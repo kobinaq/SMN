@@ -39,11 +39,11 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <Image
-              src="/brand/logo-on-blue.png"
+              src="/images/Logos/Logo on white.png"
               alt={site.name}
-              width={180}
-              height={54}
-              className="h-10 w-auto"
+              width={314}
+              height={161}
+              className="h-9 w-auto"
             />
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/60">
               {site.tagline}
@@ -75,7 +75,9 @@ export function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/40 md:flex-row md:items-center md:justify-between">
-          <p>© {new Date().getFullYear()} {site.name}. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} {site.name}. All rights reserved.
+          </p>
           <div className="flex flex-wrap gap-5">
             <Link href="/privacy" className="hover:text-white/70">
               Privacy
@@ -83,10 +85,20 @@ export function Footer() {
             <Link href="/terms" className="hover:text-white/70">
               Terms
             </Link>
-            <a href={site.social.instagram} className="hover:text-white/70" target="_blank" rel="noreferrer">
+            <a
+              href={site.social.instagram}
+              className="hover:text-white/70"
+              target="_blank"
+              rel="noreferrer"
+            >
               Instagram
             </a>
-            <a href={site.social.linkedin} className="hover:text-white/70" target="_blank" rel="noreferrer">
+            <a
+              href={site.social.linkedin}
+              className="hover:text-white/70"
+              target="_blank"
+              rel="noreferrer"
+            >
               LinkedIn
             </a>
           </div>

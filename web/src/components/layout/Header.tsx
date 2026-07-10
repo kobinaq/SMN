@@ -39,11 +39,11 @@ export function Header() {
       <div className="container-wide flex h-16 items-center justify-between md:h-20">
         <Link href="/" className="relative z-10 flex items-center gap-3">
           <Image
-            src="/brand/logo-on-blue.png"
+            src="/images/Logos/Logo on white.png"
             alt={site.name}
-            width={160}
-            height={48}
-            className="h-9 w-auto md:h-10"
+            width={314}
+            height={161}
+            className="h-8 w-auto md:h-9"
             priority
           />
         </Link>

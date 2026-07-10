@@ -148,7 +148,7 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
       {/* Soft grid backdrop (reference style, brand-tinted) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-0 max-md:hidden top-[180px] h-[420px] w-full bg-transparent bg-[linear-gradient(to_right,rgba(126,182,255,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(126,182,255,0.12)_1px,transparent_1px)] bg-[size:3rem_3rem] opacity-30 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"
+        className="pointer-events-none absolute inset-0 -z-0 top-[180px] h-[420px] w-full max-md:hidden bg-transparent bg-[linear-gradient(to_right,rgba(126,182,255,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(126,182,255,0.12)_1px,transparent_1px)] bg-[size:3rem_3rem] opacity-30 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"
       />
       <div
         aria-hidden
