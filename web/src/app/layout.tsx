@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, League_Spartan } from "next/font/google";
 import { site } from "@/lib/site";
 import "./globals.css";
@@ -27,6 +27,26 @@ export const metadata: Metadata = {
     siteName: site.name,
     type: "website",
   },
+  // Mobile browser chrome + safe layout
+  other: {
+    "mobile-web-app-capable": "yes",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: site.shortName,
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: "#0b0d12",
 };
 
 export default function RootLayout({

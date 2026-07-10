@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { site } from "@/lib/site";
 
 type Direction = "left" | "right";
+type Breakpoint = "sm" | "md" | "lg";
 
 type PhotoItem = {
   id: number;
@@ -73,27 +74,52 @@ const photos: PhotoItem[] = [
   },
 ];
 
-// Mobile / tablet spreads (tighter)
-const photosMd: Omit<PhotoItem, "src" | "alt" | "direction" | "id" | "order" | "zIndex">[] = [
-  { x: "-180px", y: "12px" },
-  { x: "-90px", y: "24px" },
-  { x: "0px", y: "6px" },
-  { x: "90px", y: "18px" },
-  { x: "180px", y: "30px" },
-];
+const spreads: Record<Breakpoint, { x: string; y: string }[]> = {
+  sm: [
+    { x: "-72px", y: "10px" },
+    { x: "-36px", y: "18px" },
+    { x: "0px", y: "4px" },
+    { x: "36px", y: "14px" },
+    { x: "72px", y: "22px" },
+  ],
+  md: [
+    { x: "-140px", y: "12px" },
+    { x: "-70px", y: "22px" },
+    { x: "0px", y: "6px" },
+    { x: "70px", y: "18px" },
+    { x: "140px", y: "28px" },
+  ],
+  lg: [
+    { x: "-320px", y: "15px" },
+    { x: "-160px", y: "32px" },
+    { x: "0px", y: "8px" },
+    { x: "160px", y: "22px" },
+    { x: "320px", y: "44px" },
+  ],
+};
+
+function useBreakpoint(): Breakpoint {
+  const [bp, setBp] = useState<Breakpoint>("lg");
+
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      if (w < 640) setBp("sm");
+      else if (w < 1024) setBp("md");
+      else setBp("lg");
+    };
+    update();
+    window.addEventListener("resize", update, { passive: true });
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  return bp;
+}
 
 export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: number }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isWide, setIsWide] = useState(true);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const update = () => setIsWide(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
+  const bp = useBreakpoint();
 
   useEffect(() => {
     const visibilityTimer = setTimeout(() => setIsVisible(true), animationDelay * 1000);
@@ -112,8 +138,8 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1,
+        staggerChildren: 0.12,
+        delayChildren: 0.08,
       },
     },
   };
@@ -132,10 +158,10 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
       scale: 1,
       transition: {
         type: "spring",
-        stiffness: 70,
-        damping: 12,
+        stiffness: bp === "sm" ? 90 : 70,
+        damping: 14,
         mass: 1,
-        delay: custom.order * 0.15,
+        delay: custom.order * (bp === "sm" ? 0.1 : 0.15),
       },
     }),
   };
@@ -143,33 +169,38 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
   return (
     <section
       data-hero
-      className="grain relative flex min-h-[100svh] flex-col overflow-hidden bg-near-black pt-28 md:pt-32"
+      className="grain relative flex min-h-[100svh] flex-col overflow-hidden bg-near-black pt-[calc(5rem+env(safe-area-inset-top))] md:pt-32"
     >
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 text-center">
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 text-center sm:px-6">
         <p
           data-hero-item
-          className="text-[11px] font-medium uppercase tracking-[0.32em] text-baby-blue md:text-xs"
+          className="text-[10px] font-medium uppercase tracking-[0.28em] text-baby-blue sm:text-[11px] md:text-xs"
         >
           Social Marketers Network
         </p>
         <h1
           data-hero-item
-          className="font-display mx-auto mt-4 max-w-3xl text-4xl leading-[1.05] text-white sm:text-5xl md:text-6xl lg:text-7xl"
+          className="font-display mx-auto mt-3 max-w-3xl text-[2rem] leading-[1.08] text-white sm:mt-4 sm:text-5xl md:text-6xl lg:text-7xl"
         >
           Where marketers <span className="text-baby-blue">belong</span>
         </h1>
         <p
           data-hero-item
-          className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-white/60 md:text-base"
+          className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/60 sm:mt-5 md:text-base"
         >
           Strategy, AI, community, and real client work. Not just another course platform.
         </p>
       </div>
 
-      {/* Fan photo gallery */}
-      <div className="relative z-10 mb-6 mt-10 flex h-[280px] w-full items-center justify-center sm:h-[320px] lg:h-[360px]">
+      {/* Fan photo gallery — tighter on small screens, clipped overflow */}
+      <div
+        className={cn(
+          "relative z-10 mb-4 mt-8 w-full overflow-hidden sm:mb-6 sm:mt-10",
+          "flex h-[210px] items-center justify-center sm:h-[280px] md:h-[320px] lg:h-[360px]",
+        )}
+      >
         <motion.div
-          className="relative mx-auto flex w-full max-w-7xl justify-center"
+          className="relative mx-auto flex w-full max-w-7xl justify-center px-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: isVisible ? 1 : 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
@@ -180,12 +211,10 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
             initial="hidden"
             animate={isLoaded ? "visible" : "hidden"}
           >
-            <div className="relative h-[180px] w-[180px] sm:h-[200px] sm:w-[200px] lg:h-[220px] lg:w-[220px]">
+            <div className="relative h-[120px] w-[120px] sm:h-[180px] sm:w-[180px] md:h-[200px] md:w-[200px] lg:h-[220px] lg:w-[220px]">
               {[...photos].reverse().map((photo, reverseIndex) => {
                 const index = photos.length - 1 - reverseIndex;
-                const spread = isWide
-                  ? { x: photo.x, y: photo.y }
-                  : photosMd[index] || { x: photo.x, y: photo.y };
+                const spread = spreads[bp][index] || { x: photo.x, y: photo.y };
 
                 return (
                   <motion.div
@@ -206,6 +235,7 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
                       alt={photo.alt}
                       direction={photo.direction}
                       priority={photo.order === 2}
+                      enableDrag={bp === "lg"}
                     />
                   </motion.div>
                 );
@@ -215,20 +245,22 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
         </motion.div>
       </div>
 
-      <div data-hero-item className="relative z-10 flex w-full flex-col items-center px-6 pb-10">
-        <div className="flex flex-wrap justify-center gap-3">
-          <Button href="/apply" className="min-w-[170px] px-8 py-3.5">
+      <div
+        data-hero-item
+        className="relative z-10 mt-auto flex w-full flex-col items-center px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-6 sm:pb-10"
+      >
+        <div className="btn-row-mobile">
+          <Button href="/apply" className="sm:min-w-[160px]">
             Become a Member
           </Button>
-          <Button href="/programs/cohort" variant="secondary" className="min-w-[150px]">
+          <Button href="/programs/cohort" variant="secondary" className="sm:min-w-[140px]">
             View cohort
           </Button>
         </div>
-        <p className="mt-8 text-center text-xs tracking-[0.18em] text-white/35 uppercase md:mt-10">
+        <p className="mt-6 max-w-[20rem] text-center text-[10px] leading-relaxed tracking-[0.14em] text-white/35 uppercase sm:mt-8 sm:max-w-none sm:text-xs sm:tracking-[0.18em] md:mt-10">
           Next cohort {site.cohort.startDate} · {site.cohort.seats} seats · {site.cohort.duration}
         </p>
       </div>
-
     </section>
   );
 }
@@ -249,6 +281,7 @@ function Photo({
   className,
   direction,
   priority,
+  enableDrag = true,
 }: {
   src: string;
   alt: string;
@@ -257,6 +290,7 @@ function Photo({
   width: number;
   height: number;
   priority?: boolean;
+  enableDrag?: boolean;
 }) {
   const [rotation, setRotation] = useState(0);
 
@@ -268,18 +302,19 @@ function Photo({
 
   return (
     <motion.div
-      drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-      whileTap={{ scale: 1.15, zIndex: 9999 }}
-      whileHover={{
-        scale: 1.08,
-        rotateZ: 2 * (direction === "left" ? -1 : 1),
-        zIndex: 9999,
-      }}
-      whileDrag={{
-        scale: 1.1,
-        zIndex: 9999,
-      }}
+      drag={enableDrag}
+      dragConstraints={enableDrag ? { left: 0, right: 0, top: 0, bottom: 0 } : undefined}
+      whileTap={enableDrag ? { scale: 1.12, zIndex: 9999 } : undefined}
+      whileHover={
+        enableDrag
+          ? {
+              scale: 1.08,
+              rotateZ: 2 * (direction === "left" ? -1 : 1),
+              zIndex: 9999,
+            }
+          : undefined
+      }
+      whileDrag={enableDrag ? { scale: 1.1, zIndex: 9999 } : undefined}
       initial={{ rotate: 0 }}
       animate={{ rotate: rotation }}
       style={{
@@ -287,26 +322,27 @@ function Photo({
         WebkitTouchCallout: "none",
         WebkitUserSelect: "none",
         userSelect: "none",
-        touchAction: "none",
+        touchAction: enableDrag ? "none" : "pan-y",
       }}
       className={cn(
         className,
-        "relative mx-auto h-[150px] w-[150px] shrink-0 cursor-grab active:cursor-grabbing sm:h-[200px] sm:w-[200px] lg:h-[220px] lg:w-[220px]",
+        "relative mx-auto h-[110px] w-[110px] shrink-0 sm:h-[160px] sm:w-[160px] md:h-[200px] md:w-[200px] lg:h-[220px] lg:w-[220px]",
+        enableDrag && "cursor-grab active:cursor-grabbing",
       )}
       draggable={false}
-      tabIndex={0}
+      tabIndex={enableDrag ? 0 : -1}
     >
-      <div className="relative h-full w-full overflow-hidden rounded-3xl border border-white/10 bg-surface">
+      <div className="relative h-full w-full overflow-hidden rounded-2xl border border-white/10 bg-surface sm:rounded-3xl">
         <MotionImage
-          className="rounded-3xl object-cover"
+          className="rounded-2xl object-cover sm:rounded-3xl"
           fill
           src={src}
           alt={alt}
-          sizes="(max-width: 640px) 150px, (max-width: 1024px) 200px, 220px"
+          sizes="(max-width: 640px) 110px, (max-width: 1024px) 200px, 220px"
           priority={priority}
           draggable={false}
         />
-        <div className="image-matte rounded-3xl" />
+        <div className="image-matte rounded-2xl sm:rounded-3xl" />
       </div>
     </motion.div>
   );

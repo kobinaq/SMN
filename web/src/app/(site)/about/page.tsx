@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
-import { beliefs } from "@/lib/content";
+import { beliefs, instructor } from "@/lib/content";
 import { site } from "@/lib/site";
+import { Button } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "About",
@@ -70,19 +71,52 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-near-black py-20">
-        <div className="container-wide max-w-3xl">
-          <p className="text-xs uppercase tracking-[0.22em] text-baby-blue">Lead instructor</p>
-          <h2 className="mt-4 font-display text-3xl text-white">Meet the founder</h2>
-          <p className="mt-5 text-white/65 leading-relaxed">
-            Too many courses stop at tools and templates. SMN was built for the strategy, practice,
-            and community marketers actually need. Programs cover marketing strategy, social media,
-            AI, hands-on work, mentorship, and real client experience.
-          </p>
-          <p className="mt-4 text-sm text-white/40">
-            Full instructor biography, brand list, and milestones can be updated once the client
-            provides them.
-          </p>
+      <section className="bg-near-black py-16 sm:py-20">
+        <div className="container-wide grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl sm:rounded-[2rem]">
+            <Image
+              src={instructor.image}
+              alt={instructor.name}
+              fill
+              className="object-cover"
+              sizes="50vw"
+            />
+            <div className="image-matte" />
+          </div>
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
+              Lead instructor
+            </p>
+            <h2 className="mt-3 font-display text-2xl text-white sm:mt-4 sm:text-3xl md:text-4xl">
+              {instructor.name}
+            </h2>
+            <p className="mt-2 text-sm text-white/45">{instructor.role}</p>
+            <p className="mt-5 text-sm leading-relaxed text-white/65 sm:text-base">
+              {instructor.bio}
+            </p>
+            <p className="mt-4 text-sm leading-relaxed text-white/65 sm:text-base">
+              {instructor.philosophy}
+            </p>
+            <ul className="mt-6 space-y-3 text-sm text-white/70">
+              {instructor.highlights.map((item) => (
+                <li key={item} className="flex gap-3">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-baby-blue" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="btn-row-mobile mt-8">
+              <Button href={instructor.linkedin} target="_blank" rel="noreferrer">
+                View LinkedIn
+              </Button>
+              <Button href="/apply" variant="secondary">
+                Apply to the cohort
+              </Button>
+            </div>
+            {instructor.note ? (
+              <p className="mt-5 text-xs text-white/35">{instructor.note}</p>
+            ) : null}
+          </div>
         </div>
       </section>
     </>

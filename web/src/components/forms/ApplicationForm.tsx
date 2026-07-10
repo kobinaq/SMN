@@ -36,10 +36,10 @@ export function ApplicationForm() {
   }
 
   const field =
-    "field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/35";
+    "field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/35 sm:py-3";
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
       <input
         type="text"
         name="website"
@@ -48,10 +48,25 @@ export function ApplicationForm() {
         className="hidden"
         aria-hidden
       />
-      <div className="grid gap-4 md:grid-cols-2">
-        <input className={field} name="name" required placeholder="Full name" />
-        <input className={field} name="email" type="email" required placeholder="Email" />
-        <input className={field} name="phone" required placeholder="WhatsApp / phone" />
+      <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
+        <input className={field} name="name" required placeholder="Full name" autoComplete="name" />
+        <input
+          className={field}
+          name="email"
+          type="email"
+          required
+          placeholder="Email"
+          autoComplete="email"
+          inputMode="email"
+        />
+        <input
+          className={field}
+          name="phone"
+          required
+          placeholder="WhatsApp / phone"
+          autoComplete="tel"
+          inputMode="tel"
+        />
         <input className={field} name="country" required placeholder="City / Country" />
         <input className={field} name="role" required placeholder="Current role" />
         <select className={cn(field, "bg-surface")} name="level" required defaultValue="">
@@ -64,11 +79,11 @@ export function ApplicationForm() {
             </option>
           ))}
         </select>
-        <input className={field} name="linkedin" placeholder="LinkedIn URL" />
-        <input className={field} name="portfolio" placeholder="Portfolio URL (optional)" />
+        <input className={field} name="linkedin" placeholder="LinkedIn URL" inputMode="url" />
+        <input className={field} name="portfolio" placeholder="Portfolio URL (optional)" inputMode="url" />
       </div>
       <textarea
-        className={cn(field, "min-h-28")}
+        className={cn(field, "min-h-28 resize-y")}
         name="goals"
         required
         placeholder="What do you want from this cohort?"

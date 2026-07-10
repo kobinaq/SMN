@@ -10,7 +10,10 @@ gsap.registerPlugin(ScrollTrigger);
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) return;
+    // Native scroll feels better on phones/tablets
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    const narrow = window.matchMedia("(max-width: 1023px)").matches;
+    if (reduce || coarse || narrow) return;
 
     const lenis = new Lenis({
       duration: 1.15,

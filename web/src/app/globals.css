@@ -12,6 +12,9 @@
   --white: #ffffff;
   --off-white: #f4f6fa;
   --line: rgba(255, 255, 255, 0.1);
+  --header-h: 4rem;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
 }
 
 @theme inline {
@@ -30,9 +33,23 @@
   --font-sans: var(--font-inter);
 }
 
+@media (min-width: 768px) {
+  :root {
+    --header-h: 5rem;
+  }
+}
+
 html {
   scroll-behavior: auto;
   color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 html.lenis,
@@ -50,6 +67,7 @@ body {
   font-family: var(--font-inter), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  padding-bottom: var(--safe-bottom);
 }
 
 ::selection {
@@ -64,16 +82,24 @@ h4,
 .font-display {
   font-family: var(--font-league-spartan), system-ui, sans-serif;
   letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
 .container-page {
-  width: min(1120px, calc(100% - 2.5rem));
+  width: min(1120px, calc(100% - 1.5rem));
   margin-inline: auto;
 }
 
 .container-wide {
-  width: min(1280px, calc(100% - 2.5rem));
+  width: min(1280px, calc(100% - 1.5rem));
   margin-inline: auto;
+}
+
+@media (min-width: 640px) {
+  .container-page,
+  .container-wide {
+    width: min(1280px, calc(100% - 2.5rem));
+  }
 }
 
 .text-balance {
@@ -94,7 +120,13 @@ h4,
   mix-blend-mode: overlay;
 }
 
-/* Flat matte over photos — no gradient */
+@media (max-width: 767px) {
+  .grain::after {
+    opacity: 0.02;
+  }
+}
+
+/* Flat matte over photos */
 .image-matte {
   pointer-events: none;
   position: absolute;
@@ -114,6 +146,61 @@ h4,
   transform: translateY(36px);
 }
 
+/* Stacked CTAs on small screens — compact, not oversized */
+.btn-row-mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 17.5rem;
+  margin-inline: auto;
+}
+
+@media (min-width: 480px) {
+  .btn-row-mobile {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    max-width: none;
+    margin-inline: 0;
+    gap: 0.75rem;
+  }
+}
+
+.btn-row-mobile > a,
+.btn-row-mobile > button {
+  width: 100%;
+  min-height: 2.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+@media (min-width: 480px) {
+  .btn-row-mobile > a,
+  .btn-row-mobile > button {
+    width: auto;
+    min-height: 0;
+    font-size: inherit;
+  }
+}
+
+/* Forms: 16px prevents iOS zoom on focus */
+.field {
+  font-size: 16px;
+  min-height: 48px;
+}
+
+@media (min-width: 768px) {
+  .field {
+    font-size: inherit;
+    min-height: auto;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal-hidden {
     opacity: 1;
@@ -130,6 +217,13 @@ h4,
   }
 }
 
+/* Soften heavy motion on coarse pointers (phones) */
+@media (pointer: coarse) {
+  .reveal-hidden {
+    transform: translateY(20px);
+  }
+}
+
 input,
 textarea,
 select {
@@ -139,4 +233,10 @@ select {
 .field:focus {
   outline: 2px solid var(--baby-blue);
   outline-offset: 2px;
+}
+
+/* Tap highlight */
+a,
+button {
+  -webkit-tap-highlight-color: rgba(126, 182, 255, 0.15);
 }

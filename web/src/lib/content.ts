@@ -1,3 +1,21 @@
+export const instructor = {
+  name: "Arielle Adodo",
+  role: "Founder & Lead Instructor · Social Media Strategist (B2B & B2C)",
+  image: "/images/instructor-arielle.jpg",
+  headline: "Arielle Adodo",
+  linkedin: "https://www.linkedin.com/in/arielle-adodo/",
+  bio: "Arielle is a social media specialist and creative strategist based in Ghana. She builds stories that connect brands and creators to their audiences, with experience across B2B and B2C, including SaaS and tech.",
+  philosophy:
+    "She founded the Social Marketers Network to help beginners, social media managers, marketing professionals, and business owners move beyond random posting. SMN is more than an academy. It is a community and network for people who want strategy, AI skills, and real practice.",
+  highlights: [
+    "Social media strategist for B2B and B2C brands",
+    "Content strategy, brand storytelling, and digital marketing education",
+    "Leads the Social Media Marketing & AI training path at SMN",
+    "Building a community for marketers across Africa and beyond",
+  ],
+  note: null as string | null,
+};
+
 export const beliefs = [
   {
     title: "Strategy over content tricks",
@@ -41,7 +59,7 @@ export const courses = [
     outcomes: ["Channel strategy", "Experiment design", "Reporting frameworks"],
     duration: "6 hours",
     lessons: 24,
-    price: "₦45,000",
+    price: "GHS 45,000",
     selarUrl: "https://selar.com/smn-growth-foundations",
     badge: "Recommended" as string | null,
     image: "/images/self-paced.jpg",
@@ -54,7 +72,7 @@ export const courses = [
     outcomes: ["Prompt systems", "Workflow design", "Quality control"],
     duration: "4 hours",
     lessons: 18,
-    price: "₦38,000",
+    price: "GHS 38,000",
     selarUrl: "https://selar.com/smn-ai-marketers",
     badge: null,
     image: "/images/presentation.jpg",
@@ -67,7 +85,7 @@ export const courses = [
     outcomes: ["Audience insight", "Content systems", "Community loops"],
     duration: "5 hours",
     lessons: 20,
-    price: "₦42,000",
+    price: "GHS 42,000",
     selarUrl: "https://selar.com/smn-social-systems",
     badge: null,
     image: "/images/workshop.jpg",

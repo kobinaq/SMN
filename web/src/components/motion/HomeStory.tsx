@@ -17,6 +17,9 @@ export function HomeStory({ children }: { children: React.ReactNode }) {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
 
+    // Lighter transforms on small screens for performance
+    const mobile = window.matchMedia("(max-width: 767px)").matches;
+
     const ctx = gsap.context(() => {
       const hero = el.querySelector<HTMLElement>("[data-hero]");
       if (hero) {
@@ -62,23 +65,25 @@ export function HomeStory({ children }: { children: React.ReactNode }) {
         }
       }
 
-      el.querySelectorAll<HTMLElement>("[data-parallax]").forEach((img) => {
-        gsap.fromTo(
-          img,
-          { scale: 1.14, yPercent: -6 },
-          {
-            scale: 1,
-            yPercent: 6,
-            ease: "none",
-            scrollTrigger: {
-              trigger: img.closest("[data-parallax-wrap]") || img.parentElement,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
+      if (!mobile) {
+        el.querySelectorAll<HTMLElement>("[data-parallax]").forEach((img) => {
+          gsap.fromTo(
+            img,
+            { scale: 1.14, yPercent: -6 },
+            {
+              scale: 1,
+              yPercent: 6,
+              ease: "none",
+              scrollTrigger: {
+                trigger: img.closest("[data-parallax-wrap]") || img.parentElement,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+              },
             },
-          },
-        );
-      });
+          );
+        });
+      }
 
       el.querySelectorAll<HTMLElement>("[data-pin-chapter]").forEach((section) => {
         const lines = section.querySelectorAll("[data-line]");

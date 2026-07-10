@@ -20,7 +20,7 @@ export const site = {
     seats: 30,
     format: "Live classes, Discord community, and portfolio projects",
     sessions: "2 live sessions per week on Google Classroom",
-    priceLabel: "From ₦250,000",
+    priceLabel: "From GHS 250,000",
     priceNote: "Payment plans available after acceptance",
   },
 } as const;

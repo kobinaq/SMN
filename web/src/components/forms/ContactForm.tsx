@@ -41,14 +41,22 @@ export function ContactForm({ defaultType }: { defaultType?: string }) {
   }
 
   const field =
-    "field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/35";
+    "field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/35 sm:py-3";
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
       <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
-      <div className="grid gap-4 md:grid-cols-2">
-        <input className={field} name="name" required placeholder="Full name" />
-        <input className={field} name="email" type="email" required placeholder="Email" />
+      <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
+        <input className={field} name="name" required placeholder="Full name" autoComplete="name" />
+        <input
+          className={field}
+          name="email"
+          type="email"
+          required
+          placeholder="Email"
+          autoComplete="email"
+          inputMode="email"
+        />
       </div>
       <select
         className={cn(field, "bg-surface")}
@@ -66,12 +74,12 @@ export function ContactForm({ defaultType }: { defaultType?: string }) {
         ))}
       </select>
       <textarea
-        className={cn(field, "min-h-32")}
+        className={cn(field, "min-h-32 resize-y")}
         name="message"
         required
         placeholder="How can we help?"
       />
-      <Button type="submit" disabled={status === "loading"}>
+      <Button type="submit" disabled={status === "loading"} className="w-full sm:w-auto">
         {status === "loading" ? "Sending…" : "Send message"}
       </Button>
       {message ? (
