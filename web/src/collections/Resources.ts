@@ -1,0 +1,27 @@
+import type { CollectionConfig } from "payload";
+
+export const Resources: CollectionConfig = {
+  slug: "resources",
+  admin: {
+    useAsTitle: "title",
+  },
+  access: {
+    read: () => true,
+  },
+  fields: [
+    { name: "title", type: "text", required: true },
+    { name: "slug", type: "text", required: true, unique: true },
+    {
+      name: "type",
+      type: "select",
+      required: true,
+      options: ["Template", "Guide", "AI Prompts", "Checklist", "Toolkit", "Download"],
+    },
+    { name: "description", type: "textarea", required: true },
+    {
+      name: "file",
+      type: "upload",
+      relationTo: "media",
+    },
+  ],
+};

@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+/* ── Brand (stable) ── */
+:root {
+  --deep-blue: #0a2f8f;
+  --baby-blue: #7eb6ff;
+  --mint: #6fcfb0;
+  --grey: #6b7280;
+  --paper: #ffffff;
+  --ink-solid: #0b0d12;
+
+  /* Semantic surfaces & type (dark default) */
+  --near-black: #0b0d12;
+  --ink: #12151c;
+  --surface: #141820;
+  --surface-2: #1a1f2b;
+  --white: #ffffff;
+  --off-white: #f4f6fa;
+  --line: rgba(255, 255, 255, 0.1);
+  --header-bg: rgba(11, 13, 18, 0.85);
+  --field-bg: rgba(255, 255, 255, 0.05);
+  --field-border: rgba(255, 255, 255, 0.1);
+  --accent-text: #7eb6ff;
+}
+
+/* ── Light mode ── */
+html.light {
+  --baby-blue: #0a2f8f;
+  --mint: #0d9488;
+  --grey: #5b6475;
+
+  --near-black: #f4f6fa;
+  --ink: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #eef2f8;
+  --white: #0c1222;
+  --off-white: #e8edf5;
+  --line: rgba(12, 18, 34, 0.1);
+  --header-bg: rgba(244, 246, 250, 0.9);
+  --field-bg: rgba(12, 18, 34, 0.04);
+  --field-border: rgba(12, 18, 34, 0.12);
+  --accent-text: #0a2f8f;
+}
+
+@theme inline {
+  --color-deep-blue: var(--deep-blue);
+  --color-baby-blue: var(--baby-blue);
+  --color-mint: var(--mint);
+  --color-grey: var(--grey);
+  --color-near-black: var(--near-black);
+  --color-ink: var(--ink);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-off-white: var(--off-white);
+  --color-line: var(--line);
+  /* Semantic “fg” uses --white token (inverted in light mode) */
+  --color-white: var(--white);
+  /* Always pure colors for on-media / on-brand panels */
+  --color-paper: var(--paper);
+  --color-ink-solid: var(--ink-solid);
+  --font-display: var(--font-league-spartan);
+  --font-sans: var(--font-inter);
+}
+
+html {
+  scroll-behavior: auto;
+  color-scheme: dark;
+}
+
+html.light {
+  color-scheme: light;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  background: var(--near-black);
+  color: var(--white);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--deep-blue) 35%, transparent);
+  color: var(--paper);
+}
+
+html.light ::selection {
+  color: var(--paper);
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+  font-family: var(--font-league-spartan), system-ui, sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.container-page {
+  width: min(1120px, calc(100% - 2.5rem));
+  margin-inline: auto;
+}
+
+.container-wide {
+  width: min(1280px, calc(100% - 2.5rem));
+  margin-inline: auto;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.grain {
+  position: relative;
+}
+
+.grain::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+html.light .grain::after {
+  opacity: 0.02;
+  mix-blend-mode: multiply;
+}
+
+.mask-fade-b {
+  mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+}
+
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(36px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-hidden {
+    opacity: 1;
+    transform: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.field {
+  background: var(--field-bg);
+  border-color: var(--field-border);
+  color: var(--white);
+}
+
+.field::placeholder {
+  color: color-mix(in srgb, var(--white) 40%, transparent);
+}
+
+.field:focus {
+  outline: 2px solid var(--deep-blue);
+  outline-offset: 2px;
+}
+
+/* Light mode: slightly stronger card borders */
+html.light .border-white\/10 {
+  border-color: rgba(12, 18, 34, 0.1);
+}
+
+html.light .border-white\/15 {
+  border-color: rgba(12, 18, 34, 0.14);
+}
