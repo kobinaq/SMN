@@ -62,6 +62,7 @@ export function HomePage() {
               data-parallax
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
+            <div className="image-matte" />
           </div>
         </div>
       </section>
@@ -79,7 +80,7 @@ export function HomePage() {
               <div
                 key={item.title}
                 data-stagger-item
-                className="rounded-3xl border border-white/10 bg-surface-2 p-6 transition duration-500 hover:border-baby-blue/30 hover:bg-ink md:p-8"
+                className="rounded-3xl border border-white/10 bg-surface-2 p-6 transition duration-300 hover:border-baby-blue/30 md:p-8"
               >
                 <span className="font-display text-sm text-baby-blue">
                   {String(i + 1).padStart(2, "0")}
@@ -95,7 +96,7 @@ export function HomePage() {
       {/* ECOSYSTEM */}
       <section data-section-fade className="bg-near-black py-24 md:py-36">
         <div className="container-wide">
-          <div data-rule className="mb-10 h-px w-full bg-gradient-to-r from-baby-blue/50 via-white/10 to-transparent" />
+          <div data-rule className="mb-10 h-px w-full bg-white/10" />
           <SectionHeading
             eyebrow="How it works"
             title="One network. Multiple ways to grow."
@@ -120,7 +121,7 @@ export function HomePage() {
               <div
                 key={item.title}
                 data-stagger-item
-                className="group rounded-[1.75rem] border border-white/10 bg-gradient-to-b from-surface to-ink p-8 transition duration-500 hover:border-baby-blue/40 hover:shadow-[0_20px_60px_rgba(10,47,143,0.2)]"
+                className="group rounded-[1.75rem] border border-white/10 bg-surface p-8 transition duration-300 hover:border-baby-blue/40"
               >
                 <h3 className="font-display text-2xl text-white">{item.title}</h3>
                 <p className="mt-4 text-sm leading-relaxed text-white/60">{item.body}</p>
@@ -152,7 +153,7 @@ export function HomePage() {
               <article
                 key={course.slug}
                 data-stagger-item
-                className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface transition duration-500 hover:-translate-y-1 hover:border-baby-blue/30"
+                className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface transition duration-300 hover:border-baby-blue/30"
               >
                 <div className="relative aspect-[16/10]" data-parallax-wrap>
                   <Image
@@ -163,6 +164,7 @@ export function HomePage() {
                     data-parallax
                     sizes="(max-width: 1024px) 100vw, 33vw"
                   />
+                  <div className="image-matte" />
                 </div>
                 <div className="p-6">
                   <div className="flex items-center gap-2">
@@ -209,6 +211,7 @@ export function HomePage() {
                 data-parallax
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
+              <div className="image-matte" />
             </div>
           </Reveal>
           <Reveal delay={0.08}>
@@ -328,7 +331,7 @@ export function HomePage() {
 
       {/* EMPLOYERS TEASER */}
       <section data-section-fade className="bg-near-black py-24">
-        <div className="container-wide overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-deep-blue to-[#061a52] p-8 md:p-14">
+        <div className="container-wide overflow-hidden rounded-[2rem] border border-white/10 bg-deep-blue p-8 md:p-14">
           <div className="grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-center">
             <div>
               <p className="text-xs uppercase tracking-[0.22em] text-baby-blue">Employers & partners</p>

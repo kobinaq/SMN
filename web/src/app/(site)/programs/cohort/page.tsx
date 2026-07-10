@@ -30,6 +30,7 @@ export default function CohortPage() {
               sizes="60vw"
               priority
             />
+            <div className="image-matte" />
           </div>
           <div className="rounded-[2rem] border border-white/10 bg-surface p-8">
             <p className="text-xs uppercase tracking-[0.2em] text-white/40">Next intake</p>

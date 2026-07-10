@@ -27,6 +27,7 @@ export default async function CoursesPage() {
             >
               <div className="relative aspect-[16/10]">
                 <Image src={course.image} alt="" fill className="object-cover" sizes="33vw" />
+                <div className="image-matte" />
               </div>
               <div className="p-6">
                 <div className="flex items-center gap-2 text-xs text-white/40">

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
 import { site } from "@/lib/site";
 
-/** GrowthX-style cohort band: large group photo + headline + CTA. */
+/** Full-bleed cohort band: group photo + flat matte + CTAs. */
 export function CohortSpotlight() {
   return (
     <section data-section-fade className="relative min-h-[85svh] overflow-hidden py-28 md:py-36">
@@ -19,9 +19,7 @@ export function CohortSpotlight() {
           sizes="100vw"
           priority={false}
         />
-        <div className="absolute inset-0 bg-black/55" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/50" />
-        <div className="absolute inset-0 bg-gradient-to-r from-deep-blue/30 via-transparent to-deep-blue/20" />
+        <div className="image-matte-strong" />
       </div>
 
       <div className="container-wide relative z-10 flex min-h-[55svh] flex-col items-center justify-center text-center">

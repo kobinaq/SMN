@@ -36,9 +36,14 @@ export default buildConfig({
   },
   db: sqliteAdapter({
     client: {
-      url: process.env.DATABASE_URL || `file:${path.resolve(dirname, "../payload.db")}`,
+      // Local: project payload.db. Vercel serverless FS is read-only except /tmp.
+      url:
+        process.env.DATABASE_URL ||
+        (process.env.VERCEL
+          ? "file:/tmp/payload.db"
+          : `file:${path.resolve(dirname, "../payload.db")}`),
     },
-    // Auto-create/update tables in local dev (use migrations in production)
+    // Auto-create/update tables in local dev only
     push: process.env.NODE_ENV !== "production",
   }),
   sharp,

@@ -28,6 +28,35 @@ Copy `.env.example` → `.env` / `.env.local`. Without Resend/Mailchimp keys, fo
 
 Pages fall back to seed data in `src/lib/content.ts` when CMS collections are empty.
 
+## Deploy on Vercel
+
+The Next.js app is in the **`web`** folder (not the repo root).
+
+### Required project settings
+
+| Setting | Value |
+|--------|--------|
+| **Framework Preset** | Next.js |
+| **Root Directory** | `web` |
+| **Build Command** | `npm run build` (default) |
+| **Install Command** | `npm install` (default) |
+| **Output Directory** | leave default (do not set) |
+
+**Root Directory is the usual cause of a Vercel 404** when the repo root only has `web/` + docs.
+
+1. Vercel → Project → **Settings → General → Root Directory**
+2. Set to `web` → Save
+3. **Deployments → Redeploy** the latest commit
+
+### Environment variables (Production)
+
+At minimum:
+
+- `PAYLOAD_SECRET` — long random string
+- `NEXT_PUBLIC_SITE_URL` — your `https://….vercel.app` (or custom domain)
+
+Optional: Resend, Mailchimp, Discord invite, `OPS_EMAIL`.
+
 ## Key routes
 
 | Path | Purpose |

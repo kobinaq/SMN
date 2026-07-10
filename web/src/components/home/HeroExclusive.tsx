@@ -24,8 +24,7 @@ export function HeroExclusive() {
           className="object-cover opacity-90"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/80" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.55)_70%)]" />
+        <div className="image-matte-strong" />
       </div>
 
       {/* Decorative 3D pillars (CSS + GSAP) for depth if image is soft */}

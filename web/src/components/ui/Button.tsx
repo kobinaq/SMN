@@ -5,13 +5,10 @@ import type { ComponentProps, ReactNode } from "react";
 type Variant = "primary" | "secondary" | "ghost" | "light";
 
 const variants: Record<Variant, string> = {
-  primary:
-    "bg-deep-blue text-white hover:bg-[#0c3ab0] shadow-[0_10px_30px_rgba(10,47,143,0.35)]",
-  secondary:
-    "bg-white/10 text-white border border-white/15 hover:bg-white/15 backdrop-blur",
+  primary: "bg-deep-blue text-white hover:bg-[#0c3ab0]",
+  secondary: "bg-white/10 text-white border border-white/15 hover:bg-white/15",
   ghost: "bg-transparent text-white hover:bg-white/10 border border-transparent",
-  light:
-    "bg-white text-near-black hover:bg-off-white shadow-[0_10px_30px_rgba(0,0,0,0.12)]",
+  light: "bg-white text-near-black hover:bg-off-white",
 };
 
 type Common = {

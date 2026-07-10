@@ -27,6 +27,7 @@ export default async function EventsPage() {
             >
               <div className="relative aspect-[16/10]">
                 <Image src={event.image} alt="" fill className="object-cover" sizes="33vw" />
+                <div className="image-matte" />
               </div>
               <div className="p-6">
                 <p className="text-xs uppercase tracking-[0.18em] text-mint">{event.type}</p>

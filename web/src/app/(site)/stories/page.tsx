@@ -27,6 +27,7 @@ export default async function StoriesPage() {
             >
               <div className="relative aspect-[4/3]">
                 <Image src={story.image} alt={story.name} fill className="object-cover" sizes="50vw" />
+                <div className="image-matte" />
               </div>
               <div className="p-7">
                 <figcaption className="font-display text-2xl text-white">{story.name}</figcaption>

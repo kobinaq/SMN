@@ -30,6 +30,7 @@ export default function AboutPage() {
                 className="object-cover"
                 sizes="50vw"
               />
+              <div className="image-matte" />
             </div>
           </Reveal>
           <Reveal delay={0.08}>

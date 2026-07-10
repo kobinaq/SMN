@@ -27,6 +27,7 @@ export default function CommunityPage() {
               className="object-cover"
               sizes="50vw"
             />
+            <div className="image-matte" />
           </div>
           <div>
             <h2 className="font-display text-3xl text-white">What happens in Discord</h2>

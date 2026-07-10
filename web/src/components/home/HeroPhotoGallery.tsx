@@ -145,20 +145,10 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
       data-hero
       className="grain relative flex min-h-[100svh] flex-col overflow-hidden bg-near-black pt-28 md:pt-32"
     >
-      {/* Soft grid backdrop (reference style, brand-tinted) */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-0 top-[180px] h-[420px] w-full max-md:hidden bg-transparent bg-[linear-gradient(to_right,rgba(126,182,255,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(126,182,255,0.12)_1px,transparent_1px)] bg-[size:3rem_3rem] opacity-30 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-24 h-72 w-[36rem] -translate-x-1/2 rounded-full bg-deep-blue/25 blur-[100px]"
-      />
-
       <div className="relative z-10 mx-auto w-full max-w-6xl px-6 text-center">
         <p
           data-hero-item
-          className="text-[11px] font-medium uppercase tracking-[0.32em] text-baby-blue/90 md:text-xs"
+          className="text-[11px] font-medium uppercase tracking-[0.32em] text-baby-blue md:text-xs"
         >
           Social Marketers Network
         </p>
@@ -166,10 +156,7 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
           data-hero-item
           className="font-display mx-auto mt-4 max-w-3xl text-4xl leading-[1.05] text-white sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          Where marketers{" "}
-          <span className="bg-gradient-to-r from-baby-blue to-mint bg-clip-text text-transparent">
-            belong
-          </span>
+          Where marketers <span className="text-baby-blue">belong</span>
         </h1>
         <p
           data-hero-item
@@ -309,7 +296,7 @@ function Photo({
       draggable={false}
       tabIndex={0}
     >
-      <div className="relative h-full w-full overflow-hidden rounded-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.45)] ring-1 ring-white/5">
+      <div className="relative h-full w-full overflow-hidden rounded-3xl border border-white/10 bg-surface">
         <MotionImage
           className="rounded-3xl object-cover"
           fill
@@ -319,7 +306,7 @@ function Photo({
           priority={priority}
           draggable={false}
         />
-        <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-t from-near-black/30 to-transparent" />
+        <div className="image-matte rounded-3xl" />
       </div>
     </motion.div>
   );

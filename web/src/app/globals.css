@@ -94,8 +94,19 @@ h4,
   mix-blend-mode: overlay;
 }
 
-.mask-fade-b {
-  mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+/* Flat matte over photos — no gradient */
+.image-matte {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 13, 18, 0.42);
+}
+
+.image-matte-strong {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 13, 18, 0.62);
 }
 
 .reveal-hidden {
