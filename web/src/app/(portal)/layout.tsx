@@ -7,6 +7,11 @@ import {
 export const metadata = siteMetadata;
 export const viewport = siteViewport;
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+/** Document shell for /app/* — chrome is in app/layout.tsx */
+export default function PortalRootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return <SiteDocument>{children}</SiteDocument>;
 }

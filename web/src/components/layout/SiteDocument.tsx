@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, League_Spartan } from "next/font/google";
 import { site } from "@/lib/site";
-import "./globals.css";
+import "@/app/globals.css";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -13,7 +13,7 @@ const leagueSpartan = League_Spartan({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
+export const siteMetadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
     default: `${site.name} | Professional Learning Network`,
@@ -27,7 +27,6 @@ export const metadata: Metadata = {
     siteName: site.name,
     type: "website",
   },
-  // Mobile browser chrome + safe layout
   other: {
     "mobile-web-app-capable": "yes",
   },
@@ -41,7 +40,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = {
+export const siteViewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -49,14 +48,13 @@ export const viewport: Viewport = {
   themeColor: "#0b0d12",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+/** Shared document shell for marketing, auth, and member portal (not Payload admin). */
+export function SiteDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${leagueSpartan.variable} h-full`}>
-      <body className="min-h-full bg-near-black font-sans text-white antialiased">{children}</body>
+      <body className="min-h-full bg-near-black font-sans text-white antialiased">
+        {children}
+      </body>
     </html>
   );
 }
