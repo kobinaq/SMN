@@ -9,13 +9,15 @@ const dirname = path.dirname(filename);
 const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
+    // Next 16: if localPatterns is set, ONLY these paths work.
+    // Must include site assets (/images, /brand), not just Payload media.
     localPatterns: [
-      {
-        pathname: "/api/media/file/**",
-      },
+      { pathname: "/images/**" },
+      { pathname: "/brand/**" },
+      { pathname: "/api/media/file/**" },
     ],
   },
-  // Required for Payload import maps on production (webpack) builds
+  // Payload import-map resolution on production webpack builds
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       ".cjs": [".cts", ".cjs"],

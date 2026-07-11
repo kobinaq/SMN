@@ -13,8 +13,16 @@ const leagueSpartan = League_Spartan({
   subsets: ["latin"],
 });
 
+function safeMetadataBase() {
+  try {
+    return new URL(site.url);
+  } catch {
+    return new URL("http://localhost:3000");
+  }
+}
+
 export const siteMetadata: Metadata = {
-  metadataBase: new URL(site.url),
+  metadataBase: safeMetadataBase(),
   title: {
     default: `${site.name} | Professional Learning Network`,
     template: `%s · ${site.name}`,

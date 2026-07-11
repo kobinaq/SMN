@@ -1,17 +1,4 @@
-/* SMN brand accents in the Payload admin panel */
+/* SMN admin branding — keep minimal to avoid fighting Payload CSS */
 :root {
   --smn-deep-blue: #0a2f8f;
-  --smn-baby-blue: #7eb6ff;
-  --smn-mint: #6fcfb0;
-}
-
-/* Soft brand tint on primary actions when theme allows */
-.payload-default .btn--style-primary,
-.btn.btn--style-primary {
-  --theme-elevation-800: var(--smn-deep-blue);
-}
-
-/* Login branding area spacing */
-.template-default__wrap {
-  /* no-op guard for layout */
 }
