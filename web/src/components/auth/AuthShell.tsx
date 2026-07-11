@@ -1,6 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
-import { site } from "@/lib/site";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 
 export function AuthShell({
   title,
@@ -16,14 +15,7 @@ export function AuthShell({
       <header className="border-b border-white/10 px-4 py-4 sm:px-6">
         <div className="mx-auto flex max-w-md items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="/images/Logos/Logo on white.png"
-              alt={site.name}
-              width={120}
-              height={32}
-              className="h-7 w-auto"
-              priority
-            />
+            <BrandLogo width={120} height={32} className="h-7" />
           </Link>
           <Link href="/" className="text-xs text-white/45 transition hover:text-white">
             Back to site

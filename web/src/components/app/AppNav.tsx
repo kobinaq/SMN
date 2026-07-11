@@ -1,12 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 import { cn } from "@/lib/utils";
-import { site } from "@/lib/site";
 
 const links = [
   { href: "/app", label: "Home" },
@@ -40,14 +39,7 @@ export function AppNav({ memberName }: { memberName: string }) {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:h-16 sm:px-6">
         <div className="flex items-center gap-6">
           <Link href="/app" className="flex shrink-0 items-center">
-            <Image
-              src="/images/Logos/Logo on white.png"
-              alt={site.name}
-              width={110}
-              height={28}
-              className="h-6 w-auto sm:h-7"
-              priority
-            />
+            <BrandLogo width={110} height={28} className="h-6 sm:h-7" />
           </Link>
           <nav className="hidden items-center gap-1 md:flex">
             {links.map((link) => {

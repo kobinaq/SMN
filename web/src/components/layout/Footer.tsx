@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 import { site } from "@/lib/site";
 
 const footerLinks = [
@@ -38,13 +38,7 @@ export function Footer() {
       <div className="container-wide py-12 sm:py-16 md:py-20">
         <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1fr] md:gap-12">
           <div className="sm:col-span-2 md:col-span-1">
-            <Image
-              src="/images/Logos/Logo on white.png"
-              alt={site.name}
-              width={314}
-              height={161}
-              className="h-8 w-auto sm:h-9"
-            />
+            <BrandLogo className="h-8 sm:h-9" />
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60 sm:mt-5">
               {site.tagline}
             </p>

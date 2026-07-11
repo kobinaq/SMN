@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
-import { nav, site } from "@/lib/site";
+import { BrandLogo } from "@/components/layout/BrandLogo";
+import { nav } from "@/lib/site";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
@@ -48,14 +48,7 @@ export function Header() {
     >
       <div className="container-wide flex h-14 items-center justify-between gap-3 sm:h-16 md:h-20">
         <Link href="/" className="relative z-10 flex min-w-0 shrink items-center gap-3">
-          <Image
-            src="/images/Logos/Logo on white.png"
-            alt={site.name}
-            width={314}
-            height={161}
-            className="h-7 w-auto sm:h-8 md:h-9"
-            priority
-          />
+          <BrandLogo className="h-7 sm:h-8 md:h-9" priority />
         </Link>
 
         <nav className="hidden items-center gap-6 xl:gap-8 lg:flex">
