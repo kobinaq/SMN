@@ -29,7 +29,29 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     meta: {
-      titleSuffix: " · SMN CMS",
+      title: "SMN CMS",
+      description: "Social Marketers Network content and member administration",
+      titleSuffix: " · SMN",
+      // Browser tab / bookmarks
+      icons: [
+        {
+          rel: "icon",
+          type: "image/png",
+          url: "/brand/logo-blue.png",
+        },
+      ],
+      openGraph: {
+        title: "SMN CMS",
+        description: "Social Marketers Network admin",
+        siteName: "Social Marketers Network",
+      },
+    },
+    components: {
+      graphics: {
+        // Paths relative to admin.importMap.baseDir (src/)
+        Logo: "./components/payload/Logo.tsx",
+        Icon: "./components/payload/Icon.tsx",
+      },
     },
   },
   collections: [Users, Members, Media, Posts, Courses, Events, Stories, Resources],
