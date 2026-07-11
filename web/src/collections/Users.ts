@@ -1,8 +1,11 @@
-import type { Access, CollectionConfig } from "payload";
+import type { Access, CollectionConfig, PayloadRequest } from "payload";
+
+function isStaffUser(req: PayloadRequest) {
+  return Boolean(req.user && req.user.collection === "users");
+}
 
 /** Staff only (users collection). */
-const isStaff: Access = ({ req }) =>
-  Boolean(req.user && req.user.collection === "users");
+const isStaff: Access = ({ req }) => isStaffUser(req);
 
 /**
  * Allow creating the very first staff user when the table is empty.
@@ -40,9 +43,8 @@ export const Users: CollectionConfig = {
     description: "Staff accounts for the Payload CMS admin panel.",
   },
   access: {
-    // Only authenticated staff may use the admin panel.
-    // Unauthenticated users get redirected to /admin/login (public route).
-    admin: isStaff,
+    // admin access must return boolean only (not a Where query)
+    admin: ({ req }) => isStaffUser(req),
     read: isStaff,
     create: canCreateStaff,
     update: isStaff,
