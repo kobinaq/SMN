@@ -19,7 +19,8 @@ export const Members: CollectionConfig = {
     description: "Member accounts for the SMN portal (not CMS staff).",
   },
   access: {
-    // Staff (users) can manage all members in admin
+    // Who can see this collection *inside* the admin UI (staff only).
+    // Does not control /admin panel access — that is Users.access.admin.
     admin: ({ req }) => Boolean(req.user && req.user.collection === "users"),
     read: ({ req }) => {
       if (req.user?.collection === "users") return true;
