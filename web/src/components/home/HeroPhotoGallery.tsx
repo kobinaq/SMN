@@ -5,6 +5,7 @@ import Image, { ImageProps } from "next/image";
 import { motion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
+import { img } from "@/lib/images";
 import { site } from "@/lib/site";
 
 type Direction = "left" | "right";
@@ -29,8 +30,8 @@ const photos: PhotoItem[] = [
     y: "15px",
     zIndex: 50,
     direction: "left",
-    src: "/images/hero-student.jpg",
-    alt: "Student member of the Social Marketers Network",
+    src: img.hero1,
+    alt: "Member of the Social Marketers Network community",
   },
   {
     id: 2,
@@ -39,8 +40,8 @@ const photos: PhotoItem[] = [
     y: "32px",
     zIndex: 40,
     direction: "left",
-    src: "/images/hero-junior.jpg",
-    alt: "Junior social media marketer",
+    src: img.hero2,
+    alt: "Marketer in the SMN community",
   },
   {
     id: 3,
@@ -49,8 +50,8 @@ const photos: PhotoItem[] = [
     y: "8px",
     zIndex: 30,
     direction: "right",
-    src: "/images/hero-freelancer.jpg",
-    alt: "Freelance marketing professional",
+    src: img.hero3,
+    alt: "Social Marketers Network member",
   },
   {
     id: 4,
@@ -59,8 +60,8 @@ const photos: PhotoItem[] = [
     y: "22px",
     zIndex: 20,
     direction: "right",
-    src: "/images/hero-professional.jpg",
-    alt: "Brand marketing professional",
+    src: img.hero4,
+    alt: "Professional in the SMN network",
   },
   {
     id: 5,
@@ -69,8 +70,8 @@ const photos: PhotoItem[] = [
     y: "44px",
     zIndex: 10,
     direction: "left",
-    src: "/images/hero-mentor.jpg",
-    alt: "Senior marketing mentor",
+    src: img.hero5,
+    alt: "Community member of Social Marketers Network",
   },
 ];
 

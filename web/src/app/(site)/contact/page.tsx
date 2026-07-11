@@ -25,12 +25,12 @@ export default function ContactPage() {
             </a>
             <p className="mt-8 text-sm text-white/55">Community</p>
             <a
-              href={site.discordInvite}
+              href={site.whatsappInvite}
               target="_blank"
               rel="noreferrer"
               className="mt-1 block text-lg text-white hover:text-baby-blue"
             >
-              Join Discord
+              Join WhatsApp
             </a>
           </div>
           <div className="rounded-[2rem] border border-white/10 bg-surface p-6 md:p-8">

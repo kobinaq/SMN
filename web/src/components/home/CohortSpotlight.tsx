@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
+import { img } from "@/lib/images";
 import { site } from "@/lib/site";
 
 /** Full-bleed cohort band: group photo + flat matte + CTAs. */
@@ -11,7 +12,7 @@ export function CohortSpotlight() {
     <section data-section-fade className="relative min-h-[70svh] overflow-hidden py-16 sm:min-h-[85svh] sm:py-28 md:py-36">
       <div className="absolute inset-0" data-parallax-wrap>
         <Image
-          src="/images/cohort-group.jpg"
+          src={img.cohortSpotlight}
           alt="Social Marketers Network cohort members"
           fill
           className="object-cover"
@@ -33,7 +34,7 @@ export function CohortSpotlight() {
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-sm text-white/75 sm:mt-6 sm:text-base md:text-lg">
             Live Social Media Marketing & AI classes, practical assignments, portfolio projects,
-            Discord community, and chances to work on real client problems.
+            WhatsApp community, and chances to work on real client problems.
           </p>
           <div className="btn-row-mobile mt-8 sm:mt-10">
             <Button href="/apply" className="sm:min-w-[160px]">

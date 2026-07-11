@@ -49,7 +49,7 @@ export function Footer() {
               {site.tagline}
             </p>
             <p className="mt-4 text-xs leading-relaxed text-white/45 sm:mt-6 sm:text-sm">
-              Community on Discord. Courses on Selar. Live sessions on Google Classroom.
+              Community on WhatsApp. Courses on Selar. Live sessions on Google Classroom.
             </p>
           </div>
 

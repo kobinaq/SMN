@@ -3,6 +3,7 @@ import Image from "next/image";
 import { PageHero } from "@/components/layout/PageHero";
 import { Button } from "@/components/ui/Button";
 import { cohortFaqs, curriculum } from "@/lib/content";
+import { img } from "@/lib/images";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export default function CohortPage() {
         <div className="container-wide grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="relative min-h-[320px] overflow-hidden rounded-[2rem]">
             <Image
-              src="/images/cohort-group.jpg"
+              src={img.cohortPage}
               alt="Social Marketers Network cohort members"
               fill
               className="object-cover"
@@ -38,15 +39,15 @@ export default function CohortPage() {
             <ul className="mt-6 space-y-3 text-sm text-white/70">
               <li>· Duration: {site.cohort.duration}</li>
               <li>· {site.cohort.sessions}</li>
-              <li>· Community: Discord</li>
+              <li>· Community: WhatsApp</li>
               <li>· Seats: {site.cohort.seats}</li>
               <li>· {site.cohort.priceLabel}</li>
             </ul>
             <p className="mt-4 text-xs text-white/40">{site.cohort.priceNote}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button href="/apply">Apply Now</Button>
-              <Button href={site.discordInvite} target="_blank" rel="noreferrer" variant="secondary">
-                Preview Discord
+              <Button href={site.whatsappInvite} target="_blank" rel="noreferrer" variant="secondary">
+                Join WhatsApp
               </Button>
             </div>
           </div>

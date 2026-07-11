@@ -3,6 +3,7 @@ import Image from "next/image";
 import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { beliefs, instructor } from "@/lib/content";
+import { img } from "@/lib/images";
 import { site } from "@/lib/site";
 import { Button } from "@/components/ui/Button";
 
@@ -25,7 +26,7 @@ export default function AboutPage() {
           <Reveal>
             <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem]">
               <Image
-                src="/images/presentation.jpg"
+                src={img.aboutMission}
                 alt="Lead instructor presenting"
                 fill
                 className="object-cover"

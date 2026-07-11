@@ -12,7 +12,7 @@ export default function TermsPage() {
           <p>
             Content on this site is for general information. Program details, pricing, and dates may
             change. Course purchases on Selar are subject to Selar’s terms. Community participation
-            on Discord is subject to Discord’s terms and SMN community guidelines.
+            on WhatsApp is subject to WhatsApp’s terms and SMN community guidelines.
           </p>
           <p>
             Employment is not guaranteed through any SMN program or partnership.

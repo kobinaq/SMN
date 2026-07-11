@@ -8,7 +8,7 @@ export const SiteSettings: GlobalConfig = {
   fields: [
     { name: "siteName", type: "text", required: true, defaultValue: "Social Marketers Network" },
     { name: "tagline", type: "textarea" },
-    { name: "discordInvite", type: "text" },
+    { name: "whatsappInvite", type: "text" },
     { name: "opsEmail", type: "email" },
     {
       name: "cohort",

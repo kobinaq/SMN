@@ -109,7 +109,7 @@ export function Header() {
 
         <div className="hidden items-center gap-3 lg:flex">
           <Button href="/community" variant="ghost" className="px-4 py-2">
-            Join Discord
+            Join WhatsApp
           </Button>
           <Button href="/apply" className="px-5 py-2.5">
             Apply Now
@@ -171,7 +171,7 @@ export function Header() {
               Apply Now
             </Button>
             <Button href="/community" variant="secondary" className="w-full">
-              Join Discord
+              Join WhatsApp
             </Button>
           </div>
         </div>

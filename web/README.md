@@ -10,7 +10,7 @@ Premium marketing-community site for SMN.
 - Resend (form email)
 - Mailchimp (newsletter)
 - Selar (course checkout links)
-- Discord (community)
+- WhatsApp (community)
 - Vercel-ready
 
 ## Develop
@@ -55,7 +55,7 @@ At minimum:
 - `PAYLOAD_SECRET` — long random string
 - `NEXT_PUBLIC_SITE_URL` — your `https://….vercel.app` (or custom domain)
 
-Optional: Resend, Mailchimp, Discord invite, `OPS_EMAIL`.
+Optional: Resend, Mailchimp, WhatsApp invite, `OPS_EMAIL`.
 
 ## Key routes
 
@@ -66,7 +66,7 @@ Optional: Resend, Mailchimp, Discord invite, `OPS_EMAIL`.
 | `/programs/cohort` | Flagship cohort |
 | `/programs/courses` | Selar catalogue |
 | `/apply` | Cohort application |
-| `/community` | Discord CTA |
+| `/community` | WhatsApp CTA |
 | `/employers` | Partner / talent forms |
 
 ## CMS collections

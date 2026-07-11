@@ -5,6 +5,7 @@ import {
   stories as fallbackStories,
   resources as fallbackResources,
 } from "@/lib/content";
+import { img } from "@/lib/images";
 import { site as fallbackSite } from "@/lib/site";
 import { safePayloadQuery } from "@/lib/payload";
 
@@ -31,7 +32,7 @@ export async function getCourses() {
       image:
         typeof doc.image === "object" && doc.image && "url" in doc.image && doc.image.url
           ? (doc.image.url as string)
-          : "/images/self-paced.jpg",
+          : img.default,
     }));
   }, fallbackCourses);
 }
@@ -57,7 +58,7 @@ export async function getEvents() {
       image:
         typeof doc.image === "object" && doc.image && "url" in doc.image && doc.image.url
           ? (doc.image.url as string)
-          : "/images/events-rooftop.jpg",
+          : img.defaultEvent,
     }));
   }, fallbackEvents);
 }
@@ -72,14 +73,21 @@ export async function getPosts() {
       sort: "-publishedAt",
     });
     if (!result.docs.length) return fallbackPosts;
-    return result.docs.map((doc) => ({
-      slug: doc.slug as string,
-      title: doc.title as string,
-      category: doc.category as string,
-      excerpt: doc.excerpt as string,
-      date: (doc.publishedAt as string)?.slice(0, 10) || "",
-      readTime: (doc.readTime as string) || "5 min",
-    }));
+    return result.docs.map((doc) => {
+      const cover =
+        typeof doc.cover === "object" && doc.cover && "url" in doc.cover && doc.cover.url
+          ? (doc.cover.url as string)
+          : undefined;
+      return {
+        slug: doc.slug as string,
+        title: doc.title as string,
+        category: doc.category as string,
+        excerpt: doc.excerpt as string,
+        date: (doc.publishedAt as string)?.slice(0, 10) || "",
+        readTime: (doc.readTime as string) || "5 min",
+        cover,
+      };
+    });
   }, fallbackPosts);
 }
 
@@ -96,7 +104,7 @@ export async function getStories() {
       image:
         typeof doc.image === "object" && doc.image && "url" in doc.image && doc.image.url
           ? (doc.image.url as string)
-          : "/images/story-ada.jpg",
+          : img.defaultStory,
     }));
   }, fallbackStories);
 }
@@ -126,7 +134,10 @@ export async function getSiteSettings() {
       ...fallbackSite,
       name: (doc.siteName as string) || fallbackSite.name,
       tagline: (doc.tagline as string) || fallbackSite.tagline,
-      discordInvite: (doc.discordInvite as string) || fallbackSite.discordInvite,
+      whatsappInvite:
+        (doc.whatsappInvite as string) ||
+        (doc.discordInvite as string) ||
+        fallbackSite.whatsappInvite,
       email: (doc.opsEmail as string) || fallbackSite.email,
       cohort: {
         ...fallbackSite.cohort,

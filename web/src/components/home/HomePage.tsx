@@ -16,6 +16,7 @@ import {
   instructor,
   stories,
 } from "@/lib/content";
+import { img } from "@/lib/images";
 import { site } from "@/lib/site";
 
 const ecosystemMorph = ["Learn", "Practice", "Connect", "Grow"];
@@ -56,7 +57,7 @@ export function HomePage() {
             data-parallax-wrap
           >
             <Image
-              src="/images/workshop.jpg"
+              src={img.philosophy}
               alt="Instructor leading a marketing workshop"
               fill
               className="object-cover"
@@ -263,7 +264,7 @@ export function HomePage() {
           <Reveal>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:aspect-[5/4] sm:rounded-[2rem]" data-parallax-wrap>
               <Image
-                src="/images/events-rooftop.jpg"
+                src={img.communityHome}
                 alt="Community networking event"
                 fill
                 className="object-cover"
@@ -277,7 +278,7 @@ export function HomePage() {
             <div data-rule className="mb-8 h-px w-24 bg-mint/50" />
             <SectionHeading
               eyebrow="Community"
-              title="The heart of the Network lives on Discord."
+              title="The heart of the Network lives on WhatsApp."
               description="Ask questions, share work, team up on projects, celebrate wins, and stay connected after a program ends."
             />
             <ul className="mt-8 space-y-3 text-white/70">
@@ -287,8 +288,8 @@ export function HomePage() {
               <li>· The support many marketers wish they had earlier</li>
             </ul>
             <div className="btn-row-mobile mt-8 sm:mt-10">
-              <Button href={site.discordInvite} target="_blank" rel="noreferrer">
-                Join Discord
+              <Button href={site.whatsappInvite} target="_blank" rel="noreferrer">
+                Join WhatsApp
               </Button>
               <Button href="/community" variant="secondary">
                 About community
