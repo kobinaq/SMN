@@ -21,6 +21,7 @@ import { OpportunityApplications } from "./collections/OpportunityApplications";
 import { Enrollments } from "./collections/Enrollments";
 import { LearningItems } from "./collections/LearningItems";
 import { Progress } from "./collections/Progress";
+import { Portfolios } from "./collections/Portfolios";
 import { SiteSettings } from "./globals/SiteSettings";
 import { createDbAdapter } from "./lib/db";
 import { getServerURL } from "./lib/server-url";
@@ -91,6 +92,7 @@ export default buildConfig({
     Enrollments,
     LearningItems,
     Progress,
+    Portfolios,
     Media,
     Posts,
     Courses,

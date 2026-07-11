@@ -7,7 +7,7 @@ Post-MVP network product. Marketing site remains public; authenticated product l
 | Area | Choice |
 |------|--------|
 | Member auth | **Payload** `members` collection (separate from staff `users`) |
-| Staff CMS | Payload `users` → `/admin` |
+| Staff CMS | Payload `users` â†’ `/admin` |
 | Media | **Cloudflare R2** (S3 adapter) when env configured |
 | Hosting | Vercel (`web` root) |
 | Production DB | Postgres (`DATABASE_URL`) |
@@ -21,7 +21,7 @@ Post-MVP network product. Marketing site remains public; authenticated product l
 | **7.2 Mentor directory** | Implemented | Approved mentors, applications, filters, requests |
 | **7.3 Opportunities** | Implemented | Moderated job/gig board with public ATS imports |
 | **7.4 Learning dashboard** | Implemented | Enrollments, Classroom/Selar access, milestones, progress |
-| **7.5 Portfolios** | Planned | Public `/u/[handle]` |
+| **7.5 Portfolios** | Implemented | Member case studies, public `/u/[handle]`, 10 MB upload or cover URL |
 | **7.6 Certificates** | Planned | PDF on R2 + `/verify/[code]` |
 | **7.7 Employer portal** | Planned | Thin employer dashboard |
 | **7.8 Forum** | Optional / late | Prefer WhatsApp until demand is clear |
@@ -30,20 +30,20 @@ Post-MVP network product. Marketing site remains public; authenticated product l
 ## Dependency graph
 
 ```text
-7.0 → 7.1 → 7.2 mentors
-           → 7.3 jobs → 7.7 employers
-           → 7.4 learning → 7.6 certs
-           → 7.5 portfolios
+7.0 â†’ 7.1 â†’ 7.2 mentors
+           â†’ 7.3 jobs â†’ 7.7 employers
+           â†’ 7.4 learning â†’ 7.6 certs
+           â†’ 7.5 portfolios
 ```
 
 ## Env (product)
 
 See `web/.env.example` for `DATABASE_URL`, R2_*, and existing Resend/Mailchimp vars.
 
-## Verification checklist (7.0–7.1)
+## Verification checklist (7.0â€“7.1)
 
 - [ ] Staff create first user at `/admin`
-- [ ] Member signup at `/signup` → lands on `/app`
+- [ ] Member signup at `/signup` â†’ lands on `/app`
 - [ ] Member cannot open `/admin`
 - [ ] Profile save via `/app/profile`
 - [ ] Logout returns to login

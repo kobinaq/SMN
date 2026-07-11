@@ -16,8 +16,7 @@ export default async function ProfilePage() {
         </p>
         <h1 className="mt-3 font-display text-2xl text-white sm:text-3xl">Your profile</h1>
         <p className="mt-2 text-sm text-white/50">
-          This is what mentors and employers will see when portfolio profiles go live. Avatar
-          upload lands with R2 media next.
+          This information appears on your public portfolio when visibility is set to Public.
         </p>
         <p className="mt-2 text-xs text-white/35">{member.email}</p>
       </div>

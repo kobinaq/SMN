@@ -13,7 +13,7 @@ This document is the transfer brief. Codex has full repo access. Prefer reading 
 
 ## 1. Product in one paragraph
 
-**Social Marketers Network (SMN)** is a premium marketing-community site for modern marketers (Africa-first): flagship cohort, Selar self-paced courses, WhatsApp community, events, insights, resources, and employers/partners. Phase 7+ turns it into a **network product** with member accounts, mentors, jobs, learning dashboard, portfolios, certificates — without building a full LMS or replacing WhatsApp/Selar/Classroom yet.
+**Social Marketers Network (SMN)** is a premium marketing-community site for modern marketers (Africa-first): flagship cohort, Selar self-paced courses, WhatsApp community, events, insights, resources, and employers/partners. Phase 7+ turns it into a **network product** with member accounts, mentors, jobs, learning dashboard, portfolios, certificates â€” without building a full LMS or replacing WhatsApp/Selar/Classroom yet.
 
 ---
 
@@ -26,35 +26,35 @@ This document is the transfer brief. Codex has full repo access. Prefer reading 
 - Apply, contact, employers, mentorship pages (thinner layouts)
 - Forms: cohort apply, contact, newsletter (Resend/Mailchimp when env set; otherwise console log)
 - GSAP + Lenis motion (Lenis off on mobile/touch)
-- Unique image map: `web/src/lib/images.ts` — do not reuse photos across surfaces
+- Unique image map: `web/src/lib/images.ts` â€” do not reuse photos across surfaces
 - Seed content: `web/src/lib/content.ts` when CMS empty
 
-### Platform / product started (7.0–7.1)
-- **Staff CMS:** Payload collection `users` → `/admin`
-- **Members:** auth collection `members` → `/signup`, `/login`, `/app/*`
+### Platform / product started (7.0â€“7.1)
+- **Staff CMS:** Payload collection `users` â†’ `/admin`
+- **Members:** auth collection `members` â†’ `/signup`, `/login`, `/app/*`
 - Portal shell: home, profile edit, placeholder pages for learning/mentors/opportunities
 - Postgres via `DATABASE_URL` (`web/src/lib/db.ts`); SQLite local fallback
 - R2 via `@payloadcms/storage-s3` when `R2_*` env present
-- Schema push: **opt-in only** — `npm run db:push` (not on every request)
+- Schema push: **opt-in only** â€” `npm run db:push` (not on every request)
 - Dual document shells: multi-root layouts (no `app/layout.tsx`)
-  - `(site)`, `(auth)`, `(portal)` → `SiteDocument`
-  - `(payload)` → Payload `RootLayout`
+  - `(site)`, `(auth)`, `(portal)` â†’ `SiteDocument`
+  - `(payload)` â†’ Payload `RootLayout`
 
 ### Confirmed working in production (as of handoff)
 - Marketing pages + images
-- Member `/login` → `/app` (user was logged in)
+- Member `/login` â†’ `/app` (user was logged in)
 - Neon DB reachable; `members` / `users` tables exist
 
 ### Not confirmed / broken / fragile
 - **`/admin` on Vercel was blank black** while local worked  
   - Root cause identified: `Users.access.admin` returned `true` when `!req.user`, so Payload rendered Dashboard with `user: null` instead of redirecting to login  
   - **Fix committed in spirit** in `Users.ts`: `admin` must return **boolean only** for staff  
-  - **Verify after deploy:** private window → `/admin` → should redirect to `/admin/login` or create-first-user  
+  - **Verify after deploy:** private window â†’ `/admin` â†’ should redirect to `/admin/login` or create-first-user  
 - Member and staff share **one** cookie: `payload-token` (Payload global `cookiePrefix`)  
   - Middleware `web/src/middleware.ts` strips member JWT from `/admin` request only  
   - Logging into staff admin still **overwrites** member cookie (known limitation)
 - Resend / Mailchimp / domain / `R2_PUBLIC_URL` not fully set (user waiting on domain purchase)
-- Thinner marketing pages not “uplifted” to events/community quality: employers, mentorship, stories, programs hub, courses catalogue
+- Thinner marketing pages not â€œupliftedâ€ to events/community quality: employers, mentorship, stories, programs hub, courses catalogue
 - Legal: privacy/terms are starter stubs
 - GA4 not wired
 - Selar / Lu.ma URLs still placeholders in seed content
@@ -65,7 +65,7 @@ This document is the transfer brief. Codex has full repo access. Prefer reading 
 
 | Topic | Decision |
 |-------|----------|
-| Member auth | **Payload** `members` collection — **not** Clerk/Auth.js |
+| Member auth | **Payload** `members` collection â€” **not** Clerk/Auth.js |
 | Staff auth | Payload `users` only for `/admin` |
 | Media | **Cloudflare R2** (S3 adapter), not Vercel Blob |
 | Hosting | Vercel, monorepo root directory **`web`** |
@@ -89,7 +89,7 @@ This document is the transfer brief. Codex has full repo access. Prefer reading 
 | `web/src/lib/images.ts` | Central unique image paths |
 | `web/src/lib/content.ts` | Seed marketing content |
 | `web/src/lib/auth/member.ts` | `getMember` / `requireMember` |
-| `web/src/collections/Users.ts` | Staff access — **admin must return boolean staff-only** |
+| `web/src/collections/Users.ts` | Staff access â€” **admin must return boolean staff-only** |
 | `web/src/collections/Members.ts` | Member profiles + auth |
 | `web/src/middleware.ts` | Strip member JWT on `/admin` only |
 | `web/src/app/(payload)/layout.tsx` | Payload RootLayout + serverFunction |
@@ -100,7 +100,7 @@ This document is the transfer brief. Codex has full repo access. Prefer reading 
 | `web/scripts/push-schema.mjs` | Production schema sync helper |
 | `web/scripts/check-schema.mjs` | List tables |
 | `PRODUCT-ROADMAP.md` | Short phase list |
-| `ARCHITECTURE.md` | Original MVP architecture (some Discord refs outdated → WhatsApp) |
+| `ARCHITECTURE.md` | Original MVP architecture (some Discord refs outdated â†’ WhatsApp) |
 | `web/README.md` | Dev + Vercel notes |
 | `web/.env.example` | Env template (no real secrets) |
 
@@ -113,8 +113,8 @@ This document is the transfer brief. Codex has full repo access. Prefer reading 
 | Variable | Purpose |
 |----------|---------|
 | `DATABASE_URL` | Neon Postgres |
-| `PAYLOAD_SECRET` | JWT/signing — **match local** if same DB |
-| `NEXT_PUBLIC_SITE_URL` | Full origin e.g. `https://socialmarketersnetwork.vercel.app` (no trailing slash) — **critical for admin CSRF/cookies** |
+| `PAYLOAD_SECRET` | JWT/signing â€” **match local** if same DB |
+| `NEXT_PUBLIC_SITE_URL` | Full origin e.g. `https://socialmarketersnetwork.vercel.app` (no trailing slash) â€” **critical for admin CSRF/cookies** |
 | `R2_BUCKET` | Cloudflare R2 |
 | `R2_ACCESS_KEY_ID` | R2 |
 | `R2_SECRET_ACCESS_KEY` | R2 |
@@ -139,30 +139,30 @@ This document is the transfer brief. Codex has full repo access. Prefer reading 
 ### Schema / migrate notes
 - `payload migrate` CLI **breaks on Node 24** in this environment (tsx / `@next/env` interop)
 - Use `npm run db:push` instead of migrate for now
-- Do **not** re-enable `push: true` on every app connect (causes 20–30s “Pulling schema” and failed admin queries)
+- Do **not** re-enable `push: true` on every app connect (causes 20â€“30s â€œPulling schemaâ€ and failed admin queries)
 
 ---
 
 ## 6. Immediate priorities (do these first)
 
-### P0 — Unblock production admin
+### P0 â€” Unblock production admin
 1. Confirm latest `Users.access.admin` is deployed (boolean staff-only).
-2. Private window → `https://socialmarketersnetwork.vercel.app/admin`
-3. Expect **redirect to `/admin/login`** or create-first-user — not blank dashboard.
+2. Private window â†’ `https://socialmarketersnetwork.vercel.app/admin`
+3. Expect **redirect to `/admin/login`** or create-first-user â€” not blank dashboard.
 4. Create/login **staff** user (separate from member account).
 5. If still blank: check browser console + Network for `/api/*` failures; verify `NEXT_PUBLIC_SITE_URL` and `PAYLOAD_SECRET` on Vercel.
 
-### P0 — Stabilize, don’t thrash
+### P0 â€” Stabilize, donâ€™t thrash
 - Avoid stacking speculative admin fixes without reproducing the HTML/RSC payload.
-- Production debug tip: `curl` `/admin` HTML — if RSC stream has `"user":null` and page children `null` with Dashboard view, it’s the canAccessAdmin bug again.
+- Production debug tip: `curl` `/admin` HTML â€” if RSC stream has `"user":null` and page children `null` with Dashboard view, itâ€™s the canAccessAdmin bug again.
 
-### P1 — Content / launch readiness (marketing)
+### P1 â€” Content / launch readiness (marketing)
 - Real WhatsApp invite, Selar URLs, Lu.ma events, cohort dates/prices
 - Privacy/terms legal review
 - GA4
-- Domain → update `NEXT_PUBLIC_SITE_URL`, Resend domain, optional `R2_PUBLIC_URL`
+- Domain â†’ update `NEXT_PUBLIC_SITE_URL`, Resend domain, optional `R2_PUBLIC_URL`
 
-### P1 — Optional page uplifts (quality parity with events/community)
+### P1 â€” Optional page uplifts (quality parity with events/community)
 - Employers, mentorship, stories, programs hub, courses catalogue
 
 ---
@@ -172,25 +172,25 @@ This document is the transfer brief. Codex has full repo access. Prefer reading 
 Implement in dependency order. Full design notes also in session plan history; this is the executable backlog.
 
 ```text
-7.0 Platform ──► 7.1 Portal shell ──┬──► 7.2 Mentors
-        (mostly done)    (mostly done) ├──► 7.3 Opportunities ──► 7.7 Employer portal
-                                       ├──► 7.4 Learning ──► 7.6 Certificates
-                                       └──► 7.5 Portfolios
-                                       └──► 7.8 Forum (late / optional)
-                                       └──► 7.9 Native pay/LMS (only if needed)
+7.0 Platform â”€â”€â–º 7.1 Portal shell â”€â”€â”¬â”€â”€â–º 7.2 Mentors
+        (mostly done)    (mostly done) â”œâ”€â”€â–º 7.3 Opportunities â”€â”€â–º 7.7 Employer portal
+                                       â”œâ”€â”€â–º 7.4 Learning â”€â”€â–º 7.6 Certificates
+                                       â””â”€â”€â–º 7.5 Portfolios
+                                       â””â”€â”€â–º 7.8 Forum (late / optional)
+                                       â””â”€â”€â–º 7.9 Native pay/LMS (only if needed)
 ```
 
-### 7.0 Platform — status: ~90%
+### 7.0 Platform â€” status: ~90%
 **Done:** dual auth collections, R2 plugin, Postgres adapter, multi-root layouts, member session helpers, middleware for admin vs member cookie.  
 **Left:**
 - [ ] Prove `/admin` login on Vercel end-to-end
-- [ ] Optional: separate cookies for members vs staff (today shared `payload-token` — staff login overwrites member)
-- [ ] Avatar upload on profile (media → R2)
+- [ ] Optional: separate cookies for members vs staff (today shared `payload-token` â€” staff login overwrites member)
+- [ ] Avatar upload on profile (media â†’ R2)
 - [ ] Payload email adapter (Resend) for forgot-password
 - [ ] Formal migrations when CLI works (or document db:push as permanent process)
 - [ ] Fix monorepo `vercel.json` confusion (root vs `web/vercel.json`) if Root Directory is mis-set
 
-### 7.1 Portal shell — status: ~80%
+### 7.1 Portal shell â€” status: ~80%
 **Done:** signup/login/logout, `/app` home, profile form, nav placeholders.  
 **Left:**
 - [ ] Avatar upload
@@ -198,15 +198,15 @@ Implement in dependency order. Full design notes also in session plan history; t
 - [ ] Ensure production member session + profile PATCH solid
 - [ ] Password reset emails when Resend ready
 
-### 7.2 Mentor directory — **next major feature**
+### 7.2 Mentor directory â€” **next major feature**
 **Goal:** Browsable, staff-approved mentors (not form-only).
 
 **Build:**
-- [ ] Payload collections: `mentors` (relation → member), `mentorship-requests`
+- [ ] Payload collections: `mentors` (relation â†’ member), `mentorship-requests`
 - [ ] Fields: topics, bio, availability, Cal.com URL, status draft/approved
 - [ ] Public or member-gated `/mentors` + `/app/mentors`
-- [ ] Apply to become mentor → staff approve in admin
-- [ ] Request mentorship → Resend to mentor + ops
+- [ ] Apply to become mentor â†’ staff approve in admin
+- [ ] Request mentorship â†’ Resend to mentor + ops
 - [ ] Filters: topic, seniority, availability
 - [ ] Extend/replace thin `mentorship/page.tsx` marketing intro
 
@@ -234,7 +234,7 @@ Implement in dependency order. Full design notes also in session plan history; t
 
 ### 7.6 Certificates
 - [ ] Collection `certificates`
-- [ ] Staff issue → PDF on R2
+- [ ] Staff issue â†’ PDF on R2
 - [ ] Public `/verify/[code]`
 - [ ] List in portal
 
@@ -255,13 +255,13 @@ Implement in dependency order. Full design notes also in session plan history; t
 ## 8. Known pitfalls (read before coding)
 
 1. **`Users.access.admin` must return boolean staff-only.**  
-   Never return `true` for `!req.user` — causes blank Dashboard on Vercel.
+   Never return `true` for `!req.user` â€” causes blank Dashboard on Vercel.
 
 2. **Next.js 16 `images.localPatterns`**  
    If set, **only** listed paths work. Must include `/images/**`, `/brand/**`, and `/api/media/file/**`.
 
 3. **Multi-root layouts**  
-   No `app/layout.tsx`. Each of `(site)`, `(auth)`, `(portal)`, `(payload)` owns document shell. Don’t reintroduce nested `<html>` inside marketing body.
+   No `app/layout.tsx`. Each of `(site)`, `(auth)`, `(portal)`, `(payload)` owns document shell. Donâ€™t reintroduce nested `<html>` inside marketing body.
 
 4. **Shared auth cookie**  
    Members and staff use `payload-token`. Middleware ignores member token on `/admin` only.
@@ -298,7 +298,7 @@ cd web
 npm install
 npm run dev              # http://localhost:3000
 # Admin local:           http://localhost:3000/admin
-# Member:                /signup → /app
+# Member:                /signup â†’ /app
 
 npm run db:push          # push schema to DATABASE_URL (Postgres)
 npm run db:check         # list public tables
@@ -323,8 +323,8 @@ npx tsc --noEmit         # typecheck
 
 - Founder instructor: **Arielle Adodo** (Ghana), LinkedIn-informed bio in content  
 - Pricing shown in **GHS**  
-- Community: **WhatsApp** (not Discord — ARCHITECTURE.md may still mention Discord in places; code uses WhatsApp)  
-- Domain purchase pending → delay Resend + public R2 CDN until then  
+- Community: **WhatsApp** (not Discord â€” ARCHITECTURE.md may still mention Discord in places; code uses WhatsApp)  
+- Domain purchase pending â†’ delay Resend + public R2 CDN until then  
 - User preference: **stop stacking speculative fixes**; prefer root-cause verification (e.g. inspect production HTML/RSC for `user` and view type)
 
 ---
@@ -332,7 +332,7 @@ npx tsc --noEmit         # typecheck
 ## 13. Open verification checklist for Codex
 
 - [ ] Vercel deploy green after `Users.ts` boolean `admin` fix  
-- [ ] `/admin` → login UI on production (private window)  
+- [ ] `/admin` â†’ login UI on production (private window)  
 - [ ] Staff can log in and see collections  
 - [ ] Member can still use `/app`  
 - [ ] Homepage images load on production  

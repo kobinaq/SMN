@@ -16,7 +16,7 @@ export type MemberUser = {
   roles?: string[] | null;
   visibility?: string | null;
   collection: "members";
-  avatar?: unknown;
+  avatar?: { url?: string | null } | string | number | null;
 };
 
 /** Current session if authenticated as a network member (not staff). */
