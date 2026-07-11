@@ -352,3 +352,4 @@ npx tsc --noEmit         # typecheck
 - Access-control, login callback, newsletter error handling, and hero lint issues fixed.
 - Phase 7.2 mentor directory implemented: applications, staff approval, member filters, and mentorship requests.
 - Neon schema includes `mentors` and `mentorship-requests`.
+- Phase 7.3 opportunities board implemented with manual listings, moderated ATS imports, member filters, and application tracking.

@@ -117,3 +117,17 @@ For Neon, either the **pooled** or **direct** connection string works; if querie
 **Users** (staff), **Members** (portal), Media, Posts, Courses, Events, Stories, Resources + global **Site Settings**.
 
 See repo root `PRODUCT-ROADMAP.md` for Phase 7+ (mentors, jobs, learning, certs).
+## Automated opportunity sources
+
+Phase 7.3 can import public marketing roles from Greenhouse, Lever, and Ashby without API keys.
+
+1. Set `CRON_SECRET` in Vercel to a random value of at least 16 characters.
+2. In Payload admin, open **Opportunities → Opportunity Sources**.
+3. Add a company, choose its ATS, and enter the public board identifier:
+   - Greenhouse: the token in `boards.greenhouse.io/<token>`
+   - Lever: the site name in `jobs.lever.co/<site>`
+   - Ashby: the board name in `jobs.ashbyhq.com/<board>`
+4. Leave **Auto publish** off until the source has produced consistently relevant results.
+5. Imported roles appear under **Opportunities → Opportunities** as `pending` for staff review.
+
+Vercel calls `/api/cron/sync-opportunities` daily at 05:00 UTC. Imported applications always continue on the employer's original site; SMN stores only member activity status.

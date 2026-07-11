@@ -15,6 +15,9 @@ import { Stories } from "./collections/Stories";
 import { Resources } from "./collections/Resources";
 import { Mentors } from "./collections/Mentors";
 import { MentorshipRequests } from "./collections/MentorshipRequests";
+import { OpportunitySources } from "./collections/OpportunitySources";
+import { Opportunities } from "./collections/Opportunities";
+import { OpportunityApplications } from "./collections/OpportunityApplications";
 import { SiteSettings } from "./globals/SiteSettings";
 import { createDbAdapter } from "./lib/db";
 import { getServerURL } from "./lib/server-url";
@@ -76,6 +79,9 @@ export default buildConfig({
     Members,
     Mentors,
     MentorshipRequests,
+    OpportunitySources,
+    Opportunities,
+    OpportunityApplications,
     Media,
     Posts,
     Courses,

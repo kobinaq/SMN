@@ -19,7 +19,7 @@ Post-MVP network product. Marketing site remains public; authenticated product l
 | **7.0 Platform** | In progress | Dual auth, R2-ready media, Postgres-ready DB |
 | **7.1 Portal shell** | In progress | Login/signup, `/app` home, profile, placeholders |
 | **7.2 Mentor directory** | Implemented | Approved mentors, applications, filters, requests |
-| **7.3 Opportunities** | Planned | Job/gig board |
+| **7.3 Opportunities** | Implemented | Moderated job/gig board with public ATS imports |
 | **7.4 Learning dashboard** | Planned | Classroom links, Selar entitlements |
 | **7.5 Portfolios** | Planned | Public `/u/[handle]` |
 | **7.6 Certificates** | Planned | PDF on R2 + `/verify/[code]` |
@@ -58,3 +58,11 @@ See `web/.env.example` for `DATABASE_URL`, R2_*, and existing Resend/Mailchimp v
 - Authenticated mentorship requests with staff moderation states
 - Optional Resend notification to operations
 - Public mentorship pages connected to the member workflow
+
+## Phase 7.3 delivery
+
+- Staff-managed manual, partner, and imported opportunities
+- Greenhouse, Lever, and Ashby public job-board importers
+- Daily secured Vercel cron with relevance scoring, deduplication, and stale closure
+- Pending-review moderation by default with per-source trusted auto-publishing
+- Member search, filters, detail pages, external application handoff, and activity tracking
