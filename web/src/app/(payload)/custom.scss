@@ -1,4 +1,54 @@
-/* SMN admin branding — keep minimal to avoid fighting Payload CSS */
+/* SMN Payload workspace */
 :root {
   --smn-deep-blue: #0a2f8f;
+  --smn-blue: #7eb6ff;
+  --smn-mint: #6fcfb0;
+  --smn-ink: #0b0d12;
+  --smn-surface: #141820;
+  --smn-line: rgba(255, 255, 255, 0.1);
 }
+
+.smn-eyebrow { color: var(--smn-blue); font-size: 11px; font-weight: 650; letter-spacing: .2em; text-transform: uppercase; }
+
+/* Login: preserve Payload's form and authentication behavior. */
+.login { position: relative; isolation: isolate; overflow: hidden; min-height: 100vh; padding: 56px 24px; background: radial-gradient(circle at 15% 15%, rgba(10,47,143,.42), transparent 34%), radial-gradient(circle at 85% 80%, rgba(126,182,255,.12), transparent 30%), #0b0d12; }
+.login::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .035; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.login__brand, .smn-login-intro, .login__form, .smn-login-help { width: min(100%, 470px); margin-inline: auto; }
+.login__brand { margin-bottom: 24px; }
+.login__brand img { max-width: 190px !important; max-height: 48px !important; filter: brightness(0) invert(1); }
+.smn-login-intro { padding: 30px 32px 24px; border: 1px solid var(--smn-line); border-bottom: 0; border-radius: 24px 24px 0 0; background: linear-gradient(145deg, rgba(20,24,32,.98), rgba(13,17,26,.96)); box-shadow: 0 30px 90px rgba(0,0,0,.32); }
+.smn-login-intro h1 { margin: 12px 0 10px; color: white; font-size: clamp(28px, 5vw, 38px); line-height: 1.02; letter-spacing: -.045em; }
+.smn-login-intro p { margin: 0; color: rgba(255,255,255,.55); font-size: 14px; line-height: 1.65; }
+.smn-login-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.smn-login-pills span { border: 1px solid rgba(126,182,255,.18); border-radius: 999px; padding: 5px 10px; color: rgba(255,255,255,.55); font-size: 11px; }
+.login__form { box-sizing: border-box; padding: 8px 32px 30px; border: 1px solid var(--smn-line); border-top: 0; background: rgba(20,24,32,.98); }
+.login__form .field-label { color: rgba(255,255,255,.66); }
+.login__form input { min-height: 48px; border-color: rgba(255,255,255,.13); border-radius: 12px; background: rgba(255,255,255,.045); }
+.login__form input:focus { border-color: var(--smn-blue); box-shadow: 0 0 0 2px rgba(126,182,255,.15); }
+.login__form .btn--style-primary { width: 100%; border-radius: 999px; background: var(--smn-deep-blue); color: white; }
+.login__form .btn--style-primary:hover { background: #0c3ab0; }
+.login__form > a { color: var(--smn-blue); font-size: 13px; }
+.smn-login-help { box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 8px 16px; padding: 15px 32px; border: 1px solid var(--smn-line); border-top: 0; border-radius: 0 0 24px 24px; background: rgba(13,17,26,.98); color: rgba(255,255,255,.35); font-size: 11px; }
+.smn-login-help span { margin-right: auto; text-transform: uppercase; letter-spacing: .12em; }
+.smn-login-help a { color: rgba(255,255,255,.52); text-decoration: none; }
+.smn-login-help a:hover { color: white; }
+
+/* Dashboard operational layer. */
+.smn-dashboard { margin: 8px 0 36px; color: var(--theme-text); }
+.smn-dashboard-hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; overflow: hidden; position: relative; padding: 32px; border: 1px solid var(--theme-elevation-150); border-radius: 20px; background: linear-gradient(130deg, #0a2f8f, #102353 58%, #141820); color: white; }
+.smn-dashboard-hero::after { content: "SMN"; position: absolute; right: 3%; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,.045); font-size: clamp(80px, 14vw, 180px); font-weight: 800; letter-spacing: -.08em; pointer-events: none; }
+.smn-dashboard-hero h1 { position: relative; z-index: 1; margin: 10px 0 8px; font-size: clamp(30px, 4vw, 48px); line-height: 1; letter-spacing: -.045em; }
+.smn-dashboard-hero p { position: relative; z-index: 1; margin: 0; color: rgba(255,255,255,.62); }
+.smn-site-link { position: relative; z-index: 1; flex: none; border: 1px solid rgba(255,255,255,.2); border-radius: 999px; padding: 10px 16px; color: white; text-decoration: none; font-size: 13px; }
+.smn-site-link:hover { background: rgba(255,255,255,.1); }
+.smn-metrics { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; margin-top: 14px; }
+.smn-metric { --accent: var(--smn-blue); display: flex; min-height: 132px; flex-direction: column; padding: 20px; border: 1px solid var(--theme-elevation-150); border-radius: 16px; background: var(--theme-elevation-50); color: var(--theme-text); text-decoration: none; transition: transform .18s ease, border-color .18s ease; }
+.smn-metric:hover { transform: translateY(-2px); border-color: var(--accent); }
+.smn-metric--mint { --accent: var(--smn-mint); }.smn-metric--amber { --accent: #f2b84b; }.smn-metric--violet { --accent: #ae8cff; }
+.smn-metric strong { color: var(--accent); font-size: 34px; line-height: 1; }.smn-metric span { margin-top: 10px; font-size: 13px; }.smn-metric small { margin-top: auto; color: var(--theme-elevation-500); font-size: 11px; }
+.smn-quick-actions { display: grid; grid-template-columns: .65fr 1.35fr; align-items: center; gap: 24px; margin-top: 14px; padding: 22px 24px; border: 1px solid var(--theme-elevation-150); border-radius: 16px; background: var(--theme-elevation-50); }
+.smn-quick-actions h2 { margin: 6px 0 0; font-size: 20px; }.smn-quick-actions nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }.smn-quick-actions nav a { border: 1px solid var(--theme-elevation-200); border-radius: 999px; padding: 8px 13px; color: var(--theme-text); text-decoration: none; font-size: 12px; }.smn-quick-actions nav a:hover { border-color: var(--smn-blue); color: var(--smn-blue); }
+.dashboard .dashboard__wrap { margin-top: 10px; }.dashboard .card { border-radius: 14px; }
+
+@media (max-width: 1024px) { .smn-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width: 700px) { .login { padding: 28px 14px; }.smn-login-intro { padding: 24px 22px 20px; }.login__form { padding-inline: 22px; }.smn-login-help { padding-inline: 22px; }.smn-dashboard-hero { align-items: flex-start; flex-direction: column; padding: 24px; }.smn-metrics { grid-template-columns: 1fr; }.smn-quick-actions { grid-template-columns: 1fr; }.smn-quick-actions nav { justify-content: flex-start; }.smn-metric { min-height: 112px; } }
