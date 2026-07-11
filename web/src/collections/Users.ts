@@ -23,7 +23,8 @@ const canCreateStaff: Access = async ({ req }) => {
     });
     return existing.totalDocs === 0;
   } catch {
-    return true;
+    // Never grant anonymous staff creation when the uniqueness check is unavailable.
+    return false;
   }
 };
 

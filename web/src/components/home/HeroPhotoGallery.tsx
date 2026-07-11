@@ -271,8 +271,11 @@ function getRandomNumberInRange(min: number, max: number): number {
 }
 
 const MotionImage = motion.create(
-  forwardRef(function MotionImage(props: ImageProps, ref: Ref<HTMLImageElement>) {
-    return <Image ref={ref} {...props} />;
+  forwardRef(function MotionImage(
+    { alt, ...props }: ImageProps,
+    ref: Ref<HTMLImageElement>,
+  ) {
+    return <Image ref={ref} alt={alt} {...props} />;
   }),
 );
 
@@ -296,9 +299,12 @@ function Photo({
   const [rotation, setRotation] = useState(0);
 
   useEffect(() => {
-    const randomRotation =
-      getRandomNumberInRange(1.5, 4.5) * (direction === "left" ? -1 : 1);
-    setRotation(randomRotation);
+    const timer = window.setTimeout(() => {
+      const randomRotation =
+        getRandomNumberInRange(1.5, 4.5) * (direction === "left" ? -1 : 1);
+      setRotation(randomRotation);
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [direction]);
 
   return (

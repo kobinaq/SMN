@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       if (!res.ok) {
         const err = await res.text();
         // Treat "already subscribed" as success-ish
-        if (!err.includes("Member Exists") && res.status !== 400) {
+        if (!err.includes("Member Exists")) {
           console.error(err);
           return NextResponse.json({ error: "Subscription failed." }, { status: 502 });
         }

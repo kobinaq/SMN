@@ -8,10 +8,17 @@ import { Button } from "@/components/ui/Button";
 const field =
   "field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/35 sm:py-3";
 
+function safeCallbackUrl(value: string | null) {
+  if (!value || !value.startsWith("/") || value.startsWith("//") || value.includes(String.fromCharCode(92))) {
+    return "/app";
+  }
+  return value;
+}
+
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/app";
+  const callbackUrl = safeCallbackUrl(searchParams.get("callbackUrl"));
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [message, setMessage] = useState("");
 

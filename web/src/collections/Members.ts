@@ -82,6 +82,10 @@ export const Members: CollectionConfig = {
     {
       name: "roles",
       type: "select",
+      access: {
+        create: ({ req }) => req.user?.collection === "users",
+        update: ({ req }) => req.user?.collection === "users",
+      },
       hasMany: true,
       defaultValue: ["member"],
       options: [
@@ -94,6 +98,10 @@ export const Members: CollectionConfig = {
     {
       name: "cohortStatus",
       type: "select",
+      access: {
+        create: ({ req }) => req.user?.collection === "users",
+        update: ({ req }) => req.user?.collection === "users",
+      },
       defaultValue: "none",
       options: [
         { label: "None", value: "none" },
