@@ -18,7 +18,7 @@ Post-MVP network product. Marketing site remains public; authenticated product l
 |-------|--------|---------|
 | **7.0 Platform** | In progress | Dual auth, R2-ready media, Postgres-ready DB |
 | **7.1 Portal shell** | In progress | Login/signup, `/app` home, profile, placeholders |
-| **7.2 Mentor directory** | Planned | Approved mentors, requests |
+| **7.2 Mentor directory** | Implemented | Approved mentors, applications, filters, requests |
 | **7.3 Opportunities** | Planned | Job/gig board |
 | **7.4 Learning dashboard** | Planned | Classroom links, Selar entitlements |
 | **7.5 Portfolios** | Planned | Public `/u/[handle]` |
@@ -49,3 +49,12 @@ See `web/.env.example` for `DATABASE_URL`, R2_*, and existing Resend/Mailchimp v
 - [ ] Logout returns to login
 - [ ] With Postgres URL, app uses Postgres adapter
 - [ ] With R2 env, Media uploads go to R2
+
+## Phase 7.2 delivery
+
+- Staff-managed `mentors` and `mentorship-requests` collections
+- Member mentor applications with draft/approval workflow
+- Approved-only member directory with specialty search and filters
+- Authenticated mentorship requests with staff moderation states
+- Optional Resend notification to operations
+- Public mentorship pages connected to the member workflow

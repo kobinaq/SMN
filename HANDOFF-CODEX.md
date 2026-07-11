@@ -343,3 +343,12 @@ npx tsc --noEmit         # typecheck
 ---
 
 *End of handoff. Prefer this file + `PRODUCT-ROADMAP.md` + `web/README.md` as the source of truth for remaining work.*
+
+---
+
+## Codex progress after handoff
+
+- Production `/admin` restored by making the R2 plugin/import map environment-invariant.
+- Access-control, login callback, newsletter error handling, and hero lint issues fixed.
+- Phase 7.2 mentor directory implemented: applications, staff approval, member filters, and mentorship requests.
+- Neon schema includes `mentors` and `mentorship-requests`.

@@ -27,7 +27,7 @@ const placeholders = [
     href: "/app/mentors",
     icon: UserRound,
     title: "Mentors",
-    body: "Browse approved mentors and request guidance (directory coming next).",
+    body: "Browse approved mentors by specialty and request focused guidance.",
     cta: "View mentors",
   },
   {

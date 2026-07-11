@@ -1,28 +1,9 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/layout/PageHero";
-import { ContactForm } from "@/components/forms/ContactForm";
+import { Button } from "@/components/ui/Button";
 
-export const metadata: Metadata = {
-  title: "Become a Mentor",
-  description: "Mentor marketers in the Network.",
-};
+export const metadata: Metadata = { title: "Become a Mentor", description: "Mentor marketers in the Network." };
 
 export default function BecomeMentorPage() {
-  return (
-    <>
-      <PageHero
-        eyebrow="Give back"
-        title="Become a mentor"
-        description="If you have real experience, help marketers in the Network grow with clear, honest guidance."
-      />
-      <section className="border-t border-white/10 bg-ink pb-24">
-        <div className="container-wide max-w-2xl rounded-[2rem] border border-white/10 bg-surface p-6 md:p-10">
-          <ContactForm defaultType="Other" />
-          <p className="mt-4 text-xs text-white/40">
-            Use the message field to share expertise, years of experience, and LinkedIn.
-          </p>
-        </div>
-      </section>
-    </>
-  );
+  return <><PageHero eyebrow="Give back" title="Become a mentor" description="If you have real experience, help marketers in the Network grow with clear, honest guidance." /><section className="border-t border-white/10 bg-ink py-20"><div className="container-wide grid gap-10 lg:grid-cols-[1fr_0.8fr]"><div><h2 className="font-display text-3xl text-white">A thoughtful, reviewed directory</h2><p className="mt-4 max-w-2xl leading-relaxed text-white/60">Mentors share their specialties, experience, and approach from their member account. The SMN team reviews each application before the profile becomes visible.</p><ul className="mt-7 space-y-3 text-sm text-white/60"><li>· Offer one-on-one guidance, portfolio reviews, or office hours</li><li>· Set your availability and pause whenever needed</li><li>· SMN reviews requests before making introductions</li></ul></div><div className="rounded-[2rem] border border-white/10 bg-surface p-6 md:p-8"><h3 className="font-display text-2xl text-white">Apply from the portal</h3><p className="mt-3 text-sm leading-relaxed text-white/50">Create or sign in to your member account, complete your profile, and submit your mentor application from the directory.</p><div className="btn-row-mobile mt-7"><Button href="/app/mentors">Apply to mentor</Button><Button href="/signup" variant="secondary">Create account</Button></div></div></div></section></>;
 }

@@ -13,6 +13,8 @@ import { Courses } from "./collections/Courses";
 import { Events } from "./collections/Events";
 import { Stories } from "./collections/Stories";
 import { Resources } from "./collections/Resources";
+import { Mentors } from "./collections/Mentors";
+import { MentorshipRequests } from "./collections/MentorshipRequests";
 import { SiteSettings } from "./globals/SiteSettings";
 import { createDbAdapter } from "./lib/db";
 import { getServerURL } from "./lib/server-url";
@@ -69,7 +71,18 @@ export default buildConfig({
       },
     },
   },
-  collections: [Users, Members, Media, Posts, Courses, Events, Stories, Resources],
+  collections: [
+    Users,
+    Members,
+    Mentors,
+    MentorshipRequests,
+    Media,
+    Posts,
+    Courses,
+    Events,
+    Stories,
+    Resources,
+  ],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "smn-dev-secret-change-me-in-production",
