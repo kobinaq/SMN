@@ -430,7 +430,12 @@ DISCORD_INVITE_URL=             # also in CMS; env as fallback
 
 ### Phase 7+ (post-MVP product)
 
-Member portal, Selar webhooks deeper, Classroom automation, mentor directory, job board — **separate initiative**.
+See **`PRODUCT-ROADMAP.md`**. Locked product decisions:
+
+- Member auth: Payload **`members`** collection (not Clerk); staff stay on **`users`** / `/admin`
+- Media: **Cloudflare R2** via S3 storage adapter
+- Portal: `/app` (learning, mentors, opportunities, profile)
+- Phases: 7.0 platform → 7.1 portal → 7.2 mentors → 7.3 jobs → 7.4 learning → portfolios / certs / employer portal; forum late
 
 ---
 

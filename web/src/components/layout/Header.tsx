@@ -108,6 +108,9 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
+          <Button href="/login" variant="ghost" className="px-4 py-2">
+            Sign in
+          </Button>
           <Button href="/community" variant="ghost" className="px-4 py-2">
             Join WhatsApp
           </Button>
@@ -172,6 +175,9 @@ export function Header() {
             </Button>
             <Button href="/community" variant="secondary" className="w-full">
               Join WhatsApp
+            </Button>
+            <Button href="/login" variant="ghost" className="w-full">
+              Member sign in
             </Button>
           </div>
         </div>
