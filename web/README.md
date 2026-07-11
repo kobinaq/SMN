@@ -64,8 +64,9 @@ The Next.js app is in the **`web`** folder (not the repo root).
 
 At minimum:
 
-- `PAYLOAD_SECRET` — long random string
-- `NEXT_PUBLIC_SITE_URL` — your `https://….vercel.app` (or custom domain)
+- `PAYLOAD_SECRET` — long random string (**same as local** if you share the Neon DB)
+- `NEXT_PUBLIC_SITE_URL` — full origin, e.g. `https://your-app.vercel.app` (required for `/admin` cookies & server actions)
+- `DATABASE_URL` — Neon Postgres URL
 
 Optional: Resend, Mailchimp, WhatsApp invite, `OPS_EMAIL`.
 

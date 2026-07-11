@@ -7,6 +7,10 @@ import { handleServerFunctions, RootLayout } from "@payloadcms/next/layouts";
 import { importMap } from "./admin/importMap.js";
 import "./custom.scss";
 
+// Admin must always run on Node and never be statically cached
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 type Args = {
   children: ReactNode;
 };

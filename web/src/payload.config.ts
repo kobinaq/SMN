@@ -15,14 +15,19 @@ import { Stories } from "./collections/Stories";
 import { Resources } from "./collections/Resources";
 import { SiteSettings } from "./globals/SiteSettings";
 import { createDbAdapter } from "./lib/db";
+import { getServerURL } from "./lib/server-url";
 import { isR2Configured } from "./lib/storage";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 const r2Enabled = isR2Configured();
+const serverURL = getServerURL();
 
 export default buildConfig({
+  serverURL,
+  // Allow admin cookies / server actions from this origin on Vercel
+  csrf: [serverURL],
   admin: {
     user: Users.slug,
     importMap: {
@@ -32,7 +37,6 @@ export default buildConfig({
       title: "SMN CMS",
       description: "Social Marketers Network content and member administration",
       titleSuffix: " · SMN",
-      // Browser tab / bookmarks
       icons: [
         {
           rel: "icon",
@@ -48,9 +52,8 @@ export default buildConfig({
     },
     components: {
       graphics: {
-        // Paths relative to admin.importMap.baseDir (src/)
-        Logo: "./components/payload/Logo.tsx",
-        Icon: "./components/payload/Icon.tsx",
+        Logo: "@/components/payload/Logo",
+        Icon: "@/components/payload/Icon",
       },
     },
   },

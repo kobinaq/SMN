@@ -9,6 +9,9 @@ import {
   REST_PUT,
 } from "@payloadcms/next/routes";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 export const GET = REST_GET(config);
 export const POST = REST_POST(config);
 export const DELETE = REST_DELETE(config);
