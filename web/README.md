@@ -80,6 +80,18 @@ Optional: Resend, Mailchimp, WhatsApp invite, `OPS_EMAIL`.
 
 Without R2, media uses local disk (or is disabled on Vercel). Without Postgres, use SQLite locally; Vercel marketing still uses seed content unless a remote DB is set.
 
+### Database schema (production Postgres)
+
+`payload migrate` currently breaks on Node 24 in this setup. Use the project helper instead (loads `.env` + `.env.local`):
+
+```bash
+cd web
+npm run db:push    # drizzle push via Payload (creates/updates tables, including members)
+npm run db:check   # list public tables
+```
+
+Ensure `DATABASE_URL` is your Neon/Postgres URL and `PAYLOAD_SECRET` matches Vercel when targeting that DB.
+
 ## Key routes
 
 | Path | Purpose |
