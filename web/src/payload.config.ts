@@ -18,6 +18,9 @@ import { MentorshipRequests } from "./collections/MentorshipRequests";
 import { OpportunitySources } from "./collections/OpportunitySources";
 import { Opportunities } from "./collections/Opportunities";
 import { OpportunityApplications } from "./collections/OpportunityApplications";
+import { Enrollments } from "./collections/Enrollments";
+import { LearningItems } from "./collections/LearningItems";
+import { Progress } from "./collections/Progress";
 import { SiteSettings } from "./globals/SiteSettings";
 import { createDbAdapter } from "./lib/db";
 import { getServerURL } from "./lib/server-url";
@@ -85,6 +88,9 @@ export default buildConfig({
     OpportunitySources,
     Opportunities,
     OpportunityApplications,
+    Enrollments,
+    LearningItems,
+    Progress,
     Media,
     Posts,
     Courses,

@@ -16,8 +16,7 @@ export default async function LoginPage() {
 
   return (
     <AuthShell
-      title="Welcome back"
-      subtitle="Sign in to your member portal for learning, mentors, and opportunities. Staff CMS is at /admin with a separate staff account."
+      title="Member sign in"
     >
       <Suspense fallback={<div className="h-40 animate-pulse rounded-2xl bg-white/5" />}>
         <LoginForm />

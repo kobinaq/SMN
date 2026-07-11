@@ -20,7 +20,7 @@ Post-MVP network product. Marketing site remains public; authenticated product l
 | **7.1 Portal shell** | In progress | Login/signup, `/app` home, profile, placeholders |
 | **7.2 Mentor directory** | Implemented | Approved mentors, applications, filters, requests |
 | **7.3 Opportunities** | Implemented | Moderated job/gig board with public ATS imports |
-| **7.4 Learning dashboard** | Planned | Classroom links, Selar entitlements |
+| **7.4 Learning dashboard** | Implemented | Enrollments, Classroom/Selar access, milestones, progress |
 | **7.5 Portfolios** | Planned | Public `/u/[handle]` |
 | **7.6 Certificates** | Planned | PDF on R2 + `/verify/[code]` |
 | **7.7 Employer portal** | Planned | Thin employer dashboard |
@@ -66,3 +66,11 @@ See `web/.env.example` for `DATABASE_URL`, R2_*, and existing Resend/Mailchimp v
 - Daily secured Vercel cron with relevance scoring, deduplication, and stale closure
 - Pending-review moderation by default with per-source trusted auto-publishing
 - Member search, filters, detail pages, external application handoff, and activity tracking
+
+## Phase 7.4 delivery
+
+- Staff-managed enrollments for cohorts, Selar purchases, workshops, and community tracks
+- Published learning items grouped by stable program keys and week
+- Classroom, external course, and gated resource links
+- Member progress checklist with server-side entitlement validation
+- Staff grant flow for Selar entitlements; native playback and quizzes remain out of scope

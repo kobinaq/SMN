@@ -33,7 +33,7 @@ export default async function AdminDashboard({ payload, user }: ServerProps) {
           <Link href="/admin/collections/opportunities/create">Add opportunity</Link>
           <Link href="/admin/collections/opportunity-sources/create">Add job source</Link>
           <Link href="/admin/collections/posts/create">Write insight</Link>
-          <Link href="/admin/collections/events/create">Create event</Link>
+          <Link href="/admin/collections/learning-items/create">Add learning item</Link><Link href="/admin/collections/events/create">Create event</Link>
         </nav>
       </section>
     </div>

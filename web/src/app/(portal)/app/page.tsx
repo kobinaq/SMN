@@ -20,7 +20,7 @@ const placeholders = [
     href: "/app/learning",
     icon: BookOpen,
     title: "Learning",
-    body: "Cohort status, Classroom links, and course access will live here.",
+    body: "Open your Classroom links, unlocked courses, resources, and weekly milestones.",
     cta: "Open learning",
   },
   {

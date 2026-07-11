@@ -131,3 +131,14 @@ Phase 7.3 can import public marketing roles from Greenhouse, Lever, and Ashby wi
 5. Imported roles appear under **Opportunities → Opportunities** as `pending` for staff review.
 
 Vercel calls `/api/cron/sync-opportunities` daily at 05:00 UTC. Imported applications always continue on the employer's original site; SMN stores only member activity status.
+## Learning dashboard operations
+
+Phase 7.4 is a light access and progress layer; course delivery remains on Selar and live cohorts remain on Google Classroom.
+
+1. In **Learning → Learning Items**, create published milestones/resources with a stable `programKey` such as `cohort-2026` or `ai-marketers`.
+2. In **Learning → Enrollments**, link a member to the same `programKey`, choose the grant source, and add Classroom/Selar URLs.
+3. Active or completed enrollments unlock matching items in `/app/learning`.
+4. Use access rule **Any member** for general onboarding, **Matching enrollment** for paid programs, and **Active/completed cohort member** for cohort-wide material.
+5. Member completion is stored under **Learning → Progress**.
+
+Selar purchases are granted manually for now by creating an enrollment with source **Selar purchase** and optionally storing the order reference. A verified Selar webhook can automate this later without changing the dashboard model.

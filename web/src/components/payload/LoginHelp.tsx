@@ -3,9 +3,9 @@ import Link from "next/link";
 export default function LoginHelp() {
   return (
     <div className="smn-login-help">
-      <span>Staff access only</span>
-      <Link href="/">Return to website</Link>
+      <span>Not staff?</span>
       <Link href="/login">Member sign in</Link>
+      <Link href="/">Back to website</Link>
     </div>
   );
 }
