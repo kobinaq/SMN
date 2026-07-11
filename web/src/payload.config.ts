@@ -78,24 +78,28 @@ export default buildConfig({
   },
   db: createDbAdapter(),
   sharp,
-  plugins: r2Enabled
-    ? [
-        s3Storage({
-          collections: {
-            media: {
-              prefix: "media",
-              generateFileURL: ({ filename: file, prefix }) => {
-                const base = process.env.R2_PUBLIC_URL?.replace(/\/$/, "");
-                if (base) {
-                  return `${base}/${prefix ? `${prefix}/` : ""}${file}`;
-                }
-                // Fallback: API path if no public CDN URL
-                return `/api/media/file/${file}`;
-              },
-            },
+  plugins: [
+    s3Storage({
+      enabled: r2Enabled,
+      alwaysInsertFields: true,
+      collections: {
+        media: {
+          prefix: "media",
+          generateFileURL: ({ filename: file, prefix }) => {
+            const base = process.env.R2_PUBLIC_URL?.replace(/\/$/, "");
+            if (base) {
+              return `${base}/${prefix ? `${prefix}/` : ""}${file}`;
+            }
+            // Fallback: API path if no public CDN URL
+            return `/api/media/file/${file}`;
           },
-          bucket: process.env.R2_BUCKET as string,
-          config: {
+        },
+      },
+      // Disabled locally when R2 env vars are absent, but keeping the plugin in
+      // the config makes the admin schema and import map environment-invariant.
+      bucket: process.env.R2_BUCKET || "disabled-local",
+      config: r2Enabled
+        ? {
             credentials: {
               accessKeyId: process.env.R2_ACCESS_KEY_ID as string,
               secretAccessKey: process.env.R2_SECRET_ACCESS_KEY as string,
@@ -103,8 +107,8 @@ export default buildConfig({
             region: process.env.R2_REGION || "auto",
             endpoint: process.env.R2_ENDPOINT as string,
             forcePathStyle: true,
-          },
-        }),
-      ]
-    : [],
+          }
+        : { region: "auto" },
+    }),
+  ],
 });
