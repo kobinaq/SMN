@@ -92,6 +92,10 @@ npm run db:check   # list public tables
 
 Ensure `DATABASE_URL` is your Neon/Postgres URL and `PAYLOAD_SECRET` matches Vercel when targeting that DB.
 
+Schema push is **opt-in** (`PAYLOAD_DB_PUSH=true` only during `db:push`). The app does not push on every request — that was slow and could break `/admin`.
+
+For Neon, either the **pooled** or **direct** connection string works; if queries flake, try the direct (non-`-pooler`) URL.
+
 ## Key routes
 
 | Path | Purpose |

@@ -23,8 +23,8 @@ if (!process.env.PAYLOAD_SECRET) {
   process.exit(1);
 }
 
-// Enable drizzle push in createDbAdapter()
-process.env.NODE_ENV = "development";
+// Opt-in schema push (see createDbAdapter — not enabled on normal app start)
+process.env.PAYLOAD_DB_PUSH = "true";
 
 console.log("Connecting to Postgres and pushing schema…");
 console.log("Host:", (dbUrl.match(/@([^/?]+)/) || [])[1] || "(unknown)");
