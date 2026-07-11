@@ -22,6 +22,7 @@ import { Enrollments } from "./collections/Enrollments";
 import { LearningItems } from "./collections/LearningItems";
 import { Progress } from "./collections/Progress";
 import { Portfolios } from "./collections/Portfolios";
+import { Certificates } from "./collections/Certificates";
 import { SiteSettings } from "./globals/SiteSettings";
 import { createDbAdapter } from "./lib/db";
 import { getServerURL } from "./lib/server-url";
@@ -93,6 +94,7 @@ export default buildConfig({
     LearningItems,
     Progress,
     Portfolios,
+    Certificates,
     Media,
     Posts,
     Courses,

@@ -22,7 +22,7 @@ Post-MVP network product. Marketing site remains public; authenticated product l
 | **7.3 Opportunities** | Implemented | Moderated job/gig board with public ATS imports |
 | **7.4 Learning dashboard** | Implemented | Enrollments, Classroom/Selar access, milestones, progress |
 | **7.5 Portfolios** | Implemented | Member case studies, public `/u/[handle]`, 10 MB upload or cover URL |
-| **7.6 Certificates** | Planned | PDF on R2 + `/verify/[code]` |
+| **7.6 Certificates** | Implemented | Staff-issued credentials, PDF on R2/media, public `/verify/[code]` |
 | **7.7 Employer portal** | Planned | Thin employer dashboard |
 | **7.8 Forum** | Optional / late | Prefer WhatsApp until demand is clear |
 | **7.9 Native payments/LMS** | Conditional | Only if Selar/Classroom block growth |
@@ -74,3 +74,11 @@ See `web/.env.example` for `DATABASE_URL`, R2_*, and existing Resend/Mailchimp v
 - Classroom, external course, and gated resource links
 - Member progress checklist with server-side entitlement validation
 - Staff grant flow for Selar entitlements; native playback and quizzes remain out of scope
+
+## Phase 7.6 delivery
+
+- Staff-managed `certificates` collection for member credentials
+- PDF attachment via existing Media/R2 pipeline
+- Member certificate shelf at `/app/certificates`
+- Public verification page at `/verify/[code]` for valid public credentials
+- Revoked, draft, and private certificates stay hidden from public verification

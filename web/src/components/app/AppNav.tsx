@@ -11,7 +11,8 @@ import { cn } from "@/lib/utils";
 const links = [
   { href: "/app", label: "Home" }, { href: "/app/learning", label: "Learning" },
   { href: "/app/mentors", label: "Mentors" }, { href: "/app/opportunities", label: "Opportunities" },
-  { href: "/app/portfolio", label: "Portfolio" }, { href: "/app/profile", label: "Profile" },
+  { href: "/app/portfolio", label: "Portfolio" }, { href: "/app/certificates", label: "Certificates" },
+  { href: "/app/profile", label: "Profile" },
 ] as const;
 
 export function AppNav({ memberName, memberHandle, avatarUrl }: { memberName: string; memberHandle: string; avatarUrl: string }) {

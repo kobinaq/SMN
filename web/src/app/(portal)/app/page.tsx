@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {
   ArrowRight,
+  Award,
   BookOpen,
   Briefcase,
   CalendarDays,
@@ -36,6 +37,13 @@ const placeholders = [
     title: "Opportunities",
     body: "Jobs, gigs, and internships from the Network will show here.",
     cta: "Browse board",
+  },
+  {
+    href: "/app/certificates",
+    icon: Award,
+    title: "Certificates",
+    body: "View issued SMN certificates and share public verification links.",
+    cta: "View credentials",
   },
 ];
 
@@ -82,7 +90,7 @@ export default async function AppHomePage() {
         </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {placeholders.map((item) => (
           <Link
             key={item.href}

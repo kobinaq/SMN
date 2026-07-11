@@ -354,3 +354,5 @@ npx tsc --noEmit         # typecheck
 - Neon schema includes `mentors` and `mentorship-requests`.
 - Phase 7.3 opportunities board implemented with manual listings, moderated ATS imports, member filters, and application tracking.
 - Phase 7.4 learning dashboard implemented with staff grants, Classroom/Selar links, weekly items, resources, and member progress.
+- Phase 7.5 portfolio profiles implemented with member case studies, public `/u/[handle]`, and upload-or-URL covers.
+- Phase 7.6 certificates implemented with staff-issued credentials, Media/R2 PDFs, member listing, and public `/verify/[code]`.
