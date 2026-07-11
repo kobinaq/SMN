@@ -23,11 +23,23 @@ const dirname = path.dirname(filename);
 
 const r2Enabled = isR2Configured();
 const serverURL = getServerURL();
+const csrfOrigins = Array.from(
+  new Set(
+    [
+      serverURL,
+      process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "",
+      process.env.VERCEL_BRANCH_URL ? `https://${process.env.VERCEL_BRANCH_URL}` : "",
+      process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : "",
+    ].filter(Boolean),
+  ),
+);
 
 export default buildConfig({
   serverURL,
-  // Allow admin cookies / server actions from this origin on Vercel
-  csrf: [serverURL],
+  // Allow admin cookies / server actions from deployment origins
+  csrf: csrfOrigins,
   admin: {
     user: Users.slug,
     importMap: {
