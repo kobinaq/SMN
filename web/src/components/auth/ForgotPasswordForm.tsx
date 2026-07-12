@@ -19,7 +19,7 @@ export function ForgotPasswordForm() {
     const data = Object.fromEntries(new FormData(form).entries());
 
     try {
-      const res = await fetch("/api/members/forgot-password", {
+      const res = await fetch("/api/member-auth/forgot-password", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

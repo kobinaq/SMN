@@ -1,5 +1,6 @@
 import type { MemberUser } from "@/lib/auth/member";
 import { getPayloadClient } from "@/lib/payload";
+import { youtubeEmbedUrl } from "@/lib/youtube";
 
 type Relation<T> = T | string | number | null | undefined;
 type Status = "not-started" | "in-progress" | "completed";
@@ -120,21 +121,6 @@ function hasCourseAccess(member: MemberUser, course: LmsCourseDoc, enrollments: 
   );
   if (course.accessRule === "enrolled") return enrolled;
   return enrolled || member.cohortStatus === "active" || member.cohortStatus === "completed";
-}
-
-export function youtubeEmbedUrl(value: string) {
-  if (!value) return "";
-  try {
-    const url = new URL(value);
-    const host = url.hostname.replace(/^www\./, "");
-    const id =
-      host === "youtu.be"
-        ? url.pathname.split("/").filter(Boolean)[0]
-        : url.searchParams.get("v") || url.pathname.split("/").filter(Boolean).pop();
-    return id ? `https://www.youtube-nocookie.com/embed/${id}` : "";
-  } catch {
-    return "";
-  }
 }
 
 async function getEnrollments(member: MemberUser) {

@@ -1,6 +1,6 @@
-import { headers as nextHeaders } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { memberAuthHeaders } from "@/lib/auth/member";
 import { mentorSeniorities, mentorTopics } from "@/lib/mentor-options";
 import { getPayloadClient } from "@/lib/payload";
 
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     if (!parsed.success) return NextResponse.json({ error: "Check your application details and try again." }, { status: 400 });
     if (parsed.data.website) return NextResponse.json({ ok: true });
     const payload = await getPayloadClient();
-    const { user } = await payload.auth({ headers: await nextHeaders() });
+    const { user } = await payload.auth({ headers: await memberAuthHeaders() });
     if (!user || user.collection !== "members") return NextResponse.json({ error: "Sign in to apply as a mentor." }, { status: 401 });
     const existing = await payload.find({ collection: "mentors", limit: 1, depth: 0, where: { member: { equals: user.id } }, overrideAccess: true });
     if (existing.totalDocs) return NextResponse.json({ error: "You already have a mentor application." }, { status: 409 });

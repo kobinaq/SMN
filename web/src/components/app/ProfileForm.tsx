@@ -32,7 +32,7 @@ export function ProfileForm({ initial }: { initial: ProfileValues }) {
     const data = Object.fromEntries(new FormData(form).entries());
 
     try {
-      const res = await fetch(`/api/members/${initial.id}`, {
+      const res = await fetch("/api/member-auth/profile", {
         method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

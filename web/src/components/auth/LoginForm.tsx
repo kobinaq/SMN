@@ -30,7 +30,7 @@ export function LoginForm() {
     const data = Object.fromEntries(new FormData(form).entries());
 
     try {
-      const res = await fetch("/api/members/login", {
+      const res = await fetch("/api/member-auth/login", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

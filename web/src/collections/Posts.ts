@@ -1,5 +1,8 @@
 import type { CollectionConfig } from "payload";
 
+const staffOnly = ({ req }: { req: { user?: { collection?: string } | null } }) =>
+  req.user?.collection === "users";
+
 export const Posts: CollectionConfig = {
   slug: "posts",
   admin: {
@@ -7,7 +10,13 @@ export const Posts: CollectionConfig = {
     defaultColumns: ["title", "category", "publishedAt", "updatedAt"],
   },
   access: {
-    read: () => true,
+    read: ({ req }) =>
+      req.user?.collection === "users"
+        ? true
+        : { publishedAt: { less_than_equal: new Date().toISOString() } },
+    create: staffOnly,
+    update: staffOnly,
+    delete: staffOnly,
   },
   fields: [
     {

@@ -1,6 +1,5 @@
-import { headers as nextHeaders } from "next/headers";
 import { z } from "zod";
-import type { MemberUser } from "@/lib/auth/member";
+import { memberAuthHeaders, type MemberUser } from "@/lib/auth/member";
 import { getLearningDashboard } from "@/lib/learning";
 import { getPayloadClient } from "@/lib/payload";
 
@@ -11,7 +10,7 @@ export async function POST(request: Request) {
     const parsed = schema.safeParse(await request.json());
     if (!parsed.success) return Response.json({ error: "Invalid progress update." }, { status: 400 });
     const payload = await getPayloadClient();
-    const { user } = await payload.auth({ headers: await nextHeaders() });
+    const { user } = await payload.auth({ headers: await memberAuthHeaders() });
     if (!user || user.collection !== "members") return Response.json({ error: "Sign in to update progress." }, { status: 401 });
     const dashboard = await getLearningDashboard(user as unknown as MemberUser);
     if (!dashboard.items.some((item) => String(item.id) === String(parsed.data.itemId))) return Response.json({ error: "This item is not available to your account." }, { status: 403 });

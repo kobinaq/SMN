@@ -1,6 +1,5 @@
-import { headers as nextHeaders } from "next/headers";
 import { z } from "zod";
-import type { MemberUser } from "@/lib/auth/member";
+import { memberAuthHeaders, type MemberUser } from "@/lib/auth/member";
 import { getLmsCourses } from "@/lib/lms";
 import { getPayloadClient } from "@/lib/payload";
 
@@ -18,7 +17,7 @@ export async function POST(request: Request) {
     }
 
     const payload = await getPayloadClient();
-    const { user } = await payload.auth({ headers: await nextHeaders() });
+    const { user } = await payload.auth({ headers: await memberAuthHeaders() });
     if (!user || user.collection !== "members") {
       return Response.json({ error: "Sign in to update progress." }, { status: 401 });
     }

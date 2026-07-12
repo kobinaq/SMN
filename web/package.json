@@ -7,12 +7,18 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit --pretty false",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "vitest run",
+    "test:e2e": "npm run build && node scripts/run-e2e.mjs",
+    "test:coverage": "vitest run --coverage",
     "payload": "payload",
     "generate:importmap": "esbuild src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=scripts/.payload.config.bundle.mjs && node scripts/gen-importmap.mjs",
     "prebuild": "npm run generate:importmap",
     "generate:types": "payload generate:types",
     "db:push": "esbuild src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=scripts/.payload.config.bundle.mjs && node scripts/push-schema.mjs",
-    "db:check": "node scripts/check-schema.mjs"
+    "db:check": "node scripts/check-schema.mjs",
+    "seed:demo": "esbuild src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=scripts/.payload.config.bundle.mjs && node scripts/seed-demo.mjs"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.85.2",
@@ -37,16 +43,19 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20.19.43",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.1.10",
     "esbuild": "^0.28.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "sass": "^1.101.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   },
   "allowScripts": {
     "sharp@0.34.5": true

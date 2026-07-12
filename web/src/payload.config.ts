@@ -29,8 +29,11 @@ import { Portfolios } from "./collections/Portfolios";
 import { Certificates } from "./collections/Certificates";
 import { SiteSettings } from "./globals/SiteSettings";
 import { createDbAdapter } from "./lib/db";
+import { validateProductionEnv } from "./lib/env";
 import { getServerURL } from "./lib/server-url";
 import { isR2Configured } from "./lib/storage";
+
+validateProductionEnv();
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -52,6 +55,7 @@ const csrfOrigins = Array.from(
 
 export default buildConfig({
   serverURL,
+  cookiePrefix: "smn-admin",
   // Allow admin cookies / server actions from deployment origins
   csrf: csrfOrigins,
   admin: {

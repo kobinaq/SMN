@@ -1,9 +1,8 @@
-import { headers as nextHeaders } from "next/headers";
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
 import { z } from "zod";
+import { memberAuthHeaders } from "@/lib/auth/member";
+import { opsEmail, sendEmail } from "@/lib/email";
 import { getPayloadClient } from "@/lib/payload";
-import { site } from "@/lib/site";
 
 const schema = z.object({
   mentorId: z.union([z.string().min(1), z.number()]),
@@ -21,7 +20,7 @@ export async function POST(request: Request) {
     if (parsed.data.website) return NextResponse.json({ ok: true });
 
     const payload = await getPayloadClient();
-    const { user } = await payload.auth({ headers: await nextHeaders() });
+    const { user } = await payload.auth({ headers: await memberAuthHeaders() });
     if (!user || user.collection !== "members") return NextResponse.json({ error: "Sign in to request mentorship." }, { status: 401 });
 
     const mentor = await payload.findByID({ collection: "mentors", id: parsed.data.mentorId, depth: 1, overrideAccess: true });
@@ -34,15 +33,11 @@ export async function POST(request: Request) {
       data: { requester: user.id, mentor: mentor.id, topic: parsed.data.topic, goal: parsed.data.goal, message: parsed.data.message, preferredFormat: parsed.data.preferredFormat, status: "new" },
     });
 
-    if (process.env.RESEND_API_KEY) {
-      const resend = new Resend(process.env.RESEND_API_KEY);
-      await resend.emails.send({
-        from: process.env.RESEND_FROM ?? "SMN <onboarding@resend.dev>",
-        to: process.env.OPS_EMAIL ?? site.email,
-        subject: `Mentorship request: ${parsed.data.topic}`,
-        text: `Member: ${user.email}\nGoal: ${parsed.data.goal}\nFormat: ${parsed.data.preferredFormat}\n\n${parsed.data.message}`,
-      });
-    }
+    await sendEmail({
+      to: opsEmail(),
+      subject: `Mentorship request: ${parsed.data.topic}`,
+      text: `Member: ${user.email}\nGoal: ${parsed.data.goal}\nFormat: ${parsed.data.preferredFormat}\n\n${parsed.data.message}`,
+    });
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch (error) {
     console.error("[mentor-request]", error);

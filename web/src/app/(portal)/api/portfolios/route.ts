@@ -1,5 +1,5 @@
-import { headers as nextHeaders } from "next/headers";
 import { z } from "zod";
+import { memberAuthHeaders } from "@/lib/auth/member";
 import { getPayloadClient } from "@/lib/payload";
 
 const textSchema = z.object({
@@ -14,7 +14,7 @@ function slugify(value: string) { return value.toLowerCase().normalize("NFKD").r
 export async function POST(request: Request) {
   try {
     const payload = await getPayloadClient();
-    const { user } = await payload.auth({ headers: await nextHeaders() });
+    const { user } = await payload.auth({ headers: await memberAuthHeaders() });
     if (!user || user.collection !== "members") return Response.json({ error: "Sign in to manage your portfolio." }, { status: 401 });
     const form = await request.formData();
     const parsed = textSchema.safeParse({
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const payload = await getPayloadClient(); const { user } = await payload.auth({ headers: await nextHeaders() });
+  const payload = await getPayloadClient(); const { user } = await payload.auth({ headers: await memberAuthHeaders() });
   if (!user || user.collection !== "members") return Response.json({ error: "Unauthorized" }, { status: 401 });
   const id = new URL(request.url).searchParams.get("id"); if (!id) return Response.json({ error: "Missing portfolio." }, { status: 400 });
   const doc = await payload.findByID({ collection: "portfolios", id, depth: 0, overrideAccess: true }); const owner = typeof doc.member === "object" ? doc.member.id : doc.member;

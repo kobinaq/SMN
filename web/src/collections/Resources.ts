@@ -1,5 +1,8 @@
 import type { CollectionConfig } from "payload";
 
+const staffOnly = ({ req }: { req: { user?: { collection?: string } | null } }) =>
+  req.user?.collection === "users";
+
 export const Resources: CollectionConfig = {
   slug: "resources",
   admin: {
@@ -7,6 +10,9 @@ export const Resources: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: staffOnly,
+    update: staffOnly,
+    delete: staffOnly,
   },
   fields: [
     { name: "title", type: "text", required: true },

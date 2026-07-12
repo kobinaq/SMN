@@ -18,7 +18,7 @@ const links = [
 export function AppNav({ memberName, memberHandle, avatarUrl }: { memberName: string; memberHandle: string; avatarUrl: string }) {
   const pathname = usePathname(); const router = useRouter();
   const [open, setOpen] = useState(false); const [loggingOut, setLoggingOut] = useState(false);
-  async function logout() { setLoggingOut(true); try { await fetch("/api/members/logout", { method: "POST", credentials: "include" }); } finally { router.push("/login"); router.refresh(); } }
+  async function logout() { setLoggingOut(true); try { await fetch("/api/member-auth/logout", { method: "POST", credentials: "include" }); } finally { router.push("/login"); router.refresh(); } }
   const initial = memberName.trim().slice(0, 1).toUpperCase();
 
   return <header className="sticky top-0 z-40 border-b border-white/10 bg-near-black/90 shadow-[0_8px_32px_rgba(0,0,0,.18)] backdrop-blur-md">

@@ -1,9 +1,13 @@
 import type { GlobalConfig } from "payload";
 
+const staffOnly = ({ req }: { req: { user?: { collection?: string } | null } }) =>
+  req.user?.collection === "users";
+
 export const SiteSettings: GlobalConfig = {
   slug: "site-settings",
   access: {
     read: () => true,
+    update: staffOnly,
   },
   fields: [
     { name: "siteName", type: "text", required: true, defaultValue: "Social Marketers Network" },

@@ -1,12 +1,21 @@
 import type { CollectionConfig } from "payload";
 
+const staffOnly = ({ req }: { req: { user?: { collection?: string } | null } }) =>
+  req.user?.collection === "users";
+
 export const Courses: CollectionConfig = {
   slug: "courses",
   admin: {
     useAsTitle: "title",
   },
   access: {
-    read: () => true,
+    read: ({ req }) =>
+      req.user?.collection === "users"
+        ? true
+        : { status: { in: ["published", "coming-soon"] } },
+    create: staffOnly,
+    update: staffOnly,
+    delete: staffOnly,
   },
   fields: [
     { name: "title", type: "text", required: true },

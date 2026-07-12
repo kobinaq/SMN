@@ -32,8 +32,7 @@ export function SignupForm() {
     }
 
     try {
-      // Create member
-      const createRes = await fetch("/api/members", {
+      const createRes = await fetch("/api/member-auth/signup", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -54,21 +53,6 @@ export function SignupForm() {
             createJson.message ||
             "Could not create account.",
         );
-      }
-
-      // Auto login
-      const loginRes = await fetch("/api/members/login", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-        }),
-      });
-      if (!loginRes.ok) {
-        router.push("/login");
-        return;
       }
 
       router.push("/app");
