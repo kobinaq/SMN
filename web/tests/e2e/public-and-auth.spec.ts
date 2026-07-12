@@ -36,4 +36,11 @@ test("staff lands on the workflow-first admin dashboard", async ({ page }) => {
   await expect(page.getByRole("navigation", { name: "Course Builder sections" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Curriculum" })).toBeVisible();
   await expect(page.getByRole("link", { name: "AI Content Studio" })).toBeVisible();
+  await page.getByRole("link", { name: "Curriculum" }).click();
+  await expect(page.getByRole("heading", { name: "Modules and lessons" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Move module up" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Duplicate" }).first()).toBeVisible();
+  await page.getByRole("link", { name: "Learners" }).click();
+  await expect(page.getByRole("heading", { name: "Reasoned progress override" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Save audited override" })).toBeVisible();
 });

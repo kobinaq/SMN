@@ -147,12 +147,16 @@ const course = await upsert(
     title: "Demo Content Strategy Sprint",
     slug: "demo-content-strategy",
     summary: "A fictional LMS course for testing course access, lessons, and progress.",
+    instructor: "Arielle Adodo",
+    category: "Content strategy",
+    prerequisites: "None",
+    learningOutcomes: [{ outcome: "Create a focused content strategy before building a calendar." }],
     programKey: "demo-cohort",
     accessRule: "enrolled",
     level: "foundation",
     estimatedHours: 3,
     order: 1,
-    status: "published",
+    status: "draft",
   },
 );
 
@@ -186,6 +190,13 @@ const lesson = await upsert(
     status: "published",
   },
 );
+
+await payload.update({
+  collection: "lms-courses",
+  id: course.id,
+  data: { status: "published" },
+  overrideAccess: true,
+});
 
 await upsert(
   "lms-lesson-progress",

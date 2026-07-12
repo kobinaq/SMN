@@ -1,14 +1,17 @@
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
+import { rmSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 
 const isWindows = process.platform === "win32";
 const npmCmd = isWindows ? "npm.cmd" : "npm";
 const npxCmd = isWindows ? "npx.cmd" : "npx";
 const e2ePort = process.env.PLAYWRIGHT_PORT || String(3100 + (process.pid % 1000));
 const baseURL = process.env.PLAYWRIGHT_BASE_URL || `http://127.0.0.1:${e2ePort}`;
+const localDatabasePath = fileURLToPath(new URL(`../payload.e2e-${process.pid}.db`, import.meta.url));
 const e2eEnv = {
   ...process.env,
   CRON_SECRET: process.env.CRON_SECRET || "e2e-cron-secret",
-  DATABASE_URL: process.env.PLAYWRIGHT_DATABASE_URL || "file:./payload.e2e.db",
+  DATABASE_URL: process.env.PLAYWRIGHT_DATABASE_URL || `file:./payload.e2e-${process.pid}.db`,
   NEXT_PUBLIC_SITE_URL: baseURL,
   NEXT_PUBLIC_WHATSAPP_INVITE: process.env.NEXT_PUBLIC_WHATSAPP_INVITE || "https://chat.whatsapp.com/example",
   OPS_EMAIL: process.env.OPS_EMAIL || "ops@example.com",
@@ -71,9 +74,10 @@ try {
   });
 } finally {
   if (server && !server.killed) {
-    if (isWindows) spawn("taskkill", ["/pid", String(server.pid), "/t", "/f"], { stdio: "ignore" });
+    if (isWindows) spawnSync("taskkill", ["/pid", String(server.pid), "/t", "/f"], { stdio: "ignore" });
     else server.kill("SIGTERM");
   }
+  if (!process.env.PLAYWRIGHT_DATABASE_URL) for (const suffix of ["", "-shm", "-wal"]) rmSync(`${localDatabasePath}${suffix}`, { force: true });
 }
 
 process.exit(exitCode);

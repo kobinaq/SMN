@@ -27,6 +27,7 @@ import { LmsLessons } from "./collections/LmsLessons";
 import { LmsLessonProgress } from "./collections/LmsLessonProgress";
 import { Portfolios } from "./collections/Portfolios";
 import { Certificates } from "./collections/Certificates";
+import { AuditEvents } from "./collections/AuditEvents";
 import { SiteSettings } from "./globals/SiteSettings";
 import { createDbAdapter } from "./lib/db";
 import { validateProductionEnv } from "./lib/env";
@@ -116,6 +117,7 @@ export default buildConfig({
     LmsLessonProgress,
     Portfolios,
     Certificates,
+    AuditEvents,
     Media,
     Posts,
     Courses,

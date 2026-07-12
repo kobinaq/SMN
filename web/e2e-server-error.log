@@ -1,0 +1,11 @@
+⨯ e: You are not allowed to perform this action.
+    at G (C:\Users\user\Documents\vscode\SMN\web\.next\server\chunks\ssr\_0a6zg2a._.js:10:22619)
+    at async at (C:\Users\user\Documents\vscode\SMN\web\.next\server\chunks\ssr\_0a6zg2a._.js:130:31708)
+    at async T (C:\Users\user\Documents\vscode\SMN\web\.next\server\chunks\ssr\_0j0hh20._.js:63:12712) {
+  data: null,
+  isOperational: true,
+  isPublic: true,
+  status: 403,
+  digest: '2394460458',
+  [cause]: null
+}
