@@ -356,3 +356,5 @@ npx tsc --noEmit         # typecheck
 - Phase 7.4 learning dashboard implemented with staff grants, Classroom/Selar links, weekly items, resources, and member progress.
 - Phase 7.5 portfolio profiles implemented with member case studies, public `/u/[handle]`, and upload-or-URL covers.
 - Phase 7.6 certificates implemented with staff-issued credentials, Media/R2 PDFs, member listing, and public `/verify/[code]`.
+- Product direction changed for 7.7: build a full LMS foundation. Videos are unlisted YouTube embeds to avoid storing video in R2; other lesson files continue through Media/R2.
+- Phase 7.7 LMS foundation implemented: `lms-courses`, `lms-modules`, `lms-lessons`, `lms-lesson-progress`, member course library, lesson player, and completion tracking.

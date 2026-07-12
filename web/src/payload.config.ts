@@ -21,6 +21,10 @@ import { OpportunityApplications } from "./collections/OpportunityApplications";
 import { Enrollments } from "./collections/Enrollments";
 import { LearningItems } from "./collections/LearningItems";
 import { Progress } from "./collections/Progress";
+import { LmsCourses } from "./collections/LmsCourses";
+import { LmsModules } from "./collections/LmsModules";
+import { LmsLessons } from "./collections/LmsLessons";
+import { LmsLessonProgress } from "./collections/LmsLessonProgress";
 import { Portfolios } from "./collections/Portfolios";
 import { Certificates } from "./collections/Certificates";
 import { SiteSettings } from "./globals/SiteSettings";
@@ -93,6 +97,10 @@ export default buildConfig({
     Enrollments,
     LearningItems,
     Progress,
+    LmsCourses,
+    LmsModules,
+    LmsLessons,
+    LmsLessonProgress,
     Portfolios,
     Certificates,
     Media,
