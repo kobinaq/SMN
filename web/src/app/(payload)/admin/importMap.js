@@ -27,6 +27,7 @@ import { default as default_1fb3a88f9eeed6331fbcd0a0561be2f8 } from '@/component
 import { default as default_f31229ee5d0c6a6ee99d69cf560098a0 } from '@/components/payload/LoginIntro'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 import { default as default_90396af18c2250adfc20df25d311cd9a } from '@/components/payload/AdminDashboard'
+import { default as default_f35ede1efc057a341b28fc0fd3536db4 } from '@/components/payload/CourseBuilder'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -60,5 +61,6 @@ export const importMap = {
   "@/components/payload/LoginIntro#default": default_f31229ee5d0c6a6ee99d69cf560098a0,
   "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
   "@/components/payload/AdminDashboard#default": default_90396af18c2250adfc20df25d311cd9a,
+  "@/components/payload/CourseBuilder#default": default_f35ede1efc057a341b28fc0fd3536db4,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

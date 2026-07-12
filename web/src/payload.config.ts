@@ -87,6 +87,11 @@ export default buildConfig({
         dashboard: {
           Component: "@/components/payload/AdminDashboard",
         },
+        courseBuilder: {
+          Component: "@/components/payload/CourseBuilder",
+          path: "/course-builder",
+          exact: true,
+        },
       },
       graphics: {
         Logo: "@/components/payload/Logo",

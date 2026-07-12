@@ -3,7 +3,7 @@ import { spawn } from "node:child_process";
 const isWindows = process.platform === "win32";
 const npmCmd = isWindows ? "npm.cmd" : "npm";
 const npxCmd = isWindows ? "npx.cmd" : "npx";
-const e2ePort = process.env.PLAYWRIGHT_PORT || "3100";
+const e2ePort = process.env.PLAYWRIGHT_PORT || String(3100 + (process.pid % 1000));
 const baseURL = process.env.PLAYWRIGHT_BASE_URL || `http://127.0.0.1:${e2ePort}`;
 const e2eEnv = {
   ...process.env,
@@ -41,11 +41,21 @@ async function waitForServer(url, server, timeoutMs = 120_000) {
   throw new Error(`Timed out waiting for ${url}`);
 }
 
+async function assertPortAvailable(url) {
+  try {
+    await fetch(url);
+  } catch {
+    return;
+  }
+  throw new Error(`Refusing to run E2E against occupied address ${url}. Set PLAYWRIGHT_PORT to another port.`);
+}
+
 let server;
 let exitCode = 1;
 
 try {
   if (!process.env.PLAYWRIGHT_BASE_URL) {
+    await assertPortAvailable(baseURL);
     const seedCode = await run(npmCmd, ["run", "seed:demo"], { env: e2eEnv });
     if (seedCode !== 0) throw new Error("Unable to seed the disposable E2E database.");
     server = spawn(npmCmd, ["run", "start", "--", "--hostname", "127.0.0.1", "--port", e2ePort], {
@@ -60,7 +70,10 @@ try {
     env: e2eEnv,
   });
 } finally {
-  if (server && !server.killed) server.kill();
+  if (server && !server.killed) {
+    if (isWindows) spawn("taskkill", ["/pid", String(server.pid), "/t", "/f"], { stdio: "ignore" });
+    else server.kill("SIGTERM");
+  }
 }
 
 process.exit(exitCode);
