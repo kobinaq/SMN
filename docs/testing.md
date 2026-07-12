@@ -32,6 +32,9 @@ The current smoke suite verifies:
 - Public home page loads
 - Member login page renders
 - Anonymous users are redirected away from protected portal routes
+- A seeded staff user can log in and see the workflow-first dashboard
+
+When running locally, the E2E runner pushes the schema and upserts fictional demo records into the disposable `payload.e2e.db` database before starting the production server. It never seeds the configured production database.
 
 Install browser binaries when needed:
 

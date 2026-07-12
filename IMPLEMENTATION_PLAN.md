@@ -205,3 +205,84 @@ Automated tests must be added for security-sensitive pure logic and APIs when pr
 - Pre-existing WIP preserved: portal API auth changes, member auth helper, Payload cookie prefix, deleted middleware.
 - Exact next step: inspect the complete auth WIP and relevant Next.js 16 proxy/auth/route-handler docs, run lint/type/build baseline, then either finish or safely correct the cookie-isolation migration before any new feature work.
 
+### 2026-07-12 — Hardening baseline verified
+
+- Re-read master specification: yes.
+- Verified: 6/6 Vitest tests, TypeScript, ESLint, and Next.js production build pass.
+- Build warning: Payload has no production email adapter; PostgreSQL dependency warns that future SSL-mode semantics will change.
+- E2E smoke suite and production journeys remain unverified.
+
+## Workflow Admin and AI Extension (new master specification)
+
+The following requirements extend, rather than replace, R001–R082. Status cannot be complete until implementation, tests, and documentation all pass.
+
+### Workflow-first administration
+
+- [x] **R083 — Audit current admin, LMS, relationships, roadmap, and classify interface/workflow/model problems.** Evidence: `docs/admin-architecture.md`.
+- [x] **R084 — Preserve Payload, separated collections, permissions, APIs, and default screens as advanced fallback.** Architecture constraint documented.
+- [~] **R085 — Replace the default dashboard with attention queues, quick actions, platform overview, recent meaningful activity, and health signals.** Implemented in `AdminDashboard.tsx`, `payload.config.ts`, and admin styles; TypeScript and lint pass. Production build/admin smoke test still required.
+- [ ] **R086 — Build unified Course Builder tabs: Overview, Curriculum, Learners, Assessments, Analytics, Settings, AI Content Studio.** Collections preserved: `lms-courses`, `lms-modules`, `lms-lessons`.
+- [ ] **R087 — Add course metadata/readiness checklist and block incomplete publication server-side.** Migration required; hooks and negative tests required.
+- [ ] **R088 — Add nested curriculum CRUD/reorder/move/duplicate/delete/preview with unsaved-change protection and transactional/compensating writes.** E2E coverage required.
+- [ ] **R089 — Automate enrollment, lesson completion, calculated course completion, inactivity, and certificate eligibility.** Migration/hook/service tests required.
+- [ ] **R090 — Add reasoned staff progress overrides with actor/time/before/after audit trail.** Server permission and audit tests required.
+- [ ] **R091 — Add course analytics for enrollment, progress, completion time, module drop-off, abandonment, and inactivity.** Data definitions and tests required.
+- [ ] **R092 — Build Member 360 with profile, learning, credentials, portfolio, mentorship, opportunities, activity, and private authored staff notes.** Role-sensitive E2E tests required.
+- [ ] **R093 — Build Mentorship Operations and mentor detail workspace, approval/rejection confirmation, notes, explanations, audit, and notifications.** Model gaps: relationships/capacity/feedback.
+- [ ] **R094 — Build Opportunity Operations with moderation, duplicate detection, expiry, applications, source health, and import failures.** E2E tests required.
+- [ ] **R095 — Build certificate issuing wizard with eligibility, bulk selection, duplicate prevention, unique codes, issuer, notifications, reissue/revoke, and transaction/compensation.** Migration and permission tests required.
+- [ ] **R096 — Improve standard screens and group navigation into Overview/Learning/Members/Mentorship/Opportunities/Credentials/Content/Website/System.** Accessibility and responsive checks required.
+- [ ] **R097 — Define and enforce a minimal staff permission matrix for super/content/learning/mentorship/opportunity/support/analyst responsibilities.** Do not add unnecessary roles; server tests required.
+- [ ] **R098 — Add all specified admin workflow E2E tests.** Use disposable seeded database; retain current smoke tests.
+
+### Provider-independent AI foundation and governance
+
+- [ ] **R099 — Create provider-independent AI interfaces for text, structured output, streaming, approved tools, usage, latency, timeout, and errors.** Groq isolated to adapter.
+- [ ] **R100 — Verify current production-supported Groq models from official docs, configure model IDs by environment, and document choices in `docs/ai-architecture.md`.** No secrets/model IDs scattered through features.
+- [ ] **R101 — Enforce AI auth, authorization, validation, rate/usage limits, timeouts, logging, feedback, injection defenses, minimization, privacy messaging, and human approval.** Safety tests required.
+- [ ] **R102 — Add privacy-minimized AI usage records with configurable retention.** Migration required; full prompts/responses off by default.
+- [ ] **R103 — Prevent AI from publishing, issuing credentials, grading, mentor decisions, applications, protected-data changes, or employment decisions.** Server-side policy and tests.
+- [ ] **R104 — Build provider-independent retrieval over approved course materials without assuming Groq embeddings or adding an unjustified paid vector DB.** Course isolation/citation tests required.
+
+### Course-aware AI Tutor
+
+- [ ] **R105 — Build grounded Tutor modes for explanation, simplification, examples, summaries, revision, Socratic guidance, answer feedback, comparison, and next-lesson review.** Must decline unsupported answers.
+- [ ] **R106 — Retrieve/cite approved course/module/lesson/transcript/attachment/note/resource/FAQ context with strict course isolation.** Prompt-injection and coverage tests required.
+- [ ] **R107 — Add contextual lesson/course Tutor UI with suggestions, streaming where supported, sources, reset, feedback, errors, privacy, and mobile behavior.** No assignment completion.
+- [ ] **R108 — Add Course Builder Tutor controls and aggregated, privacy-preserving feedback/FAQ reporting.** Never casually expose conversations.
+
+### Instructor AI Content Studio
+
+- [ ] **R109 — Integrate Content Studio inside Course Builder for all specified course, lesson, example, assessment, rubric, revision, and FAQ drafts.** Authorized staff only.
+- [ ] **R110 — Use separate server-validated structured-output flows for quiz, rubric, and lesson-outline schemas.** Mock invalid-output tests required.
+- [ ] **R111 — Implement preview/edit/regenerate/compare/select/reject/save-draft workflow with provenance and versioning; never auto-publish.** E2E and permission tests required.
+- [ ] **R112 — Add audience/level/context/tone/length/difficulty/example/outcome/assessment/marks/count controls and automatic course context.** Input validation required.
+
+### AI Career Coach
+
+- [ ] **R113 — Build member Career Coach connecting profile, skills, learning, certificates, portfolio, goals, mentorship, and opportunities.** Dedicated `/app` area.
+- [ ] **R114 — Implement transparent hybrid opportunity matching before LLM explanation, including matches, gaps, and relevant learning.** Never claim guarantees.
+- [ ] **R115 — Add narrowly scoped authenticated tools for summaries, completions, certificates, public portfolios, opportunities, courses, and confirmed goal/plan saves.** No unrestricted DB access or auto-apply.
+- [ ] **R116 — Add goal summary, recommendations, gaps, learning, portfolio guidance, plans, conversation, saved items, reset, and data management UI.** Mobile and privacy checks required.
+
+### Roadmap, metrics, tests, and documentation
+
+- [ ] **R117 — Extend `PRODUCT-ROADMAP.md` with “AI-Enabled Learning and Career Intelligence,” required statuses, phase details, acceptance criteria, risks, privacy, dependencies, and success metrics.** Integrate with existing roadmap.
+- [ ] **R118 — Instrument specified admin, Tutor, Content Studio, and Career Coach success metrics using privacy-conscious events.** Definitions documented.
+- [ ] **R119 — Add mocked AI tests for generation/retrieval/schema/tools/recommendations/timeouts/rate limits/invalid output/safety plus optional flag-gated Groq integration tests.** Real Groq excluded from normal CI.
+- [ ] **R120 — Test course isolation, citations, injection resistance, permissions, invalid tools, minimization, duplicates, rate limiting, failure, and fallbacks.** Required before AI beta.
+- [ ] **R121 — Create/update all required admin/AI/roadmap/status/environment documentation and everyday staff guide.** Files listed in the master specification.
+- [ ] **R122 — Produce final 16-part delivery/readiness report for internal testing, private beta, public MVP, and AI beta.** Only after final verification.
+
+### Extended work order
+
+Proceed strictly: R083–R085, R086–R091, R092, R093, R094, R095, R096–R098, R117, R099–R104, R105–R108, R109–R112, R113–R116, R118–R122. Re-read the attached master specification before every major phase.
+
+### 2026-07-12 — Workflow admin Phase 1
+
+- Re-read new master specification: yes.
+- Completed: R083 architecture/relationship audit and current-state documentation.
+- Implemented, awaiting final gate: R085 custom dashboard replacement with access-controlled attention queues, quick actions, overview metrics, recent activity, and responsive styling.
+- Verification: `npm run typecheck` passed; `npm run lint` passed.
+- Build blocker: the required elevated build was rejected because the execution allowance reached its usage limit. No workaround attempted.
+- Exact next step: run `cd web && npm run build`, then add a seeded admin dashboard E2E test and mark R085 complete only when both build and test pass. Continue with Course Builder design/schema migration only afterward.

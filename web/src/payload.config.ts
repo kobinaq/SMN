@@ -83,7 +83,11 @@ export default buildConfig({
     components: {
       beforeLogin: ["@/components/payload/LoginIntro"],
       afterLogin: ["@/components/payload/LoginHelp"],
-      beforeDashboard: ["@/components/payload/AdminDashboard"],
+      views: {
+        dashboard: {
+          Component: "@/components/payload/AdminDashboard",
+        },
+      },
       graphics: {
         Logo: "@/components/payload/Logo",
         Icon: "@/components/payload/Icon",
