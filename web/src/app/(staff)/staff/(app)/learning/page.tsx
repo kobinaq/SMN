@@ -263,6 +263,12 @@ export default async function StaffLearningPage({
                       <div>
                         <small className="text-[10px] uppercase tracking-wider text-white/35">Module {moduleIndex + 1}</small>
                         <h4 className="mt-1 text-lg text-white">{courseModule.title}</h4>
+                        <Link
+                          href={`/staff/learning/modules/${courseModule.id}`}
+                          className="mt-1 inline-block text-xs text-baby-blue hover:underline"
+                        >
+                          Edit module details
+                        </Link>
                       </div>
                       <ModuleActions
                         courseId={courseID}
@@ -279,10 +285,18 @@ export default async function StaffLearningPage({
                           className="flex flex-col gap-2 rounded-xl border border-white/5 px-3 py-3 sm:flex-row sm:items-center sm:justify-between"
                         >
                           <span>
-                            <b className="block text-sm text-white">{lesson.title}</b>
+                            <Link href={`/staff/learning/lessons/${lesson.id}`} className="block text-sm font-semibold text-white hover:text-baby-blue">
+                              {lesson.title}
+                            </Link>
                             <small className="text-xs text-white/40">
                               {lesson.lessonType} · {lesson.durationMinutes ?? 0} min · {lesson.status}
                             </small>
+                            <Link
+                              href={`/staff/learning/lessons/${lesson.id}`}
+                              className="mt-1 inline-block text-xs text-baby-blue hover:underline"
+                            >
+                              Edit lesson details
+                            </Link>
                           </span>
                           <LessonActions
                             courseId={courseID}

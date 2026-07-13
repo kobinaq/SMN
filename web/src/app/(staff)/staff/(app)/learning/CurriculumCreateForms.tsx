@@ -109,7 +109,11 @@ export function AddLessonForm({
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Unable to add lesson.");
       formEl.reset();
-      router.refresh();
+      if (result.id) {
+        router.push(`/staff/learning/lessons/${result.id}`);
+      } else {
+        router.refresh();
+      }
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Unable to add lesson.");
     } finally {

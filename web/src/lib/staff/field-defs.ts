@@ -89,6 +89,65 @@ export const storyFields: StaffField[] = [
   { name: "image", label: "Image media ID", type: "text" },
 ];
 
+export const lmsModuleFields: StaffField[] = [
+  { name: "title", label: "Title", type: "text", required: true },
+  { name: "slug", label: "Slug", type: "text", required: true },
+  { name: "summary", label: "Summary", type: "textarea", placeholder: "What this module covers" },
+  {
+    name: "status",
+    label: "Status",
+    type: "select",
+    required: true,
+    options: [
+      { label: "Draft", value: "draft" },
+      { label: "Published", value: "published" },
+      { label: "Archived", value: "archived" },
+    ],
+  },
+];
+
+export const lmsLessonFields: StaffField[] = [
+  { name: "title", label: "Title", type: "text", required: true },
+  { name: "slug", label: "Slug", type: "text", required: true },
+  { name: "summary", label: "Summary", type: "textarea", required: true, placeholder: "Short learner-facing summary" },
+  {
+    name: "lessonType",
+    label: "Lesson type",
+    type: "select",
+    required: true,
+    options: [
+      { label: "Video", value: "video" },
+      { label: "Reading", value: "reading" },
+      { label: "Download", value: "download" },
+      { label: "Assignment", value: "assignment" },
+    ],
+  },
+  {
+    name: "youtubeUrl",
+    label: "YouTube URL",
+    type: "url",
+    placeholder: "Unlisted YouTube watch / share / embed URL",
+  },
+  { name: "durationMinutes", label: "Duration (minutes)", type: "number" },
+  {
+    name: "body",
+    label: "Lesson details",
+    type: "textarea",
+    placeholder: "Notes, prompts, reading text, or assignment instructions",
+  },
+  {
+    name: "status",
+    label: "Status",
+    type: "select",
+    required: true,
+    options: [
+      { label: "Draft", value: "draft" },
+      { label: "Published", value: "published" },
+      { label: "Archived", value: "archived" },
+    ],
+  },
+];
+
 export const staffUserFields = (includePassword: boolean): StaffField[] => [
   { name: "name", label: "Full name", type: "text" },
   { name: "email", label: "Work email", type: "email", required: true },

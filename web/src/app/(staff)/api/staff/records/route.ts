@@ -72,6 +72,10 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
   }
   if (typeof body.lessons === "string") body.lessons = body.lessons === "" ? null : Number(body.lessons);
   if (typeof body.order === "string") body.order = body.order === "" ? 0 : Number(body.order);
+  if (typeof body.durationMinutes === "string") {
+    body.durationMinutes = body.durationMinutes === "" ? null : Number(body.durationMinutes);
+  }
+  if (body.youtubeUrl === "") delete body.youtubeUrl;
   if (collection === "stories") delete body.slug;
   return body;
 }
