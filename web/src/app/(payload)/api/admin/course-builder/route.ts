@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { getPayloadClient } from "@/lib/payload";
 
-const id = z.union([z.string().min(1), z.number()]);
+const id = z.coerce.number().int().positive();
 const schema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("reorder-modules"), courseId: id, ids: z.array(id).min(1) }),
   z.object({ action: z.literal("reorder-lessons"), courseId: id, moduleId: id, ids: z.array(id).min(1) }),
@@ -16,7 +16,7 @@ function relationID(value: unknown) {
   return String(value && typeof value === "object" && "id" in value ? value.id : value ?? "");
 }
 
-function copyData(doc: Record<string, unknown>, omitted: string[]) {
+function copyData<T extends object>(doc: T, omitted: string[]) {
   return Object.fromEntries(Object.entries(doc).filter(([key]) => !omitted.includes(key)));
 }
 
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
       const collection = input.action === "reorder-modules" ? "lms-modules" : "lms-lessons";
       const docs = await payload.find({ collection, depth: 0, limit: input.ids.length, where: { id: { in: input.ids } }, ...access });
       if (docs.totalDocs !== input.ids.length || docs.docs.some((doc) => relationID(doc.course) !== String(input.courseId))) return Response.json({ error: "Curriculum records do not belong to this course." }, { status: 409 });
-      if (input.action === "reorder-lessons" && docs.docs.some((doc) => relationID(doc.module) !== String(input.moduleId))) return Response.json({ error: "Lessons do not belong to this module." }, { status: 409 });
+      if (input.action === "reorder-lessons" && docs.docs.some((doc) => relationID((doc as { module?: unknown }).module) !== String(input.moduleId))) return Response.json({ error: "Lessons do not belong to this module." }, { status: 409 });
       const previous = new Map(docs.docs.map((doc) => [String(doc.id), Number(doc.order ?? 0)]));
       try {
         for (const [order, documentID] of input.ids.entries()) await payload.update({ collection, id: documentID, data: { order }, ...access });
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
       const lesson = await payload.findByID({ collection: "lms-lessons", id: input.lessonId, depth: 0, ...access });
       if (relationID(lesson.course) !== String(input.courseId)) return Response.json({ error: "Lesson does not belong to this course." }, { status: 409 });
       const data = copyData(lesson, ["id", "createdAt", "updatedAt"]);
-      const duplicate = await payload.create({ collection: "lms-lessons", data: { ...data, title: `${lesson.title} (copy)`, slug: `${lesson.slug}-copy-${Date.now()}`, status: "draft", order: Number(lesson.order ?? 0) + 1 }, ...access });
+      const duplicate = await payload.create({ collection: "lms-lessons", data: { ...data, title: `${lesson.title} (copy)`, slug: `${lesson.slug}-copy-${Date.now()}`, status: "draft", order: Number(lesson.order ?? 0) + 1 } as never, ...access });
       return Response.json({ ok: true, id: duplicate.id });
     }
 
@@ -86,11 +86,11 @@ export async function POST(request: Request) {
     let duplicateID: string | number | undefined;
     try {
       const moduleData = copyData(courseModule, ["id", "createdAt", "updatedAt"]);
-      const duplicate = await payload.create({ collection: "lms-modules", data: { ...moduleData, title: `${courseModule.title} (copy)`, slug: `${courseModule.slug}-copy-${Date.now()}`, status: "draft", order: Number(courseModule.order ?? 0) + 1 }, ...access });
+      const duplicate = await payload.create({ collection: "lms-modules", data: { ...moduleData, title: `${courseModule.title} (copy)`, slug: `${courseModule.slug}-copy-${Date.now()}`, status: "draft", order: Number(courseModule.order ?? 0) + 1 } as never, ...access });
       duplicateID = duplicate.id;
       for (const lesson of lessons.docs) {
         const lessonData = copyData(lesson, ["id", "createdAt", "updatedAt"]);
-        await payload.create({ collection: "lms-lessons", data: { ...lessonData, module: duplicate.id, title: `${lesson.title} (copy)`, slug: `${lesson.slug}-copy-${Date.now()}-${lesson.id}`, status: "draft" }, ...access });
+        await payload.create({ collection: "lms-lessons", data: { ...lessonData, module: duplicate.id, title: `${lesson.title} (copy)`, slug: `${lesson.slug}-copy-${Date.now()}-${lesson.id}`, status: "draft" } as never, ...access });
       }
       return Response.json({ ok: true, id: duplicate.id });
     } catch (error) {

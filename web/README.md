@@ -85,11 +85,11 @@ Without R2, media uses local disk (or is disabled on Vercel). Without Postgres, 
 
 ### Database schema (production Postgres)
 
-`payload migrate` currently breaks on Node 24 in this setup. Use the project helper instead (loads `.env` + `.env.local`):
+The stock Payload CLI loader breaks on Node 24, so project scripts bundle the config and call the installed ESM migration API:
 
 ```bash
 cd web
-npm run db:push    # drizzle push via Payload (creates/updates tables, including members)
+npm run db:migrate # apply committed migrations
 npm run db:check   # list public tables
 ```
 
@@ -101,7 +101,7 @@ For Neon, either the **pooled** or **direct** connection string works; if querie
 
 ### Current migration policy
 
-The older schema-push notes above describe the pre-baseline bridge. A full PostgreSQL baseline is now committed under `src/migrations`. Use `npm run db:migrate` for fresh and already-migrated databases, and create reviewed future snapshots with `npm run db:migrate:create -- concise_name`.
+A full PostgreSQL baseline is committed under `src/migrations`. Use `npm run db:migrate` for fresh and already-migrated databases, and create reviewed future snapshots with `npm run db:migrate:create -- concise_name`.
 
 Existing production predates that baseline. Do not replay the full baseline over its tables; follow the guarded push/verify/adopt procedure in `../docs/database-migrations.md`. Normal app startup keeps schema push disabled.
 
@@ -122,9 +122,9 @@ Existing production predates that baseline. Do not replay the full baseline over
 
 ## CMS collections
 
-**Users** (staff), **Members** (portal), Media, Posts, Courses, Events, Stories, Resources + global **Site Settings**.
+Collections cover staff/users, members, media/content/site settings, mentorship, opportunities, enrollments/learning/LMS/progress, portfolios, certificates, audit events, and AI usage/feedback/knowledge/drafts/career state.
 
-See repo root `PRODUCT-ROADMAP.md` for Phase 7+ (mentors, jobs, learning, certs).
+See repo root `PRODUCT-ROADMAP.md` for the current delivery and release state.
 
 ## Workflow admin and AI
 
@@ -145,7 +145,7 @@ Phase 7.3 can import public marketing roles from Greenhouse, Lever, and Ashby wi
 Vercel calls `/api/cron/sync-opportunities` daily at 05:00 UTC. Imported applications always continue on the employer's original site; SMN stores only member activity status.
 ## Learning dashboard operations
 
-Phase 7.4 is a light access and progress layer; course delivery remains on Selar and live cohorts remain on Google Classroom.
+The learning product combines external Selar/Classroom access with SMN enrollments, milestones, and the native LMS course/module/lesson/progress foundation.
 
 1. In **Learning → Learning Items**, create published milestones/resources with a stable `programKey` such as `cohort-2026` or `ai-marketers`.
 2. In **Learning → Enrollments**, link a member to the same `programKey`, choose the grant source, and add Classroom/Selar URLs.

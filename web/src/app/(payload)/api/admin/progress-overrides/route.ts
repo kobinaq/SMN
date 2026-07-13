@@ -2,7 +2,7 @@ import { z } from "zod";
 import { getPayloadClient } from "@/lib/payload";
 import { canStaff } from "@/lib/staff-permissions";
 
-const id = z.union([z.string().min(1), z.number()]);
+const id = z.coerce.number().int().positive();
 const schema = z.object({ courseId: id, lessonId: id, memberId: id, status: z.enum(["not-started", "in-progress", "completed"]), reason: z.string().trim().min(10).max(1000) });
 
 export async function POST(request: Request) {
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
   if (String(lessonCourse) !== String(course.id) || !enrollment.docs.some((item) => item.programKey === course.programKey)) return Response.json({ error: "The learner, lesson, and course do not share a valid enrollment." }, { status: 409 });
   const existing = await payload.find({ collection: "lms-lesson-progress", depth: 0, limit: 1, where: { and: [{ member: { equals: input.memberId } }, { lesson: { equals: input.lessonId } }] }, ...access });
   const previous = existing.docs[0];
-  let changedID: string | number | undefined;
+  let changedID: number | undefined;
   let created = false;
   try {
     const data = { member: input.memberId, course: input.courseId, lesson: input.lessonId, status: input.status, completedAt: input.status === "completed" ? new Date().toISOString() : null };

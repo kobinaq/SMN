@@ -4,10 +4,10 @@ import { getPayloadClient } from "@/lib/payload";
 import { sendEmail } from "@/lib/email";
 import { canStaff } from "@/lib/staff-permissions";
 
-const issueSchema = z.object({ action: z.literal("issue"), enrollmentIds: z.array(z.union([z.string(), z.number()])).min(1).max(100) });
-const certificateActionSchema = z.object({ action: z.enum(["revoke", "reissue"]), certificateId: z.union([z.string(), z.number()]), reason: z.string().trim().min(8).max(1000) });
+const issueSchema = z.object({ action: z.literal("issue"), enrollmentIds: z.array(z.coerce.number().int().positive()).min(1).max(100) });
+const certificateActionSchema = z.object({ action: z.enum(["revoke", "reissue"]), certificateId: z.coerce.number().int().positive(), reason: z.string().trim().min(8).max(1000) });
 const schema = z.discriminatedUnion("action", [issueSchema, certificateActionSchema]);
-const relationshipId = (value: unknown) => typeof value === "object" && value && "id" in value ? String((value as { id: string | number }).id) : String(value);
+const relationshipId = (value: unknown) => Number(typeof value === "object" && value && "id" in value ? (value as { id: string | number }).id : value);
 const code = () => `SMN-${randomUUID().replaceAll("-", "").slice(0, 16).toUpperCase()}`;
 
 export async function POST(request: Request) {
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
 
   const memberId = relationshipId(current.member);
   const activeIssuanceKey = `${memberId}:${current.programKey || current.programName}`;
-  let replacementId: string | number | undefined;
+  let replacementId: number | undefined;
   try {
     await payload.update({ collection: "certificates", id: current.id, data: { status: "revoked", activeIssuanceKey: null, revokedAt: now, revokedBy: user.id, revocationReason: `Reissued: ${parsed.data.reason}` }, ...access });
     const replacement = await payload.create({ collection: "certificates", data: { member: memberId, title: current.title, programName: current.programName, programKey: current.programKey, course: current.course ? relationshipId(current.course) : undefined, enrollment: current.enrollment ? relationshipId(current.enrollment) : undefined, issuedBy: user.id, activeIssuanceKey, credentialCode: code(), summary: current.summary, skills: current.skills, issuedAt: now, expiresAt: current.expiresAt, status: "valid", visibility: current.visibility, reissuedFrom: current.id, notificationStatus: "pending" }, ...access });

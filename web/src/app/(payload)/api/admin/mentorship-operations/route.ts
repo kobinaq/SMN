@@ -3,12 +3,12 @@ import { getPayloadClient } from "@/lib/payload";
 import { sendEmail } from "@/lib/email";
 import { canStaff } from "@/lib/staff-permissions";
 
-const id = z.union([z.string().min(1), z.number()]);
+const id = z.coerce.number().int().positive();
 const schema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("mentor-decision"), mentorId: id, decision: z.enum(["approved", "rejected"]), reason: z.string().trim().max(2000).default("") }),
   z.object({ action: z.literal("request-transition"), requestId: id, status: z.enum(["reviewing", "introduced", "completed", "declined"]), reason: z.string().trim().max(2000).default("") }),
 ]);
-const relationshipID = (value: unknown) => value && typeof value === "object" && "id" in value ? value.id : value;
+const relationshipID = (value: unknown) => Number(value && typeof value === "object" && "id" in value ? value.id : value);
 
 export async function POST(request: Request) {
   const payload = await getPayloadClient(); const { user } = await payload.auth({ headers: request.headers });
@@ -21,12 +21,12 @@ export async function POST(request: Request) {
     const mentor = await payload.findByID({ collection: "mentors", id: input.mentorId, depth: 1, ...access }); const before = mentor.status;
     const updated = await payload.update({ collection: "mentors", id: mentor.id, data: { status: input.decision, rejectionReason: input.decision === "rejected" ? input.reason : null }, ...access });
     await payload.create({ collection: "audit-events", data: { actor: user.id, action: `mentorship.mentor.${input.decision}`, entityType: "mentors", entityId: String(mentor.id), reason: input.reason || "Staff approved mentor application.", before: { status: before }, after: { status: updated.status }, visibility: "staff" }, ...access });
-    if (input.decision === "rejected") { const member = mentor.member && typeof mentor.member === "object" ? mentor.member : await payload.findByID({ collection: "members", id: relationshipID(mentor.member) as string | number, depth: 0, overrideAccess: true }); await sendEmail({ to: member.email, subject: "Update on your SMN mentor application", text: `Hi ${member.name || "there"},\n\nYour mentor application was not approved at this time.\n\n${input.reason}\n\nSocial Marketers Network` }); }
+    if (input.decision === "rejected") { const member = mentor.member && typeof mentor.member === "object" ? mentor.member : await payload.findByID({ collection: "members", id: relationshipID(mentor.member), depth: 0, overrideAccess: true }); await sendEmail({ to: member.email, subject: "Update on your SMN mentor application", text: `Hi ${member.name || "there"},\n\nYour mentor application was not approved at this time.\n\n${input.reason}\n\nSocial Marketers Network` }); }
     return Response.json({ ok: true });
   }
   if ((input.status === "declined") && input.reason.length < 10) return Response.json({ error: "A decline explanation of at least 10 characters is required." }, { status: 400 });
   const mentorshipRequest = await payload.findByID({ collection: "mentorship-requests", id: input.requestId, depth: 2, ...access }); const before = mentorshipRequest.status;
-  const mentorID = relationshipID(mentorshipRequest.mentor) as string | number; const requesterID = relationshipID(mentorshipRequest.requester) as string | number;
+  const mentorID = relationshipID(mentorshipRequest.mentor); const requesterID = relationshipID(mentorshipRequest.requester);
   if (input.status === "introduced") {
     const mentor = await payload.findByID({ collection: "mentors", id: mentorID, depth: 1, ...access }); if (mentor.status !== "approved" || mentor.availability === "Unavailable") return Response.json({ error: "This mentor is not available for introductions." }, { status: 409 });
     const active = await payload.count({ collection: "mentorship-relationships", where: { and: [{ mentor: { equals: mentor.id } }, { status: { equals: "active" } }] }, ...access }); if (active.totalDocs >= Number(mentor.maxActiveMentees ?? 0)) return Response.json({ error: "This mentor is at active-mentee capacity." }, { status: 409 });

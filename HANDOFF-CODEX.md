@@ -1,360 +1,170 @@
-# SMN handoff for Codex
+# SMN Engineering Handoff
 
-**Date:** 2026-07-11  
-**Repo:** `github.com/kobinaq/SMN` (branch `main`)  
-**App root:** `web/` (Next.js 16 App Router + Payload 3)  
-**Production:** `https://socialmarketersnetwork.vercel.app`  
-**Vercel Root Directory:** must be `web`  
-**Previous agent:** Grok Build (session limit almost up)
+**Updated:** 2026-07-13  
+**Repository:** `github.com/kobinaq/SMN`, branch `main`  
+**Application root:** `web/`  
+**Production:** `https://socialmarketersnetwork.vercel.app`
 
-This document is the transfer brief. Codex has full repo access. Prefer reading code over re-deriving architecture.
+This is the current transfer brief. Use it with `IMPLEMENTATION_PLAN.md`, `PRODUCT-ROADMAP.md`, `PROJECT_STATUS.md`, and the documents under `docs/`. Older phase assumptions have been removed because the product now includes a real LMS foundation, workflow-first administration, and three AI-assisted product surfaces.
 
----
+## 1. Product and architecture now
 
-## 1. Product in one paragraph
+SMN is a public marketing-community website plus an authenticated network product. Payload is the system of record, API, authorization layer, staff CMS, and member-auth provider. Staff use `users` at `/admin`; members use `members` at `/login`, `/signup`, and `/app`. Browser cookies are separated through the `smn-admin` prefix and the `smn-member-token` bridge.
 
-**Social Marketers Network (SMN)** is a premium marketing-community site for modern marketers (Africa-first): flagship cohort, Selar self-paced courses, WhatsApp community, events, insights, resources, and employers/partners. Phase 7+ turns it into a **network product** with member accounts, mentors, jobs, learning dashboard, portfolios, certificates â€” without building a full LMS or replacing WhatsApp/Selar/Classroom yet.
+The implemented product includes:
 
----
+- Public marketing/content pages and CMS-managed content.
+- Member profiles, mentor applications/directory/requests, opportunities and application activity, learning/enrollments, portfolios, and public credentials.
+- LMS courses, modules, lessons, unlisted YouTube playback, Media/R2 attachments, member entitlement, lesson progress, course completion automation, readiness, analytics, and certificate eligibility.
+- Workflow-first admin Overview, Course Builder, Member 360, Mentorship Operations, Opportunity Operations, and Certificate Issuing.
+- Minimal staff roles: super-admin, content, learning, mentorship, opportunity, support, and analyst, enforced on server collection access and custom routes.
+- Provider-independent AI foundation, course-aware Tutor, instructor Content Studio, and member Career Coach, all independently feature-flagged.
 
-## 2. Current state (what works)
+## 2. Production incident resolved during this work
 
-### Marketing site (largely complete)
-- Dark-only brand UI (no light mode)
-- Home (hero photo fan, philosophy, instructor Arielle Adodo, courses, community, events, stories)
-- About, programs/cohort/courses, community (WhatsApp), events (calendar uplift), insights + articles, resources library + detail
-- Apply, contact, employers, mentorship pages (thinner layouts)
-- Forms: cohort apply, contact, newsletter (Resend/Mailchimp when env set; otherwise console log)
-- GSAP + Lenis motion (Lenis off on mobile/touch)
-- Unique image map: `web/src/lib/images.ts` â€” do not reuse photos across surfaces
-- Seed content: `web/src/lib/content.ts` when CMS empty
+The reported production admin RSC failure was caused by database schema drift, not the browser-extension `content.js`/`polyfill.js` messages. Production had 37 older tables and lacked new admin schema such as `member_notes`, `mentorship_relationships`, and staff role fields.
 
-### Platform / product started (7.0â€“7.1)
-- **Staff CMS:** Payload collection `users` â†’ `/admin`
-- **Members:** auth collection `members` â†’ `/signup`, `/login`, `/app/*`
-- Portal shell: home, profile edit, placeholder pages for learning/mentors/opportunities
-- Postgres via `DATABASE_URL` (`web/src/lib/db.ts`); SQLite local fallback
-- R2 via `@payloadcms/storage-s3` when `R2_*` env present
-- Schema push: **opt-in only** â€” `npm run db:push` (not on every request)
-- Dual document shells: multi-root layouts (no `app/layout.tsx`)
-  - `(site)`, `(auth)`, `(portal)` â†’ `SiteDocument`
-  - `(payload)` â†’ Payload `RootLayout`
+With user authorization, `npm run db:push` was run against the configured Neon database. Verification then showed 41 tables, required columns present, successful admin Local API reads, and HTTP 200 for the production `/admin` login surface. This repaired the pre-AI admin schema.
 
-### Confirmed working in production (as of handoff)
-- Marketing pages + images
-- Member `/login` â†’ `/app` (user was logged in)
-- Neon DB reachable; `members` / `users` tables exist
+The final AI collections and the latest member/LMS fields were added afterward and have **not** yet been pushed to or adopted by production. Keep every AI feature flag false until the final schema procedure and verification are complete.
 
-### Not confirmed / broken / fragile
-- **`/admin` on Vercel was blank black** while local worked  
-  - Root cause identified: `Users.access.admin` returned `true` when `!req.user`, so Payload rendered Dashboard with `user: null` instead of redirecting to login  
-  - **Fix committed in spirit** in `Users.ts`: `admin` must return **boolean only** for staff  
-  - **Verify after deploy:** private window â†’ `/admin` â†’ should redirect to `/admin/login` or create-first-user  
-- Member and staff share **one** cookie: `payload-token` (Payload global `cookiePrefix`)  
-  - Middleware `web/src/middleware.ts` strips member JWT from `/admin` request only  
-  - Logging into staff admin still **overwrites** member cookie (known limitation)
-- Resend / Mailchimp / domain / `R2_PUBLIC_URL` not fully set (user waiting on domain purchase)
-- Thinner marketing pages not â€œupliftedâ€ to events/community quality: employers, mentorship, stories, programs hub, courses catalogue
-- Legal: privacy/terms are starter stubs
-- GA4 not wired
-- Selar / Lu.ma URLs still placeholders in seed content
+## 3. Work completed in the current uncommitted change set
 
----
+### Workflow administration
 
-## 3. Locked technical decisions (do not reverse without reason)
+- Course Builder tabs, metadata/readiness, curriculum actions, compensating writes, progress automation/overrides, analytics, Tutor settings, and Content Studio.
+- Member 360 with private authored staff notes.
+- Mentorship review, capacity, request transitions, relationships, feedback, audit, and notifications.
+- Opportunity moderation, duplicate/expiry queues, applications, source health, and audited transitions.
+- Certificate eligibility, bulk issuance, duplicate prevention, issuer/source relationships, notifications, reissue/revoke, audit, and compensation.
+- Workflow navigation groups and server-enforced staff permission matrix.
+- Disposable Playwright workflow scenarios were added for these operations.
 
-| Topic | Decision |
-|-------|----------|
-| Member auth | **Payload** `members` collection â€” **not** Clerk/Auth.js |
-| Staff auth | Payload `users` only for `/admin` |
-| Media | **Cloudflare R2** (S3 adapter), not Vercel Blob |
-| Hosting | Vercel, monorepo root directory **`web`** |
-| DB production | **Neon Postgres** via `DATABASE_URL` |
-| Schema changes | `npm run db:push` (`PAYLOAD_DB_PUSH=true`), not auto-push on request |
-| Community chat | **WhatsApp** (external invite); do not build in-app chat yet |
-| Course sales | **Selar** outbound links |
-| Live cohort | **Google Classroom** (ops links; light dashboard later) |
-| Brand | Dark-only, deep blue `#0A2F8F`, baby blue, mint; matte overlays on photos (not glow) |
-| Currency display | GHS for pricing copy |
+### AI foundation and surfaces
 
----
+- Provider-independent text, structured output, streaming, usage, timeout, and error contracts under `web/src/lib/ai`.
+- Fetch-based Groq adapter isolated from feature code; mock provider supports text and structured test responses.
+- Current model aliases documented from official Groq documentation in `docs/ai-architecture.md`.
+- Validation, prompt-injection screening, prohibited-action policy, explicit save confirmation, per-actor hourly limits, opaque actor hashes, prompt hashes, timeouts, privacy-minimized usage records, feedback, retention expiry, and deletion.
+- Approved course retrieval with entitlement, one-course isolation, lexical ranking, source delimiters, citations, unsafe-source filtering, and unsupported-answer decline.
+- Tutor API/UI with nine modes, course controls, citations, feedback, reset, privacy copy, and aggregate reporting.
+- Content Studio API/UI with separate strict quiz/rubric/outline schemas, all requested controls, generation/regeneration/comparison/selection/rejection/edit/save, provenance, and versioned drafts.
+- Career Coach deterministic opportunity matching, evidence/gaps/learning, authenticated minimized context, explanations/conversation, confirmed goal/plan saves, feedback, reset, and retained-data deletion.
+- Member profile editing now includes skills, career interests, and career goals.
+- Privacy-conscious success metric definitions and events.
 
-## 4. Critical file map
+### Schema, scripts, tests, and documentation
 
-| Path | Role |
-|------|------|
-| `web/src/payload.config.ts` | Payload config, serverURL, CSRF, R2 plugin, admin branding |
-| `web/src/lib/db.ts` | Postgres vs SQLite adapter; push only if `PAYLOAD_DB_PUSH=true` |
-| `web/src/lib/server-url.ts` | `getServerURL()` for admin/cookies |
-| `web/src/lib/images.ts` | Central unique image paths |
-| `web/src/lib/content.ts` | Seed marketing content |
-| `web/src/lib/auth/member.ts` | `getMember` / `requireMember` |
-| `web/src/collections/Users.ts` | Staff access â€” **admin must return boolean staff-only** |
-| `web/src/collections/Members.ts` | Member profiles + auth |
-| `web/src/middleware.ts` | Strip member JWT on `/admin` only |
-| `web/src/app/(payload)/layout.tsx` | Payload RootLayout + serverFunction |
-| `web/src/app/(portal)/app/*` | Member portal pages |
-| `web/src/app/(auth)/*` | Login/signup/forgot |
-| `web/src/components/layout/SiteDocument.tsx` | Marketing/auth/portal html shell |
-| `web/src/components/layout/BrandLogo.tsx` | Logo with `unoptimized` (avoid preload warnings) |
-| `web/scripts/push-schema.mjs` | Production schema sync helper |
-| `web/scripts/check-schema.mjs` | List tables |
-| `PRODUCT-ROADMAP.md` | Short phase list |
-| `ARCHITECTURE.md` | Original MVP architecture (some Discord refs outdated â†’ WhatsApp) |
-| `web/README.md` | Dev + Vercel notes |
-| `web/.env.example` | Env template (no real secrets) |
+- AI collections: `ai-usage-records`, `ai-feedback`, `ai-knowledge-sources`, `ai-drafts`, and `ai-career-states`.
+- Full PostgreSQL baseline generated at `web/src/migrations/20260713_140429_smn_baseline_20260713.ts` with its snapshot and index.
+- Node 24 workarounds added for migration creation/application and Payload type generation by bundling `payload.config.ts` before calling the installed ESM APIs.
+- Guarded existing-database adoption script added; see `docs/database-migrations.md`.
+- Generated Payload types and admin import map were refreshed.
+- Mocked AI/safety tests, staff permission tests, optional flag-gated Groq integration test, and workflow/AI E2E tests were added.
+- Staff guide, migration runbook, AI/admin architecture, metric definitions, environment reference, testing guide, roadmap, and status docs were updated.
 
----
+## 4. Exact verification checkpoint
 
-## 5. Environment variables
+The user originally asked to defer tests until implementation was complete. Verification then began.
 
-### Required on Vercel (Production)
+Completed:
 
-| Variable | Purpose |
-|----------|---------|
-| `DATABASE_URL` | Neon Postgres |
-| `PAYLOAD_SECRET` | JWT/signing â€” **match local** if same DB |
-| `NEXT_PUBLIC_SITE_URL` | Full origin e.g. `https://socialmarketersnetwork.vercel.app` (no trailing slash) â€” **critical for admin CSRF/cookies** |
-| `R2_BUCKET` | Cloudflare R2 |
-| `R2_ACCESS_KEY_ID` | R2 |
-| `R2_SECRET_ACCESS_KEY` | R2 |
-| `R2_ENDPOINT` | `https://<accountid>.r2.cloudflarestorage.com` |
-| `R2_REGION` | Usually `auto` |
+- `npm run db:migrate:create -- smn_baseline_20260713` through the bundled workaround: passed and generated the baseline without connecting to the DB.
+- `npm run generate:types` through the bundled workaround: passed; canonical output is `web/src/payload-types.ts`.
+- `npm run generate:importmap`: passed.
+- First unit run: existing 14 tests passed and the new AI suite failed to parse because `retrieval.ts` had an unterminated replacement string. That syntax defect was fixed.
 
-### Optional / later (domain)
+Current static-check state:
 
-| Variable | When |
-|----------|------|
-| `R2_PUBLIC_URL` | After custom media domain or r2.dev public URL |
-| `RESEND_API_KEY`, `RESEND_FROM` | After domain for email |
-| `OPS_EMAIL` | Form notifications |
-| `MAILCHIMP_*` | Newsletter |
-| `NEXT_PUBLIC_WHATSAPP_INVITE` | Real group link |
+- The first generated-type `npm run typecheck` reported 31 errors.
+- Errors were primarily numeric Postgres relationship IDs still modeled as `string | number`, Payload draft-overload ambiguity for dynamic duplicated records, Career Coach union narrowing, Tutor enablement placed on the wrong LMS view type, a removed `discordInvite` field reference, and the admin wrapper returning a possible `Where` for `access.admin`.
+- Fix batches were started. The portal batch completed. The admin-route batch was interrupted while `apply_patch` was still running; inspect its exact filesystem result before continuing.
+- Lint output from the parallel gate was not preserved because the combined process rejected when unit tests failed.
+- Full unit rerun, lint, build, Playwright E2E, disposable PostgreSQL migration verification, and production final-schema adoption remain outstanding.
 
-### Local
-- Prefer `web/.env.local` for Postgres + secret (gitignored)
-- Schema: `cd web && npm run db:push`
-- Check tables: `npm run db:check`
+## 5. Incoming agent: first actions
 
-### Schema / migrate notes
-- `payload migrate` CLI **breaks on Node 24** in this environment (tsx / `@next/env` interop)
-- Use `npm run db:push` instead of migrate for now
-- Do **not** re-enable `push: true` on every app connect (causes 20â€“30s â€œPulling schemaâ€ and failed admin queries)
+Do not restart implementation. Continue the verification/fix loop:
 
----
+1. Run `git status --short` and inspect these partially patched files first:
+   - `web/src/app/(payload)/api/admin/certificate-operations/route.ts`
+   - `web/src/app/(payload)/api/admin/course-builder/route.ts`
+   - `web/src/app/(payload)/api/admin/progress-overrides/route.ts`
+   - `web/src/app/(payload)/api/admin/mentorship-operations/route.ts`
+2. Run `cd web && npm run typecheck` and fix the remaining generated-type errors.
+3. Run `npm run lint` and `npm run test:unit`; fix every failure.
+4. Regenerate types/import map if config changes.
+5. Run `npm run build`.
+6. Run `npm run test:e2e`. The runner creates and removes a per-process SQLite database, forces one Playwright worker, seeds fictional records, and uses `AI_PROVIDER=mock` with all AI test flags enabled.
+7. Verify the committed migration on a disposable PostgreSQL database. Review the full baseline SQL before any shared-environment action.
+8. Only after all gates pass, follow `docs/database-migrations.md` for existing production: backup/maintenance window, final `db:push`, full schema reads, guarded `db:migrate:adopt`, then `db:migrate` must show no pending baseline.
+9. Keep production AI flags false until private-beta approval.
+10. Update `IMPLEMENTATION_PLAN.md` final gates and write R122’s 16-part delivery/readiness report with actual evidence.
 
-## 6. Immediate priorities (do these first)
+## 6. Likely remaining type fixes from the first report
 
-### P0 â€” Unblock production admin
-1. Confirm latest `Users.access.admin` is deployed (boolean staff-only).
-2. Private window â†’ `https://socialmarketersnetwork.vercel.app/admin`
-3. Expect **redirect to `/admin/login`** or create-first-user â€” not blank dashboard.
-4. Create/login **staff** user (separate from member account).
-5. If still blank: check browser console + Network for `/api/*` failures; verify `NEXT_PUBLIC_SITE_URL` and `PAYLOAD_SECRET` on Vercel.
+Recheck rather than applying blindly:
 
-### P0 â€” Stabilize, donâ€™t thrash
-- Avoid stacking speculative admin fixes without reproducing the HTML/RSC payload.
-- Production debug tip: `curl` `/admin` HTML â€” if RSC stream has `"user":null` and page children `null` with Dashboard view, itâ€™s the canAccessAdmin bug again.
+- `certificate-operations`: relationship helper must return numeric IDs; certificate inputs should coerce numeric IDs.
+- `course-builder`: narrow dynamic collection unions and cast only spread-generated create data where Payload cannot infer required fields.
+- `progress-overrides`: numeric IDs remove update/create overload ambiguity.
+- `mentorship-operations`: numeric mentor/requester IDs.
+- `learning-progress`, `lms-progress`, `mentor-requests`, `portfolios`, and opportunity sync: numeric relationship IDs.
+- `mentor-applications`: dynamic draft create overload.
+- `lms.ts`: `tutorEnabled` belongs on `LmsCourseCard`, not `LmsLessonListItem`.
+- `admin-permission-config.ts`: `access.admin` must always resolve to boolean.
 
-### P1 â€” Content / launch readiness (marketing)
-- Real WhatsApp invite, Selar URLs, Lu.ma events, cohort dates/prices
-- Privacy/terms legal review
-- GA4
-- Domain â†’ update `NEXT_PUBLIC_SITE_URL`, Resend domain, optional `R2_PUBLIC_URL`
+## 7. Database workflow
 
-### P1 â€” Optional page uplifts (quality parity with events/community)
-- Employers, mentorship, stories, programs hub, courses catalogue
-
----
-
-## 7. Remaining product phases (Phase 7+)
-
-Implement in dependency order. Full design notes also in session plan history; this is the executable backlog.
-
-```text
-7.0 Platform â”€â”€â–º 7.1 Portal shell â”€â”€â”¬â”€â”€â–º 7.2 Mentors
-        (mostly done)    (mostly done) â”œâ”€â”€â–º 7.3 Opportunities â”€â”€â–º 7.7 Employer portal
-                                       â”œâ”€â”€â–º 7.4 Learning â”€â”€â–º 7.6 Certificates
-                                       â””â”€â”€â–º 7.5 Portfolios
-                                       â””â”€â”€â–º 7.8 Forum (late / optional)
-                                       â””â”€â”€â–º 7.9 Native pay/LMS (only if needed)
-```
-
-### 7.0 Platform â€” status: ~90%
-**Done:** dual auth collections, R2 plugin, Postgres adapter, multi-root layouts, member session helpers, middleware for admin vs member cookie.  
-**Left:**
-- [ ] Prove `/admin` login on Vercel end-to-end
-- [ ] Optional: separate cookies for members vs staff (today shared `payload-token` â€” staff login overwrites member)
-- [ ] Avatar upload on profile (media â†’ R2)
-- [ ] Payload email adapter (Resend) for forgot-password
-- [ ] Formal migrations when CLI works (or document db:push as permanent process)
-- [ ] Fix monorepo `vercel.json` confusion (root vs `web/vercel.json`) if Root Directory is mis-set
-
-### 7.1 Portal shell â€” status: ~80%
-**Done:** signup/login/logout, `/app` home, profile form, nav placeholders.  
-**Left:**
-- [ ] Avatar upload
-- [ ] Stronger empty states
-- [ ] Ensure production member session + profile PATCH solid
-- [ ] Password reset emails when Resend ready
-
-### 7.2 Mentor directory â€” **next major feature**
-**Goal:** Browsable, staff-approved mentors (not form-only).
-
-**Build:**
-- [ ] Payload collections: `mentors` (relation â†’ member), `mentorship-requests`
-- [ ] Fields: topics, bio, availability, Cal.com URL, status draft/approved
-- [ ] Public or member-gated `/mentors` + `/app/mentors`
-- [ ] Apply to become mentor â†’ staff approve in admin
-- [ ] Request mentorship â†’ Resend to mentor + ops
-- [ ] Filters: topic, seniority, availability
-- [ ] Extend/replace thin `mentorship/page.tsx` marketing intro
-
-**Out of scope:** auto-matching, in-app video.
-
-### 7.3 Opportunities board
-- [ ] Collections: `opportunities`, `opportunity-applications`, optional `employer-orgs`
-- [ ] Staff/employer post; moderation states
-- [ ] Member browse/filter/apply
-- [ ] Notify via Resend
-- [ ] `/app/opportunities` real UI
-
-### 7.4 Learning dashboard (light LMS)
-- [ ] Collections: `enrollments`, `learning-items`, `progress`
-- [ ] Cohort status + Classroom links
-- [ ] Selar entitlements via webhook or staff grant
-- [ ] Resource unlocks; weekly milestone checklist
-- [ ] **Not** video player / quiz engine
-
-### 7.5 Portfolio profiles
-- [ ] Collection `portfolios` / case studies
-- [ ] Public `/u/[handle]` with visibility private | members | public
-- [ ] Media on R2
-- [ ] Optional feature on marketing Stories
-
-### 7.6 Certificates
-- [ ] Collection `certificates`
-- [ ] Staff issue â†’ PDF on R2
-- [ ] Public `/verify/[code]`
-- [ ] List in portal
-
-### 7.7 Employer portal (depends on 7.3)
-- [ ] Employer org accounts
-- [ ] Dashboard: own listings + applicants
-
-### 7.8 Forum (late)
-- Only if WhatsApp insufficient; empty forums hurt trust
-- Prefer announcement archive first
-
-### 7.9 Native payments / LMS
-- Only if Selar/Classroom block growth
-- Prefer webhooks + dashboard first
-
----
-
-## 8. Known pitfalls (read before coding)
-
-1. **`Users.access.admin` must return boolean staff-only.**  
-   Never return `true` for `!req.user` â€” causes blank Dashboard on Vercel.
-
-2. **Next.js 16 `images.localPatterns`**  
-   If set, **only** listed paths work. Must include `/images/**`, `/brand/**`, and `/api/media/file/**`.
-
-3. **Multi-root layouts**  
-   No `app/layout.tsx`. Each of `(site)`, `(auth)`, `(portal)`, `(payload)` owns document shell. Donâ€™t reintroduce nested `<html>` inside marketing body.
-
-4. **Shared auth cookie**  
-   Members and staff use `payload-token`. Middleware ignores member token on `/admin` only.
-
-5. **Schema push**  
-   `PAYLOAD_DB_PUSH=true` only for `npm run db:push`. Auto-push on connect breaks admin with slow schema pull.
-
-6. **Node 24 + `npx payload migrate`**  
-   Broken here; use db:push scripts.
-
-7. **Import map for admin graphics**  
-   `web/src/app/(payload)/admin/importMap.js` maps Logo/Icon. Paths use `@/components/payload/...`. Regenerate carefully if adding components.
-
-8. **Branding**  
-   SMN logo/icon in admin; `BrandLogo` uses `unoptimized` to avoid preload warnings.
-
-9. **Do not expand scope into full LMS** unless product asks.
-
----
-
-## 9. Suggested first Codex session
-
-1. **Verify production `/admin`** after latest deploy; fix only if still blank (check canAccessAdmin + console/network).  
-2. **Smoke test:** member signup/login, staff login, images, forms.  
-3. **Start 7.2 Mentor directory** collections + `/app/mentors` list + staff approval flow.  
-4. Keep marketing seed content working without requiring CMS for every page.
-
----
-
-## 10. Commands cheat sheet
+Fresh PostgreSQL database:
 
 ```bash
 cd web
-npm install
-npm run dev              # http://localhost:3000
-# Admin local:           http://localhost:3000/admin
-# Member:                /signup â†’ /app
-
-npm run db:push          # push schema to DATABASE_URL (Postgres)
-npm run db:check         # list public tables
-npm run build            # production build
-npx tsc --noEmit         # typecheck
+npm run db:migrate
 ```
 
----
+Future schema change:
 
-## 11. Explicitly out of scope (unless product changes)
+```bash
+npm run db:migrate:create -- concise_change_name
+```
 
-- Replacing WhatsApp with in-app chat  
-- Full course player / quizzes  
-- Job guarantees  
-- Clerk / Auth.js for members  
-- Vercel Blob instead of R2  
-- Mobile native apps  
+Existing production must use the guarded baseline adoption runbook. The stock `payload migrate:*` and `payload generate:types` loaders fail on Node 24 with `ERR_REQUIRE_ASYNC_MODULE`; use the project npm scripts.
 
----
+## 8. Important files
 
-## 12. User / stakeholder context
+| File | Purpose |
+|---|---|
+| `IMPLEMENTATION_PLAN.md` | Requirement-level status and verification gates |
+| `PRODUCT-ROADMAP.md` | Current product phases and release state |
+| `PROJECT_STATUS.md` | Current operational status |
+| `docs/admin-architecture.md` | Workflow admin structure and role matrix |
+| `docs/ai-architecture.md` | AI boundaries, models, retrieval, retention, surfaces |
+| `docs/database-migrations.md` | Fresh DB and existing-production adoption runbook |
+| `docs/staff-guide.md` | Everyday workflow and AI incident guide |
+| `docs/success-metrics.md` | Admin and AI metric definitions |
+| `docs/testing.md` | Test layers and commands |
+| `web/src/payload.config.ts` | Collections, views, DB, admin, plugins |
+| `web/src/lib/ai/` | Provider/runtime/retrieval/schema/career foundation |
+| `web/src/migrations/` | PostgreSQL migration baseline |
+| `web/scripts/seed-demo.mjs` | Current fictional seed for workflow and AI E2E |
 
-- Founder instructor: **Arielle Adodo** (Ghana), LinkedIn-informed bio in content  
-- Pricing shown in **GHS**  
-- Community: **WhatsApp** (not Discord â€” ARCHITECTURE.md may still mention Discord in places; code uses WhatsApp)  
-- Domain purchase pending â†’ delay Resend + public R2 CDN until then  
-- User preference: **stop stacking speculative fixes**; prefer root-cause verification (e.g. inspect production HTML/RSC for `user` and view type)
+## 9. Stable operational facts
 
----
+- Vercel project root is `web`.
+- Normal app startup does not push schema.
+- Media uses Cloudflare R2 when the complete `R2_*` configuration is present.
+- LMS videos use unlisted YouTube embeds; other lesson files use Media/R2.
+- Course access is based on existing member/enrollment rules and `programKey` grants.
+- WhatsApp, Selar, Google Classroom, Resend, Mailchimp, R2, and employer ATS links remain external integrations configured through CMS/environment values.
+- AI configuration is server-only. Normal CI never calls Groq.
+- Extension console errors such as `content.js useCache` and `polyfill receiving end` are not application errors; inspect the server/RSC digest and database logs.
 
-## 13. Open verification checklist for Codex
+## 10. Release state at handoff
 
-- [ ] Vercel deploy green after `Users.ts` boolean `admin` fix  
-- [ ] `/admin` â†’ login UI on production (private window)  
-- [ ] Staff can log in and see collections  
-- [ ] Member can still use `/app`  
-- [ ] Homepage images load on production  
-- [ ] `NEXT_PUBLIC_SITE_URL` = `https://socialmarketersnetwork.vercel.app` (or custom domain)  
-- [ ] Neon + R2 env complete on Vercel  
-- [ ] Uncommitted local diffs reviewed (git status may show WIP on newsletter, Members, Users, LoginForm, HeroPhotoGallery)
-
----
-
-*End of handoff. Prefer this file + `PRODUCT-ROADMAP.md` + `web/README.md` as the source of truth for remaining work.*
-
----
-
-## Codex progress after handoff
-
-- Production `/admin` restored by making the R2 plugin/import map environment-invariant.
-- Access-control, login callback, newsletter error handling, and hero lint issues fixed.
-- Phase 7.2 mentor directory implemented: applications, staff approval, member filters, and mentorship requests.
-- Neon schema includes `mentors` and `mentorship-requests`.
-- Phase 7.3 opportunities board implemented with manual listings, moderated ATS imports, member filters, and application tracking.
-- Phase 7.4 learning dashboard implemented with staff grants, Classroom/Selar links, weekly items, resources, and member progress.
-- Phase 7.5 portfolio profiles implemented with member case studies, public `/u/[handle]`, and upload-or-URL covers.
-- Phase 7.6 certificates implemented with staff-issued credentials, Media/R2 PDFs, member listing, and public `/verify/[code]`.
-- Product direction changed for 7.7: build a full LMS foundation. Videos are unlisted YouTube embeds to avoid storing video in R2; other lesson files continue through Media/R2.
-- Phase 7.7 LMS foundation implemented: `lms-courses`, `lms-modules`, `lms-lessons`, `lms-lesson-progress`, member course library, lesson player, and completion tracking.
+- Existing public MVP/product features: implemented; production integration/content checks remain environment-specific.
+- Workflow admin extension: implemented, verification incomplete.
+- LMS operational extension: implemented, verification incomplete after the latest admin/AI changes.
+- AI foundation/Tutor/Content Studio/Career Coach: implemented behind flags, verification incomplete, not approved for beta.
+- Migration baseline: generated, not yet proven on disposable PostgreSQL or adopted by production.
+- R122 final readiness report: pending verified evidence.

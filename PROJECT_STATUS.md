@@ -1,117 +1,111 @@
 # SMN Project Status
 
-Date: 2026-07-12
+**Updated:** 2026-07-13
 
-## Implemented Features
+## Current product
 
-- Public marketing website with home, about, programs, courses, cohort, community, events, insights, resources, stories, mentorship, employers, apply, contact, privacy, and terms pages.
-- Payload CMS at `/admin` for staff users.
-- Separate member auth collection and branded member login/signup pages.
-- Member portal at `/app`.
-- Member profile editing and public/private profile visibility.
-- Mentor applications, approved mentor directory, and mentorship requests.
-- Opportunities board with manual/imported listings and member application tracking.
-- Opportunity source import support for Greenhouse, Lever, and Ashby feeds.
-- Learning dashboard with enrollments, learning items, and progress.
-- LMS foundation with courses, modules, lessons, YouTube video embeds, R2-backed attachments, and lesson progress.
-- Portfolio case studies and public `/u/[handle]` pages.
-- Certificates, member certificate list, and public `/verify/[code]` verification.
-- Media upload through Payload, with Cloudflare R2 support.
-- Vercel cron route for opportunity sync.
-- Demo seed script at `web/scripts/seed-demo.mjs`.
-- CI workflow at `.github/workflows/ci.yml`.
+SMN includes a public marketing/content website, Payload staff CMS, authenticated member portal, mentorship, opportunities, learning and LMS delivery, portfolios, credentials, workflow-first administration, and feature-flagged AI-assisted learning/career tools.
 
-## Production-Ready Features
+### Public and member product
 
-- Public site fallback content works without CMS data.
-- Staff/admin access is restricted to `users`.
-- Member portal routes redirect unauthenticated users to `/login`.
-- Staff and member browser sessions now use separate cookies.
-- Member profile update uses an allowlisted custom route.
-- Member-owned workflow APIs use the member auth cookie bridge.
-- Certificates verify only `valid` and `public` credentials.
-- Portfolio public pages require both a public member profile and public published portfolio items.
-- Production env validation exists for core required variables.
+- Marketing pages, CMS fallback content, forms, events, resources, insights, stories, cohort/course pages, mentorship, employers, legal pages, and WhatsApp community integration.
+- Separate staff and member auth collections/cookies.
+- Member profile with visibility, skills, career interests, and goals.
+- Mentor applications, approved directory, mentorship requests, capacity, relationships, feedback, and notifications.
+- Manual/imported opportunities, Greenhouse/Lever/Ashby sync, moderation, search/filter, external application handoff, and member activity.
+- Enrollments, learning items, Classroom/Selar links, LMS courses/modules/lessons, unlisted YouTube player, Media/R2 attachments, progress, completion, and course access.
+- Portfolio case studies and public `/u/[handle]` profiles.
+- Member credentials and public `/verify/[code]` verification.
 
-## Features Requiring Verification
+### Staff product
 
-- End-to-end production staff login after deploy.
-- End-to-end member login/signup with the new `smn-member-token` cookie.
-- R2 uploads on Vercel.
-- Resend emails after verified sender/domain setup.
-- Mailchimp newsletter integration with real audience settings.
-- Opportunity import cron on Vercel.
-- LMS access with real enrollments and real unlisted YouTube videos.
-- Certificate PDF uploads and public verification with real files.
+- Workflow-first Overview with action queues, health, metrics, quick actions, and recent meaningful changes.
+- Course Builder with readiness, curriculum operations, progress automation/correction, analytics, Tutor controls/reporting, and Content Studio.
+- Member 360, Mentorship Operations, Opportunity Operations, and Certificate Issuing.
+- Grouped navigation and server-enforced super-admin/content/learning/mentorship/opportunity/support/analyst roles.
+- Audit events for consequential staff actions.
 
-## Known Bugs / Risks
+### AI product
 
-- Payload session revocation is not yet performed on member logout; member logout clears the browser cookie only.
-- Several public content collections do not yet have draft/status workflows (`events`, `resources`, `stories`).
-- Password reset depends on a configured Payload email adapter; without email it returns a safe generic response.
-- Some older copy/assets may still contain placeholder external links for Selar, Lu.ma, WhatsApp, and legal pages.
-- Full workflow automated tests are not yet implemented.
-- npm audit currently reports 10 vulnerabilities from dependency tree review: 1 low, 9 moderate.
+- Provider-independent runtime with an isolated Groq adapter and deterministic mock provider.
+- Auth, role checks, input/schema validation, injection screening, prohibited-action policy, quotas, timeouts, opaque actors, privacy-minimized usage, retention, feedback, and deletion.
+- Approved course retrieval with entitlement, course isolation, lexical ranking, citations, and unsupported-answer decline.
+- Course Tutor with nine modes, sources, feedback, reset, per-course controls, aggregate reporting, privacy, and responsive UI.
+- Content Studio with text and strict structured drafts, requested controls, candidate review, provenance, versions, and explicit saves.
+- Career Coach with deterministic opportunity ranking, explanations, gaps/learning, conversation, confirmed goals/plans, feedback, reset, and data management.
 
-## Missing Integrations
+All AI surfaces remain independently feature-flagged. Production enablement follows the release gates in `PRODUCT-ROADMAP.md`.
 
-- Resend production domain and Payload email adapter.
-- Mailchimp production credentials.
-- Google Analytics.
-- Real Selar course/product URLs.
-- Real Google Classroom links.
-- Real Lu.ma/event registration links.
-- Final WhatsApp invite.
-- Custom media domain for `R2_PUBLIC_URL`.
+## Production state
 
-## Missing Content
+- Production URL: `https://socialmarketersnetwork.vercel.app`.
+- Vercel root directory: `web`.
+- Production Postgres: Neon via `DATABASE_URL`.
+- The July 13 admin RSC failure was traced to schema drift. The authorized schema push repaired the pre-AI admin schema, required reads passed, and `/admin` returned HTTP 200.
+- The final AI collections/latest member-LMS fields were implemented after that repair and still require the guarded production schema/adoption procedure.
+- AI flags must remain false through that procedure.
 
-- Final legal privacy and terms review.
-- Final cohort dates/pricing.
-- Real employer/partner copy and listings.
-- Real course curriculum and videos.
-- Real mentor roster.
-- Real certificate PDFs.
+## Migration state
 
-## Security Concerns Addressed
+- Full PostgreSQL baseline generated under `web/src/migrations`.
+- Bundled Node 24 scripts exist for type generation, migration creation, migration application, and guarded baseline adoption.
+- Fresh databases use `npm run db:migrate`.
+- Existing production follows `docs/database-migrations.md`.
+- Disposable PostgreSQL proof and production baseline adoption are open verification gates.
 
-- Staff/member cookie separation implemented.
-- Removed middleware cookie deletion workaround.
-- Staff-only mutations added for public content collections and site settings.
-- Member-owned APIs now authenticate against member cookie only.
-- Profile update no longer depends on a member id in the URL.
-- Public certificate verification exposes only necessary credential data.
-- Production env validation added.
+## Verification state
 
-## Test Coverage
+Completed:
 
-- Vitest configured.
-- Playwright configured.
-- Unit tests cover YouTube embed URL parsing and production env validation.
-- E2E smoke tests cover public home, login page, and anonymous protected-route redirect.
-- CI runs install, typecheck, lint, unit tests, build, and E2E smoke tests.
+- Payload types regenerated to `web/src/payload-types.ts`.
+- Payload admin import map regenerated.
+- PostgreSQL baseline generation completed without connecting to the database.
+- Existing LMS helper tests had 14 passes in the first unit run.
+- A retrieval source parser defect found by the new AI suite was fixed.
 
-## Remaining MVP Work
+Active:
 
-- Add disposable test database and workflow-level integration tests.
-- Add member logout server-side session revocation.
-- Add robust email templates and notifications for all major workflows.
-- Finish production env configuration and external integrations.
-- Seed and verify realistic demo data locally/staging.
-- Run complete manual staff and member journey tests after deploy.
+- Generated-type errors are being corrected. The first strict run reported 31 issues, primarily numeric relationship IDs and dynamic Payload draft overloads.
+- The last admin-route fix batch was interrupted; its filesystem result must be inspected before the next typecheck.
 
-## Readiness
+Verification queue:
 
-- Internal testing: ready after deploying this hardening pass and running smoke checks.
-- Private beta: close, but requires real env configuration, email setup, R2 verification, and seeded/manual workflow checks.
-- Public MVP: not ready until full manual journeys and higher-value workflow tests pass.
+1. TypeScript.
+2. ESLint.
+3. Complete unit/safety suite.
+4. Production build.
+5. Disposable seeded Playwright workflows.
+6. Disposable PostgreSQL migration proof.
+7. Existing-production final schema push, full reads, guarded baseline adoption, and no-pending-migration confirmation.
+8. R122 final 16-part readiness report.
 
-## Workflow Admin and AI Extension (2026-07-13)
+## External configuration and content gates
 
-Implementation is complete and final verification is pending for the workflow-first admin, Course Builder/readiness/automation/analytics, Member 360, mentorship operations, opportunity operations, certificate issuing/lifecycle, grouped navigation, and the minimal seven-role staff matrix.
+- Verified Resend sender/domain and Payload email adapter.
+- Mailchimp production audience credentials.
+- R2 production upload/CDN verification.
+- Google Analytics configuration.
+- Final Selar, Google Classroom, event registration, WhatsApp, cohort/pricing, legal, employer, course, mentor, and certificate content supplied by stakeholders.
+- Production opportunity cron verification.
 
-Provider-independent AI foundations, privacy-minimized retained usage, approved course retrieval, Tutor, Content Studio, deterministic-first Career Coach, success metrics, safety/unit/E2E source coverage, staff guidance, and independent rollback flags are implemented. AI remains disabled by default and is not approved for private beta until the final verification report is complete.
+## Security and privacy controls in place
 
-A full PostgreSQL baseline migration now exists for fresh databases. Existing production requires the guarded adoption procedure in `docs/database-migrations.md`; its schema was repaired through the pre-baseline admin tables but has not yet received/adopted the final AI schema in this status snapshot.
+- Staff/member cookie separation and member-cookie API bridge.
+- Server-side staff roles and member ownership checks.
+- Allowlisted member profile update.
+- Public portfolio/credential visibility restrictions.
+- Production environment validation.
+- AI data minimization, opaque actor identifiers, bounded retention, explicit persistence confirmation, deletion, and high-impact action blocks.
 
-The older “Known Bugs,” “Test Coverage,” and “Remaining MVP Work” bullets above are historical context where contradicted by this dated section. The final 16-part readiness report will supersede release statements after verification.
+## Release assessment
+
+| Release | Current state |
+|---|---|
+| Internal engineering | Implementation complete through R121; verification active |
+| Existing public/member product | Implemented; latest regression and environment checks pending |
+| Workflow admin extension | Implemented; final static/build/E2E gates pending |
+| AI internal testing | Implemented behind flags; final safety/static/build/E2E/migration gates pending |
+| AI private beta | Awaits internal gate, production schema adoption, accessibility/privacy/operations review |
+| R122 readiness decision | Pending verified evidence |
+
+See `HANDOFF-CODEX.md` for the exact incoming-agent continuation.

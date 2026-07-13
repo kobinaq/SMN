@@ -2,7 +2,7 @@
 
 **Status:** Locked decisions v1  
 **Date:** 2026-07-10  
-**Product:** Premium marketing-community website (not a full LMS/portal)
+**Product:** Premium marketing-community website plus an authenticated network portal, LMS foundation, workflow administration, and AI-assisted learning/career surfaces.
 
 ---
 
@@ -498,4 +498,4 @@ Build a **Clapat-grade Next.js marketing site** with **Payload** as the content 
 - **Mailchimp** = list growth  
 - **Vercel** = host everything public-facing  
 
-Defer portals and native LMS until the brand site converts.
+The original marketing-site architecture has since expanded into the implemented member portal and LMS foundation documented in `PRODUCT-ROADMAP.md` and `docs/admin-architecture.md`.

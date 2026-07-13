@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       projectUrl: form.get("projectUrl") || "", coverUrl: form.get("coverUrl") || "", status: form.get("status"), visibility: form.get("visibility"),
     });
     if (!parsed.success) return Response.json({ error: "Check the case study details and try again." }, { status: 400 });
-    const file = form.get("cover"); let cover: string | number | undefined;
+    const file = form.get("cover"); let cover: number | undefined;
     if (file instanceof File && file.size) {
       if (!file.type.startsWith("image/") || file.size > 10 * 1024 * 1024) return Response.json({ error: "Cover must be an image no larger than 10 MB." }, { status: 400 });
       const media = await payload.create({ collection: "media", overrideAccess: true, data: { alt: `${parsed.data.title} portfolio cover` }, file: { data: Buffer.from(await file.arrayBuffer()), mimetype: file.type, name: file.name, size: file.size } });
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   const payload = await getPayloadClient(); const { user } = await payload.auth({ headers: await memberAuthHeaders() });
   if (!user || user.collection !== "members") return Response.json({ error: "Unauthorized" }, { status: 401 });
-  const id = new URL(request.url).searchParams.get("id"); if (!id) return Response.json({ error: "Missing portfolio." }, { status: 400 });
+  const rawId = new URL(request.url).searchParams.get("id"); const id = Number(rawId); if (!Number.isInteger(id) || id < 1) return Response.json({ error: "Missing portfolio." }, { status: 400 });
   const doc = await payload.findByID({ collection: "portfolios", id, depth: 0, overrideAccess: true }); const owner = typeof doc.member === "object" ? doc.member.id : doc.member;
   if (String(owner) !== String(user.id)) return Response.json({ error: "Forbidden" }, { status: 403 });
   await payload.delete({ collection: "portfolios", id, overrideAccess: true }); return Response.json({ ok: true });
