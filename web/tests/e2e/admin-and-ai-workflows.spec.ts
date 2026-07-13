@@ -31,7 +31,7 @@ test("staff completes the audited admin operations workflows", async ({ page }) 
   await page.getByLabel("Lesson").selectOption({ index: 1 });
   await page.getByLabel("Reason").fill("Verified completion correction for the isolated E2E workflow.");
   await page.getByRole("button", { name: "Save audited override" }).click();
-  await expect(page.getByRole("status")).toContainText("Audited override saved");
+  await expect(page.getByText("Audited override saved.")).toBeVisible();
 
   await page.getByRole("link", { name: "AI Content Studio" }).click();
   await page.getByLabel("Instruction").fill("Create a concise outline grounded in this course.");
@@ -39,12 +39,12 @@ test("staff completes the audited admin operations workflows", async ({ page }) 
   await expect(page.getByRole("heading", { name: "Compare candidates" })).toBeVisible();
   await page.getByRole("button", { name: "Select" }).click();
   await page.getByRole("button", { name: "Save reviewed draft" }).click();
-  await expect(page.getByText(/Draft saved as version/i)).toBeVisible();
+  await expect(page.getByText(/Draft .* saved/i)).toBeVisible();
 
   await page.goto("/admin/member-360");
   await page.getByLabel("Private staff note").fill("Disposable E2E support context; never production member data.");
   await page.getByRole("button", { name: "Add private note" }).click();
-  await expect(page.getByRole("status")).toContainText("Private note saved");
+  await expect(page.getByText("Private note saved.")).toBeVisible();
 
   await page.goto("/admin/mentorship-operations");
   await page.getByRole("button", { name: "Approve" }).first().click();

@@ -8,7 +8,12 @@ import { AIError, type AIMessage, type AIResult } from "./types";
 export type AIFeature = "tutor" | "content-studio" | "career-coach" | "retrieval" | "tool";
 export type AIActor = { collection: "members" | "users"; id: string | number };
 const prohibitedActions = new Set(["publish_content", "publish_course", "issue_certificate", "grade_assignment", "decide_mentor", "apply_opportunity", "employment_decision", "change_protected_member_data"]);
-const injectionPatterns = [/ignore\s+(all\s+)?(previous|prior|system)\s+instructions/i, /reveal\s+(the\s+)?(system|developer)\s+prompt/i, /act\s+as\s+(the\s+)?system/i, /<\/?(system|assistant|tool)>/i];
+const injectionPatterns = [
+  /ignore\s+(all\s+)?(previous|prior|system)(\s+(previous|prior|system))*\s+instructions/i,
+  /reveal\s+(the\s+)?((system|developer)\s+)?prompt/i,
+  /act\s+as\s+(the\s+)?system/i,
+  /<\/?(system|assistant|tool)>/i,
+];
 
 const db = (payload: Payload) => payload as unknown as { find(args: unknown): Promise<{ totalDocs: number }>; create(args: unknown): Promise<unknown>; delete(args: unknown): Promise<unknown> };
 export function actorKey(actor: AIActor) { return createHash("sha256").update(`${process.env.PAYLOAD_SECRET || "local"}:${actor.collection}:${actor.id}`).digest("hex").slice(0, 32); }

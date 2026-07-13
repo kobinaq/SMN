@@ -65,54 +65,49 @@ The final AI collections and the latest member/LMS fields were added afterward a
 
 ## 4. Exact verification checkpoint
 
-The user originally asked to defer tests until implementation was complete. Verification then began.
+Completed in this cleanup pass:
 
-Completed:
+- `npm run typecheck` — clean (Career Coach union narrowing + numeric opportunity source ID).
+- `npm run lint` — clean; generated `src/migrations/**` ignored.
+- `npm run test:unit` — 25 passed, 1 skipped; injection override pattern fixed.
+- `npm run build` — passed.
+- Playwright browsers installed; `npm run test:e2e` / `node scripts/run-e2e.mjs` — **7/7 passed**.
+- Runtime `SITE_URL` + CSRF allowlist fix so disposable E2E origins authenticate admin cookie POSTs.
+- Demo seed sets `tutorEnabled: true` for Tutor E2E coverage.
 
-- `npm run db:migrate:create -- smn_baseline_20260713` through the bundled workaround: passed and generated the baseline without connecting to the DB.
-- `npm run generate:types` through the bundled workaround: passed; canonical output is `web/src/payload-types.ts`.
-- `npm run generate:importmap`: passed.
-- First unit run: existing 14 tests passed and the new AI suite failed to parse because `retrieval.ts` had an unterminated replacement string. That syntax defect was fixed.
+Earlier completed:
 
-Current static-check state:
+- `npm run db:migrate:create -- smn_baseline_20260713` through the bundled workaround.
+- `npm run generate:types` / `generate:importmap`.
+- Retrieval parser defect fixed.
 
-- The first generated-type `npm run typecheck` reported 31 errors.
-- Errors were primarily numeric Postgres relationship IDs still modeled as `string | number`, Payload draft-overload ambiguity for dynamic duplicated records, Career Coach union narrowing, Tutor enablement placed on the wrong LMS view type, a removed `discordInvite` field reference, and the admin wrapper returning a possible `Where` for `access.admin`.
-- Fix batches were started. The portal batch completed. The admin-route batch was interrupted while `apply_patch` was still running; inspect its exact filesystem result before continuing.
-- Lint output from the parallel gate was not preserved because the combined process rejected when unit tests failed.
-- Full unit rerun, lint, build, Playwright E2E, disposable PostgreSQL migration verification, and production final-schema adoption remain outstanding.
+Still outstanding:
+
+1. Disposable PostgreSQL migration proof (`docs/database-migrations.md`).
+2. Existing-production final schema push, full reads, guarded `db:migrate:adopt`, confirm no pending baseline.
+3. Keep production AI flags false until private-beta approval.
+4. R122 16-part delivery/readiness report with evidence.
 
 ## 5. Incoming agent: first actions
 
-Do not restart implementation. Continue the verification/fix loop:
+Do not restart product implementation. Continue migration/production gates:
 
-1. Run `git status --short` and inspect these partially patched files first:
-   - `web/src/app/(payload)/api/admin/certificate-operations/route.ts`
-   - `web/src/app/(payload)/api/admin/course-builder/route.ts`
-   - `web/src/app/(payload)/api/admin/progress-overrides/route.ts`
-   - `web/src/app/(payload)/api/admin/mentorship-operations/route.ts`
-2. Run `cd web && npm run typecheck` and fix the remaining generated-type errors.
-3. Run `npm run lint` and `npm run test:unit`; fix every failure.
-4. Regenerate types/import map if config changes.
-5. Run `npm run build`.
-6. Run `npm run test:e2e`. The runner creates and removes a per-process SQLite database, forces one Playwright worker, seeds fictional records, and uses `AI_PROVIDER=mock` with all AI test flags enabled.
-7. Verify the committed migration on a disposable PostgreSQL database. Review the full baseline SQL before any shared-environment action.
-8. Only after all gates pass, follow `docs/database-migrations.md` for existing production: backup/maintenance window, final `db:push`, full schema reads, guarded `db:migrate:adopt`, then `db:migrate` must show no pending baseline.
-9. Keep production AI flags false until private-beta approval.
-10. Update `IMPLEMENTATION_PLAN.md` final gates and write R122’s 16-part delivery/readiness report with actual evidence.
+1. Review baseline SQL under `web/src/migrations`.
+2. Prove migrate on a disposable PostgreSQL database.
+3. Only with explicit authorization, follow `docs/database-migrations.md` for production adoption.
+4. Keep AI feature flags false in production until private-beta approval.
+5. Write R122 readiness report from evidenced gates.
 
-## 6. Likely remaining type fixes from the first report
+## 6. Closed type/E2E defects from this cleanup
 
-Recheck rather than applying blindly:
+Already fixed; do not re-apply:
 
-- `certificate-operations`: relationship helper must return numeric IDs; certificate inputs should coerce numeric IDs.
-- `course-builder`: narrow dynamic collection unions and cast only spread-generated create data where Payload cannot infer required fields.
-- `progress-overrides`: numeric IDs remove update/create overload ambiguity.
-- `mentorship-operations`: numeric mentor/requester IDs.
-- `learning-progress`, `lms-progress`, `mentor-requests`, `portfolios`, and opportunity sync: numeric relationship IDs.
-- `mentor-applications`: dynamic draft create overload.
-- `lms.ts`: `tutorEnabled` belongs on `LmsCourseCard`, not `LmsLessonListItem`.
-- `admin-permission-config.ts`: `access.admin` must always resolve to boolean.
+- Career Coach `explain-match` union narrowing via extracted `opportunityId`.
+- Opportunity sync `source: Number(source.id)`.
+- Injection pattern for “ignore all previous system instructions”.
+- Runtime `SITE_URL` preferred for Payload server/CSRF; E2E uses localhost + `SITE_URL`.
+- Demo LMS course `tutorEnabled: true`.
+- Admin E2E status assertions avoid Payload DnD `role="status"` collisions.
 
 ## 7. Database workflow
 

@@ -13,7 +13,7 @@ function useCurriculumAction() {
     if (confirmation && !window.confirm(confirmation)) return;
     setBusy(true); setError("");
     try {
-      const response = await fetch("/api/admin/course-builder", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+      const response = await fetch("/api/admin/course-builder", { method: "POST", credentials: "include", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Unable to update curriculum.");
       router.refresh();

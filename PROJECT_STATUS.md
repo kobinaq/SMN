@@ -60,24 +60,19 @@ Completed:
 - Payload types regenerated to `web/src/payload-types.ts`.
 - Payload admin import map regenerated.
 - PostgreSQL baseline generation completed without connecting to the database.
-- Existing LMS helper tests had 14 passes in the first unit run.
-- A retrieval source parser defect found by the new AI suite was fixed.
+- `npm run typecheck` — clean.
+- `npm run lint` — clean (generated migration warnings ignored).
+- `npm run test:unit` — 25 passed, 1 skipped.
+- `npm run build` — production build succeeded.
+- `npm run test:e2e` — 7/7 Playwright workflows passed (seeded SQLite, mock AI, disposable DB).
+- Injection-policy pattern broadened to catch “ignore all previous system instructions”.
+- E2E CSRF fixed via runtime `SITE_URL` / Playwright origin allowlisting; demo course seeds `tutorEnabled`.
 
-Active:
+Active / remaining:
 
-- Generated-type errors are being corrected. The first strict run reported 31 issues, primarily numeric relationship IDs and dynamic Payload draft overloads.
-- The last admin-route fix batch was interrupted; its filesystem result must be inspected before the next typecheck.
-
-Verification queue:
-
-1. TypeScript.
-2. ESLint.
-3. Complete unit/safety suite.
-4. Production build.
-5. Disposable seeded Playwright workflows.
-6. Disposable PostgreSQL migration proof.
-7. Existing-production final schema push, full reads, guarded baseline adoption, and no-pending-migration confirmation.
-8. R122 final 16-part readiness report.
+1. Disposable PostgreSQL migration proof.
+2. Existing-production final schema push, full reads, guarded baseline adoption, and no-pending-migration confirmation.
+3. R122 final 16-part readiness report.
 
 ## External configuration and content gates
 
@@ -101,11 +96,11 @@ Verification queue:
 
 | Release | Current state |
 |---|---|
-| Internal engineering | Implementation complete through R121; verification active |
-| Existing public/member product | Implemented; latest regression and environment checks pending |
-| Workflow admin extension | Implemented; final static/build/E2E gates pending |
-| AI internal testing | Implemented behind flags; final safety/static/build/E2E/migration gates pending |
-| AI private beta | Awaits internal gate, production schema adoption, accessibility/privacy/operations review |
-| R122 readiness decision | Pending verified evidence |
+| Internal engineering | Implementation complete through R121; static/unit/build/E2E gates passed |
+| Existing public/member product | Implemented; production schema adoption and env checks pending |
+| Workflow admin extension | Implemented; local E2E passed |
+| AI internal testing | Implemented behind flags; local safety/static/build/E2E passed |
+| AI private beta | Awaits production schema adoption, accessibility/privacy/operations review |
+| R122 readiness decision | Pending migration proof + production adoption evidence |
 
 See `HANDOFF-CODEX.md` for the exact incoming-agent continuation.

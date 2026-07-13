@@ -104,7 +104,7 @@ export async function syncOpportunitySource(payload: Payload, source: SourceDoc)
     } else {
       const duplicate = await payload.find({ collection: "opportunities", limit: 1, depth: 0, overrideAccess: true, where: { fingerprint: { equals: common.fingerprint } } });
       if (duplicate.totalDocs) { skipped++; continue; }
-      await payload.create({ collection: "opportunities", overrideAccess: true, data: { ...common, slug: `${slugify(job.company)}-${slugify(job.title)}-${slugify(job.externalId).slice(-12)}`, source: source.id, sourceLabel: "imported", status: source.autoPublish ? "published" : "pending", publishedAt: source.autoPublish ? now : undefined } });
+      await payload.create({ collection: "opportunities", overrideAccess: true, data: { ...common, slug: `${slugify(job.company)}-${slugify(job.title)}-${slugify(job.externalId).slice(-12)}`, source: Number(source.id), sourceLabel: "imported", status: source.autoPublish ? "published" : "pending", publishedAt: source.autoPublish ? now : undefined } });
       created++;
     }
   }

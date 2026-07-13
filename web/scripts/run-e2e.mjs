@@ -6,12 +6,13 @@ const isWindows = process.platform === "win32";
 const npmCmd = isWindows ? "npm.cmd" : "npm";
 const npxCmd = isWindows ? "npx.cmd" : "npx";
 const e2ePort = process.env.PLAYWRIGHT_PORT || String(3100 + (process.pid % 1000));
-const baseURL = process.env.PLAYWRIGHT_BASE_URL || `http://127.0.0.1:${e2ePort}`;
+const baseURL = process.env.PLAYWRIGHT_BASE_URL || `http://localhost:${e2ePort}`;
 const localDatabasePath = fileURLToPath(new URL(`../payload.e2e-${process.pid}.db`, import.meta.url));
 const e2eEnv = {
   ...process.env,
   CRON_SECRET: process.env.CRON_SECRET || "e2e-cron-secret",
   DATABASE_URL: process.env.PLAYWRIGHT_DATABASE_URL || `file:./payload.e2e-${process.pid}.db`,
+  SITE_URL: baseURL,
   NEXT_PUBLIC_SITE_URL: baseURL,
   NEXT_PUBLIC_WHATSAPP_INVITE: process.env.NEXT_PUBLIC_WHATSAPP_INVITE || "https://chat.whatsapp.com/example",
   OPS_EMAIL: process.env.OPS_EMAIL || "ops@example.com",
@@ -65,7 +66,7 @@ try {
     await assertPortAvailable(baseURL);
     const seedCode = await run(npmCmd, ["run", "seed:demo"], { env: e2eEnv });
     if (seedCode !== 0) throw new Error("Unable to seed the disposable E2E database.");
-    server = spawn(npmCmd, ["run", "start", "--", "--hostname", "127.0.0.1", "--port", e2ePort], {
+    server = spawn(npmCmd, ["run", "start", "--", "--hostname", "localhost", "--port", e2ePort], {
       env: e2eEnv,
       stdio: "inherit",
       shell: isWindows,

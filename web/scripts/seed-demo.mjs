@@ -159,6 +159,7 @@ const course = await upsert(
     estimatedHours: 3,
     order: 1,
     status: "draft",
+    tutorEnabled: true,
   },
 );
 

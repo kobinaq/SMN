@@ -49,6 +49,11 @@ const csrfOrigins = Array.from(
   new Set(
     [
       serverURL,
+      process.env.SITE_URL?.replace(/\/$/, "") || "",
+      process.env.PLAYWRIGHT_BASE_URL?.replace(/\/$/, "") || "",
+      process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "",
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
       process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "",
       process.env.VERCEL_BRANCH_URL ? `https://${process.env.VERCEL_BRANCH_URL}` : "",
       process.env.VERCEL_PROJECT_PRODUCTION_URL
