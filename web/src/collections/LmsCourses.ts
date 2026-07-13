@@ -65,6 +65,9 @@ export const LmsCourses: CollectionConfig = {
     { name: "enrollmentOpen", type: "checkbox", defaultValue: true, admin: { position: "sidebar" } },
     { name: "certificateEnabled", type: "checkbox", defaultValue: false, admin: { position: "sidebar" } },
     { name: "previewEnabled", type: "checkbox", defaultValue: false, admin: { position: "sidebar" } },
+    { name: "tutorEnabled", type: "checkbox", defaultValue: false, admin: { position: "sidebar", description: "Requires the environment Tutor feature flag and approved course material." } },
+    { name: "tutorModes", type: "select", hasMany: true, defaultValue: ["explain", "simplify", "example", "summary", "revision", "socratic", "feedback", "compare", "next-lesson"], options: ["explain", "simplify", "example", "summary", "revision", "socratic", "feedback", "compare", "next-lesson"] },
+    { name: "tutorGuidance", type: "textarea", maxLength: 2000, admin: { description: "Optional instructor guidance. This never overrides safety or grounding policy." } },
     { name: "order", type: "number", defaultValue: 0 },
     {
       name: "status",

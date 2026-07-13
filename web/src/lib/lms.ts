@@ -24,6 +24,7 @@ type LmsCourseDoc = {
   cover?: Relation<MediaDoc>;
   order?: number | null;
   status: "draft" | "published" | "archived";
+  tutorEnabled?: boolean | null;
 };
 type LmsModuleDoc = {
   id: string | number;
@@ -65,6 +66,7 @@ export type LmsLessonListItem = {
   durationMinutes: number;
   status: Status;
   href: string;
+  tutorEnabled: boolean;
 };
 
 export type LmsModule = {
@@ -155,6 +157,7 @@ function toCourseCard(course: LmsCourseDoc, lessons: LmsLessonDoc[], progress: M
     completedCount,
     percentage: lessonCount ? Math.round((completedCount / lessonCount) * 100) : 0,
     href: `/app/learning/courses/${course.slug}`,
+    tutorEnabled: Boolean(course.tutorEnabled),
   };
 }
 

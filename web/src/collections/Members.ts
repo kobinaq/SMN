@@ -62,6 +62,9 @@ export const Members: CollectionConfig = {
       name: "bio",
       type: "textarea",
     },
+    { name: "skills", type: "array", maxRows: 30, fields: [{ name: "skill", type: "text", required: true, maxLength: 100 }] },
+    { name: "careerGoals", type: "textarea", maxLength: 5000, admin: { description: "Member-authored goals; only used by Career Coach when enabled." } },
+    { name: "careerInterests", type: "array", maxRows: 20, fields: [{ name: "interest", type: "text", required: true, maxLength: 150 }] },
     {
       name: "location",
       type: "text",

@@ -34,20 +34,26 @@ async function enforceRateLimit(payload: Payload, actor: AIActor) {
 }
 
 type UsageContext = { payload: Payload; actor: AIActor; feature: AIFeature; operation: string; inputChars: number; sourceCount?: number };
-async function recordUsage(context: UsageContext, result: AIResult<unknown> | null, status: "success" | "declined" | "error" | "timeout" | "limited", errorCode?: string, hash?: string) {
+export type AIEventStatus = "success" | "declined" | "error" | "timeout" | "limited";
+async function recordUsage(context: UsageContext, result: AIResult<unknown> | null, status: AIEventStatus, errorCode?: string, hash?: string) {
   const retention = getAIConfig().retentionDays * 86_400_000;
   await db(context.payload).create({ collection: "ai-usage-records", overrideAccess: true, data: { actorType: context.actor.collection === "members" ? "member" : "staff", actorKey: actorKey(context.actor), feature: context.feature, operation: context.operation, provider: result?.provider, model: result?.model, status, inputChars: context.inputChars, outputChars: typeof result?.value === "string" ? result.value.length : result ? JSON.stringify(result.value).length : 0, inputTokens: result?.usage.inputTokens, outputTokens: result?.usage.outputTokens, latencyMs: result?.latencyMs, sourceCount: context.sourceCount || 0, promptHash: hash, errorCode, expiresAt: new Date(Date.now() + retention).toISOString() } }).catch(() => undefined);
 }
 
+/** Records a privacy-minimized product event without storing prompt or response content. */
+export async function recordAIEvent(context: UsageContext, status: AIEventStatus, errorCode?: string) {
+  await recordUsage(context, null, status, errorCode);
+}
+
 export async function runAIText(context: UsageContext & { messages: AIMessage[]; model?: string; maxTokens?: number }) {
-  await enforceRateLimit(context.payload, context.actor); const hash = promptHash(context.messages);
-  try { const result = await getAIProvider().generateText({ messages: context.messages, model: context.model, maxTokens: context.maxTokens, timeoutMs: getAIConfig().timeoutMs }); await recordUsage(context, result, "success", undefined, hash); return result; }
+  const hash = promptHash(context.messages);
+  try { await enforceRateLimit(context.payload, context.actor); const result = await getAIProvider().generateText({ messages: context.messages, model: context.model, maxTokens: context.maxTokens, timeoutMs: getAIConfig().timeoutMs }); await recordUsage(context, result, "success", undefined, hash); return result; }
   catch (error) { const aiError = error instanceof AIError ? error : new AIError("AI request failed.", "provider", true); await recordUsage(context, null, aiError.code === "timeout" ? "timeout" : aiError.code === "rate_limit" ? "limited" : aiError.code === "policy" ? "declined" : "error", aiError.code, hash); throw aiError; }
 }
 
 export async function runAIStructured<T>(context: UsageContext & { messages: AIMessage[]; schema: z.ZodType<T>; jsonSchema: Record<string, unknown>; schemaName: string; model?: string; maxTokens?: number }) {
-  await enforceRateLimit(context.payload, context.actor); const hash = promptHash(context.messages);
-  try { const result = await getAIProvider().generateStructured({ messages: context.messages, schema: context.schema, jsonSchema: context.jsonSchema, schemaName: context.schemaName, model: context.model || getAIConfig().models.structured, maxTokens: context.maxTokens, timeoutMs: getAIConfig().timeoutMs }); await recordUsage(context, result, "success", undefined, hash); return result; }
+  const hash = promptHash(context.messages);
+  try { await enforceRateLimit(context.payload, context.actor); const result = await getAIProvider().generateStructured({ messages: context.messages, schema: context.schema, jsonSchema: context.jsonSchema, schemaName: context.schemaName, model: context.model || getAIConfig().models.structured, maxTokens: context.maxTokens, timeoutMs: getAIConfig().timeoutMs }); await recordUsage(context, result, "success", undefined, hash); return result; }
   catch (error) { const aiError = error instanceof AIError ? error : new AIError("AI request failed.", "provider", true); await recordUsage(context, null, aiError.code === "timeout" ? "timeout" : aiError.code === "rate_limit" ? "limited" : aiError.code === "policy" ? "declined" : "error", aiError.code, hash); throw aiError; }
 }
 

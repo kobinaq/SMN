@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Download, FileText, PlayCircle } from "lucide-react";
 import { LmsProgressButton } from "@/components/app/LmsProgressButton";
+import { AITutor } from "@/components/app/AITutor";
 import { Button } from "@/components/ui/Button";
 import { requireMember } from "@/lib/auth/member";
 import { getLmsLesson } from "@/lib/lms";
@@ -110,6 +111,7 @@ export default async function LmsLessonPage(
           </Button>
         )}
       </div>
+      {process.env.AI_TUTOR_ENABLED === "true" && lesson.course.tutorEnabled ? <AITutor courseId={lesson.course.id} lessonId={lesson.id}/> : null}
     </div>
   );
 }

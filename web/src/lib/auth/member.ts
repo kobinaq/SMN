@@ -13,6 +13,9 @@ export type MemberUser = {
   handle?: string | null;
   headline?: string | null;
   bio?: string | null;
+  skills?: Array<{ skill?: string | null }> | null;
+  careerGoals?: string | null;
+  careerInterests?: Array<{ interest?: string | null }> | null;
   location?: string | null;
   linkedin?: string | null;
   portfolioUrl?: string | null;

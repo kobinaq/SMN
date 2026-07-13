@@ -13,6 +13,9 @@ type ProfileValues = {
   handle: string;
   headline: string;
   bio: string;
+  skills: string[];
+  careerGoals: string;
+  careerInterests: string[];
   location: string;
   linkedin: string;
   portfolioUrl: string;
@@ -41,6 +44,9 @@ export function ProfileForm({ initial }: { initial: ProfileValues }) {
           handle: data.handle || undefined,
           headline: data.headline || undefined,
           bio: data.bio || undefined,
+          skills: String(data.skills || "").split(",").map((item) => item.trim()).filter(Boolean),
+          careerGoals: data.careerGoals || undefined,
+          careerInterests: String(data.careerInterests || "").split(",").map((item) => item.trim()).filter(Boolean),
           location: data.location || undefined,
           linkedin: data.linkedin || undefined,
           portfolioUrl: data.portfolioUrl || undefined,
@@ -101,6 +107,11 @@ export function ProfileForm({ initial }: { initial: ProfileValues }) {
           placeholder="A short intro for mentors and employers"
         />
       </div>
+      <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+        <div><label className="mb-1.5 block text-xs text-white/40">Skills</label><input className={field} name="skills" defaultValue={initial.skills.join(", ")} placeholder="Strategy, analytics, content"/><p className="mt-1 text-[11px] text-white/30">Comma-separated; used for transparent opportunity matching.</p></div>
+        <div><label className="mb-1.5 block text-xs text-white/40">Career interests</label><input className={field} name="careerInterests" defaultValue={initial.careerInterests.join(", ")} placeholder="Growth, community, brand"/><p className="mt-1 text-[11px] text-white/30">Comma-separated areas you want to explore.</p></div>
+      </div>
+      <div><label className="mb-1.5 block text-xs text-white/40">Career goals</label><textarea className={`${field} min-h-24 resize-y`} name="careerGoals" maxLength={5000} defaultValue={initial.careerGoals} placeholder="Describe the roles, outcomes, or direction you are working toward"/></div>
       <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
         <div>
           <label className="mb-1.5 block text-xs text-white/40">Location</label>

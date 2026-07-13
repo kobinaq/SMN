@@ -4,6 +4,7 @@ import { evaluateCourseReadiness, type CourseReadinessInput, type CurriculumLess
 import { LessonActions, ModuleActions } from "./CurriculumActions";
 import { ProgressOverrideForm } from "./ProgressOverrideForm";
 import { calculateCourseAnalytics, type AnalyticsEnrollment, type AnalyticsLesson, type AnalyticsModule, type AnalyticsProgress } from "@/lib/lms-analytics";
+import { ContentStudio } from "./ContentStudio";
 
 const tabs = [
   ["overview", "Overview"], ["curriculum", "Curriculum"], ["learners", "Learners"],
@@ -45,6 +46,13 @@ export default async function CourseBuilder({ initPageResult, payload, searchPar
   const learnerOptions = enrollments.docs.map((item) => { const member = item.member; return typeof member === "object" ? { id: member.id, label: member.name || member.email } : { id: member, label: `Member ${member}` }; });
   const lessonOptions = lessons.docs.map((item) => ({ id: item.id, label: String(item.title) }));
   const analytics = calculateCourseAnalytics(enrollments.docs as unknown as AnalyticsEnrollment[], modules.docs as unknown as AnalyticsModule[], lessons.docs as unknown as AnalyticsLesson[], progress.docs as unknown as AnalyticsProgress[]);
+  const ai = payload as unknown as { find(args: unknown): Promise<{ totalDocs: number; docs: Array<{ rating?: string }> }> };
+  const [tutorUsage, tutorFeedback, faqs, drafts] = activeTab === "ai-content-studio" ? await Promise.all([
+    ai.find({ collection: "ai-usage-records", depth: 0, limit: 0, overrideAccess: false, req: initPageResult.req, where: { and: [{ feature: { equals: "tutor" } }, { operation: { contains: `course:${courseID}` } }] } }),
+    ai.find({ collection: "ai-feedback", depth: 0, limit: 1000, overrideAccess: false, req: initPageResult.req, where: { and: [{ feature: { equals: "tutor" } }, { contextKey: { contains: `course:${courseID}` } }] } }),
+    ai.find({ collection: "ai-knowledge-sources", depth: 0, limit: 0, overrideAccess: false, req: initPageResult.req, where: { and: [{ course: { equals: selected.id } }, { kind: { equals: "faq" } }, { approved: { equals: true } }] } }),
+    ai.find({ collection: "ai-drafts", depth: 0, limit: 0, overrideAccess: false, req: initPageResult.req, where: { course: { equals: selected.id } } }),
+  ]) : [{ totalDocs: 0, docs: [] }, { totalDocs: 0, docs: [] }, { totalDocs: 0, docs: [] }, { totalDocs: 0, docs: [] }];
 
   return <main className="smn-workspace">
     <header className="smn-workspace-header"><div><span className="smn-eyebrow">Learning operations</span><h1>Course Builder</h1><p>Build, review, and operate a course without losing its relationships.</p></div><div className="smn-workspace-actions"><Link href={`/admin/collections/lms-courses/${courseID}`}>Advanced edit</Link><Link className="smn-primary-action" href="/admin/collections/lms-courses/create">New course</Link></div></header>
@@ -57,6 +65,6 @@ export default async function CourseBuilder({ initPageResult, payload, searchPar
     {activeTab === "assessments" ? <section className="smn-placeholder"><h3>Assessments</h3><p>Assessment authoring and grading will extend the existing lesson structure.</p></section> : null}
     {activeTab === "analytics" ? <section className="smn-placeholder"><h3>Analytics</h3><p>Activity uses a rolling 30-day window. Abandonment means a started, incomplete enrollment with no activity inside that window.</p><div className="smn-analytics-grid"><div><strong>{analytics.enrolled}</strong><span>Enrolled</span></div><div><strong>{analytics.activeLearners}</strong><span>Active (30d)</span></div><div><strong>{analytics.completionRate}%</strong><span>Completion rate</span></div><div><strong>{analytics.averageCompletionDays ?? "—"}</strong><span>Avg. completion days</span></div><div><strong>{analytics.inactiveLearners}</strong><span>Inactive learners</span></div><div><strong>{analytics.abandonmentRate}%</strong><span>Abandonment rate</span></div></div><h3>Module drop-off</h3><div className="smn-analytics-table"><div><b>Module</b><b>Reached</b><b>Completed</b><b>Drop-off</b></div>{analytics.moduleStats.map((item) => <div key={item.id}><span>{item.title}</span><span>{item.reached}</span><span>{item.completed}</span><span>{item.dropOff}</span></div>)}</div></section> : null}
     {activeTab === "settings" ? <section className="smn-placeholder"><h3>Settings</h3><p>Course access, publishing, certificate, and Tutor controls remain protected by the course record.</p><Link href={`/admin/collections/lms-courses/${courseID}`}>Edit course settings</Link></section> : null}
-    {activeTab === "ai-content-studio" ? <section className="smn-placeholder"><h3>AI Content Studio</h3><p>This governed drafting workspace stays unavailable until the provider-independent AI foundation and approval controls are in place.</p></section> : null}
+    {activeTab === "ai-content-studio" ? <ContentStudio courseId={selected.id} lessons={lessonOptions} report={{ usageCount: tutorUsage.totalDocs, helpful: tutorFeedback.docs.filter(item => item.rating === "helpful").length, notHelpful: tutorFeedback.docs.filter(item => item.rating === "not-helpful").length, faqCount: faqs.totalDocs, draftCount: drafts.totalDocs }}/> : null}
   </main>;
 }
