@@ -28,8 +28,10 @@ test("staff lands on the workflow-first admin dashboard", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "What needs action" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Network health" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Meaningful changes" })).toBeVisible();
-  await expect(page.getByRole("link", { name: /create course/i })).toBeVisible();
+  await expect(page.getByLabel("Platform health")).toBeVisible();
+  await expect(page.getByRole("link", { name: /create course|open course builder/i }).first()).toBeVisible();
   await expect(page.getByText("Total members", { exact: true })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Operational workspaces" })).toBeVisible();
 
   await page.goto("/admin/course-builder");
   await expect(page.getByRole("heading", { name: "Course Builder" })).toBeVisible();
