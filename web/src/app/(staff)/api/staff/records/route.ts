@@ -98,7 +98,7 @@ function payloadErrorStatus(error: unknown) {
 
 export async function POST(request: Request) {
   const payload = await getPayloadClient();
-  const { user } = await payload.auth({ headers: await staffAuthHeaders() });
+  const { user } = await payload.auth({ headers: await staffAuthHeaders(request) });
   if (!user || user.collection !== "users") {
     return Response.json({ error: "Staff sign-in required." }, { status: 401 });
   }

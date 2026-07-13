@@ -4,7 +4,7 @@ import { canStaff } from "@/lib/staff-permissions";
 
 export async function POST(request: Request) {
   const payload = await getPayloadClient();
-  const { user } = await payload.auth({ headers: await staffAuthHeaders() });
+  const { user } = await payload.auth({ headers: await staffAuthHeaders(request) });
   if (!user || user.collection !== "users") return Response.json({ error: "Staff sign-in required." }, { status: 401 });
   if (!canStaff(user as never, "content", "learning")) {
     return Response.json({ error: "Content or learning permission required." }, { status: 403 });
