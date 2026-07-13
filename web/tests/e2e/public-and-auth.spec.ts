@@ -34,7 +34,7 @@ test("staff lands on the workflow-first staff dashboard", async ({ page }) => {
   await expect(page.getByRole("navigation", { name: "Operational workspaces" })).toBeVisible();
 
   await page.goto("/admin/login");
-  await expect(page).toHaveURL(/\/staff\/login/);
+  await expect(page).toHaveURL(/\/staff\/?$/);
 
   await page.goto("/staff/learning");
   await expect(page.getByRole("heading", { name: "Course Builder" })).toBeVisible();

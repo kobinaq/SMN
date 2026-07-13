@@ -14,13 +14,16 @@ export function assertStaffCan(user: StaffUser, ...roles: StaffRole[]) {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type StaffRecord = { id: string | number; [key: string]: any };
+
 export async function listCollection(
   payload: Payload,
   user: StaffUser,
   collection: string,
   options: { limit?: number; page?: number; sort?: string; where?: Record<string, unknown>; depth?: number } = {},
 ) {
-  return payload.find({
+  const result = await payload.find({
     collection: collection as never,
     depth: options.depth ?? 0,
     limit: options.limit ?? 50,
@@ -29,6 +32,7 @@ export async function listCollection(
     where: options.where as never,
     ...staffAccess(user),
   });
+  return result as unknown as { docs: StaffRecord[]; totalDocs: number; page?: number; totalPages?: number };
 }
 
 export async function getCollectionDoc(
@@ -38,12 +42,13 @@ export async function getCollectionDoc(
   id: string | number,
   depth = 1,
 ) {
-  return payload.findByID({
+  const doc = await payload.findByID({
     collection: collection as never,
     id,
     depth,
     ...staffAccess(user),
   });
+  return doc as unknown as StaffRecord;
 }
 
 export async function createCollectionDoc(
@@ -52,11 +57,12 @@ export async function createCollectionDoc(
   collection: string,
   data: Record<string, unknown>,
 ) {
-  return payload.create({
+  const doc = await payload.create({
     collection: collection as never,
     data: data as never,
     ...staffAccess(user),
   });
+  return doc as unknown as StaffRecord;
 }
 
 export async function updateCollectionDoc(
@@ -66,12 +72,13 @@ export async function updateCollectionDoc(
   id: string | number,
   data: Record<string, unknown>,
 ) {
-  return payload.update({
+  const doc = await payload.update({
     collection: collection as never,
     id,
     data: data as never,
     ...staffAccess(user),
   });
+  return doc as unknown as StaffRecord;
 }
 
 export async function deleteCollectionDoc(
@@ -80,11 +87,12 @@ export async function deleteCollectionDoc(
   collection: string,
   id: string | number,
 ) {
-  return payload.delete({
+  const doc = await payload.delete({
     collection: collection as never,
     id,
     ...staffAccess(user),
   });
+  return doc as unknown as StaffRecord;
 }
 
 /** Convert plain text into a minimal Lexical document for richText fields. */
