@@ -18,7 +18,8 @@ export function AddModuleForm({ courseId, order }: { courseId: string | number; 
     event.preventDefault();
     setBusy(true);
     setError("");
-    const form = new FormData(event.currentTarget);
+    const formEl = event.currentTarget;
+    const form = new FormData(formEl);
     const title = String(form.get("title") || "").trim();
     try {
       const response = await fetch("/api/staff/records", {
@@ -39,7 +40,7 @@ export function AddModuleForm({ courseId, order }: { courseId: string | number; 
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Unable to add module.");
-      event.currentTarget.reset();
+      formEl.reset();
       router.refresh();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Unable to add module.");
@@ -82,7 +83,8 @@ export function AddLessonForm({
     event.preventDefault();
     setBusy(true);
     setError("");
-    const form = new FormData(event.currentTarget);
+    const formEl = event.currentTarget;
+    const form = new FormData(formEl);
     const title = String(form.get("title") || "").trim();
     try {
       const response = await fetch("/api/staff/records", {
@@ -106,7 +108,7 @@ export function AddLessonForm({
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Unable to add lesson.");
-      event.currentTarget.reset();
+      formEl.reset();
       router.refresh();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Unable to add lesson.");
