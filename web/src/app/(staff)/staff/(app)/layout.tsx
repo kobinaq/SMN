@@ -31,6 +31,11 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
       { href: "/staff/website/stories", label: "Stories" },
       { href: "/staff/website/settings", label: "Site settings" },
     );
+  } else if (canStaff(staff, "learning")) {
+    links.push(
+      { href: "/staff/content/resources", label: "Resources" },
+      { href: "/staff/content/media", label: "Media" },
+    );
   }
 
   if (canStaff(staff, "support", "analyst") || role === "super-admin") {

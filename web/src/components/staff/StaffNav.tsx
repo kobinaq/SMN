@@ -69,7 +69,7 @@ export function StaffNav({
           <Link href="/staff" aria-label="SMN staff home" className="flex shrink-0 items-center rounded-xl p-1.5 transition hover:bg-white/5">
             <BrandLogo width={110} height={28} className="h-6 sm:h-7" />
           </Link>
-          <nav className="hidden items-center gap-1 xl:flex" aria-label="Staff primary">
+          <nav className="hidden items-center gap-1 xl:flex" aria-label="Operational workspaces">
             {primary.map((link) => {
               const active = link.href === "/staff" ? pathname === "/staff" : pathname.startsWith(link.href);
               return (

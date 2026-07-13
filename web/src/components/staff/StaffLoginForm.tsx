@@ -48,12 +48,21 @@ export function StaffLoginForm({ bootstrap }: { bootstrap: boolean }) {
       ) : null}
       <label className="block text-sm text-white/70">
         Work email
-        <input className={field} type="email" autoComplete="username" value={email} onChange={(event) => setEmail(event.target.value)} required />
+        <input
+          className={field}
+          name="email"
+          type="email"
+          autoComplete="username"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          required
+        />
       </label>
       <label className="block text-sm text-white/70">
         Password
         <input
           className={field}
+          name="password"
           type="password"
           autoComplete={bootstrap ? "new-password" : "current-password"}
           value={password}

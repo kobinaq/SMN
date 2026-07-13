@@ -1,11 +1,11 @@
 import { expect, test, type Page } from "@playwright/test";
 
 async function loginStaff(page: Page) {
-  await page.goto("/admin/login");
+  await page.goto("/staff/login");
   await page.locator('input[name="email"]').fill("staff.demo@smn.example");
   await page.locator('input[name="password"]').fill("DemoStaff123!");
   await page.locator('button[type="submit"]').click();
-  await expect(page).toHaveURL(/\/admin\/?$/);
+  await expect(page).toHaveURL(/\/staff\/?$/);
 }
 
 async function loginMember(page: Page) {
@@ -20,7 +20,7 @@ test("staff completes the audited admin operations workflows", async ({ page }) 
   page.on("dialog", async (dialog) => { await dialog.accept(dialog.type() === "prompt" ? "Verified during the disposable E2E workflow." : undefined); });
   await loginStaff(page);
 
-  await page.goto("/admin/course-builder?tab=curriculum");
+  await page.goto("/staff/learning?tab=curriculum");
   const duplicateButtons = page.getByRole("button", { name: "Duplicate" });
   const before = await duplicateButtons.count();
   await duplicateButtons.last().click();
@@ -41,24 +41,38 @@ test("staff completes the audited admin operations workflows", async ({ page }) 
   await page.getByRole("button", { name: "Save reviewed draft" }).click();
   await expect(page.getByText(/Draft .* saved/i)).toBeVisible();
 
-  await page.goto("/admin/member-360");
+  await page.goto("/staff/members");
   await page.getByLabel("Private staff note").fill("Disposable E2E support context; never production member data.");
   await page.getByRole("button", { name: "Add private note" }).click();
   await expect(page.getByText("Private note saved.")).toBeVisible();
 
-  await page.goto("/admin/mentorship-operations");
+  await page.goto("/staff/mentorship");
   await page.getByRole("button", { name: "Approve" }).first().click();
   await expect(page.getByText("No mentor applications need review.")).toBeVisible();
   await page.getByRole("button", { name: "Introduce" }).first().click();
   await expect(page.getByText(/introduced/i).first()).toBeVisible();
 
-  await page.goto("/admin/opportunity-operations");
+  await page.goto("/staff/opportunities");
   await page.getByRole("button", { name: "Publish" }).first().click();
   await expect(page.getByText("No listings await moderation.")).toBeVisible();
 
-  await page.goto("/admin/certificate-issuing");
+  await page.goto("/staff/certificates");
   await page.getByRole("button", { name: "Reissue" }).first().click();
   await expect(page.getByText(/notification/i).first()).toBeVisible();
+});
+
+test("staff can create and publish a CMS post", async ({ page }) => {
+  await loginStaff(page);
+  const stamp = Date.now();
+  await page.goto("/staff/content/posts/new");
+  await page.getByLabel("Title").fill(`E2E Post ${stamp}`);
+  await page.getByLabel("Category").selectOption("AI");
+  await page.getByLabel("Summary").fill("Disposable E2E article summary for staff CMS cutover.");
+  await page.getByLabel("Body").fill("First paragraph.\n\nSecond paragraph for the staff CMS publish path.");
+  await page.getByLabel("Publish at").fill("2030-01-15T10:00");
+  await page.getByRole("button", { name: "Create post" }).click();
+  await expect(page).toHaveURL(/\/staff\/content\/posts\/\d+/);
+  await expect(page.getByRole("heading", { name: `E2E Post ${stamp}` })).toBeVisible();
 });
 
 test("member uses grounded Tutor and confirmed Career Coach controls with mock AI", async ({ page }) => {

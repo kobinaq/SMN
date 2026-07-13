@@ -35,7 +35,7 @@ export default async function StaffMentorshipPage() {
     <div className={`space-y-6 ${staffOpsChrome}`}>
       <StaffPageHeader
         eyebrow="Mentorship operations"
-        title="Mentorship"
+        title="Mentorship Operations"
         description="Review mentors, protect capacity, manage introductions, and close the feedback loop."
       />
 

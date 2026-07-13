@@ -129,3 +129,25 @@ export function slugify(value: string) {
     .replace(/^-|-$/g, "")
     .slice(0, 80);
 }
+
+export function relationId(value: unknown) {
+  if (value == null) return "";
+  if (typeof value === "object" && "id" in value) return String((value as { id: string | number }).id);
+  return String(value);
+}
+
+export function toDateTimeLocal(value?: string | null) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+export function toDateInput(value?: string | null) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}

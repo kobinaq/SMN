@@ -60,7 +60,7 @@ export default async function StaffOpportunitiesPage() {
     <div className={`space-y-6 ${staffOpsChrome}`}>
       <StaffPageHeader
         eyebrow="Opportunity operations"
-        title="Opportunities"
+        title="Opportunity Operations"
         description="Moderation, expiry, applications, duplicate candidates, and source health in one workspace."
       />
 

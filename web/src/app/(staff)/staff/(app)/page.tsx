@@ -43,7 +43,7 @@ export default async function StaffHomePage({
         </p>
       ) : null}
 
-      <div className="grid gap-3 md:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-3" aria-label="Platform health">
         {snapshot.health.map((item) => (
           <StaffPanel key={item.label} className={toneBorder[item.tone] || ""}>
             <b className="text-sm text-white">{item.label}</b>
@@ -104,8 +104,8 @@ export default async function StaffHomePage({
 
       <StaffPanel>
         <div className="mb-4">
-          <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Network health</p>
-          <h2 className="mt-1 font-display text-2xl text-white">Decision metrics</h2>
+          <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Decision metrics</p>
+          <h2 className="mt-1 font-display text-2xl text-white">Network health</h2>
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {snapshot.metrics.map((metric) => (

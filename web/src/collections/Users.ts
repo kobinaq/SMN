@@ -43,7 +43,7 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: "email",
     group: "System",
-    description: "Staff accounts for the Payload CMS admin panel.",
+    description: "Staff accounts for the SMN staff app at /staff.",
   },
   access: {
     // admin access must return boolean only (not a Where query)
