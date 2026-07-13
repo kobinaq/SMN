@@ -27,6 +27,11 @@ const domains: Record<string, Domain> = {
   events: { read: ["content", "analyst"], write: ["content"] },
   stories: { read: ["content", "analyst"], write: ["content"] },
   "audit-events": { read: ["support", "analyst"], write: ["content", "learning", "mentorship", "opportunity", "support"] },
+  "ai-usage-records": { read: ["learning", "support", "analyst"], write: [] },
+  "ai-feedback": { read: ["learning", "support", "analyst"], write: [] },
+  "ai-knowledge-sources": { read: ["learning", "analyst"], write: ["learning"] },
+  "ai-drafts": { read: ["learning", "analyst"], write: ["learning"] },
+  "ai-career-states": { read: ["support", "analyst"], write: ["support"] },
 };
 
 function restrict(rule: Access | undefined, roles: StaffRole[], fallback: boolean): Access {

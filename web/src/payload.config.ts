@@ -30,6 +30,7 @@ import { Portfolios } from "./collections/Portfolios";
 import { Certificates } from "./collections/Certificates";
 import { AuditEvents } from "./collections/AuditEvents";
 import { MemberNotes } from "./collections/MemberNotes";
+import { AICollections } from "./collections/AI";
 import { SiteSettings } from "./globals/SiteSettings";
 import { createDbAdapter } from "./lib/db";
 import { validateProductionEnv } from "./lib/env";
@@ -128,6 +129,7 @@ export default buildConfig({
     Certificates,
     AuditEvents,
     MemberNotes,
+    ...AICollections,
     Media,
     Posts,
     Courses,
