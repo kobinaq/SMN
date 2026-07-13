@@ -15,6 +15,7 @@ import { Stories } from "./collections/Stories";
 import { Resources } from "./collections/Resources";
 import { Mentors } from "./collections/Mentors";
 import { MentorshipRequests } from "./collections/MentorshipRequests";
+import { MentorshipRelationships } from "./collections/MentorshipRelationships";
 import { OpportunitySources } from "./collections/OpportunitySources";
 import { Opportunities } from "./collections/Opportunities";
 import { OpportunityApplications } from "./collections/OpportunityApplications";
@@ -28,6 +29,7 @@ import { LmsLessonProgress } from "./collections/LmsLessonProgress";
 import { Portfolios } from "./collections/Portfolios";
 import { Certificates } from "./collections/Certificates";
 import { AuditEvents } from "./collections/AuditEvents";
+import { MemberNotes } from "./collections/MemberNotes";
 import { SiteSettings } from "./globals/SiteSettings";
 import { createDbAdapter } from "./lib/db";
 import { validateProductionEnv } from "./lib/env";
@@ -93,6 +95,9 @@ export default buildConfig({
           path: "/course-builder",
           exact: true,
         },
+        member360: { Component: "@/components/payload/Member360", path: "/member-360", exact: true },
+        mentorshipOperations: { Component: "@/components/payload/MentorshipOperations", path: "/mentorship-operations", exact: true },
+        opportunityOperations: { Component: "@/components/payload/OpportunityOperations", path: "/opportunity-operations", exact: true },
       },
       graphics: {
         Logo: "@/components/payload/Logo",
@@ -105,6 +110,7 @@ export default buildConfig({
     Members,
     Mentors,
     MentorshipRequests,
+    MentorshipRelationships,
     OpportunitySources,
     Opportunities,
     OpportunityApplications,
@@ -118,6 +124,7 @@ export default buildConfig({
     Portfolios,
     Certificates,
     AuditEvents,
+    MemberNotes,
     Media,
     Posts,
     Courses,

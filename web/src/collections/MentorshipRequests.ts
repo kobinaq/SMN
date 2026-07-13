@@ -25,5 +25,7 @@ export const MentorshipRequests: CollectionConfig = {
     { name: "preferredFormat", type: "select", required: true, defaultValue: "Video call", options: ["Video call", "Portfolio review", "Async feedback", "Group office hours"] },
     { name: "status", type: "select", required: true, defaultValue: "new", options: ["new", "reviewing", "introduced", "completed", "declined"], admin: { position: "sidebar" } },
     { name: "staffNotes", type: "textarea", access: { read: isStaff, create: isStaff, update: isStaff } },
+    { name: "decisionReason", type: "textarea", access: { read: isStaff, create: isStaff, update: isStaff } },
+    { name: "mentorResponse", type: "textarea" },
   ],
 };

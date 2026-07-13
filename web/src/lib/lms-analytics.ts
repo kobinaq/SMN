@@ -1,12 +1,12 @@
 type ID = string | number;
-type Enrollment = { member: ID | { id: ID }; status?: unknown; startedAt?: string | null; lastActivityAt?: string | null; completedAt?: string | null };
-type Module = { id: ID; title?: unknown; order?: unknown };
-type Lesson = { id: ID; module: ID | { id: ID } };
-type Progress = { member: ID | { id: ID }; lesson: ID | { id: ID }; status?: unknown };
+export type AnalyticsEnrollment = { member: ID | { id: ID }; status?: unknown; startedAt?: string | null; lastActivityAt?: string | null; completedAt?: string | null };
+export type AnalyticsModule = { id: ID; title?: unknown; order?: unknown };
+export type AnalyticsLesson = { id: ID; module: ID | { id: ID } };
+export type AnalyticsProgress = { member: ID | { id: ID }; lesson: ID | { id: ID }; status?: unknown };
 
 const id = (value: ID | { id: ID }) => String(typeof value === "object" ? value.id : value);
 
-export function calculateCourseAnalytics(enrollments: Enrollment[], modules: Module[], lessons: Lesson[], progress: Progress[], now = new Date()) {
+export function calculateCourseAnalytics(enrollments: AnalyticsEnrollment[], modules: AnalyticsModule[], lessons: AnalyticsLesson[], progress: AnalyticsProgress[], now = new Date()) {
   const inactivityCutoff = now.getTime() - 30 * 86_400_000;
   const completedEnrollments = enrollments.filter((item) => item.status === "completed" || item.completedAt);
   const startedEnrollments = enrollments.filter((item) => item.startedAt);

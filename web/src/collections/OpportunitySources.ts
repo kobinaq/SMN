@@ -16,5 +16,11 @@ export const OpportunitySources: CollectionConfig = {
     { name: "defaultLocation", type: "text" },
     { name: "lastSyncedAt", type: "date", admin: { readOnly: true } },
     { name: "lastError", type: "textarea", admin: { readOnly: true } },
+    { name: "consecutiveFailures", type: "number", defaultValue: 0, min: 0, admin: { readOnly: true } },
+    { name: "lastFetchedCount", type: "number", defaultValue: 0, min: 0, admin: { readOnly: true } },
+    { name: "lastCreatedCount", type: "number", defaultValue: 0, min: 0, admin: { readOnly: true } },
+    { name: "lastUpdatedCount", type: "number", defaultValue: 0, min: 0, admin: { readOnly: true } },
+    { name: "lastSkippedCount", type: "number", defaultValue: 0, min: 0, admin: { readOnly: true } },
+    { name: "lastDurationMs", type: "number", defaultValue: 0, min: 0, admin: { readOnly: true } },
   ],
 };

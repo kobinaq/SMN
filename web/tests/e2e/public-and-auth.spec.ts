@@ -43,4 +43,25 @@ test("staff lands on the workflow-first admin dashboard", async ({ page }) => {
   await page.getByRole("link", { name: "Learners" }).click();
   await expect(page.getByRole("heading", { name: "Reasoned progress override" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Save audited override" })).toBeVisible();
+  await page.getByRole("link", { name: "Analytics" }).click();
+  await expect(page.getByText("Completion rate", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Module drop-off" })).toBeVisible();
+
+  await page.goto("/admin/member-360");
+  await expect(page.getByRole("heading", { name: "Member 360" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Private staff notes" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Add private note" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Opportunity activity" })).toBeVisible();
+
+  await page.goto("/admin/mentorship-operations");
+  await expect(page.getByRole("heading", { name: "Mentorship Operations" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Mentor applications" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Request queue" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Mentor capacity" })).toBeVisible();
+
+  await page.goto("/admin/opportunity-operations");
+  await expect(page.getByRole("heading", { name: "Opportunity Operations" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Moderation queue" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Duplicate candidates" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Source health" })).toBeVisible();
 });

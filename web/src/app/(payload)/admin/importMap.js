@@ -28,6 +28,8 @@ import { default as default_f31229ee5d0c6a6ee99d69cf560098a0 } from '@/component
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 import { default as default_90396af18c2250adfc20df25d311cd9a } from '@/components/payload/AdminDashboard'
 import { default as default_f35ede1efc057a341b28fc0fd3536db4 } from '@/components/payload/CourseBuilder'
+import { default as default_5141ae02d9f687972ff1693d1ff3cb1a } from '@/components/payload/Member360'
+import { default as default_ddfec14adbd971b220629b0252fd9130 } from '@/components/payload/MentorshipOperations'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -62,5 +64,7 @@ export const importMap = {
   "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
   "@/components/payload/AdminDashboard#default": default_90396af18c2250adfc20df25d311cd9a,
   "@/components/payload/CourseBuilder#default": default_f35ede1efc057a341b28fc0fd3536db4,
+  "@/components/payload/Member360#default": default_5141ae02d9f687972ff1693d1ff3cb1a,
+  "@/components/payload/MentorshipOperations#default": default_ddfec14adbd971b220629b0252fd9130,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

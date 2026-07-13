@@ -10,6 +10,7 @@ type SourceDoc = {
   autoPublish?: boolean | null;
   minimumScore?: number | null;
   defaultLocation?: string | null;
+  consecutiveFailures?: number | null;
 };
 
 type ImportedJob = {
@@ -77,6 +78,7 @@ async function fetchJobs(source: SourceDoc): Promise<ImportedJob[]> {
 }
 
 export async function syncOpportunitySource(payload: Payload, source: SourceDoc) {
+  const started = Date.now();
   const now = new Date().toISOString();
   const jobs = await fetchJobs(source);
   const seen: string[] = [];
@@ -111,7 +113,7 @@ export async function syncOpportunitySource(payload: Payload, source: SourceDoc)
   for (const job of previous.docs) {
     if (job.externalId && !seen.includes(job.externalId)) await payload.update({ collection: "opportunities", id: job.id, overrideAccess: true, data: { status: job.status === "published" ? "closed" : "archived" } });
   }
-  await payload.update({ collection: "opportunity-sources", id: source.id, overrideAccess: true, data: { lastSyncedAt: now, lastError: null } });
+  await payload.update({ collection: "opportunity-sources", id: source.id, overrideAccess: true, data: { lastSyncedAt: now, lastError: null, consecutiveFailures: 0, lastFetchedCount: jobs.length, lastCreatedCount: created, lastUpdatedCount: updated, lastSkippedCount: skipped, lastDurationMs: Date.now() - started } });
   return { source: source.name, fetched: jobs.length, created, updated, skipped };
 }
 
@@ -122,7 +124,7 @@ export async function syncAllOpportunitySources(payload: Payload) {
     try { results.push(await syncOpportunitySource(payload, source as SourceDoc)); }
     catch (error) {
       const message = error instanceof Error ? error.message : "Unknown sync error";
-      await payload.update({ collection: "opportunity-sources", id: source.id, overrideAccess: true, data: { lastSyncedAt: new Date().toISOString(), lastError: message } });
+      await payload.update({ collection: "opportunity-sources", id: source.id, overrideAccess: true, data: { lastSyncedAt: new Date().toISOString(), lastError: message, consecutiveFailures: Number(source.consecutiveFailures || 0) + 1 } });
       results.push({ source: source.name, error: message });
     }
   }

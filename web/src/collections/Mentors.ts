@@ -84,10 +84,12 @@ export const Mentors: CollectionConfig = {
     { name: "topics", type: "select", hasMany: true, required: true, options: mentorTopics.map((topic) => ({ label: topic, value: topic })) },
     { name: "seniority", type: "select", required: true, options: [...mentorSeniorities] },
     { name: "availability", type: "select", required: true, defaultValue: "Limited", options: ["Available", "Limited", "Unavailable"] },
+    { name: "maxActiveMentees", type: "number", required: true, min: 0, defaultValue: 3, admin: { description: "Introductions are blocked when this capacity is reached." } },
     { name: "bookingUrl", type: "text" },
     { name: "status", type: "select", required: true, defaultValue: "draft", options: ["draft", "approved", "paused", "rejected"], admin: { position: "sidebar" } },
     { name: "featured", type: "checkbox", defaultValue: false, admin: { position: "sidebar" } },
     { name: "approvedAt", type: "date", admin: { position: "sidebar", readOnly: true }, access: { read: isStaff, create: isStaff, update: isStaff } },
     { name: "approvedBy", type: "relationship", relationTo: "users", admin: { position: "sidebar", readOnly: true }, access: { read: isStaff, create: isStaff, update: isStaff } },
+    { name: "rejectionReason", type: "textarea", access: { read: isStaff, create: isStaff, update: isStaff } },
   ],
 };
