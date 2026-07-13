@@ -35,6 +35,7 @@ import { createDbAdapter } from "./lib/db";
 import { validateProductionEnv } from "./lib/env";
 import { getServerURL } from "./lib/server-url";
 import { isR2Configured } from "./lib/storage";
+import { enforceStaffPermissions } from "./lib/admin-permission-config";
 
 validateProductionEnv();
 
@@ -98,6 +99,7 @@ export default buildConfig({
         member360: { Component: "@/components/payload/Member360", path: "/member-360", exact: true },
         mentorshipOperations: { Component: "@/components/payload/MentorshipOperations", path: "/mentorship-operations", exact: true },
         opportunityOperations: { Component: "@/components/payload/OpportunityOperations", path: "/opportunity-operations", exact: true },
+        certificateIssuing: { Component: "@/components/payload/CertificateIssuing", path: "/certificate-issuing", exact: true },
       },
       graphics: {
         Logo: "@/components/payload/Logo",
@@ -105,7 +107,7 @@ export default buildConfig({
       },
     },
   },
-  collections: [
+  collections: enforceStaffPermissions([
     Users,
     Members,
     Mentors,
@@ -131,7 +133,7 @@ export default buildConfig({
     Events,
     Stories,
     Resources,
-  ],
+  ]),
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "smn-dev-secret-change-me-in-production",

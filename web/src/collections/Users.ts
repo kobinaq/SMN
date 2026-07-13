@@ -1,18 +1,20 @@
 import type { Access, CollectionConfig, PayloadRequest } from "payload";
+import { requireStaff, staffRoles } from "@/lib/staff-permissions";
 
 function isStaffUser(req: PayloadRequest) {
   return Boolean(req.user && req.user.collection === "users");
 }
 
 /** Staff only (users collection). */
-const isStaff: Access = ({ req }) => isStaffUser(req);
+const isStaff: Access = ({ req }) => requireStaff(req, "analyst", "content", "learning", "mentorship", "opportunity", "support");
+const isSuperAdmin: Access = ({ req }) => requireStaff(req);
 
 /**
  * Allow creating the very first staff user when the table is empty.
  * After that, only staff can create staff.
  */
 const canCreateStaff: Access = async ({ req }) => {
-  if (req.user?.collection === "users") return true;
+  if (req.user?.collection === "users") return requireStaff(req);
   if (req.user) return false;
   try {
     const existing = await req.payload.find({
@@ -40,7 +42,7 @@ export const Users: CollectionConfig = {
   auth: true,
   admin: {
     useAsTitle: "email",
-    group: "Admin",
+    group: "System",
     description: "Staff accounts for the Payload CMS admin panel.",
   },
   access: {
@@ -48,13 +50,21 @@ export const Users: CollectionConfig = {
     admin: ({ req }) => isStaffUser(req),
     read: isStaff,
     create: canCreateStaff,
-    update: isStaff,
-    delete: isStaff,
+    update: isSuperAdmin,
+    delete: isSuperAdmin,
   },
   fields: [
     {
       name: "name",
       type: "text",
+    },
+    {
+      name: "role",
+      type: "select",
+      required: true,
+      defaultValue: "super-admin",
+      options: staffRoles.map((role) => ({ label: role.replace("-", " ").replace(/^./, (value) => value.toUpperCase()), value: role })),
+      admin: { position: "sidebar", description: "Least-privilege responsibility for this staff account." },
     },
   ],
 };
