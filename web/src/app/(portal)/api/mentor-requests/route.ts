@@ -3,10 +3,11 @@ import { z } from "zod";
 import { memberAuthHeaders } from "@/lib/auth/member";
 import { opsEmail, sendEmail } from "@/lib/email";
 import { getPayloadClient } from "@/lib/payload";
+import { mentorTopics } from "@/lib/mentor-options";
 
 const schema = z.object({
-  mentorId: z.union([z.string().min(1), z.number()]),
-  topic: z.string().min(2).max(100),
+  mentorId: z.coerce.number().int().positive(),
+  topic: z.enum(mentorTopics),
   goal: z.string().min(10).max(200),
   message: z.string().min(20).max(2000),
   preferredFormat: z.enum(["Video call", "Portfolio review", "Async feedback", "Group office hours"]),
