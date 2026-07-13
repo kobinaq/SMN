@@ -11,9 +11,9 @@ const writeRoles: Record<string, StaffRole[]> = {
   courses: ["content"],
   events: ["content"],
   stories: ["content"],
-  "lms-courses": ["learning", "content"],
-  "lms-modules": ["learning", "content"],
-  "lms-lessons": ["learning", "content"],
+  "lms-courses": ["learning"],
+  "lms-modules": ["learning"],
+  "lms-lessons": ["learning"],
   users: [], // super-admin only
   opportunities: ["opportunity"],
 };
@@ -31,6 +31,14 @@ function toIsoDate(value: unknown) {
   return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }
 
+function coerceRelationId(value: unknown) {
+  if (value === "" || value == null) return undefined;
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string" && /^\d+$/.test(value)) return Number(value);
+  if (value && typeof value === "object" && "id" in value) return coerceRelationId((value as { id: unknown }).id);
+  return value;
+}
+
 function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
   const body = { ...data };
   if (typeof body.title === "string" && !body.slug) body.slug = slugify(body.title);
@@ -46,9 +54,11 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
       .map((item) => ({ item }));
     delete body.outcomesText;
   }
-  for (const key of ["cover", "file", "image"]) {
-    if (body[key] === "" || body[key] == null) delete body[key];
-    else if (typeof body[key] === "string" && /^\d+$/.test(body[key])) body[key] = Number(body[key]);
+  for (const key of ["cover", "file", "image", "course", "module", "member", "mentor", "source"]) {
+    if (!(key in body)) continue;
+    const next = coerceRelationId(body[key]);
+    if (next === undefined) delete body[key];
+    else body[key] = next;
   }
   if (body.publishedAt === "" || body.publishedAt == null) {
     if ("publishedAt" in body) body.publishedAt = null;
@@ -61,8 +71,29 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
     if (iso) body.date = iso;
   }
   if (typeof body.lessons === "string") body.lessons = body.lessons === "" ? null : Number(body.lessons);
+  if (typeof body.order === "string") body.order = body.order === "" ? 0 : Number(body.order);
   if (collection === "stories") delete body.slug;
   return body;
+}
+
+function payloadErrorMessage(error: unknown) {
+  if (!error || typeof error !== "object") return "Unable to save the record.";
+  const candidate = error as {
+    message?: string;
+    status?: number;
+    data?: { errors?: Array<{ message?: string; path?: string; label?: string }> };
+  };
+  const fieldErrors = candidate.data?.errors?.map((item) => item.message || item.label || item.path).filter(Boolean);
+  if (fieldErrors?.length) return fieldErrors.join(" ");
+  if (typeof candidate.message === "string" && candidate.message.trim()) return candidate.message;
+  return "Unable to save the record.";
+}
+
+function payloadErrorStatus(error: unknown) {
+  if (!error || typeof error !== "object") return 500;
+  const status = (error as { status?: number; statusCode?: number }).status ?? (error as { statusCode?: number }).statusCode;
+  if (status === 400 || status === 401 || status === 403 || status === 404 || status === 409) return status;
+  return 500;
 }
 
 export async function POST(request: Request) {
@@ -95,16 +126,23 @@ export async function POST(request: Request) {
 
     if (!id) return Response.json({ error: "Record id is required." }, { status: 400 });
 
+    const recordId = (typeof id === "string" && /^\d+$/.test(id) ? Number(id) : id) as string | number;
+
     if (action === "delete") {
-      await payload.delete({ collection: collection as never, id, ...access });
+      await payload.delete({ collection: collection as never, id: recordId, ...access });
       return Response.json({ ok: true });
     }
 
     const body = normalizeStaffBody(collection, data);
-    const updated = await payload.update({ collection: collection as never, id, data: body as never, ...access });
+    const updated = await payload.update({
+      collection: collection as never,
+      id: recordId,
+      data: body as never,
+      ...access,
+    });
     return Response.json({ ok: true, id: (updated as { id: string | number }).id });
   } catch (error) {
     console.error("[staff-records]", error);
-    return Response.json({ error: "Unable to save the record." }, { status: 500 });
+    return Response.json({ error: payloadErrorMessage(error) }, { status: payloadErrorStatus(error) });
   }
 }

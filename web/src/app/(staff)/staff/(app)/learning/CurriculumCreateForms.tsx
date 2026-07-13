@@ -4,6 +4,11 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { staffFieldClass, StaffFormField } from "@/components/staff/ui";
 
+function asRelationId(value: string | number) {
+  if (typeof value === "number") return value;
+  return /^\d+$/.test(value) ? Number(value) : value;
+}
+
 export function AddModuleForm({ courseId, order }: { courseId: string | number; order: number }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -24,11 +29,11 @@ export function AddModuleForm({ courseId, order }: { courseId: string | number; 
           collection: "lms-modules",
           action: "create",
           data: {
-            course: courseId,
+            course: asRelationId(courseId),
             title,
             slug: `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60)}-${Date.now().toString(36)}`,
             status: "draft",
-            order,
+            order: Number(order) || 0,
           },
         }),
       });
@@ -88,14 +93,14 @@ export function AddLessonForm({
           collection: "lms-lessons",
           action: "create",
           data: {
-            course: courseId,
-            module: moduleId,
+            course: asRelationId(courseId),
+            module: asRelationId(moduleId),
             title,
             slug: `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60)}-${Date.now().toString(36)}`,
             summary: "Draft lesson summary",
             lessonType: "reading",
             status: "draft",
-            order,
+            order: Number(order) || 0,
           },
         }),
       });
