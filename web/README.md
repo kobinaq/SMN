@@ -2,6 +2,8 @@
 
 Premium marketing-community site for SMN.
 
+Current operational sources of truth: `../docs/staff-guide.md`, `../docs/ai-architecture.md`, `../docs/database-migrations.md`, `../docs/success-metrics.md`, and `../docs/testing.md`.
+
 ## Stack
 
 - Next.js (App Router) + TypeScript + Tailwind CSS
@@ -97,6 +99,12 @@ Schema push is **opt-in** (`PAYLOAD_DB_PUSH=true` only during `db:push`). The ap
 
 For Neon, either the **pooled** or **direct** connection string works; if queries flake, try the direct (non-`-pooler`) URL.
 
+### Current migration policy
+
+The older schema-push notes above describe the pre-baseline bridge. A full PostgreSQL baseline is now committed under `src/migrations`. Use `npm run db:migrate` for fresh and already-migrated databases, and create reviewed future snapshots with `npm run db:migrate:create -- concise_name`.
+
+Existing production predates that baseline. Do not replay the full baseline over its tables; follow the guarded push/verify/adopt procedure in `../docs/database-migrations.md`. Normal app startup keeps schema push disabled.
+
 ## Key routes
 
 | Path | Purpose |
@@ -117,6 +125,10 @@ For Neon, either the **pooled** or **direct** connection string works; if querie
 **Users** (staff), **Members** (portal), Media, Posts, Courses, Events, Stories, Resources + global **Site Settings**.
 
 See repo root `PRODUCT-ROADMAP.md` for Phase 7+ (mentors, jobs, learning, certs).
+
+## Workflow admin and AI
+
+Staff start with the workflow-first Overview and use Course Builder, Member 360, Mentorship Operations, Opportunity Operations, and Certificate Issuing. Tutor, Content Studio, and Career Coach use a provider-independent runtime and independent feature flags; all remain disabled by default until their release gate is approved.
 ## Automated opportunity sources
 
 Phase 7.3 can import public marketing roles from Greenhouse, Lever, and Ashby without API keys.

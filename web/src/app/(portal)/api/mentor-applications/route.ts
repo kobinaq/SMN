@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     if (!user || user.collection !== "members") return NextResponse.json({ error: "Sign in to apply as a mentor." }, { status: 401 });
     const existing = await payload.find({ collection: "mentors", limit: 1, depth: 0, where: { member: { equals: user.id } }, overrideAccess: true });
     if (existing.totalDocs) return NextResponse.json({ error: "You already have a mentor application." }, { status: 409 });
-    await payload.create({ collection: "mentors", overrideAccess: true, data: { member: user.id, title: parsed.data.title, bio: parsed.data.bio, topics: parsed.data.topics, seniority: parsed.data.seniority, availability: "Limited", status: "draft" } });
+    await payload.create({ collection: "mentors", overrideAccess: true, data: { member: user.id, title: parsed.data.title, bio: parsed.data.bio, topics: parsed.data.topics, seniority: parsed.data.seniority, availability: "Limited", status: "draft" } as never });
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch (error) {
     console.error("[mentor-application]", error);

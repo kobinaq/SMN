@@ -17,6 +17,10 @@ const e2eEnv = {
   OPS_EMAIL: process.env.OPS_EMAIL || "ops@example.com",
   PAYLOAD_SECRET: process.env.PAYLOAD_SECRET || "e2e-payload-secret",
   PAYLOAD_DB_PUSH: "true",
+  AI_PROVIDER: "mock",
+  AI_TUTOR_ENABLED: "true",
+  AI_CONTENT_STUDIO_ENABLED: "true",
+  AI_CAREER_COACH_ENABLED: "true",
   PLAYWRIGHT_BASE_URL: baseURL,
   USE_SEED_CONTENT: "true",
 };

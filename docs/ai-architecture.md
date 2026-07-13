@@ -1,6 +1,6 @@
 # SMN AI Architecture
 
-Status: implementation in progress; AI surfaces remain disabled unless `AI_PROVIDER` and provider credentials are configured.
+Status: implementation complete and awaiting final verification/private-beta approval. AI surfaces remain independently disabled unless their feature flag and `AI_PROVIDER` are configured.
 
 ## Boundaries
 
@@ -39,6 +39,17 @@ The initial retriever uses approved Payload content and deterministic lexical ra
 - Provider calls have a bounded timeout, completion size, input size, and hourly per-actor quota.
 - Normal CI never calls Groq. A separately enabled integration check may do so.
 - A provider failure does not fabricate a response or bypass the policy layer.
+- Tutor, feedback, and Career Coach authenticate through the member-cookie bridge; Content Studio requires a staff session plus learning permission.
+- Confirmed saves, draft lifecycle transitions, grounded declines, provider results, limits, and failures produce privacy-minimized events.
+- See `docs/success-metrics.md` for definitions and `docs/staff-guide.md` for incident handling.
+
+## Implemented surfaces
+
+- **Tutor:** nine grounded learning modes, strict course entitlement/isolation, approved-source citations, unsupported-answer decline, feedback, reset, mobile drawer, and per-course controls/reporting.
+- **Content Studio:** course/lesson-aware text and separately validated quiz/rubric/outline generation, controls, candidate comparison, explicit selection/rejection/edit/save, provenance, and versions. It never publishes.
+- **Career Coach:** deterministic opportunity ranking before LLM explanation, evidence/gaps/learning, minimized authenticated context, conversation, explicit goal/plan persistence, feedback, reset, and retained-data deletion. It never auto-applies or guarantees employment.
+
+Provider streaming is available through the provider-independent interface. Current product routes return bounded JSON responses so citations, policy state, and errors arrive atomically; streaming may be enabled per surface after accessibility and partial-response safety verification.
 
 ## Privacy message
 

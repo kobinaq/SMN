@@ -26,5 +26,21 @@ Production validation runs when `VERCEL_ENV=production` or `SMN_VALIDATE_PROD_EN
 | `SMN_VALIDATE_PROD_ENV` | No | Forces production env validation outside Vercel | `true` for checks | Usually unset | env validator | No effect when unset |
 | `ALLOW_PRODUCTION_SEED` | No | Allows demo seeding in production deliberately | Unset | Only `true` for explicit one-off seed | seed script | Production seeding is blocked |
 | `PLAYWRIGHT_BASE_URL` | No | Runs E2E against an existing server | `http://127.0.0.1:3000` | Preview URL if desired | Playwright | Playwright starts local dev server when unset |
+| `AI_PROVIDER` | No | Provider adapter: `disabled`, `mock`, or `groq` | `mock` for isolated tests | `groq` only after beta approval | AI runtime | Disabled/unavailable when unset without a Groq key |
+| `GROQ_API_KEY` | Required for Groq | Server-only Groq credential | Empty | Secret key | Groq adapter | Groq provider unavailable |
+| `AI_TEXT_MODEL` | No | Quality text model alias | `llama-3.3-70b-versatile` | Reviewed supported model | AI runtime | Documented default used |
+| `AI_FAST_MODEL` | No | Fast model alias | `llama-3.1-8b-instant` | Reviewed supported model | AI runtime/tests | Documented default used |
+| `AI_STRUCTURED_MODEL` | No | Strict structured-output alias | `openai/gpt-oss-20b` | Reviewed supported model | Content Studio | Documented default used |
+| `AI_TIMEOUT_MS` | No | Per-provider-call timeout | `20000` | Monitored bounded value | AI runtime | 20 seconds |
+| `AI_MAX_INPUT_CHARS` | No | Validated request input ceiling | `12000` | Reviewed bounded value | AI runtime | 12,000 characters |
+| `AI_HOURLY_REQUESTS` | No | Per-opaque-actor hourly quota | `30` | Capacity-based value | AI runtime | 30 |
+| `AI_USAGE_RETENTION_DAYS` | No | Usage event expiry | `30` | Privacy-approved value | AI records/cleanup | 30 days |
+| `AI_TUTOR_ENABLED` | No | Tutor rollback flag | `false` | Enable only after gate | Tutor | Tutor unavailable |
+| `AI_CONTENT_STUDIO_ENABLED` | No | Content Studio rollback flag | `false` | Enable only after gate | Admin | Studio unavailable |
+| `AI_CAREER_COACH_ENABLED` | No | Career Coach rollback flag | `false` | Enable only after gate | Portal | Coach coming-soon state |
+| `RUN_GROQ_INTEGRATION` | No | Explicitly opts the optional live-provider test in | Unset | CI should remain unset | Vitest integration test | Live test skipped |
+| `ALLOW_MIGRATION_BASELINE` | No | One-time guard for an existing DB baseline adoption | Unset | Temporary `true` only during runbook step | migration adoption | Adoption refused |
 
 Do not commit real secrets.
+
+AI keys and model configuration are server-only; never prefix them with `NEXT_PUBLIC_`. Keep all AI feature flags false during schema deployment and baseline adoption. See `docs/database-migrations.md`.

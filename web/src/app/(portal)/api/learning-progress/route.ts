@@ -3,7 +3,7 @@ import { memberAuthHeaders, type MemberUser } from "@/lib/auth/member";
 import { getLearningDashboard } from "@/lib/learning";
 import { getPayloadClient } from "@/lib/payload";
 
-const schema = z.object({ itemId: z.union([z.string().min(1), z.number()]), status: z.enum(["not-started", "in-progress", "completed"]) });
+const schema = z.object({ itemId: z.coerce.number().int().positive(), status: z.enum(["not-started", "in-progress", "completed"]) });
 
 export async function POST(request: Request) {
   try {

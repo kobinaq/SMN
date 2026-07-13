@@ -157,6 +157,8 @@ const course = await upsert(
     accessRule: "enrolled",
     level: "foundation",
     estimatedHours: 3,
+    tutorEnabled: true,
+    tutorModes: ["explain", "simplify", "example", "summary", "revision", "socratic", "feedback", "compare", "next-lesson"],
     order: 1,
     status: "draft",
   },

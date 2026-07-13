@@ -66,7 +66,6 @@ export type LmsLessonListItem = {
   durationMinutes: number;
   status: Status;
   href: string;
-  tutorEnabled: boolean;
 };
 
 export type LmsModule = {
@@ -90,6 +89,7 @@ export type LmsCourseCard = {
   completedCount: number;
   percentage: number;
   href: string;
+  tutorEnabled: boolean;
 };
 
 export type LmsCourseDetail = LmsCourseCard & {

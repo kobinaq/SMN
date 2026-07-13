@@ -4,8 +4,8 @@ import { getLmsCourses } from "@/lib/lms";
 import { getPayloadClient } from "@/lib/payload";
 
 const schema = z.object({
-  courseId: z.union([z.string().min(1), z.number()]),
-  lessonId: z.union([z.string().min(1), z.number()]),
+  courseId: z.coerce.number().int().positive(),
+  lessonId: z.coerce.number().int().positive(),
   status: z.enum(["not-started", "in-progress", "completed"]),
 });
 

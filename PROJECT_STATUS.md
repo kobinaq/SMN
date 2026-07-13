@@ -105,3 +105,13 @@ Date: 2026-07-12
 - Internal testing: ready after deploying this hardening pass and running smoke checks.
 - Private beta: close, but requires real env configuration, email setup, R2 verification, and seeded/manual workflow checks.
 - Public MVP: not ready until full manual journeys and higher-value workflow tests pass.
+
+## Workflow Admin and AI Extension (2026-07-13)
+
+Implementation is complete and final verification is pending for the workflow-first admin, Course Builder/readiness/automation/analytics, Member 360, mentorship operations, opportunity operations, certificate issuing/lifecycle, grouped navigation, and the minimal seven-role staff matrix.
+
+Provider-independent AI foundations, privacy-minimized retained usage, approved course retrieval, Tutor, Content Studio, deterministic-first Career Coach, success metrics, safety/unit/E2E source coverage, staff guidance, and independent rollback flags are implemented. AI remains disabled by default and is not approved for private beta until the final verification report is complete.
+
+A full PostgreSQL baseline migration now exists for fresh databases. Existing production requires the guarded adoption procedure in `docs/database-migrations.md`; its schema was repaired through the pre-baseline admin tables but has not yet received/adopted the final AI schema in this status snapshot.
+
+The older “Known Bugs,” “Test Coverage,” and “Remaining MVP Work” bullets above are historical context where contradicted by this dated section. The final 16-part readiness report will supersede release statements after verification.

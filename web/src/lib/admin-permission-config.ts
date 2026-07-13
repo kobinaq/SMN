@@ -42,6 +42,14 @@ function restrict(rule: Access | undefined, roles: StaffRole[], fallback: boolea
   };
 }
 
+function restrictAdmin(rule: Access | undefined, roles: StaffRole[], fallback: boolean) {
+  return async (args: Parameters<Access>[0]): Promise<boolean> => {
+    if (args.req.user?.collection === "users" && !canStaff(args.req.user, ...roles)) return false;
+    if (typeof rule === "function") return Boolean(await rule(args));
+    return Boolean(rule ?? fallback);
+  };
+}
+
 export function enforceStaffPermissions(collections: CollectionConfig[]) {
   return collections.map((collection) => {
     const domain = domains[collection.slug];
@@ -50,7 +58,7 @@ export function enforceStaffPermissions(collections: CollectionConfig[]) {
       ...collection,
       access: {
         ...collection.access,
-        admin: restrict(collection.access?.admin, domain.read, false),
+        admin: restrictAdmin(collection.access?.admin, domain.read, false),
         read: restrict(collection.access?.read, domain.read, false),
         create: restrict(collection.access?.create, domain.write, false),
         update: restrict(collection.access?.update, domain.write, false),

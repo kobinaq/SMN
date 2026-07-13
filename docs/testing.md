@@ -18,10 +18,15 @@ npm run test:coverage
 
 Vitest is configured in `vitest.config.ts`.
 
-Current coverage focuses on pure, high-risk helpers:
+Coverage focuses on pure, high-risk helpers:
 
 - YouTube URL parsing for LMS embeds
 - Production environment validation
+- LMS completion, readiness, and analytics
+- AI provider contracts, structured schemas, invalid output, timeout mapping, rate limiting, injection policy, prohibited actions, minimization, opaque actor identifiers, course isolation/citations, unsupported fallbacks, and deterministic career matching
+- Staff role boundaries
+
+The live Groq integration check is skipped unless both `RUN_GROQ_INTEGRATION=true` and `GROQ_API_KEY` are present. Normal CI never calls Groq.
 
 ## End-to-End Tests
 
@@ -33,6 +38,11 @@ The current smoke suite verifies:
 - Member login page renders
 - Anonymous users are redirected away from protected portal routes
 - A seeded staff user can log in and see the workflow-first dashboard
+- Curriculum duplication and audited progress correction
+- Content Studio generation, candidate review, and explicit draft save using mock AI
+- Member 360 private notes, mentorship transitions, opportunity moderation, and certificate reissue
+- Grounded Tutor answers/citations and confirmed Career Coach saves using mock AI
+- Anonymous denial on staff and member AI mutation APIs
 
 When running locally, the E2E runner pushes the schema and upserts fictional demo records into the disposable `payload.e2e.db` database before starting the production server. It never seeds the configured production database.
 
@@ -42,17 +52,6 @@ Install browser binaries when needed:
 npx playwright install chromium
 ```
 
-## Remaining Test Work
+Playwright uses one worker because workflow tests intentionally mutate a shared per-process disposable database. The E2E runner deletes that database after the run. Real external email, R2, ATS feeds, and Groq require separate flag-gated integration or staging checks; they are not prerequisites for deterministic CI.
 
-The MVP still needs database-backed workflow tests for:
-
-- Member registration/login/logout
-- Staff login and admin permissions
-- Mentor application and approval
-- Mentorship request lifecycle
-- Opportunity publishing and applications
-- LMS course access and lesson completion
-- Portfolio visibility and ownership
-- Certificate issuance and public verification
-
-Those tests should run against a disposable test database seeded with `npm run seed:demo`.
+Before AI private beta, run typecheck, lint, unit, build, E2E, manual reduced-motion/mobile/keyboard checks, schema migration on a disposable PostgreSQL database, and the privacy/safety checklist in `docs/staff-guide.md`.

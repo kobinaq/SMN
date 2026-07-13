@@ -29,5 +29,5 @@ export async function retrieveCourseContext(payload: Payload, memberId: string |
   for (const source of sources.docs) candidates.push({ id: `source-${source.id}`, label: String(source.citationLabel || source.title), href: lessonId ? `/app/learning/courses/${course.slug}/lessons/${lessonId}` : `/app/learning/courses/${course.slug}`, excerpt: String(source.content || "") });
   const citations = candidates.filter(item => item.excerpt && !unsafeSource.test(item.excerpt)).map(item => ({ ...item, excerpt: item.excerpt.slice(0, 4000), rank: score(query, `${item.label} ${item.excerpt}`) })).filter(item => item.rank > 0).sort((a, b) => b.rank - a.rank).slice(0, 8).map(({ rank: _rank, ...item }) => item);
   if (!citations.length) return { courseId: String(course.id), context: "", citations: [], declined: true };
-  return { courseId: String(course.id), citations, declined: false, context: citations.map(item => `<source id="${item.id}" label="${item.label.replaceAll('"', "')}">\n${item.excerpt}\n</source>`).join("\n\n") };
+  return { courseId: String(course.id), citations, declined: false, context: citations.map(item => `<source id="${item.id}" label="${item.label.replaceAll('"', "'")}">\n${item.excerpt}\n</source>`).join("\n\n") };
 }

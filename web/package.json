@@ -15,8 +15,11 @@
     "payload": "payload",
     "generate:importmap": "esbuild src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=scripts/.payload.config.bundle.mjs && node scripts/gen-importmap.mjs",
     "prebuild": "npm run generate:importmap",
-    "generate:types": "payload generate:types",
+    "generate:types": "esbuild ./src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=./scripts/.payload.config.bundle.mjs && node ./scripts/generate-types.mjs",
     "db:push": "esbuild src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=scripts/.payload.config.bundle.mjs && node scripts/push-schema.mjs",
+    "db:migrate:create": "esbuild ./src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=./scripts/.payload.config.bundle.mjs && node ./scripts/create-migration.mjs",
+    "db:migrate": "esbuild ./src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=./scripts/.payload.config.bundle.mjs && node ./scripts/run-migrations.mjs",
+    "db:migrate:adopt": "esbuild ./src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=./scripts/.payload.config.bundle.mjs && node ./scripts/adopt-migration-baseline.mjs",
     "db:check": "node scripts/check-schema.mjs",
     "seed:demo": "esbuild src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=scripts/.payload.config.bundle.mjs && node scripts/seed-demo.mjs"
   },

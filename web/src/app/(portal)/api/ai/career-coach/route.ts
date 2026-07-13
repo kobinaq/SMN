@@ -10,7 +10,8 @@ const schema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("chat"), message: z.string().min(1).max(12000) }),
   z.object({ action: z.literal("save-goal"), goal: z.string().trim().min(3).max(5000), confirmed: z.literal(true) }),
   z.object({ action: z.literal("save-plan"), plan: z.unknown(), confirmed: z.literal(true) }),
-  z.object({ action: z.enum(["reset", "delete-data"]), confirmed: z.literal(true) }),
+  z.object({ action: z.literal("reset"), confirmed: z.literal(true) }),
+  z.object({ action: z.literal("delete-data"), confirmed: z.literal(true) }),
 ]);
 
 export async function POST(request: Request) {

@@ -95,3 +95,20 @@ Schema changes will be introduced only alongside a reviewed migration/schema-pus
 5. Complete workflow E2E coverage before declaring the admin overhaul complete.
 6. Add the provider-independent AI foundation and then Tutor, Content Studio, and Career Coach in that order.
 
+## Implemented state (2026-07-13)
+
+The workflow-first dashboard and all five operations workspaces are implemented. Course Builder includes readiness, curriculum actions, audited progress correction, analytics, Tutor controls/reporting, and Content Studio. Member 360, mentorship, opportunity, and certificate operations use authenticated Local/API calls, explicit confirmation, compensating or transactional writes where appropriate, and audit events.
+
+Navigation groups now follow the target information architecture. Standard collection screens remain available for advanced record work. The enforced staff matrix is:
+
+| Role | Primary responsibility |
+|---|---|
+| super-admin | All domains and staff administration |
+| content | Posts, resources, media, catalogue, events, stories, website content |
+| learning | LMS, enrollments, progress, certificates, approved AI sources/drafts |
+| mentorship | Mentors, requests, relationships |
+| opportunity | Listings, sources, applications |
+| support | Member support, private notes, allowed enrollment/progress/application support |
+| analyst | Read-only operational and aggregate reporting access |
+
+Server-side collection wrappers and custom-route checks enforce these responsibilities; hiding navigation is not treated as authorization. Workflow audit and AI metric definitions are in `docs/success-metrics.md`. Everyday use and incident procedures are in `docs/staff-guide.md`.

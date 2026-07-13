@@ -136,7 +136,6 @@ export async function getSiteSettings() {
       tagline: (doc.tagline as string) || fallbackSite.tagline,
       whatsappInvite:
         (doc.whatsappInvite as string) ||
-        (doc.discordInvite as string) ||
         fallbackSite.whatsappInvite,
       email: (doc.opsEmail as string) || fallbackSite.email,
       cohort: {
