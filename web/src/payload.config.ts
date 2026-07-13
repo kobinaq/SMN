@@ -85,6 +85,7 @@ export default buildConfig({
       },
     },
     components: {
+      beforeNavLinks: ["@/components/payload/AdminWorkspaceNav"],
       beforeLogin: ["@/components/payload/LoginIntro"],
       afterLogin: ["@/components/payload/LoginHelp"],
       views: {

@@ -5,6 +5,7 @@ const staffOnly = ({ req }: { req: { user?: { collection?: string } | null } }) 
 
 export const SiteSettings: GlobalConfig = {
   slug: "site-settings",
+  admin: { group: "Website" },
   access: {
     read: () => true,
     update: staffOnly,

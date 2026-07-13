@@ -6,7 +6,7 @@ const isStaff = ({ req }: { req: { user?: { collection?: string } | null } }) =>
 
 export const MentorshipRequests: CollectionConfig = {
   slug: "mentorship-requests",
-  admin: { useAsTitle: "goal", defaultColumns: ["requester", "mentor", "topic", "status", "createdAt"], group: "Network" },
+  admin: { useAsTitle: "goal", defaultColumns: ["requester", "mentor", "topic", "status", "createdAt"], group: "Mentorship" },
   access: {
     admin: isStaff,
     read: ({ req }) => {

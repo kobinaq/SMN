@@ -8,6 +8,7 @@ export const Events: CollectionConfig = {
   admin: {
     useAsTitle: "title",
     defaultColumns: ["title", "type", "date"],
+    group: "Website",
   },
   access: {
     read: () => true,

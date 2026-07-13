@@ -8,6 +8,7 @@ const useLocalDisk = !onVercel && !r2;
 
 export const Media: CollectionConfig = {
   slug: "media",
+  admin: { group: "Content" },
   access: {
     read: () => true,
     create: ({ req }) =>

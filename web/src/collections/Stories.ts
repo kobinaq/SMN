@@ -7,6 +7,7 @@ export const Stories: CollectionConfig = {
   slug: "stories",
   admin: {
     useAsTitle: "name",
+    group: "Website",
   },
   access: {
     read: () => true,

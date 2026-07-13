@@ -4,7 +4,7 @@ const staffOnly = ({ req }: { req: { user?: { collection?: string } | null } }) 
 
 export const Portfolios: CollectionConfig = {
   slug: "portfolios",
-  admin: { useAsTitle: "title", defaultColumns: ["title", "member", "status", "visibility", "updatedAt"], group: "Network" },
+  admin: { useAsTitle: "title", defaultColumns: ["title", "member", "status", "visibility", "updatedAt"], group: "Members" },
   access: {
     admin: staffOnly,
     read: ({ req }) => {

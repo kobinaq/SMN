@@ -7,6 +7,7 @@ export const Resources: CollectionConfig = {
   slug: "resources",
   admin: {
     useAsTitle: "title",
+    group: "Content",
   },
   access: {
     read: () => true,

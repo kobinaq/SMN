@@ -8,6 +8,7 @@ export const Posts: CollectionConfig = {
   admin: {
     useAsTitle: "title",
     defaultColumns: ["title", "category", "publishedAt", "updatedAt"],
+    group: "Content",
   },
   access: {
     read: ({ req }) =>

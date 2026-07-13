@@ -7,6 +7,7 @@ export const Courses: CollectionConfig = {
   slug: "courses",
   admin: {
     useAsTitle: "title",
+    group: "Website",
   },
   access: {
     read: ({ req }) =>

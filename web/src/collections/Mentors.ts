@@ -59,7 +59,7 @@ export const Mentors: CollectionConfig = {
   admin: {
     useAsTitle: "title",
     defaultColumns: ["member", "title", "status", "availability", "updatedAt"],
-    group: "Network",
+    group: "Mentorship",
     description: "Mentor profiles. Only approved profiles appear in the member directory.",
   },
   access: {
