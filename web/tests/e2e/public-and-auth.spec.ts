@@ -41,14 +41,16 @@ test("staff lands on the workflow-first staff dashboard", async ({ page }) => {
   await expect(page.getByRole("navigation", { name: "Course Builder sections" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Curriculum" })).toBeVisible();
   await expect(page.getByRole("link", { name: "AI Content Studio" })).toBeVisible();
-  await page.getByRole("link", { name: "Curriculum" }).click();
+  await page.getByRole("navigation", { name: "Course Builder sections" }).getByRole("link", { name: "Curriculum" }).click();
   await expect(page.getByRole("heading", { name: "Modules and lessons" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Move module up" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Duplicate" }).first()).toBeVisible();
-  await page.getByRole("link", { name: "Learners" }).click();
+  await page.getByRole("navigation", { name: "Course Builder sections" }).getByRole("link", { name: "Learners" }).click();
+  await expect(page).toHaveURL(/tab=learners/);
   await expect(page.getByRole("heading", { name: "Reasoned progress override" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Save audited override" })).toBeVisible();
-  await page.getByRole("link", { name: "Analytics" }).click();
+  await page.getByRole("navigation", { name: "Course Builder sections" }).getByRole("link", { name: "Analytics" }).click();
+  await expect(page).toHaveURL(/tab=analytics/);
   await expect(page.getByText("Completion rate", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Module drop-off" })).toBeVisible();
 

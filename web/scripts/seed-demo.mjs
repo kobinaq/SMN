@@ -6,6 +6,11 @@ if (process.env.NODE_ENV === "production" && process.env.ALLOW_PRODUCTION_SEED !
   throw new Error("Refusing to seed production without ALLOW_PRODUCTION_SEED=true.");
 }
 
+// Local/E2E SQLite needs an explicit schema push now that connect no longer auto-pushes.
+if (process.env.PAYLOAD_DB_PUSH !== "false") {
+  process.env.PAYLOAD_DB_PUSH = "true";
+}
+
 const payload = await getPayload({ config });
 const now = new Date();
 const future = new Date(now.getTime() + 1000 * 60 * 60 * 24 * 45).toISOString();

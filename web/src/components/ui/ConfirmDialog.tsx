@@ -22,7 +22,7 @@ export function ConfirmDialog({
   cancelLabel?: string;
   destructive?: boolean;
   busy?: boolean;
-  onConfirm: () => void;
+  onConfirm: () => void | Promise<void>;
   onClose: () => void;
   children?: React.ReactNode;
 }) {
@@ -67,7 +67,9 @@ export function ConfirmDialog({
           </Button>
           <Button
             type="button"
-            onClick={onConfirm}
+            onClick={() => {
+              void Promise.resolve(onConfirm());
+            }}
             disabled={busy}
             className={destructive ? "border-red-300/40 bg-red-400/15 text-red-100" : undefined}
           >

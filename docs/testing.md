@@ -14,6 +14,8 @@ npm run test:coverage
 
 `npm test` runs unit tests and E2E tests. `npm run test:e2e` builds the app, starts `next start`, runs Playwright against a local test environment, then stops the server.
 
+CI prepares a fresh SQLite schema with `npm run db:ensure-sqlite` before `npm run build`. Import map generation uses an ephemeral SQLite file and never schema-pushes a shared `payload.db` (avoids Drizzle “index already exists” failures).
+
 ## Unit Tests
 
 Vitest is configured in `vitest.config.ts`.

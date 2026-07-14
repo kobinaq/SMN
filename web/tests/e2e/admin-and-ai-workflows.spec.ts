@@ -16,8 +16,33 @@ async function loginMember(page: Page) {
   await expect(page).toHaveURL(/\/app/);
 }
 
+async function confirmDialog(page: Page, confirmName: string | RegExp, reason?: string) {
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  if (reason) {
+    const box = dialog.getByLabel("Reason");
+    await box.fill(reason);
+    await expect(box).toHaveValue(reason);
+  }
+  const confirmButton = dialog.getByRole("button", { name: confirmName });
+  await Promise.all([
+    page.waitForResponse(
+      (response) =>
+        response.request().method() === "POST" &&
+        /\/api\/admin\//.test(response.url()) &&
+        response.status() < 500,
+      { timeout: 20_000 },
+    ),
+    confirmButton.click(),
+  ]);
+  await expect(dialog).toBeHidden({ timeout: 15_000 });
+}
+
 test("staff completes the audited admin operations workflows", async ({ page }) => {
-  page.on("dialog", async (dialog) => { await dialog.accept(dialog.type() === "prompt" ? "Verified during the disposable E2E workflow." : undefined); });
+  // Remaining native dialogs (e.g. Career Coach) still use window.confirm/prompt.
+  page.on("dialog", async (dialog) => {
+    await dialog.accept(dialog.type() === "prompt" ? "Verified during the disposable E2E workflow." : undefined);
+  });
   await loginStaff(page);
 
   await page.goto("/staff/learning?tab=curriculum");
@@ -48,16 +73,20 @@ test("staff completes the audited admin operations workflows", async ({ page }) 
 
   await page.goto("/staff/mentorship");
   await page.getByRole("button", { name: "Approve" }).first().click();
+  await confirmDialog(page, "Approve");
   await expect(page.getByText("No mentor applications need review.")).toBeVisible();
   await page.getByRole("button", { name: "Introduce" }).first().click();
+  await confirmDialog(page, "Update status");
   await expect(page.getByText(/introduced/i).first()).toBeVisible();
 
   await page.goto("/staff/opportunities");
   await page.getByRole("button", { name: "Publish" }).first().click();
+  await confirmDialog(page, "Confirm", "Verified during the disposable E2E workflow.");
   await expect(page.getByText("No listings await moderation.")).toBeVisible();
 
   await page.goto("/staff/certificates");
   await page.getByRole("button", { name: "Reissue" }).first().click();
+  await confirmDialog(page, "Reissue", "Verified during the disposable E2E workflow.");
   await expect(page.getByText(/notification/i).first()).toBeVisible();
 });
 
@@ -76,7 +105,9 @@ test("staff can create and publish a CMS post", async ({ page }) => {
 });
 
 test("member uses grounded Tutor and confirmed Career Coach controls with mock AI", async ({ page }) => {
-  page.on("dialog", async (dialog) => { await dialog.accept(); });
+  page.on("dialog", async (dialog) => {
+    await dialog.accept();
+  });
   await loginMember(page);
 
   await page.goto("/app/learning/courses/demo-content-strategy/lessons/demo-strategy-before-calendar");
@@ -88,7 +119,9 @@ test("member uses grounded Tutor and confirmed Career Coach controls with mock A
 
   await page.goto("/app/career-coach");
   await expect(page.getByRole("heading", { name: "Career Coach" })).toBeVisible();
-  await page.getByPlaceholder(/What kind of work/i).fill("Build toward a content strategy role with measurable portfolio evidence.");
+  await page
+    .getByPlaceholder(/What kind of work/i)
+    .fill("Build toward a content strategy role with measurable portfolio evidence.");
   await page.getByRole("button", { name: "Confirm and save goal" }).click();
   await expect(page.getByText("Career goal saved.")).toBeVisible();
   await page.getByPlaceholder(/Ask about a role/i).fill("Give me one practical next step.");
@@ -97,8 +130,12 @@ test("member uses grounded Tutor and confirmed Career Coach controls with mock A
 });
 
 test("anonymous callers cannot use staff or member AI mutation routes", async ({ request }) => {
-  const staff = await request.post("/api/admin/certificate-operations", { data: { action: "issue", enrollmentIds: [1] } });
+  const staff = await request.post("/api/admin/certificate-operations", {
+    data: { action: "issue", enrollmentIds: [1] },
+  });
   expect(staff.status()).toBe(401);
-  const tutor = await request.post("/api/ai/tutor", { data: { courseId: 1, mode: "explain", question: "hello", history: [] } });
+  const tutor = await request.post("/api/ai/tutor", {
+    data: { courseId: 1, mode: "explain", question: "hello", history: [] },
+  });
   expect(tutor.status()).toBe(401);
 });

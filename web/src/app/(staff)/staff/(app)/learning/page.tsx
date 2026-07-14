@@ -361,7 +361,7 @@ export default async function StaffLearningPage({
             {enrollments.totalDocs} enrollment records grant access through program key{" "}
             <b className="text-white">{selected.programKey}</b>.
           </p>
-          <h4 className="mt-6 text-sm font-medium text-white">Reasoned progress override</h4>
+          <h3 className="mt-6 font-display text-lg text-white">Reasoned progress override</h3>
           <p className="mt-1 mb-4 text-xs text-white/45">
             Every correction records the staff actor, timestamp, reason, and before/after state.
           </p>

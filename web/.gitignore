@@ -17,6 +17,12 @@
 /blob-report
 payload.e2e.db
 payload.e2e-*.db
+payload.importmap-*.db
+
+# local / CI disposable SQLite (never commit — causes schema push conflicts)
+*.db
+*.db-shm
+*.db-wal
 
 # next.js
 /.next/

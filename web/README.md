@@ -95,7 +95,7 @@ npm run db:check   # list public tables
 
 Ensure `DATABASE_URL` is your Neon/Postgres URL and `PAYLOAD_SECRET` matches Vercel when targeting that DB.
 
-Schema push is **opt-in** (`PAYLOAD_DB_PUSH=true` only during `db:push`). The app does not push on every request — that was slow and could break staff auth surfaces.
+Schema push is **opt-in** (`PAYLOAD_DB_PUSH=true` for `db:push`, demo seed, and disposable E2E DBs only). SQLite and Postgres both keep push disabled on normal app connect — auto-push was slow and could fail CI with “index already exists” against a stale local DB.
 
 For Neon, either the **pooled** or **direct** connection string works; if queries flake, try the direct (non-`-pooler`) URL.
 

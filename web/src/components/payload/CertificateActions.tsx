@@ -163,6 +163,11 @@ export function CertificateLifecycle({ certificateId }: { certificateId: string 
             minLength={8}
           />
         </label>
+        {error ? (
+          <p className="mt-3 text-sm text-red-200" role="alert">
+            {error}
+          </p>
+        ) : null}
       </ConfirmDialog>
     </div>
   );

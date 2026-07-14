@@ -57,7 +57,9 @@ function useCurriculumAction() {
       destructive
       busy={busy}
       onClose={() => !busy && setPending(null)}
-      onConfirm={() => pending && execute(pending.body)}
+      onConfirm={() => {
+        if (pending) return execute(pending.body);
+      }}
     />
   );
 
