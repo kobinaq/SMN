@@ -90,7 +90,7 @@ export function HeroExclusive() {
         </p>
         <div data-hero-item className="mt-10 flex flex-wrap items-center justify-center gap-3">
           <Button href="/apply" className="min-w-[180px] px-8 py-3.5 text-[13px] tracking-wide">
-            Become a Member
+            Apply for the next cohort
           </Button>
           <Button href="/programs/cohort" variant="secondary" className="min-w-[160px]">
             View cohort

@@ -292,6 +292,8 @@ await upsert(
     name: "Efua Demo",
     role: "Fictional alumna",
     quote: "SMN helped me explain my work with more clarity.",
+    published: false,
+    permissionConfirmed: false,
   },
 );
 

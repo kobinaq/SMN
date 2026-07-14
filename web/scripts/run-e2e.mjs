@@ -64,6 +64,8 @@ let exitCode = 1;
 try {
   if (!process.env.PLAYWRIGHT_BASE_URL) {
     await assertPortAvailable(baseURL);
+    const pushCode = await run(npmCmd, ["run", "db:push"], { env: e2eEnv });
+    if (pushCode !== 0) throw new Error("Unable to push schema to the disposable E2E database.");
     const seedCode = await run(npmCmd, ["run", "seed:demo"], { env: e2eEnv });
     if (seedCode !== 0) throw new Error("Unable to seed the disposable E2E database.");
     server = spawn(npmCmd, ["run", "start", "--", "--hostname", "localhost", "--port", e2ePort], {

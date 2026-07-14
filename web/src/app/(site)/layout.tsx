@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { SiteSettingsProvider } from "@/components/layout/SiteSettingsProvider";
 import {
   SiteDocument,
   siteMetadata,
@@ -7,20 +8,41 @@ import {
 } from "@/components/layout/SiteDocument";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { PageTransition } from "@/components/motion/PageTransition";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { getSiteSettings } from "@/lib/cms";
 
 export const metadata = siteMetadata;
 export const viewport = siteViewport;
 
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getSiteSettings();
+
   return (
     <SiteDocument>
-      <SmoothScroll>
-        <Header />
-        <PageTransition>
-          <main className="flex-1">{children}</main>
-        </PageTransition>
-        <Footer />
-      </SmoothScroll>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "EducationalOrganization",
+          name: settings.name,
+          url: settings.url,
+          description: settings.description,
+          email: settings.email,
+          sameAs: [
+            settings.social.instagram,
+            settings.social.linkedin,
+            settings.social.twitter,
+          ].filter(Boolean),
+        }}
+      />
+      <SiteSettingsProvider value={settings}>
+        <SmoothScroll>
+          <Header />
+          <PageTransition>
+            <main className="flex-1">{children}</main>
+          </PageTransition>
+          <Footer site={settings} />
+        </SmoothScroll>
+      </SiteSettingsProvider>
     </SiteDocument>
   );
 }

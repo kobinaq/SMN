@@ -1,24 +1,25 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/layout/BrandLogo";
-import { site } from "@/lib/site";
+import type { SiteConfig } from "@/lib/site";
 
 const footerLinks = [
   {
-    title: "Learn",
+    title: "Programmes",
     links: [
-      { label: "Programs", href: "/programs" },
-      { label: "Flagship Cohort", href: "/programs/cohort" },
-      { label: "Self-Paced Courses", href: "/programs/courses" },
-      { label: "Resources", href: "/resources" },
+      { label: "All programmes", href: "/programs" },
+      { label: "Flagship cohort", href: "/programs/cohort" },
+      { label: "Self-paced courses", href: "/programs/courses" },
+      { label: "Apply", href: "/apply" },
     ],
   },
   {
-    title: "Network",
+    title: "Learning & network",
     links: [
-      { label: "Community", href: "/community" },
+      { label: "Resources", href: "/resources" },
       { label: "Mentorship", href: "/mentorship" },
+      { label: "Community", href: "/community" },
       { label: "Events", href: "/events" },
-      { label: "Success Stories", href: "/stories" },
+      { label: "Member stories", href: "/stories" },
     ],
   },
   {
@@ -28,11 +29,12 @@ const footerLinks = [
       { label: "Employers", href: "/employers" },
       { label: "Insights", href: "/insights" },
       { label: "Contact", href: "/contact" },
+      { label: "Member sign in", href: "/login" },
     ],
   },
 ];
 
-export function Footer() {
+export function Footer({ site }: { site: SiteConfig }) {
   return (
     <footer className="border-t border-white/10 bg-ink pb-[env(safe-area-inset-bottom)]">
       <div className="container-wide py-12 sm:py-16 md:py-20">
@@ -43,7 +45,7 @@ export function Footer() {
               {site.tagline}
             </p>
             <p className="mt-4 text-xs leading-relaxed text-white/45 sm:mt-6 sm:text-sm">
-              Community on WhatsApp. Courses on Selar. Live sessions on Google Classroom.
+              {site.footerBlurb}
             </p>
           </div>
 
@@ -54,7 +56,7 @@ export function Footer() {
               </p>
               <ul className="mt-3 space-y-1 sm:mt-4 sm:space-y-3">
                 {group.links.map((link) => (
-                  <li key={link.href}>
+                  <li key={link.href + link.label}>
                     <Link
                       href={link.href}
                       className="inline-flex min-h-10 items-center text-sm text-white/70 transition hover:text-white sm:min-h-0"

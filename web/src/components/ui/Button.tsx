@@ -26,6 +26,7 @@ type ButtonAsLink = Common & {
   href: string;
   target?: string;
   rel?: string;
+  onClick?: ComponentProps<"a">["onClick"];
 };
 
 export function Button({
@@ -37,14 +38,15 @@ export function Button({
   const classes = cn(
     "inline-flex min-h-10 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium tracking-wide transition duration-300 sm:min-h-0 sm:px-6 sm:py-3",
     "touch-manipulation select-none",
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-baby-blue",
     variants[variant],
     className,
   );
 
   if ("href" in props && props.href) {
-    const { href, target, rel } = props;
+    const { href, target, rel, onClick } = props;
     return (
-      <Link href={href} target={target} rel={rel} className={classes}>
+      <Link href={href} target={target} rel={rel} className={classes} onClick={onClick}>
         {children}
       </Link>
     );

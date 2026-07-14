@@ -11,9 +11,9 @@ import {
   Briefcase,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { stories } from "@/lib/content";
 import { img } from "@/lib/images";
 import { site } from "@/lib/site";
+import { getStories } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Community",
@@ -110,7 +110,8 @@ const steps = [
   },
 ];
 
-export default function CommunityPage() {
+export default async function CommunityPage() {
+  const stories = await getStories();
   return (
     <>
       {/* Hero */}
@@ -322,7 +323,7 @@ export default function CommunityPage() {
         </div>
       </section>
 
-      {/* Member voices */}
+      {/* Member voices — published only */}
       <section className="bg-near-black py-16 sm:py-24">
         <div className="container-wide">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -341,33 +342,40 @@ export default function CommunityPage() {
               More stories <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-2">
-            {stories.map((story) => (
-              <figure
-                key={story.name}
-                className="rounded-2xl border border-white/10 bg-surface p-5 sm:rounded-[1.75rem] sm:p-7"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="relative h-14 w-14 overflow-hidden rounded-full border border-white/10">
-                    <Image
-                      src={story.image}
-                      alt={story.name}
-                      fill
-                      className="object-cover"
-                      sizes="56px"
-                    />
+          {stories.length ? (
+            <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-2">
+              {stories.map((story) => (
+                <figure
+                  key={story.name}
+                  className="rounded-2xl border border-white/10 bg-surface p-5 sm:rounded-[1.75rem] sm:p-7"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="relative h-14 w-14 overflow-hidden rounded-full border border-white/10">
+                      <Image
+                        src={story.image}
+                        alt={story.name}
+                        fill
+                        className="object-cover"
+                        sizes="56px"
+                      />
+                    </div>
+                    <div>
+                      <figcaption className="font-display text-lg text-white">{story.name}</figcaption>
+                      <p className="text-sm text-white/45">{story.role}</p>
+                    </div>
                   </div>
-                  <div>
-                    <figcaption className="font-display text-lg text-white">{story.name}</figcaption>
-                    <p className="text-sm text-white/45">{story.role}</p>
-                  </div>
-                </div>
-                <blockquote className="mt-5 text-sm leading-relaxed text-white/70 sm:text-base">
-                  “{story.quote}”
-                </blockquote>
-              </figure>
-            ))}
-          </div>
+                  <blockquote className="mt-5 text-sm leading-relaxed text-white/70 sm:text-base">
+                    “{story.quote}”
+                  </blockquote>
+                </figure>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-10 max-w-2xl text-sm text-white/55">
+              Published member testimonials will appear here once confirmed in the CMS. Until then,
+              join the community and meet people directly.
+            </p>
+          )}
         </div>
       </section>
 

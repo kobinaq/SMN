@@ -5,8 +5,10 @@ import Image, { ImageProps } from "next/image";
 import { motion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
+import { useSiteSettings } from "@/components/layout/SiteSettingsProvider";
 import { img } from "@/lib/images";
-import { site } from "@/lib/site";
+import { cta } from "@/lib/cta";
+import { trackEvent } from "@/lib/analytics";
 
 type Direction = "left" | "right";
 type Breakpoint = "sm" | "md" | "lg";
@@ -118,6 +120,7 @@ function useBreakpoint(): Breakpoint {
 }
 
 export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: number }) {
+  const site = useSiteSettings();
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const bp = useBreakpoint();
@@ -183,13 +186,13 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
           data-hero-item
           className="font-display mx-auto mt-3 max-w-3xl text-[2rem] leading-[1.08] text-white sm:mt-4 sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          Where marketers <span className="text-baby-blue">belong</span>
+          {site.homepage.headline}
         </h1>
         <p
           data-hero-item
           className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/60 sm:mt-5 md:text-base"
         >
-          Strategy, AI, community, and real client work. Not just another course platform.
+          {site.homepage.supportingCopy}
         </p>
       </div>
 
@@ -251,11 +254,20 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
         className="relative z-10 mt-auto flex w-full flex-col items-center px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-6 sm:pb-10"
       >
         <div className="btn-row-mobile">
-          <Button href="/apply" className="sm:min-w-[160px]">
-            Become a Member
+          <Button
+            href={cta.applyCohort.href}
+            className="sm:min-w-[160px]"
+            onClick={() => trackEvent("primary_cta_click", { location: "hero" })}
+          >
+            {site.homepage.primaryCtaLabel}
           </Button>
-          <Button href="/programs/cohort" variant="secondary" className="sm:min-w-[140px]">
-            View cohort
+          <Button
+            href={site.homepage.secondaryCtaHref || cta.explorePrograms.href}
+            variant="secondary"
+            className="sm:min-w-[140px]"
+            onClick={() => trackEvent("secondary_cta_click", { location: "hero" })}
+          >
+            {site.homepage.secondaryCtaLabel}
           </Button>
         </div>
         <p className="mt-6 max-w-[20rem] text-center text-[10px] leading-relaxed tracking-[0.14em] text-white/35 uppercase sm:mt-8 sm:max-w-none sm:text-xs sm:tracking-[0.18em] md:mt-10">

@@ -111,7 +111,7 @@ export default function AboutPage() {
                 View LinkedIn
               </Button>
               <Button href="/apply" variant="secondary">
-                Apply to the cohort
+                Apply for the next cohort
               </Button>
             </div>
             {instructor.note ? (

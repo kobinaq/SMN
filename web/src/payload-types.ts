@@ -1038,8 +1038,12 @@ export interface Story {
   id: number;
   name: string;
   role: string;
+  programme?: string | null;
   quote: string;
   image?: (number | null) | Media;
+  portfolioUrl?: string | null;
+  permissionConfirmed?: boolean | null;
+  published?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1926,13 +1930,27 @@ export interface SiteSetting {
   id: number;
   siteName: string;
   tagline?: string | null;
+  description?: string | null;
   whatsappInvite?: string | null;
   opsEmail?: string | null;
+  announcementBanner?: string | null;
+  footerBlurb?: string | null;
+  homepage?: {
+    headline?: string | null;
+    supportingCopy?: string | null;
+    primaryCtaLabel?: string | null;
+    secondaryCtaLabel?: string | null;
+    secondaryCtaHref?: string | null;
+  };
   cohort?: {
     name?: string | null;
     startDate?: string | null;
+    applicationDeadline?: string | null;
     duration?: string | null;
     seats?: number | null;
+    audience?: string | null;
+    format?: string | null;
+    priceConfirmed?: boolean | null;
     priceLabel?: string | null;
     priceNote?: string | null;
     sessions?: string | null;
@@ -1942,6 +1960,14 @@ export interface SiteSetting {
     linkedin?: string | null;
     twitter?: string | null;
   };
+  impactStats?:
+    | {
+        label: string;
+        value: string;
+        verified?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }

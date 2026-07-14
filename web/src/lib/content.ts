@@ -44,12 +44,60 @@ export const ecosystem = [
   },
   {
     title: "Connect",
-    body: "WhatsApp community, mentors, and peers you can keep learning with after a program ends.",
+    body: "WhatsApp community, mentors, and peers you keep learning with after a programme ends.",
   },
   {
     title: "Grow",
-    body: "Career guidance, portfolios, and introductions to employers and partners.",
+    body: "Portfolios, verifiable credentials, opportunity tracking, and introductions to employers.",
   },
+];
+
+/** Member journey steps for the homepage conversion narrative */
+export const memberJourney = [
+  {
+    step: "01",
+    title: "Learn practical marketing skills",
+    body: "Strategy, research, brand, digital campaigns, analytics, and professional communication.",
+  },
+  {
+    step: "02",
+    title: "Practise through projects",
+    body: "Assignments and client-style work that produce proof, not only notes.",
+  },
+  {
+    step: "03",
+    title: "Receive mentorship",
+    body: "Request guidance from mentors on portfolio reviews, career questions, and stuck points.",
+  },
+  {
+    step: "04",
+    title: "Build a portfolio",
+    body: "Document case studies on your public member profile.",
+  },
+  {
+    step: "05",
+    title: "Earn verifiable credentials",
+    body: "Certificates that employers and partners can verify on SMN.",
+  },
+  {
+    step: "06",
+    title: "Discover opportunities",
+    body: "Find and track marketing roles and gigs inside the member platform.",
+  },
+];
+
+export const capabilityAreas = [
+  "Marketing strategy",
+  "Market research",
+  "Brand development",
+  "Digital marketing",
+  "Campaign planning",
+  "Analytics",
+  "Content strategy",
+  "Customer understanding",
+  "Professional communication",
+  "Portfolio development",
+  "Career readiness",
 ];
 
 export const courses = [
@@ -61,7 +109,7 @@ export const courses = [
     outcomes: ["Channel strategy", "Experiment design", "Reporting frameworks"],
     duration: "6 hours",
     lessons: 24,
-    price: "GHS 45,000",
+    price: "See Selar for current price",
     selarUrl: "https://selar.com/smn-growth-foundations",
     badge: "Recommended" as string | null,
     image: img.courseGrowth,
@@ -74,7 +122,7 @@ export const courses = [
     outcomes: ["Prompt systems", "Workflow design", "Quality control"],
     duration: "4 hours",
     lessons: 18,
-    price: "GHS 38,000",
+    price: "See Selar for current price",
     selarUrl: "https://selar.com/smn-ai-marketers",
     badge: null,
     image: img.courseAi,
@@ -87,7 +135,7 @@ export const courses = [
     outcomes: ["Audience insight", "Content systems", "Community loops"],
     duration: "5 hours",
     lessons: 20,
-    price: "GHS 42,000",
+    price: "See Selar for current price",
     selarUrl: "https://selar.com/smn-social-systems",
     badge: null,
     image: img.courseSocial,
@@ -312,22 +360,19 @@ export const resourceTypes = [
   "Guide",
 ] as const;
 
-export const stories = [
-  {
-    name: "Ada Okonkwo",
-    role: "Social Media Manager to Growth Lead",
-    quote:
-      "SMN didn’t just teach me tools. It taught me how to think. I left with a portfolio, a network, and a clearer career path.",
-    image: img.storyAda,
-  },
-  {
-    name: "Kwame Mensah",
-    role: "Freelance Marketer",
-    quote:
-      "The community is what sets it apart. I got feedback, mentors, and systems I still use with clients every week.",
-    image: img.storyKwame,
-  },
-];
+/**
+ * Seed testimonials are intentionally empty for public fallbacks.
+ * Publish real stories in Payload (`stories` collection) with published=true.
+ * Demo/fictional quotes must not appear on the marketing site.
+ */
+export const stories: {
+  name: string;
+  role: string;
+  quote: string;
+  image: string;
+  programme?: string;
+  portfolioUrl?: string;
+}[] = [];
 
 export type BlogPost = {
   slug: string;
@@ -526,11 +571,15 @@ export const cohortFaqs = [
   },
   {
     q: "How are live sessions delivered?",
-    a: "Live sessions run on Google Classroom. You’ll also join the SMN WhatsApp community for feedback and support.",
+    a: "Live sessions run on Google Classroom. Members also use the SMN member portal for learning progress, resources, mentorship, and opportunities, plus the WhatsApp community for day-to-day support.",
   },
   {
     q: "Do I need prior experience?",
-    a: "No. Curiosity, consistency, and a willingness to practice matter more than job titles.",
+    a: "No. Curiosity, consistency, and a willingness to practise matter more than job titles.",
+  },
+  {
+    q: "When do I pay?",
+    a: "Submit an application first. SMN reviews applications within a few business days. Payment or an approved payment plan is arranged after acceptance — not before you apply.",
   },
   {
     q: "Is employment guaranteed?",
@@ -538,6 +587,10 @@ export const cohortFaqs = [
   },
   {
     q: "How do self-paced courses work?",
-    a: "Self-paced courses are sold and delivered through Selar. Browse them here, then enroll on Selar.",
+    a: "Self-paced courses are sold on Selar. Browse them here, then complete purchase on Selar. Cohort membership is a separate application path.",
+  },
+  {
+    q: "What is the fee?",
+    a: "Contact SMN for current fees. Published amounts are only shown after client confirmation. Payment plans may be available after acceptance.",
   },
 ];

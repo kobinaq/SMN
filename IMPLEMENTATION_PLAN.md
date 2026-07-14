@@ -278,6 +278,98 @@ The following requirements extend, rather than replace, R001–R082. Status cann
 
 Proceed strictly: R083–R085, R086–R091, R092, R093, R094, R095, R096–R098, R117, R099–R104, R105–R108, R109–R112, R113–R116, R118–R122. Re-read the attached master specification before every major phase.
 
+---
+
+## Marketing website improvement (2026-07-14)
+
+**Audit:** `MARKETING_SITE_AUDIT.md`  
+**Constraint:** Preserve brand identity; no full redesign; no invented prices/metrics/testimonials.
+
+### Marketing checklist (M-series)
+
+#### Docs & process
+- [x] **M001–M005** Audit routes/content; create audit + update this plan + project status.
+
+#### Pricing (stage 3)
+- [ ] **M010** Inventory all price/fee strings.
+- [ ] **M011** Withhold unconfirmed GHS figures from public display.
+- [ ] **M012** CMS-manage fees; mark client confirmation required.
+- [ ] **M013** Standardise format `GH₵X,XXX` via shared helper.
+- [ ] **M014** Safe wording: “Contact SMN for current fees” where unknown.
+
+#### Application language & CTAs (stages 4–5)
+- [ ] **M020** Enrolment flow language: apply → review → accept → pay → access.
+- [ ] **M021** Terminology map: Apply / Buy on Selar / Member sign in / Hire / WhatsApp.
+- [ ] **M022** One primary CTA per page; secondary quieter.
+- [ ] **M023** Header primary = Apply for the next cohort (`/apply`).
+- [ ] **M024** Specific CTA labels (no generic Learn More where avoidable).
+
+#### Homepage (stage 6)
+- [ ] **M030–M038** Restructure sections: hero → proof → journey → cohort → learning → mentorship/community → outcomes → employers → final CTA.
+
+#### Messaging & platform (stages 7–8)
+- [ ] **M040–M044** Value prop + accurate platform (native portal/LMS/etc.); no unverified AI promo.
+- [ ] **M050–M052** Remove seed testimonials from public; CMS publication status.
+
+#### Payload (stage 9)
+- [ ] **M060** Wire `getSiteSettings()` into layout/pages.
+- [ ] **M061–M064** Editable homepage/cohort/contact/social/banner fields; admin-friendly.
+- [ ] **M065** Migrations for schema changes.
+
+#### Programmes, apply, employers, nav, legal (stages 10–14)
+- [ ] **M070–M071** Complete programme/course decision info; clear product types.
+- [ ] **M080–M083** Application clarity, confirmation next steps, validation.
+- [ ] **M090–M091** Employer conversion path.
+- [ ] **M100–M102** Simpler nav; keyboard menus; sign-in vs apply.
+- [ ] **M110–M111** Legal expansion with client-confirmation markers.
+
+#### Quality gates (stages 15–22)
+- [ ] **M120–M124** SEO, performance, a11y, mobile.
+- [ ] **M130** Conversion analytics + event naming doc.
+- [ ] **M140** Automated tests (nav, apply, CMS render, SEO, a11y basics).
+- [ ] **M150** typecheck + lint + tests + production build.
+- [ ] **M160** Final 23-part marketing report.
+
+### Marketing phase log
+
+#### 2026-07-14 — Audit complete; implementation starting
+- Re-read marketing brief: yes.
+- Completed: route audit, pricing inventory, CTA/social-proof/CMS/SEO gaps documented in `MARKETING_SITE_AUDIT.md`.
+- Exact next step: M010–M014 pricing + wire SiteSettings + CTA standardisation.
+
+#### 2026-07-14 — Core marketing improvements shipped
+- Pricing withheld pending confirmation (`Contact SMN for current fees` / `See Selar for current price`); `formatGhs` helper; `priceConfirmed` gate in SiteSettings.
+- CTA terminology standardised via `lib/cta.ts`; header primary = Apply; WhatsApp demoted from header desktop.
+- Homepage restructured toward conversion journey; CMS-backed courses/events/stories; seed testimonials removed from public fallbacks.
+- `getSiteSettings()` wired through site layout + provider; SiteSettings expanded (homepage, announcement, footer, impact stats, cohort deadline/audience/format).
+- Stories require `published` + `permissionConfirmed`; migration `20260714_marketing_cms_fields`.
+- Application page explains apply → review → accept → pay → access; form labels + confirmation state.
+- Employer page uses Hire / Share / Partner CTAs separate from apply.
+- Nav simplified (Programmes / Learning / Community / Employers / About); keyboard dropdowns.
+- Legal pages expanded with client-confirmation markers; sitemap + robots + Organisation/Course/FAQ JSON-LD; analytics helper + docs.
+- Verification: typecheck clean; lint clean; unit 32 passed / 1 skipped; production build passed; Playwright e2e 14/14 passed.
+
+#### Marketing checklist status (summary)
+- [x] M001–M005 docs
+- [x] M010–M014 pricing safety + format helper
+- [x] M020–M024 application language + CTA hierarchy
+- [x] M030–M038 homepage structure (CMS-ready proof slot)
+- [x] M040–M044 messaging / platform accuracy (AI not promoted as generally available)
+- [x] M050–M052 social proof gates
+- [x] M060–M065 Payload wiring + migration
+- [x] M070–M071 programme/course clarity
+- [x] M080–M083 application flow clarity
+- [x] M090–M091 employer path
+- [x] M100–M102 navigation
+- [x] M110–M111 legal expansion (counsel markers remain)
+- [x] M120–M121 SEO basics (sitemap/robots/canonical/OG/Twitter/JSON-LD)
+- [~] M122–M124 performance/a11y/mobile — baseline improvements (focus states, labels, reduced-motion already in hero); deeper audit remains
+- [x] M130 analytics events + naming doc
+- [x] M140 tests (unit + e2e marketing suite)
+- [x] M150 typecheck/lint/unit/build/e2e
+- [x] M160 final report in agent response / PROJECT_STATUS
+
+
 ### 2026-07-12 — Workflow admin Phase 1
 
 - Re-read new master specification: yes.

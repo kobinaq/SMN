@@ -28,12 +28,20 @@ export const siteMetadata: Metadata = {
     template: `%s · ${site.name}`,
   },
   description: site.description,
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: site.name,
     description: site.description,
     url: site.url,
     siteName: site.name,
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: site.name,
+    description: site.description,
   },
   other: {
     "mobile-web-app-capable": "yes",

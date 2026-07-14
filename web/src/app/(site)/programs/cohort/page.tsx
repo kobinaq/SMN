@@ -2,22 +2,50 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { PageHero } from "@/components/layout/PageHero";
 import { Button } from "@/components/ui/Button";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { cohortFaqs, curriculum } from "@/lib/content";
 import { img } from "@/lib/images";
-import { site } from "@/lib/site";
+import { cta } from "@/lib/cta";
+import { getSiteSettings } from "@/lib/cms";
 
-export const metadata: Metadata = {
-  title: "Flagship Cohort",
-  description: site.cohort.name,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getSiteSettings();
+  return {
+    title: "Flagship cohort",
+    description: `${site.cohort.name} — ${site.cohort.duration}. ${site.cohort.priceLabel}.`,
+    alternates: { canonical: "/programs/cohort" },
+  };
+}
 
-export default function CohortPage() {
+export default async function CohortPage() {
+  const site = await getSiteSettings();
+
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Course",
+          name: site.cohort.name,
+          description: site.cohort.format,
+          provider: {
+            "@type": "EducationalOrganization",
+            name: site.name,
+            url: site.url,
+          },
+          offers: {
+            "@type": "Offer",
+            category: "Application required",
+            priceCurrency: "GHS",
+            availability: "https://schema.org/LimitedAvailability",
+            url: `${site.url}/apply`,
+          },
+        }}
+      />
       <PageHero
-        eyebrow="Flagship cohort"
+        eyebrow="Flagship cohort programme"
         title={site.cohort.name}
-        description="Live classes, practical assignments, AI workflows, portfolio projects, mentorship, community, and chances to work on real client problems."
+        description={`${site.cohort.audience}. Live classes, practical projects, mentorship, community, member-platform learning, and portfolio-ready outcomes.`}
       />
 
       <section className="border-t border-white/10 bg-ink py-16">
@@ -37,17 +65,20 @@ export default function CohortPage() {
             <p className="text-xs uppercase tracking-[0.2em] text-white/40">Next intake</p>
             <p className="mt-3 font-display text-3xl text-white">{site.cohort.startDate}</p>
             <ul className="mt-6 space-y-3 text-sm text-white/70">
+              <li>· Intended audience: {site.cohort.audience}</li>
               <li>· Duration: {site.cohort.duration}</li>
-              <li>· {site.cohort.sessions}</li>
-              <li>· Community: WhatsApp</li>
+              <li>· Delivery: {site.cohort.format}</li>
+              <li>· Sessions: {site.cohort.sessions}</li>
+              <li>· Application deadline: {site.cohort.applicationDeadline}</li>
               <li>· Seats: {site.cohort.seats}</li>
-              <li>· {site.cohort.priceLabel}</li>
+              <li>· Fee: {site.cohort.priceLabel}</li>
+              <li>· Certificate: Available on successful completion</li>
             </ul>
             <p className="mt-4 text-xs text-white/40">{site.cohort.priceNote}</p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button href="/apply">Apply Now</Button>
-              <Button href={site.whatsappInvite} target="_blank" rel="noreferrer" variant="secondary">
-                Join WhatsApp
+              <Button href={cta.applyCohort.href}>{cta.applyCohort.shortLabel}</Button>
+              <Button href="/contact" variant="secondary">
+                Ask about fees
               </Button>
             </div>
           </div>
@@ -56,8 +87,13 @@ export default function CohortPage() {
 
       <section className="bg-near-black py-20">
         <div className="container-wide">
-          <h2 className="font-display text-3xl text-white md:text-4xl">Curriculum</h2>
-          <div className="mt-10 grid gap-4 md:grid-cols-2">
+          <h2 className="font-display text-3xl text-white md:text-4xl">Learning outcomes</h2>
+          <p className="mt-3 max-w-2xl text-sm text-white/60">
+            Build marketing strategy, research, brand, social systems, campaign execution,
+            analytics, AI-assisted workflows, portfolio case studies, and career readiness.
+          </p>
+          <h3 className="mt-12 font-display text-2xl text-white">Curriculum overview</h3>
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
             {curriculum.map((week) => (
               <div key={week.week} className="rounded-3xl border border-white/10 bg-surface p-6">
                 <p className="text-xs text-baby-blue">Week {week.week}</p>
@@ -71,7 +107,7 @@ export default function CohortPage() {
 
       <section className="bg-surface py-20">
         <div className="container-wide max-w-3xl">
-          <h2 className="font-display text-3xl text-white">FAQs</h2>
+          <h2 className="font-display text-3xl text-white">Frequently asked questions</h2>
           <div className="mt-8 space-y-4">
             {cohortFaqs.map((faq) => (
               <details
@@ -85,8 +121,19 @@ export default function CohortPage() {
               </details>
             ))}
           </div>
+          <JsonLd
+            data={{
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: cohortFaqs.map((faq) => ({
+                "@type": "Question",
+                name: faq.q,
+                acceptedAnswer: { "@type": "Answer", text: faq.a },
+              })),
+            }}
+          />
           <div className="mt-10">
-            <Button href="/apply">Start your application</Button>
+            <Button href={cta.applyCohort.href}>{cta.applyCohort.label}</Button>
           </div>
         </div>
       </section>
