@@ -14,12 +14,35 @@ export const metadata = {
 export default async function AppHomePage() {
   const member = await requireMember("/app");
   const name = memberDisplayName(member);
-  const continuity = await getMemberContinuity(member);
+  let continuity: Awaited<ReturnType<typeof getMemberContinuity>>;
+  try {
+    continuity = await getMemberContinuity(member);
+  } catch (error) {
+    console.error("[portal-home] continuity failed", error);
+    continuity = {
+      profile: { percent: 0, missing: ["Update your profile"] },
+      primary: {
+        key: "complete-profile",
+        eyebrow: "Get set up",
+        title: "Finish the essentials on your profile",
+        detail: "Add a few details so mentors and opportunities fit better.",
+        href: "/app/profile",
+        cta: "Update profile",
+        tone: "primary",
+      },
+      secondary: [],
+      courses: [],
+      openMentorshipCount: 0,
+      opportunityActivityCount: 0,
+      certificateCount: 0,
+    };
+  }
   const cohortLabel =
     member.cohortStatus && member.cohortStatus !== "none"
       ? member.cohortStatus
       : "Not in an active cohort";
   const hasStartedCourse = continuity.courses.some((course) => course.percentage > 0);
+  const roles = Array.isArray(member.roles) && member.roles.length ? member.roles : ["member"];
   const onboardingSteps = [
     { key: "profile", label: "Complete essential profile details", href: "/app/profile", done: continuity.profile.percent >= 60 },
     { key: "skills", label: "Add skills and a career goal", href: "/app/profile", done: continuity.profile.percent >= 80 },
@@ -49,7 +72,7 @@ export default async function AppHomePage() {
         <div className="mt-5 flex flex-wrap gap-3 text-xs text-white/40">
           <span className="rounded-full border border-white/10 bg-surface px-3 py-1.5">Cohort · {cohortLabel}</span>
           <StatusBadge label={`Profile ${continuity.profile.percent}%`} tone={continuity.profile.percent >= 80 ? "success" : "info"} />
-          {(member.roles || ["member"]).map((role) => (
+          {roles.map((role) => (
             <span key={role} className="rounded-full border border-white/10 bg-surface px-3 py-1.5 capitalize">
               {role}
             </span>

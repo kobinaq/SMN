@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle2, Circle, X } from "lucide-react";
 
 export type OnboardingStep = {
@@ -13,26 +13,21 @@ export type OnboardingStep = {
 
 const STORAGE_KEY = "smn-onboarding-dismissed";
 
-function subscribe(onStoreChange: () => void) {
-  window.addEventListener("storage", onStoreChange);
-  return () => window.removeEventListener("storage", onStoreChange);
-}
-
-function getDismissedSnapshot() {
-  try {
-    return window.localStorage.getItem(STORAGE_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
 export function OnboardingChecklist({ steps }: { steps: OnboardingStep[] }) {
-  const storedDismissed = useSyncExternalStore(subscribe, getDismissedSnapshot, () => true);
-  const [localDismissed, setLocalDismissed] = useState(false);
-  const dismissed = storedDismissed || localDismissed;
+  const [ready, setReady] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    try {
+      setDismissed(window.localStorage.getItem(STORAGE_KEY) === "1");
+    } catch {
+      setDismissed(false);
+    }
+    setReady(true);
+  }, []);
 
   const remaining = steps.filter((step) => !step.done);
-  if (dismissed || !remaining.length) return null;
+  if (!ready || dismissed || !remaining.length) return null;
 
   function dismiss() {
     try {
@@ -40,18 +35,25 @@ export function OnboardingChecklist({ steps }: { steps: OnboardingStep[] }) {
     } catch {
       /* ignore */
     }
-    setLocalDismissed(true);
+    setDismissed(true);
   }
 
   return (
-    <section className="rounded-2xl border border-white/10 bg-surface p-5 sm:p-6" aria-labelledby="onboarding-heading">
+    <section
+      className="rounded-2xl border border-white/10 bg-surface p-5 sm:p-6"
+      aria-labelledby="onboarding-heading"
+    >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Getting started</p>
+          <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">
+            Getting started
+          </p>
           <h2 id="onboarding-heading" className="mt-2 font-display text-xl text-white">
             Your first steps
           </h2>
-          <p className="mt-1 text-sm text-white/50">Complete what helps — you can explore the platform anytime.</p>
+          <p className="mt-1 text-sm text-white/50">
+            Complete what helps — you can explore the platform anytime.
+          </p>
         </div>
         <button
           type="button"
@@ -74,7 +76,9 @@ export function OnboardingChecklist({ steps }: { steps: OnboardingStep[] }) {
               ) : (
                 <Circle className="h-4 w-4 shrink-0 text-white/35" aria-hidden />
               )}
-              <span className={step.done ? "text-white/45 line-through" : "text-white/80"}>{step.label}</span>
+              <span className={step.done ? "text-white/45 line-through" : "text-white/80"}>
+                {step.label}
+              </span>
             </Link>
           </li>
         ))}

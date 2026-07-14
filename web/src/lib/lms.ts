@@ -185,7 +185,7 @@ function toCourseCard(course: LmsCourseDoc, lessons: LmsLessonDoc[], progress: M
     instructor: course.instructor?.trim() || "",
     category: course.category?.trim() || "",
     prerequisites: course.prerequisites?.trim() || "",
-    learningOutcomes: (course.learningOutcomes || [])
+    learningOutcomes: (Array.isArray(course.learningOutcomes) ? course.learningOutcomes : [])
       .map((item) => item?.outcome?.trim() || "")
       .filter(Boolean),
     certificateEnabled: Boolean(course.certificateEnabled),

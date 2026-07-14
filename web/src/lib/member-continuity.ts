@@ -1,6 +1,6 @@
 import type { MemberUser } from "@/lib/auth/member";
 import { getMemberCertificates } from "@/lib/certificates";
-import { getLmsCourses } from "@/lib/lms";
+import { getLmsCourses, type LmsCourseCard } from "@/lib/lms";
 import { getMentorApplicationStatus } from "@/lib/mentors";
 import { getMemberOpportunityActivity } from "@/lib/opportunities";
 import { getMemberPortfolios } from "@/lib/portfolios";
@@ -15,6 +15,15 @@ export type ContinuityAction = {
   cta: string;
   tone: "primary" | "secondary";
 };
+
+async function settled<T>(promise: Promise<T>, fallback: T, label: string): Promise<T> {
+  try {
+    return await promise;
+  } catch (error) {
+    console.error(`[member-continuity] ${label} failed`, error);
+    return fallback;
+  }
+}
 
 function profileCompletion(member: MemberUser) {
   const checks = [
@@ -43,21 +52,34 @@ function profileCompletion(member: MemberUser) {
 
 export async function getMemberContinuity(member: MemberUser) {
   const payload = await getPayloadClient();
-  const [courses, opportunities, certificates, portfolios, mentorStatus, mentorshipRequests] = await Promise.all([
-    getLmsCourses(member),
-    getMemberOpportunityActivity(member.id),
-    getMemberCertificates(member),
-    getMemberPortfolios(member.id),
-    getMentorApplicationStatus(member.id),
-    payload.find({
-      collection: "mentorship-requests",
-      depth: 0,
-      limit: 20,
-      sort: "-createdAt",
-      overrideAccess: true,
-      where: { requester: { equals: member.id } },
-    }),
-  ]);
+  const [courses, opportunities, certificates, portfolios, mentorStatus, mentorshipRequests] =
+    await Promise.all([
+      settled(getLmsCourses(member), [] as LmsCourseCard[], "lms-courses"),
+      settled(getMemberOpportunityActivity(member.id), [], "opportunity-activity"),
+      settled(getMemberCertificates(member), [], "certificates"),
+      settled(getMemberPortfolios(member.id), [], "portfolios"),
+      settled(getMentorApplicationStatus(member.id), null, "mentor-status"),
+      settled(
+        payload.find({
+          collection: "mentorship-requests",
+          depth: 0,
+          limit: 20,
+          sort: "-createdAt",
+          overrideAccess: true,
+          where: { requester: { equals: member.id } },
+        }),
+        {
+          docs: [],
+          totalDocs: 0,
+          hasNextPage: false,
+          hasPrevPage: false,
+          limit: 20,
+          pagingCounter: 1,
+          totalPages: 0,
+        },
+        "mentorship-requests",
+      ),
+    ]);
 
   const profile = profileCompletion(member);
   const activeCourse =
@@ -117,7 +139,7 @@ export async function getMemberContinuity(member: MemberUser) {
     secondary.push({
       key: "mentorship",
       eyebrow: "Mentorship",
-      title: `Request ${openMentorship.status}`,
+      title: `Request ${String(openMentorship.status)}`,
       detail: "Track where your mentorship request sits in the review cycle.",
       href: "/app/mentors",
       cta: "View mentors",
@@ -129,7 +151,7 @@ export async function getMemberContinuity(member: MemberUser) {
       eyebrow: "Mentor application",
       title: `Application ${mentorStatus}`,
       detail: "Staff will update you when your mentor application advances.",
-      href: "/app/mentors/become-a-mentor",
+      href: "/mentorship/become-a-mentor",
       cta: "View status",
       tone: "secondary",
     });
