@@ -23,9 +23,9 @@ Public site, member portal, LMS, mentorship, opportunities, portfolios, certific
 ## Highest-priority gaps remaining
 
 1. Avatar upload + fuller onboarding persistence beyond local dismiss
-2. Lesson overview/completion celebration polish
-3. Curriculum ConfirmDialog migration + attachments in lesson editor
-4. Password-reset UX when Resend is unconfigured
+2. Lesson attachments management in Course Builder editor
+3. Member 360 tabs + record-level deep links
+4. Opportunity filter persistence + broader tracking states
 5. Broader E2E coverage for member continuity + staff settings save
 6. AI knowledge approval / draft→curriculum still incomplete (flags off)
 

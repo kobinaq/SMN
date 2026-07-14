@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { MemberNoteForm } from "@/components/payload/MemberNoteForm";
+import { MemberPicker } from "@/components/staff/MemberPicker";
 import { StaffEmpty, StaffMetricGrid, StaffPageHeader, StaffPanel, staffOpsChrome } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { staffAccess } from "@/lib/staff/records";
-import { cn } from "@/lib/utils";
 
 const related = (value: unknown): Record<string, unknown> | null =>
   value && typeof value === "object" && "id" in value ? (value as Record<string, unknown>) : null;
@@ -103,23 +103,15 @@ export default async function StaffMembersPage({
 
       <StaffPanel>
         <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Member</p>
-        <nav className="flex flex-wrap gap-2" aria-label="Member picker">
-          {members.docs.map((item) => {
-            const active = String(item.id) === String(member.id);
-            return (
-              <Link
-                key={item.id}
-                href={`/staff/members?member=${item.id}`}
-                className={cn(
-                  "rounded-full border px-3 py-1.5 text-xs transition",
-                  active ? "border-baby-blue/50 bg-baby-blue/15 text-baby-blue" : "border-white/10 text-white/55 hover:border-white/25 hover:text-white",
-                )}
-              >
-                {item.name || item.email}
-              </Link>
-            );
-          })}
-        </nav>
+        <MemberPicker
+          activeId={member.id}
+          members={members.docs.map((item) => ({
+            id: item.id,
+            label: item.name || item.email,
+            email: item.email,
+            handle: item.handle,
+          }))}
+        />
       </StaffPanel>
 
       <StaffPanel>
@@ -129,8 +121,33 @@ export default async function StaffMembersPage({
             <p className="mt-1 text-sm text-white/55">{member.headline || member.email}</p>
             <p className="mt-2 text-xs text-white/40">
               {member.location || "Location not set"} · {member.cohortStatus}
+              {member.handle ? ` · @${member.handle}` : ""}
             </p>
+            {(member.skills || []).length || member.careerGoals ? (
+              <div className="mt-4 space-y-2 text-sm text-white/55">
+                {(member.skills || []).length ? (
+                  <p>
+                    <span className="text-white/35">Skills · </span>
+                    {(member.skills || [])
+                      .map((item) => item?.skill)
+                      .filter(Boolean)
+                      .join(", ")}
+                  </p>
+                ) : null}
+                {member.careerGoals ? (
+                  <p>
+                    <span className="text-white/35">Goals · </span>
+                    {member.careerGoals}
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
           </div>
+          {member.handle ? (
+            <Link href={`/u/${member.handle}`} className="text-sm text-baby-blue hover:underline">
+              Public profile
+            </Link>
+          ) : null}
         </div>
         <div className="mt-6">
           <StaffMetricGrid

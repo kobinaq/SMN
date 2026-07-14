@@ -149,16 +149,16 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` done
 
 ### Portfolios
 
-- [ ] **R440** — Guided case-study steps (title→reflection)
-- [ ] **R441** — Draft/publish + public preview before publish
-- [ ] **R442** — Edit existing case study (PATCH)
-- [ ] **R443** — Image upload/preview/order polish
-- [ ] **R444** — Remove full-page reload; use toast/refresh pattern
+- [~] **R440** — Guided case-study steps (title→reflection)
+- [~] **R441** — Draft/publish + public preview before publish
+- [~] **R442** — Edit existing case study (PATCH)
+- [~] **R443** — Image upload/preview/order polish
+- [~] **R444** — Remove full-page reload; use toast/refresh pattern
 
 ### Certificates (member + public)
 
-- [ ] **R450** — Copy verification link; clear revoked/reissued states
-- [ ] **R451** — Print/download-friendly presentation
+- [~] **R450** — Copy verification link; clear revoked/reissued states
+- [~] **R451** — Print/download-friendly presentation
 - [ ] **R452** — Public `/verify/[code]` mobile + privacy-safe errors
 - [ ] **R453** — Link certificate to programme/course when available
 
@@ -187,9 +187,9 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` done
 
 ### Member 360
 
-- [ ] **R480** — Searchable member directory
+- [~] **R480** — Searchable member directory
 - [ ] **R481** — Tabs: profile, learning, certificates, portfolio, mentorship, opportunities, notes, activity
-- [ ] **R482** — Show skills/goals; private notes remain private
+- [~] **R482** — Show skills/goals; private notes remain private
 - [ ] **R483** — Contextual actions (add note, open learning, open applications)
 - [ ] **R484** — Deep links to related records
 - [ ] **R485** — Safe limited member field updates for support (cohort/roles) with audit
