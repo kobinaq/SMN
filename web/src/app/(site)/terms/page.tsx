@@ -18,12 +18,6 @@ export default function TermsPage() {
       />
       <section className="border-t border-white/10 bg-ink pb-24">
         <div className="container-page max-w-3xl space-y-8 text-sm leading-relaxed text-white/65">
-          <p className="rounded-2xl border border-amber-400/30 bg-amber-400/5 px-4 py-3 text-amber-100/90">
-            <strong>Client / counsel confirmation required.</strong> These terms summarise product
-            behaviour and intended policies. Confirm refunds, governing law, and payment terms
-            before public launch.
-          </p>
-
           <div>
             <h2 className="font-display text-xl text-white">Website use</h2>
             <p className="mt-3">
@@ -38,16 +32,15 @@ export default function TermsPage() {
             <h2 className="font-display text-xl text-white">Applications and payment</h2>
             <p className="mt-3">
               Cohort applications are reviewed by SMN. Submitting an application does not create a
-              payment obligation. Fees and payment plans are arranged after acceptance. Published
-              fees are only shown when confirmed by SMN.{" "}
-              <em>[Client confirmation: exact refund and cancellation policy.]</em>
+              payment obligation. Fees and payment plans are arranged after acceptance. Contact SMN
+              for current fees and refund details.
             </p>
           </div>
 
           <div>
             <h2 className="font-display text-xl text-white">Member platform</h2>
             <p className="mt-3">
-              Accepted members may receive access to the member portal, LMS progress tools,
+              Accepted members may receive access to the member portal, learning progress tools,
               mentorship requests, opportunity tracking, portfolios, and certificates. Access may be
               revoked for policy violations or non-payment after acceptance.
             </p>

@@ -323,26 +323,25 @@ export default async function CommunityPage() {
         </div>
       </section>
 
-      {/* Member voices — published only */}
-      <section className="bg-near-black py-16 sm:py-24">
-        <div className="container-wide">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-                Member voices
-              </p>
-              <h2 className="mt-3 font-display text-2xl text-white sm:mt-4 sm:text-3xl md:text-4xl">
-                What people say about the room
-              </h2>
+      {stories.length ? (
+        <section className="bg-near-black py-16 sm:py-24">
+          <div className="container-wide">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
+                  Member voices
+                </p>
+                <h2 className="mt-3 font-display text-2xl text-white sm:mt-4 sm:text-3xl md:text-4xl">
+                  What people say about the room
+                </h2>
+              </div>
+              <Link
+                href="/stories"
+                className="inline-flex items-center gap-1.5 text-sm text-baby-blue transition hover:text-white"
+              >
+                More stories <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
-            <Link
-              href="/stories"
-              className="inline-flex items-center gap-1.5 text-sm text-baby-blue transition hover:text-white"
-            >
-              More stories <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-          {stories.length ? (
             <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-2">
               {stories.map((story) => (
                 <figure
@@ -370,14 +369,9 @@ export default async function CommunityPage() {
                 </figure>
               ))}
             </div>
-          ) : (
-            <p className="mt-10 max-w-2xl text-sm text-white/55">
-              Published member testimonials will appear here once confirmed in the CMS. Until then,
-              join the community and meet people directly.
-            </p>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      ) : null}
 
       {/* Pathways */}
       <section className="border-t border-white/10 bg-ink py-16 sm:py-24">

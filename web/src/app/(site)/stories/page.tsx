@@ -18,7 +18,7 @@ export default async function StoriesPage() {
       <PageHero
         eyebrow="Member stories"
         title="Outcomes from people in the Network."
-        description="Only permissioned, published testimonials appear here. Seed or fictional quotes are not shown."
+        description="Real progress from marketers learning and growing with SMN."
       />
       <section className="border-t border-white/10 bg-ink pb-24">
         {stories.length ? (
@@ -62,10 +62,10 @@ export default async function StoriesPage() {
             ))}
           </div>
         ) : (
-          <div className="container-wide max-w-2xl rounded-[2rem] border border-dashed border-white/15 bg-surface p-8 text-center">
+          <div className="container-wide max-w-2xl text-center">
             <p className="text-sm text-white/60">
-              No published member stories yet. When SMN confirms permissioned testimonials in
-              Payload, they will appear here automatically.
+              Member stories are coming soon. Apply to the next cohort and become part of the
+              Network.
             </p>
           </div>
         )}

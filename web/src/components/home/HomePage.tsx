@@ -71,7 +71,7 @@ export async function HomePage() {
               <p className="mt-4 text-sm leading-relaxed text-white/65 sm:text-base">
                 Members build capabilities across strategy, research, brand, campaigns, analytics,
                 and career-ready portfolios — with mentorship, community, and a native member
-                platform. Verified impact metrics will appear here once confirmed in Payload.
+                platform.
               </p>
               <ul className="mt-6 flex flex-wrap justify-center gap-2">
                 {capabilityAreas.slice(0, 6).map((item) => (
@@ -371,7 +371,7 @@ export async function HomePage() {
           <SectionHeading
             eyebrow="Member work & outcomes"
             title="Portfolios, stories, and credentials."
-            description="We only publish member stories with permission. Browse public portfolios and verify certificates when available."
+            description="See the work members build — and how SMN helps them show it with clarity."
           />
           {stories.length ? (
             <div data-stagger className="mt-8 grid gap-4 sm:mt-14 sm:gap-6 md:grid-cols-2">
@@ -399,22 +399,17 @@ export async function HomePage() {
                 </figure>
               ))}
             </div>
-          ) : (
-            <div className="mt-10 rounded-[1.75rem] border border-dashed border-white/15 bg-surface-2 p-8 text-center">
-              <p className="text-sm text-white/60">
-                Member testimonials will appear here once published in the CMS with permission
-                confirmed. Until then, explore public portfolios and certificate verification.
-              </p>
-              <div className="btn-row-mobile mt-6 justify-center">
-                <Button href="/stories" variant="secondary">
-                  Member stories
-                </Button>
-                <Button href="/programs" variant="ghost">
-                  Explore programmes
-                </Button>
-              </div>
+          ) : null}
+          <div className="mt-10">
+            <div className="btn-row-mobile">
+              <Button href="/stories" variant="secondary">
+                Member stories
+              </Button>
+              <Button href="/programs" variant="ghost">
+                Explore programmes
+              </Button>
             </div>
-          )}
+          </div>
         </div>
       </section>
 

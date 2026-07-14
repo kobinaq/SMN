@@ -18,25 +18,16 @@ export default function PrivacyPage() {
       />
       <section className="border-t border-white/10 bg-ink pb-24">
         <div className="container-page max-w-3xl space-y-8 text-sm leading-relaxed text-white/65">
-          <p className="rounded-2xl border border-amber-400/30 bg-amber-400/5 px-4 py-3 text-amber-100/90">
-            <strong>Client / counsel confirmation required.</strong> This policy describes current
-            product systems for transparency. It is not a final legal opinion and must be reviewed
-            before relying on it as definitive public legal terms.
-          </p>
-
           <div>
             <h2 className="font-display text-xl text-white">What we collect</h2>
             <ul className="mt-3 list-disc space-y-2 pl-5">
               <li>Application, contact, and newsletter form submissions</li>
               <li>Member account details (name, email, profile, career interests)</li>
-              <li>LMS activity such as course progress and lesson completion</li>
+              <li>Learning activity such as course progress and lesson completion</li>
               <li>Mentorship requests and opportunity-tracking activity</li>
               <li>Portfolio content members choose to publish</li>
               <li>Certificate records used for public verification</li>
-              <li>
-                Limited AI feature usage metadata when those features are enabled (prompts/answers
-                are minimised; see AI disclosure)
-              </li>
+              <li>Limited usage data when optional AI learning tools are enabled</li>
               <li>Basic analytics events for conversion and site improvement</li>
             </ul>
           </div>
@@ -54,20 +45,16 @@ export default function PrivacyPage() {
           <div>
             <h2 className="font-display text-xl text-white">Cookies and analytics</h2>
             <p className="mt-3">
-              Essential cookies support sign-in and security. Privacy-conscious analytics may record
-              events such as CTA clicks and application completion without collecting unnecessary
-              sensitive fields.{" "}
-              <em>[Client confirmation: analytics vendor and cookie banner requirements.]</em>
+              Essential cookies support sign-in and security. Analytics may record events such as
+              CTA clicks and application completion without collecting unnecessary sensitive fields.
             </p>
           </div>
 
           <div>
             <h2 className="font-display text-xl text-white">AI features</h2>
             <p className="mt-3">
-              When AI Tutor or Career Coach are enabled for a member, SMN sends only the context
-              needed for the request. Full prompts/answers are not retained as ordinary usage logs.
-              AI output can be wrong and should be reviewed before acting.{" "}
-              <em>[Client confirmation: public AI disclosure wording.]</em>
+              When optional AI learning tools are enabled for a member, SMN sends only the context
+              needed for the request. AI output can be wrong and should be reviewed before acting.
             </p>
           </div>
 
@@ -78,8 +65,7 @@ export default function PrivacyPage() {
               <a className="text-baby-blue hover:text-white" href={`mailto:${site.email}`}>
                 {site.email}
               </a>{" "}
-              to request access or deletion of personal data where applicable.{" "}
-              <em>[Client confirmation: data-protection officer / regional obligations.]</em>
+              to request access or deletion of personal data where applicable.
             </p>
           </div>
 

@@ -591,6 +591,6 @@ export const cohortFaqs = [
   },
   {
     q: "What is the fee?",
-    a: "Contact SMN for current fees. Published amounts are only shown after client confirmation. Payment plans may be available after acceptance.",
+    a: "Contact SMN for current fees. Payment plans may be available after acceptance.",
   },
 ];

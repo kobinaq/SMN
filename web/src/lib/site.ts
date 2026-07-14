@@ -41,8 +41,7 @@ export const site = {
     sessions: "2 live sessions per week (Classroom) plus member-platform learning",
     /** Safe public wording until the client confirms a final fee */
     priceLabel: FEE_PENDING_LABEL,
-    priceNote:
-      "Payment is requested after acceptance. Payment plans may be available. Fee amount requires client confirmation before public display.",
+    priceNote: "Payment is requested after acceptance. Payment plans may be available.",
     priceConfirmed: false,
     audience: "Beginners, social media managers, freelancers, and marketers ready for strategy-level work",
   },

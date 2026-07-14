@@ -184,9 +184,18 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
         </p>
         <h1
           data-hero-item
-          className="font-display mx-auto mt-3 max-w-3xl text-[2rem] leading-[1.08] text-white sm:mt-4 sm:text-5xl md:text-6xl lg:text-7xl"
+          className="font-display mx-auto mt-3 max-w-3xl text-[2rem] leading-[1.15] text-white sm:mt-4 sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          {site.homepage.headline}
+          {site.homepage.headline
+            .split(". ")
+            .map((part) => part.trim())
+            .filter(Boolean)
+            .map((sentence, index, parts) => (
+              <span key={sentence} className="block">
+                {sentence}
+                {index < parts.length - 1 && !sentence.endsWith(".") ? "." : ""}
+              </span>
+            ))}
         </h1>
         <p
           data-hero-item
