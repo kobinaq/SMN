@@ -41,11 +41,11 @@ Run `npm run test:e2e` locally after installing Playwright browsers.
 ## Post-Deploy Smoke Test
 
 - `/` loads public site.
-- `/admin` shows Payload login for logged-out users.
-- Staff login works and shows collections.
+- `/admin` redirects to `/staff` (or `/staff/login` for `/admin/login`).
+- Staff login at `/staff/login` works and shows Overview.
 - `/login` member login works.
 - `/app` requires member auth.
 - Member profile save works.
-- Media upload works in Payload.
+- Media upload works from `/staff/content/media`.
 - `/app/learning/courses` loads for an enrolled member.
 - `/verify/<code>` verifies a public valid certificate.

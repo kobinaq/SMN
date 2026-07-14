@@ -19,9 +19,13 @@ SMN includes a public marketing/content website, Payload staff CMS, authenticate
 
 ### Staff product
 
+- Canonical staff app at `/staff` (portal design language). `/admin` redirects unless `STAFF_LEGACY_ADMIN=true`.
 - Workflow-first Overview with action queues, health, metrics, quick actions, and recent meaningful changes.
 - Course Builder with readiness, curriculum operations, progress automation/correction, analytics, Tutor controls/reporting, and Content Studio.
 - Member 360, Mentorship Operations, Opportunity Operations, and Certificate Issuing.
+- Content CMS: posts, resources, media library.
+- Website CMS: programme catalogue, events, stories, site settings.
+- System: staff users, AI usage/feedback (read-only), audit log.
 - Grouped navigation and server-enforced super-admin/content/learning/mentorship/opportunity/support/analyst roles.
 - Audit events for consequential staff actions.
 

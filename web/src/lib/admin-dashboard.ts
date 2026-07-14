@@ -88,12 +88,12 @@ export async function getAdminWorkspaceBadges(payload: Payload, user: unknown) {
     certificateBacklog;
 
   const workspaces: WorkspaceBadge[] = [
-    { href: "/admin", label: "Overview", count: overview, roles: staffRolesAll() },
-    { href: "/admin/course-builder", label: "Course Builder", count: courseQueue, roles: roles("super-admin", "learning", "content", "support") },
-    { href: "/admin/member-360", label: "Member 360", count: 0, roles: roles("super-admin", "support", "mentorship", "learning", "analyst") },
-    { href: "/admin/mentorship-operations", label: "Mentorship", count: pendingMentors.totalDocs + mentorshipRequests.totalDocs, roles: roles("super-admin", "mentorship", "support") },
-    { href: "/admin/opportunity-operations", label: "Opportunities", count: pendingOpportunities.totalDocs + expiringOpportunities.totalDocs + failedSources.totalDocs, roles: roles("super-admin", "opportunity", "support", "analyst") },
-    { href: "/admin/certificate-issuing", label: "Certificates", count: certificateBacklog, roles: roles("super-admin", "learning", "support") },
+    { href: "/staff", label: "Overview", count: overview, roles: staffRolesAll() },
+    { href: "/staff/learning", label: "Course Builder", count: courseQueue, roles: roles("super-admin", "learning", "content", "support") },
+    { href: "/staff/members", label: "Member 360", count: 0, roles: roles("super-admin", "support", "mentorship", "learning", "analyst") },
+    { href: "/staff/mentorship", label: "Mentorship", count: pendingMentors.totalDocs + mentorshipRequests.totalDocs, roles: roles("super-admin", "mentorship", "support") },
+    { href: "/staff/opportunities", label: "Opportunities", count: pendingOpportunities.totalDocs + expiringOpportunities.totalDocs + failedSources.totalDocs, roles: roles("super-admin", "opportunity", "support", "analyst") },
+    { href: "/staff/certificates", label: "Certificates", count: certificateBacklog, roles: roles("super-admin", "learning", "support") },
   ].filter((item) => canStaff(user as never, ...item.roles) || staffRole(user as never) === "analyst");
 
   return workspaces;
@@ -221,7 +221,7 @@ export async function getAdminOpsSnapshot(payload: Payload, user: unknown) {
       label: "Mentor applications",
       detail: [ageLabel(daysWaiting(oldestMentor.docs[0]?.createdAt)), "Awaiting staff review"].filter(Boolean).join(" · "),
       value: pendingMentors.totalDocs,
-      href: "/admin/mentorship-operations",
+      href: "/staff/mentorship",
       tone: tone("mint"),
       oldestDays: daysWaiting(oldestMentor.docs[0]?.createdAt),
       roles: roles("super-admin", "mentorship", "support"),
@@ -231,7 +231,7 @@ export async function getAdminOpsSnapshot(payload: Payload, user: unknown) {
       label: "Mentorship requests",
       detail: [ageLabel(daysWaiting(oldestRequest.docs[0]?.createdAt)), "New or under review"].filter(Boolean).join(" · "),
       value: mentorshipRequests.totalDocs,
-      href: "/admin/mentorship-operations",
+      href: "/staff/mentorship",
       tone: tone("violet"),
       oldestDays: daysWaiting(oldestRequest.docs[0]?.createdAt),
       roles: roles("super-admin", "mentorship", "support"),
@@ -241,7 +241,7 @@ export async function getAdminOpsSnapshot(payload: Payload, user: unknown) {
       label: "Pending opportunities",
       detail: [ageLabel(daysWaiting(oldestPendingOpportunity.docs[0]?.createdAt)), "Awaiting publication"].filter(Boolean).join(" · "),
       value: pendingOpportunities.totalDocs,
-      href: "/admin/opportunity-operations",
+      href: "/staff/opportunities",
       tone: tone("amber"),
       oldestDays: daysWaiting(oldestPendingOpportunity.docs[0]?.createdAt),
       roles: roles("super-admin", "opportunity", "support"),
@@ -253,7 +253,7 @@ export async function getAdminOpsSnapshot(payload: Payload, user: unknown) {
         ? `Next expiry ${new Intl.DateTimeFormat("en-GH", { dateStyle: "medium" }).format(new Date(oldestExpiring.docs[0].expiresAt))}`
         : "Closing in the next 14 days",
       value: expiringOpportunities.totalDocs,
-      href: "/admin/opportunity-operations",
+      href: "/staff/opportunities",
       tone: tone("amber"),
       roles: roles("super-admin", "opportunity", "support"),
     },
@@ -262,7 +262,7 @@ export async function getAdminOpsSnapshot(payload: Payload, user: unknown) {
       label: "Source failures",
       detail: "Opportunity imports reporting errors",
       value: failedSources.totalDocs,
-      href: "/admin/opportunity-operations",
+      href: "/staff/opportunities",
       tone: tone("red"),
       roles: roles("super-admin", "opportunity", "support", "analyst"),
     },
@@ -271,7 +271,7 @@ export async function getAdminOpsSnapshot(payload: Payload, user: unknown) {
       label: "Courses blocked",
       detail: "Failing publication readiness",
       value: incompleteCourses,
-      href: "/admin/course-builder",
+      href: "/staff/learning",
       tone: tone("blue"),
       roles: roles("super-admin", "learning", "content", "support"),
     },
@@ -280,7 +280,7 @@ export async function getAdminOpsSnapshot(payload: Payload, user: unknown) {
       label: "Draft courses",
       detail: "Not yet published",
       value: draftCourses.totalDocs,
-      href: "/admin/course-builder",
+      href: "/staff/learning",
       tone: tone("blue"),
       roles: roles("super-admin", "learning", "content"),
     },
@@ -289,7 +289,7 @@ export async function getAdminOpsSnapshot(payload: Payload, user: unknown) {
       label: "Certificates due",
       detail: "Eligible completions without a credential",
       value: certificateBacklog,
-      href: "/admin/certificate-issuing",
+      href: "/staff/certificates",
       tone: tone("mint"),
       roles: roles("super-admin", "learning", "support"),
     },
@@ -301,12 +301,12 @@ export async function getAdminOpsSnapshot(payload: Payload, user: unknown) {
     .sort((a, b) => (b.oldestDays || 0) - (a.oldestDays || 0) || b.value - a.value);
 
   const workspaces: WorkspaceBadge[] = [
-    { href: "/admin", label: "Overview", count: visibleAttention.reduce((sum, item) => sum + item.value, 0), roles: staffRolesAll() },
-    { href: "/admin/course-builder", label: "Course Builder", count: incompleteCourses + draftCourses.totalDocs, roles: roles("super-admin", "learning", "content", "support") },
-    { href: "/admin/member-360", label: "Member 360", count: 0, roles: roles("super-admin", "support", "mentorship", "learning", "analyst") },
-    { href: "/admin/mentorship-operations", label: "Mentorship", count: pendingMentors.totalDocs + mentorshipRequests.totalDocs, roles: roles("super-admin", "mentorship", "support") },
-    { href: "/admin/opportunity-operations", label: "Opportunities", count: pendingOpportunities.totalDocs + expiringOpportunities.totalDocs + failedSources.totalDocs, roles: roles("super-admin", "opportunity", "support", "analyst") },
-    { href: "/admin/certificate-issuing", label: "Certificates", count: certificateBacklog, roles: roles("super-admin", "learning", "support") },
+    { href: "/staff", label: "Overview", count: visibleAttention.reduce((sum, item) => sum + item.value, 0), roles: staffRolesAll() },
+    { href: "/staff/learning", label: "Course Builder", count: incompleteCourses + draftCourses.totalDocs, roles: roles("super-admin", "learning", "content", "support") },
+    { href: "/staff/members", label: "Member 360", count: 0, roles: roles("super-admin", "support", "mentorship", "learning", "analyst") },
+    { href: "/staff/mentorship", label: "Mentorship", count: pendingMentors.totalDocs + mentorshipRequests.totalDocs, roles: roles("super-admin", "mentorship", "support") },
+    { href: "/staff/opportunities", label: "Opportunities", count: pendingOpportunities.totalDocs + expiringOpportunities.totalDocs + failedSources.totalDocs, roles: roles("super-admin", "opportunity", "support", "analyst") },
+    { href: "/staff/certificates", label: "Certificates", count: certificateBacklog, roles: roles("super-admin", "learning", "support") },
   ].filter((item) => canStaff(user as never, ...item.roles) || role === "analyst");
 
   const completionRate = enrollments.totalDocs
@@ -323,18 +323,18 @@ export async function getAdminOpsSnapshot(payload: Payload, user: unknown) {
     attention: visibleAttention,
     workspaces,
     metrics: [
-      { label: "Total members", value: members.totalDocs, href: "/admin/collections/members" },
-      { label: "Active members (30d)", value: recentlyActiveMembers.totalDocs, href: "/admin/collections/members" },
-      { label: "New this month", value: newMembers.totalDocs, href: "/admin/collections/members" },
-      { label: "Queue backlog", value: visibleAttention.reduce((sum, item) => sum + item.value, 0), href: "/admin" },
-      { label: "Completion rate", value: `${completionRate}%`, href: "/admin/course-builder?tab=analytics" },
-      { label: "Active learners (30d)", value: activeLearners.totalDocs, href: "/admin/course-builder?tab=learners" },
-      { label: "Active mentorships", value: activeMentorships.totalDocs, href: "/admin/mentorship-operations" },
-      { label: "Published opportunities", value: publishedOpportunities.totalDocs, href: "/admin/opportunity-operations" },
-      { label: "Applications", value: opportunityApplications.totalDocs, href: "/admin/opportunity-operations" },
-      { label: "Certificates issued", value: certificates.totalDocs, href: "/admin/certificate-issuing" },
-      { label: "Certificates due", value: certificateBacklog, href: "/admin/certificate-issuing" },
-      { label: "Source failures", value: failedSources.totalDocs, href: "/admin/opportunity-operations" },
+      { label: "Total members", value: members.totalDocs, href: "/staff/members" },
+      { label: "Active members (30d)", value: recentlyActiveMembers.totalDocs, href: "/staff/members" },
+      { label: "New this month", value: newMembers.totalDocs, href: "/staff/members" },
+      { label: "Queue backlog", value: visibleAttention.reduce((sum, item) => sum + item.value, 0), href: "/staff" },
+      { label: "Completion rate", value: `${completionRate}%`, href: "/staff/learning?tab=analytics" },
+      { label: "Active learners (30d)", value: activeLearners.totalDocs, href: "/staff/learning?tab=learners" },
+      { label: "Active mentorships", value: activeMentorships.totalDocs, href: "/staff/mentorship" },
+      { label: "Published opportunities", value: publishedOpportunities.totalDocs, href: "/staff/opportunities" },
+      { label: "Applications", value: opportunityApplications.totalDocs, href: "/staff/opportunities" },
+      { label: "Certificates issued", value: certificates.totalDocs, href: "/staff/certificates" },
+      { label: "Certificates due", value: certificateBacklog, href: "/staff/certificates" },
+      { label: "Source failures", value: failedSources.totalDocs, href: "/staff/opportunities" },
     ],
     health: [
       {
@@ -435,27 +435,27 @@ function readableAuditAction(action: string) {
 }
 
 function auditHref(entityType: string, entityId: string, action: string) {
-  if (entityType === "opportunities" || action.startsWith("opportunity.")) return "/admin/opportunity-operations";
-  if (entityType.includes("mentor") || action.startsWith("mentorship.") || action.startsWith("mentor.")) return "/admin/mentorship-operations";
-  if (entityType === "certificates" || action.includes("certificate")) return "/admin/certificate-issuing";
-  if (entityType.includes("lms") || action.startsWith("learning.")) return "/admin/course-builder";
-  if (entityType === "members" || entityType === "member-notes") return `/admin/member-360`;
-  return `/admin/collections/${entityType}/${entityId}`;
+  if (entityType === "opportunities" || action.startsWith("opportunity.")) return "/staff/opportunities";
+  if (entityType.includes("mentor") || action.startsWith("mentorship.") || action.startsWith("mentor.")) return "/staff/mentorship";
+  if (entityType === "certificates" || action.includes("certificate")) return "/staff/certificates";
+  if (entityType.includes("lms") || action.startsWith("learning.")) return "/staff/learning";
+  if (entityType === "members" || entityType === "member-notes") return `/staff/members`;
+  return "/staff";
 }
 
 function quickActionsFor(role: StaffRole | null) {
   const all = [
-    { href: "/admin/course-builder", label: "Open Course Builder", roles: roles("super-admin", "learning", "content", "support") },
-    { href: "/admin/collections/lms-courses/create", label: "Create course", roles: roles("super-admin", "learning", "content") },
-    { href: "/admin/opportunity-operations", label: "Moderate opportunities", roles: roles("super-admin", "opportunity", "support") },
-    { href: "/admin/collections/opportunities/create", label: "Add opportunity", roles: roles("super-admin", "opportunity") },
-    { href: "/admin/mentorship-operations", label: "Review mentors", roles: roles("super-admin", "mentorship", "support") },
-    { href: "/admin/certificate-issuing", label: "Issue certificate", roles: roles("super-admin", "learning", "support") },
-    { href: "/admin/member-360", label: "Open Member 360", roles: roles("super-admin", "support", "mentorship", "learning", "analyst") },
-    { href: "/admin/collections/events/create", label: "Create event", roles: roles("super-admin", "content") },
-    { href: "/admin/collections/posts/create", label: "Publish article", roles: roles("super-admin", "content") },
-    { href: "/admin/collections/resources/create", label: "Add resource", roles: roles("super-admin", "content", "learning") },
-    { href: "/admin/collections/members", label: "View members", roles: staffRolesAll() },
+    { href: "/staff/learning", label: "Open Course Builder", roles: roles("super-admin", "learning", "content", "support") },
+    { href: "/staff/learning", label: "Create course", roles: roles("super-admin", "learning", "content") },
+    { href: "/staff/opportunities", label: "Moderate opportunities", roles: roles("super-admin", "opportunity", "support") },
+    { href: "/staff/opportunities", label: "Add opportunity", roles: roles("super-admin", "opportunity") },
+    { href: "/staff/mentorship", label: "Review mentors", roles: roles("super-admin", "mentorship", "support") },
+    { href: "/staff/certificates", label: "Issue certificate", roles: roles("super-admin", "learning", "support") },
+    { href: "/staff/members", label: "Open Member 360", roles: roles("super-admin", "support", "mentorship", "learning", "analyst") },
+    { href: "/staff/website/events/new", label: "Create event", roles: roles("super-admin", "content") },
+    { href: "/staff/content/posts/new", label: "Publish article", roles: roles("super-admin", "content") },
+    { href: "/staff/content/resources/new", label: "Add resource", roles: roles("super-admin", "content", "learning") },
+    { href: "/staff/members", label: "View members", roles: staffRolesAll() },
   ];
   return all.filter((item) => !role || role === "super-admin" || role === "analyst" || item.roles.includes(role));
 }

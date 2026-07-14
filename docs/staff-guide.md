@@ -2,11 +2,11 @@
 
 ## Sign in and permissions
 
-Use `/admin` with a staff account. Member accounts cannot enter Payload. The seven staff roles are deliberately narrow: super-admin, content, learning, mentorship, opportunity, support, and analyst. Ask a super-admin for a role change; do not share accounts. If a workspace or collection is absent, your role does not have that domain.
+Use `/staff` with a staff account (first visit can create the first super-admin). Member accounts cannot enter the staff app. The seven staff roles are deliberately narrow: super-admin, content, learning, mentorship, opportunity, support, and analyst. Ask a super-admin for a role change; do not share accounts. If a workspace is absent, your role does not have that domain. `/admin` redirects to `/staff` unless emergency fallback `STAFF_LEGACY_ADMIN=true` is set.
 
 ## Start with Overview
 
-The Overview dashboard is the daily queue. Review items needing action, network health, and meaningful recent changes before opening individual collections. The custom navigation links directly to Course Builder, Member 360, Mentorship Operations, Opportunity Operations, and Certificate Issuing. Collection screens remain the advanced fallback.
+The Overview dashboard is the daily queue. Review items needing action, network health, and meaningful recent changes before opening individual workspaces. Navigation covers Course Builder, Member 360, Mentorship Operations, Opportunity Operations, Certificate Issuing, Content, Website, and System screens.
 
 ## Course Builder
 

@@ -97,9 +97,11 @@ Schema changes will be introduced only alongside a reviewed migration/schema-pus
 
 ## Implemented state (2026-07-13)
 
-The workflow-first dashboard and all five operations workspaces are implemented. Course Builder includes readiness, curriculum actions, audited progress correction, analytics, Tutor controls/reporting, and Content Studio. Member 360, mentorship, opportunity, and certificate operations use authenticated Local/API calls, explicit confirmation, compensating or transactional writes where appropriate, and audit events.
+The staff product now lives at **`/staff`**. Payload remains the system of record (Local API, REST, `/api/admin/*` mutations). Payload’s React admin chrome is retired: `/admin` and `/admin/*` redirect to `/staff` unless `STAFF_LEGACY_ADMIN=true`.
 
-Navigation groups now follow the target information architecture. Standard collection screens remain available for advanced record work. The enforced staff matrix is:
+The workflow-first Overview and five operations workspaces (Course Builder, Member 360, Mentorship, Opportunities, Certificates) run inside the staff shell with portal styling. Content (posts, resources, media), Website (catalogue courses, events, stories, site settings), and System (staff users, AI usage/feedback read-only, audit log) use shared staff record primitives and role-gated routes.
+
+Navigation follows the target information architecture. The enforced staff matrix is:
 
 | Role | Primary responsibility |
 |---|---|

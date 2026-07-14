@@ -1,41 +1,39 @@
 # Admin Guide
 
-Staff work happens in Payload at `/admin`.
+Staff work happens in the custom SMN staff app at `/staff` (Payload remains the API/data layer). `/admin` redirects there unless `STAFF_LEGACY_ADMIN=true`.
+
+Prefer the operations workspaces and Content / Website / System screens over raw collection browsing. Everyday procedures are in `docs/staff-guide.md`.
 
 ## Members
 
-- Open `Members`.
+- Open **Members** (`/staff/members`).
 - Review name, email, profile fields, roles, and cohort status.
 - Staff-controlled fields include `roles` and `cohortStatus`.
 - Members can update only their own public profile fields from `/app/profile`.
 
 ## Mentors
 
-- Open `Mentors`.
+- Open **Mentorship Operations** (`/staff/mentorship`).
 - Review draft mentor applications.
-- Set `status` to `approved` to publish a mentor profile to members.
-- Use `paused` or `rejected` when a profile should not appear.
+- Approve to publish a mentor profile to members; reject with a reason when a profile should not appear.
 - Approved mentors can receive mentorship requests.
 
 ## Mentorship Requests
 
-- Open `Mentorship Requests`.
+- Use the Mentorship Operations request queue.
 - Review requester, mentor, topic, goal, message, and preferred format.
 - Move status through `new`, `reviewing`, `introduced`, `completed`, or `declined`.
-- Use `staffNotes` for internal context.
 
 ## Opportunities
 
-- Open `Opportunities`.
-- Create manual listings with title, company, summary, type, work mode, location, and application URL.
-- Set `status` to `published` for member visibility.
-- Draft/pending listings are hidden from members.
-- Imported listings are reviewed the same way.
+- Open **Opportunity Operations** (`/staff/opportunities`).
+- Review pending listings, expiry, duplicates, and source health.
+- Publish only after verifying employer, destination URL, dates, and role details.
 
 ## Opportunity Sources
 
-- Open `Opportunity Sources`.
-- Add Greenhouse, Lever, or Ashby public job-board sources.
+- Source health is surfaced in Opportunity Operations.
+- Add Greenhouse, Lever, or Ashby public job-board sources via staff APIs / advanced records when needed.
 - Keep new sources in review until imports are trusted.
 - The cron route is protected by `CRON_SECRET`.
 
