@@ -230,7 +230,27 @@ select {
   font: inherit;
 }
 
-.field:focus {
+/* Native select fallback (custom Select preferred — OS option menus stay light on Windows) */
+select:not([aria-hidden="true"]) {
+  appearance: none;
+  background-color: color-mix(in srgb, var(--surface) 88%, black);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.45)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  background-size: 1rem;
+  color: var(--white);
+  color-scheme: dark;
+  padding-right: 2.5rem;
+}
+
+select:not([aria-hidden="true"]) option,
+select:not([aria-hidden="true"]) optgroup {
+  background-color: #12161f;
+  color: #f4f6fa;
+}
+
+.field:focus,
+.field:focus-visible {
   outline: 2px solid var(--baby-blue);
   outline-offset: 2px;
 }

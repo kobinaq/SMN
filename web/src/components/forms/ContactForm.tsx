@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Select } from "@/components/ui/Select";
 import { cn } from "@/lib/utils";
 import { trackEvent } from "@/lib/analytics";
 
@@ -87,7 +88,7 @@ export function ContactForm({ defaultType }: { defaultType?: string }) {
         <label className="mb-1.5 block text-xs text-white/50" htmlFor="contact-type">
           Enquiry type
         </label>
-        <select
+        <Select
           id="contact-type"
           className={cn(field, "bg-surface")}
           name="type"
@@ -98,11 +99,11 @@ export function ContactForm({ defaultType }: { defaultType?: string }) {
             Enquiry type
           </option>
           {types.map((type) => (
-            <option key={type} value={type} className="bg-near-black">
+            <option key={type} value={type}>
               {type}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
       <div>
         <label className="mb-1.5 block text-xs text-white/50" htmlFor="contact-message">

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Select } from "@/components/ui/Select";
 import { cn } from "@/lib/utils";
 import { trackEvent } from "@/lib/analytics";
 import { cta } from "@/lib/cta";
@@ -157,7 +158,7 @@ export function ApplicationForm() {
           <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-level">
             Experience level
           </label>
-          <select
+          <Select
             id="apply-level"
             className={cn(field, "bg-surface")}
             name="level"
@@ -168,11 +169,11 @@ export function ApplicationForm() {
               Experience level
             </option>
             {levels.map((level) => (
-              <option key={level} value={level} className="bg-near-black">
+              <option key={level} value={level}>
                 {level}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div>
           <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-linkedin">

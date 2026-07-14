@@ -8,6 +8,7 @@ import type { PortfolioItem } from "@/lib/portfolios";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { EmptyState, StatusBadge } from "@/components/ui/Feedback";
+import { Select } from "@/components/ui/Select";
 import { TagInput } from "@/components/ui/TagInput";
 import { useToast } from "@/components/ui/Toast";
 
@@ -271,18 +272,18 @@ export function PortfolioManager({
             <div className="grid gap-3 sm:grid-cols-2">
               <label className="block text-sm text-white/70">
                 Status
-                <select className={`${field} mt-2 bg-surface`} name="status" defaultValue={defaults.status}>
+                <Select className={`${field} mt-2 bg-surface`} name="status" defaultValue={defaults.status}>
                   <option value="draft">Draft</option>
                   <option value="published">Published</option>
-                </select>
+                </Select>
               </label>
               <label className="block text-sm text-white/70">
                 Visibility
-                <select className={`${field} mt-2 bg-surface`} name="visibility" defaultValue={defaults.visibility}>
+                <Select className={`${field} mt-2 bg-surface`} name="visibility" defaultValue={defaults.visibility}>
                   <option value="private">Private</option>
                   <option value="members">Members only</option>
                   <option value="public">Public</option>
-                </select>
+                </Select>
               </label>
             </div>
             <p className="rounded-2xl border border-white/10 bg-near-black/40 px-4 py-3 text-xs text-white/45">

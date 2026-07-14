@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Select } from "@/components/ui/Select";
 import { TagInput } from "@/components/ui/TagInput";
 import { useToast } from "@/components/ui/Toast";
 
@@ -185,22 +186,16 @@ export function ProfileForm({ initial }: { initial: ProfileValues }) {
           <label className="mb-1.5 block text-xs text-white/40" htmlFor="profile-visibility">
             Profile visibility
           </label>
-          <select
+          <Select
             id="profile-visibility"
             className={`${field} bg-surface`}
             name="visibility"
             defaultValue={initial.visibility || "private"}
           >
-            <option value="private" className="bg-near-black">
-              Private — only you and staff
-            </option>
-            <option value="members" className="bg-near-black">
-              Members only — visible inside the network
-            </option>
-            <option value="public" className="bg-near-black">
-              Public — shareable portfolio profile
-            </option>
-          </select>
+            <option value="private">Private — only you and staff</option>
+            <option value="members">Members only — visible inside the network</option>
+            <option value="public">Public — shareable portfolio profile</option>
+          </Select>
         </div>
       </div>
       <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">

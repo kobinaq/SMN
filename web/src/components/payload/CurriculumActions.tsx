@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { Select } from "@/components/ui/Select";
 import { useToast } from "@/components/ui/Toast";
 
 type ID = string | number;
@@ -161,9 +162,11 @@ export function LessonActions({
       >
         ↓
       </button>
-      <select
+      <Select
         aria-label="Move lesson to module"
         disabled={busy}
+        size="sm"
+        className="min-w-[10rem] rounded-xl border border-white/15 bg-near-black px-2 py-1 text-xs text-white"
         value={String(moduleId)}
         onChange={(event) =>
           run({ action: "move-lesson", courseId, lessonId, moduleId: event.target.value, order: 0 })
@@ -174,7 +177,7 @@ export function LessonActions({
             {item.title}
           </option>
         ))}
-      </select>
+      </Select>
       <button disabled={busy} onClick={() => run({ action: "duplicate-lesson", courseId, lessonId })} type="button">
         Duplicate
       </button>

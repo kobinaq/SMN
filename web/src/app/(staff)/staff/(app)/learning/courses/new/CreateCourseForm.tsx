@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { staffFieldClass, StaffFormField } from "@/components/staff/ui";
+import { Select } from "@/components/ui/Select";
 
 type Mode = "blank" | "ai";
 
@@ -139,11 +140,11 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
           </StaffFormField>
           <div className="grid gap-4 sm:grid-cols-2">
             <StaffFormField label="Level">
-              <select className={staffFieldClass} name="level" defaultValue="foundation">
+              <Select className={staffFieldClass} name="level" defaultValue="foundation">
                 <option value="foundation">Foundation</option>
                 <option value="intermediate">Intermediate</option>
                 <option value="advanced">Advanced</option>
-              </select>
+              </Select>
             </StaffFormField>
             <StaffFormField label="Audience (optional)">
               <input

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Select } from "@/components/ui/Select";
 import { staffFieldClass } from "@/components/staff/ui";
 
 export type StaffField =
@@ -88,7 +89,7 @@ export function StaffRecordForm({
               onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.value }))}
             />
           ) : field.type === "select" ? (
-            <select
+            <Select
               className={staffFieldClass}
               required={field.required}
               value={String(values[field.name] || "")}
@@ -98,7 +99,7 @@ export function StaffRecordForm({
               {field.options.map((option) => (
                 <option key={option.value} value={option.value}>{option.label}</option>
               ))}
-            </select>
+            </Select>
           ) : field.type === "checkbox" ? (
             <input
               className="ml-3 mt-3"
