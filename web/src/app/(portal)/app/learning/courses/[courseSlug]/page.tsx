@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CheckCircle2, Circle, Clock, PlayCircle } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { StatusBadge } from "@/components/ui/Feedback";
 import { requireMember } from "@/lib/auth/member";
 import { getLmsCourse } from "@/lib/lms";
 
@@ -18,11 +20,30 @@ export default async function LmsCoursePage(props: { params: Promise<{ courseSlu
         <Link href="/app/learning/courses" className="text-sm text-white/45 transition hover:text-white">
           Courses
         </Link>
-        <p className="mt-5 text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">
-          {course.programKey}
-        </p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <StatusBadge label={course.level} />
+          {course.category ? <StatusBadge label={course.category} tone="info" /> : null}
+          {course.certificateEnabled ? <StatusBadge label="Certificate available" tone="success" /> : null}
+        </div>
+        <p className="mt-4 text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">{course.programKey}</p>
         <h1 className="mt-3 font-display text-2xl text-white sm:text-3xl">{course.title}</h1>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/55">{course.summary}</p>
+        <div className="mt-4 flex flex-wrap gap-3 text-xs text-white/45">
+          {course.instructor ? <span>Instructor · {course.instructor}</span> : null}
+          <span>
+            {course.modules.length} modules · {course.lessonCount} lessons
+            {course.estimatedHours ? ` · ${course.estimatedHours}h` : ""}
+          </span>
+        </div>
+        <div className="mt-6">
+          <Button href={course.continueHref}>
+            {course.percentage > 0 && course.percentage < 100
+              ? "Resume lesson"
+              : course.percentage >= 100
+                ? "Review course"
+                : "Start course"}
+          </Button>
+        </div>
       </div>
 
       <section className="rounded-2xl border border-white/10 bg-ink p-5">
@@ -39,6 +60,27 @@ export default async function LmsCoursePage(props: { params: Promise<{ courseSlu
           <div className="h-full rounded-full bg-mint" style={{ width: `${course.percentage}%` }} />
         </div>
       </section>
+
+      {(course.learningOutcomes.length || course.prerequisites) && (
+        <section className="grid gap-4 lg:grid-cols-2">
+          {course.learningOutcomes.length ? (
+            <div className="rounded-2xl border border-white/10 bg-surface p-5">
+              <h2 className="font-display text-lg text-white">Learning outcomes</h2>
+              <ul className="mt-3 space-y-2 text-sm text-white/55">
+                {course.learningOutcomes.map((outcome) => (
+                  <li key={outcome}>• {outcome}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          {course.prerequisites ? (
+            <div className="rounded-2xl border border-white/10 bg-surface p-5">
+              <h2 className="font-display text-lg text-white">Prerequisites</h2>
+              <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-white/55">{course.prerequisites}</p>
+            </div>
+          ) : null}
+        </section>
+      )}
 
       <div className="space-y-6">
         {course.modules.map((module) => (
@@ -66,13 +108,9 @@ export default async function LmsCoursePage(props: { params: Promise<{ courseSlu
                     <span>
                       <span className="flex flex-wrap items-center gap-2">
                         <span className="font-display text-base text-white">{lesson.title}</span>
-                        <span className="text-[10px] uppercase tracking-wide text-baby-blue">
-                          {lesson.lessonType}
-                        </span>
+                        <span className="text-[10px] uppercase tracking-wide text-baby-blue">{lesson.lessonType}</span>
                       </span>
-                      <span className="mt-1 block text-sm leading-relaxed text-white/45">
-                        {lesson.summary}
-                      </span>
+                      <span className="mt-1 block text-sm leading-relaxed text-white/45">{lesson.summary}</span>
                     </span>
                     <span className="inline-flex items-center gap-2 text-xs text-white/35">
                       {lesson.lessonType === "video" ? (

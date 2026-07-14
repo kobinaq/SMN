@@ -54,6 +54,14 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
       .map((item) => ({ item }));
     delete body.outcomesText;
   }
+  if (typeof body.learningOutcomesText === "string") {
+    body.learningOutcomes = String(body.learningOutcomesText)
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((outcome) => ({ outcome }));
+    delete body.learningOutcomesText;
+  }
   for (const key of ["cover", "file", "image", "course", "module", "member", "mentor", "source"]) {
     if (!(key in body)) continue;
     const next = coerceRelationId(body[key]);
@@ -75,7 +83,24 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
   if (typeof body.durationMinutes === "string") {
     body.durationMinutes = body.durationMinutes === "" ? null : Number(body.durationMinutes);
   }
-  if (body.youtubeUrl === "") delete body.youtubeUrl;
+  if (typeof body.estimatedHours === "string") {
+    body.estimatedHours = body.estimatedHours === "" ? null : Number(body.estimatedHours);
+  }
+  if (body.youtubeUrl === "") body.youtubeUrl = null;
+  if (body.resourceUrl === "") body.resourceUrl = null;
+  if (body.resourceLabel === "") body.resourceLabel = null;
+  if (Array.isArray(body.attachments)) {
+    body.attachments = body.attachments
+      .map((item) => {
+        if (!item || typeof item !== "object") return null;
+        const row = item as Record<string, unknown>;
+        const label = typeof row.label === "string" ? row.label.trim() : "";
+        const file = coerceRelationId(row.file);
+        if (!label || file === undefined) return null;
+        return { label, file };
+      })
+      .filter(Boolean);
+  }
   if (collection === "stories") delete body.slug;
   return body;
 }

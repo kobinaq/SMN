@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { getPayloadClient } from "@/lib/payload";
+import { staffAuthHeaders } from "@/lib/auth/staff";
 import { sendEmail } from "@/lib/email";
 import { canStaff } from "@/lib/staff-permissions";
 
@@ -12,7 +13,7 @@ const code = () => `SMN-${randomUUID().replaceAll("-", "").slice(0, 16).toUpperC
 
 export async function POST(request: Request) {
   const payload = await getPayloadClient();
-  const { user } = await payload.auth({ headers: request.headers });
+  const { user } = await payload.auth({ headers: await staffAuthHeaders(request) });
   if (!user || user.collection !== "users") return Response.json({ error: "Staff access required." }, { status: 401 });
   if (!canStaff(user, "learning")) return Response.json({ error: "Learning operations permission required." }, { status: 403 });
   const parsed = schema.safeParse(await request.json().catch(() => null));
@@ -57,16 +58,84 @@ export async function POST(request: Request) {
 
   const memberId = relationshipId(current.member);
   const activeIssuanceKey = `${memberId}:${current.programKey || current.programName}`;
+  // Copy skill values only — do not reuse array row ids from the previous certificate.
+  const skills = (Array.isArray(current.skills) ? current.skills : []).flatMap((item) => {
+    const skill =
+      item && typeof item === "object" && "skill" in item
+        ? String((item as { skill?: unknown }).skill || "").trim()
+        : "";
+    return skill ? [{ skill }] : [];
+  });
   let replacementId: number | undefined;
   try {
-    await payload.update({ collection: "certificates", id: current.id, data: { status: "revoked", activeIssuanceKey: null, revokedAt: now, revokedBy: user.id, revocationReason: `Reissued: ${parsed.data.reason}` }, ...access });
-    const replacement = await payload.create({ collection: "certificates", data: { member: memberId, title: current.title, programName: current.programName, programKey: current.programKey, course: current.course ? relationshipId(current.course) : undefined, enrollment: current.enrollment ? relationshipId(current.enrollment) : undefined, issuedBy: user.id, activeIssuanceKey, credentialCode: code(), summary: current.summary, skills: current.skills, issuedAt: now, expiresAt: current.expiresAt, status: "valid", visibility: current.visibility, reissuedFrom: current.id, notificationStatus: "pending" }, ...access });
+    await payload.update({
+      collection: "certificates",
+      id: current.id,
+      data: {
+        status: "revoked",
+        activeIssuanceKey: null,
+        revokedAt: now,
+        revokedBy: user.id,
+        revocationReason: `Reissued: ${parsed.data.reason}`,
+      },
+      ...access,
+    });
+    const replacement = await payload.create({
+      collection: "certificates",
+      data: {
+        member: memberId,
+        title: current.title,
+        programName: current.programName,
+        programKey: current.programKey,
+        course: current.course ? relationshipId(current.course) : undefined,
+        enrollment: current.enrollment ? relationshipId(current.enrollment) : undefined,
+        issuedBy: user.id,
+        activeIssuanceKey,
+        credentialCode: code(),
+        summary: current.summary,
+        skills,
+        issuedAt: now,
+        expiresAt: current.expiresAt,
+        status: "valid",
+        visibility: current.visibility,
+        reissuedFrom: current.id,
+        notificationStatus: "pending",
+      },
+      ...access,
+    });
     replacementId = replacement.id;
-    await payload.create({ collection: "audit-events", data: { actor: user.id, action: "certificate.reissued", entityType: "certificates", entityId: String(replacement.id), reason: parsed.data.reason, before: { certificateId: current.id, credentialCode: current.credentialCode }, after: { certificateId: replacement.id, credentialCode: replacement.credentialCode }, visibility: "staff" }, ...access });
+    await payload.create({
+      collection: "audit-events",
+      data: {
+        actor: user.id,
+        action: "certificate.reissued",
+        entityType: "certificates",
+        entityId: String(replacement.id),
+        reason: parsed.data.reason,
+        before: { certificateId: current.id, credentialCode: current.credentialCode },
+        after: { certificateId: replacement.id, credentialCode: replacement.credentialCode },
+        visibility: "staff",
+      },
+      ...access,
+    });
     return Response.json({ ok: true, certificateId: replacement.id });
   } catch (error) {
+    console.error("[certificate-operations:reissue]", error);
     if (replacementId) await payload.delete({ collection: "certificates", id: replacementId, overrideAccess: true }).catch(() => undefined);
-    await payload.update({ collection: "certificates", id: current.id, data: { status: current.status, activeIssuanceKey: current.activeIssuanceKey, revokedAt: current.revokedAt, revokedBy: current.revokedBy ? relationshipId(current.revokedBy) : null, revocationReason: current.revocationReason }, overrideAccess: true }).catch(() => undefined);
-    return Response.json({ error: error instanceof Error ? error.message : "Reissue failed and was compensated." }, { status: 409 });
+    await payload
+      .update({
+        collection: "certificates",
+        id: current.id,
+        data: {
+          status: current.status,
+          activeIssuanceKey: current.activeIssuanceKey,
+          revokedAt: current.revokedAt,
+          revokedBy: current.revokedBy ? relationshipId(current.revokedBy) : null,
+          revocationReason: current.revocationReason,
+        },
+        overrideAccess: true,
+      })
+      .catch(() => undefined);
+    return Response.json({ error: "Reissue failed and was compensated. Try again or contact support." }, { status: 409 });
   }
 }

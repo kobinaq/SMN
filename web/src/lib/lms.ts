@@ -21,6 +21,11 @@ type LmsCourseDoc = {
   accessRule: "enrolled" | "member" | "cohort";
   level?: string | null;
   estimatedHours?: number | null;
+  instructor?: string | null;
+  category?: string | null;
+  prerequisites?: string | null;
+  learningOutcomes?: Array<{ outcome?: string | null }> | null;
+  certificateEnabled?: boolean | null;
   cover?: Relation<MediaDoc>;
   order?: number | null;
   status: "draft" | "published" | "archived";
@@ -46,6 +51,8 @@ type LmsLessonDoc = {
   youtubeUrl?: string | null;
   durationMinutes?: number | null;
   body?: string | null;
+  resourceLabel?: string | null;
+  resourceUrl?: string | null;
   attachments?: { label?: string | null; file?: Relation<MediaDoc> }[] | null;
   order?: number | null;
   status: "draft" | "published" | "archived";
@@ -89,7 +96,13 @@ export type LmsCourseCard = {
   completedCount: number;
   percentage: number;
   href: string;
+  continueHref: string;
   tutorEnabled: boolean;
+  instructor: string;
+  category: string;
+  prerequisites: string;
+  learningOutcomes: string[];
+  certificateEnabled: boolean;
 };
 
 export type LmsCourseDetail = LmsCourseCard & {
@@ -101,6 +114,8 @@ export type LmsLessonDetail = LmsLessonListItem & {
   moduleTitle: string;
   youtubeEmbedUrl: string;
   body: string;
+  resourceLabel: string;
+  resourceUrl: string;
   attachments: { label: string; url: string }[];
   previousHref: string;
   nextHref: string;
@@ -141,6 +156,14 @@ function progressMap(progress: ProgressDoc[]) {
   return new Map(progress.map((item) => [String(relationId(item.lesson)), item.status]));
 }
 
+function continueLessonHref(courseSlug: string, lessons: LmsLessonDoc[], progress: Map<string, Status>) {
+  const ordered = [...lessons].sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0));
+  const inProgress = ordered.find((lesson) => progress.get(String(lesson.id)) === "in-progress");
+  const nextOpen = ordered.find((lesson) => progress.get(String(lesson.id)) !== "completed");
+  const target = inProgress || nextOpen || ordered[0];
+  return target ? `/app/learning/courses/${courseSlug}/lessons/${target.slug}` : `/app/learning/courses/${courseSlug}`;
+}
+
 function toCourseCard(course: LmsCourseDoc, lessons: LmsLessonDoc[], progress: Map<string, Status>) {
   const completedCount = lessons.filter((lesson) => progress.get(String(lesson.id)) === "completed").length;
   const lessonCount = lessons.length;
@@ -157,7 +180,15 @@ function toCourseCard(course: LmsCourseDoc, lessons: LmsLessonDoc[], progress: M
     completedCount,
     percentage: lessonCount ? Math.round((completedCount / lessonCount) * 100) : 0,
     href: `/app/learning/courses/${course.slug}`,
+    continueHref: continueLessonHref(course.slug, lessons, progress),
     tutorEnabled: Boolean(course.tutorEnabled),
+    instructor: course.instructor?.trim() || "",
+    category: course.category?.trim() || "",
+    prerequisites: course.prerequisites?.trim() || "",
+    learningOutcomes: (course.learningOutcomes || [])
+      .map((item) => item?.outcome?.trim() || "")
+      .filter(Boolean),
+    certificateEnabled: Boolean(course.certificateEnabled),
   };
 }
 
@@ -251,6 +282,8 @@ export async function getLmsLesson(member: MemberUser, courseSlug: string, lesso
     moduleTitle: currentModule?.title || "",
     youtubeEmbedUrl: youtubeEmbedUrl(lesson.youtubeUrl || ""),
     body: lesson.body || "",
+    resourceLabel: lesson.resourceLabel?.trim() || "Open resource",
+    resourceUrl: lesson.resourceUrl?.trim() || "",
     attachments: (lesson.attachments || [])
       .map((item) => ({ label: item.label || "Download", url: mediaUrl(item.file) }))
       .filter((item) => item.url),

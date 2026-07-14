@@ -49,7 +49,7 @@ export function StaffRecordForm({
       const raw = values[field.name];
       if (field.type === "checkbox") data[field.name] = Boolean(raw);
       else if (field.type === "number") data[field.name] = raw === "" ? null : Number(raw);
-      else if (field.name === "contentText" || raw !== "") data[field.name] = raw;
+      else data[field.name] = raw;
     }
     try {
       const response = await fetch("/api/staff/records", {

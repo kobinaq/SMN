@@ -4,6 +4,7 @@ import { StaffLoginForm } from "@/components/staff/StaffLoginForm";
 import { getStaff, staffUserCount } from "@/lib/auth/staff";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
 export const metadata = { title: "Staff sign in" };
 
 export default async function StaffLoginPage() {

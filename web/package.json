@@ -21,6 +21,7 @@
     "db:migrate": "esbuild ./src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=./scripts/.payload.config.bundle.mjs && node ./scripts/run-migrations.mjs",
     "db:migrate:adopt": "esbuild ./src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=./scripts/.payload.config.bundle.mjs && node ./scripts/adopt-migration-baseline.mjs",
     "db:check": "node scripts/check-schema.mjs",
+    "db:ensure-sqlite": "esbuild src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=scripts/.payload.config.bundle.mjs && node scripts/ensure-sqlite-schema.mjs",
     "seed:demo": "esbuild src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=scripts/.payload.config.bundle.mjs && node scripts/seed-demo.mjs"
   },
   "dependencies": {
