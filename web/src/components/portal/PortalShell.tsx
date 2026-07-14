@@ -1,25 +1,27 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   PortalSidebar,
   findActiveNavTitle,
 } from "./PortalSidebar";
-import type { PortalIdentity, PortalNavGroup, PortalVariant } from "./types";
+import { buildStaffNavGroups, memberNavGroups, type StaffLinkInput } from "./nav-config";
+import type { PortalIdentity, PortalVariant } from "./types";
 
 export function PortalShell({
   variant,
   identity,
-  groups,
+  staffLinks,
   children,
   maxWidth = "6xl",
 }: {
   variant: PortalVariant;
   identity: PortalIdentity;
-  groups: PortalNavGroup[];
+  /** Serializable staff nav links; icons are mapped on the client. */
+  staffLinks?: StaffLinkInput[];
   children: React.ReactNode;
   maxWidth?: "6xl" | "7xl";
 }) {
@@ -28,6 +30,11 @@ export function PortalShell({
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+
+  const groups = useMemo(
+    () => (variant === "staff" ? buildStaffNavGroups(staffLinks ?? []) : memberNavGroups),
+    [variant, staffLinks],
+  );
 
   const homeHref = variant === "member" ? "/app" : "/staff";
   const portalLabel = variant === "member" ? "Member" : "Staff";
@@ -53,7 +60,6 @@ export function PortalShell({
 
   return (
     <div className="flex min-h-svh bg-near-black">
-      {/* Desktop sidebar */}
       <div
         className={cn(
           "sticky top-0 hidden h-svh shrink-0 overflow-hidden border-r border-white/10 transition-all duration-300 ease-in-out md:block",
@@ -72,7 +78,6 @@ export function PortalShell({
         />
       </div>
 
-      {/* Mobile drawer */}
       {mobileOpen ? (
         <div className="fixed inset-0 z-50 md:hidden">
           <button

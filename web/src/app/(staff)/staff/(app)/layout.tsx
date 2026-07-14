@@ -1,5 +1,5 @@
 import { PortalShell } from "@/components/portal/PortalShell";
-import { buildStaffNavGroups } from "@/components/portal/nav-config";
+import type { StaffLinkInput } from "@/components/portal/nav-config";
 import { requireStaff, staffDisplayName, staffRoleLabel } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { getAdminWorkspaceBadges } from "@/lib/admin-dashboard";
@@ -13,7 +13,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   const badgeFor = (...parts: string[]) =>
     badges.find((item) => parts.some((part) => item.href.includes(part) || item.href === part))?.count;
 
-  const links = [
+  const links: StaffLinkInput[] = [
     { href: "/staff", label: "Home", count: badgeFor("/admin", "/staff") },
     { href: "/staff/learning", label: "Courses", count: badgeFor("course-builder", "learning") },
     { href: "/staff/members", label: "Members" },
@@ -54,7 +54,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
         name: staffDisplayName(staff),
         subtitle: staffRoleLabel(staff),
       }}
-      groups={buildStaffNavGroups(links)}
+      staffLinks={links}
       maxWidth="7xl"
     >
       {children}

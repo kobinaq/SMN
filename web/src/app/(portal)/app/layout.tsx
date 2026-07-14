@@ -1,5 +1,4 @@
 import { PortalShell } from "@/components/portal/PortalShell";
-import { memberNavGroups } from "@/components/portal/nav-config";
 import { memberDisplayName, requireMember } from "@/lib/auth/member";
 
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
@@ -15,7 +14,6 @@ export default async function PortalLayout({ children }: { children: React.React
         subtitle: handle ? `@${handle}` : undefined,
         avatarUrl: avatar?.url || undefined,
       }}
-      groups={memberNavGroups}
       maxWidth="6xl"
     >
       {children}
