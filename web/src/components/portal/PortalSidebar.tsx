@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ChevronRight, LogOut, UserRound } from "lucide-react";
+import { ChevronRight, Globe, LogOut, UserRound } from "lucide-react";
 import { BrandLogo } from "@/components/layout/BrandLogo";
 import { cn } from "@/lib/utils";
 import type { PortalIdentity, PortalNavGroup, PortalNavItem, PortalVariant } from "./types";
@@ -218,6 +218,16 @@ export function PortalSidebar({
       </div>
 
       <div className="mt-auto flex flex-col gap-0.5 border-t border-white/10 pt-4">
+        {variant === "staff" ? (
+          <Link
+            href="/"
+            onClick={onNavigate}
+            className="group flex items-center gap-2.5 rounded-[6px] px-2.5 py-[7px] text-white/50 transition hover:bg-white/5 hover:text-white/90"
+          >
+            <Globe className="h-4 w-4 text-white/40 group-hover:text-white/70" strokeWidth={1.5} />
+            <span className="text-[13px] tracking-wide">Public website</span>
+          </Link>
+        ) : null}
         <button
           type="button"
           onClick={onLogout}
