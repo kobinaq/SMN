@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { site } from "@/lib/site";
 
 const field =
   "field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/35 sm:py-3";
@@ -25,17 +26,22 @@ export function ForgotPasswordForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: data.email }),
       });
-      // Always show success-style message to avoid email enumeration
+      const json = (await res.json().catch(() => ({}))) as {
+        message?: string;
+        emailDeliveryConfigured?: boolean;
+        error?: string;
+      };
       if (!res.ok) {
-        const json = (await res.json().catch(() => ({}))) as {
-          errors?: { message?: string }[];
-        };
-        // Payload may error if email not configured — still guide the user
-        console.warn("[forgot-password]", json);
+        setStatus("error");
+        setMessage(json.error || "Unable to process request. Try again or contact support.");
+        return;
       }
       setStatus("success");
       setMessage(
-        "If an account exists for that email, password reset instructions will be sent when email is configured. For now, contact the team if you need help.",
+        json.message ||
+          (json.emailDeliveryConfigured
+            ? "If an account exists for that email, reset instructions will be sent."
+            : `Password reset email is not configured yet. Contact ${site.email} for help signing in.`),
       );
     } catch {
       setStatus("error");
@@ -45,20 +51,24 @@ export function ForgotPasswordForm() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
-      <input
-        className={field}
-        name="email"
-        type="email"
-        required
-        autoComplete="email"
-        placeholder="Email"
-        inputMode="email"
-      />
-      <Button type="submit" className="w-full" disabled={status === "loading"}>
+      <label className="block text-sm text-white/70" htmlFor="forgot-email">
+        Email
+        <input
+          id="forgot-email"
+          className={`${field} mt-2`}
+          name="email"
+          type="email"
+          required
+          autoComplete="email"
+          placeholder="you@example.com"
+          inputMode="email"
+        />
+      </label>
+      <Button type="submit" className="w-full" disabled={status === "loading"} aria-busy={status === "loading"}>
         {status === "loading" ? "Sending…" : "Send reset link"}
       </Button>
       {message ? (
-        <p className={`text-sm ${status === "error" ? "text-red-300" : "text-mint"}`}>
+        <p className={`text-sm ${status === "error" ? "text-red-300" : "text-mint"}`} role="status" aria-live="polite">
           {message}
         </p>
       ) : null}

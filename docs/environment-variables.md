@@ -26,6 +26,7 @@ Production validation runs when `VERCEL_ENV=production` or `SMN_VALIDATE_PROD_EN
 | `SMN_VALIDATE_PROD_ENV` | No | Forces production env validation outside Vercel | `true` for checks | Usually unset | env validator | No effect when unset |
 | `ALLOW_PRODUCTION_SEED` | No | Allows demo seeding in production deliberately | Unset | Only `true` for explicit one-off seed | seed script | Production seeding is blocked |
 | `PLAYWRIGHT_BASE_URL` | No | Runs E2E against an existing server | `http://127.0.0.1:3000` | Preview URL if desired | Playwright | Playwright starts local dev server when unset |
+| `STAFF_LEGACY_ADMIN` | No | Emergency kill-switch restoring Payload admin chrome at `/admin` | unset / `true` | Usually unset | Admin catch-all | `/admin` redirects to `/staff` |
 | `AI_PROVIDER` | No | Provider adapter: `disabled`, `mock`, or `groq` | `mock` for isolated tests | `groq` only after beta approval | AI runtime | Disabled/unavailable when unset without a Groq key |
 | `GROQ_API_KEY` | Required for Groq | Server-only Groq credential | Empty | Secret key | Groq adapter | Groq provider unavailable |
 | `AI_TEXT_MODEL` | No | Quality text model alias | `llama-3.3-70b-versatile` | Reviewed supported model | AI runtime | Documented default used |

@@ -1,19 +1,38 @@
 # SMN Project Status
 
-**Updated:** 2026-07-14
+**Updated:** 2026-07-14  
+**Active programme:** Platform refinement (`cursor/platform-refinement-8510`)  
+**Source of truth:** code + `REFINEMENT_AUDIT.md` + `IMPLEMENTATION_PLAN.md`
 
-## Current product
+## Current product (breadth)
 
-SMN includes a public marketing/content website, Payload staff CMS, authenticated member portal, mentorship, opportunities, learning and LMS delivery, portfolios, credentials, workflow-first administration, and feature-flagged AI-assisted learning/career tools.
+Public site, member portal, LMS, mentorship, opportunities, portfolios, certificates, custom staff app at `/staff`, and feature-flagged AI (Tutor, Content Studio, Career Coach). Payload remains CMS/auth/API.
 
-## Marketing website (active workstream)
+## Refinement programme status
+
+| Phase | Focus | Status |
+|---|---|---|
+| 0 | Audit + checklist | Mostly done (docs shells landing; mark complete after build/tests) |
+| 1 | Production reliability | In progress (admin auth headers, role guards, env soft checks, API helpers) |
+| 2 | Interaction consistency | In progress (Toast/ConfirmDialog/Empty/Error/Skeleton wired; ops confirms migrating) |
+| 3 | Member experience | In progress (continuity dashboard, onboarding checklist, profile tags, LMS resume + save feedback) |
+| 4 | Admin experience | In progress (Course Builder settings editor; mentorship/opportunity ConfirmDialog) |
+| 5 | Existing AI refinement | Pending (flags stay off in prod) |
+| 6 | Mobile, a11y, performance, tests, docs | Pending / docs expanding |
+
+## Highest-priority gaps remaining
+
+1. Avatar upload + fuller onboarding persistence beyond local dismiss
+2. Lesson attachments management in Course Builder editor
+3. Member 360 tabs + record-level deep links
+4. Opportunity filter persistence + broader tracking states
+5. Broader E2E coverage for member continuity + staff settings save
+6. AI knowledge approval / draft→curriculum still incomplete (flags off)
+
+## Marketing website (completed workstream)
 
 **Brief:** Improve clarity, credibility, conversion, CMS manageability, SEO, a11y, performance — without a full visual redesign.  
 **Audit:** `MARKETING_SITE_AUDIT.md` · Checklist: `IMPLEMENTATION_PLAN.md` (M-series) · Analytics: `web/docs/marketing-analytics.md`
-
-### Assessment (2026-07-14)
-
-Original issues included unconfirmed seed prices, mixed Apply/Enroll CTAs, unwired `site-settings`, homepage seed testimonials, platform messaging that underplayed the native portal/LMS, starter legal copy, and missing sitemap/analytics.
 
 ### Marketing progress
 
@@ -48,10 +67,15 @@ Original issues included unconfirmed seed prices, mixed Apply/Enroll CTAs, unwir
 - Production analytics property (GTM/gtag/Plausible)
 - Apply `20260714_marketing_cms_fields` (or `db:push`) on production Postgres before relying on new CMS columns
 
-## Production / platform state (unchanged gates)
+## Production / migration
 
-- Production URL: `https://socialmarketersnetwork.vercel.app` (prefer custom domain in `NEXT_PUBLIC_SITE_URL`)
-- Disposable PostgreSQL migration proof and production schema adoption remain open for the broader product line
-- AI flags must remain false until release gates in `PRODUCT-ROADMAP.md`
+- Production: `https://socialmarketersnetwork.vercel.app` (Vercel root `web`, Neon Postgres).
+- Baseline migration tooling exists; disposable Postgres proof + final prod adoption remain open gates.
+- AI feature flags must remain false until schema adoption + smoke gates pass.
+- Backup/recovery notes: `docs/deployment.md` · ops gate: `docs/production-checklist.md`.
 
-See `HANDOFF-CODEX.md` for platform continuation; see marketing checklist for website follow-ups.
+## Freeze
+
+No new major product areas. Improve depth, reliability, and usability of what exists.
+
+See `IMPLEMENTATION_PLAN.md` for the numbered requirement checklist (R300+ and M-series). Items stay `[~]` until implemented + tested + docs + production build.

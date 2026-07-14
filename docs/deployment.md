@@ -38,14 +38,26 @@ npm run build
 
 Run `npm run test:e2e` locally after installing Playwright browsers.
 
+## Backup and recovery
+
+- Neon (or equivalent) continuous backups are the primary recovery path for Postgres.
+- Before adopting migrations in production, take a manual snapshot / point-in-time note.
+- Media in Cloudflare R2 should have versioning or a separate backup bucket if certificates and portfolio assets are production-critical.
+- Rollback: redeploy the previous Vercel deployment; restore DB only if a migration is irreversible — document the owner before running `db:push` against production.
+- Emergency Payload UI: set `STAFF_LEGACY_ADMIN=true` only temporarily; custom `/staff` remains canonical.
+
 ## Post-Deploy Smoke Test
 
+See also `docs/production-checklist.md`.
+
 - `/` loads public site.
-- `/admin` shows Payload login for logged-out users.
-- Staff login works and shows collections.
+- `/admin` redirects to `/staff` (or `/staff/login` for `/admin/login`).
+- Staff login at `/staff/login` works and shows Overview.
 - `/login` member login works.
-- `/app` requires member auth.
-- Member profile save works.
-- Media upload works in Payload.
-- `/app/learning/courses` loads for an enrolled member.
+- `/app` requires member auth and shows continuity actions (not placeholder “coming soon” copy).
+- Member profile save works with confirmation.
+- Media upload works from `/staff/content/media`.
+- `/app/learning/courses` Resume/Start deep-links to a lesson for enrolled members.
+- Course Builder Settings can edit and save course metadata.
 - `/verify/<code>` verifies a public valid certificate.
+- With AI flags off, non-AI pages still load if Groq is unavailable.

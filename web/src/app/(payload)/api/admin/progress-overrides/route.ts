@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { getPayloadClient } from "@/lib/payload";
+import { staffAuthHeaders } from "@/lib/auth/staff";
 import { canStaff } from "@/lib/staff-permissions";
 
 const id = z.coerce.number().int().positive();
@@ -7,7 +8,7 @@ const schema = z.object({ courseId: id, lessonId: id, memberId: id, status: z.en
 
 export async function POST(request: Request) {
   const payload = await getPayloadClient();
-  const { user } = await payload.auth({ headers: request.headers });
+  const { user } = await payload.auth({ headers: await staffAuthHeaders(request) });
   if (!user || user.collection !== "users") return Response.json({ error: "Staff access required." }, { status: 401 });
   if (!canStaff(user, "learning", "support")) return Response.json({ error: "Learning or support permission required." }, { status: 403 });
   const parsed = schema.safeParse(await request.json().catch(() => null));

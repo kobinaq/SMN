@@ -14,6 +14,8 @@ npm run test:coverage
 
 `npm test` runs unit tests and E2E tests. `npm run test:e2e` builds the app, starts `next start`, runs Playwright against a local test environment, then stops the server.
 
+CI prepares a fresh SQLite schema with `npm run db:ensure-sqlite` before `npm run build`. Import map generation uses an ephemeral SQLite file and never schema-pushes a shared `payload.db` (avoids Drizzle “index already exists” failures).
+
 ## Unit Tests
 
 Vitest is configured in `vitest.config.ts`.
@@ -38,6 +40,15 @@ The current smoke suite verifies:
 - Member login page renders
 - Anonymous users are redirected away from protected portal routes
 - A seeded staff user can log in and see the workflow-first dashboard
+
+Refinement programme expands coverage toward:
+
+- Member continuity dashboard + resume lesson deep link
+- Profile save confirmation and tag inputs
+- LMS progress save failure messaging
+- Staff Course Builder settings save
+- Mentorship/opportunity ConfirmDialog flows
+- AI mocked provider cases (flags off by default)
 - Curriculum duplication and audited progress correction
 - Content Studio generation, candidate review, and explicit draft save using mock AI
 - Member 360 private notes, mentorship transitions, opportunity moderation, and certificate reissue

@@ -7,7 +7,7 @@ Current operational sources of truth: `../docs/staff-guide.md`, `../docs/ai-arch
 ## Stack
 
 - Next.js (App Router) + TypeScript + Tailwind CSS
-- **Payload CMS 3** (SQLite locally; Postgres in production; admin at `/admin`)
+- **Payload CMS 3** (SQLite locally; Postgres in production; staff app at `/staff`; Payload admin chrome retired)
 - **Member auth** via Payload `members` collection (portal at `/app`)
 - **Cloudflare R2** for media when configured (S3-compatible)
 - GSAP + Lenis (scroll storytelling + page transitions)
@@ -26,7 +26,7 @@ npm run dev
 ```
 
 - Site: [http://localhost:3000](http://localhost:3000)
-- CMS: [http://localhost:3000/admin](http://localhost:3000/admin) — create first **staff** user on first visit
+- Staff: [http://localhost:3000/staff](http://localhost:3000/staff) — create first **staff** user on first visit at `/staff/login`
 - Member portal: [http://localhost:3000/login](http://localhost:3000/login) → `/app` after signup
 
 Copy `.env.example` → `.env` / `.env.local`. Without Resend/Mailchimp keys, forms log to the server console.
@@ -37,10 +37,10 @@ Marketing pages fall back to seed data in `src/lib/content.ts` when CMS collecti
 
 | Collection | Who | Surfaces |
 |------------|-----|----------|
-| `users` | Staff | `/admin` only |
+| `users` | Staff | `/staff` (canonical); `/admin` redirects |
 | `members` | Network members | `/login`, `/signup`, `/app/*` |
 
-Members cannot open the Payload admin. Staff manage members under **Network → Members** in admin.
+Members cannot open the staff app. Staff manage members under **Members** in `/staff`.
 
 ## Deploy on Vercel
 
@@ -67,7 +67,7 @@ The Next.js app is in the **`web`** folder (not the repo root).
 At minimum:
 
 - `PAYLOAD_SECRET` — long random string (**same as local** if you share the Neon DB)
-- `NEXT_PUBLIC_SITE_URL` — full origin, e.g. `https://your-app.vercel.app` (required for `/admin` cookies & server actions)
+- `NEXT_PUBLIC_SITE_URL` — full origin, e.g. `https://your-app.vercel.app` (required for staff cookies & server actions)
 - `DATABASE_URL` — Neon Postgres URL
 
 Optional: Resend, Mailchimp, WhatsApp invite, `OPS_EMAIL`.
@@ -95,7 +95,7 @@ npm run db:check   # list public tables
 
 Ensure `DATABASE_URL` is your Neon/Postgres URL and `PAYLOAD_SECRET` matches Vercel when targeting that DB.
 
-Schema push is **opt-in** (`PAYLOAD_DB_PUSH=true` only during `db:push`). The app does not push on every request — that was slow and could break `/admin`.
+Schema push is **opt-in** (`PAYLOAD_DB_PUSH=true` for `db:push`, demo seed, and disposable E2E DBs only). SQLite and Postgres both keep push disabled on normal app connect — auto-push was slow and could fail CI with “index already exists” against a stale local DB.
 
 For Neon, either the **pooled** or **direct** connection string works; if queries flake, try the direct (non-`-pooler`) URL.
 
@@ -110,7 +110,8 @@ Existing production predates that baseline. Do not replay the full baseline over
 | Path | Purpose |
 |------|---------|
 | `/` | Storytelling homepage |
-| `/admin` | Payload CMS (staff) |
+| `/staff` | Staff app (ops + CMS) |
+| `/admin` | Redirects to `/staff` (legacy Payload UI only if `STAFF_LEGACY_ADMIN=true`) |
 | `/login` `/signup` | Member auth |
 | `/app` | Member portal home |
 | `/app/profile` | Member profile |

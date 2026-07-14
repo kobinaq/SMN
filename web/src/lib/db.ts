@@ -56,6 +56,8 @@ export function createDbAdapter() {
     client: {
       url: sqliteUrl,
     },
-    push: shouldPushSchema() || process.env.NODE_ENV !== "production",
+    // Same gate as Postgres: never auto-push on connect. CI/build/importmap must not
+    // mutate a shared SQLite file (Drizzle can fail with "index already exists").
+    push: shouldPushSchema(),
   });
 }

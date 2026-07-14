@@ -36,6 +36,10 @@ jobs:
       - name: Install Playwright browser
         run: npx playwright install chromium
 
+      - name: Reset local SQLite artifacts
+        # Prevent stale local payload.db from breaking importmap/build with "index already exists".
+        run: rm -f payload.db payload.db-shm payload.db-wal payload.importmap-*.db payload.e2e-*.db
+
       - name: Type check
         run: npm run typecheck
 
@@ -44,6 +48,10 @@ jobs:
 
       - name: Unit tests
         run: npm run test:unit
+
+      - name: Prepare fresh SQLite schema
+        # CI uses file:./payload.db. Create schema once with an explicit push (connect never auto-pushes).
+        run: npm run db:ensure-sqlite
 
       - name: Production build
         run: npm run build

@@ -9,14 +9,14 @@ This is the current transfer brief. Use it with `IMPLEMENTATION_PLAN.md`, `PRODU
 
 ## 1. Product and architecture now
 
-SMN is a public marketing-community website plus an authenticated network product. Payload is the system of record, API, authorization layer, staff CMS, and member-auth provider. Staff use `users` at `/admin`; members use `members` at `/login`, `/signup`, and `/app`. Browser cookies are separated through the `smn-admin` prefix and the `smn-member-token` bridge.
+SMN is a public marketing-community website plus an authenticated network product. Payload is the system of record, API, authorization layer, and member-auth provider. Staff use `users` at `/staff` (custom staff CMS; `/admin` redirects). Members use `members` at `/login`, `/signup`, and `/app`. Browser cookies are separated through the `smn-admin` prefix and the `smn-member-token` bridge.
 
 The implemented product includes:
 
 - Public marketing/content pages and CMS-managed content.
 - Member profiles, mentor applications/directory/requests, opportunities and application activity, learning/enrollments, portfolios, and public credentials.
 - LMS courses, modules, lessons, unlisted YouTube playback, Media/R2 attachments, member entitlement, lesson progress, course completion automation, readiness, analytics, and certificate eligibility.
-- Workflow-first admin Overview, Course Builder, Member 360, Mentorship Operations, Opportunity Operations, and Certificate Issuing.
+- Custom staff app Overview, Course Builder, Member 360, Mentorship Operations, Opportunity Operations, Certificate Issuing, Content/Website CMS, and System screens.
 - Minimal staff roles: super-admin, content, learning, mentorship, opportunity, support, and analyst, enforced on server collection access and custom routes.
 - Provider-independent AI foundation, course-aware Tutor, instructor Content Studio, and member Career Coach, all independently feature-flagged.
 

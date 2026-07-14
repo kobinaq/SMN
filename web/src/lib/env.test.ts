@@ -33,4 +33,16 @@ describe("validateProductionEnv", () => {
 
     expect(() => validateProductionEnv()).toThrow(/R2_ACCESS_KEY_ID/);
   });
+
+  it("accepts complete required env even when Resend/CRON soft checks warn", () => {
+    process.env.SMN_VALIDATE_PROD_ENV = "true";
+    process.env.DATABASE_URL = "postgresql://user:pass@example.com/db";
+    process.env.PAYLOAD_SECRET = "a-long-production-secret";
+    process.env.NEXT_PUBLIC_SITE_URL = "https://example.com";
+    delete process.env.RESEND_API_KEY;
+    delete process.env.CRON_SECRET;
+    delete process.env.R2_BUCKET;
+
+    expect(() => validateProductionEnv()).not.toThrow();
+  });
 });

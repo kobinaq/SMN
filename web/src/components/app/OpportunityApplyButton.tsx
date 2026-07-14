@@ -8,7 +8,12 @@ export function OpportunityApplyButton({ opportunityId }: { opportunityId: strin
   const [state, setState] = useState<"idle" | "opening" | "opened" | "saving" | "applied">("idle");
   const [error, setError] = useState("");
   async function record(status: "started" | "applied") {
-    const response = await fetch("/api/opportunity-applications", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ opportunityId, status }) });
+    const response = await fetch("/api/opportunity-applications", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ opportunityId, status }),
+    });
     const json = (await response.json().catch(() => ({}))) as { applicationUrl?: string; error?: string };
     if (!response.ok) throw new Error(json.error || "Unable to update application activity.");
     return json;

@@ -90,24 +90,10 @@ export default buildConfig({
         siteName: "Social Marketers Network",
       },
     },
+    // Custom ops/CMS UI lives at /staff. Payload admin chrome is retired unless STAFF_LEGACY_ADMIN=true.
     components: {
-      beforeNavLinks: ["@/components/payload/AdminWorkspaceNav"],
       beforeLogin: ["@/components/payload/LoginIntro"],
       afterLogin: ["@/components/payload/LoginHelp"],
-      views: {
-        dashboard: {
-          Component: "@/components/payload/AdminDashboard",
-        },
-        courseBuilder: {
-          Component: "@/components/payload/CourseBuilder",
-          path: "/course-builder",
-          exact: true,
-        },
-        member360: { Component: "@/components/payload/Member360", path: "/member-360", exact: true },
-        mentorshipOperations: { Component: "@/components/payload/MentorshipOperations", path: "/mentorship-operations", exact: true },
-        opportunityOperations: { Component: "@/components/payload/OpportunityOperations", path: "/opportunity-operations", exact: true },
-        certificateIssuing: { Component: "@/components/payload/CertificateIssuing", path: "/certificate-issuing", exact: true },
-      },
       graphics: {
         Logo: "@/components/payload/Logo",
         Icon: "@/components/payload/Icon",

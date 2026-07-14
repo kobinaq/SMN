@@ -39,14 +39,31 @@ export const LmsLessons: CollectionConfig = {
       type: "text",
       admin: {
         description:
-          "Use an unlisted YouTube watch/share/embed URL. Videos are streamed by YouTube, not stored in R2.",
+          "Optional unlisted YouTube watch/share/embed URL. Videos are streamed by YouTube, not stored in R2.",
       },
     },
     { name: "durationMinutes", type: "number", min: 0 },
-    { name: "body", type: "textarea", admin: { description: "Lesson notes, prompts, or assignment instructions." } },
+    {
+      name: "body",
+      type: "textarea",
+      admin: {
+        description: "Lesson text, reading content, article notes, prompts, or assignment instructions.",
+      },
+    },
+    {
+      name: "resourceLabel",
+      type: "text",
+      admin: { description: "Optional label for an external article or resource link." },
+    },
+    {
+      name: "resourceUrl",
+      type: "text",
+      admin: { description: "Optional external article, Notion page, Google Doc, or other resource URL." },
+    },
     {
       name: "attachments",
       type: "array",
+      admin: { description: "Downloadable documents and files for learners." },
       fields: [
         { name: "label", type: "text", required: true },
         { name: "file", type: "upload", relationTo: "media", required: true },

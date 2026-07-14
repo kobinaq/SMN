@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { failJson, logServerError, okJson } from "@/lib/api-response";
 import { memberAuthHeaders, type MemberUser } from "@/lib/auth/member";
 import { getLmsCourses } from "@/lib/lms";
 import { getPayloadClient } from "@/lib/payload";
@@ -11,20 +12,20 @@ const schema = z.object({
 
 export async function POST(request: Request) {
   try {
-    const parsed = schema.safeParse(await request.json());
+    const parsed = schema.safeParse(await request.json().catch(() => null));
     if (!parsed.success) {
-      return Response.json({ error: "Invalid progress update." }, { status: 400 });
+      return failJson("Invalid progress update.", 400);
     }
 
     const payload = await getPayloadClient();
     const { user } = await payload.auth({ headers: await memberAuthHeaders() });
     if (!user || user.collection !== "members") {
-      return Response.json({ error: "Sign in to update progress." }, { status: 401 });
+      return failJson("Sign in to update progress.", 401);
     }
 
     const courses = await getLmsCourses(user as unknown as MemberUser);
     if (!courses.some((course) => String(course.id) === String(parsed.data.courseId))) {
-      return Response.json({ error: "This course is not available to your account." }, { status: 403 });
+      return failJson("This course is not available to your account.", 403);
     }
 
     const existing = await payload.find({
@@ -62,9 +63,9 @@ export async function POST(request: Request) {
         },
       });
     }
-    return Response.json({ ok: true });
+    return okJson({ ok: true, status: parsed.data.status });
   } catch (error) {
-    console.error("[lms-progress]", error);
-    return Response.json({ error: "Unable to save progress right now." }, { status: 500 });
+    logServerError("lms-progress", error);
+    return failJson("Unable to save progress right now.", 500);
   }
 }

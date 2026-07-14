@@ -1,12 +1,13 @@
 import { z } from "zod";
 import { getPayloadClient } from "@/lib/payload";
+import { staffAuthHeaders } from "@/lib/auth/staff";
 import { canStaff } from "@/lib/staff-permissions";
 
 const schema = z.object({ memberId: z.union([z.string().min(1), z.number()]), category: z.enum(["support", "learning", "mentorship", "opportunity", "conduct", "other"]), note: z.string().trim().min(3).max(5000) });
 
 export async function POST(request: Request) {
   const payload = await getPayloadClient();
-  const { user } = await payload.auth({ headers: request.headers });
+  const { user } = await payload.auth({ headers: await staffAuthHeaders(request) });
   if (!user || user.collection !== "users") return Response.json({ error: "Staff access required." }, { status: 401 });
   if (!canStaff(user, "support")) return Response.json({ error: "Support permission required." }, { status: 403 });
   const parsed = schema.safeParse(await request.json().catch(() => null));
