@@ -35,8 +35,7 @@ function decodeCookieValue(value: string) {
  */
 export async function staffAuthHeaders(request?: Request) {
   const incoming = request?.headers ?? (await nextHeaders());
-  const headers = new Headers(incoming);
-  const cookieHeader = headers.get("cookie") || "";
+  const cookieHeader = incoming.get("cookie") || "";
   const parts = cookieParts(cookieHeader).filter(
     (part) => !part.startsWith(`${MEMBER_TOKEN_COOKIE}=`),
   );
@@ -46,12 +45,11 @@ export async function staffAuthHeaders(request?: Request) {
     ?.slice(ADMIN_TOKEN_COOKIE.length + 1);
   const token = rawToken ? decodeCookieValue(rawToken) : "";
 
-  if (token && !headers.get("authorization")) {
-    headers.set("Authorization", `JWT ${token}`);
-  }
-
+  // Build a clean header bag — forwarding Origin/Referer can trip Payload CSRF
+  // when cookie auth is evaluated alongside JWT.
+  const headers = new Headers();
   if (parts.length) headers.set("cookie", parts.join("; "));
-  else headers.delete("cookie");
+  if (token) headers.set("Authorization", `JWT ${token}`);
   return headers;
 }
 
