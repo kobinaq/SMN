@@ -35,7 +35,7 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` done
 - [~] **R321** — All staff mutation clients send `credentials: "include"`
 - [~] **R322** — All `/api/admin/*` auth use `staffAuthHeaders(request)` (JWT promotion)
 - [~] **R323** — Role guards on every admin mutation (incl. opportunity-operations, course-builder)
-- [ ] **R324** — Password-reset path: clear UX when email unconfigured; adapter wiring documented
+- [~] **R324** — Password-reset path: clear UX when email unconfigured; adapter wiring documented
 - [ ] **R325** — Bootstrap first-user remains safe (empty users only) + rate/abuse notes
 
 ### Request hygiene
@@ -123,11 +123,11 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` done
 ### LMS
 
 - [~] **R410** — Course cards: status, duration, difficulty, progress, enrol state
-- [ ] **R411** — Course overview: outcomes, instructor, modules, cert, prerequisites, CTA
-- [ ] **R412** — Lesson: prev/next, module nav, progress chrome
+- [~] **R411** — Course overview: outcomes, instructor, modules, cert, prerequisites, CTA
+- [~] **R412** — Lesson: prev/next, module nav, progress chrome
 - [~] **R413** — Progress save success + failure + retry (never silent)
 - [~] **R414** — Resume last in-progress lesson
-- [ ] **R415** — Completion celebration + certificate eligibility CTA
+- [~] **R415** — Completion celebration + certificate eligibility CTA
 - [ ] **R416** — Attachment presentation polish; member-safe empty media copy
 - [ ] **R417** — Mobile lesson layout + keyboard accessibility
 
@@ -141,8 +141,8 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` done
 
 ### Opportunities (member)
 
-- [ ] **R430** — Filter persistence + expired labelling
-- [ ] **R431** — Detail page shows member application status
+- [~] **R430** — Filter persistence + expired labelling
+- [~] **R431** — Detail page shows member application status
 - [ ] **R432** — Expand tracking states (interested/applied/interviewing/offer/rejected/withdrawn/accepted) where schema allows safely
 - [ ] **R433** — Notes + date applied + confirmation feedback
 - [ ] **R434** — No auto-apply; external destination clarity
@@ -182,7 +182,7 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` done
 - [ ] **R473** — Enrollment grant/list minimal ops (no raw collection hopping)
 - [ ] **R474** — Curriculum preview / learner preview link
 - [ ] **R475** — Unsaved-change warning on editors
-- [ ] **R476** — Replace prompt-based curriculum confirms with ConfirmDialog
+- [~] **R476** — Replace prompt-based curriculum confirms with ConfirmDialog
 - [ ] **R477** — Assessments: keep Content Studio drafts only — no new LMS assessment product (freeze)
 
 ### Member 360
@@ -215,8 +215,8 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` done
 
 - [ ] **R510** — Eligibility confirmation + preview
 - [ ] **R511** — Bulk results + partial failure handling UI
-- [ ] **R512** — Revoke/reissue with reason dialogs
-- [ ] **R513** — Notification feedback clarity
+- [~] **R512** — Revoke/reissue with reason dialogs
+- [~] **R513** — Notification feedback clarity
 - [ ] **R514** — Optional PDF attach when media available
 
 ### Staff workflow consistency

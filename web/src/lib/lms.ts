@@ -21,6 +21,11 @@ type LmsCourseDoc = {
   accessRule: "enrolled" | "member" | "cohort";
   level?: string | null;
   estimatedHours?: number | null;
+  instructor?: string | null;
+  category?: string | null;
+  prerequisites?: string | null;
+  learningOutcomes?: Array<{ outcome?: string | null }> | null;
+  certificateEnabled?: boolean | null;
   cover?: Relation<MediaDoc>;
   order?: number | null;
   status: "draft" | "published" | "archived";
@@ -89,7 +94,13 @@ export type LmsCourseCard = {
   completedCount: number;
   percentage: number;
   href: string;
+  continueHref: string;
   tutorEnabled: boolean;
+  instructor: string;
+  category: string;
+  prerequisites: string;
+  learningOutcomes: string[];
+  certificateEnabled: boolean;
 };
 
 export type LmsCourseDetail = LmsCourseCard & {
@@ -167,6 +178,13 @@ function toCourseCard(course: LmsCourseDoc, lessons: LmsLessonDoc[], progress: M
     href: `/app/learning/courses/${course.slug}`,
     continueHref: continueLessonHref(course.slug, lessons, progress),
     tutorEnabled: Boolean(course.tutorEnabled),
+    instructor: course.instructor?.trim() || "",
+    category: course.category?.trim() || "",
+    prerequisites: course.prerequisites?.trim() || "",
+    learningOutcomes: (course.learningOutcomes || [])
+      .map((item) => item?.outcome?.trim() || "")
+      .filter(Boolean),
+    certificateEnabled: Boolean(course.certificateEnabled),
   };
 }
 

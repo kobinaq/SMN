@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Download, FileText, PlayCircle } from "lucide-react";
+import { CourseCompletionBanner } from "@/components/app/CourseCompletionBanner";
 import { LmsProgressButton } from "@/components/app/LmsProgressButton";
 import { AITutor } from "@/components/app/AITutor";
 import { Button } from "@/components/ui/Button";
@@ -30,6 +31,10 @@ export default async function LmsLessonPage(
           <div>
             <h1 className="font-display text-2xl text-white sm:text-3xl">{lesson.title}</h1>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/55">{lesson.summary}</p>
+            <p className="mt-3 text-xs text-white/40">
+              Course progress · {lesson.course.completedCount}/{lesson.course.lessonCount} lessons ·{" "}
+              {lesson.course.percentage}%
+            </p>
           </div>
           <LmsProgressButton
             courseId={lesson.course.id}
@@ -38,6 +43,13 @@ export default async function LmsLessonPage(
           />
         </div>
       </div>
+
+      <CourseCompletionBanner
+        courseTitle={lesson.course.title}
+        percentage={lesson.course.percentage}
+        certificateEnabled={lesson.course.certificateEnabled}
+        courseHref={lesson.course.href}
+      />
 
       {lesson.youtubeEmbedUrl ? (
         <section className="overflow-hidden rounded-2xl border border-white/10 bg-black">
