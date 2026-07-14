@@ -184,22 +184,13 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
         </p>
         <h1
           data-hero-item
-          className="font-display mx-auto mt-3 max-w-3xl text-[2rem] leading-[1.15] text-white sm:mt-4 sm:text-5xl md:text-6xl lg:text-7xl"
+          className="font-display mx-auto mt-3 max-w-4xl text-[2rem] leading-[1.1] text-white sm:mt-4 sm:text-5xl md:text-6xl lg:text-7xl"
         >
-          {site.homepage.headline
-            .split(". ")
-            .map((part) => part.trim())
-            .filter(Boolean)
-            .map((sentence, index, parts) => (
-              <span key={sentence} className="block">
-                {sentence}
-                {index < parts.length - 1 && !sentence.endsWith(".") ? "." : ""}
-              </span>
-            ))}
+          {site.homepage.headline}
         </h1>
         <p
           data-hero-item
-          className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/60 sm:mt-5 md:text-base"
+          className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-white/60 sm:mt-5 md:text-base"
         >
           {site.homepage.supportingCopy}
         </p>

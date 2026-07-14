@@ -21,9 +21,8 @@ export const site = {
     twitter: "https://x.com/smn_africa",
   },
   homepage: {
-    headline: "Learn marketing that gets results. Build proof. Join the network.",
-    supportingCopy:
-      "SMN helps beginners, social media managers, and marketers develop strategy, research, brand, campaigns, analytics, and portfolio-ready work — then connects them to mentors, community, and opportunities.",
+    headline: "Learn marketing that gets results.",
+    supportingCopy: "Strategy, mentorship, and portfolio-ready work, with a network that keeps you growing.",
     primaryCtaLabel: "Apply for the next cohort",
     secondaryCtaLabel: "Explore programmes",
     secondaryCtaHref: "/programs",
