@@ -43,7 +43,7 @@ Public site, member portal, LMS, mentorship, opportunities, portfolios, certific
 | CTA / application language | Done |
 | Homepage conversion journey | Done |
 | Social-proof publication gates | Done |
-| Payload SiteSettings + stories fields | Done (migration `20260714_marketing_cms_fields`) |
+| Payload SiteSettings + stories fields | Done (migration applied on production) |
 | Programme / apply / employer / nav / legal / SEO | Done |
 | Analytics events | Done (vendor property still client-gated) |
 | Unit + e2e + production build | Passed |
@@ -65,13 +65,24 @@ Public site, member portal, LMS, mentorship, opportunities, portfolios, certific
 - Real testimonials / partner logos / impact metrics (`verified` stats)
 - Legal counsel review of privacy/terms/refunds
 - Production analytics property (GTM/gtag/Plausible)
-- Apply `20260714_marketing_cms_fields` (or `db:push`) on production Postgres before relying on new CMS columns
+
+### Production schema (2026-07-14)
+
+Marketing CMS schema is applied on production Neon:
+
+- Guarded `db:push` brought prod to the current Payload schema (pre-baseline DB).
+- Baseline `20260713_140429_smn_baseline_20260713` adopted (recorded only; `up` SQL not re-run).
+- Cleared Payload `dev` / `batch=-1` marker so migrations can run non-interactively.
+- `20260714_marketing_cms_fields` migrated and recorded (batch 2).
+- Verified: `site_settings` homepage/cohort columns, `site_settings_impact_stats`, `stories.published` / `permission_confirmed` reads succeed.
+
+Remaining client confirmation above still gates live fees/testimonials/legal/analytics content.
 
 ## Production / migration
 
 - Production: `https://socialmarketersnetwork.vercel.app` (Vercel root `web`, Neon Postgres).
-- Baseline migration tooling exists; disposable Postgres proof + final prod adoption remain open gates.
-- AI feature flags must remain false until schema adoption + smoke gates pass.
+- Production migration bookkeeping: baseline + marketing CMS migration recorded; future schema changes should use additive `db:migrate` only (do not re-run baseline `up`).
+- AI feature flags must remain false until remaining smoke gates pass.
 - Backup/recovery notes: `docs/deployment.md` · ops gate: `docs/production-checklist.md`.
 
 ## Freeze
