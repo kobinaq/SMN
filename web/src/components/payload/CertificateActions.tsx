@@ -5,7 +5,7 @@ import { useState } from "react";
 type Eligible = { id: string | number; label: string; detail: string };
 
 async function operate(body: unknown) {
-  const response = await fetch("/api/admin/certificate-operations", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+  const response = await fetch("/api/admin/certificate-operations", { method: "POST", credentials: "include", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
   const result = await response.json();
   if (!response.ok) throw new Error(result.error || "Certificate operation failed.");
   return result;

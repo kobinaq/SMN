@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { getPayloadClient } from "@/lib/payload";
+import { staffAuthHeaders } from "@/lib/auth/staff";
 import { sendEmail } from "@/lib/email";
 import { canStaff } from "@/lib/staff-permissions";
 
@@ -11,7 +12,7 @@ const schema = z.discriminatedUnion("action", [
 const relationshipID = (value: unknown) => Number(value && typeof value === "object" && "id" in value ? value.id : value);
 
 export async function POST(request: Request) {
-  const payload = await getPayloadClient(); const { user } = await payload.auth({ headers: request.headers });
+  const payload = await getPayloadClient(); const { user } = await payload.auth({ headers: await staffAuthHeaders(request) });
   if (!user || user.collection !== "users") return Response.json({ error: "Staff access required." }, { status: 401 });
   if (!canStaff(user, "mentorship")) return Response.json({ error: "Mentorship operations permission required." }, { status: 403 });
   const parsed = schema.safeParse(await request.json().catch(() => null)); if (!parsed.success) return Response.json({ error: "Invalid mentorship operation." }, { status: 400 });

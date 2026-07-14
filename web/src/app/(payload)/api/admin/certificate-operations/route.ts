@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { getPayloadClient } from "@/lib/payload";
+import { staffAuthHeaders } from "@/lib/auth/staff";
 import { sendEmail } from "@/lib/email";
 import { canStaff } from "@/lib/staff-permissions";
 
@@ -12,7 +13,7 @@ const code = () => `SMN-${randomUUID().replaceAll("-", "").slice(0, 16).toUpperC
 
 export async function POST(request: Request) {
   const payload = await getPayloadClient();
-  const { user } = await payload.auth({ headers: request.headers });
+  const { user } = await payload.auth({ headers: await staffAuthHeaders(request) });
   if (!user || user.collection !== "users") return Response.json({ error: "Staff access required." }, { status: 401 });
   if (!canStaff(user, "learning")) return Response.json({ error: "Learning operations permission required." }, { status: 403 });
   const parsed = schema.safeParse(await request.json().catch(() => null));

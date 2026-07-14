@@ -12,7 +12,7 @@ export function ProgressOverrideForm({ courseId, learners, lessons }: { courseId
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setMessage("");
     const data = new FormData(event.currentTarget);
-    const response = await fetch("/api/admin/progress-overrides", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ courseId, memberId: data.get("memberId"), lessonId: data.get("lessonId"), status: data.get("status"), reason: data.get("reason") }) });
+    const response = await fetch("/api/admin/progress-overrides", { method: "POST", credentials: "include", headers: { "content-type": "application/json" }, body: JSON.stringify({ courseId, memberId: data.get("memberId"), lessonId: data.get("lessonId"), status: data.get("status"), reason: data.get("reason") }) });
     const result = await response.json();
     setMessage(response.ok ? "Audited override saved." : result.error || "Unable to save override.");
     setBusy(false);

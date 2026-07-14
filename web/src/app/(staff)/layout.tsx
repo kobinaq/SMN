@@ -3,6 +3,7 @@ import {
   siteMetadata,
   siteViewport,
 } from "@/components/layout/SiteDocument";
+import { AppProviders } from "@/components/providers/AppProviders";
 
 export const metadata = {
   ...siteMetadata,
@@ -14,5 +15,9 @@ export const metadata = {
 export const viewport = siteViewport;
 
 export default function StaffRootLayout({ children }: { children: React.ReactNode }) {
-  return <SiteDocument>{children}</SiteDocument>;
+  return (
+    <SiteDocument>
+      <AppProviders>{children}</AppProviders>
+    </SiteDocument>
+  );
 }

@@ -15,6 +15,7 @@ import { evaluateCourseReadiness, type CourseReadinessInput, type CurriculumLess
 import { getPayloadClient } from "@/lib/payload";
 import { staffAccess } from "@/lib/staff/records";
 import { cn } from "@/lib/utils";
+import { StaffRecordForm } from "@/components/staff/StaffRecordForm";
 import { AddLessonForm, AddModuleForm } from "./CurriculumCreateForms";
 
 const baseTabs = [
@@ -385,27 +386,100 @@ export default async function StaffLearningPage({
       {activeTab === "settings" ? (
         <StaffPanel>
           <h3 className="font-display text-xl text-white">Settings</h3>
-          <p className="mt-2 text-sm text-white/55">
-            Course access, publishing, certificate, and Tutor controls remain on the course record.
+          <p className="mt-2 mb-5 text-sm text-white/55">
+            Edit course metadata, access, publishing, certificate, and Tutor controls without leaving Course Builder.
+            Publication still requires the readiness checklist below.
           </p>
-          <dl className="mt-4 space-y-3 text-sm">
-            <div className="flex justify-between gap-4 border-b border-white/5 pb-2">
-              <dt className="text-white/45">Enrollment open</dt>
-              <dd className="text-white">{selected.enrollmentOpen ? "Yes" : "No"}</dd>
+          {!readiness.ready ? (
+            <div className="mb-5 rounded-2xl border border-amber-300/30 bg-amber-300/10 px-4 py-3 text-sm text-amber-100" role="status">
+              Not ready to publish. Missing: {readiness.missing.join(", ")}.
             </div>
-            <div className="flex justify-between gap-4 border-b border-white/5 pb-2">
-              <dt className="text-white/45">Certificate enabled</dt>
-              <dd className="text-white">{selected.certificateEnabled ? "Yes" : "No"}</dd>
+          ) : (
+            <div className="mb-5 rounded-2xl border border-mint/30 bg-mint/10 px-4 py-3 text-sm text-mint" role="status">
+              Publication readiness checks passed. You can set status to published.
             </div>
-            <div className="flex justify-between gap-4 border-b border-white/5 pb-2">
-              <dt className="text-white/45">Preview enabled</dt>
-              <dd className="text-white">{selected.previewEnabled ? "Yes" : "No"}</dd>
-            </div>
-            <div className="flex justify-between gap-4">
-              <dt className="text-white/45">Tutor enabled</dt>
-              <dd className="text-white">{selected.tutorEnabled ? "Yes" : "No"}</dd>
-            </div>
-          </dl>
+          )}
+          <StaffRecordForm
+            collection="lms-courses"
+            action="update"
+            id={selected.id}
+            submitLabel="Save course settings"
+            fields={[
+              { name: "title", label: "Title", type: "text", required: true },
+              { name: "slug", label: "Slug", type: "text", required: true },
+              { name: "summary", label: "Summary", type: "textarea", required: true },
+              { name: "instructor", label: "Instructor", type: "text", placeholder: "Facilitator name" },
+              { name: "category", label: "Category", type: "text" },
+              { name: "programKey", label: "Program key", type: "text", required: true },
+              {
+                name: "accessRule",
+                label: "Access rule",
+                type: "select",
+                required: true,
+                options: [
+                  { label: "Matching enrollment", value: "enrolled" },
+                  { label: "Any member", value: "member" },
+                  { label: "Active/completed cohort member", value: "cohort" },
+                ],
+              },
+              {
+                name: "level",
+                label: "Level",
+                type: "select",
+                options: [
+                  { label: "Foundation", value: "foundation" },
+                  { label: "Intermediate", value: "intermediate" },
+                  { label: "Advanced", value: "advanced" },
+                ],
+              },
+              { name: "estimatedHours", label: "Estimated hours", type: "number" },
+              { name: "prerequisites", label: "Prerequisites", type: "textarea", placeholder: "None" },
+              {
+                name: "learningOutcomesText",
+                label: "Learning outcomes (one per line)",
+                type: "textarea",
+                placeholder: "Learners will be able to…",
+              },
+              { name: "tutorGuidance", label: "Tutor guidance (optional)", type: "textarea" },
+              {
+                name: "status",
+                label: "Status",
+                type: "select",
+                required: true,
+                options: [
+                  { label: "Draft", value: "draft" },
+                  { label: "Published", value: "published" },
+                  { label: "Archived", value: "archived" },
+                ],
+              },
+              { name: "enrollmentOpen", label: "Enrollment open", type: "checkbox" },
+              { name: "certificateEnabled", label: "Certificate enabled", type: "checkbox" },
+              { name: "previewEnabled", label: "Preview enabled", type: "checkbox" },
+              { name: "tutorEnabled", label: "Tutor enabled (also requires env flag)", type: "checkbox" },
+            ]}
+            initial={{
+              title: selected.title,
+              slug: selected.slug,
+              summary: selected.summary,
+              instructor: selected.instructor || "",
+              category: selected.category || "",
+              programKey: selected.programKey,
+              accessRule: selected.accessRule || "enrolled",
+              level: selected.level || "foundation",
+              estimatedHours: selected.estimatedHours ?? "",
+              prerequisites: selected.prerequisites || "",
+              learningOutcomesText: (selected.learningOutcomes || [])
+                .map((item) => item?.outcome || "")
+                .filter(Boolean)
+                .join("\n"),
+              tutorGuidance: selected.tutorGuidance || "",
+              status: selected.status || "draft",
+              enrollmentOpen: Boolean(selected.enrollmentOpen),
+              certificateEnabled: Boolean(selected.certificateEnabled),
+              previewEnabled: Boolean(selected.previewEnabled),
+              tutorEnabled: Boolean(selected.tutorEnabled),
+            }}
+          />
         </StaffPanel>
       ) : null}
 

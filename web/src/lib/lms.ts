@@ -141,6 +141,14 @@ function progressMap(progress: ProgressDoc[]) {
   return new Map(progress.map((item) => [String(relationId(item.lesson)), item.status]));
 }
 
+function continueLessonHref(courseSlug: string, lessons: LmsLessonDoc[], progress: Map<string, Status>) {
+  const ordered = [...lessons].sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0));
+  const inProgress = ordered.find((lesson) => progress.get(String(lesson.id)) === "in-progress");
+  const nextOpen = ordered.find((lesson) => progress.get(String(lesson.id)) !== "completed");
+  const target = inProgress || nextOpen || ordered[0];
+  return target ? `/app/learning/courses/${courseSlug}/lessons/${target.slug}` : `/app/learning/courses/${courseSlug}`;
+}
+
 function toCourseCard(course: LmsCourseDoc, lessons: LmsLessonDoc[], progress: Map<string, Status>) {
   const completedCount = lessons.filter((lesson) => progress.get(String(lesson.id)) === "completed").length;
   const lessonCount = lessons.length;
@@ -157,6 +165,7 @@ function toCourseCard(course: LmsCourseDoc, lessons: LmsLessonDoc[], progress: M
     completedCount,
     percentage: lessonCount ? Math.round((completedCount / lessonCount) * 100) : 0,
     href: `/app/learning/courses/${course.slug}`,
+    continueHref: continueLessonHref(course.slug, lessons, progress),
     tutorEnabled: Boolean(course.tutorEnabled),
   };
 }

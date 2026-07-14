@@ -38,6 +38,15 @@ The current smoke suite verifies:
 - Member login page renders
 - Anonymous users are redirected away from protected portal routes
 - A seeded staff user can log in and see the workflow-first dashboard
+
+Refinement programme expands coverage toward:
+
+- Member continuity dashboard + resume lesson deep link
+- Profile save confirmation and tag inputs
+- LMS progress save failure messaging
+- Staff Course Builder settings save
+- Mentorship/opportunity ConfirmDialog flows
+- AI mocked provider cases (flags off by default)
 - Curriculum duplication and audited progress correction
 - Content Studio generation, candidate review, and explicit draft save using mock AI
 - Member 360 private notes, mentorship transitions, opportunity moderation, and certificate reissue

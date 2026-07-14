@@ -54,6 +54,14 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
       .map((item) => ({ item }));
     delete body.outcomesText;
   }
+  if (typeof body.learningOutcomesText === "string") {
+    body.learningOutcomes = String(body.learningOutcomesText)
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((outcome) => ({ outcome }));
+    delete body.learningOutcomesText;
+  }
   for (const key of ["cover", "file", "image", "course", "module", "member", "mentor", "source"]) {
     if (!(key in body)) continue;
     const next = coerceRelationId(body[key]);
@@ -74,6 +82,9 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
   if (typeof body.order === "string") body.order = body.order === "" ? 0 : Number(body.order);
   if (typeof body.durationMinutes === "string") {
     body.durationMinutes = body.durationMinutes === "" ? null : Number(body.durationMinutes);
+  }
+  if (typeof body.estimatedHours === "string") {
+    body.estimatedHours = body.estimatedHours === "" ? null : Number(body.estimatedHours);
   }
   if (body.youtubeUrl === "") delete body.youtubeUrl;
   if (collection === "stories") delete body.slug;
