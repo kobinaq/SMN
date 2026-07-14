@@ -4,6 +4,7 @@ import { staffAuthHeaders } from "@/lib/auth/staff";
 import { canStaff } from "@/lib/staff-permissions";
 import { lessonOutlineJSONSchema, lessonOutlineSchema, quizJSONSchema, quizSchema, rubricJSONSchema, rubricSchema } from "@/lib/ai/content-schemas";
 import { recordAIEvent, runAIStructured, runAIText, validateAIInput } from "@/lib/ai/runtime";
+import { isAIFeatureEnabled } from "@/lib/ai/config";
 import { AIError } from "@/lib/ai/types";
 
 const id = z.union([z.string().min(1), z.number()]);
@@ -14,7 +15,7 @@ const transition = z.object({ action: z.literal("transition"), draftId: id, stat
 const schema = z.discriminatedUnion("action", [generate, save, transition]);
 
 export async function POST(request: Request) {
-  if (process.env.AI_CONTENT_STUDIO_ENABLED !== "true") return Response.json({ error: "AI Content Studio is not enabled." }, { status: 503 });
+  if (!isAIFeatureEnabled("content-studio")) return Response.json({ error: "AI Content Studio is not enabled." }, { status: 503 });
   const payload = await getPayloadClient(); const { user } = await payload.auth({ headers: await staffAuthHeaders(request) });
   if (!user || user.collection !== "users") return Response.json({ error: "Staff sign-in required." }, { status: 401 });
   if (!canStaff(user, "learning")) return Response.json({ error: "Learning permission required." }, { status: 403 });

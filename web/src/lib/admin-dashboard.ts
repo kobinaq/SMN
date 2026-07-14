@@ -1,4 +1,5 @@
 import type { Payload } from "payload";
+import { isAIFeatureEnabled } from "@/lib/ai/config";
 import { canStaff, staffRole, type StaffRole } from "@/lib/staff-permissions";
 import { evaluateCourseReadiness } from "@/lib/lms-readiness";
 
@@ -349,9 +350,9 @@ export async function getAdminOpsSnapshot(payload: Payload, user: unknown) {
       {
         label: "AI surfaces",
         detail: [
-          process.env.AI_TUTOR_ENABLED === "true" ? "Tutor on" : "Tutor off",
-          process.env.AI_CONTENT_STUDIO_ENABLED === "true" ? "Studio on" : "Studio off",
-          process.env.AI_CAREER_COACH_ENABLED === "true" ? "Coach on" : "Coach off",
+          isAIFeatureEnabled("tutor") ? "Tutor on" : "Tutor off",
+          isAIFeatureEnabled("content-studio") ? "Studio on" : "Studio off",
+          isAIFeatureEnabled("career-coach") ? "Coach on" : "Coach off",
         ].join(" · "),
         tone: "blue",
       },

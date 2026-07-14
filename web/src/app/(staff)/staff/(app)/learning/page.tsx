@@ -10,6 +10,7 @@ import {
   staffOpsChrome,
 } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
+import { isAIFeatureEnabled } from "@/lib/ai/config";
 import { calculateCourseAnalytics, type AnalyticsEnrollment, type AnalyticsLesson, type AnalyticsModule, type AnalyticsProgress } from "@/lib/lms-analytics";
 import { evaluateCourseReadiness, type CourseReadinessInput, type CurriculumLesson } from "@/lib/lms-readiness";
 import { getPayloadClient } from "@/lib/payload";
@@ -39,7 +40,7 @@ export default async function StaffLearningPage({
   const payload = await getPayloadClient();
   const access = staffAccess(staff);
   const params = await searchParams;
-  const studioEnabled = process.env.AI_CONTENT_STUDIO_ENABLED === "true";
+  const studioEnabled = isAIFeatureEnabled("content-studio");
 
   const tabs = studioEnabled
     ? ([...baseTabs, ["ai-content-studio", "AI Content Studio"]] as const)

@@ -1,7 +1,19 @@
 import { AIError } from "./types";
 
 export type AIModelPurpose = "text" | "structured" | "fast";
+export type AIFeatureFlag = "tutor" | "content-studio" | "career-coach";
 export type AIConfig = { provider: "groq" | "mock" | "disabled"; apiKey?: string; models: Record<AIModelPurpose, string>; timeoutMs: number; maxInputChars: number; hourlyRequests: number; retentionDays: number };
+
+const featureEnv: Record<AIFeatureFlag, string> = {
+  tutor: "AI_TUTOR_ENABLED",
+  "content-studio": "AI_CONTENT_STUDIO_ENABLED",
+  "career-coach": "AI_CAREER_COACH_ENABLED",
+};
+
+/** True when the feature env var is set to true (trimmed, case-insensitive). */
+export function isAIFeatureEnabled(feature: AIFeatureFlag) {
+  return process.env[featureEnv[feature]]?.trim().toLowerCase() === "true";
+}
 
 export function getAIConfig(): AIConfig {
   const provider = (process.env.AI_PROVIDER || (process.env.GROQ_API_KEY ? "groq" : "disabled")) as AIConfig["provider"];
