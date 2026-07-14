@@ -178,7 +178,7 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` done
 
 - [~] **R470** — Editable course settings/metadata (instructor, outcomes, cover, status, tutor controls)
 - [~] **R471** — Publication readiness blocks incomplete publish
-- [ ] **R472** — Lesson attachments management in editor
+- [~] **R472** — Lesson attachments management in editor
 - [ ] **R473** — Enrollment grant/list minimal ops (no raw collection hopping)
 - [ ] **R474** — Curriculum preview / learner preview link
 - [ ] **R475** — Unsaved-change warning on editors

@@ -13,9 +13,20 @@ Staff work happens in the custom `/staff` app. Payload remains the system of rec
 1. Open `/staff/learning`
 2. Create draft course
 3. Add modules and lessons in the Curriculum tab
-4. Edit lesson/module detail pages for content, video, attachments
-5. Complete Settings (metadata, readiness fields, publish controls)
+4. Open a lesson’s **Edit lesson details** page to add materials:
+   - Lesson type (video / reading / download / assignment)
+   - Lesson text / reading content
+   - External article or resource URL
+   - Optional YouTube URL
+   - Document uploads (PDFs and files)
+5. Open the **Settings** tab for course-level fields:
+   - Instructor
+   - Category
+   - Learning outcomes (one per line)
+   - Access, publish status, certificate, Tutor controls
 6. Publish only when readiness checks pass
+
+Schema note: lesson `resourceUrl` / `resourceLabel` require a production schema update (`npm run db:push` or migrate) after deploy.
 
 ## Mentorship & opportunities
 

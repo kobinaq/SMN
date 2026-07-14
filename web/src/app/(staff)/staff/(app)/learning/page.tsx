@@ -221,11 +221,43 @@ export default async function StaffLearningPage({
                 </li>
               ))}
             </ul>
+            {!readiness.ready ? (
+              <p className="mt-4 text-sm text-white/55">
+                Missing instructor, category, or learning outcomes? Edit them in{" "}
+                <Link href={`${base}&tab=settings`} className="text-baby-blue hover:underline">
+                  Settings
+                </Link>
+                .
+              </p>
+            ) : null}
           </StaffPanel>
           <StaffPanel>
-            <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Course details</p>
-            <h3 className="mt-2 font-display text-xl text-white">At a glance</h3>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Course details</p>
+                <h3 className="mt-2 font-display text-xl text-white">At a glance</h3>
+              </div>
+              <Link href={`${base}&tab=settings`} className="text-xs text-baby-blue hover:underline">
+                Edit in Settings
+              </Link>
+            </div>
             <dl className="mt-4 space-y-3 text-sm">
+              <div className="flex justify-between gap-4 border-b border-white/5 pb-2">
+                <dt className="text-white/45">Instructor</dt>
+                <dd className="text-right text-white">{selected.instructor || "Not set — open Settings"}</dd>
+              </div>
+              <div className="flex justify-between gap-4 border-b border-white/5 pb-2">
+                <dt className="text-white/45">Category</dt>
+                <dd className="text-right text-white">{selected.category || "Not set — open Settings"}</dd>
+              </div>
+              <div className="flex justify-between gap-4 border-b border-white/5 pb-2">
+                <dt className="text-white/45">Learning outcomes</dt>
+                <dd className="text-right text-white">
+                  {(selected.learningOutcomes || []).length
+                    ? `${(selected.learningOutcomes || []).length} set`
+                    : "Not set — open Settings"}
+                </dd>
+              </div>
               <div className="flex justify-between gap-4 border-b border-white/5 pb-2">
                 <dt className="text-white/45">Program key</dt>
                 <dd className="text-white">{selected.programKey}</dd>
@@ -385,10 +417,10 @@ export default async function StaffLearningPage({
 
       {activeTab === "settings" ? (
         <StaffPanel>
-          <h3 className="font-display text-xl text-white">Settings</h3>
+          <h3 className="font-display text-xl text-white">Course settings</h3>
           <p className="mt-2 mb-5 text-sm text-white/55">
-            Edit course metadata, access, publishing, certificate, and Tutor controls without leaving Course Builder.
-            Publication still requires the readiness checklist below.
+            Set instructor, category, learning outcomes (one per line), access, publishing, certificate, and Tutor
+            controls here. Curriculum lessons are edited from the Curriculum tab.
           </p>
           {!readiness.ready ? (
             <div className="mb-5 rounded-2xl border border-amber-300/30 bg-amber-300/10 px-4 py-3 text-sm text-amber-100" role="status">

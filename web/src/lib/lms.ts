@@ -51,6 +51,8 @@ type LmsLessonDoc = {
   youtubeUrl?: string | null;
   durationMinutes?: number | null;
   body?: string | null;
+  resourceLabel?: string | null;
+  resourceUrl?: string | null;
   attachments?: { label?: string | null; file?: Relation<MediaDoc> }[] | null;
   order?: number | null;
   status: "draft" | "published" | "archived";
@@ -112,6 +114,8 @@ export type LmsLessonDetail = LmsLessonListItem & {
   moduleTitle: string;
   youtubeEmbedUrl: string;
   body: string;
+  resourceLabel: string;
+  resourceUrl: string;
   attachments: { label: string; url: string }[];
   previousHref: string;
   nextHref: string;
@@ -278,6 +282,8 @@ export async function getLmsLesson(member: MemberUser, courseSlug: string, lesso
     moduleTitle: currentModule?.title || "",
     youtubeEmbedUrl: youtubeEmbedUrl(lesson.youtubeUrl || ""),
     body: lesson.body || "",
+    resourceLabel: lesson.resourceLabel?.trim() || "Open resource",
+    resourceUrl: lesson.resourceUrl?.trim() || "",
     attachments: (lesson.attachments || [])
       .map((item) => ({ label: item.label || "Download", url: mediaUrl(item.file) }))
       .filter((item) => item.url),

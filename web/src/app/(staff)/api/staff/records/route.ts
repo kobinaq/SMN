@@ -86,7 +86,21 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
   if (typeof body.estimatedHours === "string") {
     body.estimatedHours = body.estimatedHours === "" ? null : Number(body.estimatedHours);
   }
-  if (body.youtubeUrl === "") delete body.youtubeUrl;
+  if (body.youtubeUrl === "") body.youtubeUrl = null;
+  if (body.resourceUrl === "") body.resourceUrl = null;
+  if (body.resourceLabel === "") body.resourceLabel = null;
+  if (Array.isArray(body.attachments)) {
+    body.attachments = body.attachments
+      .map((item) => {
+        if (!item || typeof item !== "object") return null;
+        const row = item as Record<string, unknown>;
+        const label = typeof row.label === "string" ? row.label.trim() : "";
+        const file = coerceRelationId(row.file);
+        if (!label || file === undefined) return null;
+        return { label, file };
+      })
+      .filter(Boolean);
+  }
   if (collection === "stories") delete body.slug;
   return body;
 }
