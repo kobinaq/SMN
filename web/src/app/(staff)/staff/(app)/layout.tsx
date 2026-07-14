@@ -1,4 +1,5 @@
-import { StaffNav, type StaffNavLink } from "@/components/staff/StaffNav";
+import { PortalShell } from "@/components/portal/PortalShell";
+import { buildStaffNavGroups } from "@/components/portal/nav-config";
 import { requireStaff, staffDisplayName, staffRoleLabel } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { getAdminWorkspaceBadges } from "@/lib/admin-dashboard";
@@ -12,7 +13,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   const badgeFor = (...parts: string[]) =>
     badges.find((item) => parts.some((part) => item.href.includes(part) || item.href === part))?.count;
 
-  const links: StaffNavLink[] = [
+  const links = [
     { href: "/staff", label: "Home", count: badgeFor("/admin", "/staff") },
     { href: "/staff/learning", label: "Courses", count: badgeFor("course-builder", "learning") },
     { href: "/staff/members", label: "Members" },
@@ -47,9 +48,16 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   }
 
   return (
-    <div className="flex min-h-svh flex-col bg-near-black">
-      <StaffNav staffName={staffDisplayName(staff)} staffRole={staffRoleLabel(staff)} links={links} />
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 sm:py-10">{children}</main>
-    </div>
+    <PortalShell
+      variant="staff"
+      identity={{
+        name: staffDisplayName(staff),
+        subtitle: staffRoleLabel(staff),
+      }}
+      groups={buildStaffNavGroups(links)}
+      maxWidth="7xl"
+    >
+      {children}
+    </PortalShell>
   );
 }
