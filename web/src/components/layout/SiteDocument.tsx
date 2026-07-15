@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, League_Spartan } from "next/font/google";
+import { AhrefsAnalytics } from "@/components/analytics/AhrefsAnalytics";
 import { site } from "@/lib/site";
 import "@/app/globals.css";
 
@@ -68,9 +69,10 @@ export const siteViewport: Viewport = {
 export function SiteDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${leagueSpartan.variable} h-full`}>
-      <body className="min-h-full bg-near-black font-sans text-white antialiased">
-        {children}
-      </body>
+      <head>
+        <AhrefsAnalytics />
+      </head>
+      <body className="min-h-full bg-near-black font-sans text-white antialiased">{children}</body>
     </html>
   );
 }

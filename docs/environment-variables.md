@@ -10,6 +10,7 @@ Production validation runs when `VERCEL_ENV=production` or `SMN_VALIDATE_PROD_EN
 | `PAYLOAD_DB_PUSH` | No | Enables schema push for `npm run db:push` | `true` only when pushing schema | Usually unset | DB adapter | No automatic schema push |
 | `USE_SEED_CONTENT` | No | Forces public pages to use static seed content | `true` or unset | Usually unset | CMS helpers | CMS queried when DB exists |
 | `NEXT_PUBLIC_WHATSAPP_INVITE` | Recommended | Public WhatsApp invite link | Test invite URL | Real invite URL | Site/settings links | Falls back to placeholder from seed content |
+| `NEXT_PUBLIC_AHREFS_ANALYTICS_KEY` | Optional | Ahrefs Web Analytics `data-key` | Empty or key from Ahrefs | Production Ahrefs key | `AhrefsAnalytics` in `SiteDocument` | Script not loaded |
 | `OPS_EMAIL` | Recommended | Operations notification recipient | `hello@example.com` | Real ops inbox | forms, mentorship | Falls back to site email in some routes |
 | `RESEND_API_KEY` | Optional until email live | Email sending | Empty or Resend key | Resend key | forms, mentor emails, Payload email later | Emails are skipped or logged |
 | `RESEND_FROM` | Optional until email live | Sender identity | `SMN <onboarding@resend.dev>` | Verified domain sender | email sends | Fallback sender used |

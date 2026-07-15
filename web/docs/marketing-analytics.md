@@ -33,4 +33,7 @@ Privacy-conscious events for the public marketing site. Do not attach emails, ph
 2. `window.gtag` when present
 3. `window.plausible` when present
 
+Pageviews / traffic are handled separately by **Ahrefs Web Analytics** when
+`NEXT_PUBLIC_AHREFS_ANALYTICS_KEY` is set (`AhrefsAnalytics` in `SiteDocument`).
+
 Configure the production analytics property via the client’s preferred vendor. No secrets belong in the client bundle.
