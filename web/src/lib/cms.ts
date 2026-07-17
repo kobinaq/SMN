@@ -32,7 +32,9 @@ export async function getCourses() {
       where: { status: { equals: "published" } },
     });
     if (!result.docs.length) return fallbackCourses;
-    return result.docs.map((doc) => ({
+    return result.docs.map((doc) => {
+      const record = doc as unknown as Record<string, unknown>;
+      return {
       slug: doc.slug as string,
       title: doc.title as string,
       summary: doc.summary as string,
@@ -40,13 +42,19 @@ export async function getCourses() {
       duration: (doc.duration as string) || "",
       lessons: (doc.lessons as number) || 0,
       price: resolvePublicPrice(doc.price as string, COURSE_FEE_PENDING_LABEL),
-      selarUrl: doc.selarUrl as string,
+      selarUrl: "",
+      id: doc.id,
+      amount: typeof record.amount === "number" ? record.amount : null,
+      currency: (record.currency as string) || "GHS",
+      programKey: (record.programKey as string) || "",
+      delivery: (record.delivery as string) || "self-paced",
       badge: (doc.badge as string) || null,
       image:
         typeof doc.image === "object" && doc.image && "url" in doc.image && doc.image.url
           ? (doc.image.url as string)
           : img.default,
-    }));
+    };
+    });
   }, fallbackCourses);
 }
 
@@ -57,22 +65,49 @@ export async function getEvents() {
     const result = await payload.find({
       collection: "events",
       limit: 50,
-      sort: "date",
+      sort: "startsAt",
+      where: { status: { equals: "published" } },
     });
     if (!result.docs.length) return fallbackEvents;
-    return result.docs.map((doc) => ({
-      slug: doc.slug as string,
-      title: doc.title as string,
-      type: doc.type as string,
-      date: doc.date as string,
-      time: (doc.time as string) || "",
-      summary: doc.summary as string,
-      registrationUrl: doc.registrationUrl as string,
-      image:
-        typeof doc.image === "object" && doc.image && "url" in doc.image && doc.image.url
-          ? (doc.image.url as string)
-          : img.defaultEvent,
-    }));
+    return result.docs.map((doc) => {
+      const record = doc as unknown as Record<string, unknown>;
+      const startsAt = String(record.startsAt || record.date || "");
+      const pricing = (record.pricing as string) || "free";
+      const amount = typeof record.amount === "number" ? record.amount : null;
+      const formatValue = String(record.format || "online");
+      const formatLabel =
+        formatValue === "onsite" ? "Onsite" : formatValue === "hybrid" ? "Hybrid" : "Online";
+      const priceLabel =
+        pricing === "paid" && amount
+          ? new Intl.NumberFormat("en-GH", { style: "currency", currency: String(record.currency || "GHS") }).format(amount / 100)
+          : "Free";
+      return {
+        id: doc.id,
+        slug: doc.slug as string,
+        title: doc.title as string,
+        type: doc.type as string,
+        date: startsAt,
+        time: (doc.time as string) || "",
+        summary: doc.summary as string,
+        registrationUrl: `/events/${doc.slug}`,
+        image:
+          typeof doc.image === "object" && doc.image && "url" in doc.image && doc.image.url
+            ? (doc.image.url as string)
+            : img.defaultEvent,
+        format: (record.venue as string) || formatLabel,
+        price: priceLabel,
+        host: (record.host as string) || "SMN",
+        highlights: [],
+        pricing: pricing as "free" | "paid",
+        amount,
+        currency: String(record.currency || "GHS"),
+        capacity: typeof record.capacity === "number" ? record.capacity : null,
+        venue: (record.venue as string) || null,
+        address: (record.address as string) || null,
+        onlineUrl: (record.onlineUrl as string) || null,
+        status: String(record.status || "published"),
+      };
+    });
   }, fallbackEvents);
 }
 

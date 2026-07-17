@@ -78,7 +78,21 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
     const iso = toIsoDate(body.date);
     if (iso) body.date = iso;
   }
-  if (typeof body.lessons === "string") body.lessons = body.lessons === "" ? null : Number(body.lessons);
+  if ("startsAt" in body) {
+    const iso = toIsoDate(body.startsAt);
+    if (iso) {
+      body.startsAt = iso;
+      if (!body.date) body.date = iso;
+    }
+  }
+  if ("endsAt" in body) {
+    const iso = toIsoDate(body.endsAt);
+    if (iso) body.endsAt = iso;
+    else if (body.endsAt === "") body.endsAt = null;
+  }
+  for (const key of ["amount", "capacity", "lessons"]) {
+    if (typeof body[key] === "string") body[key] = body[key] === "" ? null : Number(body[key]);
+  }
   if (typeof body.order === "string") body.order = body.order === "" ? 0 : Number(body.order);
   if (typeof body.durationMinutes === "string") {
     body.durationMinutes = body.durationMinutes === "" ? null : Number(body.durationMinutes);

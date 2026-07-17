@@ -218,7 +218,7 @@ export async function HomePage() {
             <SectionHeading
               eyebrow="Learning experience"
               title="Courses, progress, and a native member portal."
-              description="Members access learning through the SMN platform: courses, modules, lessons, progress tracking, resources, and certificates. Selected self-paced courses are also available on Selar."
+              description="Members access learning through the SMN platform: courses, modules, lessons, progress tracking, resources, and certificates. Self-paced catalogue courses enroll on-platform."
             />
             <Button href={cta.viewCourses.href} variant="secondary" className="w-full self-start sm:w-auto">
               {cta.viewCourses.label}
@@ -260,12 +260,10 @@ export async function HomePage() {
                   <div className="mt-6 flex items-center justify-between gap-3">
                     <span className="text-sm font-medium text-baby-blue">{course.price}</span>
                     <a
-                      href={course.selarUrl}
-                      target="_blank"
-                      rel="noreferrer"
+                      href="/programs/courses"
                       className="inline-flex items-center gap-1 text-sm text-white/80 transition hover:text-white"
                     >
-                      {cta.buyOnSelar.label}
+                      {cta.buyCourse.label}
                       <ArrowUpRight className="h-4 w-4" />
                     </a>
                   </div>
@@ -446,9 +444,7 @@ export async function HomePage() {
                   </p>
                   <p className="mt-4 text-sm leading-relaxed text-white/65">{event.summary}</p>
                   <a
-                    href={event.registrationUrl}
-                    target="_blank"
-                    rel="noreferrer"
+                    href={`/events/${event.slug}`}
                     className="mt-6 inline-flex items-center gap-1 text-sm text-baby-blue hover:text-white"
                   >
                     Register for event <ArrowUpRight className="h-4 w-4" />

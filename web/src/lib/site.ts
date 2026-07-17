@@ -29,7 +29,7 @@ export const site = {
   },
   announcementBanner: "",
   footerBlurb:
-    "Member portal with courses, progress tracking, mentorship, opportunities, portfolios, and verifiable credentials. Community on WhatsApp. Selected courses also available on Selar.",
+    "Member portal with courses, progress tracking, mentorship, opportunities, portfolios, and verifiable credentials. Community on WhatsApp. Catalogue courses enroll on-platform.",
   cohort: {
     name: "Social Media Marketing & AI Cohort",
     startDate: "September 2026",

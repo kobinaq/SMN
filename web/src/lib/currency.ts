@@ -21,4 +21,4 @@ export function formatGhsLabel(raw: string | null | undefined): string {
 }
 
 export const FEE_PENDING_LABEL = "Contact SMN for current fees";
-export const COURSE_FEE_PENDING_LABEL = "See Selar for current price";
+export const COURSE_FEE_PENDING_LABEL = "Price on checkout";

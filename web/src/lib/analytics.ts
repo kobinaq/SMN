@@ -15,7 +15,9 @@ export type MarketingEventName =
   | "employer_enquiry_start"
   | "employer_enquiry_complete"
   | "whatsapp_click"
-  | "course_purchase_click"
+  | "payment_start"
+  | "payment_success"
+  | "event_register"
   | "member_signin_click"
   | "portfolio_view"
   | "certificate_verify_view";

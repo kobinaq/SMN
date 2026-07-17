@@ -31,6 +31,8 @@ import { Certificates } from "./collections/Certificates";
 import { AuditEvents } from "./collections/AuditEvents";
 import { MemberNotes } from "./collections/MemberNotes";
 import { AICollections } from "./collections/AI";
+import { EventRegistrations } from "./collections/EventRegistrations";
+import { Payments } from "./collections/Payments";
 import { SiteSettings } from "./globals/SiteSettings";
 import { createDbAdapter } from "./lib/db";
 import { validateProductionEnv } from "./lib/env";
@@ -120,6 +122,8 @@ export default buildConfig({
     Certificates,
     AuditEvents,
     MemberNotes,
+    EventRegistrations,
+    Payments,
     ...AICollections,
     Media,
     Posts,

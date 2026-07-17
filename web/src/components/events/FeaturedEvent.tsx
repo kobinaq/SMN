@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowUpRight, CalendarDays, Clock, MapPin, Ticket } from "lucide-react";
+import { CalendarDays, Clock, MapPin, Ticket } from "lucide-react";
 import type { EventItem } from "@/lib/content";
 import { formatEventDate, formatEventDay } from "@/lib/events";
 import { Button } from "@/components/ui/Button";
@@ -83,9 +83,10 @@ export function FeaturedEvent({ event }: { event: EventItem }) {
           ) : null}
 
           <div className="btn-row-mobile mt-7 sm:mt-8">
-            <Button href={event.registrationUrl} target="_blank" rel="noreferrer">
-              Register free
-              <ArrowUpRight className="h-4 w-4" />
+            <Button href={`/events/${event.slug}`}>
+              {event.pricing === "paid" || !event.price.toLowerCase().includes("free")
+                ? "View & register"
+                : "Register free"}
             </Button>
             <Button href="/community" variant="secondary">
               Join community first

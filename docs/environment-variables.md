@@ -41,6 +41,9 @@ Production validation runs when `VERCEL_ENV=production` or `SMN_VALIDATE_PROD_EN
 | `AI_CONTENT_STUDIO_ENABLED` | No | Content Studio rollback flag | `false` | Enable only after gate | Admin | Studio unavailable |
 | `AI_CAREER_COACH_ENABLED` | No | Career Coach rollback flag | `false` | Enable only after gate | Portal | Coach coming-soon state |
 | `RUN_GROQ_INTEGRATION` | No | Explicitly opts the optional live-provider test in | Unset | CI should remain unset | Vitest integration test | Live test skipped |
+| `PAYSTACK_SECRET_KEY` | Required for paid checkout | Paystack secret key | Empty or `sk_test_…` | Live/test secret | payments initialize/verify/webhook | Checkout returns 503 |
+| `PAYSTACK_PUBLIC_KEY` | Recommended with Paystack | Paystack public key | Empty or `pk_test_…` | Live/test public | client checkout UI | Inline widget unavailable; redirect still works |
+| `PAYSTACK_WEBHOOK_SECRET` | Recommended | HMAC secret for webhooks (defaults to secret key if unset) | Empty or secret | Same as dashboard webhook secret | `/api/payments/webhook` | Signature check uses secret key fallback |
 | `ALLOW_MIGRATION_BASELINE` | No | One-time guard for an existing DB baseline adoption | Unset | Temporary `true` only during runbook step | migration adoption | Adoption refused |
 
 Do not commit real secrets.

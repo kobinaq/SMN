@@ -117,7 +117,7 @@ export function HeroExclusive() {
       <div className="relative z-10 border-t border-white/10">
         <div className="container-wide flex flex-col gap-2 py-5 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
           <p className="text-xs text-white/40">
-            Courses on Selar · Live sessions on Google Classroom · Community on WhatsApp
+            Courses on SMN · Live sessions on Google Classroom · Community on WhatsApp
           </p>
           <p className="text-xs text-white/30">Africa-first · Global diaspora welcome</p>
         </div>

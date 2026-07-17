@@ -26,8 +26,8 @@ export default async function ProgramsPage() {
     {
       href: "/programs/courses",
       title: "Self-paced courses",
-      body: "Individual courses covering strategy, AI, social systems, and more. Purchase and access on Selar.",
-      meta: "Flexible · Buy on Selar",
+      body: "Individual courses covering strategy, AI, social systems, and more. Enroll on SMN and learn in the member portal.",
+      meta: "Flexible · Enroll on SMN",
       cta: "View courses",
     },
   ];

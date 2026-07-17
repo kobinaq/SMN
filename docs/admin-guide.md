@@ -49,7 +49,7 @@ Prefer the operations workspaces and Content / Website / System screens over raw
 
 ## Learning Dashboard
 
-- Use `Enrollments` to grant cohort, Selar, workshop, or community access.
+- Use `Enrollments` to grant cohort, Paystack catalogue, workshop, or community access. Paste Google Classroom invite links on the enrollment when the programme is live.
 - Use `Learning Items` for lightweight milestones, resources, and checklist items.
 - `Progress` records are created by member interactions.
 

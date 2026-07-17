@@ -22,9 +22,9 @@ export default function TermsPage() {
             <h2 className="font-display text-xl text-white">Website use</h2>
             <p className="mt-3">
               Content on this site is for general information. Programme details, pricing, and dates
-              may change. Self-paced course purchases on Selar are subject to Selar’s terms.
-              Community participation on WhatsApp is subject to WhatsApp’s terms and SMN community
-              guidelines.
+              may change. Self-paced course and event payments are processed by Paystack and subject to
+              Paystack’s terms. Community participation on WhatsApp is subject to WhatsApp’s terms and
+              SMN community guidelines.
             </p>
           </div>
 

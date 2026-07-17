@@ -109,8 +109,8 @@ export const courses = [
     outcomes: ["Channel strategy", "Experiment design", "Reporting frameworks"],
     duration: "6 hours",
     lessons: 24,
-    price: "See Selar for current price",
-    selarUrl: "https://selar.com/smn-growth-foundations",
+    price: "Price on checkout",
+    selarUrl: "",
     badge: "Recommended" as string | null,
     image: img.courseGrowth,
   },
@@ -122,8 +122,8 @@ export const courses = [
     outcomes: ["Prompt systems", "Workflow design", "Quality control"],
     duration: "4 hours",
     lessons: 18,
-    price: "See Selar for current price",
-    selarUrl: "https://selar.com/smn-ai-marketers",
+    price: "Price on checkout",
+    selarUrl: "",
     badge: null,
     image: img.courseAi,
   },
@@ -135,26 +135,36 @@ export const courses = [
     outcomes: ["Audience insight", "Content systems", "Community loops"],
     duration: "5 hours",
     lessons: 20,
-    price: "See Selar for current price",
-    selarUrl: "https://selar.com/smn-social-systems",
+    price: "Price on checkout",
+    selarUrl: "",
     badge: null,
     image: img.courseSocial,
   },
 ];
 
 export type EventItem = {
+  id?: string | number;
   slug: string;
   title: string;
   type: string;
   date: string;
   time: string;
   summary: string;
+  /** @deprecated Prefer first-party /events/[slug] registration */
   registrationUrl: string;
   image: string;
   format: string;
   price: string;
   host: string;
   highlights: string[];
+  pricing?: "free" | "paid";
+  amount?: number | null;
+  currency?: string;
+  capacity?: number | null;
+  venue?: string | null;
+  address?: string | null;
+  onlineUrl?: string | null;
+  status?: string;
 };
 
 export const eventTypes = ["All", "Webinar", "Workshop", "Networking"] as const;
@@ -168,10 +178,11 @@ export const events: EventItem[] = [
     time: "6:00 PM WAT",
     summary:
       "A free live session on using AI day to day for research, drafts, and reviews without handing over the thinking.",
-    registrationUrl: "https://lu.ma/smn-ai-workflows",
+    registrationUrl: "/events/ai-workflows-webinar",
     image: img.eventAi,
     format: "Online · Live",
     price: "Free",
+    pricing: "free" as const,
     host: "Arielle Adodo",
     highlights: [
       "Practical AI workflows you can run the same week",
@@ -187,10 +198,11 @@ export const events: EventItem[] = [
     time: "5:30 PM WAT",
     summary:
       "Share work, get feedback, and meet peers and mentors in a small group setting built for marketers.",
-    registrationUrl: "https://lu.ma/smn-portfolio-night",
+    registrationUrl: "/events/portfolio-night",
     image: img.eventPortfolio,
     format: "Online · Small group",
     price: "Free · Limited seats",
+    pricing: "free" as const,
     host: "SMN Mentors",
     highlights: [
       "Show one project and get constructive notes",
@@ -206,10 +218,11 @@ export const events: EventItem[] = [
     time: "10:00 AM WAT",
     summary:
       "Brief a campaign, design the plan, present your approach, and leave with critique you can use on real work.",
-    registrationUrl: "https://lu.ma/smn-strategy-workshop",
+    registrationUrl: "/events/strategy-workshop",
     image: img.eventWorkshop,
     format: "Online · Hands-on",
     price: "Free · Application",
+    pricing: "free" as const,
     host: "Arielle Adodo",
     highlights: [
       "Work from a real-style brief, not slides alone",
@@ -408,7 +421,7 @@ export const posts: BlogPost[] = [
       "If you start with a content calendar and no clear offer, no audience insight, and no measure of success, you will stay busy and still struggle to prove impact. Brands notice that gap quickly.",
       "A stronger habit is to answer a few hard questions first. Who is this for? What problem are we solving? What does success look like in 30 days? Only then do you choose channels, formats, and hooks.",
       "At Social Marketers Network, we teach marketers to think in systems: research, positioning, content, distribution, and review. That is how you move from “I made content” to “I moved the business.”",
-      "If this resonates, explore the flagship cohort, join the WhatsApp community, or start with a self-paced course on Selar.",
+      "If this resonates, explore the flagship cohort, join the WhatsApp community, or start with a self-paced course on SMN.",
     ],
   },
   {
@@ -587,7 +600,7 @@ export const cohortFaqs = [
   },
   {
     q: "How do self-paced courses work?",
-    a: "Self-paced courses are sold on Selar. Browse them here, then complete purchase on Selar. Cohort membership is a separate application path.",
+    a: "Self-paced courses are purchased on SMN via Paystack. Browse the catalogue, enroll, then access lessons in the member portal. Cohort membership is a separate application path.",
   },
   {
     q: "What is the fee?",

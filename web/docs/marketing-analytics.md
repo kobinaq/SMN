@@ -15,7 +15,9 @@ Privacy-conscious events for the public marketing site. Do not attach emails, ph
 | `employer_enquiry_start` | Employer/talent contact form mounted |
 | `employer_enquiry_complete` | Employer enquiry sent |
 | `whatsapp_click` | WhatsApp invite / community CTA |
-| `course_purchase_click` | Selar purchase link clicked |
+| `payment_start` | Paystack checkout started (event or course) |
+| `payment_success` | Member returned from successful Paystack payment |
+| `event_register` | Free event registration completed |
 | `member_signin_click` | Member sign-in CTA |
 | `portfolio_view` | Public portfolio viewed |
 | `certificate_verify_view` | Certificate verification viewed |

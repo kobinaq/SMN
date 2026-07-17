@@ -38,7 +38,7 @@ export default function PrivacyPage() {
               We use information to review applications, operate programmes, deliver learning,
               provide mentorship and opportunity tools, issue credentials, respond to enquiries, and
               improve the website. Transactional email may be sent via Resend. Newsletters may use
-              Mailchimp. Self-paced course payments may be processed by Selar.
+              Mailchimp. Course and event payments are processed by Paystack.
             </p>
           </div>
 

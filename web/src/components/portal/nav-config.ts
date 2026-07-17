@@ -24,6 +24,7 @@ export const memberNavGroups: PortalNavGroup[] = [
     items: [
       { href: "/app", label: "Home", icon: LayoutDashboard },
       { href: "/app/learning", label: "Learning", icon: BookOpen },
+      { href: "/app/events", label: "Events", icon: Calendar },
       { href: "/app/mentors", label: "Mentors", icon: Handshake },
       { href: "/app/opportunities", label: "Opportunities", icon: Briefcase },
       { href: "/app/career-coach", label: "Career Coach", icon: Sparkles },
@@ -49,6 +50,7 @@ const staffIconByHref: Record<string, PortalNavItem["icon"]> = {
   "/staff/mentorship": Handshake,
   "/staff/opportunities": Briefcase,
   "/staff/certificates": Award,
+  "/staff/events": Calendar,
   "/staff/content/posts": FileText,
   "/staff/content/resources": FolderOpen,
   "/staff/content/media": Image,
@@ -68,6 +70,7 @@ const workHrefs = new Set([
   "/staff/mentorship",
   "/staff/opportunities",
   "/staff/certificates",
+  "/staff/events",
 ]);
 
 const siteHrefs = new Set([

@@ -20,6 +20,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
     { href: "/staff/mentorship", label: "Mentorship", count: badgeFor("mentorship") },
     { href: "/staff/opportunities", label: "Jobs", count: badgeFor("opportunity") },
     { href: "/staff/certificates", label: "Certificates", count: badgeFor("certificate") },
+    { href: "/staff/events", label: "Events" },
   ];
 
   if (canStaff(staff, "content", "analyst")) {
@@ -28,7 +29,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
       { href: "/staff/content/resources", label: "Resources" },
       { href: "/staff/content/media", label: "Media" },
       { href: "/staff/website/courses", label: "Catalogue" },
-      { href: "/staff/website/events", label: "Events" },
+      { href: "/staff/website/events", label: "Event editor" },
       { href: "/staff/website/stories", label: "Stories" },
       { href: "/staff/website/settings", label: "Site settings" },
     );

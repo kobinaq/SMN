@@ -13,7 +13,7 @@ describe("marketing defaults", () => {
   it("withholds unconfirmed course seed prices", () => {
     for (const course of courses) {
       expect(course.price).not.toMatch(/45,?000|38,?000|42,?000/);
-      expect(course.price.toLowerCase()).toMatch(/selar|contact/);
+      expect(course.price.toLowerCase()).toMatch(/checkout|contact|price/);
     }
   });
 
@@ -23,7 +23,7 @@ describe("marketing defaults", () => {
 
   it("keeps apply / purchase / sign-in terminology distinct", () => {
     expect(cta.applyCohort.href).toBe("/apply");
-    expect(cta.buyOnSelar.label).toMatch(/Selar/i);
+    expect(cta.buyCourse.label).toMatch(/Enroll/i);
     expect(cta.memberSignIn.href).toBe("/login");
     expect(cta.hireTalent.href).toBe("/employers");
   });

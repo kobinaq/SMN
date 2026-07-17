@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { ArrowUpRight, Clock, MapPin } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Clock, MapPin } from "lucide-react";
 import type { EventItem } from "@/lib/content";
 import { formatEventDay } from "@/lib/events";
 import { cn } from "@/lib/utils";
@@ -14,6 +15,7 @@ export function EventCard({
   className?: string;
 }) {
   const { day, month } = formatEventDay(event.date);
+  const href = `/events/${event.slug}`;
 
   return (
     <article
@@ -23,7 +25,7 @@ export function EventCard({
         className,
       )}
     >
-      <div className="relative aspect-[16/10] overflow-hidden">
+      <Link href={href} className="relative aspect-[16/10] overflow-hidden">
         <div className="absolute inset-0 transition duration-500 ease-out group-hover:scale-[1.02]">
           <Image
             src={event.image}
@@ -51,16 +53,16 @@ export function EventCard({
           </span>
           <span className="font-display text-xl leading-none text-white sm:text-2xl">{day}</span>
         </div>
-      </div>
+      </Link>
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         <h3 className="font-display text-xl leading-snug text-white transition group-hover:text-baby-blue sm:text-2xl">
-          {event.title}
+          <Link href={href}>{event.title}</Link>
         </h3>
         <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-white/45 sm:text-sm">
           <span className="inline-flex items-center gap-1.5">
             <Clock className="h-3.5 w-3.5 text-baby-blue" strokeWidth={1.75} />
-            {event.time}
+            {event.time || "See details"}
           </span>
           <span className="inline-flex items-center gap-1.5">
             <MapPin className="h-3.5 w-3.5 text-baby-blue" strokeWidth={1.75} />
@@ -70,15 +72,13 @@ export function EventCard({
         <p className="mt-4 flex-1 text-sm leading-relaxed text-white/60">{event.summary}</p>
         <div className="mt-6 flex items-center justify-between gap-3 border-t border-white/10 pt-5">
           <p className="truncate text-xs text-white/40">Host · {event.host}</p>
-          <a
-            href={event.registrationUrl}
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            href={href}
             className="inline-flex shrink-0 items-center gap-1 text-sm font-medium text-baby-blue transition hover:text-white"
           >
-            Register
-            <ArrowUpRight className="h-4 w-4" />
-          </a>
+            Details
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
       </div>
     </article>

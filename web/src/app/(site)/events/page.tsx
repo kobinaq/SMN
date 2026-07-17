@@ -100,7 +100,7 @@ export default async function EventsPage({ searchParams }: Props) {
               </p>
               <div className="btn-row-mobile mt-7 sm:mt-8">
                 {next ? (
-                  <Button href={next.registrationUrl} target="_blank" rel="noreferrer">
+                  <Button href={`/events/${next.slug}`}>
                     Register for next event
                   </Button>
                 ) : null}

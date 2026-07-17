@@ -7,9 +7,25 @@ export default async function NewEventPage() {
   await requireStaff(["content"], "/staff/website/events/new");
   return (
     <div className="space-y-6">
-      <StaffPageHeader eyebrow="Website" title="New event" description="Create a public event listing with registration link." />
+      <StaffPageHeader
+        eyebrow="Events"
+        title="New event"
+        description="Create a free or paid event with capacity, venue or online link, then publish for member registration."
+      />
       <StaffPanel>
-        <StaffRecordForm collection="events" fields={eventFields} submitLabel="Create event" onSuccessHref="/staff/website/events" />
+        <StaffRecordForm
+          collection="events"
+          fields={eventFields}
+          initial={{
+            status: "draft",
+            format: "online",
+            pricing: "free",
+            currency: "GHS",
+            type: "Webinar",
+          }}
+          submitLabel="Create event"
+          onSuccessHref="/staff/events"
+        />
       </StaffPanel>
     </div>
   );

@@ -62,6 +62,13 @@ export const LmsCourses: CollectionConfig = {
     },
     { name: "cover", type: "upload", relationTo: "media" },
     { name: "estimatedHours", type: "number", min: 0 },
+    {
+      name: "classroomUrl",
+      type: "text",
+      admin: {
+        description: "Optional default Google Classroom / live join link for live cohorts using this course.",
+      },
+    },
     { name: "enrollmentOpen", type: "checkbox", defaultValue: true, admin: { position: "sidebar" } },
     { name: "certificateEnabled", type: "checkbox", defaultValue: false, admin: { position: "sidebar" } },
     { name: "previewEnabled", type: "checkbox", defaultValue: false, admin: { position: "sidebar" } },

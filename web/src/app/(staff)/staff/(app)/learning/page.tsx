@@ -479,6 +479,12 @@ export default async function StaffLearningPage({
               { name: "category", label: "Category", type: "text" },
               { name: "programKey", label: "Program key", type: "text", required: true },
               {
+                name: "classroomUrl",
+                label: "Default Classroom / live link",
+                type: "url",
+                placeholder: "Paste invite link for live cohorts",
+              },
+              {
                 name: "accessRule",
                 label: "Access rule",
                 type: "select",
@@ -531,6 +537,7 @@ export default async function StaffLearningPage({
               instructor: selected.instructor || "",
               category: selected.category || "",
               programKey: selected.programKey,
+              classroomUrl: (selected as { classroomUrl?: string | null }).classroomUrl || "",
               accessRule: selected.accessRule || "enrolled",
               level: selected.level || "foundation",
               estimatedHours: selected.estimatedHours ?? "",

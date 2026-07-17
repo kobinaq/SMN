@@ -21,9 +21,9 @@ export const cta = {
     label: "View courses",
     href: "/programs/courses",
   },
-  /** Outbound Selar purchase — different action from applying */
-  buyOnSelar: {
-    label: "Buy on Selar",
+  /** On-platform Paystack purchase */
+  buyCourse: {
+    label: "Enroll now",
   },
   memberSignIn: {
     label: "Member sign in",
