@@ -19,12 +19,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const resource = await getResource(slug);
   if (!resource) return {};
+  const canonical = `/resources/${slug}`;
   return {
     title: resource.title,
     description: resource.description,
+    alternates: { canonical },
     openGraph: {
       title: resource.title,
       description: resource.description,
+      url: canonical,
       images: [{ url: resource.cover }],
     },
   };

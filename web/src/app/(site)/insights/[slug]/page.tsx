@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { Button } from "@/components/ui/Button";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { formatBlogDate, getBlogPost, getBlogPosts, getRelatedPosts } from "@/lib/blog";
 import { posts as seedPosts } from "@/lib/content";
 import { site } from "@/lib/site";
@@ -19,15 +20,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getBlogPost(slug);
   if (!post) return {};
+  const canonical = `/insights/${slug}`;
   return {
     title: post.title,
     description: post.excerpt,
+    alternates: { canonical },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: "article",
+      url: canonical,
       publishedTime: post.date,
       images: [{ url: post.cover }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: [post.cover],
     },
   };
 }
@@ -40,8 +50,31 @@ export default async function InsightArticlePage({ params }: Props) {
 
   const related = getRelatedPosts(post, all, 3);
 
+  const base = site.url.replace(/\/$/, "");
+  const pageUrl = `${base}/insights/${post.slug}`;
+  const absoluteCover = post.cover?.startsWith("http") ? post.cover : `${base}${post.cover}`;
+
   return (
     <article className="bg-near-black">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          headline: post.title,
+          description: post.excerpt,
+          image: absoluteCover,
+          datePublished: post.date,
+          articleSection: post.category,
+          author: { "@type": "Person", name: post.author },
+          publisher: {
+            "@type": "Organization",
+            name: site.name,
+            logo: { "@type": "ImageObject", url: `${base}/brand/logo-blue.png` },
+          },
+          mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
+          url: pageUrl,
+        }}
+      />
       {/* Hero */}
       <header className="border-b border-white/10 pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-32">
         <div className="container-wide pb-8 sm:pb-10 md:pb-12">
