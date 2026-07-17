@@ -61,10 +61,33 @@ function planToLines(value: unknown): string[] {
   return [];
 }
 
-function looksLikePlan(content: string) {
-  const lines = content.split("\n").filter((line) => line.trim());
-  const bullets = lines.filter((line) => /^(\d+[.)]\s+|[-*•]\s+)/.test(line.trim())).length;
-  return bullets >= 3 || /week|day\s*\d|plan|checklist/i.test(content);
+const BULLET_MARKER = /^(\d+[.)]|[-*•–])\s+/;
+const LABEL_MARKER = /^(week|day|step|phase)\s*\d+\b/i;
+
+/**
+ * Pull only the actionable step lines out of a coach reply — numbered/bulleted
+ * items, or "Week/Day/Step N" lines — so intros, titles, and trailing prose
+ * (e.g. "Here is a focused 3-step plan:") are not added to the checklist.
+ */
+function extractPlanSteps(content: string): string[] {
+  const lines = content
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const bulleted = lines.filter((line) => BULLET_MARKER.test(line));
+  // Prefer explicit bullet/number lists; fall back to Week/Day/Step labels.
+  const chosen = bulleted.length ? bulleted : lines.filter((line) => LABEL_MARKER.test(line));
+  return chosen
+    .map((line) =>
+      line
+        .replace(/^#+\s*/, "")
+        .replace(BULLET_MARKER, "")
+        .replace(/\*\*/g, "")
+        .replace(/\s+/g, " ")
+        .trim(),
+    )
+    .filter((line) => line.length > 3 && line.length < 220)
+    .slice(0, 12);
 }
 
 export function CareerCoach({ initial }: { initial: Snapshot }) {
@@ -138,7 +161,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
       const answer = result.answer || "No explanation was returned.";
       setConversation((current) => [
         ...current,
-        { role: "coach", content: answer, offerAsPlan: looksLikePlan(answer) },
+        { role: "coach", content: answer, offerAsPlan: extractPlanSteps(answer).length >= 2 },
       ]);
       if (result.notice) toast.push(result.notice, "info");
     } catch (caught) {
@@ -160,7 +183,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
       const answer = result.answer || "No response was returned.";
       setConversation((current) => [
         ...current,
-        { role: "coach", content: answer, offerAsPlan: looksLikePlan(answer) },
+        { role: "coach", content: answer, offerAsPlan: extractPlanSteps(answer).length >= 2 },
       ]);
       if (result.notice) toast.push(result.notice, "info");
     } catch (caught) {
@@ -201,16 +224,13 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
     }
   }
 
-  // Append distinct steps from a coach reply rather than overwriting the plan.
+  // Append only the actionable steps from a coach reply (not titles/prose),
+  // and never overwrite the existing plan.
   function addToPlan(content: string) {
-    const lines = content
-      .split("\n")
-      .map((line) => line.replace(/^#+\s*/, "").replace(/^[-*•\d.)\s]+/, "").trim())
-      .filter((line) => line.length > 3 && line.length < 220)
-      .slice(0, 12);
-    if (!lines.length) return;
+    const steps = extractPlanSteps(content);
+    if (!steps.length) return;
     const existing = new Set(planItems.map((line) => line.trim().toLowerCase()));
-    const additions = lines.filter((line) => !existing.has(line.toLowerCase()));
+    const additions = steps.filter((line) => !existing.has(line.toLowerCase()));
     if (!additions.length) {
       toast.push("Those steps are already in your plan.", "info");
       return;
