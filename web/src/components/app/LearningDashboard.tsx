@@ -5,6 +5,7 @@ import { BookOpen, Check, Circle, Clock, ExternalLink, Play, Users } from "lucid
 import type { LearningDashboardItem, LearningEnrollment } from "@/lib/learning";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
+import { useToast } from "@/components/ui/Toast";
 
 type Status = LearningDashboardItem["status"];
 const statusIcon = { "not-started": Circle, "in-progress": Play, completed: Check };
@@ -12,6 +13,7 @@ const statusIcon = { "not-started": Circle, "in-progress": Play, completed: Chec
 export function LearningDashboard({ initialItems, enrollments }: { initialItems: LearningDashboardItem[]; enrollments: LearningEnrollment[] }) {
   const [items, setItems] = useState(initialItems);
   const [program, setProgram] = useState("All programs");
+  const toast = useToast();
   const programs = useMemo(() => ["All programs", ...Array.from(new Set(items.map((item) => item.programKey)))], [items]);
   const visible = program === "All programs" ? items : items.filter((item) => item.programKey === program);
   const completed = items.filter((item) => item.status === "completed").length;
@@ -21,8 +23,23 @@ export function LearningDashboard({ initialItems, enrollments }: { initialItems:
   async function update(itemId: string | number, status: Status) {
     const previous = items;
     setItems((current) => current.map((item) => item.id === itemId ? { ...item, status } : item));
-    const response = await fetch("/api/learning-progress", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ itemId, status }) });
-    if (!response.ok) setItems(previous);
+    try {
+      const response = await fetch("/api/learning-progress", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ itemId, status }),
+      });
+      if (!response.ok) {
+        setItems(previous);
+        toast.push("Progress didn’t save. Your place is unchanged — try again.", "error");
+        return;
+      }
+      toast.push(status === "completed" ? "Marked complete." : "Progress saved.", "success");
+    } catch {
+      setItems(previous);
+      toast.push("Progress didn’t save. Check your connection and try again.", "error");
+    }
   }
 
   return <div className="space-y-7">

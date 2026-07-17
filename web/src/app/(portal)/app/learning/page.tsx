@@ -3,14 +3,19 @@ import { LearningDashboard } from "@/components/app/LearningDashboard";
 import { Button } from "@/components/ui/Button";
 import { requireMember } from "@/lib/auth/member";
 import { getLearningDashboard } from "@/lib/learning";
+import { getLmsCourses } from "@/lib/lms";
 import { site } from "@/lib/site";
 
 export const metadata = { title: "Learning" };
 
 export default async function LearningPage() {
   const member = await requireMember("/app/learning");
-  const dashboard = await getLearningDashboard(member);
+  const [dashboard, lmsCourses] = await Promise.all([
+    getLearningDashboard(member),
+    getLmsCourses(member).catch(() => []),
+  ]);
   const hasAccess = dashboard.enrollments.length || dashboard.items.length;
+  const resumeCourse = lmsCourses.find((course) => course.percentage > 0 && course.percentage < 100);
 
   return (
     <div className="space-y-7">
@@ -23,8 +28,27 @@ export default async function LearningPage() {
           Courses, Classroom links, Selar access, resources, and weekly milestones organized around
           the programs you have unlocked.
         </p>
+        {resumeCourse ? (
+          <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-baby-blue/30 bg-gradient-to-br from-baby-blue/10 to-surface p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+            <div className="min-w-0">
+              <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">
+                Pick up where you left off
+              </p>
+              <p className="mt-1 truncate font-display text-lg text-white">{resumeCourse.title}</p>
+              <p className="mt-0.5 text-sm text-white/50">
+                {resumeCourse.percentage}% complete · {resumeCourse.completedCount}/
+                {resumeCourse.lessonCount} lessons
+              </p>
+            </div>
+            <Button href={resumeCourse.continueHref} className="shrink-0">
+              Resume lesson
+            </Button>
+          </div>
+        ) : null}
         <div className="btn-row-mobile mt-5">
-          <Button href="/app/learning/courses">Open courses</Button>
+          <Button href="/app/learning/courses" variant={resumeCourse ? "secondary" : "primary"}>
+            Open courses
+          </Button>
         </div>
       </div>
 
