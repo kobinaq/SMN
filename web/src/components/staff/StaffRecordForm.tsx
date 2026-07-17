@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { useToast } from "@/components/ui/Toast";
 import { staffFieldClass } from "@/components/staff/ui";
 
 export type StaffField =
@@ -129,9 +131,10 @@ export function StaffRecordForm({
 
 export function StaffDeleteButton({ collection, id, redirectTo }: { collection: string; id: string | number; redirectTo: string }) {
   const router = useRouter();
+  const toast = useToast();
   const [busy, setBusy] = useState(false);
+  const [open, setOpen] = useState(false);
   async function remove() {
-    if (!window.confirm("Delete this record? This cannot be undone.")) return;
     setBusy(true);
     try {
       const response = await fetch("/api/staff/records", {
@@ -142,16 +145,30 @@ export function StaffDeleteButton({ collection, id, redirectTo }: { collection: 
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Unable to delete.");
+      toast.push("Record deleted.", "success");
+      setOpen(false);
       router.push(redirectTo);
       router.refresh();
     } catch (error) {
-      window.alert(error instanceof Error ? error.message : "Unable to delete.");
+      toast.push(error instanceof Error ? error.message : "Unable to delete.", "error");
       setBusy(false);
     }
   }
   return (
-    <Button type="button" variant="secondary" disabled={busy} onClick={remove}>
-      {busy ? "Deleting…" : "Delete"}
-    </Button>
+    <>
+      <Button type="button" variant="secondary" disabled={busy} onClick={() => setOpen(true)}>
+        {busy ? "Deleting…" : "Delete"}
+      </Button>
+      <ConfirmDialog
+        open={open}
+        title="Delete this record?"
+        description="This cannot be undone."
+        confirmLabel="Delete"
+        destructive
+        busy={busy}
+        onClose={() => !busy && setOpen(false)}
+        onConfirm={remove}
+      />
+    </>
   );
 }

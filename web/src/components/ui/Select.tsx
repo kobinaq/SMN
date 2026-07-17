@@ -162,8 +162,13 @@ export function Select({
         tabIndex={-1}
         aria-hidden="true"
         className="pointer-events-none absolute h-px w-px opacity-0"
-        onChange={() => {
-          /* driven by commit() */
+        onChange={(event) => {
+          // The visible trigger drives selection via commit() (which sets this
+          // element's value imperatively, without firing change). A change event
+          // here therefore only comes from programmatic drivers (e.g. Playwright
+          // selectOption / assistive form tooling) — route it through commit so
+          // React state and consumers stay in sync.
+          commit(event.currentTarget.value);
         }}
         {...rest}
       >
