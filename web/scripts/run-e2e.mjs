@@ -64,7 +64,15 @@ let exitCode = 1;
 try {
   if (!process.env.PLAYWRIGHT_BASE_URL) {
     await assertPortAvailable(baseURL);
-    const pushCode = await run(npmCmd, ["run", "db:push"], { env: e2eEnv });
+    // The disposable E2E DB is SQLite by default (file:) and Postgres only when
+    // PLAYWRIGHT_DATABASE_URL points at one. Pick the matching schema-push script:
+    // db:push is Postgres-only, db:ensure-sqlite handles the SQLite file.
+    // db:push is Postgres-only; the disposable E2E DB is SQLite by default.
+    // Both push scripts self-retry the fragile config-bundle import (see
+    // scripts/with-retry.mjs), so a single invocation here is sufficient.
+    const isPostgresDb = /^postgres(ql)?:\/\//.test(e2eEnv.DATABASE_URL || "");
+    const pushScript = isPostgresDb ? "db:push" : "db:ensure-sqlite";
+    const pushCode = await run(npmCmd, ["run", pushScript], { env: e2eEnv });
     if (pushCode !== 0) throw new Error("Unable to push schema to the disposable E2E database.");
     const seedCode = await run(npmCmd, ["run", "seed:demo"], { env: e2eEnv });
     if (seedCode !== 0) throw new Error("Unable to seed the disposable E2E database.");
