@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Copy, ListPlus, Lock, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { AiMarkdown } from "@/components/ui/AiMarkdown";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { useToast } from "@/components/ui/Toast";
 import { cn } from "@/lib/utils";
 
 type Match = {
@@ -73,9 +76,10 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
   const [question, setQuestion] = useState("");
   const [conversation, setConversation] = useState<Conversation[]>([]);
   const [busy, setBusy] = useState("");
-  const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
+  const [pendingClear, setPendingClear] = useState<null | { deleteUsage: boolean }>(null);
   const threadRef = useRef<HTMLDivElement>(null);
+  const toast = useToast();
 
   const topGaps = useMemo(() => {
     const counts = new Map<string, number>();
@@ -136,7 +140,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
         ...current,
         { role: "coach", content: answer, offerAsPlan: looksLikePlan(answer) },
       ]);
-      setNotice(result.notice || "");
+      if (result.notice) toast.push(result.notice, "info");
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not explain this match.");
     } finally {
@@ -158,7 +162,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
         ...current,
         { role: "coach", content: answer, offerAsPlan: looksLikePlan(answer) },
       ]);
-      setNotice(result.notice || "");
+      if (result.notice) toast.push(result.notice, "info");
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Career Coach is unavailable.");
     } finally {
@@ -167,13 +171,13 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
   }
 
   async function saveGoal() {
-    if (!goal.trim() || !window.confirm("Save this career goal to your private Career Coach data?")) return;
+    if (!goal.trim()) return;
     setBusy("goal");
     setError("");
     try {
       await request({ action: "save-goal", goal: goal.trim(), confirmed: true });
       setSavedGoal(goal.trim());
-      setNotice("Career goal saved.");
+      toast.push("Career goal saved.", "success");
       setGoalOpen(false);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not save your goal.");
@@ -184,12 +188,12 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
 
   async function savePlan() {
     const lines = planItems.map((item) => item.trim()).filter(Boolean);
-    if (!lines.length || !window.confirm("Save this plan to your private Career Coach data?")) return;
+    if (!lines.length) return;
     setBusy("plan");
     setError("");
     try {
       await request({ action: "save-plan", plan: lines, confirmed: true });
-      setNotice("Career plan saved.");
+      toast.push("Career plan saved.", "success");
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not save your plan.");
     } finally {
@@ -197,22 +201,39 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
     }
   }
 
-  function applyAsPlan(content: string) {
+  // Append distinct steps from a coach reply rather than overwriting the plan.
+  function addToPlan(content: string) {
     const lines = content
       .split("\n")
       .map((line) => line.replace(/^#+\s*/, "").replace(/^[-*•\d.)\s]+/, "").trim())
       .filter((line) => line.length > 3 && line.length < 220)
       .slice(0, 12);
     if (!lines.length) return;
-    setPlanItems(lines);
-    setNotice("Plan checklist updated — confirm and save when ready.");
+    const existing = new Set(planItems.map((line) => line.trim().toLowerCase()));
+    const additions = lines.filter((line) => !existing.has(line.toLowerCase()));
+    if (!additions.length) {
+      toast.push("Those steps are already in your plan.", "info");
+      return;
+    }
+    setPlanItems((current) => [...current, ...additions]);
+    toast.push(
+      `Added ${additions.length} step${additions.length > 1 ? "s" : ""} to your plan — review and save.`,
+      "success",
+    );
   }
 
-  async function clearData(deleteUsage: boolean) {
-    const message = deleteUsage
-      ? "Delete your saved Career Coach data, AI feedback, and retained usage records? This cannot be undone."
-      : "Reset your saved Career Coach goal and plan? This cannot be undone.";
-    if (!window.confirm(message)) return;
+  async function copyMessage(content: string) {
+    try {
+      await navigator.clipboard.writeText(content);
+      toast.push("Copied to clipboard.", "success");
+    } catch {
+      toast.push("Couldn’t copy — select and copy manually.", "error");
+    }
+  }
+
+  async function confirmClear() {
+    if (!pendingClear) return;
+    const { deleteUsage } = pendingClear;
     setBusy("reset");
     setError("");
     try {
@@ -221,7 +242,11 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
       setSavedGoal("");
       setPlanItems([]);
       setConversation([]);
-      setNotice(deleteUsage ? "Career Coach data and retained AI records deleted." : "Career Coach data reset.");
+      toast.push(
+        deleteUsage ? "Career Coach data and retained AI records deleted." : "Career Coach data reset.",
+        "success",
+      );
+      setPendingClear(null);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not reset Career Coach data.");
     } finally {
@@ -235,14 +260,20 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ feature: "career-coach", contextKey: "workspace", rating }),
     });
-    setNotice("Thanks for the feedback.");
+    toast.push("Thanks for the feedback.", "success");
   }
 
   return (
     <div className="space-y-5 sm:space-y-6">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-[10px] font-medium tracking-[0.22em] text-mint uppercase">Private AI workspace</p>
+          <div className="flex items-center gap-2">
+            <p className="text-[10px] font-medium tracking-[0.22em] text-mint uppercase">Private AI workspace</p>
+            <span className="inline-flex items-center gap-1 rounded-full border border-mint/25 bg-mint/10 px-2 py-0.5 text-[10px] font-medium text-mint">
+              <Lock className="h-3 w-3" aria-hidden />
+              Private to you
+            </span>
+          </div>
           <h1 className="mt-2 font-display text-3xl text-white">Career Coach</h1>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/55">
             Ask for practical next steps. Matches and gaps stay visible so guidance stays grounded in your profile —
@@ -254,15 +285,13 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
         </Button>
       </header>
 
-      {error || notice ? (
+      {error ? (
         <div
           aria-live="polite"
-          className={cn(
-            "rounded-xl border px-4 py-3 text-sm",
-            error ? "border-red-400/30 bg-red-400/10 text-red-200" : "border-mint/25 bg-mint/10 text-mint",
-          )}
+          className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200"
+          role="alert"
         >
-          {error || notice}
+          {error}
         </div>
       ) : null}
 
@@ -422,11 +451,23 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
           <div className="border-b border-white/10 pb-4">
             <p className="text-[10px] font-medium tracking-[0.18em] text-mint uppercase">Conversation</p>
             <h2 className="mt-1 font-display text-xl text-white">Ask for practical guidance</h2>
+            <p className="mt-3 flex items-center gap-2 rounded-lg border border-mint/20 bg-mint/5 px-3 py-2 text-xs text-mint/90">
+              <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden />
+              Grounded in your profile · AI can be wrong — review before acting.
+            </p>
           </div>
 
           <div ref={threadRef} className="mt-4 flex-1 space-y-3 overflow-y-auto pr-1">
             {!conversation.length ? (
               <div className="space-y-3 py-2">
+                <div className="rounded-xl border border-white/10 bg-white/[.02] p-4">
+                  <p className="text-sm font-medium text-white">What the Coach can do</p>
+                  <p className="mt-1 text-sm leading-relaxed text-white/55">
+                    Build preparation plans, close skill gaps with proof-of-work ideas, and prioritize profile
+                    improvements — always tied to your real matches. It won’t make hiring decisions or guarantee
+                    outcomes.
+                  </p>
+                </div>
                 <p className="text-sm text-white/45">Start with a focused ask, or pick a prompt:</p>
                 <div className="grid gap-2">
                   {starterPrompts.map((prompt) => (
@@ -448,21 +489,37 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
                 key={`${item.role}-${index}`}
                 className={cn(
                   "max-w-3xl rounded-xl p-4 text-sm leading-relaxed",
-                  item.role === "member" ? "ml-auto bg-deep-blue/35 text-white" : "bg-white/[.04] text-white/70",
+                  item.role === "member"
+                    ? "ml-auto bg-deep-blue/35 text-white"
+                    : "border-l-2 border-mint/40 bg-white/[.04] text-white/70",
                 )}
               >
-                <p className="mb-1 text-[10px] tracking-wider text-white/35 uppercase">
+                <p className="mb-1 flex items-center gap-1.5 text-[10px] tracking-wider text-white/35 uppercase">
+                  {item.role === "coach" ? <Sparkles className="h-3 w-3 text-mint" aria-hidden /> : null}
                   {item.role === "member" ? "You" : "Career Coach"}
                 </p>
                 {item.role === "coach" ? <AiMarkdown content={item.content} /> : <p className="whitespace-pre-wrap">{item.content}</p>}
-                {item.role === "coach" && item.offerAsPlan ? (
-                  <button
-                    type="button"
-                    className="mt-3 text-xs text-mint hover:underline"
-                    onClick={() => applyAsPlan(item.content)}
-                  >
-                    Use this as my plan
-                  </button>
+                {item.role === "coach" ? (
+                  <div className="mt-3 flex flex-wrap items-center gap-4 text-xs">
+                    {item.offerAsPlan ? (
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1.5 text-mint transition hover:underline"
+                        onClick={() => addToPlan(item.content)}
+                      >
+                        <ListPlus className="h-3.5 w-3.5" aria-hidden />
+                        Add to plan
+                      </button>
+                    ) : null}
+                    <button
+                      type="button"
+                      className="inline-flex items-center gap-1.5 text-white/45 transition hover:text-white"
+                      onClick={() => void copyMessage(item.content)}
+                    >
+                      <Copy className="h-3.5 w-3.5" aria-hidden />
+                      Copy
+                    </button>
+                  </div>
                 ) : null}
               </div>
             ))}
@@ -520,7 +577,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
           <button
             type="button"
             disabled={busy === "reset"}
-            onClick={() => void clearData(false)}
+            onClick={() => setPendingClear({ deleteUsage: false })}
             className="text-white/55 hover:text-white"
           >
             Reset saved Coach data
@@ -528,7 +585,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
           <button
             type="button"
             disabled={busy === "reset"}
-            onClick={() => void clearData(true)}
+            onClick={() => setPendingClear({ deleteUsage: true })}
             className="text-red-200/70 hover:text-red-200"
           >
             Delete Coach and retained AI data
@@ -540,6 +597,21 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
           ) : null}
         </div>
       </footer>
+
+      <ConfirmDialog
+        open={pendingClear !== null}
+        title={pendingClear?.deleteUsage ? "Delete Coach and retained AI data?" : "Reset saved Coach data?"}
+        description={
+          pendingClear?.deleteUsage
+            ? "This permanently deletes your saved goal, plan, AI feedback, and retained usage records. This cannot be undone."
+            : "This clears your saved goal and plan. This cannot be undone."
+        }
+        confirmLabel={pendingClear?.deleteUsage ? "Delete data" : "Reset data"}
+        destructive
+        busy={busy === "reset"}
+        onClose={() => busy !== "reset" && setPendingClear(null)}
+        onConfirm={confirmClear}
+      />
     </div>
   );
 }
