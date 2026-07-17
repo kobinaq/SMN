@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { CheckCircle2, Circle, X } from "lucide-react";
 
 export type OnboardingStep = {
@@ -13,21 +13,28 @@ export type OnboardingStep = {
 
 const STORAGE_KEY = "smn-onboarding-dismissed";
 
-export function OnboardingChecklist({ steps }: { steps: OnboardingStep[] }) {
-  const [ready, setReady] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+const emptySubscribe = () => () => {};
 
-  useEffect(() => {
+export function OnboardingChecklist({ steps }: { steps: OnboardingStep[] }) {
+  // `mounted` is false during SSR and the first client (hydration) render, then
+  // true afterwards — a hydration-safe two-pass without setState in an effect.
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+  // Read the persisted dismissal lazily; only applied after mount.
+  const [dismissed, setDismissed] = useState(() => {
+    if (typeof window === "undefined") return false;
     try {
-      setDismissed(window.localStorage.getItem(STORAGE_KEY) === "1");
+      return window.localStorage.getItem(STORAGE_KEY) === "1";
     } catch {
-      setDismissed(false);
+      return false;
     }
-    setReady(true);
-  }, []);
+  });
 
   const remaining = steps.filter((step) => !step.done);
-  if (!ready || dismissed || !remaining.length) return null;
+  if (!mounted || dismissed || !remaining.length) return null;
 
   function dismiss() {
     try {

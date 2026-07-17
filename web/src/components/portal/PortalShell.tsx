@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -44,9 +44,13 @@ export function PortalShell({
   const logoutRedirect = variant === "member" ? "/login" : "/staff/login";
   const activeTitle = findActiveNavTitle(pathname, groups, exactRoots, "Dashboard");
 
-  useEffect(() => {
+  // Close the mobile drawer whenever the route changes (adjust state during
+  // render via a stored previous value — avoids a cascading effect render).
+  const [lastPathname, setLastPathname] = useState(pathname);
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname);
     setMobileOpen(false);
-  }, [pathname]);
+  }
 
   async function logout() {
     setLoggingOut(true);

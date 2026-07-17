@@ -10,7 +10,6 @@ export function AhrefsAnalytics() {
   if (!AHREFS_KEY) return null;
 
   return (
-    // eslint-disable-next-line @next/next/no-sync-scripts -- Ahrefs requires this exact async snippet in <head>
     <script
       src="https://analytics.ahrefs.com/analytics.js"
       data-key={AHREFS_KEY}

@@ -49,11 +49,15 @@ export function ResourceDownloadForm({
   return (
     <form onSubmit={onSubmit} className="space-y-3">
       <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
-      <label className="block text-xs uppercase tracking-wider text-white/40">
+      <label
+        htmlFor="resource-download-email"
+        className="block text-xs tracking-wider text-white/40 uppercase"
+      >
         Work email
       </label>
       <div className="flex flex-col gap-2 sm:flex-row">
         <input
+          id="resource-download-email"
           name="email"
           type="email"
           required

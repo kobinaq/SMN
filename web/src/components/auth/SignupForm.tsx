@@ -65,14 +65,22 @@ export function SignupForm() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
+      <label htmlFor="signup-name" className="sr-only">
+        Full name
+      </label>
       <input
+        id="signup-name"
         className={field}
         name="name"
         required
         autoComplete="name"
         placeholder="Full name"
       />
+      <label htmlFor="signup-email" className="sr-only">
+        Email
+      </label>
       <input
+        id="signup-email"
         className={field}
         name="email"
         type="email"
@@ -81,7 +89,11 @@ export function SignupForm() {
         placeholder="Email"
         inputMode="email"
       />
+      <label htmlFor="signup-password" className="sr-only">
+        Password (minimum 8 characters)
+      </label>
       <input
+        id="signup-password"
         className={field}
         name="password"
         type="password"
@@ -89,7 +101,11 @@ export function SignupForm() {
         autoComplete="new-password"
         placeholder="Password (min 8 characters)"
       />
+      <label htmlFor="signup-confirm" className="sr-only">
+        Confirm password
+      </label>
       <input
+        id="signup-confirm"
         className={field}
         name="confirm"
         type="password"

@@ -35,10 +35,15 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         }}
       />
       <SiteSettingsProvider value={settings}>
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
         <SmoothScroll>
           <Header />
           <PageTransition>
-            <main className="flex-1">{children}</main>
+            <main id="main" className="flex-1">
+              {children}
+            </main>
           </PageTransition>
           <Footer site={settings} />
         </SmoothScroll>

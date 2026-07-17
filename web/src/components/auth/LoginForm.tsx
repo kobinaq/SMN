@@ -58,7 +58,11 @@ export function LoginForm() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
+      <label htmlFor="login-email" className="sr-only">
+        Email
+      </label>
       <input
+        id="login-email"
         className={field}
         name="email"
         type="email"
@@ -67,7 +71,11 @@ export function LoginForm() {
         placeholder="Email"
         inputMode="email"
       />
+      <label htmlFor="login-password" className="sr-only">
+        Password
+      </label>
       <input
+        id="login-password"
         className={field}
         name="password"
         type="password"

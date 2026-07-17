@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ChevronRight, Globe, LogOut, UserRound } from "lucide-react";
 import { BrandLogo } from "@/components/layout/BrandLogo";
 import { cn } from "@/lib/utils";
@@ -33,9 +33,13 @@ function NavItem({
   const active = !hasChildren && isActivePath(pathname, item.href, exactRoots);
   const [isOpen, setIsOpen] = useState(childActive);
 
-  useEffect(() => {
+  // Expand the group when a child route becomes active (adjust state during
+  // render via a stored previous value instead of a cascading effect).
+  const [wasChildActive, setWasChildActive] = useState(childActive);
+  if (childActive !== wasChildActive) {
+    setWasChildActive(childActive);
     if (childActive) setIsOpen(true);
-  }, [childActive]);
+  }
 
   if (hasChildren) {
     return (
