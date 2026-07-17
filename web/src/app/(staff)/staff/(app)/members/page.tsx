@@ -1,16 +1,11 @@
-import Link from "next/link";
-import { MemberNoteForm } from "@/components/payload/MemberNoteForm";
-import { MemberPicker } from "@/components/staff/MemberPicker";
-import { StaffEmpty, StaffMetricGrid, StaffPageHeader, StaffPanel, staffOpsChrome } from "@/components/staff/ui";
+import { PeopleWorkspace } from "@/components/staff/PeopleWorkspace";
+import { StaffEmptyState, StaffPageHeader } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { staffAccess } from "@/lib/staff/records";
 
 const related = (value: unknown): Record<string, unknown> | null =>
   value && typeof value === "object" && "id" in value ? (value as Record<string, unknown>) : null;
-
-const readableDate = (value: unknown) =>
-  value ? new Intl.DateTimeFormat("en-GH", { dateStyle: "medium" }).format(new Date(String(value))) : "—";
 
 export default async function StaffMembersPage({
   searchParams,
@@ -29,12 +24,12 @@ export default async function StaffMembersPage({
   if (!member) {
     return (
       <div className="space-y-6">
-        <StaffPageHeader
-          eyebrow="Member operations"
-          title="Member 360"
-          description="Profile, learning, credentials, work, relationships, and staff context in one place."
+        <StaffPageHeader eyebrow="Work" title="People" />
+        <StaffEmptyState
+          title="No people yet"
+          description="Members appear here once they join."
+          action={{ href: "/staff", label: "Back to Today" }}
         />
-        <StaffEmpty>No members are available yet.</StaffEmpty>
       </div>
     );
   }
@@ -61,32 +56,32 @@ export default async function StaffMembersPage({
   const activity = [
     ...enrollments.docs.map((item) => ({
       label: `Enrollment · ${item.programName}`,
-      state: item.status,
-      at: item.updatedAt,
-      href: `/staff/learning?tab=learners`,
+      state: String(item.status),
+      at: String(item.updatedAt),
+      href: `/staff/learning?tab=learners&member=${member.id}`,
     })),
     ...certificates.docs.map((item) => ({
       label: `Certificate · ${item.title}`,
-      state: item.status,
-      at: item.issuedAt,
+      state: String(item.status),
+      at: String(item.issuedAt || item.updatedAt),
       href: `/staff/certificates`,
     })),
     ...applications.docs.map((item) => ({
-      label: `Opportunity · ${String(related(item.opportunity)?.title ?? "Application")}`,
-      state: item.status,
-      at: item.updatedAt,
+      label: `Job · ${String(related(item.opportunity)?.title ?? "Application")}`,
+      state: String(item.status),
+      at: String(item.updatedAt),
       href: `/staff/opportunities`,
     })),
     ...mentorship.docs.map((item) => ({
       label: `Mentorship · ${item.topic}`,
-      state: item.status,
-      at: item.updatedAt,
+      state: String(item.status),
+      at: String(item.updatedAt),
       href: `/staff/mentorship`,
     })),
     ...audit.docs.map((item) => ({
       label: `Audit · ${item.action}`,
       state: "staff",
-      at: item.createdAt,
+      at: String(item.createdAt),
       href: `/staff/system/audit`,
     })),
   ]
@@ -94,212 +89,70 @@ export default async function StaffMembersPage({
     .slice(0, 20);
 
   return (
-    <div className={`space-y-6 ${staffOpsChrome}`}>
-      <StaffPageHeader
-        eyebrow="Member operations"
-        title="Member 360"
-        description="Profile, learning, credentials, work, relationships, and staff context in one place."
-      />
-
-      <StaffPanel>
-        <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Member</p>
-        <MemberPicker
-          activeId={member.id}
-          members={members.docs.map((item) => ({
-            id: item.id,
-            label: item.name || item.email,
-            email: item.email,
-            handle: item.handle,
-          }))}
-        />
-      </StaffPanel>
-
-      <StaffPanel>
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <h2 className="font-display text-2xl text-white">{member.name}</h2>
-            <p className="mt-1 text-sm text-white/55">{member.headline || member.email}</p>
-            <p className="mt-2 text-xs text-white/40">
-              {member.location || "Location not set"} · {member.cohortStatus}
-              {member.handle ? ` · @${member.handle}` : ""}
-            </p>
-            {(member.skills || []).length || member.careerGoals ? (
-              <div className="mt-4 space-y-2 text-sm text-white/55">
-                {(member.skills || []).length ? (
-                  <p>
-                    <span className="text-white/35">Skills · </span>
-                    {(member.skills || [])
-                      .map((item) => item?.skill)
-                      .filter(Boolean)
-                      .join(", ")}
-                  </p>
-                ) : null}
-                {member.careerGoals ? (
-                  <p>
-                    <span className="text-white/35">Goals · </span>
-                    {member.careerGoals}
-                  </p>
-                ) : null}
-              </div>
-            ) : null}
-          </div>
-          {member.handle ? (
-            <Link href={`/u/${member.handle}`} className="text-sm text-baby-blue hover:underline">
-              Public profile
-            </Link>
-          ) : null}
-        </div>
-        <div className="mt-6">
-          <StaffMetricGrid
-            items={[
-              { label: "Enrollments", value: enrollments.totalDocs },
-              { label: "Certificates", value: certificates.totalDocs },
-              { label: "Portfolio", value: portfolios.totalDocs },
-              { label: "Applications", value: applications.totalDocs },
-            ]}
-          />
-        </div>
-      </StaffPanel>
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        <StaffPanel>
-          <h3 className="mb-3 font-display text-xl text-white">Learning</h3>
-          {enrollments.docs.length ? (
-            <div className="space-y-1">
-              {enrollments.docs.map((item) => (
-                <Link
-                  key={item.id}
-                  href="/staff/learning?tab=learners"
-                  className="flex items-center justify-between gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[.03]"
-                >
-                  <b className="text-sm text-white">{item.programName}</b>
-                  <span className="text-xs text-white/45">
-                    {item.status} · {item.completionPercent ?? 0}%
-                  </span>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <StaffEmpty>No enrollments.</StaffEmpty>
-          )}
-        </StaffPanel>
-
-        <StaffPanel>
-          <h3 className="mb-3 font-display text-xl text-white">Credentials & portfolio</h3>
-          {certificates.docs.length || portfolios.docs.length ? (
-            <div className="space-y-1">
-              {certificates.docs.map((item) => (
-                <Link
-                  key={item.id}
-                  href="/staff/certificates"
-                  className="flex items-center justify-between gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[.03]"
-                >
-                  <b className="text-sm text-white">{item.title}</b>
-                  <span className="text-xs text-white/45">{item.status}</span>
-                </Link>
-              ))}
-              {portfolios.docs.map((item) => (
-                <div key={item.id} className="flex items-center justify-between gap-3 rounded-xl px-3 py-3">
-                  <b className="text-sm text-white">{item.title}</b>
-                  <span className="text-xs text-white/45">
-                    {item.status} · {item.visibility}
-                  </span>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <StaffEmpty>No credentials or portfolio items.</StaffEmpty>
-          )}
-        </StaffPanel>
-
-        <StaffPanel>
-          <h3 className="mb-3 font-display text-xl text-white">Mentorship</h3>
-          <p className="mb-3 text-sm text-white/55">
-            {mentorProfiles.totalDocs ? "Mentor profile exists." : "No mentor profile."}
-          </p>
-          {mentorship.docs.length ? (
-            <div className="space-y-1">
-              {mentorship.docs.map((item) => (
-                <Link
-                  key={item.id}
-                  href="/staff/mentorship"
-                  className="flex items-center justify-between gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[.03]"
-                >
-                  <b className="text-sm text-white">{item.topic}</b>
-                  <span className="text-xs text-white/45">{item.status}</span>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <StaffEmpty>No mentorship requests.</StaffEmpty>
-          )}
-        </StaffPanel>
-
-        <StaffPanel>
-          <h3 className="mb-3 font-display text-xl text-white">Opportunity activity</h3>
-          {applications.docs.length ? (
-            <div className="space-y-1">
-              {applications.docs.map((item) => (
-                <Link
-                  key={item.id}
-                  href="/staff/opportunities"
-                  className="flex items-center justify-between gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[.03]"
-                >
-                  <b className="text-sm text-white">{String(related(item.opportunity)?.title ?? "Application")}</b>
-                  <span className="text-xs text-white/45">{item.status}</span>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <StaffEmpty>No applications.</StaffEmpty>
-          )}
-        </StaffPanel>
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        <StaffPanel>
-          <h3 className="mb-3 font-display text-xl text-white">Recent activity</h3>
-          {activity.length ? (
-            <div className="space-y-1">
-              {activity.map((item) => (
-                <Link
-                  key={`${item.href}-${item.at}-${item.label}`}
-                  href={item.href}
-                  className="flex items-center justify-between gap-4 rounded-xl px-3 py-3 transition hover:bg-white/[.03]"
-                >
-                  <span>
-                    <b className="block text-sm text-white">{item.label}</b>
-                    <small className="text-xs text-white/40">{item.state}</small>
-                  </span>
-                  <time className="text-xs text-white/35">{readableDate(item.at)}</time>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <StaffEmpty>No recent activity.</StaffEmpty>
-          )}
-        </StaffPanel>
-
-        <StaffPanel>
-          <h3 className="mb-3 font-display text-xl text-white">Private staff notes</h3>
-          <MemberNoteForm memberId={member.id} />
-          <div className="mt-4 space-y-3">
-            {notes.docs.map((item) => {
-              const author = related(item.author);
-              return (
-                <div key={item.id} className="rounded-xl border border-white/10 bg-near-black/30 p-3">
-                  <b className="text-xs uppercase tracking-wider text-baby-blue">{item.category}</b>
-                  <p className="mt-2 text-sm text-white/75">{item.note}</p>
-                  <small className="mt-2 block text-xs text-white/35">
-                    {String(author?.name ?? author?.email ?? "Staff")} · {readableDate(item.createdAt)}
-                  </small>
-                </div>
-              );
-            })}
-            {!notes.docs.length ? <StaffEmpty>No private notes yet.</StaffEmpty> : null}
-          </div>
-        </StaffPanel>
-      </div>
-    </div>
+    <PeopleWorkspace
+      member={{
+        id: member.id,
+        name: member.name,
+        email: member.email,
+        headline: member.headline,
+        location: member.location,
+        cohortStatus: member.cohortStatus,
+        handle: member.handle,
+        skills: member.skills,
+        careerGoals: member.careerGoals,
+      }}
+      pickerMembers={members.docs.map((item) => ({
+        id: item.id,
+        label: item.name || item.email,
+        email: item.email,
+        handle: item.handle,
+      }))}
+      metrics={[
+        { label: "Enrollments", value: enrollments.totalDocs },
+        { label: "Certificates", value: certificates.totalDocs },
+        { label: "Portfolio", value: portfolios.totalDocs },
+        { label: "Applications", value: applications.totalDocs },
+      ]}
+      enrollments={enrollments.docs.map((item) => ({
+        id: item.id,
+        programName: item.programName,
+        status: String(item.status),
+        completionPercent: item.completionPercent,
+        programKey: item.programKey,
+      }))}
+      certificates={certificates.docs.map((item) => ({
+        id: item.id,
+        title: item.title,
+        status: String(item.status),
+      }))}
+      portfolios={portfolios.docs.map((item) => ({
+        id: item.id,
+        title: item.title,
+        status: String(item.status),
+        visibility: String(item.visibility),
+      }))}
+      mentorProfilesCount={mentorProfiles.totalDocs}
+      mentorship={mentorship.docs.map((item) => ({
+        id: item.id,
+        topic: item.topic,
+        status: String(item.status),
+      }))}
+      applications={applications.docs.map((item) => ({
+        id: item.id,
+        title: String(related(item.opportunity)?.title ?? "Application"),
+        status: String(item.status),
+      }))}
+      notes={notes.docs.map((item) => {
+        const author = related(item.author);
+        return {
+          id: item.id,
+          category: String(item.category),
+          note: String(item.note),
+          author: String(author?.name ?? author?.email ?? "Staff"),
+          createdAt: String(item.createdAt),
+        };
+      })}
+      activity={activity}
+    />
   );
 }

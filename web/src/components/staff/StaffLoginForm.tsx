@@ -76,8 +76,8 @@ export function StaffLoginForm({ bootstrap }: { bootstrap: boolean }) {
           {error}
         </p>
       ) : null}
-      <Button type="submit" disabled={busy} className="w-full">
-        {busy ? "Please wait…" : bootstrap ? "Create first staff account" : "Sign in to staff"}
+      <Button type="submit" disabled={busy} className="w-full min-h-11">
+        {busy ? "Please wait…" : bootstrap ? "Create first staff account" : "Sign in"}
       </Button>
     </form>
   );

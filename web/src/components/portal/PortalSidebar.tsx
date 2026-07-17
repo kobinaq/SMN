@@ -112,18 +112,22 @@ function NavItem({
       href={item.href}
       onClick={onNavigate}
       className={cn(
-        "group flex items-center justify-between rounded-[6px] px-2.5 py-[7px] transition-all duration-200 select-none",
+        "group relative flex min-h-11 items-center justify-between rounded-[8px] px-2.5 py-[7px] transition-all duration-200 select-none md:min-h-0",
+        "ease-[cubic-bezier(0.32,0.72,0,1)]",
         active
-          ? "bg-white/10 font-medium text-white"
+          ? "bg-white/[.08] font-medium text-white"
           : "text-white/50 hover:bg-white/5 hover:text-white/90",
       )}
       style={{ paddingLeft: `${level * 12 + 10}px` }}
     >
+      {active ? (
+        <span className="absolute top-1/2 left-0 h-4 w-[2px] -translate-y-1/2 rounded-full bg-baby-blue" aria-hidden />
+      ) : null}
       <div className="flex items-center gap-2.5">
         <item.icon
           className={cn(
             "h-4 w-4 transition-colors",
-            active ? "text-white" : "text-white/40 group-hover:text-white/70",
+            active ? "text-baby-blue" : "text-white/40 group-hover:text-white/70",
           )}
           strokeWidth={1.5}
         />

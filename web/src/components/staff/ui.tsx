@@ -1,24 +1,30 @@
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
+import { staffEase, staffMotionClass } from "@/components/staff/motion";
 
 export function StaffPageHeader({
   eyebrow,
   title,
   description,
+  hint,
   action,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
+  /** Optional one-line hint; preferred over long descriptions. */
+  hint?: string;
   action?: { href: string; label: string };
 }) {
+  const sub = hint || description;
   return (
-    <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <header className={cn("mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between", staffMotionClass.fadeIn)}>
       <div>
         {eyebrow ? <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">{eyebrow}</p> : null}
-        <h1 className="mt-2 font-display text-3xl text-white sm:text-4xl">{title}</h1>
-        {description ? <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/55">{description}</p> : null}
+        <h1 className={cn("font-display text-3xl text-white sm:text-4xl", eyebrow ? "mt-2" : "")}>{title}</h1>
+        {sub ? <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/50">{sub}</p> : null}
       </div>
       {action ? <Button href={action.href}>{action.label}</Button> : null}
     </header>
@@ -26,11 +32,174 @@ export function StaffPageHeader({
 }
 
 export function StaffPanel({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <section className={cn("rounded-2xl border border-white/10 bg-surface p-5 sm:p-6", className)}>{children}</section>;
+  return (
+    <section
+      className={cn(
+        "rounded-2xl border border-white/10 bg-surface p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] sm:p-6",
+        className,
+      )}
+    >
+      {children}
+    </section>
+  );
 }
 
 export function StaffEmpty({ children }: { children: React.ReactNode }) {
   return <p className="rounded-2xl border border-dashed border-white/15 px-4 py-8 text-center text-sm text-white/45">{children}</p>;
+}
+
+export function StaffSection({
+  title,
+  aside,
+  children,
+  className,
+}: {
+  title: string;
+  aside?: React.ReactNode;
+  children?: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={cn("mb-4 flex items-end justify-between gap-3", className)}>
+      <h2 className="font-display text-xl text-white sm:text-2xl">{title}</h2>
+      {aside ? <div className="shrink-0 text-xs text-white/40">{aside}</div> : null}
+      {children}
+    </div>
+  );
+}
+
+export function StaffActionCard({
+  href,
+  value,
+  label,
+  detail,
+  tone = "blue",
+}: {
+  href: string;
+  value: string | number;
+  label: string;
+  detail?: string;
+  tone?: "mint" | "amber" | "violet" | "red" | "blue";
+}) {
+  const toneBorder: Record<string, string> = {
+    mint: "border-mint/35 hover:border-mint/55",
+    amber: "border-amber-300/35 hover:border-amber-300/55",
+    violet: "border-purple-300/35 hover:border-purple-300/55",
+    red: "border-red-300/35 hover:border-red-300/55",
+    blue: "border-baby-blue/35 hover:border-baby-blue/55",
+  };
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "group grid grid-cols-[auto_1fr_auto] items-center gap-4 rounded-2xl border bg-near-black/35 p-4 transition",
+        "hover:bg-white/[.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-baby-blue",
+        staffMotionClass.press,
+        toneBorder[tone] || toneBorder.blue,
+      )}
+      style={{ transitionTimingFunction: staffEase }}
+    >
+      <strong className="text-3xl tabular-nums text-baby-blue">{value}</strong>
+      <span className="min-w-0">
+        <b className="block text-sm text-white">{label}</b>
+        {detail ? <span className="mt-1 block text-xs text-white/45">{detail}</span> : null}
+      </span>
+      <ChevronRight
+        className="h-4 w-4 text-white/30 transition group-hover:translate-x-0.5 group-hover:text-white/60"
+        strokeWidth={1.5}
+        style={{ transitionTimingFunction: staffEase }}
+      />
+    </Link>
+  );
+}
+
+export function StaffEmptyState({
+  title,
+  description,
+  action,
+  steps,
+}: {
+  title: string;
+  description?: string;
+  action?: { href: string; label: string };
+  steps?: Array<{ label: string; href?: string; active?: boolean }>;
+}) {
+  return (
+    <div className="rounded-2xl border border-dashed border-white/12 bg-white/[.02] px-5 py-10 text-center">
+      <h3 className="font-display text-xl text-white">{title}</h3>
+      {description ? <p className="mx-auto mt-2 max-w-md text-sm text-white/45">{description}</p> : null}
+      {steps?.length ? (
+        <ol className="mx-auto mt-6 flex max-w-lg flex-col gap-2 sm:flex-row sm:items-center sm:justify-center sm:gap-0">
+          {steps.map((step, index) => (
+            <li key={step.label} className="flex items-center justify-center gap-2 sm:contents">
+              {index > 0 ? <span className="hidden text-white/20 sm:mx-2 sm:inline">→</span> : null}
+              {step.href && step.active !== false ? (
+                <Link
+                  href={step.href}
+                  className="rounded-full border border-baby-blue/40 bg-baby-blue/15 px-3 py-1.5 text-xs text-baby-blue transition"
+                >
+                  {index + 1}. {step.label}
+                </Link>
+              ) : (
+                <span
+                  className={cn(
+                    "rounded-full border px-3 py-1.5 text-xs",
+                    step.active ? "border-baby-blue/40 bg-baby-blue/15 text-baby-blue" : "border-white/10 text-white/35",
+                  )}
+                >
+                  {index + 1}. {step.label}
+                </span>
+              )}
+            </li>
+          ))}
+        </ol>
+      ) : null}
+      {action ? (
+        <div className="mt-6">
+          <Button href={action.href}>{action.label}</Button>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+export function StaffFilterChips({
+  options,
+  value,
+  onChange,
+}: {
+  options: Array<{ id: string; label: string; count?: number }>;
+  value: string;
+  onChange: (id: string) => void;
+}) {
+  return (
+    <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filter">
+      {options.map((option) => {
+        const active = option.id === value;
+        return (
+          <button
+            key={option.id}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            onClick={() => onChange(option.id)}
+            className={cn(
+              "rounded-full border px-3 py-1.5 text-xs transition",
+              active
+                ? "border-baby-blue/45 bg-baby-blue/15 text-baby-blue"
+                : "border-white/10 text-white/55 hover:border-white/25 hover:text-white",
+            )}
+            style={{ transitionTimingFunction: staffEase }}
+          >
+            {option.label}
+            {typeof option.count === "number" ? (
+              <span className={cn("ml-1.5 tabular-nums", active ? "text-baby-blue/80" : "text-white/35")}>{option.count}</span>
+            ) : null}
+          </button>
+        );
+      })}
+    </div>
+  );
 }
 
 export function StaffMetricGrid({ items }: { items: Array<{ label: string; value: string | number }> }) {
@@ -187,12 +356,12 @@ export function StaffOpsRow({
   children?: React.ReactNode;
 }) {
   return (
-    <div className={cn("flex flex-col gap-3 border-b border-white/5 py-3 last:border-0 sm:flex-row sm:items-center sm:justify-between", staffOpsChrome)}>
+    <div className="flex flex-col gap-3 border-b border-white/5 py-3 transition last:border-0 hover:bg-white/[.02] sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
         <b className="block text-sm text-white">{title}</b>
         {detail ? <span className="mt-1 block text-xs text-white/45">{detail}</span> : null}
       </div>
-      {children ? <div className="shrink-0">{children}</div> : null}
+      {children ? <div className={`shrink-0 ${staffOpsChrome}`}>{children}</div> : null}
     </div>
   );
 }

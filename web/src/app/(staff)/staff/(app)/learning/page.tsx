@@ -2,8 +2,10 @@ import Link from "next/link";
 import { ContentStudio } from "@/components/payload/ContentStudio";
 import { LessonActions, ModuleActions } from "@/components/payload/CurriculumActions";
 import { ProgressOverrideForm } from "@/components/payload/ProgressOverrideForm";
+import { LearningCourseSwitcher, LearningTabNav } from "@/components/staff/LearningNav";
 import {
   StaffEmpty,
+  StaffEmptyState,
   StaffMetricGrid,
   StaffPageHeader,
   StaffPanel,
@@ -19,12 +21,13 @@ import { cn } from "@/lib/utils";
 import { StaffRecordForm } from "@/components/staff/StaffRecordForm";
 import { AddLessonForm, AddModuleForm } from "./CurriculumCreateForms";
 
-const baseTabs = [
+const allTabs = [
   ["overview", "Overview"],
   ["curriculum", "Curriculum"],
   ["learners", "Learners"],
   ["analytics", "Analytics"],
   ["settings", "Settings"],
+  ["ai-content-studio", "AI Content Studio"],
 ] as const;
 
 function relationID(value: unknown) {
@@ -34,7 +37,7 @@ function relationID(value: unknown) {
 export default async function StaffLearningPage({
   searchParams,
 }: {
-  searchParams: Promise<{ course?: string; tab?: string }>;
+  searchParams: Promise<{ course?: string; tab?: string; member?: string }>;
 }) {
   const staff = await requireStaff(["learning", "content", "support"], "/staff/learning");
   const payload = await getPayloadClient();
@@ -42,13 +45,14 @@ export default async function StaffLearningPage({
   const params = await searchParams;
   const studioEnabled = isAIFeatureEnabled("content-studio");
 
-  const tabs = studioEnabled
-    ? ([...baseTabs, ["ai-content-studio", "AI Content Studio"]] as const)
-    : baseTabs;
+  const tabs = (studioEnabled
+    ? allTabs
+    : allTabs.filter(([key]) => key !== "ai-content-studio")) as ReadonlyArray<readonly [string, string]>;
 
   const requestedID = typeof params.course === "string" ? params.course : undefined;
   const requestedTab = typeof params.tab === "string" ? params.tab : undefined;
   const activeTab = tabs.some(([key]) => key === requestedTab) ? requestedTab! : "overview";
+  const focusMember = typeof params.member === "string" ? params.member : undefined;
 
   const courses = await payload.find({ collection: "lms-courses", depth: 0, limit: 100, sort: "order", ...access });
   const selected = courses.docs.find((course) => String(course.id) === requestedID) ?? courses.docs[0];
@@ -57,12 +61,26 @@ export default async function StaffLearningPage({
     return (
       <div className="space-y-6">
         <StaffPageHeader
-          eyebrow="Learning operations"
-          title="Course Builder"
-          description="Create the first course to begin building its curriculum."
-          action={{ href: "/staff/learning/courses/new", label: "Create course" }}
+          eyebrow="Work"
+          title="Learning"
+          hint="Build programs members take inside the portal."
+          action={{ href: "/staff/learning/courses/new", label: "Create program" }}
         />
-        <StaffEmpty>No LMS courses yet.</StaffEmpty>
+        <p className="text-xs text-white/40">
+          Looking for public website cards?{" "}
+          <Link href="/staff/website/courses" className="text-baby-blue hover:underline">
+            Public catalogue →
+          </Link>
+        </p>
+        <StaffEmptyState
+          title="Create your first program"
+          steps={[
+            { label: "Create program", href: "/staff/learning/courses/new", active: true },
+            { label: "Add modules" },
+            { label: "Publish" },
+          ]}
+          action={{ href: "/staff/learning/courses/new", label: "Create program" }}
+        />
       </div>
     );
   }
@@ -144,31 +162,28 @@ export default async function StaffLearningPage({
   return (
     <div className={`space-y-6 ${staffOpsChrome}`}>
       <StaffPageHeader
-        eyebrow="Learning operations"
-        title="Course Builder"
-        description="Build, review, and operate a course without losing its relationships."
-        action={{ href: "/staff/learning/courses/new", label: "New course" }}
+        eyebrow="Work"
+        title="Learning"
+        hint="Build and operate programs."
+        action={{ href: "/staff/learning/courses/new", label: "New program" }}
       />
+      <p className="text-xs text-white/40">
+        Looking for public website cards?{" "}
+        <Link href="/staff/website/courses" className="text-baby-blue hover:underline">
+          Public catalogue →
+        </Link>
+      </p>
 
       <StaffPanel>
-        <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Course</p>
-        <nav className="flex flex-wrap gap-2" aria-label="Course picker">
-          {courses.docs.map((course) => {
-            const active = String(course.id) === courseID;
-            return (
-              <Link
-                key={course.id}
-                href={`/staff/learning?course=${course.id}&tab=${activeTab}`}
-                className={cn(
-                  "rounded-full border px-3 py-1.5 text-xs transition",
-                  active ? "border-baby-blue/50 bg-baby-blue/15 text-baby-blue" : "border-white/10 text-white/55 hover:border-white/25 hover:text-white",
-                )}
-              >
-                {course.title}
-              </Link>
-            );
-          })}
-        </nav>
+        <LearningCourseSwitcher
+          courseId={courseID}
+          activeTab={activeTab}
+          courses={courses.docs.map((course) => ({
+            id: course.id,
+            title: String(course.title),
+            status: course.status,
+          }))}
+        />
       </StaffPanel>
 
       <StaffPanel>
@@ -193,21 +208,12 @@ export default async function StaffLearningPage({
         </div>
       </StaffPanel>
 
-      <nav className="flex gap-1 overflow-x-auto border-b border-white/10 pb-px" aria-label="Course Builder sections">
-        {tabs.map(([key, label]) => (
-          <Link
-            key={key}
-            href={`${base}&tab=${key}`}
-            aria-current={activeTab === key ? "page" : undefined}
-            className={cn(
-              "shrink-0 border-b-2 px-4 py-3 text-xs transition",
-              activeTab === key ? "border-baby-blue text-white" : "border-transparent text-white/45 hover:text-white/70",
-            )}
-          >
-            {label}
-          </Link>
-        ))}
-      </nav>
+      <LearningTabNav
+        base={base}
+        activeTab={activeTab}
+        studioEnabled={studioEnabled}
+        highlightCurriculum={!readiness.ready}
+      />
 
       {activeTab === "overview" ? (
         <div className="grid gap-4 lg:grid-cols-2">
@@ -359,14 +365,42 @@ export default async function StaffLearningPage({
         <StaffPanel>
           <h3 className="font-display text-xl text-white">Learners</h3>
           <p className="mt-2 text-sm text-white/55">
-            {enrollments.totalDocs} enrollment records grant access through program key{" "}
-            <b className="text-white">{selected.programKey}</b>.
+            {enrollments.totalDocs} enrolled · progress overrides stay under More tools.
           </p>
-          <h3 className="mt-6 font-display text-lg text-white">Reasoned progress override</h3>
-          <p className="mt-1 mb-4 text-xs text-white/45">
-            Every correction records the staff actor, timestamp, reason, and before/after state.
-          </p>
-          <ProgressOverrideForm courseId={courseID} learners={learnerOptions} lessons={lessonOptions} />
+          {focusMember ? (
+            <p className="mt-2 text-xs text-baby-blue">Focused on member {focusMember}</p>
+          ) : null}
+          <div className="mt-4 space-y-1">
+            {enrollments.docs.slice(0, 25).map((item) => {
+              const member = item.member;
+              const memberId = typeof member === "object" ? member.id : member;
+              const label =
+                typeof member === "object" ? member.name || member.email : `Member ${member}`;
+              const focused = focusMember && String(memberId) === String(focusMember);
+              return (
+                <Link
+                  key={item.id}
+                  href={`/staff/members?member=${memberId}`}
+                  className={cn(
+                    "flex items-center justify-between gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[.03]",
+                    focused && "border border-baby-blue/35 bg-baby-blue/10",
+                  )}
+                >
+                  <b className="text-sm text-white">{label}</b>
+                  <span className="text-xs text-white/45">
+                    {item.status} · {item.completionPercent ?? 0}%
+                  </span>
+                </Link>
+              );
+            })}
+            {!enrollments.docs.length ? <StaffEmpty>No learners enrolled yet.</StaffEmpty> : null}
+          </div>
+          <details className="mt-6 rounded-2xl border border-white/10 bg-near-black/30 p-4">
+            <summary className="cursor-pointer text-sm text-white/70">Progress override</summary>
+            <div className="mt-4">
+              <ProgressOverrideForm courseId={courseID} learners={learnerOptions} lessons={lessonOptions} />
+            </div>
+          </details>
         </StaffPanel>
       ) : null}
 

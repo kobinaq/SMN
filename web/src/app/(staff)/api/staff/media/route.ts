@@ -2,6 +2,57 @@ import { getPayloadClient } from "@/lib/payload";
 import { staffAuthHeaders } from "@/lib/auth/staff";
 import { canStaff } from "@/lib/staff-permissions";
 
+export async function GET(request: Request) {
+  const payload = await getPayloadClient();
+  const { user } = await payload.auth({ headers: await staffAuthHeaders(request) });
+  if (!user || user.collection !== "users") return Response.json({ error: "Staff sign-in required." }, { status: 401 });
+  if (!canStaff(user as never, "content", "learning", "analyst")) {
+    return Response.json({ error: "Content or learning permission required." }, { status: 403 });
+  }
+
+  const url = new URL(request.url);
+  const id = url.searchParams.get("id");
+  try {
+    if (id) {
+      const doc = await payload.findByID({
+        collection: "media",
+        id,
+        depth: 0,
+        overrideAccess: false,
+        user,
+      });
+      return Response.json({
+        doc: {
+          id: doc.id,
+          alt: doc.alt,
+          url: doc.url,
+          mimeType: doc.mimeType,
+        },
+      });
+    }
+
+    const result = await payload.find({
+      collection: "media",
+      limit: 100,
+      sort: "-createdAt",
+      depth: 0,
+      overrideAccess: false,
+      user,
+    });
+    return Response.json({
+      docs: result.docs.map((doc) => ({
+        id: doc.id,
+        alt: doc.alt,
+        url: doc.url,
+        mimeType: doc.mimeType,
+      })),
+    });
+  } catch (error) {
+    console.error("[staff-media-get]", error);
+    return Response.json({ error: "Unable to load media." }, { status: 500 });
+  }
+}
+
 export async function POST(request: Request) {
   const payload = await getPayloadClient();
   const { user } = await payload.auth({ headers: await staffAuthHeaders(request) });

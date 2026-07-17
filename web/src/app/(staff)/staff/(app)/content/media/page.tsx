@@ -1,7 +1,7 @@
 import { MediaCopyButton } from "@/components/staff/MediaCopyButton";
 import { MediaUploadForm } from "@/components/staff/MediaUploadForm";
 import { StaffDeleteButton } from "@/components/staff/StaffRecordForm";
-import { StaffEmpty, StaffPageHeader, StaffPanel } from "@/components/staff/ui";
+import { StaffEmptyState, StaffPageHeader, StaffPanel } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { listCollection } from "@/lib/staff/records";
@@ -13,11 +13,7 @@ export default async function StaffMediaPage() {
 
   return (
     <div className="space-y-6">
-      <StaffPageHeader
-        eyebrow="Content"
-        title="Media library"
-        description="Upload images and PDFs, then reference them by ID on posts, resources, and website pages."
-      />
+      <StaffPageHeader eyebrow="Site" title="Media" hint="Upload once, attach from any form." />
       <StaffPanel>
         <MediaUploadForm />
       </StaffPanel>
@@ -40,10 +36,11 @@ export default async function StaffMediaPage() {
                   <div className="space-y-3 p-4">
                     <div>
                       <b className="block text-sm text-white">{doc.alt || "Untitled"}</b>
-                      <small className="mt-1 block text-xs text-white/40">ID {doc.id}</small>
+                      <small className="mt-1 block text-xs text-white/40">Attached via picker</small>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {url ? <MediaCopyButton url={url} /> : null}
+                      <MediaCopyButton url={String(doc.id)} label="Copy ID" />
                       <StaffDeleteButton collection="media" id={doc.id} redirectTo="/staff/content/media" />
                     </div>
                   </div>
@@ -52,7 +49,14 @@ export default async function StaffMediaPage() {
             })}
           </div>
         ) : (
-          <StaffEmpty>No media uploaded yet. Add the first image or PDF above.</StaffEmpty>
+          <StaffEmptyState
+            title="No media yet"
+            steps={[
+              { label: "Upload a file", active: true },
+              { label: "Attach on a form" },
+              { label: "Publish" },
+            ]}
+          />
         )}
       </StaffPanel>
     </div>

@@ -61,7 +61,7 @@ const staffIconByHref: Record<string, PortalNavItem["icon"]> = {
   "/staff/system/audit": ScrollText,
 };
 
-const operationsHrefs = new Set([
+const workHrefs = new Set([
   "/staff",
   "/staff/learning",
   "/staff/members",
@@ -70,20 +70,17 @@ const operationsHrefs = new Set([
   "/staff/certificates",
 ]);
 
-const contentHrefs = new Set([
+const siteHrefs = new Set([
   "/staff/content/posts",
   "/staff/content/resources",
   "/staff/content/media",
-]);
-
-const websiteHrefs = new Set([
   "/staff/website/courses",
   "/staff/website/events",
   "/staff/website/stories",
   "/staff/website/settings",
 ]);
 
-const systemHrefs = new Set([
+const teamHrefs = new Set([
   "/staff/system/users",
   "/staff/system/ai",
   "/staff/system/audit",
@@ -104,41 +101,14 @@ function toNavItem(link: StaffLinkInput): PortalNavItem {
   };
 }
 
-function collapsibleGroup(
-  heading: string,
-  icon: PortalNavItem["icon"],
-  links: StaffLinkInput[],
-): PortalNavItem | null {
-  if (!links.length) return null;
-  return {
-    href: links[0].href,
-    label: heading,
-    icon,
-    children: links.map(toNavItem),
-  };
-}
-
-/** Regroup flat role-gated staff links into sidebar groups with nested sections. */
+/** Regroup flat role-gated staff links into Work / Site / Team. */
 export function buildStaffNavGroups(links: StaffLinkInput[]): PortalNavGroup[] {
-  const operations = links.filter((link) => operationsHrefs.has(link.href)).map(toNavItem);
-  const content = links.filter((link) => contentHrefs.has(link.href));
-  const website = links.filter((link) => websiteHrefs.has(link.href));
-  const system = links.filter((link) => systemHrefs.has(link.href));
+  const work = links.filter((link) => workHrefs.has(link.href)).map(toNavItem);
+  const site = links.filter((link) => siteHrefs.has(link.href)).map(toNavItem);
+  const team = links.filter((link) => teamHrefs.has(link.href)).map(toNavItem);
 
-  const groups: PortalNavGroup[] = [{ heading: "Operations", items: operations }];
-
-  const contentItem = collapsibleGroup("Content", FileText, content);
-  const websiteItem = collapsibleGroup("Website", Globe, website);
-  const systemItem = collapsibleGroup("System", Shield, system);
-
-  const secondary: PortalNavItem[] = [];
-  if (contentItem) secondary.push(contentItem);
-  if (websiteItem) secondary.push(websiteItem);
-  if (systemItem) secondary.push(systemItem);
-
-  if (secondary.length) {
-    groups.push({ heading: "More", items: secondary });
-  }
-
+  const groups: PortalNavGroup[] = [{ heading: "Work", items: work }];
+  if (site.length) groups.push({ heading: "Site", items: site });
+  if (team.length) groups.push({ heading: "Team", items: team });
   return groups;
 }

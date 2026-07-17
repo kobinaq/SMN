@@ -1,4 +1,4 @@
-import { StaffEmpty, StaffPageHeader, StaffPanel, StaffTable } from "@/components/staff/ui";
+import { StaffEmptyState, StaffPageHeader, StaffPanel, StaffTable } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { listCollection } from "@/lib/staff/records";
@@ -11,9 +11,9 @@ export default async function StaffPostsPage() {
   return (
     <div className="space-y-6">
       <StaffPageHeader
-        eyebrow="Content"
+        eyebrow="Site"
         title="Posts"
-        description="Publish articles for the public insights feed. Leave publish time blank to keep a draft."
+        hint="Articles for the public insights feed."
         action={{ href: "/staff/content/posts/new", label: "New post" }}
       />
       <StaffPanel>
@@ -32,7 +32,15 @@ export default async function StaffPostsPage() {
             }))}
           />
         ) : (
-          <StaffEmpty>No posts yet. Create the first article for the insights feed.</StaffEmpty>
+          <StaffEmptyState
+            title="No posts yet"
+            steps={[
+              { label: "Write a post", href: "/staff/content/posts/new", active: true },
+              { label: "Add a cover" },
+              { label: "Publish" },
+            ]}
+            action={{ href: "/staff/content/posts/new", label: "New post" }}
+          />
         )}
       </StaffPanel>
     </div>

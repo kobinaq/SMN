@@ -1,17 +1,26 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { useToast } from "@/components/ui/Toast";
 import { staffFieldClass } from "@/components/staff/ui";
+import { StaffMediaField } from "@/components/staff/StaffMediaField";
 
 export type StaffField =
-  | { name: string; label: string; type: "text" | "email" | "url" | "number" | "textarea" | "datetime-local" | "password"; required?: boolean; placeholder?: string }
-  | { name: string; label: string; type: "select"; required?: boolean; options: Array<{ label: string; value: string }> }
-  | { name: string; label: string; type: "checkbox"; required?: boolean };
+  | {
+      name: string;
+      label: string;
+      type: "text" | "email" | "url" | "number" | "textarea" | "datetime-local" | "password";
+      required?: boolean;
+      placeholder?: string;
+      advanced?: boolean;
+    }
+  | { name: string; label: string; type: "select"; required?: boolean; options: Array<{ label: string; value: string }>; advanced?: boolean }
+  | { name: string; label: string; type: "checkbox"; required?: boolean; advanced?: boolean }
+  | { name: string; label: string; type: "media"; required?: boolean; advanced?: boolean };
 
 export function StaffRecordForm({
   collection,
@@ -42,6 +51,10 @@ export function StaffRecordForm({
   });
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [advancedOpen, setAdvancedOpen] = useState(false);
+
+  const primaryFields = useMemo(() => fields.filter((field) => !field.advanced), [fields]);
+  const advancedFields = useMemo(() => fields.filter((field) => field.advanced), [fields]);
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
@@ -77,53 +90,87 @@ export function StaffRecordForm({
     }
   }
 
+  function renderField(field: StaffField) {
+    const wide = field.type === "textarea" || field.type === "checkbox" || field.type === "media";
+    return (
+      <label key={field.name} className={`block text-sm text-white/70 ${wide ? "md:col-span-2" : ""}`}>
+        {field.label}
+        {field.type === "textarea" ? (
+          <textarea
+            className={`${staffFieldClass} min-h-36`}
+            required={field.required}
+            value={String(values[field.name] || "")}
+            placeholder={field.placeholder}
+            onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.value }))}
+          />
+        ) : field.type === "select" ? (
+          <Select
+            className={staffFieldClass}
+            required={field.required}
+            value={String(values[field.name] || "")}
+            onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.value }))}
+          >
+            <option value="">Select…</option>
+            {field.options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Select>
+        ) : field.type === "checkbox" ? (
+          <input
+            className="ml-3 mt-3"
+            type="checkbox"
+            checked={Boolean(values[field.name])}
+            onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.checked }))}
+          />
+        ) : field.type === "media" ? (
+          <StaffMediaField
+            name={field.name}
+            label={field.label}
+            required={field.required}
+            value={String(values[field.name] || "")}
+            onChange={(next) => setValues((current) => ({ ...current, [field.name]: next }))}
+          />
+        ) : (
+          <input
+            className={staffFieldClass}
+            type={field.type}
+            required={field.required}
+            value={String(values[field.name] || "")}
+            placeholder={field.placeholder}
+            onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.value }))}
+          />
+        )}
+      </label>
+    );
+  }
+
   return (
     <form onSubmit={submit} className="grid gap-4 md:grid-cols-2">
-      {fields.map((field) => (
-        <label key={field.name} className={`block text-sm text-white/70 ${field.type === "textarea" || field.type === "checkbox" ? "md:col-span-2" : ""}`}>
-          {field.label}
-          {field.type === "textarea" ? (
-            <textarea
-              className={`${staffFieldClass} min-h-36`}
-              required={field.required}
-              value={String(values[field.name] || "")}
-              placeholder={field.placeholder}
-              onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.value }))}
-            />
-          ) : field.type === "select" ? (
-            <Select
-              className={staffFieldClass}
-              required={field.required}
-              value={String(values[field.name] || "")}
-              onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.value }))}
-            >
-              <option value="">Select…</option>
-              {field.options.map((option) => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
-            </Select>
-          ) : field.type === "checkbox" ? (
-            <input
-              className="ml-3 mt-3"
-              type="checkbox"
-              checked={Boolean(values[field.name])}
-              onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.checked }))}
-            />
-          ) : (
-            <input
-              className={staffFieldClass}
-              type={field.type}
-              required={field.required}
-              value={String(values[field.name] || "")}
-              placeholder={field.placeholder}
-              onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.value }))}
-            />
-          )}
-        </label>
-      ))}
+      {primaryFields.map(renderField)}
+      {advancedFields.length ? (
+        <div className="md:col-span-2">
+          <button
+            type="button"
+            className="text-xs text-white/45 hover:text-white/70"
+            onClick={() => setAdvancedOpen((value) => !value)}
+            aria-expanded={advancedOpen}
+          >
+            {advancedOpen ? "Hide advanced" : "Advanced"}
+          </button>
+          {advancedOpen ? <div className="mt-4 grid gap-4 md:grid-cols-2">{advancedFields.map(renderField)}</div> : null}
+        </div>
+      ) : null}
       <div className="md:col-span-2 flex items-center gap-3">
-        <Button type="submit" disabled={busy}>{busy ? "Saving…" : submitLabel}</Button>
-        {message ? <span className="text-sm text-white/50" aria-live="polite">{message}</span> : null}
+        <Button type="submit" disabled={busy}>
+          {busy ? "Saving…" : submitLabel}
+        </Button>
+        {message ? (
+          <span className="text-sm text-white/50" aria-live="polite">
+            {message}
+          </span>
+        ) : null}
       </div>
     </form>
   );

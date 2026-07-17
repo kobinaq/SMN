@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export function MediaCopyButton({ url }: { url: string }) {
+export function MediaCopyButton({ url, label = "Copy URL" }: { url: string; label?: string }) {
   const [copied, setCopied] = useState(false);
 
   async function copy() {
@@ -21,7 +21,7 @@ export function MediaCopyButton({ url }: { url: string }) {
       onClick={copy}
       className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-white/80 transition hover:border-baby-blue/40"
     >
-      {copied ? "Copied" : "Copy URL"}
+      {copied ? "Copied" : label}
     </button>
   );
 }

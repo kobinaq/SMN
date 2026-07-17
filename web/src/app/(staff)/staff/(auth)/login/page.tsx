@@ -18,8 +18,8 @@ export default async function StaffLoginPage() {
       title={bootstrap ? "Set up SMN staff" : "Staff sign in"}
       subtitle={
         bootstrap
-          ? "Create the first staff account. This person becomes a super admin."
-          : "Operations, content, and network administration for Social Marketers Network."
+          ? "Create the first staff account."
+          : "Sign in to run SMN operations."
       }
     >
       <Suspense fallback={<p className="text-sm text-white/50">Loading…</p>}>

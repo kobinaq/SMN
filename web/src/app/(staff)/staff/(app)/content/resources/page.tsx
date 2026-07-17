@@ -1,4 +1,4 @@
-import { StaffEmpty, StaffPageHeader, StaffPanel, StaffTable } from "@/components/staff/ui";
+import { StaffEmptyState, StaffPageHeader, StaffPanel, StaffTable } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { listCollection } from "@/lib/staff/records";
@@ -11,9 +11,9 @@ export default async function StaffResourcesPage() {
   return (
     <div className="space-y-6">
       <StaffPageHeader
-        eyebrow="Content"
+        eyebrow="Site"
         title="Resources"
-        description="Templates, guides, and downloadable member assets."
+        hint="Templates and downloadable assets."
         action={{ href: "/staff/content/resources/new", label: "New resource" }}
       />
       <StaffPanel>
@@ -27,7 +27,15 @@ export default async function StaffResourcesPage() {
             }))}
           />
         ) : (
-          <StaffEmpty>No resources yet. Add the first template or guide.</StaffEmpty>
+          <StaffEmptyState
+            title="No resources yet"
+            steps={[
+              { label: "Add a resource", href: "/staff/content/resources/new", active: true },
+              { label: "Attach a file" },
+              { label: "Publish" },
+            ]}
+            action={{ href: "/staff/content/resources/new", label: "New resource" }}
+          />
         )}
       </StaffPanel>
     </div>

@@ -14,11 +14,11 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
     badges.find((item) => parts.some((part) => item.href.includes(part) || item.href === part))?.count;
 
   const links: StaffLinkInput[] = [
-    { href: "/staff", label: "Home", count: badgeFor("/admin", "/staff") },
-    { href: "/staff/learning", label: "Courses", count: badgeFor("course-builder", "learning") },
-    { href: "/staff/members", label: "Members" },
+    { href: "/staff", label: "Today", count: badgeFor("/admin", "/staff") },
+    { href: "/staff/learning", label: "Learning", count: badgeFor("course-builder", "learning") },
+    { href: "/staff/members", label: "People" },
     { href: "/staff/mentorship", label: "Mentorship", count: badgeFor("mentorship") },
-    { href: "/staff/opportunities", label: "Opportunities", count: badgeFor("opportunity") },
+    { href: "/staff/opportunities", label: "Jobs", count: badgeFor("opportunity") },
     { href: "/staff/certificates", label: "Certificates", count: badgeFor("certificate") },
   ];
 

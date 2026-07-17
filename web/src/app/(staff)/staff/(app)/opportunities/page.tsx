@@ -1,7 +1,16 @@
 /* Expiry queues intentionally use the current server request time. */
 /* eslint-disable react-hooks/purity */
 import { OpportunityActions } from "@/components/payload/OpportunityActions";
-import { StaffEmpty, StaffMetricGrid, StaffOpsRow, StaffPageHeader, StaffPanel, staffOpsChrome } from "@/components/staff/ui";
+import { StaffQueue } from "@/components/staff/StaffQueue";
+import {
+  StaffEmptyState,
+  StaffMetricGrid,
+  StaffOpsRow,
+  StaffPageHeader,
+  StaffPanel,
+  StaffSection,
+  staffOpsChrome,
+} from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { staffAccess } from "@/lib/staff/records";
@@ -17,8 +26,8 @@ export default async function StaffOpportunitiesPage() {
   const access = staffAccess(staff);
 
   const [opportunities, applications, sources] = await Promise.all([
-    payload.find({ collection: "opportunities", depth: 0, limit: 1000, sort: "-updatedAt", ...access }),
-    payload.find({ collection: "opportunity-applications", depth: 1, limit: 1000, sort: "-createdAt", ...access }),
+    payload.find({ collection: "opportunities", depth: 0, limit: 200, sort: "createdAt", ...access }),
+    payload.find({ collection: "opportunity-applications", depth: 1, limit: 500, sort: "-createdAt", ...access }),
     payload.find({ collection: "opportunity-sources", depth: 0, limit: 200, sort: "name", ...access }),
   ]);
 
@@ -37,6 +46,7 @@ export default async function StaffOpportunitiesPage() {
     if (item.fingerprint) byFingerprint.set(item.fingerprint, [...(byFingerprint.get(item.fingerprint) || []), item]);
   }
   const duplicates = [...byFingerprint.values()].filter((items) => items.length > 1);
+  const failing = sources.docs.filter((item) => item.lastError);
 
   const applicationCounts = new Map<string, number>();
   for (const item of applications.docs) {
@@ -44,79 +54,105 @@ export default async function StaffOpportunitiesPage() {
     applicationCounts.set(id, (applicationCounts.get(id) || 0) + 1);
   }
 
-  function row(item: (typeof opportunities.docs)[number]) {
-    return (
-      <StaffOpsRow
-        key={item.id}
-        title={item.title}
-        detail={`${item.company} · ${item.sourceLabel} · ${applicationCounts.get(String(item.id)) || 0} applications${formatExpiry(item.expiresAt)}`}
-      >
-        <OpportunityActions opportunityId={item.id} current={String(item.status)} />
-      </StaffOpsRow>
-    );
-  }
+  const triageItems = [
+    ...pending.map((item) => ({
+      id: `pending-${item.id}`,
+      bucket: "needs" as const,
+      createdAt: item.createdAt ? Date.parse(String(item.createdAt)) : 0,
+      title: item.title,
+      detail: `${item.company} · ${item.sourceLabel} · ${applicationCounts.get(String(item.id)) || 0} apps`,
+      actions: <OpportunityActions opportunityId={item.id} current={String(item.status)} />,
+    })),
+    ...[...expired, ...expiring].map((item) => ({
+      id: `expiry-${item.id}`,
+      bucket: "expiry" as const,
+      createdAt: item.expiresAt ? Date.parse(String(item.expiresAt)) : 0,
+      title: item.title,
+      detail: `${item.company}${formatExpiry(item.expiresAt)}`,
+      actions: <OpportunityActions opportunityId={item.id} current={String(item.status)} />,
+    })),
+  ];
 
   return (
     <div className={`space-y-6 ${staffOpsChrome}`}>
-      <StaffPageHeader
-        eyebrow="Opportunity operations"
-        title="Opportunity Operations"
-        description="Moderation, expiry, applications, duplicate candidates, and source health in one workspace."
-      />
+      <StaffPageHeader eyebrow="Work" title="Jobs" hint="Moderate listings and clear expiry risk." />
 
       <StaffMetricGrid
         items={[
-          { label: "Pending moderation", value: pending.length },
+          { label: "Needs decision", value: pending.length },
           { label: "Expiry actions", value: expiring.length + expired.length },
           { label: "Applications", value: applications.totalDocs },
-          { label: "Duplicate groups", value: duplicates.length },
-          { label: "Failing sources", value: sources.docs.filter((item) => item.lastError).length },
+          { label: "Failing sources", value: failing.length },
         ]}
       />
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <StaffPanel>
-          <h2 className="mb-3 font-display text-xl text-white">Moderation queue</h2>
-          {pending.length ? pending.map(row) : <StaffEmpty>No listings await moderation.</StaffEmpty>}
-        </StaffPanel>
+      {!triageItems.length && !duplicates.length && !sources.docs.length ? (
+        <StaffEmptyState
+          title="No jobs to review"
+          steps={[
+            { label: "Connect a source", active: true },
+            { label: "Moderate listings" },
+            { label: "Publish" },
+          ]}
+          action={{ href: "/staff", label: "Back to Today" }}
+        />
+      ) : (
+        <div className="grid gap-4 lg:grid-cols-2">
+          <StaffPanel className="lg:col-span-2">
+            <StaffSection title="Triage" />
+            <StaffQueue
+              defaultFilter="needs"
+              emptyTitle="You're clear"
+              items={triageItems}
+              filters={[
+                { id: "needs", label: "Needs decision", match: (item) => item.bucket === "needs" },
+                { id: "expiry", label: "Expiry", match: (item) => item.bucket === "expiry" },
+                { id: "all", label: "All", match: () => true },
+              ]}
+            />
+          </StaffPanel>
 
-        <StaffPanel>
-          <h2 className="mb-3 font-display text-xl text-white">Expiry queue</h2>
-          {[...expired, ...expiring].length ? [...expired, ...expiring].map(row) : <StaffEmpty>No published listings require expiry action.</StaffEmpty>}
-        </StaffPanel>
+          <StaffPanel>
+            <StaffSection title="Possible duplicates" />
+            {duplicates.length ? (
+              duplicates.slice(0, 10).map((group, index) => (
+                <div key={index} className="mb-4 border-b border-white/5 pb-3 last:mb-0 last:border-0 last:pb-0">
+                  {group.map((item) => (
+                    <StaffOpsRow
+                      key={item.id}
+                      title={item.title}
+                      detail={`${item.company} · ${item.sourceLabel}`}
+                    >
+                      <OpportunityActions opportunityId={item.id} current={String(item.status)} />
+                    </StaffOpsRow>
+                  ))}
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-white/45">No duplicate groups.</p>
+            )}
+          </StaffPanel>
 
-        <StaffPanel>
-          <h2 className="mb-3 font-display text-xl text-white">Duplicate candidates</h2>
-          {duplicates.length ? (
-            duplicates.map((group, index) => (
-              <div key={index} className="mb-4 border-b border-white/5 pb-3 last:mb-0 last:border-0 last:pb-0">
-                {group.map(row)}
-              </div>
-            ))
-          ) : (
-            <StaffEmpty>No duplicate fingerprints detected.</StaffEmpty>
-          )}
-        </StaffPanel>
-
-        <StaffPanel>
-          <h2 className="mb-3 font-display text-xl text-white">Source health</h2>
-          {sources.docs.length ? (
-            sources.docs.map((source) => (
-              <StaffOpsRow
-                key={source.id}
-                title={source.name}
-                detail={
-                  source.lastError
-                    ? `Failure: ${source.lastError}`
-                    : `Healthy · ${source.lastFetchedCount ?? 0} fetched · ${source.lastCreatedCount ?? 0} created · ${source.lastDurationMs ?? 0} ms`
-                }
-              />
-            ))
-          ) : (
-            <StaffEmpty>No opportunity sources configured.</StaffEmpty>
-          )}
-        </StaffPanel>
-      </div>
+          <StaffPanel>
+            <StaffSection title="Sources" />
+            {sources.docs.length ? (
+              sources.docs.map((source) => (
+                <StaffOpsRow
+                  key={source.id}
+                  title={source.name}
+                  detail={
+                    source.lastError
+                      ? `Failure: ${source.lastError}`
+                      : `Healthy · ${source.lastFetchedCount ?? 0} fetched`
+                  }
+                />
+              ))
+            ) : (
+              <p className="text-sm text-white/45">No sources configured.</p>
+            )}
+          </StaffPanel>
+        </div>
+      )}
     </div>
   );
 }

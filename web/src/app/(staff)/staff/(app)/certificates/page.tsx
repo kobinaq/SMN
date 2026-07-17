@@ -1,5 +1,5 @@
-import { CertificateIssuer, CertificateLifecycle } from "@/components/payload/CertificateActions";
-import { StaffEmpty, StaffMetricGrid, StaffOpsRow, StaffPageHeader, StaffPanel, staffOpsChrome } from "@/components/staff/ui";
+import { CertificateWizard } from "@/components/staff/CertificateWizard";
+import { StaffMetricGrid, StaffPageHeader, staffOpsChrome } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { staffAccess } from "@/lib/staff/records";
@@ -33,12 +33,10 @@ export default async function StaffCertificatesPage() {
     .filter((item) => !active.has(`${rel(item.member)?.id ?? item.member}:${item.programKey}`))
     .map((item) => ({
       id: item.id,
-      label: `${rel(item.member)?.name || "Member"} — ${item.programName}`,
-      detail: `${rel(item.member)?.email || "No email"} · completed ${
-        item.completedAt
-          ? new Intl.DateTimeFormat("en-GH", { dateStyle: "medium" }).format(new Date(item.completedAt))
-          : "date unavailable"
-      }`,
+      name: rel(item.member)?.name || "Member",
+      program: item.programName,
+      email: rel(item.member)?.email,
+      completedAt: item.completedAt,
     }));
 
   const valid = certificates.docs.filter((item) => item.status === "valid");
@@ -46,43 +44,26 @@ export default async function StaffCertificatesPage() {
 
   return (
     <div className={`space-y-6 ${staffOpsChrome}`}>
-      <StaffPageHeader
-        eyebrow="Credentials"
-        title="Certificates"
-        description="Confirm eligibility, issue in bulk, prevent duplicates, and manage the credential lifecycle."
-      />
+      <StaffPageHeader eyebrow="Work" title="Certificates" hint="Select, preview, then issue." />
 
       <StaffMetricGrid
         items={[
-          { label: "Eligible", value: eligible.length },
-          { label: "Valid certificates", value: valid.length },
+          { label: "Due", value: eligible.length },
+          { label: "Valid", value: valid.length },
           { label: "Revoked", value: revoked },
         ]}
       />
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <StaffPanel>
-          <h2 className="mb-3 font-display text-xl text-white">1. Select eligible completions</h2>
-          {eligible.length ? <CertificateIssuer eligible={eligible} /> : <StaffEmpty>No eligible completions without a certificate.</StaffEmpty>}
-        </StaffPanel>
-
-        <StaffPanel>
-          <h2 className="mb-3 font-display text-xl text-white">2. Review active credentials</h2>
-          {valid.length ? (
-            valid.map((item) => (
-              <StaffOpsRow
-                key={item.id}
-                title={item.title}
-                detail={`${rel(item.member)?.name || "Member"} · ${item.credentialCode} · notification ${item.notificationStatus || "pending"}`}
-              >
-                <CertificateLifecycle certificateId={item.id} />
-              </StaffOpsRow>
-            ))
-          ) : (
-            <StaffEmpty>No valid certificates yet.</StaffEmpty>
-          )}
-        </StaffPanel>
-      </div>
+      <CertificateWizard
+        eligible={eligible}
+        issued={valid.map((item) => ({
+          id: item.id,
+          title: item.title,
+          memberName: rel(item.member)?.name || "Member",
+          credentialCode: item.credentialCode,
+          notificationStatus: item.notificationStatus,
+        }))}
+      />
     </div>
   );
 }
