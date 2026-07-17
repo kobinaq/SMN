@@ -7,7 +7,7 @@ export function FeaturedPost({ post }: { post: BlogPost }) {
   return (
     <Link
       href={`/insights/${post.slug}`}
-      className="group relative grid overflow-hidden rounded-2xl border border-white/10 bg-surface sm:rounded-[2rem] lg:grid-cols-[1.15fr_0.85fr]"
+      className="group relative grid overflow-hidden rounded-2xl border border-white/10 bg-surface transition duration-300 hover:border-baby-blue/35 hover:-translate-y-0.5 hover:shadow-[0_20px_50px_-20px_rgba(126,182,255,0.35)] active:translate-y-0 sm:rounded-[2rem] lg:grid-cols-[1.15fr_0.85fr]"
     >
       <div className="relative min-h-[240px] overflow-hidden sm:min-h-[320px] lg:min-h-[420px]">
         <div className="absolute inset-0 transition duration-500 ease-out group-hover:scale-[1.02]">

@@ -45,7 +45,7 @@ export default async function ProgramsPage() {
             <Link
               key={path.href}
               href={path.href}
-              className="group rounded-[2rem] border border-white/10 bg-surface p-8 transition hover:border-baby-blue/40"
+              className="group rounded-[2rem] border border-white/10 bg-surface p-8 transition duration-300 hover:border-baby-blue/40 hover:-translate-y-0.5 hover:shadow-[0_20px_50px_-20px_rgba(126,182,255,0.35)] active:translate-y-0"
             >
               <p className="text-xs uppercase tracking-[0.18em] text-baby-blue">{path.meta}</p>
               <h2 className="mt-4 font-display text-3xl text-white">{path.title}</h2>
