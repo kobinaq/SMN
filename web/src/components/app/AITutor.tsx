@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Copy, Sparkles } from "lucide-react";
 import { AiMarkdown } from "@/components/ui/AiMarkdown";
+import { useToast } from "@/components/ui/Toast";
 import { cn } from "@/lib/utils";
 
 type Citation = { id: string; label: string; href: string; excerpt: string };
@@ -84,6 +86,16 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
   const [error, setError] = useState("");
   const [feedback, setFeedback] = useState("");
   const threadRef = useRef<HTMLDivElement>(null);
+  const toast = useToast();
+
+  async function copyMessage(content: string) {
+    try {
+      await navigator.clipboard.writeText(content);
+      toast.push("Copied to clipboard.", "success");
+    } catch {
+      toast.push("Couldn’t copy — select the text manually.", "error");
+    }
+  }
 
   const mode = modeByIntent[intent];
   const intentConfig = intents.find((item) => item.id === intent)!;
@@ -259,25 +271,49 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
             key={`${message.role}-${index}`}
             className={cn(
               "rounded-xl p-3 text-sm leading-relaxed",
-              message.role === "member" ? "ml-6 bg-deep-blue/40 text-white" : "mr-2 bg-white/[.04] text-white/75",
+              message.role === "member"
+                ? "ml-6 bg-deep-blue/40 text-white"
+                : "mr-2 border-l-2 border-mint/40 bg-white/[.04] text-white/75",
             )}
           >
-            <p className="mb-1 text-[10px] tracking-wider text-white/35 uppercase">
+            <p className="mb-1 flex items-center gap-1.5 text-[10px] tracking-wider text-white/35 uppercase">
+              {message.role === "tutor" ? <Sparkles className="h-3 w-3 text-mint" aria-hidden /> : null}
               {message.role === "member" ? "You" : "Tutor"}
             </p>
             {message.role === "tutor" ? <AiMarkdown content={message.content} /> : <p className="whitespace-pre-wrap">{message.content}</p>}
             {message.role === "tutor" && message.citations?.length ? (
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div className="mt-3 space-y-1.5">
+                <p className="text-[10px] tracking-wider text-white/35 uppercase">Sources</p>
                 {message.citations.map((source) => (
-                  <a
+                  <details
                     key={source.id}
-                    className="rounded-full border border-mint/25 bg-mint/10 px-2.5 py-1 text-[11px] text-mint hover:bg-mint/15"
-                    href={source.href}
+                    className="rounded-lg border border-mint/20 bg-mint/5 px-2.5 py-1.5 [&_summary::-webkit-details-marker]:hidden"
                   >
-                    {source.label}
-                  </a>
+                    <summary className="cursor-pointer list-none text-[11px] font-medium text-mint">
+                      {source.label}
+                    </summary>
+                    {source.excerpt ? (
+                      <p className="mt-1.5 text-[11px] leading-relaxed text-white/55">{source.excerpt}</p>
+                    ) : null}
+                    <a
+                      href={source.href}
+                      className="mt-1.5 inline-block text-[11px] text-mint hover:underline"
+                    >
+                      Open source →
+                    </a>
+                  </details>
                 ))}
               </div>
+            ) : null}
+            {message.role === "tutor" ? (
+              <button
+                type="button"
+                className="mt-3 inline-flex items-center gap-1.5 text-[11px] text-white/45 transition hover:text-white"
+                onClick={() => void copyMessage(message.content)}
+              >
+                <Copy className="h-3 w-3" aria-hidden />
+                Copy
+              </button>
             ) : null}
           </div>
         ))}
