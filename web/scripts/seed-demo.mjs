@@ -199,6 +199,23 @@ const lesson = await upsert(
   },
 );
 
+const lesson2 = await upsert(
+  "lms-lessons",
+  { slug: { equals: "demo-build-the-calendar" } },
+  {
+    course: course.id,
+    module: courseModule.id,
+    title: "Build a repeatable calendar",
+    slug: "demo-build-the-calendar",
+    summary: "A fictional lesson on turning strategy into a weekly publishing rhythm.",
+    lessonType: "reading",
+    durationMinutes: 15,
+    body: "Translate the pillars into a repeatable weekly schedule your team can sustain.",
+    order: 2,
+    status: "published",
+  },
+);
+
 await payload.update({
   collection: "lms-courses",
   id: course.id,
@@ -206,11 +223,48 @@ await payload.update({
   overrideAccess: true,
 });
 
+// Lesson 1 completed, lesson 2 in progress → a realistic 50%-complete course
+// so the "resume" continuity surfaces have a genuine in-progress state to show.
 await upsert(
   "lms-lesson-progress",
   { and: [{ member: { equals: ama.id } }, { lesson: { equals: lesson.id } }] },
-  { member: ama.id, course: course.id, lesson: lesson.id, status: "in-progress" },
+  { member: ama.id, course: course.id, lesson: lesson.id, status: "completed" },
 );
+
+await upsert(
+  "lms-lesson-progress",
+  { and: [{ member: { equals: ama.id } }, { lesson: { equals: lesson2.id } }] },
+  { member: ama.id, course: course.id, lesson: lesson2.id, status: "in-progress" },
+);
+
+const learningItems = [
+  {
+    slug: "demo-week1-audience-map",
+    title: "Map your audience and content pillars",
+    kind: "Milestone",
+    week: 1,
+    order: 1,
+    estimatedMinutes: 45,
+    summary: "Define who you serve and the three content pillars everything ladders up to.",
+  },
+  {
+    slug: "demo-week1-brand-brief",
+    title: "Draft a one-page brand brief",
+    kind: "Assignment",
+    week: 1,
+    order: 2,
+    estimatedMinutes: 30,
+    summary: "Turn the strategy into a short brief you can share with a team or client.",
+  },
+];
+
+for (const item of learningItems) {
+  await upsert(
+    "learning-items",
+    { slug: { equals: item.slug } },
+    { ...item, programKey: "demo-cohort", accessRule: "enrolled", status: "published" },
+  );
+}
 
 await upsert(
   "portfolios",
