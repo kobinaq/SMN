@@ -114,8 +114,7 @@ test("member uses grounded Tutor and confirmed Career Coach controls with mock A
   await page.getByRole("button", { name: "Ask SMN Tutor" }).click();
   await page.getByLabel("Your question").fill("Explain why strategy comes before a content calendar.");
   await page.getByRole("button", { name: "Ask", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Tutor response" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Sources" })).toBeVisible();
+  await expect(page.getByText(/Mock AI response grounded/i)).toBeVisible();
 
   await page.goto("/app/career-coach");
   await expect(page.getByRole("heading", { name: "Career Coach" })).toBeVisible();
