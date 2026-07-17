@@ -17,7 +17,7 @@ export function BlogCard({
     <Link
       href={`/insights/${post.slug}`}
       className={cn(
-        "group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-surface transition duration-300 hover:border-baby-blue/35 sm:rounded-[1.75rem]",
+        "group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-surface transition duration-300 hover:border-baby-blue/35 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-18px_rgba(126,182,255,0.35)] active:translate-y-0 sm:rounded-[1.75rem]",
         className,
       )}
     >

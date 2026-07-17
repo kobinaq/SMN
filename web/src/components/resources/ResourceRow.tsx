@@ -33,7 +33,7 @@ export function ResourceRow({
       href={`/resources/${resource.slug}`}
       className={cn(
         "group grid items-center gap-4 rounded-xl border border-white/10 bg-surface px-4 py-4 transition duration-300",
-        "hover:border-baby-blue/40 hover:bg-surface-2 sm:grid-cols-[auto_1fr_auto] sm:gap-6 sm:px-5 sm:py-5",
+        "hover:border-baby-blue/40 hover:bg-surface-2 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-18px_rgba(126,182,255,0.35)] active:translate-y-0 sm:grid-cols-[auto_1fr_auto] sm:gap-6 sm:px-5 sm:py-5",
         className,
       )}
     >
