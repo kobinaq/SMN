@@ -184,9 +184,9 @@ export function Select({
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         className={cn(
-          "flex w-full items-center justify-between gap-3 bg-transparent text-left text-white outline-none",
+          "flex w-full items-center justify-between gap-3 bg-transparent text-left text-white outline-none transition active:scale-[0.99]",
           "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-baby-blue",
-          "disabled:cursor-not-allowed disabled:opacity-50",
+          "disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100",
           size === "sm" ? "min-h-0 px-3 py-1.5 text-xs" : "px-4 py-3 text-sm",
         )}
         onClick={() => {
