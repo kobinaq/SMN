@@ -82,8 +82,8 @@ export default async function StaffMentorshipPage() {
                 };
               })}
               filters={[
-                { id: "needs", label: "Needs decision", match: () => true },
-                { id: "all", label: "All", match: () => true },
+                { id: "needs", label: "Needs decision", buckets: ["needs"] },
+                { id: "all", label: "All" },
               ]}
             />
           </StaffPanel>
@@ -108,8 +108,8 @@ export default async function StaffMentorshipPage() {
                 };
               })}
               filters={[
-                { id: "needs", label: "Needs decision", match: (item) => item.bucket === "needs" },
-                { id: "all", label: "All", match: () => true },
+                { id: "needs", label: "Needs decision", buckets: ["needs"] },
+                { id: "all", label: "All" },
               ]}
             />
           </StaffPanel>

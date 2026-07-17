@@ -25,7 +25,7 @@ export default function StaffError({
             Retry
           </Button>
           <Button href="/staff" variant="secondary">
-            Overview
+            Today
           </Button>
         </div>
       }

@@ -105,9 +105,9 @@ export default async function StaffOpportunitiesPage() {
               emptyTitle="You're clear"
               items={triageItems}
               filters={[
-                { id: "needs", label: "Needs decision", match: (item) => item.bucket === "needs" },
-                { id: "expiry", label: "Expiry", match: (item) => item.bucket === "expiry" },
-                { id: "all", label: "All", match: () => true },
+                { id: "needs", label: "Needs decision", buckets: ["needs"] },
+                { id: "expiry", label: "Expiry", buckets: ["expiry"] },
+                { id: "all", label: "All" },
               ]}
             />
           </StaffPanel>

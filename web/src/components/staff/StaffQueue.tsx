@@ -8,14 +8,27 @@ export type StaffQueueItem = {
   id: string;
   title: React.ReactNode;
   detail?: React.ReactNode;
-  /** Bucket id used by filter chips, e.g. needs / all / published */
+  /** Bucket id used by filter chips, e.g. needs / expiry */
   bucket: string;
-  /** Milliseconds since epoch for age sort (older first when descending age). */
+  /** Milliseconds since epoch for age sort (older first). */
   createdAt?: number | null;
   actions?: React.ReactNode;
 };
 
+/** Serializable filter — no functions (safe to pass from Server Components). */
+export type StaffQueueFilter = {
+  id: string;
+  label: string;
+  /** If omitted or empty, shows every item (e.g. "All"). */
+  buckets?: string[];
+};
+
 const DEFAULT_LIMIT = 25;
+
+function matchesFilter(item: StaffQueueItem, filter: StaffQueueFilter) {
+  if (!filter.buckets?.length) return true;
+  return filter.buckets.includes(item.bucket);
+}
 
 export function StaffQueue({
   items,
@@ -27,7 +40,7 @@ export function StaffQueue({
   limit = DEFAULT_LIMIT,
 }: {
   items: StaffQueueItem[];
-  filters: Array<{ id: string; label: string; match: (item: StaffQueueItem) => boolean }>;
+  filters: StaffQueueFilter[];
   defaultFilter?: string;
   emptyTitle?: string;
   emptyHref?: string;
@@ -39,7 +52,7 @@ export function StaffQueue({
 
   const activeFilter = filters.find((item) => item.id === filter) ?? filters[0];
   const filtered = useMemo(() => {
-    const list = activeFilter ? items.filter(activeFilter.match) : items;
+    const list = activeFilter ? items.filter((item) => matchesFilter(item, activeFilter)) : items;
     return [...list].sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
   }, [items, activeFilter]);
 
@@ -47,7 +60,7 @@ export function StaffQueue({
   const chipOptions = filters.map((item) => ({
     id: item.id,
     label: item.label,
-    count: items.filter(item.match).length,
+    count: items.filter((row) => matchesFilter(row, item)).length,
   }));
 
   return (
