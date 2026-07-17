@@ -197,7 +197,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
     }
   }
 
-  function useAsPlan(content: string) {
+  function applyAsPlan(content: string) {
     const lines = content
       .split("\n")
       .map((line) => line.replace(/^#+\s*/, "").replace(/^[-*•\d.)\s]+/, "").trim())
@@ -459,7 +459,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
                   <button
                     type="button"
                     className="mt-3 text-xs text-mint hover:underline"
-                    onClick={() => useAsPlan(item.content)}
+                    onClick={() => applyAsPlan(item.content)}
                   >
                     Use this as my plan
                   </button>

@@ -92,10 +92,14 @@ export function Select({
   const displayLabel = selected?.label || "Select…";
   const isPlaceholder = !selected || (selected.value === "" && !selected.label);
 
-  useEffect(() => {
-    if (!open) return;
+  function openList() {
     const selectedIndex = options.findIndex((item) => item.value === current && !item.disabled);
     setActiveIndex(selectedIndex >= 0 ? selectedIndex : enabledIndexes[0] ?? 0);
+    setOpen(true);
+  }
+
+  useEffect(() => {
+    if (!open) return;
 
     function onPointer(event: MouseEvent) {
       if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
@@ -112,7 +116,7 @@ export function Select({
       document.removeEventListener("mousedown", onPointer);
       document.removeEventListener("keydown", onKey);
     };
-  }, [open, current, options, enabledIndexes]);
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -186,17 +190,19 @@ export function Select({
           size === "sm" ? "min-h-0 px-3 py-1.5 text-xs" : "px-4 py-3 text-sm",
         )}
         onClick={() => {
-          if (!disabled) setOpen((wasOpen) => !wasOpen);
+          if (disabled) return;
+          if (open) setOpen(false);
+          else openList();
         }}
         onKeyDown={(event) => {
           if (disabled) return;
           if (event.key === "ArrowDown" || event.key === "ArrowUp") {
             event.preventDefault();
-            if (!open) setOpen(true);
+            if (!open) openList();
             else moveActive(event.key === "ArrowDown" ? 1 : -1);
           } else if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
-            if (!open) setOpen(true);
+            if (!open) openList();
             else {
               const item = options[activeIndex];
               if (item && !item.disabled) commit(item.value);
