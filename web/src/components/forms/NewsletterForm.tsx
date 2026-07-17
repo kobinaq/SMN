@@ -35,10 +35,15 @@ export function NewsletterForm({ className }: { className?: string }) {
   return (
     <form onSubmit={onSubmit} className={cn("flex flex-col gap-3 sm:flex-row", className)}>
       <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
+      <label htmlFor="newsletter-email" className="sr-only">
+        Email address
+      </label>
       <input
+        id="newsletter-email"
         name="email"
         type="email"
         required
+        autoComplete="email"
         placeholder="Email address"
         className="field min-w-0 flex-1 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-white placeholder:text-white/35"
       />
