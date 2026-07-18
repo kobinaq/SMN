@@ -19,22 +19,23 @@ export const lessonOutlineSchema = z.object({
 export const courseOutlineSchema = z.object({
   title: z.string().min(1).max(200),
   summary: z.string().min(1).max(2000),
-  programKeyHint: z.string().min(1).max(120).optional(),
-  level: z.enum(["foundation", "intermediate", "advanced"]).optional(),
+  // OpenAI strict response_format requires every properties key in `required`.
+  programKeyHint: z.string().min(1).max(120),
+  level: z.enum(["foundation", "intermediate", "advanced"]),
   learningOutcomes: z.array(z.string().min(1).max(300)).min(1).max(12),
   modules: z
     .array(
       z.object({
         title: z.string().min(1).max(200),
-        summary: z.string().min(1).max(1000).optional(),
+        summary: z.string().min(1).max(1000),
         lessons: z
           .array(
             z.object({
               title: z.string().min(1).max(200),
               summary: z.string().min(1).max(1000),
-              lessonType: z.enum(["video", "reading", "download", "assignment"]).optional(),
-              durationMinutes: z.number().int().min(0).max(480).optional(),
-              body: z.string().max(8000).optional(),
+              lessonType: z.enum(["video", "reading", "download", "assignment"]),
+              durationMinutes: z.number().int().min(0).max(480),
+              body: z.string().max(8000),
             }),
           )
           .min(1)
@@ -115,7 +116,7 @@ export const lessonOutlineJSONSchema = {
 export const courseOutlineJSONSchema = {
   type: "object",
   additionalProperties: false,
-  required: ["title", "summary", "learningOutcomes", "modules"],
+  required: ["title", "summary", "programKeyHint", "level", "learningOutcomes", "modules"],
   properties: {
     title: { type: "string" },
     summary: { type: "string" },
@@ -127,7 +128,7 @@ export const courseOutlineJSONSchema = {
       items: {
         type: "object",
         additionalProperties: false,
-        required: ["title", "lessons"],
+        required: ["title", "summary", "lessons"],
         properties: {
           title: { type: "string" },
           summary: { type: "string" },
@@ -136,7 +137,7 @@ export const courseOutlineJSONSchema = {
             items: {
               type: "object",
               additionalProperties: false,
-              required: ["title", "summary"],
+              required: ["title", "summary", "lessonType", "durationMinutes", "body"],
               properties: {
                 title: { type: "string" },
                 summary: { type: "string" },
