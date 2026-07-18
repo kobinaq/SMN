@@ -58,9 +58,17 @@ export function EventRegisterButton({
     }
   }
 
+  const label = busy
+    ? "Please wait…"
+    : !signedIn
+      ? "Sign in to register"
+      : pricing === "paid"
+        ? "Pay & register"
+        : "Register free";
+
   return (
     <Button type="button" disabled={busy} onClick={run}>
-      {busy ? "Please wait…" : pricing === "paid" ? "Pay & register" : "Register free"}
+      {label}
     </Button>
   );
 }

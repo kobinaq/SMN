@@ -170,11 +170,11 @@ export function PortalSidebar({
   return (
     <aside
       className={cn(
-        "flex h-full w-[260px] flex-col border-r border-white/10 bg-surface/90 p-3 font-sans backdrop-blur-md",
+        "flex h-full max-h-full w-[260px] flex-col border-r border-white/10 bg-surface/90 p-3 font-sans backdrop-blur-md",
         className,
       )}
     >
-      <div className="mb-4 flex items-center justify-between gap-2 rounded-lg px-2 py-2">
+      <div className="mb-4 flex shrink-0 items-center justify-between gap-2 rounded-lg px-2 py-2">
         <Link
           href={homeHref}
           onClick={onNavigate}
@@ -189,7 +189,7 @@ export function PortalSidebar({
         </Link>
       </div>
 
-      <div className="mb-3 flex items-center gap-2.5 rounded-lg border border-white/10 bg-white/[.03] px-2.5 py-2">
+      <div className="mb-3 flex shrink-0 items-center gap-2.5 rounded-lg border border-white/10 bg-white/[.03] px-2.5 py-2">
         <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[6px] bg-baby-blue/15 text-[13px] font-semibold text-baby-blue ring-1 ring-inset ring-baby-blue/20">
           {identity.avatarUrl ? (
             <img src={identity.avatarUrl} alt="" className="h-full w-full object-cover" />
@@ -205,7 +205,7 @@ export function PortalSidebar({
         </div>
       </div>
 
-      <div className="mt-1 flex flex-1 flex-col gap-4 overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="mt-1 flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {groups.map((group, idx) => (
           <div key={group.heading ?? idx} className="flex flex-col gap-0.5">
             {group.heading ? (
@@ -225,7 +225,7 @@ export function PortalSidebar({
         ))}
       </div>
 
-      <div className="mt-auto flex flex-col gap-0.5 border-t border-white/10 pt-4">
+      <div className="mt-auto flex shrink-0 flex-col gap-0.5 border-t border-white/10 pt-4">
         {variant === "staff" ? (
           <Link
             href="/"

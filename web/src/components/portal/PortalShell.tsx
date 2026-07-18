@@ -63,10 +63,10 @@ export function PortalShell({
   }
 
   return (
-    <div className="flex min-h-svh bg-near-black">
+    <div className="flex h-svh overflow-hidden bg-near-black">
       <div
         className={cn(
-          "sticky top-0 hidden h-svh shrink-0 overflow-hidden border-r border-white/10 md:block",
+          "hidden h-full shrink-0 self-stretch overflow-hidden border-r border-white/10 md:block",
           "transition-[width,opacity] duration-[320ms] ease-[cubic-bezier(0.32,0.72,0,1)]",
           sidebarOpen ? "w-[260px] opacity-100" : "pointer-events-none w-0 border-none opacity-0",
         )}
@@ -105,8 +105,8 @@ export function PortalShell({
         </div>
       ) : null}
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center justify-between gap-3 border-b border-white/10 bg-near-black/90 px-4 backdrop-blur-md sm:px-6">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+        <header className="z-40 flex h-14 shrink-0 items-center justify-between gap-3 border-b border-white/10 bg-near-black/90 px-4 backdrop-blur-md sm:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <button
               type="button"
@@ -136,15 +136,17 @@ export function PortalShell({
           </div>
         </header>
 
-        <main
-          className={cn(
-            "mx-auto w-full flex-1 px-4 py-8 sm:px-6 sm:py-10",
-            "animate-[staff-fade-in_280ms_cubic-bezier(0.32,0.72,0,1)_both]",
-            maxWidth === "7xl" ? "max-w-7xl" : "max-w-6xl",
-          )}
-        >
-          {children}
-        </main>
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+          <main
+            className={cn(
+              "mx-auto w-full px-4 py-8 sm:px-6 sm:py-10",
+              "animate-[staff-fade-in_280ms_cubic-bezier(0.32,0.72,0,1)_both]",
+              maxWidth === "7xl" ? "max-w-7xl" : "max-w-6xl",
+            )}
+          >
+            {children}
+          </main>
+        </div>
       </div>
     </div>
   );

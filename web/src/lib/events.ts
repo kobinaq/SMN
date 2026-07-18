@@ -53,8 +53,10 @@ export async function getEventCalendar(): Promise<EventItem[]> {
     } satisfies EventItem;
   });
 
+  // Seed-only fallbacks have no DB id and cannot accept first-party registration.
   if (merged.length === 0) return seedEvents;
 
+  // Prefer CMS docs (with ids). Only add seed extras for calendar preview, not as registerable rows.
   const slugs = new Set(merged.map((e) => e.slug));
   const extras = seedEvents.filter((e) => !slugs.has(e.slug));
   return [...merged, ...extras].sort(

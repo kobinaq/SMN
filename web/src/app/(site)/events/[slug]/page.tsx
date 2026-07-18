@@ -11,6 +11,24 @@ import { getPayloadClient } from "@/lib/payload";
 
 type Props = { params: Promise<{ slug: string }> };
 
+async function resolvePublishedEventId(slug: string) {
+  try {
+    const payload = await getPayloadClient();
+    const found = await payload.find({
+      collection: "events",
+      limit: 1,
+      depth: 0,
+      overrideAccess: true,
+      where: {
+        and: [{ slug: { equals: slug } }, { status: { equals: "published" } }],
+      },
+    });
+    return found.docs[0]?.id ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const event = await getEventBySlug(slug);
@@ -24,23 +42,7 @@ export default async function EventDetailPage({ params }: Props) {
   if (!event) notFound();
 
   const member = await getMember();
-  let eventId: string | number | null = event.id ?? null;
-
-  if (!eventId) {
-    try {
-      const payload = await getPayloadClient();
-      const found = await payload.find({
-        collection: "events",
-        limit: 1,
-        depth: 0,
-        where: { slug: { equals: slug } },
-      });
-      eventId = found.docs[0]?.id ?? null;
-    } catch {
-      eventId = null;
-    }
-  }
-
+  const eventId = event.id ?? (await resolvePublishedEventId(slug));
   const pricing = event.pricing || (event.price.toLowerCase().includes("free") ? "free" : "paid");
 
   return (
@@ -98,13 +100,20 @@ export default async function EventDetailPage({ params }: Props) {
               {eventId ? (
                 <EventRegisterButton eventId={eventId} pricing={pricing} signedIn={Boolean(member)} />
               ) : (
-                <Button href="/login">Sign in to register</Button>
+                <Button href="/contact" variant="secondary">
+                  Ask about registration
+                </Button>
               )}
-              <Button href="/app/events" variant="secondary">
+              <Button href={member ? "/app/events" : `/login?callbackUrl=${encodeURIComponent("/app/events")}`} variant="secondary">
                 My tickets
               </Button>
             </div>
-            {!member ? (
+            {!eventId ? (
+              <p className="mt-3 text-xs text-white/40">
+                This listing is preview-only until staff publish it in Events. Seed demo events are not open for
+                registration.
+              </p>
+            ) : !member ? (
               <p className="mt-3 text-xs text-white/40">Member sign-in required to register.</p>
             ) : null}
           </div>
