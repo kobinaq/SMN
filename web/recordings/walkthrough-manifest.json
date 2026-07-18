@@ -1,0 +1,97 @@
+{
+  "title": "SMN Marketing Site — Portfolio Walkthrough",
+  "siteUrl": "https://www.socialmarketersnetwork.com",
+  "recordedAt": "2026-07-17T22:26:04.670Z",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "video": "smn-marketing-walkthrough.webm",
+  "frames": "frames/",
+  "chapters": [
+    {
+      "name": "01-home",
+      "path": "/",
+      "url": "https://www.socialmarketersnetwork.com/",
+      "seconds": 22.9
+    },
+    {
+      "name": "02-programs",
+      "path": "/programs",
+      "url": "https://www.socialmarketersnetwork.com/programs",
+      "seconds": 10.9
+    },
+    {
+      "name": "03-cohort",
+      "path": "/programs/cohort",
+      "url": "https://www.socialmarketersnetwork.com/programs/cohort",
+      "seconds": 12.5
+    },
+    {
+      "name": "04-courses",
+      "path": "/programs/courses",
+      "url": "https://www.socialmarketersnetwork.com/programs/courses",
+      "seconds": 12.6
+    },
+    {
+      "name": "05-resources",
+      "path": "/resources",
+      "url": "https://www.socialmarketersnetwork.com/resources",
+      "seconds": 14.5
+    },
+    {
+      "name": "06-insights",
+      "path": "/insights",
+      "url": "https://www.socialmarketersnetwork.com/insights",
+      "seconds": 13.6
+    },
+    {
+      "name": "07-mentorship",
+      "path": "/mentorship",
+      "url": "https://www.socialmarketersnetwork.com/mentorship",
+      "seconds": 20.8
+    },
+    {
+      "name": "08-community",
+      "path": "/community",
+      "url": "https://www.socialmarketersnetwork.com/community",
+      "seconds": 10.6
+    },
+    {
+      "name": "09-events",
+      "path": "/events",
+      "url": "https://www.socialmarketersnetwork.com/events",
+      "seconds": 19
+    },
+    {
+      "name": "10-stories",
+      "path": "/stories",
+      "url": "https://www.socialmarketersnetwork.com/stories",
+      "seconds": 10.5
+    },
+    {
+      "name": "11-employers",
+      "path": "/employers",
+      "url": "https://www.socialmarketersnetwork.com/employers",
+      "seconds": 7.4
+    },
+    {
+      "name": "12-about",
+      "path": "/about",
+      "url": "https://www.socialmarketersnetwork.com/about",
+      "seconds": 11.8
+    },
+    {
+      "name": "13-apply",
+      "path": "/apply",
+      "url": "https://www.socialmarketersnetwork.com/apply",
+      "seconds": 11.9
+    },
+    {
+      "name": "14-contact",
+      "path": "/contact",
+      "url": "https://www.socialmarketersnetwork.com/contact",
+      "seconds": 9.4
+    }
+  ]
+}
