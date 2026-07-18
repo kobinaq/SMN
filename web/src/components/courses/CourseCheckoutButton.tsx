@@ -5,17 +5,22 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { useToast } from "@/components/ui/Toast";
 import { trackEvent } from "@/lib/analytics";
+import { cn } from "@/lib/utils";
 
 export function CourseCheckoutButton({
   courseId,
   amount,
   label = "Enroll now",
   signedIn,
+  variant = "text",
+  className,
 }: {
   courseId: string | number;
   amount?: number | null;
   label?: string;
   signedIn: boolean;
+  variant?: "text" | "button";
+  className?: string;
 }) {
   const router = useRouter();
   const toast = useToast();
@@ -49,14 +54,28 @@ export function CourseCheckoutButton({
     }
   }
 
+  const displayLabel = busy
+    ? "Starting…"
+    : !signedIn
+      ? "Sign in to enroll"
+      : !payable
+        ? "Coming soon"
+        : label;
+
   return (
     <button
       type="button"
-      disabled={busy || !payable}
+      disabled={busy || (signedIn && !payable)}
       onClick={run}
-      className="inline-flex items-center gap-1 text-sm text-white hover:text-baby-blue disabled:opacity-40"
+      className={cn(
+        "inline-flex items-center gap-1.5 transition disabled:opacity-40",
+        variant === "button"
+          ? "rounded-full bg-baby-blue px-5 py-2.5 text-sm font-medium text-near-black hover:bg-white"
+          : "text-sm text-white hover:text-baby-blue",
+        className,
+      )}
     >
-      {busy ? "Starting…" : label} <ArrowRight className="h-4 w-4" />
+      {displayLabel} <ArrowRight className="h-4 w-4" />
     </button>
   );
 }
