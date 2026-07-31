@@ -1,68 +1,58 @@
-# Testing
+# Testing and Verification
 
-## Scripts
+**Updated:** 2026-07-21
 
-Run from `web`:
+## Commands
 
-```bash
-npm run typecheck
-npm run lint
-npm run test:unit
-npm run test:e2e
-npm run test:coverage
-```
+Run from web/:
 
-`npm test` runs unit tests and E2E tests. `npm run test:e2e` builds the app, starts `next start`, runs Playwright against a local test environment, then stops the server.
+| Command | Purpose |
+|---|---|
+| npm run generate:types | Refresh generated Payload types |
+| npm run typecheck | TypeScript without emit |
+| npm run lint | ESLint and React/Next rules |
+| npm run test:unit | Deterministic Vitest suite |
+| npm run build | Production Next.js build |
+| npm run test:e2e | Build, seed disposable SQLite, and run Playwright |
+| npm run test:coverage | Unit coverage report |
+| npm run db:ensure-sqlite | Prepare a fresh local/CI SQLite schema |
+| npm run db:migrate | Apply committed PostgreSQL migrations |
 
-CI prepares a fresh SQLite schema with `npm run db:ensure-sqlite` before `npm run build`. Import map generation uses an ephemeral SQLite file and never schema-pushes a shared `payload.db` (avoids Drizzle “index already exists” failures).
+npm test runs unit and E2E. Normal CI never calls Groq or Paystack.
 
-## Unit Tests
+## Current evidence
 
-Vitest is configured in `vitest.config.ts`.
+Run on current main on 2026-07-21:
 
-Coverage focuses on pure, high-risk helpers:
+- Typecheck passed.
+- Unit tests passed: 36 passed, 1 skipped across 12 files.
+- Lint failed: five react-hooks/set-state-in-effect errors in LearningNav, StaffEntitySwitcher, and StaffMediaField.
+- Lint also reported one no-head-element warning in SiteDocument.
+- Build and Playwright were not rerun after that lint failure.
 
-- YouTube URL parsing for LMS embeds
-- Production environment validation
-- LMS completion, readiness, and analytics
-- AI provider contracts, structured schemas, invalid output, timeout mapping, rate limiting, injection policy, prohibited actions, minimization, opaque actor identifiers, course isolation/citations, unsupported fallbacks, and deterministic career matching
-- Staff role boundaries
+The July 14 result of a passing build and 14/14 E2E predates the July 17 events/Paystack and July 18 page changes. It is historical evidence only.
 
-The live Groq integration check is skipped unless both `RUN_GROQ_INTEGRATION=true` and `GROQ_API_KEY` are present. Normal CI never calls Groq.
+## Unit coverage
 
-## End-to-End Tests
+Vitest covers AI foundation and safety, staff permissions, LMS analytics/readiness/completion, member continuity, environment validation, API responses, currency, and marketing defaults. The Groq integration test is skipped unless RUN_GROQ_INTEGRATION=true and GROQ_API_KEY is present.
 
-Playwright is configured in `playwright.config.ts`.
+Payment and event domain behavior currently needs dedicated deterministic unit coverage for signatures, amount/currency validation, idempotent fulfillment, duplicate callbacks, and cancellation/refund boundaries.
 
-The current smoke suite verifies:
+## Browser coverage
 
-- Public home page loads
-- Member login page renders
-- Anonymous users are redirected away from protected portal routes
-- A seeded staff user can log in and see the workflow-first dashboard
+Playwright specs cover public/auth, marketing, and admin/AI workflows with a disposable payload.e2e database. The runner builds the app, creates a fresh SQLite schema, seeds fictional records, uses one worker, and removes the test database afterward.
 
-Refinement programme expands coverage toward:
+The next complete browser regression must cover:
 
-- Member continuity dashboard + resume lesson deep link
-- Profile save confirmation and tag inputs
-- LMS progress save failure messaging
-- Staff Course Builder settings save
-- Mentorship/opportunity ConfirmDialog flows
-- AI mocked provider cases (flags off by default)
-- Curriculum duplication and audited progress correction
-- Content Studio generation, candidate review, and explicit draft save using mock AI
-- Member 360 private notes, mentorship transitions, opportunity moderation, and certificate reissue
-- Grounded Tutor answers/citations and confirmed Career Coach saves using mock AI
-- Anonymous denial on staff and member AI mutation APIs
+- staff/member simultaneous auth and logout isolation;
+- member onboarding, profile, dashboard continuity, LMS progress/resume, mentorship, opportunity tracking, portfolio, certificate, and logout;
+- staff Course Builder, member notes, mentorship, opportunities, certificates, media, settings, and event operations;
+- free event registration, paid checkout test path, tickets, cancellation, and check-in;
+- AI disabled/provider failure plus mock Tutor, Content Studio, and Career Coach;
+- key public pages and SEO outputs after the July 18 redesign.
 
-When running locally, the E2E runner pushes the schema and upserts fictional demo records into the disposable `payload.e2e.db` database before starting the production server. It never seeds the configured production database.
+External Paystack, Resend, R2, Mailchimp, ATS, Classroom, and Groq behavior belongs in controlled integration/staging checks, not deterministic CI.
 
-Install browser binaries when needed:
+## Release evidence
 
-```bash
-npx playwright install chromium
-```
-
-Playwright uses one worker because workflow tests intentionally mutate a shared per-process disposable database. The E2E runner deletes that database after the run. Real external email, R2, ATS feeds, and Groq require separate flag-gated integration or staging checks; they are not prerequisites for deterministic CI.
-
-Before AI private beta, run typecheck, lint, unit, build, E2E, manual reduced-motion/mobile/keyboard checks, schema migration on a disposable PostgreSQL database, and the privacy/safety checklist in `docs/staff-guide.md`.
+Do not describe the branch as green until lint, typecheck, unit, build, and Playwright all pass on the same current commit. Schema-affecting releases also require the full migration chain on disposable PostgreSQL and the production checklist.

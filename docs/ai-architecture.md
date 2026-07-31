@@ -1,6 +1,8 @@
 # SMN AI Architecture
 
-Status: implementation complete and awaiting final verification/private-beta approval. AI surfaces remain independently disabled unless their feature flag and `AI_PROVIDER` are configured.
+**Updated:** 2026-07-21
+
+Status: implementation is present in code and awaiting current build/E2E, production-schema, privacy, provider, and private-beta approval. AI surfaces remain independently disabled unless their feature flag and AI_PROVIDER are configured.
 
 ## Boundaries
 
@@ -18,7 +20,7 @@ Model IDs are environment configuration, never feature constants:
 | `AI_FAST_MODEL` | `llama-3.1-8b-instant` | Groq production model for short, latency-sensitive work. |
 | `AI_STRUCTURED_MODEL` | `openai/gpt-oss-20b` | Groq production model with strict JSON-schema structured output support. |
 
-Verified 2026-07-13 against Groq's official [supported models](https://console.groq.com/docs/models), [structured outputs](https://console.groq.com/docs/structured-outputs), and [API reference](https://console.groq.com/docs/api-reference). Groq currently documents `openai/gpt-oss-20b` and `openai/gpt-oss-120b` for strict structured outputs. Structured outputs cannot be combined with streaming or tool use, so SMN uses separate flows. Preview model IDs are not defaults. Review the official model and deprecation pages before changing production aliases.
+These aliases were verified on 2026-07-13 against Groq's official [supported models](https://console.groq.com/docs/models), [structured outputs](https://console.groq.com/docs/structured-outputs), and [API reference](https://console.groq.com/docs/api-reference). That dated check is historical evidence, not a claim that provider availability was reverified on 2026-07-21. Review the official model and deprecation pages before private beta or any production alias change.
 
 ## Data and retention
 

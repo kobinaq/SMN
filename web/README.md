@@ -1,157 +1,91 @@
-# Social Marketers Network — Website
+# Social Marketers Network Application
 
-Premium marketing-community site for SMN.
-
-Current operational sources of truth: `../docs/staff-guide.md`, `../docs/ai-architecture.md`, `../docs/database-migrations.md`, `../docs/success-metrics.md`, and `../docs/testing.md`.
+The application lives in web/. For project status and priorities, read [../PRODUCT-ROADMAP.md](../PRODUCT-ROADMAP.md). The documentation index is [../docs/README.md](../docs/README.md).
 
 ## Stack
 
-- Next.js (App Router) + TypeScript + Tailwind CSS
-- **Payload CMS 3** (SQLite locally; Postgres in production; staff app at `/staff`; Payload admin chrome retired)
-- **Member auth** via Payload `members` collection (portal at `/app`)
-- **Cloudflare R2** for media when configured (S3-compatible)
-- GSAP + Lenis (scroll storytelling + page transitions)
-- Resend (form email)
-- Mailchimp (newsletter)
-- Selar (course checkout links)
-- WhatsApp (community)
-- Vercel-ready
+- Next.js 16 App Router, React 19, TypeScript, Tailwind CSS
+- Payload CMS 3 with PostgreSQL production and disposable SQLite E2E
+- Custom staff app at /staff and member product at /app
+- Cloudflare R2 media, unlisted YouTube LMS video
+- Paystack payments, Resend email, Mailchimp newsletter, Ahrefs analytics
+- Provider-independent AI with Groq and mock adapters
 
-## Develop
+## Local development
 
-```bash
-cd web
-npm install
-npm run dev
-```
+From web/:
 
-- Site: [http://localhost:3000](http://localhost:3000)
-- Staff: [http://localhost:3000/staff](http://localhost:3000/staff) — create first **staff** user on first visit at `/staff/login`
-- Member portal: [http://localhost:3000/login](http://localhost:3000/login) → `/app` after signup
+1. Copy .env.example to .env.local and supply safe development values.
+2. Run npm install.
+3. Run npm run dev.
 
-Copy `.env.example` → `.env` / `.env.local`. Without Resend/Mailchimp keys, forms log to the server console.
+Key local routes:
 
-Marketing pages fall back to seed data in `src/lib/content.ts` when CMS collections are empty.
+| Route | Purpose |
+|---|---|
+| / | Public website |
+| /signup and /login | Member authentication |
+| /app | Member product |
+| /staff/login and /staff | Staff authentication and product |
+| /admin | Redirect to /staff unless emergency legacy mode is enabled |
 
-### Auth model
+Marketing content can fall back to safe defaults when CMS records are empty. Missing external credentials disable or degrade only their integration; see [../docs/environment-variables.md](../docs/environment-variables.md).
 
-| Collection | Who | Surfaces |
-|------------|-----|----------|
-| `users` | Staff | `/staff` (canonical); `/admin` redirects |
-| `members` | Network members | `/login`, `/signup`, `/app/*` |
+## Authentication
 
-Members cannot open the staff app. Staff manage members under **Members** in `/staff`.
+Payload users are staff; Payload members are community members. Staff and member cookies are isolated. Collection and route authorization is server-enforced. See [../docs/authentication.md](../docs/authentication.md).
 
-## Deploy on Vercel
+## Database
 
-The Next.js app is in the **`web`** folder (not the repo root).
+Production requires PostgreSQL. Normal startup never pushes schema.
 
-### Required project settings
+- npm run db:migrate applies committed forward migrations.
+- npm run db:migrate:create -- concise_name creates a reviewed migration.
+- npm run db:check lists/validates schema state.
+- npm run db:ensure-sqlite prepares disposable local/CI SQLite.
 
-| Setting | Value |
-|--------|--------|
-| **Framework Preset** | Next.js |
-| **Root Directory** | `web` |
-| **Build Command** | `npm run build` (default) |
-| **Install Command** | `npm install` (default) |
-| **Output Directory** | leave default (do not set) |
+Existing production predates the baseline; follow [../docs/database-migrations.md](../docs/database-migrations.md) and never replay the baseline over existing tables.
 
-**Root Directory is the usual cause of a Vercel 404** when the repo root only has `web/` + docs.
+Current migrations are:
 
-1. Vercel → Project → **Settings → General → Root Directory**
-2. Set to `web` → Save
-3. **Deployments → Redeploy** the latest commit
+1. baseline
+2. marketing CMS fields
+3. events and Paystack
 
-### Environment variables (Production)
+Production application of the events/Paystack migration is not confirmed in repository documentation.
 
-At minimum:
+## Quality
 
-- `PAYLOAD_SECRET` — long random string (**same as local** if you share the Neon DB)
-- `NEXT_PUBLIC_SITE_URL` — full origin, e.g. `https://your-app.vercel.app` (required for staff cookies & server actions)
-- `DATABASE_URL` — Neon Postgres URL
+Run:
 
-Optional: Resend, Mailchimp, WhatsApp invite, `OPS_EMAIL`.
+1. npm run generate:types
+2. npm run typecheck
+3. npm run lint
+4. npm run test:unit
+5. npm run build
+6. npm run test:e2e
 
-### Production product stack
+The exact current checkpoint is in [../docs/testing.md](../docs/testing.md). As of 2026-07-21, typecheck and unit tests pass, while lint has five errors in newer staff components; build/E2E need a fresh run afterward.
 
-| Variable | Purpose |
-|----------|---------|
-| `DATABASE_URL` | `postgresql://…` (Neon/Supabase) |
-| `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_ENDPOINT` | Cloudflare R2 media |
-| `R2_PUBLIC_URL` | Public CDN URL for media (optional but recommended) |
-| `PAYLOAD_SECRET` | Required |
+## Deployment
 
-Without R2, media uses local disk (or is disabled on Vercel). Without Postgres, use SQLite locally; Vercel marketing still uses seed content unless a remote DB is set.
+Vercel must use web as the Root Directory and the default Next.js output. Configure the production environment, apply reviewed migrations, and complete [../docs/production-checklist.md](../docs/production-checklist.md). See [../docs/deployment.md](../docs/deployment.md).
 
-### Database schema (production Postgres)
+## Product domains
 
-The stock Payload CLI loader breaks on Node 24, so project scripts bundle the config and call the installed ESM migration API:
+- Public CMS: Site Settings, Media, posts, resources, courses, events, and stories
+- Members: profiles, onboarding, mentorship, opportunities, portfolios, certificates, events, and tickets
+- Learning: enrollments, learning items, LMS courses/modules/lessons, progress, analytics, and completion
+- Staff: Today, learning, people, mentorship, opportunities, certificates, events, content, website, users, audit, and AI activity
+- Payments: Paystack checkout/verification/webhook, payment records, registration/enrollment fulfillment
+- AI: Tutor, Content Studio, and Career Coach behind independent flags
 
-```bash
-cd web
-npm run db:migrate # apply committed migrations
-npm run db:check   # list public tables
-```
+Operational procedures are consolidated in [../docs/staff-guide.md](../docs/staff-guide.md).
 
-Ensure `DATABASE_URL` is your Neon/Postgres URL and `PAYLOAD_SECRET` matches Vercel when targeting that DB.
+## Opportunity imports
 
-Schema push is **opt-in** (`PAYLOAD_DB_PUSH=true` for `db:push`, demo seed, and disposable E2E DBs only). SQLite and Postgres both keep push disabled on normal app connect — auto-push was slow and could fail CI with “index already exists” against a stale local DB.
+The protected cron can ingest public Greenhouse, Lever, and Ashby boards. Keep auto-publish off until a source is proven. Applications continue on the employer site; SMN stores member tracking state only.
 
-For Neon, either the **pooled** or **direct** connection string works; if queries flake, try the direct (non-`-pooler`) URL.
+## External integrations
 
-### Current migration policy
-
-A full PostgreSQL baseline is committed under `src/migrations`. Use `npm run db:migrate` for fresh and already-migrated databases, and create reviewed future snapshots with `npm run db:migrate:create -- concise_name`.
-
-Existing production predates that baseline. Do not replay the full baseline over its tables; follow the guarded push/verify/adopt procedure in `../docs/database-migrations.md`. Normal app startup keeps schema push disabled.
-
-## Key routes
-
-| Path | Purpose |
-|------|---------|
-| `/` | Storytelling homepage |
-| `/staff` | Staff app (ops + CMS) |
-| `/admin` | Redirects to `/staff` (legacy Payload UI only if `STAFF_LEGACY_ADMIN=true`) |
-| `/login` `/signup` | Member auth |
-| `/app` | Member portal home |
-| `/app/profile` | Member profile |
-| `/programs/cohort` | Flagship cohort |
-| `/programs/courses` | Selar catalogue |
-| `/apply` | Cohort application |
-| `/community` | WhatsApp CTA |
-| `/employers` | Partner / talent forms |
-
-## CMS collections
-
-Collections cover staff/users, members, media/content/site settings, mentorship, opportunities, enrollments/learning/LMS/progress, portfolios, certificates, audit events, and AI usage/feedback/knowledge/drafts/career state.
-
-See repo root `PRODUCT-ROADMAP.md` for the current delivery and release state.
-
-## Workflow admin and AI
-
-Staff start with the workflow-first Overview and use Course Builder, Member 360, Mentorship Operations, Opportunity Operations, and Certificate Issuing. Tutor, Content Studio, and Career Coach use a provider-independent runtime and independent feature flags; all remain disabled by default until their release gate is approved.
-## Automated opportunity sources
-
-Phase 7.3 can import public marketing roles from Greenhouse, Lever, and Ashby without API keys.
-
-1. Set `CRON_SECRET` in Vercel to a random value of at least 16 characters.
-2. In Payload admin, open **Opportunities → Opportunity Sources**.
-3. Add a company, choose its ATS, and enter the public board identifier:
-   - Greenhouse: the token in `boards.greenhouse.io/<token>`
-   - Lever: the site name in `jobs.lever.co/<site>`
-   - Ashby: the board name in `jobs.ashbyhq.com/<board>`
-4. Leave **Auto publish** off until the source has produced consistently relevant results.
-5. Imported roles appear under **Opportunities → Opportunities** as `pending` for staff review.
-
-Vercel calls `/api/cron/sync-opportunities` daily at 05:00 UTC. Imported applications always continue on the employer's original site; SMN stores only member activity status.
-## Learning dashboard operations
-
-The learning product combines external Selar/Classroom access with SMN enrollments, milestones, and the native LMS course/module/lesson/progress foundation.
-
-1. In **Learning → Learning Items**, create published milestones/resources with a stable `programKey` such as `cohort-2026` or `ai-marketers`.
-2. In **Learning → Enrollments**, link a member to the same `programKey`, choose the grant source, and add Classroom/Selar URLs.
-3. Active or completed enrollments unlock matching items in `/app/learning`.
-4. Use access rule **Any member** for general onboarding, **Matching enrollment** for paid programs, and **Active/completed cohort member** for cohort-wide material.
-5. Member completion is stored under **Learning → Progress**.
-
-Selar purchases are granted manually for now by creating an enrollment with source **Selar purchase** and optionally storing the order reference. A verified Selar webhook can automate this later without changing the dashboard model.
+Paystack, Resend, R2, Mailchimp, Ahrefs, WhatsApp, Classroom, ATS feeds, and Groq require their documented environment values and separate staging/production smoke. Normal deterministic CI does not contact those services.

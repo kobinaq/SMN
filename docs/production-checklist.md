@@ -1,52 +1,90 @@
-# Production checklist
+# Production Release Checklist
 
-Use before promoting a build or enabling AI flags.
+**Updated:** 2026-07-21
+
+Use this checklist for every production promotion. Complete the additional payment or AI sections only when exposing those capabilities.
+
+## Ownership and recovery
+
+- [ ] Deployment owner named
+- [ ] Migration owner named
+- [ ] Incident and rollback owner named
+- [ ] Database recovery point recorded
+- [ ] R2 recovery/versioning confirmed where critical
 
 ## Environment
 
-- [ ] `DATABASE_URL` points at durable Postgres (Neon)
-- [ ] `PAYLOAD_SECRET` is unique and not the development default
-- [ ] `NEXT_PUBLIC_SITE_URL` matches the live origin (no trailing slash)
-- [ ] R2 variables complete when media uploads are required
-- [ ] `RESEND_API_KEY` + `RESEND_FROM` set for password reset / notifications
-- [ ] `CRON_SECRET` set for opportunity import cron
-- [ ] AI flags remain `false` until schema + smoke gates pass
-- [ ] `STAFF_LEGACY_ADMIN` unset (custom `/staff` is canonical)
+- [ ] DATABASE_URL targets durable production PostgreSQL
+- [ ] PAYLOAD_SECRET is unique, non-default, and stable across deployments
+- [ ] NEXT_PUBLIC_SITE_URL exactly matches the live origin
+- [ ] R2 configuration is complete when uploads are enabled
+- [ ] RESEND_API_KEY and verified RESEND_FROM configured
+- [ ] Operations inbox, Mailchimp audience, cron secret, analytics property, WhatsApp invite, and Classroom links confirmed as applicable
+- [ ] STAFF_LEGACY_ADMIN is unset
+- [ ] All AI flags remain false unless separately approved
 
-## Schema
+## Quality and schema
 
-- [ ] Production migrations adopted (`docs/database-migrations.md`)
-- [ ] Backup/restore procedure documented for the Neon project
-- [ ] Rollback owner identified
+- [ ] Typecheck passes on the release commit
+- [ ] Lint passes without unexplained errors
+- [ ] Unit tests pass
+- [ ] Production build passes
+- [ ] Playwright passes on the release commit
+- [ ] Full migration chain passes on disposable PostgreSQL
+- [ ] Production payload-migrations matches the intended state
+- [ ] Only reviewed pending forward migrations are applied
+- [ ] Post-migration collection reads pass
 
-## Auth smoke
+## Authentication
 
-- [ ] Member register / login / logout
-- [ ] Password reset UX (or clear “email unavailable” message)
-- [ ] Staff login / logout at `/staff/login`
-- [ ] `/admin` redirects to `/staff`
-- [ ] Member and staff sessions remain isolated
+- [ ] Member signup, login, password reset behavior, and logout
+- [ ] Staff login and logout at /staff/login
+- [ ] /admin redirects to /staff
+- [ ] Simultaneous staff/member sessions remain isolated
+- [ ] Protected staff/member/API routes reject anonymous and wrong-role access
 
-## Core workflow smoke
+## Core workflows
 
-- [ ] Profile update saves with confirmation
-- [ ] Course create + publish readiness path
-- [ ] Lesson completion persists and resumes
-- [ ] Mentor application + approval
-- [ ] Mentorship request transitions
-- [ ] Opportunity create/import + application tracking
-- [ ] Portfolio publish
-- [ ] Certificate issue + public `/verify/[code]`
-- [ ] AI-disabled / provider-failure does not break non-AI pages
+- [ ] Public home, programmes, courses, events, stories, resources, apply, contact, and legal pages
+- [ ] Member profile and onboarding save
+- [ ] Course access, lesson completion, progress, and resume
+- [ ] Mentor application, review, request, and transition
+- [ ] Opportunity import/manual listing, moderation, and member tracking
+- [ ] Portfolio draft/edit/publish and public privacy
+- [ ] Certificate issue/revoke/reissue and public verification
+- [ ] Staff media upload and delivery
+- [ ] AI-disabled and provider-failure states do not break core pages
 
-## Quality gates
+## Events and Paystack
 
-```bash
-cd web
-npm run typecheck
-npm run lint
-npm run test:unit
-npm run build
-```
+- [ ] 20260717_events_paystack is recorded in production
+- [ ] Paystack keys and webhook secret are configured
+- [ ] Production webhook endpoint is registered
+- [ ] Free registration works
+- [ ] Test paid checkout verifies product, amount, currency, and member identity
+- [ ] Invalid webhook signature is rejected
+- [ ] Duplicate verification/webhook delivery does not duplicate payment, registration, or enrollment
+- [ ] Successful payment grants the correct ticket/course/Classroom access
+- [ ] Email failure does not undo payment fulfillment
+- [ ] Member tickets and staff registration list agree
+- [ ] Cancellation, refund ownership, and check-in are verified
+- [ ] Settlement/refund owner signs off before live paid CTAs
 
-Run Playwright smoke after a local production build when changing auth or staff ops.
+## AI private beta
+
+- [ ] Production AI schema verified
+- [ ] Only the approved feature flag is enabled
+- [ ] Course entitlement and retrieval isolation pass
+- [ ] Unsupported answers decline with citations policy intact
+- [ ] Injection, prohibited-action, quota, timeout, and provider-failure tests pass
+- [ ] Retention, deletion, feedback, and privacy copy pass
+- [ ] Content Studio cannot auto-publish
+- [ ] Career Coach requires confirmation before state changes
+- [ ] Rollback by disabling the affected flag is tested
+
+## Post-deploy
+
+- [ ] Deployment and migration evidence recorded
+- [ ] Critical route smoke completed
+- [ ] Logs checked for auth, database, storage, email, payment, and AI errors
+- [ ] Stakeholders notified of enabled/disabled capabilities and known gates

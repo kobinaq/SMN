@@ -1,116 +1,43 @@
-# SMN Workflow-First Admin Architecture
+# SMN Staff Application Architecture
 
-## Original admin state (2026-07-12)
+**Updated:** 2026-07-21
 
-Payload is correctly established as the system of record, authentication and authorization layer, API, and staff UI. The data model is sensibly separated into members, mentors, mentorship requests, opportunities and sources, enrollments, LMS courses/modules/lessons/progress, portfolios, certificates, media, and public content.
+The staff product is the custom /staff application. Payload remains the data, API, auth, access-control, and migration layer. /admin redirects to /staff unless emergency legacy mode is enabled.
 
-The admin experience is still primarily collection-first. A custom `AdminDashboard` is inserted before Payload's default dashboard and shows four counts plus five links, but it does not replace the dashboard or provide workflow health, recent activity, course readiness, or cross-collection operations. Standard collection screens remain the only way to manage most related records.
+## Information architecture
 
-## Relationship map
-
-```text
-members
-  -> mentors (one profile per member)
-  -> mentorship-requests.requester
-  -> enrollments (programKey grants)
-  -> lms-lesson-progress
-  -> opportunity-applications
-  -> portfolios
-  -> certificates
-
-lms-courses
-  -> lms-modules.course
-  -> lms-lessons.course
-  -> lms-lesson-progress.course
-  -> enrollments by programKey (logical link, not a relationship)
-
-lms-modules
-  -> lms-lessons.module
-
-opportunity-sources
-  -> opportunities.source
-  -> opportunity-applications.opportunity
-```
-
-## Problem classification
-
-### Interface problems
-
-- Staff must traverse separate course/module/lesson screens.
-- Member context is distributed across at least seven collections.
-- Mentorship and opportunity operations require repeated filtered-list navigation.
-- Certificate creation is a raw record form rather than an eligibility workflow.
-- Navigation groups are partly technical (`Network`, `Admin`) rather than consistently task-oriented.
-
-These should be solved with custom Payload views/components backed by Local API calls that run with the authenticated staff user and `overrideAccess: false`. Default collection screens remain available as advanced fallback.
-
-### Workflow problems
-
-- Course publication has no readiness gate.
-- Progress completion is recorded per lesson, but enrollment completion and certificate eligibility are not automatically derived.
-- Administrative corrections have no reasoned override/audit workflow.
-- Mentor approval records approver/time, but rejection explanations and general audit events are absent.
-- Imported-opportunity review has no unified source-health and duplicate-review surface.
-- Certificate issuance has no multi-learner wizard, duplicate policy, or safe reissue flow.
-
-### Genuine data-model gaps
-
-- LMS course metadata: instructor, category, description/body, learning outcomes, prerequisites, enrollment settings, certificate settings, preview/readiness state, and AI tutor controls.
-- Enrollment/activity: explicit LMS course relation or durable key policy, started/last-activity/completed timestamps, derived completion state.
-- Audit/activity: actor, action, entity, before/after summary, reason, visibility, timestamp.
-- Member support: private authored/timestamped staff notes.
-- Mentorship operations: capacity, relationship lifecycle, responses, and feedback.
-- Certificates: issuing staff, source course/enrollment, reissue/revocation metadata.
-- AI: usage records, retention controls, career goals/plans, and course-approved retrieval material metadata.
-
-Schema changes will be introduced only alongside a reviewed migration/schema-push plan and tests. No collection will be merged merely to simplify the UI.
-
-## Target admin information architecture
-
-- **Overview:** workflow dashboard, recent activity, platform health
-- **Learning:** Course Builder, learner progress, advanced LMS collections
-- **Members:** Member 360, members, portfolios, enrollments
-- **Mentorship:** operations workspace, mentors, requests, relationships
-- **Opportunities:** operations workspace, listings, applications, sources
-- **Credentials:** issuing wizard, certificates
-- **Content:** posts, courses catalogue, events, stories, resources, media
-- **Website:** site settings
-- **System:** users, audit events, AI usage, jobs/integration health
-
-## Security architecture
-
-- Every custom view requires a staff session.
-- Every mutation revalidates role and arguments on the server.
-- Local API calls use the current user with access control enabled.
-- Browser components receive only the minimum data needed for the workflow.
-- Consequential actions require confirmation and produce audit records.
-- AI may propose drafts or explanations but cannot publish, issue credentials, approve mentors, apply for jobs, or mutate protected member data without explicit authorized confirmation.
-
-## Delivery sequence
-
-1. Replace the dashboard and establish reusable workflow-shell patterns.
-2. Add the minimum audited schema needed for Course Builder and progress automation.
-3. Deliver Course Builder, then Member 360, mentorship, opportunities, and certificates.
-4. Harden navigation and standard screens.
-5. Complete workflow E2E coverage before declaring the admin overhaul complete.
-6. Add the provider-independent AI foundation and then Tutor, Content Studio, and Career Coach in that order.
-
-## Implemented state (2026-07-13)
-
-The staff product now lives at **`/staff`**. Payload remains the system of record (Local API, REST, `/api/admin/*` mutations). Payload’s React admin chrome is retired: `/admin` and `/admin/*` redirect to `/staff` unless `STAFF_LEGACY_ADMIN=true`.
-
-The workflow-first Overview and five operations workspaces (Course Builder, Member 360, Mentorship, Opportunities, Certificates) run inside the staff shell with portal styling. Content (posts, resources, media), Website (catalogue courses, events, stories, site settings), and System (staff users, AI usage/feedback read-only, audit log) use shared staff record primitives and role-gated routes.
-
-Navigation follows the target information architecture. The enforced staff matrix is:
-
-| Role | Primary responsibility |
+| Workspace | Purpose |
 |---|---|
-| super-admin | All domains and staff administration |
-| content | Posts, resources, media, catalogue, events, stories, website content |
-| learning | LMS, enrollments, progress, certificates, approved AI sources/drafts |
-| mentorship | Mentors, requests, relationships |
-| opportunity | Listings, sources, applications |
-| support | Member support, private notes, allowed enrollment/progress/application support |
-| analyst | Read-only operational and aggregate reporting access |
+| Today | Action queues, platform signals, and recent changes |
+| Learning | Course Builder, curriculum, lesson assets, learners, progress, analytics, AI drafts |
+| People | Member search and cross-domain Member 360 context |
+| Mentorship | Applications, capacity, requests, relationships, and feedback |
+| Opportunities | Listings, imports, duplicates, expiry, applications, and source health |
+| Certificates | Eligibility, issue, reissue, revoke, and verification |
+| Events | Events, registrations, tickets, cancellation, and check-in |
+| Content | Posts, resources, and Media |
+| Website | Public courses, events, stories, and Site Settings |
+| System | Staff users, audit records, and AI activity |
 
-Server-side collection wrappers and custom-route checks enforce these responsibilities; hiding navigation is not treated as authorization. Workflow audit and AI metric definitions are in `docs/success-metrics.md`. Everyday use and incident procedures are in `docs/staff-guide.md`.
+## Security model
+
+Each staff user has one least-privilege role: super-admin, content, learning, mentorship, opportunity, support, or analyst. Access is enforced in collection access rules and custom routes; navigation visibility is only presentation.
+
+Custom staff requests use authenticated Payload users, safe origin handling, input validation, and domain permission checks. Sensitive records such as member notes, audit events, payments, and AI usage have narrower access and should not be copied into public fields.
+
+## Data access
+
+- Server components use Payload Local API with the authenticated staff context.
+- /api/staff/* serves custom staff CRUD, settings, media, AI, event registration, and check-in workflows.
+- /api/admin/* remains for specialized workflow operations and must use the same staff authorization boundary.
+- Every multi-record workflow should compensate or report partial failure and record an audit event where appropriate.
+
+## Interaction contract
+
+Primary staff actions use shared loading, success, error, empty, confirmation, selection, and status primitives. Destructive actions require explicit confirmation and a reason when the state change is operationally significant. Browser-native prompt/confirm dialogs are not part of the supported staff UX.
+
+## Current verification concern
+
+As of 2026-07-21, TypeScript and unit tests pass, but lint reports five synchronous-set-state-in-effect errors in newer staff navigation/media components. See the root implementation plan before treating the staff application as release-verified.
+
+Everyday procedures are consolidated in [staff-guide.md](staff-guide.md).

@@ -1,22 +1,30 @@
 # Accessibility
 
-Target: practical WCAG 2.1 AA baseline for member portal and staff ops.
+**Updated:** 2026-07-21
 
-## Checklist
+**Target:** practical WCAG 2.1 AA across public, member, and staff critical paths
 
-- [ ] Keyboard reachability for all primary actions
-- [ ] Visible focus indicators
-- [ ] Modal focus trap + Escape closes (`ConfirmDialog`)
-- [ ] Form controls have associated labels
-- [ ] Errors linked via `role="alert"` / described fields
-- [ ] Colour is not the only status cue (`StatusBadge` + text)
-- [ ] Heading hierarchy starts at one `h1` per view
-- [ ] Meaningful button names and alternative text for media
-- [ ] Live regions for save/progress feedback (`aria-live`)
-- [ ] Respect `prefers-reduced-motion` for non-essential motion
-- [ ] Drag-and-drop curriculum actions have keyboard alternatives (move up/down)
+## Implemented baseline
 
-## Verification
+- Global skip link and visible focus treatment.
+- Associated labels on core auth and marketing forms.
+- Shared alert/status/loading/empty/error primitives.
+- Text labels alongside status colour.
+- Reduced-motion handling in motion-aware surfaces.
+- Keyboard alternatives for curriculum ordering actions.
+- Branded route loading, error, and not-found states.
 
-- Manual keyboard pass on registration, lesson player, mentor request, staff confirms
-- Expand automated a11y checks in Playwright as coverage grows (`docs/testing.md`)
+## Verification still required
+
+- Complete keyboard route pass for signup/login, member navigation, lesson player, mentor request, portfolio, event checkout/tickets, and staff workflows.
+- Focus trap, focus return, Escape, and accessible names for every modal/confirmation.
+- Error association and live-region behavior after async mutations.
+- Heading hierarchy and landmark review on July 18 redesigned pages.
+- Contrast, zoom/reflow, 375px member, and tablet staff review.
+- Meaningful image alternatives and decorative-image treatment.
+- Automated accessibility checks in Playwright/CI.
+- Reduced-motion review for GSAP, Framer Motion, and staff transitions.
+
+Accessibility is not release-verified merely because primitives exist. Record manual and automated results against the current release commit.
+
+See [testing.md](testing.md), [design-system.md](design-system.md), and [production-checklist.md](production-checklist.md).

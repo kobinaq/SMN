@@ -1,41 +1,51 @@
 # Database Migration Runbook
 
+**Updated:** 2026-07-21
+
 ## Policy
 
-Committed Payload migrations are the deployment path. Normal app startup keeps schema push disabled. `npm run db:push` is an explicit administrative bridge for an existing database that predates the migration baseline; it is not the normal deploy command.
+Committed Payload migrations are the production schema path. Normal application startup and deployment do not push schema automatically. Use db:push only for a deliberately guarded pre-baseline adoption or disposable local database, never as routine production deployment.
 
-The stock `payload migrate:*` loader fails on Node 24 in this repository because an ESM graph with top-level await is loaded through `require()`. The `db:migrate:*` scripts bundle `payload.config.ts` with esbuild and call the same installed Payload migration API from ESM.
+Project scripts bundle payload.config.ts because the stock Payload loader is incompatible with this repository’s Node 24 ESM graph.
 
-## Fresh database
+## Committed migrations
 
-From `web` with PostgreSQL `DATABASE_URL` and `PAYLOAD_SECRET` configured:
+1. 20260713_140429_smn_baseline_20260713
+2. 20260714_marketing_cms_fields
+3. 20260717_events_paystack
 
-```bash
-npm run db:migrate
-```
+Repository evidence records the baseline as adopted on the existing production database and the marketing migration as applied. Production application of 20260717_events_paystack is unconfirmed; inspect the database before acting.
 
-This applies pending files from `src/migrations` transactionally and records them in `payload-migrations`. Do not use `db:push` first on a fresh production database.
+## Fresh PostgreSQL database
 
-## Existing production database adoption
+With DATABASE_URL and PAYLOAD_SECRET configured, run npm run db:migrate from web/. This should apply all committed migrations transactionally and record them in payload-migrations.
 
-Production was explicitly schema-pushed before the first baseline existed. Never run the full baseline migration over those existing tables.
+Prove the migration chain on disposable PostgreSQL before production. Verify core collection reads plus events, registrations, payments, courses, and enrollments.
 
-1. Back up the database and place writes in a controlled maintenance window.
-2. Deploy application code with all AI feature flags still false.
-3. Run `npm run db:push` once against the intended database to bring it to the exact final Payload schema.
-4. Run `npm run db:check` and the application schema/read checks.
-5. Set `ALLOW_MIGRATION_BASELINE=true` only for the adoption command, then run `npm run db:migrate:adopt`.
-6. Run `npm run db:migrate`; it must report no pending baseline work.
-7. Remove `ALLOW_MIGRATION_BASELINE` and keep `PAYLOAD_DB_PUSH` unset.
+## Existing production
 
-The adoption script refuses to proceed unless there is exactly one baseline file and full reads succeed for the core admin, LMS, certificate, and all AI collections. It then records that exact filename without executing its `up` SQL. It is idempotent.
+1. Read payload-migrations and compare names/order with src/migrations/index.ts.
+2. Confirm the baseline and marketing migration records already documented.
+3. Do not replay the baseline over existing tables.
+4. Take a recovery point and stop or gate writes to affected features.
+5. Run npm run db:migrate to apply only genuinely pending forward migrations.
+6. Verify the affected schema and application flows.
+7. Record the migration result, timestamp, operator, and rollback/recovery point in the deployment evidence.
 
-## Future schema change
+If production bookkeeping differs from the repository’s documented state, stop and reconcile the schema before applying anything.
 
-1. Change the Payload config.
-2. Run `npm run db:migrate:create -- concise_change_name` using PostgreSQL configuration.
-3. Review both generated SQL and snapshot; pay special attention to drops, nullability, unique constraints, and data backfills.
-4. Verify on a disposable database with `npm run db:migrate`, unit tests, build, and E2E.
-5. Back up production, deploy with affected features disabled, run `npm run db:migrate`, verify, then enable features.
+## Pre-baseline adoption
 
-Never edit or delete a migration already applied to a shared environment. Add a forward migration instead. Never use `migrate:reset`, destructive SQL, or automatic push in production.
+The guarded adoption command exists only for another existing database that already has the full baseline schema but no baseline migration record. Follow the script’s checks, temporarily set ALLOW_MIGRATION_BASELINE=true, run npm run db:migrate:adopt, then remove the variable. Never use this to skip an unapplied migration.
+
+## Creating a schema change
+
+1. Change the Payload collection/global configuration.
+2. Run npm run db:migrate:create -- concise_change_name with PostgreSQL configuration.
+3. Review generated SQL and snapshot for drops, nullability, constraints, indexes, and data backfills.
+4. Add a forward data migration where existing records need transformation.
+5. Verify from an empty disposable PostgreSQL database and from the previous schema state.
+6. Run typecheck, lint, unit, build, and relevant E2E.
+7. Back up production, deploy with affected features gated, run npm run db:migrate, verify, then expose the feature.
+
+Never edit or delete a migration already applied to a shared environment. Never use migrate:reset, destructive ad-hoc SQL, or automatic schema push in production.

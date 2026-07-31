@@ -1,501 +1,135 @@
-# Social Marketers Network — Architecture & Build Plan
+# Social Marketers Network — Current Architecture
 
-**Status:** Locked decisions v1  
-**Date:** 2026-07-10  
-**Product:** Premium marketing-community website plus an authenticated network portal, LMS foundation, workflow administration, and AI-assisted learning/career surfaces.
+**Updated:** 2026-07-21
 
----
+**Canonical for:** system boundaries, data ownership, request flows, and deployment shape
 
-## 1. Product framing
+**Product state:** [PRODUCT-ROADMAP.md](PRODUCT-ROADMAP.md)
 
-SMN is the **digital home of a professional learning network** for strategic marketers in Africa. The site must feel like a **premium editorial / portfolio experience** (Clapat-grade motion + typography), not a generic course storefront.
+## System overview
 
-**Primary outcome**  
-Visitors leave thinking: *“This is where marketers belong, grow, and build careers.”*
+SMN is one Next.js application under web/. Payload supplies the data model, Local/REST APIs, authentication primitives, access control, migrations, and media integration. The application exposes four user-facing route groups:
 
-**Primary conversion**  
-Flagship cohort applications.
+| Surface | Routes | Identity |
+|---|---|---|
+| Public website | root, programmes, courses, events, stories, insights, resources, apply, community, employers, legal | Anonymous or optional member |
+| Member auth | /login, /signup, /forgot-password | Payload members |
+| Member product | /app/* | Authenticated member |
+| Staff product | /staff/* | Authenticated Payload user |
 
-**Secondary conversions**  
-Self-paced course purchases (Selar), event registrations, newsletter, Discord joins, mentor applications, employer/partner enquiries.
+Payload admin chrome is retired for normal work. /admin redirects to /staff; STAFF_LEGACY_ADMIN=true is an emergency-only fallback.
 
----
+## Runtime and infrastructure
 
-## 2. Locked architecture decisions
+- Next.js 16 App Router, React 19, TypeScript, and Tailwind CSS.
+- Payload CMS 3 with PostgreSQL in production and disposable SQLite for deterministic E2E.
+- Vercel deployment with project root web/.
+- Payload Media with Cloudflare R2 through the S3 adapter when fully configured.
+- Unlisted privacy-enhanced YouTube embeds for LMS video.
+- Paystack for first-party paid course/event checkout.
+- Resend for transactional mail, Mailchimp for newsletter, Ahrefs/analytics helpers for public-site measurement.
+- Public Greenhouse, Lever, and Ashby feeds for opportunity ingestion.
+- Groq behind a provider-independent AI runtime; normal CI uses the mock provider.
 
-| Concern | Decision |
-|--------|----------|
-| Frontend | **Next.js 15 (App Router) + TypeScript + Tailwind CSS** |
-| CMS | **Payload CMS 3** (embedded or monorepo; Postgres on managed DB) |
-| Hosting | **Vercel** (Next + Payload API routes / Node runtime as required) |
-| Database | **Neon Postgres** (assumed; serverless-friendly for Vercel) |
-| Media | **Vercel Blob** or **S3-compatible** (Cloudflare R2) via Payload storage adapter |
-| Transactional email | **Resend** (form notifications + auto-replies) |
-| Newsletter | **Mailchimp** (subscribe API from forms / footer) |
-| Course sales / LMS | **Selar** (checkout + digital product delivery) |
-| Live sessions | **Google Classroom** (cohort live classes; links managed in CMS) |
-| Community | **Discord** (invite link; not built in-app) |
-| Motion | **GSAP + ScrollTrigger** (+ optional Lenis smooth scroll) |
-| Analytics | **GA4** + conversion events (assumed) |
-| Forms backend | Next.js Route Handlers → validate → Resend (+ optional Mailchimp tag) |
+## Authentication and authorization
 
-### Explicitly out of MVP
+Staff and members are separate Payload auth collections:
 
-Member portal, learning dashboard, in-app forum, job board, mentor directory, employer portal, native certificates, portfolio profiles, custom payment/LMS.
+- users authenticate staff, use the smn-admin cookie namespace, and receive one least-privilege role: super-admin, content, learning, mentorship, opportunity, support, or analyst.
+- members authenticate the portal and use the smn-member-token bridge.
 
----
+Collection access and every custom mutation must enforce authorization server-side. Hidden navigation is not authorization. Staff API helpers promote the staff cookie into the Payload request context while preserving origin/CSRF controls. Member-owned records are filtered by authenticated member identity.
 
-## 3. Assumptions (filled gaps)
+## Data domains
 
-These are **working defaults** until the client corrects them.
+| Domain | Principal records |
+|---|---|
+| Website | Site Settings, Media, Posts, Courses, Events, Stories, Resources, newsletter and form records |
+| People | Users, Members, Member Notes |
+| Learning | Enrollments, Learning Items, Progress, LMS Courses, Modules, Lessons, Lesson Progress |
+| Mentorship | Mentors, Mentorship Requests, Relationships, Feedback |
+| Opportunities | Opportunities, Sources, Applications |
+| Credentials | Portfolios, Certificates |
+| Events and payments | Events, Event Registrations, Payments, Enrollments |
+| Governance | Audit Events, AI Usage, AI Feedback, Knowledge Sources, Drafts, Career State |
 
-### Brand & positioning
+Payload remains the system of record. UI components do not maintain an independent database or bypass collection access rules.
 
-| Item | Assumption |
-|------|------------|
-| Geography | Africa-first (English), global diaspora welcome |
-| Currency | Display NGN primary on Selar links; optional USD note for international |
-| Domain | `socialmarketers.network` (placeholder until confirmed) |
-| Legal name | Social Marketers Network |
-| Lead instructor | Single founder/instructor profile on About (name TBD from client) |
+## Main request flows
 
-### Flagship cohort
-
-| Item | Assumption |
-|------|------------|
-| Name | **Social Media Marketing & AI Cohort** |
-| Format | Live instructor-led + community + portfolio projects |
-| Duration | **8 weeks** |
-| Cadence | Live sessions **2× / week** on Google Classroom |
-| Next start | CMS-managed field (e.g. “September 2026”) |
-| Pricing | CMS-managed; checkout may be “Apply first” (no pay until accepted) **or** Selar payment link after acceptance |
-| Capacity | ~30 seats per cohort |
-| Application fields | Name, email, WhatsApp, city/country, current role, experience level, LinkedIn, goals, how they heard about SMN, portfolio URL (optional) |
-| Certificate | Mention “Certificate of completion” as content; digital certs = Phase 2 |
+### Staff operations
 
-### Self-paced courses
+1. Staff authenticate at /staff/login.
+2. Server components and custom staff APIs query Payload with the authenticated user.
+3. The role matrix limits visible and mutable domains.
+4. Mutations validate input, apply collection access, write records, and create audit records where required.
+5. The staff UI reports progress, success, failure, and confirmation without relying on browser-native prompts.
 
-| Item | Assumption |
-|------|------------|
-| Delivery | Sold on **Selar**; site shows catalogue + “Enroll on Selar” CTA |
-| Access | Selar buyer experience; Google Classroom only for cohort live tracks |
-| Count at launch | 3–6 course cards (even if some “Coming soon”) |
-
-### Community & mentorship
-
-| Item | Assumption |
-|------|------------|
-| Community home | **Discord** (public “Join Discord” CTA; private channels for paid/cohort after manual role) |
-| Mentorship v1 | Marketing page + mentor application form (no matching UI) |
-| Mentors | Alumni + industry pros; approval is manual offline |
-
-### Events
-
-| Item | Assumption |
-|------|------------|
-| Types | Webinars, workshops, networking |
-| Registration | External link (Luma / Google Form / WhatsApp) stored per event in CMS |
-| Free default | Webinars free; paid events rare and linked out |
-
-### Employers
-
-| Item | Assumption |
-|------|------------|
-| v1 | Value prop + forms (talent request, partner, guest speaking) |
-| No job board | Opportunities handled via email / Discord announcements |
-
-### Content ops
-
-| Item | Assumption |
-|------|------------|
-| Launch content | Placeholder-quality OK for structure; real copy loaded before public launch |
-| Blog cadence | Insights posts in Payload; 4–6 seed articles |
-| Resources | PDF downloads; optional email gate via Mailchimp tag `resource-download` |
-
-### Design system tokens (from brief + logos)
-
-| Token | Value (working) |
-|-------|-----------------|
-| Deep blue | `#0A2F8F` (from logo / brand; refine to exact hex from brand kit) |
-| Baby blue | `#7EB6FF` |
-| Mint | `#6FCFB0` |
-| Grey | `#6B7280` |
-| Near-black | `#0B0D12` (premium dark surfaces, Clapat/GrowthX feel) |
-| White | `#FFFFFF` |
-| Heading font | **League Spartan** |
-| Body font | **Inter** |
-| Logo | Wordmark only (blue on light / white on blue); no icon mark yet — use monogram **SMN** if needed in favicon |
-
----
-
-## 4. Visual & motion direction
-
-### Inspiration map
-
-| Source | Steal this | Avoid this |
-|--------|------------|------------|
-| **Clapat** (primary) | Smooth scroll, pinned storytelling sections, dramatic typography reveals, image scale/mask transitions, page-transition feel, generous whitespace, editorial hierarchy | Pure portfolio-only IA; WordPress theme constraints |
-| **GrowthX dark hero** | Premium black canvas, exclusive framing, strong center headline, logo social proof, geometric blue forms | “Invite-only” if SMN is open-application — adapt to “Application-based cohort” |
-| **GrowthX cohort photo** | Large community photography, mixed type (serif accent optional for quotes), solid blue pill CTA | Overly warm gold palace aesthetic if it fights brand blue |
-| **OnDeck** | Clear nav, network/community visual metaphor, dual audience (learners + partners), “Apply Now” as primary chrome | Cluttered multi-dropdown nav on mobile |
-| **Reforge cards** | Clean course cards, lesson/meta chips, recommended badge, dark section with large quote marks | Dense SaaS dashboard chrome |
-
-### Overall look
-
-- **Default mode:** dark, premium, deep blue accents (Clapat × GrowthX Club).  
-- **Light sections:** white/grey for readability (About, long-form Insights, forms).  
-- **Mint** sparingly for success states, badges, secondary accents.  
-- **Photography:** real community/cohort energy over stock icons.  
-- **UI density:** editorial and spacious, not card-grid e-commerce.
-
-### GSAP storytelling system
-
-Implement a small **animation kit** so pages feel cohesive:
-
-1. **Smooth scroll** — Lenis + ScrollTrigger scrub (respect `prefers-reduced-motion`).  
-2. **Hero intro** — logo/wordmark fade + clip-path headline + staggered CTA.  
-3. **Scroll-pinned chapters** (Home + Cohort) — full-viewport sections that pin while text/images morph (philosophy → ecosystem → programs → community).  
-4. **Text split reveals** — lines/words rise with opacity (SplitType or GSAP SplitText if licensed; else CSS + GSAP).  
-5. **Image parallax / scale** — images grow from 1.1 → 1 as they enter.  
-6. **Horizontal strip** (optional Home) — ecosystem pillars or partner logos.  
-7. **Card cascade** — programs/resources stagger on enter.  
-8. **CTA band** — final full-bleed pin with Apply + Discord.  
-9. **Route transitions** (nice-to-have) — simple opacity/clip between pages; don’t block SEO/content.
-
-**Performance rules**
-
-- Kill ScrollTriggers on unmount.  
-- No heavy WebGL for MVP.  
-- Disable/simplify motion when `prefers-reduced-motion: reduce`.  
-- Lazy-load below-fold media; prefer WebP/AVIF.
-
----
-
-## 5. System architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                         Users (browser)                          │
-└────────────────────────────┬────────────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  Vercel — Next.js 15 App Router                                  │
-│  • Marketing pages (RSC + client islands for GSAP)               │
-│  • /admin → Payload admin                                        │
-│  • /api/* → forms, Mailchimp, webhooks                           │
-└───────┬──────────────┬──────────────┬──────────────┬────────────┘
-        │              │              │              │
-        ▼              ▼              ▼              ▼
-   Neon Postgres   Resend API    Mailchimp API   Selar (external)
-   (Payload data)  (emails)      (newsletter)    Google Classroom
-                                                  Discord invites
-```
-
-### Request flows
-
-**Browse content**  
-Visitor → Next.js (ISR/SSR) → Payload Local API or REST → Postgres → rendered HTML.
-
-**Apply to cohort**  
-Form → `POST /api/forms/cohort-apply` → validate (Zod) → Resend to ops inbox + confirmation to applicant → optional Mailchimp tag `cohort-applicant` → success UI.
-
-**Enroll self-paced**  
-Course page CTA → **external Selar product URL** (from CMS). No payment code on our stack.
-
-**Join community**  
-CTA → Discord invite URL (CMS global).
-
-**Live cohort access**  
-After acceptance (offline process), ops adds student to Google Classroom + Discord role. Site only shows “what happens after you’re accepted.”
-
----
-
-## 6. Monorepo / project shape
-
-```
-SMN/
-├── apps/web/                 # or repo root as single Next app
-│   ├── app/
-│   │   ├── (marketing)/      # public site
-│   │   ├── (payload)/admin/  # Payload admin
-│   │   └── api/
-│   ├── collections/          # Payload collections
-│   ├── components/
-│   │   ├── ui/
-│   │   ├── sections/         # homepage/page blocks
-│   │   ├── forms/
-│   │   └── motion/           # GSAP hooks, providers
-│   ├── lib/                  # resend, mailchimp, payload client
-│   └── styles/
-├── public/
-├── ARCHITECTURE.md
-└── package.json
-```
-
-**Recommendation:** Single Next.js app with Payload 3 embedded (`@payloadcms/next`) for simpler Vercel deploy.
-
----
-
-## 7. Payload CMS collections
-
-### Globals
-
-- **SiteSettings** — site name, tagline, nav, footer, social links, Discord invite, default SEO, GA ID  
-- **Brand** — logo light/dark, colour overrides (optional)  
-- **Homepage** — ordered blocks (hero, philosophy, ecosystem, programs, events, stories, CTAs)
-
-### Collections
-
-| Collection | Purpose |
-|------------|---------|
-| **Pages** | Generic flexible pages if needed |
-| **Programs** | High-level pathways (cohort vs self-paced) |
-| **Cohorts** | Active/upcoming cohort: dates, price copy, curriculum, FAQ, Selar/apply mode, Classroom blurb |
-| **Courses** | Self-paced: title, summary, outcomes, duration, price label, Selar URL, image, status |
-| **Events** | Title, type, date, location/online, registration URL, featured image |
-| **Resources** | Title, type (template/guide/prompts…), file, description, gateEmail? |
-| **Posts** (Insights) | Blog: title, slug, category, body, cover, SEO |
-| **Stories** | Success stories / testimonials: quote, person, role, media, video URL |
-| **Team** | Instructor(s): bio, brands, milestones |
-| **FAQs** | Reusable FAQ groups (cohort, general) |
-| **FormSubmissions** | Optional store of applications (PII-aware; or email-only) |
-| **Media** | Uploads |
-
-### Block types (Homepage / flexible pages)
-
-`Hero`, `RichText`, `PhilosophyGrid`, `EcosystemMap`, `ProgramCards`, `FeaturedEvents`, `ResourceRow`, `StoryCarousel`, `LogoCloud`, `CTABand`, `Newsletter`, `StatsRow`, `QuoteBreak`, `MediaFullBleed`
-
----
-
-## 8. Site map & page responsibilities
-
-| Route | Purpose | Key integrations |
-|-------|---------|------------------|
-| `/` | Story + ecosystem + CTAs | GSAP chapters |
-| `/about` | Story, mission, instructor | — |
-| `/programs` | Pathways overview | — |
-| `/programs/cohort` | Flagship sales page | Apply form |
-| `/programs/courses` | Catalogue | Selar links |
-| `/programs/courses/[slug]` | Course detail | Selar CTA |
-| `/community` | Culture + Discord join | Discord |
-| `/mentorship` | How mentoring works | Mentor form |
-| `/mentorship/become-a-mentor` | Mentor pitch | Mentor form |
-| `/events` | Upcoming list | External reg links |
-| `/events/[slug]` | Event detail | Reg link |
-| `/resources` | Searchable library | Downloads / gate |
-| `/insights` | Blog index | — |
-| `/insights/[slug]` | Article | — |
-| `/stories` | Success stories | — |
-| `/employers` | Partner / hire talent | Partner forms |
-| `/contact` | Enquiry types | Resend |
-| `/apply` | Cohort application | Resend (+ Mailchimp tag) |
-| `/privacy`, `/terms` | Legal stubs | — |
-
-Nav (assumed): Programs · Community · Events · Insights · Resources · Employers · **Apply** (button)
-
----
-
-## 9. Forms specification
-
-All forms: client validation + Zod server validation + honeypot + rate limit (IP).
-
-| Form | Fields (assumed) | Email to | Auto-reply | Mailchimp |
-|------|------------------|----------|------------|-----------|
-| Cohort apply | name, email, phone/WhatsApp, country, role, level, LinkedIn, goals, source, portfolio? | `hello@…` | Yes — “application received” | Tag `cohort-applicant` |
-| Contact | name, email, type (general/partner/speaking), message | ops | Optional | No |
-| Mentor apply | name, email, expertise, years, LinkedIn, why | ops | Yes | Tag `mentor-applicant` |
-| Employer talent | company, name, email, need type, message | ops | Yes | Tag `employer` |
-| Newsletter | email | — | Mailchimp confirmation | List subscribe |
-| Resource gate | email + resourceId | — | Download link or unlock | Tag `resource-download` |
-
-**Resend**
-
-- From: `Social Marketers Network <noreply@domain>` (domain verified)  
-- Ops inbox: configurable env `OPS_EMAIL`
-
----
-
-## 10. External product map
-
-```
-                    ┌──────────────┐
-   Apply accepted → │ Manual ops   │ → Google Classroom invite
-                    │ (WhatsApp /  │ → Discord role
-                    │  email)      │ → (optional) Selar payment
-                    └──────────────┘
-
-   Self-paced buy → Selar checkout → Selar delivers access
-
-   Community CTA  → Discord invite
-
-   Events         → Luma / Form / WhatsApp (per event URL)
-```
-
-**Copy rule:** Never imply in-platform video lessons or live streaming on the website itself. Clear lines:
-
-- “Self-paced courses are delivered via Selar.”  
-- “Live cohort sessions run on Google Classroom.”  
-- “Community lives on Discord.”
-
----
-
-## 11. SEO, analytics, performance
+### Learning
 
-- Metadata API per page (title, description, OG from Payload)  
-- `sitemap.xml` + `robots.txt`  
-- JSON-LD: Organization, Course (where relevant), Event  
-- GA4 events: `apply_submit`, `newsletter_subscribe`, `selar_click`, `discord_click`, `resource_download`, `event_register_click`, `mentor_apply_submit`, `employer_submit`  
-- Lighthouse targets: mobile perf ≥ 80 with motion reduced; LCP hero image optimized  
-- Fonts: `next/font` for Inter + League Spartan  
-
----
-
-## 12. Environment variables (assumed)
-
-```
-DATABASE_URI=
-PAYLOAD_SECRET=
-BLOB_READ_WRITE_TOKEN=          # or S3 keys
-RESEND_API_KEY=
-RESEND_FROM=
-OPS_EMAIL=
-MAILCHIMP_API_KEY=
-MAILCHIMP_AUDIENCE_ID=
-MAILCHIMP_SERVER_PREFIX=        # e.g. us21
-NEXT_PUBLIC_GA_ID=
-NEXT_PUBLIC_SITE_URL=
-DISCORD_INVITE_URL=             # also in CMS; env as fallback
-```
-
----
-
-## 13. Security & compliance
-
-- No card data on our servers (Selar handles payments)  
-- Form rate limiting + honeypot  
-- Payload admin behind strong credentials; restrict admin routes  
-- Privacy policy covers form data, Mailchimp, analytics  
-- Don’t store more PII in `FormSubmissions` than needed (or email-only)  
-
----
-
-## 14. Build phases & PR plan
-
-### Phase 0 — Foundation (PR1)
-
-- Next.js + Tailwind + design tokens (brand colours, type)  
-- Base layout: nav, footer, logo, Apply CTA  
-- Payload install, Postgres, Media, SiteSettings  
-- Deploy pipeline to Vercel (preview + prod)
-
-### Phase 1 — Design system & motion (PR2)
-
-- UI primitives (Button, Card, Section, Badge, Input)  
-- GSAP provider, Lenis, reduced-motion, reusable scroll hooks  
-- Storytelling section templates (Hero, PinChapter, CTABand)
-
-### Phase 2 — Core marketing pages (PR3)
-
-- Home (block-driven) with GSAP chapters  
-- About + Team/instructor  
-- Programs index + Cohort page  
-- Static legal stubs
-
-### Phase 3 — Commerce-adjacent content (PR4)
-
-- Courses catalogue + detail → Selar URLs  
-- Events list/detail  
-- Resources library + download/gate  
-- Success stories
-
-### Phase 4 — Community & B2B (PR5)
-
-- Community (Discord)  
-- Mentorship + Become a Mentor  
-- Employers & Partners  
-
-### Phase 5 — Insights & forms (PR6)
-
-- Blog index + article template  
-- All forms + Resend + Mailchimp  
-- Apply page + confirmation states  
-
-### Phase 6 — Polish & launch (PR7)
-
-- SEO, analytics events, sitemap  
-- Content seed, image pass  
-- Motion QA, mobile QA, accessibility pass  
-- Production domain + Resend domain auth + Mailchimp live list  
-
-### Phase 7+ (post-MVP product)
-
-See **`PRODUCT-ROADMAP.md`**. Locked product decisions:
-
-- Member auth: Payload **`members`** collection (not Clerk); staff stay on **`users`** / `/admin`
-- Media: **Cloudflare R2** via S3 storage adapter
-- Portal: `/app` (learning, mentors, opportunities, profile)
-- Phases: 7.0 platform → 7.1 portal → 7.2 mentors → 7.3 jobs → 7.4 learning → portfolios / certs / employer portal; forum late
-
----
-
-## 15. Homepage scroll storyboard (assumed)
-
-| Beat | Section | Motion |
-|------|---------|--------|
-| 0 | Preloader / logo mark | Brief fade (optional) |
-| 1 | Hero: tagline + Apply / Explore | Clip-path headline, CTA rise |
-| 2 | “Not another course platform” | Pin + line-by-line philosophy |
-| 3 | Core beliefs / pillars | Stagger cards or horizontal scrub |
-| 4 | Learning ecosystem map | Draw/connect nodes (SVG or CSS) |
-| 5 | Flagship cohort spotlight | Image scale + price reveal + CTA |
-| 6 | Self-paced strip | Card cascade |
-| 7 | Community (Discord) | Full-bleed photo + join |
-| 8 | Stories | Quote marks + testimonial swap |
-| 9 | Events + Resources | Soft enter |
-| 10 | Employers teaser | Split panel |
-| 11 | Newsletter + final Apply | Sticky CTA band |
-
----
-
-## 16. Success metrics instrumentation
-
-| KPI | How we measure |
-|-----|----------------|
-| Cohort applications | Form success + GA4 `apply_submit` |
-| Course enrollments | GA4 `selar_click` (proxy) + Selar dashboard |
-| Webinar/event regs | `event_register_click` |
-| Newsletter | Mailchimp + `newsletter_subscribe` |
-| Community growth | `discord_click` + Discord insights |
-| Resource downloads | `resource_download` |
-| Employer/mentor leads | Form events |
-
----
-
-## 17. Open items still worth confirming with client
-
-Not blockers for scaffolding, but confirm before public launch:
-
-1. Exact domain + email addresses  
-2. Lead instructor name, bio, headshot, brand list  
-3. Real cohort dates, price, application vs pay-first flow  
-4. Selar store URLs for each course  
-5. Discord invite (permanent)  
-6. Google Classroom is ops-only (confirm no student-facing Classroom link on site)  
-7. Mailchimp audience name / double opt-in preference  
-8. Exact brand hexes if a full brand guide exists  
-
----
-
-## 18. Recommendation summary
-
-Build a **Clapat-grade Next.js marketing site** with **Payload** as the content brain, **GSAP scroll storytelling** on Home + Cohort, and **outbound product surfaces**:
-
-- **Selar** = money for self-paced  
-- **Google Classroom** = live cohort delivery (ops)  
-- **Discord** = community  
-- **Resend** = form email  
-- **Mailchimp** = list growth  
-- **Vercel** = host everything public-facing  
-
-The original marketing-site architecture has since expanded into the implemented member portal and LMS foundation documented in `PRODUCT-ROADMAP.md` and `docs/admin-architecture.md`.
+1. A member receives access through an active enrollment or an allowed programme key.
+2. Published LMS records are resolved into a course/module/lesson tree.
+3. Lesson completion writes member-owned progress.
+4. Completion recalculates enrollment progress and certificate eligibility.
+5. Files resolve through Media/R2; videos remain external YouTube embeds.
+
+### Events and payments
+
+1. A member or eligible visitor selects an event or paid course.
+2. The initialize route validates the product, amount, identity, and Paystack configuration, then creates or reuses payment state.
+3. Paystack redirects back to verification and independently calls the signed webhook.
+4. Shared fulfillment records the successful payment and grants the event registration or course enrollment idempotently.
+5. Members see tickets/access links; staff manage registrations, cancellation, and check-in.
+
+Email delivery is a side effect, not the source of payment truth. A failed email must not reverse a successful payment or fulfillment.
+
+### Opportunities
+
+1. A protected cron fetches enabled public ATS sources.
+2. Imported roles are normalized, fingerprinted, and usually held pending.
+3. Staff review publication, duplicates, expiry, and source health.
+4. Members track activity; applications continue on the employer’s external site.
+
+### AI
+
+1. An independent feature flag and authenticated entitlement gate the surface.
+2. The runtime validates/minimizes input, applies quotas and safety checks, and selects the configured provider/model.
+3. Tutor retrieval is restricted to approved material from the entitled course and returns citations or declines.
+4. Content Studio validates structured candidates and saves reviewed drafts only.
+5. Career Coach uses member-authorized profile context and requires confirmation before saving goals or plans.
+6. Privacy-minimized usage and feedback records support operations and deletion/retention controls.
+
+## Security boundaries
+
+- Secrets are server-only; no Groq, Paystack, database, R2, Resend, or cron secret is exposed through NEXT_PUBLIC variables.
+- Paystack webhooks require HMAC verification; fulfillment must remain idempotent and validate amount/currency/product.
+- AI never auto-publishes, approves mentors, issues credentials, applies for jobs, or makes hiring decisions.
+- Private staff notes do not enter AI context.
+- Public portfolios, stories, and certificates require explicit publication/visibility state.
+- Demo seeding is blocked in production unless explicitly unlocked.
+- Automatic schema push is disabled during normal startup.
+
+## Schema and deployment
+
+Committed migrations are the production path:
+
+1. 20260713_140429_smn_baseline_20260713
+2. 20260714_marketing_cms_fields
+3. 20260717_events_paystack
+
+Fresh databases run npm run db:migrate. Existing pre-baseline production follows [docs/database-migrations.md](docs/database-migrations.md); never replay the baseline over existing tables. Vercel’s root directory is web/.
+
+## Repository map
+
+| Path | Responsibility |
+|---|---|
+| web/src/app/(site) | Public website and public APIs |
+| web/src/app/(portal) | Member auth APIs and member product |
+| web/src/app/(staff) | Custom staff app and staff APIs |
+| web/src/app/(payload) | Payload API integration and legacy-admin redirect |
+| web/src/collections | Payload data model and access rules |
+| web/src/components | Public, member, staff, Payload, and shared UI |
+| web/src/lib | Domain services, auth, AI, payments, CMS, analytics |
+| web/src/migrations | Reviewed PostgreSQL migrations |
+| web/tests/e2e | Deterministic browser workflows |
+| docs | Operational and engineering references |

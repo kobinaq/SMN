@@ -1,50 +1,109 @@
-# SMN Everyday Staff Guide
+# SMN Staff Guide
+
+**Updated:** 2026-07-21
+
+**Canonical for:** everyday staff and admin procedures
 
 ## Sign in and permissions
 
-Use `/staff` with a staff account (first visit can create the first super-admin). Member accounts cannot enter the staff app. The seven staff roles are deliberately narrow: super-admin, content, learning, mentorship, opportunity, support, and analyst. Ask a super-admin for a role change; do not share accounts. If a workspace is absent, your role does not have that domain. `/admin` redirects to `/staff` unless emergency fallback `STAFF_LEGACY_ADMIN=true` is set.
+Use /staff/login. Staff accounts use Payload users; member accounts cannot enter the staff app. Roles are super-admin, content, learning, mentorship, opportunity, support, and analyst. Missing navigation means the account does not have that domain.
 
-## Start with Overview
+/admin redirects to /staff. Use STAFF_LEGACY_ADMIN=true only as a temporary engineering recovery measure.
 
-The Overview dashboard is the daily queue. Review items needing action, network health, and meaningful recent changes before opening individual workspaces. Navigation covers Course Builder, Member 360, Mentorship Operations, Opportunity Operations, Certificate Issuing, Content, Website, and System screens.
+The first visit may create the first super-admin only when no users exist. After bootstrap, a super-admin manages staff under System → Users.
 
-## Course Builder
+## Today
 
-1. Select a course and complete its settings and learning outcomes.
-2. Build modules and lessons in Curriculum. Reorder, move, or duplicate carefully; destructive actions require confirmation.
-3. Check Overview readiness before publication.
-4. Use Learners only for a justified progress correction. Every override requires a reason and creates an audit event.
-5. Use Analytics for completion, inactivity, abandonment, and module drop-off—not as a grading tool.
-6. Configure Tutor per course. Only approved, published course material is eligible context.
+Start at /staff. Review action queues, health signals, and recent changes, then open the relevant workspace. Treat counts as operational prompts, not performance grades.
 
-AI Content Studio creates drafts only. Choose the draft type and controls, generate, compare, select, edit, and explicitly save a reviewed version. It cannot publish. Continue through the normal readiness and publication flow after review.
+## Learning and Course Builder
 
-## Member 360
+1. Open /staff/learning and create or select a course.
+2. Complete settings: programme key, instructor, category, summary, outcomes, access, enrollment, certificate, preview, Tutor, and publication fields.
+3. Build modules and lessons. Use the detail editors for lesson type, reading body, external resource, YouTube URL, and downloadable Media attachments.
+4. Review readiness before publication.
+5. Use learner progress overrides only for a justified correction; include a durable reason.
+6. Use analytics for completion, inactivity, and curriculum drop-off, not grading.
 
-Select a member to see profile, learning, credentials, portfolio, mentorship, opportunity activity, and recent audited events. Private staff notes must be factual, necessary, and suitable for authorized support colleagues. Do not copy sensitive personal data into notes or AI prompts.
+Enrollments grant access through a stable programme key and can carry Classroom or external course links. Learning Items remain useful for lightweight milestones alongside the native LMS.
 
-## Mentorship Operations
+Content Studio generates reviewed drafts only. Compare candidates, edit the selected draft, save explicitly, and continue through ordinary curriculum and publication review. It cannot publish automatically.
 
-Review mentor applications, approve or reject with a clear reason, watch mentor capacity, move requests through review/introduction/completion, and record relationship feedback. The system never delegates mentor approval or matching decisions to AI.
+## Members
 
-## Opportunity Operations
+Use the People/Members workspace to search members and review profile, skills/goals, learning, certificates, portfolio, mentorship, opportunity activity, and private notes. Notes must be factual, necessary, and appropriate for authorized support colleagues. Do not place private notes or protected personal information into AI prompts.
 
-Review pending listings, expiry actions, duplicate fingerprints, applications, and source failures. Verify the employer, destination URL, dates, and role details before publication. Closing or archiving requires a reason and is audited. Career Coach rankings are member guidance, never hiring decisions or guarantees.
+Members edit their own public profile and portfolio through /app. Staff should avoid changing member-authored content unless a support workflow explicitly permits it.
 
-## Certificate Issuing
+## Mentorship
 
-Only completed, eligible enrollments without an active duplicate appear in the issuing wizard. Confirm the selection before bulk issuing. Reissue when replacing a credential; revoke only with a durable reason. Each action records the issuer and audit trail. Never create certificates through AI Content Studio.
+- Review mentor applications and approve, pause, or reject with a clear reason.
+- Watch capacity before introductions.
+- Move requests through new, reviewing, introduced, completed, or declined.
+- Record relationship feedback and preserve audit history.
+- AI does not approve mentors or make matching decisions.
+
+## Opportunities
+
+- Review imported and manually created roles, duplicates, expiry, applications, and source failures.
+- Verify employer, destination URL, dates, and role details before publication.
+- Keep new ATS sources manual-review until their relevance is proven.
+- Closing or archiving requires an operational reason.
+- Member applications continue on the employer site; SMN records tracking state only.
+
+## Certificates
+
+Use the certificate workspace and issuing wizard. Confirm eligibility and active duplicates before issuing. Reissue when replacing a credential; revoke only with a durable reason. Public verification requires a valid, public credential code. PDFs use Media/R2 when available.
+
+## Events, registrations, and payments
+
+### Create an event
+
+1. Open Website → Events.
+2. Set title, schedule, location/format, capacity, publication state, and access link.
+3. For a paid event, set the amount in minor currency units and confirm the public copy/refund terms.
+4. Leave legacy external registration URL blank for first-party registration.
+
+### Operate registrations
+
+1. Open Events and select the event.
+2. Review paid/free registrations and payment state.
+3. Use the check-in screen to validate the ticket/registration.
+4. Cancel only through the supported action so registration and audit state remain consistent.
+5. Escalate refunds to the designated payment owner; cancellation and Paystack refund are not interchangeable unless the workflow explicitly performs both.
+
+Never mark a payment successful manually to work around a webhook problem. Capture the Paystack reference, time, event/course, and visible error, then escalate without copying card or private payment data.
+
+## Content, website, and media
+
+- Content manages posts, resources, and media.
+- Website manages public courses, events, stories, and Site Settings.
+- Publish only verified testimonials, permissions, metrics, fees, and partner claims.
+- Upload images, PDFs, certificates, and learning files through Media. Production uses R2 when configured.
+- Keep LMS videos on unlisted YouTube rather than uploading them to Media.
+
+## System
+
+Super-admins manage staff users. Authorized staff can review audit and privacy-minimized AI activity. Never delete or rewrite audit records to hide an operational mistake.
 
 ## AI operations and incidents
 
-Tutor, Content Studio, and Career Coach are independently feature-flagged. AI can be wrong. Do not paste secrets, private notes, protected characteristics, or unnecessary personal data into an AI field. Review every draft or recommendation before acting.
+Tutor, Content Studio, and Career Coach have separate flags. AI can be wrong. Never paste secrets, private notes, protected characteristics, payment data, or unnecessary personal data into an AI field.
 
-If output appears unsafe, unsupported, or cross-course:
+For unsafe, unsupported, cross-course, or privacy-sensitive behavior:
 
-1. Stop using the affected surface and capture the feature, time, course/opportunity identifier, and visible error—do not copy private prompt content into a ticket.
-2. Disable that feature flag for the environment.
-3. Preserve privacy-minimized usage and feedback records for investigation.
-4. Escalate to the product/engineering owner; do not work around policy blocks.
-5. Resume only after the retrieval, permission, or provider issue is understood and verified.
+1. Stop using the affected surface.
+2. Record feature, time, course/opportunity identifier, and visible error without copying private prompt content.
+3. Disable only the affected feature flag.
+4. Preserve privacy-minimized usage and feedback records.
+5. Escalate to the engineering/product owner.
+6. Resume only after the cause and rollback path are verified.
 
-Members can reset Career Coach state or delete retained Coach feedback/usage from the Career Coach privacy controls. Usage records expire according to `AI_USAGE_RETENTION_DAYS`.
+## Related runbooks
+
+- [Admin architecture](admin-architecture.md)
+- [Authentication](authentication.md)
+- [Database migrations](database-migrations.md)
+- [Deployment](deployment.md)
+- [Production checklist](production-checklist.md)
+- [AI architecture](ai-architecture.md)
