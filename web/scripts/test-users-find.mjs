@@ -1,11 +1,10 @@
-import { config as loadDotenv } from "dotenv";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { build } from "esbuild";
+import { loadEnv } from "./load-env.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-loadDotenv({ path: path.join(root, ".env") });
-loadDotenv({ path: path.join(root, ".env.local"), override: true });
+loadEnv(root);
 
 process.env.NODE_ENV = "development";
 

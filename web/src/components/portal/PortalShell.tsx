@@ -8,13 +8,14 @@ import {
   PortalSidebar,
   findActiveNavTitle,
 } from "./PortalSidebar";
-import { buildStaffNavGroups, memberNavGroups, type StaffLinkInput } from "./nav-config";
+import { buildMemberNavGroups, buildStaffNavGroups, type StaffLinkInput } from "./nav-config";
 import type { PortalIdentity, PortalVariant } from "./types";
 
 export function PortalShell({
   variant,
   identity,
   staffLinks,
+  careerCoachEnabled = false,
   children,
   maxWidth = "6xl",
 }: {
@@ -22,6 +23,7 @@ export function PortalShell({
   identity: PortalIdentity;
   /** Serializable staff nav links; icons are mapped on the client. */
   staffLinks?: StaffLinkInput[];
+  careerCoachEnabled?: boolean;
   children: React.ReactNode;
   maxWidth?: "6xl" | "7xl";
 }) {
@@ -32,8 +34,11 @@ export function PortalShell({
   const [loggingOut, setLoggingOut] = useState(false);
 
   const groups = useMemo(
-    () => (variant === "staff" ? buildStaffNavGroups(staffLinks ?? []) : memberNavGroups),
-    [variant, staffLinks],
+    () =>
+      variant === "staff"
+        ? buildStaffNavGroups(staffLinks ?? [])
+        : buildMemberNavGroups({ careerCoachEnabled }),
+    [variant, staffLinks, careerCoachEnabled],
   );
 
   const homeHref = variant === "member" ? "/app" : "/staff";

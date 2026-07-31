@@ -92,7 +92,16 @@ try {
     if (isWindows) spawnSync("taskkill", ["/pid", String(server.pid), "/t", "/f"], { stdio: "ignore" });
     else server.kill("SIGTERM");
   }
-  if (!process.env.PLAYWRIGHT_DATABASE_URL) for (const suffix of ["", "-shm", "-wal"]) rmSync(`${localDatabasePath}${suffix}`, { force: true });
+  // Housekeeping only, and it runs in `finally`: Windows can still hold the
+  // SQLite handle (EPERM, which `force` does not suppress), and throwing here
+  // would discard the Playwright exit code we are about to report.
+  if (!process.env.PLAYWRIGHT_DATABASE_URL) {
+    for (const suffix of ["", "-shm", "-wal"]) {
+      try {
+        rmSync(`${localDatabasePath}${suffix}`, { force: true });
+      } catch {}
+    }
+  }
 }
 
 process.exit(exitCode);

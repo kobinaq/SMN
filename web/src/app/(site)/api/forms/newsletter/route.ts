@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { subscribeToNewsletter } from "@/lib/newsletter";
 
 const schema = z.object({
   email: z.string().email(),
@@ -16,36 +17,8 @@ export async function POST(req: Request) {
     const { email, website } = parsed.data;
     if (website) return NextResponse.json({ ok: true });
 
-    const apiKey = process.env.MAILCHIMP_API_KEY;
-    const audience = process.env.MAILCHIMP_AUDIENCE_ID;
-    const prefix = process.env.MAILCHIMP_SERVER_PREFIX;
-
-    if (apiKey && audience && prefix) {
-      const url = `https://${prefix}.api.mailchimp.com/3.0/lists/${audience}/members`;
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          Authorization: `apikey ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email_address: email,
-          status: "pending",
-          tags: ["website-newsletter"],
-        }),
-      });
-
-      if (!res.ok) {
-        const err = await res.text();
-        // Treat "already subscribed" as success-ish
-        if (!err.includes("Member Exists")) {
-          console.error(err);
-          return NextResponse.json({ error: "Subscription failed." }, { status: 502 });
-        }
-      }
-    } else {
-      console.log("[newsletter]", email);
-    }
+    const result = await subscribeToNewsletter(email);
+    if (!result.ok) return NextResponse.json({ error: result.error }, { status: 502 });
 
     return NextResponse.json({ ok: true });
   } catch (error) {

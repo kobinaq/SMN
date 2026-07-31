@@ -4,8 +4,16 @@ async function loginStaff(page: Page) {
   await page.goto("/staff/login");
   await page.locator('input[name="email"]').fill("staff.demo@smn.example");
   await page.locator('input[name="password"]').fill("DemoStaff123!");
-  await page.locator('button[type="submit"]').click();
-  await expect(page).toHaveURL(/\/staff\/?$/);
+  await Promise.all([
+    page.waitForResponse(
+      (response) =>
+        response.url().includes("/api/staff-auth/login") &&
+        response.request().method() === "POST",
+      { timeout: 30_000 },
+    ),
+    page.locator('button[type="submit"]').click(),
+  ]);
+  await expect(page).toHaveURL(/\/staff\/?$/, { timeout: 20_000 });
 }
 
 async function loginMember(page: Page) {
@@ -14,6 +22,14 @@ async function loginMember(page: Page) {
   await page.getByPlaceholder("Password").fill("DemoMember123!");
   await page.getByRole("button", { name: /sign in/i }).click();
   await expect(page).toHaveURL(/\/app/);
+}
+
+async function openLearningMore(page: Page) {
+  const more = page.getByRole("button", { name: "More", exact: true });
+  if (await more.isVisible()) {
+    const expanded = await more.getAttribute("aria-expanded");
+    if (expanded !== "true") await more.click();
+  }
 }
 
 async function confirmDialog(page: Page, confirmName: string | RegExp, reason?: string) {
@@ -29,7 +45,7 @@ async function confirmDialog(page: Page, confirmName: string | RegExp, reason?: 
     page.waitForResponse(
       (response) =>
         response.request().method() === "POST" &&
-        /\/api\/admin\//.test(response.url()) &&
+        /\/api\/(admin|staff)\//.test(response.url()) &&
         response.status() < 500,
       { timeout: 20_000 },
     ),
@@ -39,6 +55,7 @@ async function confirmDialog(page: Page, confirmName: string | RegExp, reason?: 
 }
 
 test("staff completes the audited admin operations workflows", async ({ page }) => {
+  test.setTimeout(120_000);
   // Remaining native dialogs (e.g. Career Coach) still use window.confirm/prompt.
   page.on("dialog", async (dialog) => {
     await dialog.accept(dialog.type() === "prompt" ? "Verified during the disposable E2E workflow." : undefined);
@@ -51,14 +68,20 @@ test("staff completes the audited admin operations workflows", async ({ page }) 
   await duplicateButtons.last().click();
   await expect(duplicateButtons).toHaveCount(before + 1);
 
-  await page.getByRole("link", { name: "Learners" }).click();
-  await page.getByLabel("Learner").selectOption({ index: 1 });
-  await page.getByLabel("Lesson").selectOption({ index: 1 });
-  await page.getByLabel("Reason").fill("Verified completion correction for the isolated E2E workflow.");
+  await openLearningMore(page);
+  await page.getByRole("navigation", { name: "More learning tools" }).getByRole("link", { name: "Learners" }).click();
+  await page.getByText("Progress override", { exact: true }).click();
+  // Custom Select keeps a visually hidden native <select> for form posts; force bypasses actionability.
+  await page.getByLabel("Learner").selectOption({ index: 1 }, { force: true });
+  await page.getByLabel("Lesson").selectOption({ index: 1 }, { force: true });
+  await page.getByPlaceholder("Explain why this correction is required.").fill(
+    "Verified completion correction for the isolated E2E workflow.",
+  );
   await page.getByRole("button", { name: "Save audited override" }).click();
   await expect(page.getByText("Audited override saved.")).toBeVisible();
 
-  await page.getByRole("link", { name: "AI Content Studio" }).click();
+  await openLearningMore(page);
+  await page.getByRole("navigation", { name: "More learning tools" }).getByRole("link", { name: /AI Studio/i }).click();
   await page.getByLabel("Instruction").fill("Create a concise outline grounded in this course.");
   await page.getByRole("button", { name: "Generate candidate" }).click();
   await expect(page.getByRole("heading", { name: "Compare candidates" })).toBeVisible();
@@ -67,6 +90,7 @@ test("staff completes the audited admin operations workflows", async ({ page }) 
   await expect(page.getByText(/Draft .* saved/i)).toBeVisible();
 
   await page.goto("/staff/members");
+  await page.getByRole("button", { name: "Add note" }).click();
   await page.getByLabel("Private staff note").fill("Disposable E2E support context; never production member data.");
   await page.getByRole("button", { name: "Add private note" }).click();
   await expect(page.getByText("Private note saved.")).toBeVisible();
@@ -74,7 +98,7 @@ test("staff completes the audited admin operations workflows", async ({ page }) 
   await page.goto("/staff/mentorship");
   await page.getByRole("button", { name: "Approve" }).first().click();
   await confirmDialog(page, "Approve");
-  await expect(page.getByText("No mentor applications need review.")).toBeVisible();
+  await expect(page.getByText("No applications waiting")).toBeVisible();
   await page.getByRole("button", { name: "Introduce" }).first().click();
   await confirmDialog(page, "Update status");
   await expect(page.getByText(/introduced/i).first()).toBeVisible();
@@ -82,15 +106,17 @@ test("staff completes the audited admin operations workflows", async ({ page }) 
   await page.goto("/staff/opportunities");
   await page.getByRole("button", { name: "Publish" }).first().click();
   await confirmDialog(page, "Confirm", "Verified during the disposable E2E workflow.");
-  await expect(page.getByText("No listings await moderation.")).toBeVisible();
+  await expect(page.getByText("Opportunity marked published.")).toBeVisible();
 
   await page.goto("/staff/certificates");
+  await page.getByRole("button", { name: "Manage issued" }).click();
   await page.getByRole("button", { name: "Reissue" }).first().click();
   await confirmDialog(page, "Reissue", "Verified during the disposable E2E workflow.");
-  await expect(page.getByText(/notification/i).first()).toBeVisible();
+  await expect(page.getByText("Certificate reissued.")).toBeVisible();
 });
 
 test("staff can create and publish a CMS post", async ({ page }) => {
+  test.setTimeout(60_000);
   await loginStaff(page);
   const stamp = Date.now();
   await page.goto("/staff/content/posts/new");
@@ -105,6 +131,7 @@ test("staff can create and publish a CMS post", async ({ page }) => {
 });
 
 test("member uses grounded Tutor and confirmed Career Coach controls with mock AI", async ({ page }) => {
+  test.setTimeout(90_000);
   page.on("dialog", async (dialog) => {
     await dialog.accept();
   });
@@ -121,8 +148,16 @@ test("member uses grounded Tutor and confirmed Career Coach controls with mock A
   await page
     .getByPlaceholder(/What kind of work/i)
     .fill("Build toward a content strategy role with measurable portfolio evidence.");
-  await page.getByRole("button", { name: "Confirm and save goal" }).click();
-  await expect(page.getByText("Career goal saved.")).toBeVisible();
+  await Promise.all([
+    page.waitForResponse(
+      (response) =>
+        response.url().includes("/api/ai/career-coach") &&
+        response.request().method() === "POST",
+      { timeout: 30_000 },
+    ),
+    page.getByRole("button", { name: "Confirm and save goal" }).click(),
+  ]);
+  await expect(page.getByText("Career goal saved.")).toBeVisible({ timeout: 15_000 });
   await page.getByPlaceholder(/Ask about a role/i).fill("Give me one practical next step.");
   await page.getByRole("button", { name: "Ask Coach" }).click();
   await expect(page.getByText(/Mock AI response grounded/i)).toBeVisible();

@@ -14,6 +14,13 @@ function pickString(value: unknown, fallback: string): string {
   return typeof value === "string" && value.trim() ? value.trim() : fallback;
 }
 
+/** Upload relations arrive populated as a doc, or as a bare id when depth is 0. */
+function uploadUrl(value: unknown): string | undefined {
+  if (!value || typeof value !== "object") return undefined;
+  const url = (value as { url?: unknown }).url;
+  return typeof url === "string" && url.trim() ? url : undefined;
+}
+
 function resolvePublicPrice(raw: string | null | undefined, pendingLabel: string, confirmed?: boolean) {
   const value = (raw || "").trim();
   if (confirmed === false) return pendingLabel;
@@ -176,6 +183,7 @@ export async function getResources() {
       title: doc.title as string,
       type: doc.type as string,
       description: doc.description as string,
+      fileUrl: uploadUrl(doc.file),
     }));
   }, fallbackResources);
 }

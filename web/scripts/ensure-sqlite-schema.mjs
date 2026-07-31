@@ -1,6 +1,6 @@
-import { config as loadDotenv } from "dotenv";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { loadEnv } from "./load-env.mjs";
 
 /**
  * Ensures a disposable SQLite file has a Payload schema.
@@ -8,8 +8,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
  * Postgres environments no-op.
  */
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-loadDotenv({ path: path.join(root, ".env") });
-loadDotenv({ path: path.join(root, ".env.local"), override: true });
+loadEnv(root);
 
 const databaseUrl = process.env.DATABASE_URL || "";
 if (/^postgres(ql)?:\/\//.test(databaseUrl)) {

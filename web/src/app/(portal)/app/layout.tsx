@@ -14,6 +14,7 @@ export default async function PortalLayout({ children }: { children: React.React
         subtitle: handle ? `@${handle}` : undefined,
         avatarUrl: avatar?.url || undefined,
       }}
+      careerCoachEnabled={process.env.AI_CAREER_COACH_ENABLED === "true"}
       maxWidth="6xl"
     >
       {children}

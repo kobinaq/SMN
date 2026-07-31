@@ -34,6 +34,7 @@ export function StaffLoginForm({ bootstrap }: { bootstrap: boolean }) {
       router.refresh();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Unable to sign in.");
+    } finally {
       setBusy(false);
     }
   }

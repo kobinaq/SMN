@@ -244,6 +244,8 @@ export type ResourceItem = {
   free: boolean;
   highlights: string[];
   body: string[];
+  /** Uploaded file URL when staff attached one in the CMS. */
+  fileUrl?: string;
 };
 
 export const resources: ResourceItem[] = [

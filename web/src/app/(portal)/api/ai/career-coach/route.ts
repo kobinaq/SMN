@@ -20,7 +20,16 @@ export async function POST(request: Request) {
   if (!user || user.collection !== "members") return Response.json({ error: "Member sign-in required." }, { status: 401 });
   const parsed = schema.safeParse(await request.json().catch(() => null)); if (!parsed.success) return Response.json({ error: "Invalid Career Coach request." }, { status: 400 });
   const event = { payload, actor: { collection: "members" as const, id: user.id }, feature: "career-coach" as const, inputChars: 0 };
-  if (parsed.data.action === "save-goal") { await saveCareerState(payload, user.id, "goalSummary", parsed.data.goal, parsed.data.confirmed); await recordAIEvent({ ...event, operation: "save-goal", inputChars: parsed.data.goal.length }, "success"); return Response.json({ ok: true }); }
+  if (parsed.data.action === "save-goal") {
+    try {
+      await saveCareerState(payload, user.id, "goalSummary", parsed.data.goal, parsed.data.confirmed);
+      await recordAIEvent({ ...event, operation: "save-goal", inputChars: parsed.data.goal.length }, "success");
+      return Response.json({ ok: true });
+    } catch (error) {
+      console.error("[career-coach:save-goal]", error);
+      return Response.json({ error: "Could not save your goal." }, { status: 500 });
+    }
+  }
   if (parsed.data.action === "save-plan") { await saveCareerState(payload, user.id, "confirmedPlan", parsed.data.plan, parsed.data.confirmed); await recordAIEvent({ ...event, operation: "save-plan" }, "success"); return Response.json({ ok: true }); }
   if (parsed.data.action === "reset" || parsed.data.action === "delete-data") { await resetCareerData(payload, user.id, parsed.data.action === "delete-data"); if (parsed.data.action === "reset") await recordAIEvent({ ...event, operation: "reset" }, "success"); return Response.json({ ok: true }); }
   try {

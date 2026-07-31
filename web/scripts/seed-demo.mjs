@@ -312,11 +312,16 @@ await upsert(
   {
     title: "Demo Portfolio Clinic",
     slug: "demo-portfolio-clinic",
+    status: "published",
     type: "Workshop",
+    format: "online",
+    pricing: "free",
+    startsAt: future,
+    onlineUrl: "https://example.com/meet/demo-portfolio-clinic",
+    host: "SMN",
     date: future,
     time: "6:00 PM GMT",
     summary: "A fictional event for testing public event pages.",
-    registrationUrl: "https://example.com/events/demo-portfolio-clinic",
   },
 );
 

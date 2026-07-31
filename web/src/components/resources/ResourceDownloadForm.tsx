@@ -13,31 +13,39 @@ export function ResourceDownloadForm({
 }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const [downloadUrl, setDownloadUrl] = useState("");
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("loading");
     setMessage("");
+    setDownloadUrl("");
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
 
     try {
-      // Subscribe to newsletter + tag as resource download (Mailchimp when configured)
-      const res = await fetch("/api/forms/newsletter", {
+      const res = await fetch("/api/forms/resource-download", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: data.email,
           website: data.website,
           resource: resourceSlug,
-          resourceTitle,
         }),
       });
-      const json = (await res.json()) as { ok?: boolean; error?: string };
+      const json = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        delivered?: boolean;
+        downloadUrl?: string;
+      };
+      if (json.downloadUrl) setDownloadUrl(json.downloadUrl);
       if (!res.ok) throw new Error(json.error || "Something went wrong");
       setStatus("success");
       setMessage(
-        "You're in. We'll email the resource shortly. Check your inbox (and spam) for SMN.",
+        json.delivered
+          ? `${resourceTitle} is on its way to your inbox. Check spam if you don't see it.`
+          : `${resourceTitle} is ready — use the link below.`,
       );
       form.reset();
     } catch (err) {
@@ -71,14 +79,24 @@ export function ResourceDownloadForm({
         </Button>
       </div>
       {message ? (
-        <p
-          className={cn(
-            "text-sm leading-relaxed",
-            status === "success" ? "text-mint" : "text-red-300",
-          )}
-        >
-          {message}
-        </p>
+        <div className="space-y-2">
+          <p
+            className={cn(
+              "text-sm leading-relaxed",
+              status === "success" ? "text-mint" : "text-red-300",
+            )}
+          >
+            {message}
+          </p>
+          {downloadUrl ? (
+            <a
+              href={downloadUrl}
+              className="inline-flex min-h-10 items-center text-sm font-medium text-baby-blue underline underline-offset-4 transition hover:text-white"
+            >
+              Open {resourceTitle}
+            </a>
+          ) : null}
+        </div>
       ) : (
         <p className="text-xs text-white/35">
           Free for the community. We may also send occasional strategy notes. Unsubscribe anytime.

@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import { useCallback, useEffect, useId, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { ImagePlus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { staffEase } from "@/components/staff/motion";
@@ -34,7 +34,14 @@ export function StaffMediaField({
   const [query, setQuery] = useState("");
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
-  const [preview, setPreview] = useState<MediaItem | null>(null);
+  const [fetchedPreview, setFetchedPreview] = useState<MediaItem | null>(null);
+
+  const preview = useMemo(() => {
+    if (!value) return null;
+    const match = items.find((item) => String(item.id) === String(value));
+    if (match) return match;
+    return fetchedPreview && String(fetchedPreview.id) === String(value) ? fetchedPreview : null;
+  }, [value, items, fetchedPreview]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -51,16 +58,9 @@ export function StaffMediaField({
     }
   }, []);
 
+  // Only a value with no matching loaded item needs its own lookup.
   useEffect(() => {
-    if (!value) {
-      setPreview(null);
-      return;
-    }
-    const match = items.find((item) => String(item.id) === String(value));
-    if (match) {
-      setPreview(match);
-      return;
-    }
+    if (!value || preview) return;
     let cancelled = false;
     (async () => {
       try {
@@ -68,7 +68,7 @@ export function StaffMediaField({
           credentials: "include",
         });
         const result = await response.json();
-        if (!cancelled && response.ok && result.doc) setPreview(result.doc);
+        if (!cancelled && response.ok && result.doc) setFetchedPreview(result.doc);
       } catch {
         /* ignore preview miss */
       }
@@ -76,11 +76,12 @@ export function StaffMediaField({
     return () => {
       cancelled = true;
     };
-  }, [value, items]);
+  }, [value, preview]);
 
-  useEffect(() => {
-    if (open) void load();
-  }, [open, load]);
+  function openPicker() {
+    setOpen(true);
+    void load();
+  }
 
   async function upload(file: File) {
     setUploading(true);
@@ -127,7 +128,7 @@ export function StaffMediaField({
           <button
             type="button"
             className="rounded-full border border-white/15 px-3 py-1.5 text-xs text-white/70 hover:border-baby-blue/40"
-            onClick={() => setOpen(true)}
+            onClick={openPicker}
           >
             Change
           </button>
@@ -143,7 +144,7 @@ export function StaffMediaField({
       ) : (
         <button
           type="button"
-          onClick={() => setOpen(true)}
+          onClick={openPicker}
           className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-white/15 bg-white/[.03] px-4 py-6 text-sm text-white/55 transition hover:border-baby-blue/35 hover:text-white"
           style={{ transitionTimingFunction: staffEase }}
         >
@@ -205,7 +206,7 @@ export function StaffMediaField({
                         type="button"
                         onClick={() => {
                           onChange(String(item.id));
-                          setPreview(item);
+                          setFetchedPreview(item);
                           setOpen(false);
                         }}
                         className={cn(

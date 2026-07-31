@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { Check, ChevronsUpDown, Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { staffEase } from "@/components/staff/motion";
@@ -29,10 +29,33 @@ function readRecent(storageKey: string): string[] {
   }
 }
 
+const EMPTY_RECENT: string[] = [];
+const recentListeners = new Set<() => void>();
+const recentCache = new Map<string, string[]>();
+
+function subscribeRecent(listener: () => void) {
+  recentListeners.add(listener);
+  return () => {
+    recentListeners.delete(listener);
+  };
+}
+
+/** Cached because useSyncExternalStore needs a stable snapshot between notifications. */
+function getRecentSnapshot(storageKey: string): string[] {
+  let cached = recentCache.get(storageKey);
+  if (!cached) {
+    cached = readRecent(storageKey);
+    recentCache.set(storageKey, cached);
+  }
+  return cached;
+}
+
 function writeRecent(storageKey: string, id: string) {
   if (typeof window === "undefined") return;
   const next = [id, ...readRecent(storageKey).filter((item) => item !== id)].slice(0, 6);
   sessionStorage.setItem(recentKey(storageKey), JSON.stringify(next));
+  recentCache.set(storageKey, next);
+  for (const listener of recentListeners) listener();
 }
 
 export function StaffEntitySwitcher({
@@ -61,7 +84,11 @@ export function StaffEntitySwitcher({
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [highlight, setHighlight] = useState(0);
-  const [recentIds, setRecentIds] = useState<string[]>([]);
+  const recentIds = useSyncExternalStore(
+    subscribeRecent,
+    () => getRecentSnapshot(storageKey),
+    () => EMPTY_RECENT,
+  );
 
   const selected = useMemo(
     () => items.find((item) => String(item.id) === String(value)) ?? null,
@@ -88,13 +115,13 @@ export function StaffEntitySwitcher({
     return base;
   }, [items, query, recentIds]);
 
-  useEffect(() => {
-    setRecentIds(readRecent(storageKey));
-  }, [storageKey]);
-
-  useEffect(() => {
+  // Re-highlight the first match whenever the visible list is re-scoped.
+  const highlightResetToken = `${open}:${query}`;
+  const [lastHighlightResetToken, setLastHighlightResetToken] = useState(highlightResetToken);
+  if (highlightResetToken !== lastHighlightResetToken) {
+    setLastHighlightResetToken(highlightResetToken);
     setHighlight(0);
-  }, [query, open]);
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -115,7 +142,6 @@ export function StaffEntitySwitcher({
   const choose = useCallback(
     (item: StaffEntityOption) => {
       writeRecent(storageKey, String(item.id));
-      setRecentIds(readRecent(storageKey));
       setOpen(false);
       setQuery("");
       onSelect?.(item);

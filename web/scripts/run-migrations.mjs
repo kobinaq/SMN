@@ -1,10 +1,9 @@
-import { config as loadDotenv } from "dotenv";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { loadEnv } from "./load-env.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-loadDotenv({ path: path.join(root, ".env") });
-loadDotenv({ path: path.join(root, ".env.local"), override: true });
+loadEnv(root);
 if (!/^postgres(ql)?:\/\//.test(process.env.DATABASE_URL || "")) throw new Error("DATABASE_URL must point to PostgreSQL.");
 process.env.PAYLOAD_MIGRATING = "true";
 process.env.PAYLOAD_DB_PUSH = "false";

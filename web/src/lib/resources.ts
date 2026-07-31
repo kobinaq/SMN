@@ -21,6 +21,7 @@ export async function getResourceLibrary(): Promise<ResourceItem[]> {
       free: seed?.free ?? true,
       highlights: seed?.highlights ?? [],
       body: seed?.body ?? [r.description],
+      fileUrl: ("fileUrl" in r ? r.fileUrl : undefined) ?? seed?.fileUrl,
     } satisfies ResourceItem;
   });
 

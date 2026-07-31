@@ -19,29 +19,40 @@ import {
 } from "lucide-react";
 import type { PortalNavGroup, PortalNavItem } from "./types";
 
-export const memberNavGroups: PortalNavGroup[] = [
-  {
-    items: [
-      { href: "/app", label: "Home", icon: LayoutDashboard },
-      { href: "/app/learning", label: "Learning", icon: BookOpen },
-      { href: "/app/events", label: "Events", icon: Calendar },
-      { href: "/app/mentors", label: "Mentors", icon: Handshake },
-      { href: "/app/opportunities", label: "Opportunities", icon: Briefcase },
-      { href: "/app/career-coach", label: "Career Coach", icon: Sparkles },
-    ],
-  },
-  {
-    heading: "Grow",
-    items: [
-      { href: "/app/portfolio", label: "Portfolio", icon: FolderOpen },
-      { href: "/app/certificates", label: "Certificates", icon: Award },
-    ],
-  },
-  {
-    heading: "Account",
-    items: [{ href: "/app/profile", label: "Profile", icon: UserRound }],
-  },
-];
+export type MemberNavOptions = {
+  /** Career Coach is flag-gated; linking to it while disabled is a dead end. */
+  careerCoachEnabled?: boolean;
+};
+
+export function buildMemberNavGroups({
+  careerCoachEnabled = false,
+}: MemberNavOptions = {}): PortalNavGroup[] {
+  return [
+    {
+      items: [
+        { href: "/app", label: "Home", icon: LayoutDashboard },
+        { href: "/app/learning", label: "Learning", icon: BookOpen },
+        { href: "/app/events", label: "Events", icon: Calendar },
+        { href: "/app/mentors", label: "Mentors", icon: Handshake },
+        { href: "/app/opportunities", label: "Opportunities", icon: Briefcase },
+        ...(careerCoachEnabled
+          ? [{ href: "/app/career-coach", label: "Career Coach", icon: Sparkles }]
+          : []),
+      ],
+    },
+    {
+      heading: "Grow",
+      items: [
+        { href: "/app/portfolio", label: "Portfolio", icon: FolderOpen },
+        { href: "/app/certificates", label: "Certificates", icon: Award },
+      ],
+    },
+    {
+      heading: "Account",
+      items: [{ href: "/app/profile", label: "Profile", icon: UserRound }],
+    },
+  ];
+}
 
 const staffIconByHref: Record<string, PortalNavItem["icon"]> = {
   "/staff": LayoutDashboard,

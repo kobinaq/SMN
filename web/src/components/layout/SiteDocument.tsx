@@ -66,10 +66,8 @@ export const siteViewport: Viewport = {
 export function SiteDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${leagueSpartan.variable} h-full`}>
-      <head>
-        <AhrefsAnalytics />
-      </head>
       <body className="min-h-full bg-near-black font-sans text-white antialiased">{children}</body>
+      <AhrefsAnalytics />
     </html>
   );
 }

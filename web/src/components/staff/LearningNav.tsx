@@ -1,9 +1,28 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { cn } from "@/lib/utils";
 import { StaffEntitySwitcher } from "@/components/staff/StaffEntitySwitcher";
+
+const CURRICULUM_CUE_KEY = "smn-staff-curriculum-cue";
+
+/**
+ * Resolved once per page load. Marking the cue as seen must not retract it while
+ * it is still on screen, so later reads reuse the first answer.
+ */
+let curriculumCueUnseen: boolean | null = null;
+
+function subscribeCurriculumCue() {
+  return () => {};
+}
+
+function readCurriculumCueUnseen() {
+  if (curriculumCueUnseen === null) {
+    curriculumCueUnseen = localStorage.getItem(CURRICULUM_CUE_KEY) === null;
+  }
+  return curriculumCueUnseen;
+}
 
 const PRIMARY_TABS = [
   ["overview", "Overview"],
@@ -55,18 +74,20 @@ export function LearningTabNav({
   const [moreOpen, setMoreOpen] = useState(
     MORE_TABS.some(([key]) => key === activeTab) || (studioEnabled && activeTab === "ai-content-studio"),
   );
-  const [cue, setCue] = useState(false);
+  const [cueExpired, setCueExpired] = useState(false);
+  const cueUnseen = useSyncExternalStore(
+    subscribeCurriculumCue,
+    readCurriculumCueUnseen,
+    () => false,
+  );
+  const cue = Boolean(highlightCurriculum) && cueUnseen && !cueExpired;
 
   useEffect(() => {
-    if (!highlightCurriculum) return;
-    const key = "smn-staff-curriculum-cue";
-    if (typeof window === "undefined") return;
-    if (localStorage.getItem(key)) return;
-    setCue(true);
-    localStorage.setItem(key, "1");
-    const timer = window.setTimeout(() => setCue(false), 4000);
+    if (!cue) return;
+    localStorage.setItem(CURRICULUM_CUE_KEY, "1");
+    const timer = window.setTimeout(() => setCueExpired(true), 4000);
     return () => window.clearTimeout(timer);
-  }, [highlightCurriculum]);
+  }, [cue]);
 
   const moreTabs = MORE_TABS.filter(([key]) => key !== "ai-content-studio" || studioEnabled);
 
