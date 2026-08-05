@@ -1,15 +1,34 @@
-import "dotenv/config";
-import { getPayload } from "payload";
-import config from "./.payload.config.bundle.mjs";
+import path from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { loadEnv } from "./load-env.mjs";
 
-if (process.env.NODE_ENV === "production" && process.env.ALLOW_PRODUCTION_SEED !== "true") {
-  throw new Error("Refusing to seed production without ALLOW_PRODUCTION_SEED=true.");
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+loadEnv(root);
+
+const databaseUrl = process.env.DATABASE_URL || "";
+const looksLikeRemoteDb =
+  /postgres(ql)?:\/\//i.test(databaseUrl) && !/@(localhost|127\.0\.0\.1)([:/]|$)/i.test(databaseUrl);
+
+if (
+  (process.env.NODE_ENV === "production" || looksLikeRemoteDb) &&
+  process.env.ALLOW_PRODUCTION_SEED !== "true"
+) {
+  throw new Error(
+    "Refusing to seed a remote/production database without ALLOW_PRODUCTION_SEED=true.",
+  );
 }
 
 // Local/E2E SQLite needs an explicit schema push now that connect no longer auto-pushes.
-if (process.env.PAYLOAD_DB_PUSH !== "false") {
+// Never auto-push against remote DBs from seed.
+if (looksLikeRemoteDb) {
+  process.env.PAYLOAD_DB_PUSH = "false";
+} else if (process.env.PAYLOAD_DB_PUSH !== "false") {
   process.env.PAYLOAD_DB_PUSH = "true";
 }
+
+const bundleUrl = pathToFileURL(path.join(root, "scripts", ".payload.config.bundle.mjs")).href;
+const { default: config } = await import(bundleUrl);
+const { getPayload } = await import("payload");
 
 const payload = await getPayload({ config });
 const now = new Date();
@@ -121,13 +140,13 @@ const opportunity = await upsert(
   },
 );
 
-const enrollment = await upsert(
+await upsert(
   "opportunity-applications",
   { and: [{ member: { equals: ama.id } }, { opportunity: { equals: opportunity.id } }] },
   { member: ama.id, opportunity: opportunity.id, status: "applied", appliedAt: now.toISOString() },
 );
 
-await upsert(
+const enrollment = await upsert(
   "enrollments",
   { and: [{ member: { equals: ama.id } }, { programKey: { equals: "demo-cohort" } }] },
   {
