@@ -182,7 +182,7 @@ export default async function StoriesPage() {
               <div className="btn-row-mobile">
                 <Button href={cta.applyCohort.href}>{cta.applyCohort.shortLabel}</Button>
                 <Button href="/programs" variant="secondary">
-                  Explore programmes
+                  Explore the Academy
                 </Button>
               </div>
             </div>

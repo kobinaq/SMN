@@ -11,13 +11,17 @@ const types = [
   "Partnership",
   "Speaking request",
   "Talent request",
+  "Intern request",
+  "Job posting",
   "Other",
 ] as const;
+
+const employerTypes = new Set(["Talent request", "Partnership", "Intern request", "Job posting"]);
 
 export function ContactForm({ defaultType }: { defaultType?: string }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
-  const isEmployer = defaultType === "Talent request" || defaultType === "Partnership";
+  const isEmployer = Boolean(defaultType && employerTypes.has(defaultType));
 
   useEffect(() => {
     if (isEmployer) trackEvent("employer_enquiry_start", { location: "contact_form" });

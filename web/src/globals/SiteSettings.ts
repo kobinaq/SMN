@@ -49,7 +49,7 @@ export const SiteSettings: GlobalConfig = {
                 { name: "headline", type: "text" },
                 { name: "supportingCopy", type: "textarea" },
                 { name: "primaryCtaLabel", type: "text", defaultValue: "Apply for the next cohort" },
-                { name: "secondaryCtaLabel", type: "text", defaultValue: "Explore programmes" },
+                { name: "secondaryCtaLabel", type: "text", defaultValue: "Explore the Academy" },
                 { name: "secondaryCtaHref", type: "text", defaultValue: "/programs" },
               ],
             },

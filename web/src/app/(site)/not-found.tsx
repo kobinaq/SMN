@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 
 const quickLinks = [
-  { href: "/programs", label: "Programmes" },
+  { href: "/programs", label: "Academy" },
   { href: "/insights", label: "Insights" },
   { href: "/resources", label: "Resources" },
   { href: "/contact", label: "Contact" },
@@ -22,7 +22,7 @@ export default function SiteNotFound() {
       <div className="btn-row-mobile mt-8">
         <Button href="/">Back to home</Button>
         <Button href="/programs" variant="secondary">
-          Explore programmes
+          Explore the Academy
         </Button>
       </div>
       <nav

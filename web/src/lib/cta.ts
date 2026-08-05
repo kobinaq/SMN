@@ -10,7 +10,7 @@ export const cta = {
     href: "/apply",
   },
   explorePrograms: {
-    label: "Explore programmes",
+    label: "Explore the Academy",
     href: "/programs",
   },
   viewCohort: {
@@ -21,6 +21,10 @@ export const cta = {
     label: "View courses",
     href: "/programs/courses",
   },
+  viewSimulations: {
+    label: "Explore simulations",
+    href: "/simulations",
+  },
   /** On-platform Paystack purchase */
   buyCourse: {
     label: "Enroll now",
@@ -29,17 +33,37 @@ export const cta = {
     label: "Member sign in",
     href: "/login",
   },
+  memberSignUp: {
+    label: "Create member account",
+    href: "/signup",
+  },
   hireTalent: {
     label: "Hire SMN talent",
     href: "/employers",
   },
+  requestIntern: {
+    label: "Request an intern",
+    href: "/employers/request-intern",
+  },
+  postJob: {
+    label: "Post a job",
+    href: "/employers/post-a-job",
+  },
   shareOpportunity: {
     label: "Share an opportunity",
-    href: "/contact",
+    href: "/employers/post-a-job",
   },
   partner: {
     label: "Partner with SMN",
     href: "/employers",
+  },
+  browseJobs: {
+    label: "Browse job opportunities",
+    href: "/careers/jobs",
+  },
+  browseInternships: {
+    label: "Browse internships",
+    href: "/careers/internships",
   },
   contact: {
     label: "Contact SMN",

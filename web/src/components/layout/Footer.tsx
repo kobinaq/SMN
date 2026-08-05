@@ -4,30 +4,32 @@ import type { SiteConfig } from "@/lib/site";
 
 const footerLinks = [
   {
-    title: "Programmes",
+    title: "Academy",
     links: [
-      { label: "All programmes", href: "/programs" },
-      { label: "Flagship cohort", href: "/programs/cohort" },
-      { label: "Self-paced courses", href: "/programs/courses" },
+      { label: "Training Programs", href: "/programs" },
+      { label: "Self-Paced Courses", href: "/programs/courses" },
+      { label: "Simulations", href: "/simulations" },
       { label: "Apply", href: "/apply" },
     ],
   },
   {
-    title: "Learning & network",
+    title: "Careers & network",
     links: [
-      { label: "Resources", href: "/resources" },
+      { label: "Job opportunities", href: "/careers/jobs" },
+      { label: "Internships", href: "/careers/internships" },
       { label: "Mentorship", href: "/mentorship" },
       { label: "Community", href: "/community" },
       { label: "Events", href: "/events" },
-      { label: "Member stories", href: "/stories" },
     ],
   },
   {
     title: "Company",
     links: [
       { label: "About", href: "/about" },
-      { label: "Employers", href: "/employers" },
+      { label: "Hire Talent", href: "/employers" },
+      { label: "Post a Job", href: "/employers/post-a-job" },
       { label: "Insights", href: "/insights" },
+      { label: "Resources", href: "/resources" },
       { label: "Contact", href: "/contact" },
       { label: "Member sign in", href: "/login" },
     ],

@@ -1,9 +1,14 @@
-"use client";
-
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 import { resourceTypes } from "@/lib/content";
 import { cn } from "@/lib/utils";
+
+function hrefForType(type: string) {
+  if (type === "All") return "/resources";
+  if (type === "Template") return "/resources/templates";
+  if (type === "Guide") return "/resources/guides";
+  return `/resources?type=${encodeURIComponent(type)}`;
+}
 
 export function ResourceTypeNav({
   counts,
@@ -13,14 +18,20 @@ export function ResourceTypeNav({
   orientation?: "horizontal" | "vertical";
 }) {
   const searchParams = useSearchParams();
-  const active = searchParams.get("type") || "All";
+  const pathname = usePathname();
+  const queryType = searchParams.get("type");
+  const active =
+    pathname === "/resources/templates"
+      ? "Template"
+      : pathname === "/resources/guides"
+        ? "Guide"
+        : queryType || "All";
 
   if (orientation === "vertical") {
     return (
       <nav className="space-y-1">
         {resourceTypes.map((type) => {
-          const href =
-            type === "All" ? "/resources" : `/resources?type=${encodeURIComponent(type)}`;
+          const href = hrefForType(type);
           const isActive = active === type;
           const count = type === "All" ? counts?.All : counts?.[type];
           return (
@@ -56,8 +67,7 @@ export function ResourceTypeNav({
   return (
     <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 scrollbar-none">
       {resourceTypes.map((type) => {
-        const href =
-          type === "All" ? "/resources" : `/resources?type=${encodeURIComponent(type)}`;
+        const href = hrefForType(type);
         const isActive = active === type;
         return (
           <Link

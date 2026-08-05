@@ -404,7 +404,7 @@ export async function HomePage() {
                 Member stories
               </Button>
               <Button href="/programs" variant="ghost">
-                Explore programmes
+                Explore the Academy
               </Button>
             </div>
           </div>

@@ -24,7 +24,7 @@ export const site = {
     headline: "Learn marketing that gets results.",
     supportingCopy: "Strategy, mentorship, and portfolio-ready work, with a network that keeps you growing.",
     primaryCtaLabel: "Apply for the next cohort",
-    secondaryCtaLabel: "Explore programmes",
+    secondaryCtaLabel: "Explore the Academy",
     secondaryCtaHref: "/programs",
   },
   announcementBanner: "",
@@ -85,34 +85,51 @@ export type SiteConfig = {
 
 export const nav = [
   {
-    label: "Programmes",
+    label: "Academy",
     href: "/programs",
     children: [
-      { label: "All programmes", href: "/programs" },
-      { label: "Flagship cohort", href: "/programs/cohort" },
-      { label: "Self-paced courses", href: "/programs/courses" },
+      { label: "Training Programs", href: "/programs" },
+      { label: "Self-Paced Courses", href: "/programs/courses" },
+      { label: "Simulations", href: "/simulations" },
     ],
   },
   {
-    label: "Learning",
-    href: "/resources",
+    label: "Careers",
+    href: "/careers",
     children: [
-      { label: "Free resources", href: "/resources" },
-      { label: "Insights", href: "/insights" },
+      { label: "Job opportunities", href: "/careers/jobs" },
+      { label: "Internships", href: "/careers/internships" },
       { label: "Mentorship", href: "/mentorship" },
+    ],
+  },
+  {
+    label: "Employers",
+    href: "/employers",
+    children: [
+      { label: "Hire Talent", href: "/employers" },
+      { label: "Request an Intern", href: "/employers/request-intern" },
+      { label: "Post a Job", href: "/employers/post-a-job" },
     ],
   },
   {
     label: "Community",
     href: "/community",
     children: [
-      { label: "WhatsApp community", href: "/community" },
-      { label: "Events", href: "/events" },
-      { label: "Member stories", href: "/stories" },
+      { label: "WhatsApp Community", href: "/community" },
+      { label: "Events/Webinar", href: "/events" },
+      { label: "Member Stories", href: "/stories" },
     ],
   },
-  { label: "Employers", href: "/employers" },
-  { label: "About", href: "/about" },
+  {
+    label: "Resources",
+    href: "/resources",
+    children: [
+      { label: "Insights", href: "/insights" },
+      { label: "Free Resources", href: "/resources" },
+      { label: "Templates", href: "/resources/templates" },
+      { label: "Guides", href: "/resources/guides" },
+    ],
+  },
 ] as const;
 
 /** Re-export pending labels for seed content */

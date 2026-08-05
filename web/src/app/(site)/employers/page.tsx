@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { cta } from "@/lib/cta";
 
 export const metadata: Metadata = {
-  title: "Employers & partners",
+  title: "Hire Talent",
   description:
     "Hire SMN talent, review portfolios, verify credentials, share opportunities, and partner with Social Marketers Network.",
   alternates: { canonical: "/employers" },
@@ -25,9 +25,9 @@ export default function EmployersPage() {
   return (
     <>
       <PageHero
-        eyebrow="Employers & partners"
+        eyebrow="Employers · Hire Talent"
         title="Hire SMN talent and shape the next generation of marketers."
-        description="SMN develops marketers with practical skills and proof of work. Use this page to hire, share opportunities, or partner — not to apply to a cohort."
+        description="SMN develops marketers with practical skills and proof of work. Use this page to hire or partner — not to apply to a cohort."
       />
       <section className="border-t border-white/10 bg-ink py-20">
         <div className="container-wide grid gap-12 lg:grid-cols-2">
@@ -44,11 +44,11 @@ export default function EmployersPage() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button href="#employer-form">{cta.hireTalent.label}</Button>
-              <Button href={cta.shareOpportunity.href} variant="secondary">
-                {cta.shareOpportunity.label}
+              <Button href={cta.postJob.href} variant="secondary">
+                {cta.postJob.label}
               </Button>
-              <Button href="/contact" variant="ghost">
-                {cta.partner.label}
+              <Button href={cta.requestIntern.href} variant="ghost">
+                {cta.requestIntern.label}
               </Button>
             </div>
           </div>

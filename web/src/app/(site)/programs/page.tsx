@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Users } from "lucide-react";
+import { ArrowRight, BookOpen, Target, Users } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { getSiteSettings } from "@/lib/cms";
 import { cta } from "@/lib/cta";
 import { img } from "@/lib/images";
 
 export const metadata: Metadata = {
-  title: "Programmes",
-  description: "Flagship cohort programme and self-paced courses from Social Marketers Network.",
+  title: "Academy",
+  description:
+    "Training programs, self-paced courses, and marketing simulations from Social Marketers Network.",
   alternates: { canonical: "/programs" },
 };
 
@@ -34,13 +35,13 @@ export default async function ProgramsPage() {
 
         <div className="container-wide relative z-10 flex min-h-[calc(78svh-5.5rem)] flex-col justify-end pb-14 sm:min-h-[calc(85svh-7rem)] sm:pb-20">
           <p className="font-display text-sm tracking-[0.08em] text-baby-blue sm:text-base">
-            Social Marketers Network
+            SMN Academy
           </p>
           <h1 className="mt-4 max-w-3xl text-balance font-display text-[2.35rem] leading-[1.05] text-white sm:text-5xl md:text-6xl lg:text-7xl">
             Choose how you learn with SMN.
           </h1>
           <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base md:text-lg">
-            Apply to the live flagship cohort, or enroll in a self-paced course. Both put you inside
+            Training programs, self-paced courses, and marketing simulations — practical paths into
             the Network.
           </p>
           <div className="btn-row-mobile mt-8">
@@ -56,10 +57,10 @@ export default async function ProgramsPage() {
         <div className="container-wide">
           <div className="max-w-2xl">
             <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-              Two paths
+              Academy paths
             </p>
             <h2 className="mt-3 font-display text-3xl text-white sm:text-4xl md:text-5xl">
-              Live cohort or self-paced — pick your pace.
+              Train live, learn self-paced, or practice in simulations.
             </h2>
           </div>
 
@@ -79,7 +80,7 @@ export default async function ProgramsPage() {
               <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 md:p-10">
                 <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-near-black/50 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-mint backdrop-blur-sm">
                   <Users className="h-3 w-3" strokeWidth={1.75} />
-                  Flagship · Application
+                  Training Programs · Application
                 </span>
                 <h3 className="mt-4 font-display text-3xl text-white sm:text-4xl md:text-5xl">
                   {site.cohort.name}
@@ -98,39 +99,52 @@ export default async function ProgramsPage() {
               </div>
             </Link>
 
-            <Link
-              href="/programs/courses"
-              className="group relative flex min-h-[22rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface p-6 sm:min-h-[28rem] sm:rounded-[2rem] sm:p-8 lg:min-h-full"
-            >
-              <div className="pointer-events-none absolute -right-8 top-0 h-48 w-48 rounded-full bg-baby-blue/10 blur-3xl transition duration-500 group-hover:bg-baby-blue/20" />
-              <div className="relative">
-                <span className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-baby-blue">
-                  <BookOpen className="h-3.5 w-3.5" strokeWidth={1.75} />
-                  Catalogue · Enroll on SMN
-                </span>
-                <h3 className="mt-5 font-display text-3xl text-white sm:text-4xl">Self-paced courses</h3>
-                <p className="mt-4 text-sm leading-relaxed text-white/65 sm:text-base">
-                  Strategy, AI, and social systems on your schedule. Purchase unlocks LMS or Classroom
-                  access in the member portal.
-                </p>
-              </div>
-              <div className="relative mt-10">
-                <div className="relative mb-6 aspect-[16/10] overflow-hidden rounded-2xl border border-white/10">
-                  <Image
-                    src={img.courseGrowth}
-                    alt=""
-                    fill
-                    className="object-cover transition duration-700 group-hover:scale-[1.03]"
-                    sizes="(max-width: 1024px) 100vw, 35vw"
-                  />
-                  <div className="image-matte" />
+            <div className="grid gap-5">
+              <Link
+                href="/programs/courses"
+                className="group relative flex min-h-[16rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface p-6 sm:rounded-[2rem] sm:p-7"
+              >
+                <div className="pointer-events-none absolute -right-8 top-0 h-40 w-40 rounded-full bg-baby-blue/10 blur-3xl transition duration-500 group-hover:bg-baby-blue/20" />
+                <div className="relative">
+                  <span className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-baby-blue">
+                    <BookOpen className="h-3.5 w-3.5" strokeWidth={1.75} />
+                    Self-Paced Courses
+                  </span>
+                  <h3 className="mt-4 font-display text-2xl text-white sm:text-3xl">
+                    Learn on your schedule
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-white/65">
+                    Strategy, AI, and social systems. Purchase unlocks portal access.
+                  </p>
                 </div>
-                <span className="inline-flex items-center gap-2 text-sm font-medium text-white/85 transition group-hover:text-baby-blue">
+                <span className="relative mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/85 transition group-hover:text-baby-blue">
                   View courses
                   <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
                 </span>
-              </div>
-            </Link>
+              </Link>
+
+              <Link
+                href="/simulations"
+                className="group relative flex min-h-[14rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-near-black p-6 sm:rounded-[2rem] sm:p-7"
+              >
+                <div className="relative">
+                  <span className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-mint">
+                    <Target className="h-3.5 w-3.5" strokeWidth={1.75} />
+                    Simulations · Open to all
+                  </span>
+                  <h3 className="mt-4 font-display text-2xl text-white sm:text-3xl">
+                    Practice real marketing scenarios
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-white/65">
+                    Campaign briefs and decision drills — no member account required to explore.
+                  </p>
+                </div>
+                <span className="relative mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/85 transition group-hover:text-baby-blue">
+                  Explore simulations
+                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -140,7 +154,7 @@ export default async function ProgramsPage() {
           <div className="grid gap-10 border-y border-white/10 py-10 sm:grid-cols-3 sm:gap-8 sm:py-14">
             {[
               {
-                label: "Live cohort",
+                label: "Training programs",
                 body: "Scheduled classes, review, mentors, and a shared cohort energy.",
               },
               {
@@ -148,8 +162,8 @@ export default async function ProgramsPage() {
                 body: "Buy a course, learn in the portal, move at the speed that fits your week.",
               },
               {
-                label: "Same network",
-                body: "Both paths connect you to community, events, and career tools on SMN.",
+                label: "Simulations",
+                body: "Open practice scenarios that sharpen judgment before and alongside formal training.",
               },
             ].map((item) => (
               <div key={item.label}>

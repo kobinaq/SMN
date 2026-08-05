@@ -171,7 +171,13 @@ export default async function ResourcesPage({ searchParams }: Props) {
                           {group.type}
                         </h3>
                         <Link
-                          href={`/resources?type=${encodeURIComponent(group.type)}`}
+                          href={
+                            group.type === "Template"
+                              ? "/resources/templates"
+                              : group.type === "Guide"
+                                ? "/resources/guides"
+                                : `/resources?type=${encodeURIComponent(group.type)}`
+                          }
                           className="text-xs text-baby-blue hover:text-white"
                         >
                           View only →
