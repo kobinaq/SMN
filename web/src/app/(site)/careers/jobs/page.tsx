@@ -22,8 +22,8 @@ export default async function CareersJobsPage() {
   return (
     <>
       <CinematicPageHero
-        image={img.resBrief}
-        alt="Campaign brief checklist"
+        image={img.jobsFocus}
+        alt="Marketers in a professional lounge conversation"
         kicker="Careers · Jobs"
         title="Marketing jobs and gigs."
         description="Browse published roles publicly. Create a member account to apply, track activity, and strengthen your profile."

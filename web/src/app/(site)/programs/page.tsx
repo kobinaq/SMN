@@ -21,8 +21,8 @@ export default async function ProgramsPage() {
   return (
     <>
       <CinematicPageHero
-        image={img.cohortSpotlight}
-        alt="Social Marketers Network cohort members"
+        image={img.academyGroup}
+        alt="Social Marketers Network members gathered together"
         kicker="SMN Academy"
         title="Choose how you learn with SMN."
         description="Training programs, self-paced courses, and a simulation waitlist. Practical paths into the Network."

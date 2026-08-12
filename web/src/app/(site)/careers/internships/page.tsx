@@ -22,8 +22,8 @@ export default async function CareersInternshipsPage() {
   return (
     <>
       <CinematicPageHero
-        image={img.resWeekly}
-        alt="Weekly content operating notes"
+        image={img.internPath}
+        alt="Two emerging marketers talking in the lounge"
         kicker="Careers · Internships"
         title="Internship pathways for emerging marketers."
         description="Browse briefs openly. Members apply from the portal. Employers can request SMN interns for scoped campaign work."

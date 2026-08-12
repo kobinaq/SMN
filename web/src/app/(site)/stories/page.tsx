@@ -20,8 +20,8 @@ export default async function StoriesPage() {
   return (
     <>
       <CinematicPageHero
-        image={img.communityHome}
-        alt="Marketers in the Social Marketers Network community"
+        image={img.storiesLounge}
+        alt="Members talking in the SMN lounge"
         kicker="Social Marketers Network"
         title="Outcomes from people in the Network."
         description="Real progress from marketers learning, shipping, and growing with SMN."
@@ -135,8 +135,8 @@ export default async function StoriesPage() {
             <div className="relative overflow-hidden rounded-[2rem] border border-white/10">
               <div className="absolute inset-0">
                 <Image
-                  src={img.communityPortrait}
-                  alt="Social Marketers Network community member"
+                  src={img.storiesEmpty}
+                  alt="Two SMN members"
                   fill
                   className="object-cover opacity-40"
                   sizes="100vw"

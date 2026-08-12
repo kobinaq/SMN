@@ -31,7 +31,7 @@ export default function AboutPage() {
     <>
       <CinematicPageHero
         image={img.aboutMission}
-        alt="Lead instructor presenting to marketers"
+        alt="Instructor presenting to marketers in the room"
         kicker="About"
         title="A place where marketers do not have to figure it out alone."
         description="Social Marketers Network started in Ghana as an academy and community for people who want strategy, practice, and a network that lasts after a course ends."

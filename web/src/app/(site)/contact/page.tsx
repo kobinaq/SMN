@@ -52,8 +52,8 @@ export default function ContactPage() {
   return (
     <>
       <CinematicPageHero
-        image={img.aboutMission}
-        alt="SMN instructor presenting to marketers"
+        image={img.contactTalk}
+        alt="Two people talking in the SMN space"
         kicker="Social Marketers Network"
         title="Let’s talk."
         description="Partnerships, speaking, talent requests, or a quick question. Send a message and we will get back to you."

@@ -20,8 +20,8 @@ const featuredHire = {
   label: "Hire or partner",
   title: "Start a hire enquiry",
   body: "Tell us the role, the skills, and the timeline. This is an employer enquiry, not a member application.",
-  image: img.communityHome,
-  alt: "Marketers in the Social Marketers Network",
+  image: img.eventPortfolio,
+  alt: "Two marketers in a working conversation",
 };
 
 const otherActions = [
@@ -43,8 +43,8 @@ export default function EmployersPage() {
   return (
     <>
       <CinematicPageHero
-        image={img.eventPortfolio}
-        alt="Marketers presenting work"
+        image={img.hireConversation}
+        alt="Two marketers in conversation"
         kicker="Employers"
         title="Hire SMN talent and shape the next generation of marketers."
         description="SMN develops marketers with practical skills and proof of work. Use this page to hire or partner, not to apply to a cohort."

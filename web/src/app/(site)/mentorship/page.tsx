@@ -48,8 +48,8 @@ export default function MentorshipPage() {
   return (
     <>
       <CinematicPageHero
-        image={img.communityCollab}
-        alt="Marketers collaborating during an SMN session"
+        image={img.mentorshipPair}
+        alt="Mentor and member sitting together"
         kicker="Mentorship"
         title="Guidance from people who have done the work."
         description="Brand marketers, agency leads, consultants, founders, and alumni. You bring a real question. They help you move."
@@ -89,8 +89,8 @@ export default function MentorshipPage() {
         <div className="container-wide grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:rounded-[2rem] lg:aspect-[5/4]">
             <Image
-              src={img.communityEvent}
-              alt="SMN community session"
+              src={img.mentorshipTalk}
+              alt="Two marketers in a one-to-one mentorship conversation"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"

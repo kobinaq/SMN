@@ -147,7 +147,7 @@ export default async function CommunityPage() {
               <div className="relative aspect-[3/4] overflow-hidden rounded-2xl sm:rounded-[1.5rem]">
                 <Image
                   src={img.communityPortrait}
-                  alt="SMN community member"
+                  alt="Two SMN members sitting together"
                   fill
                   className="object-cover"
                   sizes="40vw"
@@ -159,7 +159,7 @@ export default async function CommunityPage() {
                 <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:rounded-[1.5rem]">
                   <Image
                     src={img.communityCollab}
-                    alt="Members collaborating"
+                    alt="Members in a focused table conversation"
                     fill
                     className="object-cover"
                     sizes="40vw"
@@ -169,7 +169,7 @@ export default async function CommunityPage() {
                 <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:rounded-[1.5rem]">
                   <Image
                     src={img.communityEvent}
-                    alt="Community event"
+                    alt="Two members at an SMN gathering"
                     fill
                     className="object-cover"
                     sizes="40vw"
@@ -255,7 +255,7 @@ export default async function CommunityPage() {
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:rounded-[2rem] lg:aspect-[5/4]">
             <Image
               src={img.communityCulture}
-              alt="Learning together in the Network"
+              alt="Networking during an SMN session"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"

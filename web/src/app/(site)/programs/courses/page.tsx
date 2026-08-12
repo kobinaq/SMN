@@ -40,8 +40,8 @@ export default async function CoursesPage() {
   return (
     <>
       <CinematicPageHero
-        image={img.courseGrowth}
-        alt="Marketer working through a growth programme"
+        image={img.learnSolo}
+        alt="Marketer learning on a phone in the lounge"
         kicker="Academy · Courses"
         title="Self-paced courses on your schedule."
         description="Enroll on SMN to unlock LMS or Classroom access. The flagship cohort still requires an application."

@@ -84,8 +84,8 @@ export default async function EventsPage({ searchParams }: Props) {
   return (
     <>
       <CinematicPageHero
-        image={img.eventPortfolio}
-        alt="Marketers at an SMN live session"
+        image={img.eventsGathering}
+        alt="Circle discussion during an SMN workshop"
         kicker="Events"
         title="Learn live. Meet people. Ship better work."
         description="Webinars, workshops, and networking for marketers who want strategy, AI skills, and a real community."

@@ -89,7 +89,7 @@ export async function HomePage() {
           >
             <Image
               src={img.philosophy}
-              alt="Instructor leading a marketing workshop"
+              alt="Two marketers in a thoughtful one-to-one conversation"
               fill
               className="object-cover"
               data-parallax
@@ -256,7 +256,7 @@ export async function HomePage() {
             >
               <Image
                 src={img.communityHome}
-                alt="Community networking event"
+                alt="SMN gathering with a speaker, audience, and Own your voice tote"
                 fill
                 className="object-cover"
                 data-parallax

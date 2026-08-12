@@ -1,9 +1,15 @@
 /**
- * Central image map — each path is used for one visual surface
+ * Central image map. Each path is used for one visual surface
  * so the site does not repeat the same photo across sections.
  *
  * Exception: instructor / author avatar may reuse the same portrait
- * (same person). Logos may appear in header + footer.
+ * (same person). Logos may appear in header + footer. Journey tiles
+ * may reuse the destination page photo (cohort tile, jobs tile).
+ * Internships and simulations share a lounge conversation photo.
+ * CMS fallbacks may reuse a primary photo.
+ *
+ * Homepage hero fan (hero1–5) and cohort photos (cohortSpotlight, cohortPage)
+ * are locked. Do not reassign those surfaces.
  */
 export const img = {
   // Hero fan (homepage only)
@@ -17,32 +23,53 @@ export const img = {
   instructor: "/images/instructor-arielle.jpg",
   instructorTeaching: "/images/ddf.jpg",
 
-  // Homepage sections
-  philosophy: "/images/photo_3_2026-07-11_04-15-50.jpg",
-  communityHome: "/images/photo_5_2026-07-11_04-15-50.jpg",
+  // Homepage sections (cohort spotlight locked)
+  philosophy: "/images/photo_30_2026-07-11_04-15-51.jpg",
+  communityHome: "/images/community-table.jpg",
   cohortSpotlight: "/images/cohort-group.jpg",
 
   // About
-  aboutMission: "/images/photo_4_2026-07-11_04-15-50.jpg",
+  aboutMission: "/images/presentation.jpg",
+  academyGroup: "/images/photo_15_2026-07-11_04-15-51.jpg",
 
   // Community page gallery
-  communityPortrait: "/images/photo_1_2026-07-11_04-15-50.jpg",
+  communityPortrait: "/images/photo_24_2026-07-11_04-15-51.jpg",
   communityCollab: "/images/photo_17_2026-07-11_04-15-51.jpg",
   communityEvent: "/images/photo_6_2026-07-11_04-15-50.jpg",
   communityCulture: "/images/fes.jpg",
 
-  // Cohort program page
+  // Cohort program page (locked)
   cohortPage: "/images/cohort.jpg",
 
+  // Mentorship
+  mentorshipPair: "/images/photo_26_2026-07-11_04-15-51.jpg",
+  mentorshipTalk: "/images/photo_16_2026-07-11_04-15-51.jpg",
+  mentorSupport: "/images/photo_25_2026-07-11_04-15-51.jpg",
+  mentorListen: "/images/photo_1_2026-07-11_04-15-50.jpg",
+
   // Courses
-  courseGrowth: "/images/photo_14_2026-07-11_04-15-50.jpg",
-  courseAi: "/images/photo_15_2026-07-11_04-15-51.jpg",
-  courseSocial: "/images/photo_16_2026-07-11_04-15-51.jpg",
+  learnSolo: "/images/self-paced.jpg",
+  courseGrowth: "/images/photo_3_2026-07-11_04-15-50.jpg",
+  courseAi: "/images/photo_8_2026-07-11_04-15-50.jpg",
+  courseSocial: "/images/photo_27_2026-07-11_04-15-51.jpg",
 
   // Events
-  eventAi: "/images/photo_19_2026-07-11_04-15-51.jpg",
+  eventsGathering: "/images/photo_19_2026-07-11_04-15-51.jpg",
+  eventAi: "/images/photo_14_2026-07-11_04-15-50.jpg",
   eventPortfolio: "/images/photo_20_2026-07-11_04-15-51.jpg",
-  eventWorkshop: "/images/photo_22_2026-07-11_04-15-51.jpg",
+  eventWorkshop: "/images/workshop.jpg",
+
+  // Careers & employers
+  careersWork: "/images/events-rooftop.jpg",
+  jobsFocus: "/images/photo_28_2026-07-11_04-15-51.jpg",
+  internPath: "/images/photo_22_2026-07-11_04-15-51.jpg",
+  hireConversation: "/images/photo_4_2026-07-11_04-15-50.jpg",
+
+  // Contact, stories, simulations
+  contactTalk: "/images/photo_29_2026-07-11_04-15-51.jpg",
+  storiesLounge: "/images/photo_5_2026-07-11_04-15-50.jpg",
+  storiesEmpty: "/images/photo_7_2026-07-11_04-15-50.jpg",
+  practicePair: "/images/photo_22_2026-07-11_04-15-51.jpg",
 
   // Resources library — conceptual object photography
   resCalendar: "/images/resource-calendar.jpg",
@@ -66,7 +93,7 @@ export const img = {
 
   // Fallbacks (CMS only when media missing)
   default: "/images/self-paced.jpg",
-  defaultEvent: "/images/photo_7_2026-07-11_04-15-50.jpg",
+  defaultEvent: "/images/photo_19_2026-07-11_04-15-51.jpg",
   defaultStory: "/images/hero-portrait.jpg",
   defaultPost: "/images/photo_8_2026-07-11_04-15-50.jpg",
 } as const;

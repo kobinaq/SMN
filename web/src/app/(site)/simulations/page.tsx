@@ -40,8 +40,8 @@ export default function SimulationsPage() {
         <div className="container-wide grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:rounded-[2rem]">
             <Image
-              src={img.eventWorkshop}
-              alt="Marketers working a live brief"
+              src={img.practicePair}
+              alt="Two marketers talking through a practice session"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"

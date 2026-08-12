@@ -18,8 +18,8 @@ export default function CareersHubPage() {
   return (
     <>
       <CinematicPageHero
-        image={img.resPortfolio}
-        alt="Portfolio case study notes on a desk"
+        image={img.careersWork}
+        alt="Two marketers collaborating with a tablet"
         kicker="Careers"
         title="Jobs, internships, and mentorship for marketers."
         description="Browse openings publicly. Apply and track activity from a member account when you are ready."
@@ -40,8 +40,8 @@ export default function CareersHubPage() {
             className="group relative min-h-[22rem] overflow-hidden rounded-[1.75rem] border border-white/10 sm:min-h-[28rem] sm:rounded-[2rem]"
           >
             <Image
-              src={img.courseSocial}
-              alt="Marketer planning social work"
+              src={img.jobsFocus}
+              alt="Marketers in a professional lounge conversation"
               fill
               className="object-cover transition duration-700 ease-out group-hover:scale-[1.03]"
               sizes="(max-width: 1024px) 100vw, 60vw"

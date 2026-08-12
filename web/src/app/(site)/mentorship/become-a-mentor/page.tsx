@@ -47,8 +47,8 @@ export default function BecomeMentorPage() {
   return (
     <>
       <CinematicPageHero
-        image={img.communityPortrait}
-        alt="Mentor in the Social Marketers Network"
+        image={img.mentorSupport}
+        alt="Two members of the Network in a supportive moment"
         kicker="Give back"
         title="Become a mentor"
         description="If you have real experience, help marketers in the Network grow with clear, honest guidance."
@@ -99,8 +99,8 @@ export default function BecomeMentorPage() {
           </div>
           <div className="relative aspect-[4/5] overflow-hidden rounded-2xl sm:rounded-[2rem] lg:aspect-[4/5]">
             <Image
-              src={img.communityCulture}
-              alt="Learning together in the Network"
+              src={img.mentorListen}
+              alt="Two marketers talking through a mentorship session"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 45vw"
