@@ -83,8 +83,7 @@ export default async function StoriesPage() {
           {rest.length ? (
             <>
               <div className="max-w-2xl">
-                <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">More voices</p>
-                <h2 className="mt-3 font-display text-3xl text-white sm:text-4xl">
+                <h2 className="font-display text-3xl text-white sm:text-4xl">
                   Marketers finding clarity, craft, and community.
                 </h2>
               </div>
@@ -154,9 +153,6 @@ export default async function StoriesPage() {
                 </p>
                 <div className="btn-row-mobile mt-8 justify-center">
                   <Button href={cta.applyCohort.href}>{cta.applyCohort.label}</Button>
-                  <Button href="/community" variant="secondary">
-                    Meet the community
-                  </Button>
                 </div>
               </div>
             </div>
@@ -171,7 +167,6 @@ export default async function StoriesPage() {
                 </p>
               </div>
               <div className="btn-row-mobile">
-                <Button href={cta.applyCohort.href}>{cta.applyCohort.shortLabel}</Button>
                 <Button href="/programs" variant="secondary">
                   Explore the Academy
                 </Button>

@@ -45,7 +45,7 @@ export function ResourceDownloadForm({
       setMessage(
         json.delivered
           ? `${resourceTitle} is on its way to your inbox. Check spam if you don't see it.`
-          : `${resourceTitle} is ready — use the link below.`,
+          : `${resourceTitle} is ready. Use the link below.`,
       );
       form.reset();
     } catch (err) {

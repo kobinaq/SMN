@@ -111,10 +111,7 @@ export default function ContactPage() {
           </aside>
 
           <div>
-            <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">
-              Contact form
-            </p>
-            <h2 className="mt-3 font-display text-3xl text-white sm:text-4xl">Send a message</h2>
+            <h2 className="font-display text-3xl text-white sm:text-4xl">Send a message</h2>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/55">
               Tell us what you need. We route partnership, speaking, and talent requests to the right
               inbox.

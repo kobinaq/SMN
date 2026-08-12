@@ -134,8 +134,8 @@ export default async function CommunityPage() {
                 <Button href={site.whatsappInvite} target="_blank" rel="noreferrer">
                   Join WhatsApp
                 </Button>
-                <Button href="/apply" variant="secondary">
-                  Apply to cohort
+                <Button href="/events" variant="secondary">
+                  See upcoming events
                 </Button>
               </div>
               <p className="mt-5 text-xs text-white/35 sm:text-sm">
@@ -204,10 +204,7 @@ export default async function CommunityPage() {
       {/* Who it's for */}
       <section className="bg-near-black py-16 sm:py-24">
         <div className="container-wide">
-          <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-            Who thrives here
-          </p>
-          <h2 className="mt-3 max-w-2xl font-display text-2xl text-white sm:mt-4 sm:text-3xl md:text-4xl">
+          <h2 className="max-w-2xl font-display text-2xl text-white sm:text-3xl md:text-4xl">
             Built for people who take marketing seriously
           </h2>
           <div className="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
@@ -229,10 +226,7 @@ export default async function CommunityPage() {
         <div className="container-wide">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-xl">
-              <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-                Inside WhatsApp
-              </p>
-              <h2 className="mt-3 font-display text-2xl text-white sm:mt-4 sm:text-3xl md:text-4xl">
+              <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
                 What actually happens in the community
               </h2>
             </div>
@@ -269,10 +263,7 @@ export default async function CommunityPage() {
             <div className="image-matte" />
           </div>
           <div>
-            <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-              Culture
-            </p>
-            <h2 className="mt-3 font-display text-2xl text-white sm:mt-4 sm:text-3xl md:text-4xl">
+            <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
               Helpful, honest, and serious about growth
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-white/65 sm:mt-5 sm:text-base">
@@ -294,10 +285,7 @@ export default async function CommunityPage() {
       {/* How to join */}
       <section className="border-y border-white/10 bg-ink py-16 sm:py-24">
         <div className="container-wide">
-          <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-            Get started
-          </p>
-          <h2 className="mt-3 max-w-xl font-display text-2xl text-white sm:mt-4 sm:text-3xl md:text-4xl">
+          <h2 className="max-w-xl font-display text-2xl text-white sm:text-3xl md:text-4xl">
             Three simple steps
           </h2>
           <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-3">
@@ -312,14 +300,6 @@ export default async function CommunityPage() {
               </div>
             ))}
           </div>
-          <div className="mt-10 flex flex-col gap-3 sm:mt-12 sm:flex-row sm:items-center">
-            <Button href={site.whatsappInvite} target="_blank" rel="noreferrer">
-              Join the WhatsApp community
-            </Button>
-            <Button href="/events" variant="secondary">
-              See upcoming events
-            </Button>
-          </div>
         </div>
       </section>
 
@@ -328,10 +308,7 @@ export default async function CommunityPage() {
           <div className="container-wide">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-                  Member voices
-                </p>
-                <h2 className="mt-3 font-display text-2xl text-white sm:mt-4 sm:text-3xl md:text-4xl">
+                <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
                   What people say about the room
                 </h2>
               </div>
@@ -376,10 +353,7 @@ export default async function CommunityPage() {
       {/* Pathways */}
       <section className="border-t border-white/10 bg-ink py-16 sm:py-24">
         <div className="container-wide">
-          <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-            Keep going
-          </p>
-          <h2 className="mt-3 max-w-xl font-display text-2xl text-white sm:mt-4 sm:text-3xl md:text-4xl">
+          <h2 className="max-w-xl font-display text-2xl text-white sm:text-3xl md:text-4xl">
             Community is the base. Learning goes further.
           </h2>
           <div className="mt-10 grid gap-4 sm:mt-12 sm:grid-cols-3 sm:gap-5">
@@ -427,10 +401,7 @@ export default async function CommunityPage() {
         <div className="container-wide overflow-hidden rounded-2xl border border-white/10 bg-deep-blue p-6 sm:rounded-[2rem] sm:p-10 md:p-14">
           <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-                Join today
-              </p>
-              <h2 className="mt-3 font-display text-2xl text-white sm:text-3xl md:text-4xl">
+              <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
                 You do not have to figure marketing out alone
               </h2>
               <p className="mt-4 max-w-xl text-sm text-white/70 sm:text-base">

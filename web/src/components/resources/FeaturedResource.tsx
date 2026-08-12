@@ -10,7 +10,7 @@ export function FeaturedResource({ resource }: { resource: ResourceItem }) {
       <div className="relative min-h-[220px] sm:min-h-[300px] lg:min-h-[400px]">
         <Image
           src={resource.cover}
-          alt=""
+          alt={resource.title}
           fill
           priority
           className="object-cover"

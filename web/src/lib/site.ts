@@ -10,7 +10,7 @@ export const site = {
   shortName: "SMN",
   tagline: "We develop marketers, not just content creators.",
   description:
-    "A professional learning network for modern marketers: practical skills, mentorship, portfolios, credentials, and career opportunities — with a native member platform.",
+    "A professional learning network for modern marketers: practical skills, mentorship, portfolios, credentials, and career opportunities, with a native member platform.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://socialmarketers.network",
   email: process.env.OPS_EMAIL ?? "hello@socialmarketers.network",
   whatsappInvite:
@@ -33,7 +33,7 @@ export const site = {
   cohort: {
     name: "Social Media Marketing & AI Cohort",
     startDate: "September 2026",
-    applicationDeadline: "Rolling — apply early",
+    applicationDeadline: "Rolling. Apply early",
     duration: "8 weeks",
     seats: 30,
     format: "Live classes, member platform, WhatsApp community, and portfolio projects",

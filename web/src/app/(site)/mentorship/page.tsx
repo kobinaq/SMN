@@ -127,9 +127,6 @@ export default function MentorshipPage() {
             </div>
             <div className="btn-row-mobile lg:justify-end">
               <Button href="/app/mentors">Browse mentors</Button>
-              <Button href="/signup" variant="secondary">
-                Create account
-              </Button>
             </div>
           </div>
         </div>

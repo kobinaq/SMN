@@ -36,7 +36,7 @@ export function ResourceCard({
         <div className="absolute inset-0 transition duration-500 ease-out group-hover:scale-[1.03]">
           <Image
             src={resource.cover}
-            alt=""
+            alt={resource.title}
             fill
             priority={priority}
             className="object-cover"

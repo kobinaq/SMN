@@ -182,10 +182,7 @@ export default async function EventsPage({ searchParams }: Props) {
       {/* Formats */}
       <section className="border-y border-white/10 bg-near-black py-16 sm:py-20">
         <div className="container-wide">
-          <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-            Formats
-          </p>
-          <h2 className="mt-3 max-w-xl font-display text-2xl text-white sm:mt-4 sm:text-3xl">
+          <h2 className="max-w-xl font-display text-2xl text-white sm:text-3xl">
             Three ways to show up
           </h2>
           <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-3 sm:gap-5">
@@ -207,10 +204,7 @@ export default async function EventsPage({ searchParams }: Props) {
       <section className="bg-ink py-16 sm:py-20">
         <div className="container-wide grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
           <div>
-            <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-              What to expect
-            </p>
-            <h2 className="mt-3 font-display text-2xl text-white sm:mt-4 sm:text-3xl md:text-4xl">
+            <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
               Built for people who take marketing seriously
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-white/60 sm:text-base">
@@ -242,10 +236,7 @@ export default async function EventsPage({ searchParams }: Props) {
         <div className="container-wide">
           <div className="grid gap-6 rounded-2xl border border-white/10 bg-ink p-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-10 sm:rounded-[2rem] sm:p-8 md:p-10">
             <div>
-              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-baby-blue sm:text-xs">
-                Stay in the loop
-              </p>
-              <h2 className="mt-3 font-display text-xl text-white sm:text-2xl md:text-3xl">
+              <h2 className="font-display text-xl text-white sm:text-2xl md:text-3xl">
                 Events are better with the community
               </h2>
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/55">
@@ -254,10 +245,7 @@ export default async function EventsPage({ searchParams }: Props) {
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:items-end">
-              <Button href={site.whatsappInvite} target="_blank" rel="noreferrer">
-                Join WhatsApp
-              </Button>
-              <Button href="/apply" variant="secondary">
+              <Button href="/apply">
                 Apply to cohort
                 <ArrowRight className="h-4 w-4" />
               </Button>

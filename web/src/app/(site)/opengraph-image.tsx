@@ -37,7 +37,7 @@ export default function OpengraphImage() {
             Marketers who think strategy first.
           </div>
           <div style={{ display: "flex", fontSize: 34, color: "rgba(255,255,255,0.7)", maxWidth: 900 }}>
-            A professional learning network — cohorts, mentorship, and a member portal.
+            A professional learning network: cohorts, mentorship, and a member portal.
           </div>
         </div>
         <div style={{ display: "flex", fontSize: 28, color: "rgba(255,255,255,0.55)" }}>

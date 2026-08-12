@@ -90,7 +90,7 @@ export default async function ResourceDetailPage({ params }: Props) {
             <div className="relative aspect-[16/11] overflow-hidden rounded-2xl border border-white/10 sm:rounded-[1.75rem] lg:aspect-[4/3]">
               <Image
                 src={resource.cover}
-                alt=""
+                alt={resource.title}
                 fill
                 priority
                 className="object-cover"
@@ -109,7 +109,7 @@ export default async function ResourceDetailPage({ params }: Props) {
               <p key={i}>{p}</p>
             ))}
             <div className="rounded-2xl border border-white/10 bg-surface p-5 sm:p-6">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-white/40">How to use it</p>
+              <h3 className="font-display text-lg text-white">How to use it</h3>
               <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-white/70">
                 <li>Download and open the file on desktop if possible.</li>
                 <li>Duplicate it for each client or brand.</li>

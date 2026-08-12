@@ -594,7 +594,7 @@ export const cohortFaqs = [
   },
   {
     q: "When do I pay?",
-    a: "Submit an application first. SMN reviews applications within a few business days. Payment or an approved payment plan is arranged after acceptance — not before you apply.",
+    a: "Submit an application first. SMN reviews applications within a few business days. Payment or an approved payment plan is arranged after acceptance, not before you apply.",
   },
   {
     q: "Is employment guaranteed?",

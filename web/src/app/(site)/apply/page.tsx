@@ -87,10 +87,7 @@ export default async function ApplyPage() {
       >
         <div className="container-wide grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12 xl:gap-16">
           <div>
-            <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">
-              Programme application
-            </p>
-            <h2 className="mt-3 font-display text-3xl text-white sm:text-4xl">Your application</h2>
+            <h2 className="font-display text-3xl text-white sm:text-4xl">Your application</h2>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/55">
               We only ask for what we need to review your fit. No payment is required to submit this
               form.

@@ -39,10 +39,7 @@ export default async function ProgramsPage() {
       <section data-section-fade className="border-b border-white/10 bg-ink py-16 sm:py-24 md:py-28">
         <div className="container-wide">
           <div className="max-w-2xl">
-            <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-              Academy paths
-            </p>
-            <h2 className="mt-3 font-display text-3xl text-white sm:text-4xl md:text-5xl">
+            <h2 className="font-display text-3xl text-white sm:text-4xl md:text-5xl">
               Train live, learn self-paced, or join the simulation waitlist.
             </h2>
           </div>
@@ -150,7 +147,7 @@ export default async function ProgramsPage() {
               },
             ].map((item) => (
               <div key={item.label}>
-                <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-mint">{item.label}</p>
+                <p className="font-display text-lg text-white">{item.label}</p>
                 <p className="mt-3 text-sm leading-relaxed text-white/60 sm:text-[15px]">{item.body}</p>
               </div>
             ))}
@@ -158,16 +155,13 @@ export default async function ProgramsPage() {
 
           <div className="mt-14 flex flex-col items-start justify-between gap-6 sm:mt-16 md:flex-row md:items-end">
             <div className="max-w-xl">
-              <h2 className="font-display text-3xl text-white sm:text-4xl">Ready for the next intake?</h2>
+              <h2 className="font-display text-3xl text-white sm:text-4xl">Not sure which path fits?</h2>
               <p className="mt-3 text-sm leading-relaxed text-white/55">
-                Applications open on a rolling basis. Contact SMN for current fees after acceptance.
+                Ask about the live cohort, self-paced courses, or the simulation waitlist.
               </p>
             </div>
             <div className="btn-row-mobile">
-              <Button href={cta.applyCohort.href}>{cta.applyCohort.label}</Button>
-              <Button href="/contact" variant="secondary">
-                Ask a question
-              </Button>
+              <Button href="/contact">Ask a question</Button>
             </div>
           </div>
         </div>

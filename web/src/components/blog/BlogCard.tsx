@@ -25,7 +25,7 @@ export function BlogCard({
         <div className="absolute inset-0 transition duration-500 ease-out group-hover:scale-[1.03]">
           <Image
             src={post.cover}
-            alt=""
+            alt={post.title}
             fill
             priority={priority}
             className="object-cover"

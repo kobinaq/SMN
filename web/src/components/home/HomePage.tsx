@@ -163,7 +163,7 @@ export async function HomePage() {
                 <div className="relative aspect-[16/10]" data-parallax-wrap>
                   <Image
                     src={course.image}
-                    alt=""
+                    alt={course.title}
                     fill
                     className="object-cover"
                     data-parallax

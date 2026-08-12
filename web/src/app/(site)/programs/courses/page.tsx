@@ -58,10 +58,7 @@ export default async function CoursesPage() {
       <section data-section-fade className="border-b border-white/10 bg-ink py-10 sm:py-12">
         <div className="container-wide flex flex-col gap-4 border-y border-white/10 py-8 sm:flex-row sm:items-end sm:justify-between sm:py-10">
           <div className="max-w-2xl">
-            <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-mint">
-              How this differs
-            </p>
-            <p className="mt-3 text-sm leading-relaxed text-white/60 sm:text-base">
+            <p className="text-sm leading-relaxed text-white/60 sm:text-base">
               Courses are individual purchases with portal access. The flagship programme is a live
               cohort with review, mentorship, and community.{" "}
               <Link href="/apply" className="text-baby-blue transition hover:text-white">
@@ -83,10 +80,7 @@ export default async function CoursesPage() {
       <section id="catalogue" data-section-fade className="scroll-mt-24 bg-near-black py-16 sm:py-24">
         <div className="container-wide">
           <div className="max-w-2xl">
-            <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">
-              Catalogue
-            </p>
-            <h2 className="mt-3 font-display text-3xl text-white sm:text-4xl md:text-5xl">
+            <h2 className="font-display text-3xl text-white sm:text-4xl md:text-5xl">
               Pick a programme and enroll.
             </h2>
           </div>
@@ -234,21 +228,6 @@ export default async function CoursesPage() {
               ) : null}
             </div>
           )}
-
-          <div className="mt-16 flex flex-col items-start justify-between gap-6 border-t border-white/10 pt-12 sm:mt-20 md:flex-row md:items-end">
-            <div className="max-w-lg">
-              <h2 className="font-display text-3xl text-white">Want the live cohort instead?</h2>
-              <p className="mt-3 text-sm text-white/55">
-                Apply for review, mentorship, and a shared intake. Separate from catalogue checkout.
-              </p>
-            </div>
-            <div className="btn-row-mobile">
-              <Button href={cta.applyCohort.href}>{cta.applyCohort.shortLabel}</Button>
-              <Button href="/programs/cohort" variant="secondary">
-                Cohort details
-              </Button>
-            </div>
-          </div>
         </div>
       </section>
     </>

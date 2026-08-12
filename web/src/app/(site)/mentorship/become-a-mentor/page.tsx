@@ -124,9 +124,6 @@ export default function BecomeMentorPage() {
               <Button href="/app/mentors" variant="light">
                 Apply to mentor
               </Button>
-              <Button href="/mentorship" variant="secondary">
-                How mentorship works
-              </Button>
             </div>
           </div>
         </div>
