@@ -23,7 +23,7 @@ export default async function ProgramsPage() {
         <div className="absolute inset-0">
           <Image
             src={img.cohortSpotlight}
-            alt=""
+            alt="Social Marketers Network cohort members"
             fill
             priority
             className="object-cover object-center"
@@ -41,7 +41,7 @@ export default async function ProgramsPage() {
             Choose how you learn with SMN.
           </h1>
           <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base md:text-lg">
-            Training programs, self-paced courses, and marketing simulations — practical paths into
+            Training programs, self-paced courses, and a simulation waitlist. Practical paths into
             the Network.
           </p>
           <div className="btn-row-mobile mt-8">
@@ -60,7 +60,7 @@ export default async function ProgramsPage() {
               Academy paths
             </p>
             <h2 className="mt-3 font-display text-3xl text-white sm:text-4xl md:text-5xl">
-              Train live, learn self-paced, or practice in simulations.
+              Train live, learn self-paced, or join the simulation waitlist.
             </h2>
           </div>
 
@@ -71,7 +71,7 @@ export default async function ProgramsPage() {
             >
               <Image
                 src={img.cohortPage}
-                alt=""
+                alt="Social Marketers Network cohort in session"
                 fill
                 className="object-cover transition duration-700 ease-out group-hover:scale-[1.03]"
                 sizes="(max-width: 1024px) 100vw, 60vw"
@@ -130,17 +130,17 @@ export default async function ProgramsPage() {
                 <div className="relative">
                   <span className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-mint">
                     <Target className="h-3.5 w-3.5" strokeWidth={1.75} />
-                    Simulations · Open to all
+                    Simulations · Waitlist
                   </span>
                   <h3 className="mt-4 font-display text-2xl text-white sm:text-3xl">
-                    Practice real marketing scenarios
+                    Practice scenarios, when they open
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-white/65">
-                    Campaign briefs and decision drills — no member account required to explore.
+                    Campaign briefs and decision drills. Join the waitlist for the next window.
                   </p>
                 </div>
                 <span className="relative mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/85 transition group-hover:text-baby-blue">
-                  Explore simulations
+                  Join the waitlist
                   <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
                 </span>
               </Link>
@@ -163,7 +163,7 @@ export default async function ProgramsPage() {
               },
               {
                 label: "Simulations",
-                body: "Open practice scenarios that sharpen judgment before and alongside formal training.",
+                body: "Upcoming practice scenarios. Join the waitlist for the next window.",
               },
             ].map((item) => (
               <div key={item.label}>

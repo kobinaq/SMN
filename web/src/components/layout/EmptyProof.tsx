@@ -5,11 +5,15 @@ export function EmptyProof({
   body,
   href,
   label,
+  secondaryHref,
+  secondaryLabel,
 }: {
   title: string;
   body: string;
   href?: string;
   label?: string;
+  secondaryHref?: string;
+  secondaryLabel?: string;
 }) {
   return (
     <div className="rounded-2xl border border-dashed border-white/15 bg-surface p-7 sm:rounded-[1.75rem] sm:p-10">
@@ -20,8 +24,12 @@ export function EmptyProof({
           <Button href={href} variant="secondary">
             {label}
           </Button>
+          {secondaryHref && secondaryLabel ? (
+            <Button href={secondaryHref}>{secondaryLabel}</Button>
+          ) : null}
         </div>
       ) : null}
     </div>
   );
 }
+

@@ -22,7 +22,7 @@ export const cta = {
     href: "/programs/courses",
   },
   viewSimulations: {
-    label: "Explore simulations",
+    label: "Join the waitlist",
     href: "/simulations",
   },
   /** On-platform Paystack purchase */

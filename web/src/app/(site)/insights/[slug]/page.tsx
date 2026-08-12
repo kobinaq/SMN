@@ -98,9 +98,6 @@ export default async function InsightArticlePage({ params }: Props) {
             <h1 className="mt-4 font-display text-[1.75rem] leading-tight text-white sm:mt-5 sm:text-4xl md:text-5xl lg:text-[3.25rem]">
               {post.title}
             </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/55 sm:mt-5 sm:text-base md:text-lg">
-              {post.excerpt}
-            </p>
 
             <div className="mt-6 flex items-center gap-3 sm:mt-8">
               <div className="relative h-11 w-11 overflow-hidden rounded-full border border-white/10 sm:h-12 sm:w-12">
@@ -124,7 +121,7 @@ export default async function InsightArticlePage({ params }: Props) {
           <div className="relative aspect-[16/10] overflow-hidden rounded-2xl sm:aspect-[21/9] sm:rounded-[1.75rem]">
             <Image
               src={post.cover}
-              alt=""
+              alt={post.title}
               fill
               priority
               className="object-cover"
@@ -140,7 +137,17 @@ export default async function InsightArticlePage({ params }: Props) {
         <div className="container-wide grid gap-10 py-10 sm:py-14 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-16 lg:py-16">
           <div className="mx-auto w-full max-w-2xl lg:mx-0">
             <div className="space-y-5 text-[15px] leading-[1.75] text-white/75 sm:space-y-6 sm:text-base md:text-lg md:leading-[1.8]">
-              {post.body.map((paragraph, i) => (
+              {post.body[0] ? (
+                <p className="text-lg leading-relaxed text-white/85 sm:text-xl sm:leading-[1.7]">
+                  {post.body[0]}
+                </p>
+              ) : null}
+              {post.excerpt ? (
+                <blockquote className="border-l-2 border-mint pl-5 text-base italic leading-relaxed text-white/70 sm:text-lg">
+                  {post.excerpt}
+                </blockquote>
+              ) : null}
+              {post.body.slice(1).map((paragraph, i) => (
                 <p key={i}>{paragraph}</p>
               ))}
             </div>
@@ -188,13 +195,6 @@ export default async function InsightArticlePage({ params }: Props) {
                     <p className="text-xs text-white/45">{post.authorRole}</p>
                   </div>
                 </div>
-                <Button
-                  href="/about"
-                  variant="secondary"
-                  className="mt-5 w-full text-xs sm:text-sm"
-                >
-                  About the Network
-                </Button>
               </div>
 
               <div className="rounded-2xl border border-white/10 bg-deep-blue p-5 sm:p-6">

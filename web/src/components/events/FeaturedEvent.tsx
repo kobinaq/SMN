@@ -13,7 +13,7 @@ export function FeaturedEvent({ event }: { event: EventItem }) {
         <div className="relative min-h-[240px] sm:min-h-[320px] lg:min-h-[420px]">
           <Image
             src={event.image}
-            alt=""
+            alt={event.title}
             fill
             priority
             className="object-cover"
