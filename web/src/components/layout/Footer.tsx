@@ -7,6 +7,7 @@ const footerLinks = [
     title: "Academy",
     links: [
       { label: "Training Programs", href: "/programs" },
+      { label: "Flagship cohort", href: "/programs/cohort" },
       { label: "Self-Paced Courses", href: "/programs/courses" },
       { label: "Simulations", href: "/simulations" },
       { label: "Apply", href: "/apply" },

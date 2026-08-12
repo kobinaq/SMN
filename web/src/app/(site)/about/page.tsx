@@ -1,78 +1,118 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { PageHero } from "@/components/layout/PageHero";
+import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Reveal } from "@/components/motion/Reveal";
-import { beliefs, instructor } from "@/lib/content";
+import { Button } from "@/components/ui/Button";
+import { instructor } from "@/lib/content";
 import { img } from "@/lib/images";
 import { site } from "@/lib/site";
-import { Button } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "About",
-  description: `Mission, vision, and story of ${site.name}.`,
+  description: `Mission, story, and instructor behind ${site.name}.`,
+  alternates: { canonical: "/about" },
 };
+
+const forWho = [
+  "Beginners who want strategy, not a new posting trick every week",
+  "Social media managers ready to think past the content calendar",
+  "Freelancers who need proof of how they think, not only pretty work",
+  "Marketers and owners who want AI with judgment still in the room",
+];
+
+const notFor = [
+  "Anyone expecting a guaranteed job or income at the end",
+  "People who want theory with no practice or feedback",
+  "Employers looking to hire. That path is Hire Talent, not this page",
+];
 
 export default function AboutPage() {
   return (
     <>
-      <PageHero
-        eyebrow="About"
-        title="A place where marketers don’t have to figure everything out alone."
-        description="Social Marketers Network is an academy and community for beginners, social media managers, and marketing professionals who want to keep getting better."
+      <CinematicPageHero
+        image={img.aboutMission}
+        alt="Lead instructor presenting to marketers"
+        kicker="About"
+        title="A place where marketers do not have to figure it out alone."
+        description="Social Marketers Network started in Ghana as an academy and community for people who want strategy, practice, and a network that lasts after a course ends."
+        actions={
+          <>
+            <Button href="/apply">Apply for the next cohort</Button>
+            <Button href="/contact" variant="secondary">
+              Contact us
+            </Button>
+          </>
+        }
       />
 
-      <section className="border-t border-white/10 bg-ink py-20">
-        <div className="container-wide grid gap-12 lg:grid-cols-2 lg:items-center">
+      <section className="border-b border-white/10 bg-ink py-16 sm:py-24">
+        <div className="container-wide grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
           <Reveal>
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem]">
+            <p className="font-display text-sm tracking-[0.08em] text-baby-blue">How we started</p>
+            <h2 className="mt-4 font-display text-3xl text-white sm:text-4xl md:text-5xl">
+              Built for marketers who are tired of learning in isolation.
+            </h2>
+            <p className="mt-5 text-sm leading-relaxed text-white/65 sm:text-base">
+              Arielle Adodo founded SMN to help beginners, social media managers, and marketing
+              professionals move past random posting. The work is strategy, AI used with care, and
+              real practice with other people in the room.
+            </p>
+            <p className="mt-4 text-sm leading-relaxed text-white/65 sm:text-base">
+              Today that means live training, a member platform, WhatsApp community, and a path
+              toward portfolios, credentials, and introductions. The aim is simple: be a home for
+              modern marketers across Africa and beyond.
+            </p>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl sm:rounded-[2rem] lg:aspect-[5/4]">
               <Image
-                src={img.aboutMission}
-                alt="Lead instructor presenting"
+                src={img.instructorTeaching}
+                alt="Arielle Adodo teaching a marketing session"
                 fill
                 className="object-cover"
-                sizes="50vw"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
               <div className="image-matte" />
             </div>
           </Reveal>
-          <Reveal delay={0.08}>
-            <p className="text-xs uppercase tracking-[0.22em] text-baby-blue">Mission</p>
-            <h2 className="mt-4 font-display text-3xl text-white md:text-4xl">
-              Train marketers who can think and deliver.
-            </h2>
-            <p className="mt-5 text-white/65 leading-relaxed">
-              We help people build skill, get practice, find community, and gain confidence in social
-              media marketing, then keep growing after any single program ends.
-            </p>
-            <p className="mt-4 text-white/65 leading-relaxed">
-              Our aim is simple: be Africa’s go-to network for modern marketers, where people learn,
-              get experience, grow their careers, and meet opportunity.
-            </p>
-          </Reveal>
         </div>
       </section>
 
-      <section className="bg-surface py-20">
-        <div className="container-wide">
-          <h2 className="font-display text-3xl text-white md:text-4xl">Core beliefs</h2>
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {beliefs.map((b, i) => (
-              <div
-                key={b.title}
-                className="rounded-3xl border border-white/10 bg-surface-2 p-6 md:p-8"
-              >
-                <span className="font-display text-sm text-baby-blue">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-4 font-display text-xl text-white">{b.title}</h3>
-                <p className="mt-3 text-white/70 leading-relaxed">{b.body}</p>
-              </div>
-            ))}
+      <section className="bg-near-black py-16 sm:py-24">
+        <div className="container-wide grid gap-12 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <h2 className="font-display text-3xl text-white sm:text-4xl">Who thrives here</h2>
+            <ul className="mt-6 space-y-4">
+              {forWho.map((item) => (
+                <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/70 sm:text-base">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-baby-blue" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h2 className="font-display text-3xl text-white sm:text-4xl">Who should go elsewhere</h2>
+            <ul className="mt-6 space-y-4">
+              {notFor.map((item) => (
+                <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/70 sm:text-base">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-white/25" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6 text-sm text-white/45">
+              Hiring or partnering?{" "}
+              <a href="/employers" className="text-baby-blue transition hover:text-white">
+                Hire SMN talent
+              </a>
+              .
+            </p>
           </div>
         </div>
       </section>
 
-      <section className="bg-near-black py-16 sm:py-20">
+      <section className="border-t border-white/10 bg-ink py-16 sm:py-24">
         <div className="container-wide grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="relative aspect-[4/5] overflow-hidden rounded-2xl sm:rounded-[2rem]">
             <Image
@@ -80,15 +120,13 @@ export default function AboutPage() {
               alt={instructor.name}
               fill
               className="object-cover"
-              sizes="50vw"
+              sizes="(max-width: 1024px) 100vw, 50vw"
             />
             <div className="image-matte" />
           </div>
           <div>
-            <p className="text-[10px] uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-              Lead instructor
-            </p>
-            <h2 className="mt-3 font-display text-2xl text-white sm:mt-4 sm:text-3xl md:text-4xl">
+            <p className="font-display text-sm tracking-[0.08em] text-baby-blue">Lead instructor</p>
+            <h2 className="mt-3 font-display text-3xl text-white sm:text-4xl md:text-5xl">
               {instructor.name}
             </h2>
             <p className="mt-2 text-sm text-white/45">{instructor.role}</p>
@@ -110,13 +148,7 @@ export default function AboutPage() {
               <Button href={instructor.linkedin} target="_blank" rel="noreferrer">
                 View LinkedIn
               </Button>
-              <Button href="/apply" variant="secondary">
-                Apply for the next cohort
-              </Button>
             </div>
-            {instructor.note ? (
-              <p className="mt-5 text-xs text-white/35">{instructor.note}</p>
-            ) : null}
           </div>
         </div>
       </section>

@@ -7,13 +7,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { HeroPhotoGallery } from "@/components/home/HeroPhotoGallery";
 import { CohortSpotlight } from "@/components/home/CohortSpotlight";
 import { GooeyText } from "@/components/motion/GooeyText";
-import {
-  beliefs,
-  capabilityAreas,
-  ecosystem,
-  instructor,
-  memberJourney,
-} from "@/lib/content";
+import { ecosystem, instructor } from "@/lib/content";
 import { img } from "@/lib/images";
 import { cta } from "@/lib/cta";
 import {
@@ -42,10 +36,9 @@ export async function HomePage() {
     <HomeStory>
       <HeroPhotoGallery />
 
-      {/* Credibility */}
-      <section data-section-fade className="border-y border-white/10 bg-surface py-12 sm:py-16">
-        <div className="container-wide">
-          {impactStats.length ? (
+      {impactStats.length ? (
+        <section data-section-fade className="border-y border-white/10 bg-surface py-12 sm:py-16">
+          <div className="container-wide">
             <div data-stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {impactStats.map((stat) => (
                 <div
@@ -60,33 +53,9 @@ export async function HomePage() {
                 </div>
               ))}
             </div>
-          ) : (
-            <div className="mx-auto max-w-3xl text-center">
-              <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">
-                Credibility
-              </p>
-              <h2 className="mt-3 font-display text-2xl text-white sm:text-3xl">
-                We develop marketers, not just content creators.
-              </h2>
-              <p className="mt-4 text-sm leading-relaxed text-white/65 sm:text-base">
-                Members build capabilities across strategy, research, brand, campaigns, analytics,
-                and career-ready portfolios — with mentorship, community, and a native member
-                platform.
-              </p>
-              <ul className="mt-6 flex flex-wrap justify-center gap-2">
-                {capabilityAreas.slice(0, 6).map((item) => (
-                  <li
-                    key={item}
-                    className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-white/60"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      ) : null}
 
       {/* Philosophy */}
       <section
@@ -131,40 +100,12 @@ export async function HomePage() {
         </div>
       </section>
 
-      {/* Beliefs */}
-      <section data-section-fade className="border-y border-white/10 bg-surface py-16 sm:py-24 md:py-32">
-        <div className="container-wide">
-          <SectionHeading
-            eyebrow="Core beliefs"
-            title="What we stand for"
-            description="A clear point of view on modern marketing careers."
-          />
-          <div data-stagger className="mt-8 grid gap-3 sm:mt-14 sm:gap-4 md:grid-cols-3">
-            {beliefs.map((item, i) => (
-              <div
-                key={item.title}
-                data-stagger-item
-                className="rounded-2xl border border-white/10 bg-surface-2 p-5 transition duration-300 hover:border-baby-blue/30 sm:rounded-3xl sm:p-6 md:p-8"
-              >
-                <span className="font-display text-sm text-baby-blue">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-4 font-display text-xl text-white md:text-2xl">{item.title}</h3>
-                <p className="mt-3 text-base leading-relaxed text-white/70">{item.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Member journey */}
       <section data-section-fade className="bg-near-black py-16 sm:py-24 md:py-36">
         <div className="container-wide">
           <div data-rule className="mb-8 h-px w-full bg-white/10 sm:mb-10" />
           <SectionHeading
-            eyebrow="The member journey"
             title="One connected path from learning to opportunity."
-            description="SMN is not a pile of disconnected tools. Members learn, practise, get support, build proof, earn credentials, and track opportunities inside one network."
+            description="Members learn, practise, get support, build proof, earn credentials, and track opportunities inside one network."
           />
 
           <div className="relative mx-auto mt-10 max-w-4xl text-center sm:mt-16">
@@ -178,20 +119,6 @@ export async function HomePage() {
               className="mx-auto w-full"
               textClassName="font-display text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-7xl lg:text-8xl"
             />
-          </div>
-
-          <div data-stagger className="mt-8 grid gap-3 sm:mt-10 sm:gap-5 md:mt-14 md:grid-cols-2 xl:grid-cols-3">
-            {memberJourney.map((item) => (
-              <div
-                key={item.step}
-                data-stagger-item
-                className="rounded-2xl border border-white/10 bg-surface p-5 sm:rounded-[1.75rem] sm:p-7"
-              >
-                <p className="text-xs text-baby-blue">Step {item.step}</p>
-                <h3 className="mt-3 font-display text-xl text-white">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/60">{item.body}</p>
-              </div>
-            ))}
           </div>
 
           <div data-stagger className="mt-8 grid gap-3 sm:mt-10 sm:gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -363,15 +290,13 @@ export async function HomePage() {
         </div>
       </section>
 
-      {/* Outcomes / stories — real only */}
-      <section data-section-fade className="border-y border-white/10 bg-surface py-16 sm:py-24 md:py-32">
-        <div className="container-wide">
-          <SectionHeading
-            eyebrow="Member work & outcomes"
-            title="Portfolios, stories, and credentials."
-            description="See the work members build — and how SMN helps them show it with clarity."
-          />
-          {stories.length ? (
+      {stories.length ? (
+        <section data-section-fade className="border-y border-white/10 bg-surface py-16 sm:py-24 md:py-32">
+          <div className="container-wide">
+            <SectionHeading
+              title="Portfolios, stories, and credentials."
+              description="See the work members build, and how SMN helps them show it with clarity."
+            />
             <div data-stagger className="mt-8 grid gap-4 sm:mt-14 sm:gap-6 md:grid-cols-2">
               {stories.map((story) => (
                 <figure
@@ -397,19 +322,19 @@ export async function HomePage() {
                 </figure>
               ))}
             </div>
-          ) : null}
-          <div className="mt-10">
-            <div className="btn-row-mobile">
-              <Button href="/stories" variant="secondary">
-                Member stories
-              </Button>
-              <Button href="/programs" variant="ghost">
-                Explore the Academy
-              </Button>
+            <div className="mt-10">
+              <div className="btn-row-mobile">
+                <Button href="/stories" variant="secondary">
+                  Member stories
+                </Button>
+                <Button href="/programs" variant="ghost">
+                  Explore the Academy
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       {/* Events */}
       {featuredEvents.length ? (
@@ -465,7 +390,7 @@ export async function HomePage() {
                 Employers & partners
               </p>
               <h2 className="mt-3 font-display text-2xl text-white sm:mt-4 sm:text-3xl md:text-4xl">
-                Hire marketers who can think — and verify their credentials.
+                Hire marketers who can think, and verify their credentials.
               </h2>
               <p className="mt-3 max-w-xl text-sm text-white/70 sm:mt-4 sm:text-base">
                 Review portfolios, verify certificates, share opportunities, and partner with SMN on
@@ -496,7 +421,7 @@ export async function HomePage() {
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-sm text-white/65 sm:mt-5 sm:text-base">
               Submit an application. SMN reviews it within a few business days. Payment comes after
-              acceptance — not before you apply. Next intake {site.cohort.startDate}.
+              acceptance, not before you apply. Next intake {site.cohort.startDate}.
             </p>
             <div className="btn-row-mobile mt-8 sm:mt-10">
               <Button href={cta.applyCohort.href}>{cta.applyCohort.label}</Button>

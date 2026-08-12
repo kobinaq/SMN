@@ -130,6 +130,10 @@ export const nav = [
       { label: "Guides", href: "/resources/guides" },
     ],
   },
+  {
+    label: "About",
+    href: "/about",
+  },
 ] as const;
 
 /** Re-export pending labels for seed content */

@@ -81,7 +81,7 @@ export function Header() {
 
         <nav
           ref={navRef}
-          className="hidden items-center gap-5 xl:gap-7 lg:flex"
+          className="hidden items-center gap-4 xl:gap-7 lg:flex"
           aria-label="Primary"
         >
           {nav.map((item) =>
