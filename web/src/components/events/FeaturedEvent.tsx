@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { CalendarDays, Clock, MapPin, Ticket } from "lucide-react";
+import { CalendarDays, Clock, MapPin, Ticket } from "@/components/ui/icons";
 import type { EventItem } from "@/lib/content";
 import { formatEventDate, formatEventDay } from "@/lib/events";
 import { Button } from "@/components/ui/Button";

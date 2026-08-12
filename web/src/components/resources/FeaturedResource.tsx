@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Download } from "lucide-react";
+import { ArrowRight, Download } from "@/components/ui/icons";
 import type { ResourceItem } from "@/lib/content";
 import { Button } from "@/components/ui/Button";
 

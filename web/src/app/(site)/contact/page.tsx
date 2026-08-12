@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowUpRight, Briefcase, Mail, MessageCircle, Mic2 } from "lucide-react";
+import { ArrowUpRight, Briefcase, Mail, MessageCircle, Mic2 } from "@/components/ui/icons";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";

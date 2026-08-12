@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, Briefcase, MapPin } from "lucide-react";
+import { ArrowLeft, Briefcase, MapPin } from "@/components/ui/icons";
 import { OpportunityApplyButton } from "@/components/app/OpportunityApplyButton";
 import { StatusBadge } from "@/components/ui/Feedback";
 import { requireMember } from "@/lib/auth/member";

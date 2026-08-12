@@ -1,9 +1,9 @@
-import type { LucideIcon } from "lucide-react";
+import type { Icon } from "@/components/ui/icons";
 
 export type PortalNavItem = {
   href: string;
   label: string;
-  icon: LucideIcon;
+  icon: Icon;
   badge?: number;
   children?: PortalNavItem[];
 };

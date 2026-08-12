@@ -7,7 +7,7 @@ import {
   ListChecks,
   Sparkles,
   Wrench,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import type { ResourceItem } from "@/lib/content";
 import { cn } from "@/lib/utils";
 

@@ -5,7 +5,7 @@ import {
   Sparkles,
   Users,
   Video,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import { EventCard } from "@/components/events/EventCard";
 import { EventTypeNav } from "@/components/events/EventTypeNav";
 import { FeaturedEvent } from "@/components/events/FeaturedEvent";

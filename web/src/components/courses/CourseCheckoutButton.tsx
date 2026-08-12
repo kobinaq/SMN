@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@/components/ui/icons";
 import { useToast } from "@/components/ui/Toast";
 import { trackEvent } from "@/lib/analytics";
 import { cn } from "@/lib/utils";

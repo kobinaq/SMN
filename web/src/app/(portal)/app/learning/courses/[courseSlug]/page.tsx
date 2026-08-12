@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CheckCircle2, Circle, Clock, PlayCircle } from "lucide-react";
+import { CheckCircle2, Circle, Clock, PlayCircle } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/Feedback";
 import { requireMember } from "@/lib/auth/member";

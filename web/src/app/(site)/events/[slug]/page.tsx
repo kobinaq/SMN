@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CalendarDays, Clock, MapPin, Ticket } from "lucide-react";
+import { CalendarDays, Clock, MapPin, Ticket } from "@/components/ui/icons";
 import { EventCard } from "@/components/events/EventCard";
 import { EventRegisterButton } from "@/components/events/EventRegisterButton";
 import { Reveal } from "@/components/motion/Reveal";

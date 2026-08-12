@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
-import { ImagePlus, X } from "lucide-react";
+import { ImagePlus, X } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { staffEase } from "@/components/staff/motion";
 import { Button } from "@/components/ui/Button";

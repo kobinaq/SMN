@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Copy, ListPlus, Lock, Sparkles } from "lucide-react";
+import { Copy, ListPlus, Lock, Sparkles } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
 import { AiMarkdown } from "@/components/ui/AiMarkdown";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";

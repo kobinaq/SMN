@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ArrowRight, Briefcase, MapPin, Search } from "lucide-react";
+import { ArrowRight, Briefcase, MapPin, Search } from "@/components/ui/icons";
 import type { OpportunityItem } from "@/lib/opportunities";
 import { Select } from "@/components/ui/Select";
 

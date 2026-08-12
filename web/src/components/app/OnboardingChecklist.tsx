@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useSyncExternalStore } from "react";
-import { CheckCircle2, Circle, X } from "lucide-react";
+import { CheckCircle2, Circle, X } from "@/components/ui/icons";
 
 export type OnboardingStep = {
   key: string;

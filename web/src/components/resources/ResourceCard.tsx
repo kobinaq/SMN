@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, FileText, ListChecks, Sparkles, Wrench, BookOpen } from "lucide-react";
+import { ArrowRight, FileText, ListChecks, Sparkles, Wrench, BookOpen } from "@/components/ui/icons";
 import type { ResourceItem } from "@/lib/content";
 import { cn } from "@/lib/utils";
 

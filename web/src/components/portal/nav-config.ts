@@ -16,7 +16,7 @@ import {
   Sparkles,
   UserRound,
   Users,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import type { PortalNavGroup, PortalNavItem } from "./types";
 
 export type MemberNavOptions = {

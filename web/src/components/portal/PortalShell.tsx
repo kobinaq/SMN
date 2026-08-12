@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { Menu, PanelLeftClose, PanelLeftOpen, X } from "lucide-react";
+import { Menu, PanelLeftClose, PanelLeftOpen, X } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import {
   PortalSidebar,

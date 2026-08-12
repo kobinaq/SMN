@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Clock, MapPin } from "lucide-react";
+import { ArrowRight, Clock, MapPin } from "@/components/ui/icons";
 import type { EventItem } from "@/lib/content";
 import { formatEventDay } from "@/lib/events";
 import { cn } from "@/lib/utils";

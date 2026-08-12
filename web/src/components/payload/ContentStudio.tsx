@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import { Copy, FileJson, Sparkles } from "lucide-react";
+import { Copy, FileJson, Sparkles } from "@/components/ui/icons";
 import { Select } from "@/components/ui/Select";
 import { StatusBadge } from "@/components/ui/Feedback";
 import { AiMarkdown } from "@/components/ui/AiMarkdown";

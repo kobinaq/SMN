@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useId, useMemo, useRef, useState, useSyncExternalStore } from "react";
-import { Check, ChevronsUpDown, Search, X } from "lucide-react";
+import { Check, ChevronsUpDown, Search, X } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { staffEase } from "@/components/staff/motion";
 

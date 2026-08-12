@@ -9,7 +9,7 @@ import {
   Sparkles,
   Users,
   Briefcase,
-} from "lucide-react";
+} from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
 import { img } from "@/lib/images";
 import { site } from "@/lib/site";

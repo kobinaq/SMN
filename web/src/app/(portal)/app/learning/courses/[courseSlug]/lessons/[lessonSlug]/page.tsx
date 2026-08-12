@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Download, ExternalLink, FileText, PlayCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, Download, ExternalLink, FileText, PlayCircle } from "@/components/ui/icons";
 import { CourseCompletionBanner } from "@/components/app/CourseCompletionBanner";
 import { LmsProgressButton } from "@/components/app/LmsProgressButton";
 import { AITutor } from "@/components/app/AITutor";

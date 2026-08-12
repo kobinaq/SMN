@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { MapPin } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
 import { getMember } from "@/lib/auth/member";
 import { getPublishedOpportunity } from "@/lib/opportunities";

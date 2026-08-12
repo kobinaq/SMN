@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { X } from "lucide-react";
+import { X } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 
 export function TagInput({

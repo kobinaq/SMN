@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight } from "@/components/ui/icons";
 import { CourseCheckoutButton } from "@/components/courses/CourseCheckoutButton";
 import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { EmptyProof } from "@/components/layout/EmptyProof";

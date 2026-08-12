@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { ChevronRight, Globe, LogOut, UserRound } from "lucide-react";
+import { ChevronRight, Globe, LogOut, UserRound } from "@/components/ui/icons";
 import { BrandLogo } from "@/components/layout/BrandLogo";
 import { cn } from "@/lib/utils";
 import type { PortalIdentity, PortalNavGroup, PortalNavItem, PortalVariant } from "./types";

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Target, Users } from "lucide-react";
+import { ArrowRight, BookOpen, Target, Users } from "@/components/ui/icons";
 import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
 import { getSiteSettings } from "@/lib/cms";

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown } from "@/components/ui/icons";
 import { BrandLogo } from "@/components/layout/BrandLogo";
 import { useSiteSettings } from "@/components/layout/SiteSettingsProvider";
 import { nav } from "@/lib/site";

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Award, Download, ExternalLink, ShieldCheck } from "lucide-react";
+import { Award, Download, ExternalLink, ShieldCheck } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
 import { CopyLinkButton } from "@/components/ui/CopyLinkButton";
 import { EmptyState, StatusBadge } from "@/components/ui/Feedback";

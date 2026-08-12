@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, ExternalLink } from "lucide-react";
+import { Check, ExternalLink } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
 
 export function OpportunityApplyButton({ opportunityId }: { opportunityId: string | number }) {

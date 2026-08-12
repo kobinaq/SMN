@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight, MessageCircle } from "@/components/ui/icons";
 import { OnboardingChecklist } from "@/components/app/OnboardingChecklist";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/Feedback";

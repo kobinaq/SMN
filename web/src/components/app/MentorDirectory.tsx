@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { MapPin, Search, UserRound } from "lucide-react";
+import { MapPin, Search, UserRound } from "@/components/ui/icons";
 import type { MentorDirectoryItem } from "@/lib/mentors";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";

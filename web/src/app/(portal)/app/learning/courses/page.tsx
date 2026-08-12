@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BookOpen, Clock, PlayCircle } from "lucide-react";
+import { ArrowRight, BookOpen, Clock, PlayCircle } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
 import { EmptyState, StatusBadge } from "@/components/ui/Feedback";
 import { requireMember } from "@/lib/auth/member";

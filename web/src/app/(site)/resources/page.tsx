@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { ArrowRight, Download, Layers, Mail } from "lucide-react";
+import { ArrowRight, Download, Layers, Mail } from "@/components/ui/icons";
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
 import { ResourceRow } from "@/components/resources/ResourceRow";
 import { ResourceTypeNav } from "@/components/resources/ResourceTypeNav";

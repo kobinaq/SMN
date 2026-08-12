@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Copy, Sparkles } from "lucide-react";
+import { Copy, Sparkles } from "@/components/ui/icons";
 import { AiMarkdown } from "@/components/ui/AiMarkdown";
 import { useToast } from "@/components/ui/Toast";
 import { cn } from "@/lib/utils";

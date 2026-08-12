@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import type { Metadata } from "next";
-import { ExternalLink, MapPin } from "lucide-react";
+import { ExternalLink, MapPin } from "@/components/ui/icons";
 import { EmptyProof } from "@/components/layout/EmptyProof";
 import { Reveal } from "@/components/motion/Reveal";
 import { cta } from "@/lib/cta";

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Download } from "lucide-react";
+import { ArrowLeft, Download } from "@/components/ui/icons";
 import { ResourceDownloadForm } from "@/components/resources/ResourceDownloadForm";
 import { ResourceRow } from "@/components/resources/ResourceRow";
 import { Button } from "@/components/ui/Button";

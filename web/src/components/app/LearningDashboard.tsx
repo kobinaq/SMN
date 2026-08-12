@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { BookOpen, Check, Circle, Clock, ExternalLink, Play, Users } from "lucide-react";
+import { BookOpen, Check, Circle, Clock, ExternalLink, Play, Users } from "@/components/ui/icons";
 import type { LearningDashboardItem, LearningEnrollment } from "@/lib/learning";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
