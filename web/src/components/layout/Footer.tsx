@@ -6,33 +6,20 @@ const footerLinks = [
   {
     title: "Academy",
     links: [
-      { label: "Training Programs", href: "/programs" },
       { label: "Flagship cohort", href: "/programs/cohort" },
-      { label: "Self-Paced Courses", href: "/programs/courses" },
-      { label: "Simulations", href: "/simulations" },
+      { label: "Self-paced courses", href: "/programs/courses" },
       { label: "Apply", href: "/apply" },
     ],
   },
   {
-    title: "Careers & network",
+    title: "Network",
     links: [
       { label: "Job opportunities", href: "/careers/jobs" },
-      { label: "Internships", href: "/careers/internships" },
-      { label: "Mentorship", href: "/mentorship" },
       { label: "Community", href: "/community" },
       { label: "Events", href: "/events" },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
       { label: "About", href: "/about" },
       { label: "Hire Talent", href: "/employers" },
-      { label: "Post a Job", href: "/employers/post-a-job" },
-      { label: "Insights", href: "/insights" },
-      { label: "Resources", href: "/resources" },
       { label: "Contact", href: "/contact" },
-      { label: "Member sign in", href: "/login" },
     ],
   },
 ];
@@ -41,7 +28,7 @@ export function Footer({ site }: { site: SiteConfig }) {
   return (
     <footer className="border-t border-white/10 bg-ink pb-[env(safe-area-inset-bottom)]">
       <div className="container-wide py-12 sm:py-16 md:py-20">
-        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1fr] md:gap-12">
+        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-[1.6fr_1fr_1fr] md:gap-12">
           <div className="sm:col-span-2 md:col-span-1">
             <BrandLogo className="h-8 sm:h-9" />
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60 sm:mt-5">

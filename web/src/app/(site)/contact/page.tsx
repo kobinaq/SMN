@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { ArrowUpRight, Briefcase, Mail, MessageCircle, Mic2 } from "lucide-react";
 import { ContactForm } from "@/components/forms/ContactForm";
+import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
 import { cta } from "@/lib/cta";
 import { img } from "@/lib/images";
@@ -51,39 +51,22 @@ const channels = [
 export default function ContactPage() {
   return (
     <>
-      <section className="relative min-h-[68svh] overflow-hidden border-b border-white/10 bg-near-black pt-[calc(5.5rem+env(safe-area-inset-top))] sm:min-h-[76svh] sm:pt-28">
-        <div className="absolute inset-0">
-          <Image
-            src={img.aboutMission}
-            alt=""
-            fill
-            priority
-            className="object-cover object-[center_35%]"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-near-black via-near-black/90 to-near-black/55" />
-          <div className="absolute inset-0 bg-gradient-to-t from-near-black via-transparent to-near-black/45" />
-        </div>
-
-        <div className="container-wide relative z-10 flex min-h-[calc(68svh-5.5rem)] flex-col justify-end pb-14 sm:min-h-[calc(76svh-7rem)] sm:pb-20">
-          <p className="font-display text-sm tracking-[0.08em] text-baby-blue sm:text-base">
-            Social Marketers Network
-          </p>
-          <h1 className="mt-4 max-w-3xl text-balance font-display text-[2.35rem] leading-[1.05] text-white sm:text-5xl md:text-6xl lg:text-7xl">
-            Let’s talk.
-          </h1>
-          <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base md:text-lg">
-            Partnerships, speaking, talent requests, or a quick question — send a message and we’ll
-            get back to you.
-          </p>
-          <div className="btn-row-mobile mt-8">
+      <CinematicPageHero
+        image={img.aboutMission}
+        alt="SMN instructor presenting to marketers"
+        kicker="Social Marketers Network"
+        title="Let’s talk."
+        description="Partnerships, speaking, talent requests, or a quick question. Send a message and we will get back to you."
+        imageClassName="object-[center_35%]"
+        actions={
+          <>
             <Button href="#message">Send a message</Button>
             <Button href={site.whatsappInvite} target="_blank" rel="noreferrer" variant="secondary">
               {cta.whatsapp.communityLabel}
             </Button>
-          </div>
-        </div>
-      </section>
+          </>
+        }
+      />
 
       <section
         id="message"

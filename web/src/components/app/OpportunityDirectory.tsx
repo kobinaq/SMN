@@ -17,10 +17,10 @@ const sourceLabel: Record<string, string> = {
 
 export function OpportunityDirectory({
   opportunities,
-  hrefFor = (item) => `/app/opportunities/${item.slug}`,
+  hrefPrefix = "/app/opportunities",
 }: {
   opportunities: OpportunityItem[];
-  hrefFor?: (item: OpportunityItem) => string;
+  hrefPrefix?: string;
 }) {
   const [query, setQuery] = useState("");
   const [type, setType] = useState("All types");
@@ -81,7 +81,7 @@ export function OpportunityDirectory({
           {filtered.map((item) => (
             <Link
               key={item.id}
-              href={hrefFor(item)}
+              href={`${hrefPrefix}/${item.slug}`}
               className="group rounded-2xl border border-white/10 bg-surface p-5 transition hover:border-baby-blue/35 sm:p-6"
             >
               <div className="flex items-start justify-between gap-4">

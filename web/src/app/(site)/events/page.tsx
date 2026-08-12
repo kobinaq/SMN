@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import {
   ArrowRight,
-  CalendarDays,
-  Mic2,
   Sparkles,
   Users,
   Video,
@@ -11,9 +9,12 @@ import {
 import { EventCard } from "@/components/events/EventCard";
 import { EventTypeNav } from "@/components/events/EventTypeNav";
 import { FeaturedEvent } from "@/components/events/FeaturedEvent";
+import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
+import { EmptyProof } from "@/components/layout/EmptyProof";
 import { Button } from "@/components/ui/Button";
 import { eventTypes } from "@/lib/content";
 import { formatEventDate, getEventCalendar, getNextEvent } from "@/lib/events";
+import { img } from "@/lib/images";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -55,7 +56,7 @@ const expect = [
   },
   {
     title: "Connected to the Network",
-    body: "Events sit alongside WhatsApp, resources, and the flagship cohort — not isolated one-offs.",
+    body: "Events sit alongside WhatsApp, resources, and the flagship cohort, not isolated one-offs.",
   },
 ];
 
@@ -82,63 +83,51 @@ export default async function EventsPage({ searchParams }: Props) {
 
   return (
     <>
-      {/* Calendar-style hero */}
-      <section className="border-b border-white/10 bg-near-black pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-28">
-        <div className="container-wide py-10 sm:py-12 md:py-16">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
-            <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-surface px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-baby-blue">
-                <CalendarDays className="h-3 w-3" />
-                Events calendar
-              </div>
-              <h1 className="mt-4 font-display text-[1.85rem] leading-tight text-white sm:text-4xl md:text-5xl">
-                Learn live. Meet people. Ship better work.
-              </h1>
-              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/60 sm:text-base">
-                Webinars, workshops, and networking for marketers who want strategy, AI skills, and
-                a real community — not another passive webinar tab.
-              </p>
-              <div className="btn-row-mobile mt-7 sm:mt-8">
-                {next ? (
-                  <Button href={`/events/${next.slug}`}>
-                    Register for next event
-                  </Button>
-                ) : null}
-                <Button
-                  href={site.whatsappInvite}
-                  target="_blank"
-                  rel="noreferrer"
-                  variant="secondary"
-                >
-                  Join WhatsApp
-                </Button>
-              </div>
-            </div>
+      <CinematicPageHero
+        image={img.eventPortfolio}
+        alt="Marketers at an SMN live session"
+        kicker="Events"
+        title="Learn live. Meet people. Ship better work."
+        description="Webinars, workshops, and networking for marketers who want strategy, AI skills, and a real community."
+        actions={
+          <>
+            {next ? <Button href={`/events/${next.slug}`}>Register for next event</Button> : null}
+            <Button
+              href={site.whatsappInvite}
+              target="_blank"
+              rel="noreferrer"
+              variant="secondary"
+            >
+              Join WhatsApp
+            </Button>
+          </>
+        }
+      />
 
-            <div className="grid w-full grid-cols-3 gap-3 sm:max-w-md sm:gap-4 lg:w-auto">
-              <div className="rounded-2xl border border-white/10 bg-ink p-4 sm:p-5">
-                <p className="font-display text-2xl text-white sm:text-3xl">{all.length}</p>
-                <p className="mt-1 text-[11px] leading-snug text-white/40 sm:text-xs">
-                  upcoming sessions
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-ink p-4 sm:p-5">
-                <p className="font-display text-2xl text-mint sm:text-3xl">{freeCount}</p>
-                <p className="mt-1 text-[11px] leading-snug text-white/40 sm:text-xs">
-                  free or open entry
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-ink p-4 sm:p-5">
-                <p className="font-display text-lg leading-tight text-white sm:text-xl">
-                  {next ? formatEventDate(next.date).split(",")[0] : "TBA"}
-                </p>
-                <p className="mt-1 text-[11px] leading-snug text-white/40 sm:text-xs">
-                  next on the calendar
-                </p>
-              </div>
+      <section className="border-b border-white/10 bg-near-black">
+        <div className="container-wide py-8 sm:py-10">
+          <div className="grid grid-cols-3 gap-3 sm:gap-4">
+            <div className="rounded-2xl border border-white/10 bg-ink p-4 sm:p-5">
+              <p className="font-display text-2xl text-white sm:text-3xl">{all.length}</p>
+              <p className="mt-1 text-[11px] leading-snug text-white/40 sm:text-xs">
+                upcoming sessions
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-ink p-4 sm:p-5">
+              <p className="font-display text-2xl text-mint sm:text-3xl">{freeCount}</p>
+              <p className="mt-1 text-[11px] leading-snug text-white/40 sm:text-xs">
+                free or open entry
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-ink p-4 sm:p-5">
+              <p className="font-display text-lg leading-tight text-white sm:text-xl">
+                {next ? formatEventDate(next.date).split(",")[0] : "TBA"}
+              </p>
+              <p className="mt-1 text-[11px] leading-snug text-white/40 sm:text-xs">
+                next on the calendar
+              </p>
             </div>
           </div>
-
           <div className="mt-8 sm:mt-10">
             <Suspense fallback={<div className="h-10 animate-pulse rounded-full bg-white/5" />}>
               <EventTypeNav counts={counts} />
@@ -172,30 +161,20 @@ export default async function EventsPage({ searchParams }: Props) {
               </div>
             </div>
           ) : !showFeatured ? (
-            <div className="rounded-2xl border border-dashed border-white/15 px-6 py-16 text-center">
-              <Mic2 className="mx-auto h-8 w-8 text-white/30" strokeWidth={1.5} />
-              <p className="mt-4 font-display text-xl text-white">
-                {all.length === 0
+            <EmptyProof
+              title={
+                all.length === 0
                   ? "New dates coming soon"
-                  : `No ${active.toLowerCase()}s listed yet`}
-              </p>
-              <p className="mt-2 text-sm text-white/50">
-                {all.length === 0
+                  : `No ${active.toLowerCase()}s listed yet`
+              }
+              body={
+                all.length === 0
                   ? "Join WhatsApp so you hear about the next webinar or workshop first."
-                  : "Check back soon, or browse all upcoming sessions."}
-              </p>
-              <div className="mt-6 flex justify-center">
-                {all.length === 0 ? (
-                  <Button href={site.whatsappInvite} target="_blank" rel="noreferrer">
-                    Join WhatsApp
-                  </Button>
-                ) : (
-                  <Button href="/events" variant="secondary">
-                    Show all events
-                  </Button>
-                )}
-              </div>
-            </div>
+                  : "Check back soon, or browse all upcoming sessions."
+              }
+              href={all.length === 0 ? site.whatsappInvite : "/events"}
+              label={all.length === 0 ? "Join WhatsApp" : "Show all events"}
+            />
           ) : null}
         </div>
       </section>

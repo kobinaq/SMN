@@ -45,7 +45,7 @@ export default async function CareersJobsPage() {
           {opportunities.length ? (
             <OpportunityDirectory
               opportunities={opportunities}
-              hrefFor={(item) => `/careers/jobs/${item.slug}`}
+              hrefPrefix="/careers/jobs"
             />
           ) : (
             <EmptyProof

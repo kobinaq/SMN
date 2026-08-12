@@ -59,7 +59,7 @@ export default async function CareersInternshipsPage() {
           {opportunities.length ? (
             <OpportunityDirectory
               opportunities={opportunities}
-              hrefFor={(item) => `/careers/jobs/${item.slug}`}
+              hrefPrefix="/careers/jobs"
             />
           ) : (
             <EmptyProof

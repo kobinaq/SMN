@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { ApplicationForm } from "@/components/forms/ApplicationForm";
+import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getSiteSettings } from "@/lib/cms";
@@ -57,42 +57,28 @@ export default async function ApplyPage() {
         }}
       />
 
-      <section className="relative min-h-[72svh] overflow-hidden border-b border-white/10 bg-near-black pt-[calc(5.5rem+env(safe-area-inset-top))] sm:min-h-[80svh] sm:pt-28">
-        <div className="absolute inset-0">
-          <Image
-            src={img.instructorTeaching}
-            alt=""
-            fill
-            priority
-            className="object-cover object-[center_25%]"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-near-black via-near-black/90 to-near-black/55" />
-          <div className="absolute inset-0 bg-gradient-to-t from-near-black via-transparent to-near-black/45" />
-        </div>
-
-        <div className="container-wide relative z-10 flex min-h-[calc(72svh-5.5rem)] flex-col justify-end pb-14 sm:min-h-[calc(80svh-7rem)] sm:pb-20">
-          <p className="font-display text-sm tracking-[0.08em] text-baby-blue sm:text-base">
-            Social Marketers Network
-          </p>
-          <h1 className="mt-4 max-w-3xl text-balance font-display text-[2.2rem] leading-[1.05] text-white sm:text-5xl md:text-6xl lg:text-7xl">
-            Apply to the {site.cohort.name}
-          </h1>
-          <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base md:text-lg">
-            Next intake {site.cohort.startDate}. Submit first — SMN reviews before any payment.
-          </p>
-          <div className="btn-row-mobile mt-8">
+      <CinematicPageHero
+        image={img.instructorTeaching}
+        alt="Lead instructor teaching a marketing session"
+        kicker="Social Marketers Network"
+        title={`Apply to the ${site.cohort.name}`}
+        description={`Next intake ${site.cohort.startDate}. Submit first. SMN reviews before any payment.`}
+        imageClassName="object-[center_25%]"
+        actions={
+          <>
             <Button href="#application">Start application</Button>
             <Button href="/programs/cohort" variant="secondary">
               Review cohort details
             </Button>
-          </div>
-          <p className="mt-5 text-xs uppercase tracking-[0.14em] text-white/40">
+          </>
+        }
+        meta={
+          <>
             Deadline · {site.cohort.applicationDeadline} · {site.cohort.duration} · {site.cohort.seats}{" "}
             seats
-          </p>
-        </div>
-      </section>
+          </>
+        }
+      />
 
       <section
         id="application"

@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { SiteDocument } from "@/components/layout/SiteDocument";
 import { Button } from "@/components/ui/Button";
+import { cta } from "@/lib/cta";
 
 const quickLinks = [
   { href: "/programs", label: "Academy" },
-  { href: "/insights", label: "Insights" },
-  { href: "/resources", label: "Resources" },
+  { href: "/events", label: "Events" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -23,13 +23,13 @@ export default function NotFound() {
           This page isn’t here
         </h1>
         <p className="mt-4 max-w-md text-sm leading-relaxed text-white/55 sm:text-base">
-          The page you’re looking for may have moved or never existed. Let’s get you back to
-          something useful.
+          The page you are looking for may have moved or never existed. Apply for the next cohort
+          or head back home.
         </p>
         <div className="btn-row-mobile mt-8">
-          <Button href="/">Back to home</Button>
-          <Button href="/programs" variant="secondary">
-            Explore the Academy
+          <Button href={cta.applyCohort.href}>{cta.applyCohort.shortLabel}</Button>
+          <Button href="/" variant="secondary">
+            Back to home
           </Button>
         </div>
         <nav

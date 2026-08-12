@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Target, Users } from "lucide-react";
+import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
 import { getSiteSettings } from "@/lib/cms";
 import { cta } from "@/lib/cta";
@@ -19,39 +20,21 @@ export default async function ProgramsPage() {
 
   return (
     <>
-      <section className="relative min-h-[78svh] overflow-hidden border-b border-white/10 bg-near-black pt-[calc(5.5rem+env(safe-area-inset-top))] sm:min-h-[85svh] sm:pt-28">
-        <div className="absolute inset-0">
-          <Image
-            src={img.cohortSpotlight}
-            alt="Social Marketers Network cohort members"
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-near-black via-near-black/90 to-near-black/55" />
-          <div className="absolute inset-0 bg-gradient-to-t from-near-black via-transparent to-near-black/40" />
-        </div>
-
-        <div className="container-wide relative z-10 flex min-h-[calc(78svh-5.5rem)] flex-col justify-end pb-14 sm:min-h-[calc(85svh-7rem)] sm:pb-20">
-          <p className="font-display text-sm tracking-[0.08em] text-baby-blue sm:text-base">
-            SMN Academy
-          </p>
-          <h1 className="mt-4 max-w-3xl text-balance font-display text-[2.35rem] leading-[1.05] text-white sm:text-5xl md:text-6xl lg:text-7xl">
-            Choose how you learn with SMN.
-          </h1>
-          <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base md:text-lg">
-            Training programs, self-paced courses, and a simulation waitlist. Practical paths into
-            the Network.
-          </p>
-          <div className="btn-row-mobile mt-8">
+      <CinematicPageHero
+        image={img.cohortSpotlight}
+        alt="Social Marketers Network cohort members"
+        kicker="SMN Academy"
+        title="Choose how you learn with SMN."
+        description="Training programs, self-paced courses, and a simulation waitlist. Practical paths into the Network."
+        actions={
+          <>
             <Button href={cta.applyCohort.href}>{cta.applyCohort.shortLabel}</Button>
             <Button href={cta.viewCourses.href} variant="secondary">
               {cta.viewCourses.label}
             </Button>
-          </div>
-        </div>
-      </section>
+          </>
+        }
+      />
 
       <section data-section-fade className="border-b border-white/10 bg-ink py-16 sm:py-24 md:py-28">
         <div className="container-wide">

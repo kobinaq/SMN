@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { CourseCheckoutButton } from "@/components/courses/CourseCheckoutButton";
+import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
+import { EmptyProof } from "@/components/layout/EmptyProof";
 import { Button } from "@/components/ui/Button";
 import { getMember } from "@/lib/auth/member";
 import { getCourses } from "@/lib/cms";
@@ -21,6 +23,7 @@ type CourseRecord = Awaited<ReturnType<typeof getCourses>>[number] & {
   id?: string | number;
   amount?: number | null;
   currency?: string;
+  delivery?: string;
 };
 
 function priceFor(course: CourseRecord) {
@@ -36,39 +39,21 @@ export default async function CoursesPage() {
 
   return (
     <>
-      <section className="relative min-h-[72svh] overflow-hidden border-b border-white/10 bg-near-black pt-[calc(5.5rem+env(safe-area-inset-top))] sm:min-h-[82svh] sm:pt-28">
-        <div className="absolute inset-0">
-          <Image
-            src={img.courseGrowth}
-            alt=""
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-near-black via-near-black/90 to-near-black/50" />
-          <div className="absolute inset-0 bg-gradient-to-t from-near-black via-transparent to-near-black/40" />
-        </div>
-
-        <div className="container-wide relative z-10 flex min-h-[calc(72svh-5.5rem)] flex-col justify-end pb-14 sm:min-h-[calc(82svh-7rem)] sm:pb-20">
-          <p className="font-display text-sm tracking-[0.08em] text-baby-blue sm:text-base">
-            Social Marketers Network
-          </p>
-          <h1 className="mt-4 max-w-3xl text-balance font-display text-[2.35rem] leading-[1.05] text-white sm:text-5xl md:text-6xl lg:text-7xl">
-            Self-paced courses on your schedule.
-          </h1>
-          <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base md:text-lg">
-            Enroll on SMN to unlock LMS or Classroom access. The flagship cohort still requires an
-            application.
-          </p>
-          <div className="btn-row-mobile mt-8">
+      <CinematicPageHero
+        image={img.courseGrowth}
+        alt="Marketer working through a growth programme"
+        kicker="Academy · Courses"
+        title="Self-paced courses on your schedule."
+        description="Enroll on SMN to unlock LMS or Classroom access. The flagship cohort still requires an application."
+        actions={
+          <>
             <Button href="#catalogue">Browse catalogue</Button>
             <Button href="/programs/cohort" variant="secondary">
               Prefer the live cohort?
             </Button>
-          </div>
-        </div>
-      </section>
+          </>
+        }
+      />
 
       <section data-section-fade className="border-b border-white/10 bg-ink py-10 sm:py-12">
         <div className="container-wide flex flex-col gap-4 border-y border-white/10 py-8 sm:flex-row sm:items-end sm:justify-between sm:py-10">
@@ -78,9 +63,9 @@ export default async function CoursesPage() {
             </p>
             <p className="mt-3 text-sm leading-relaxed text-white/60 sm:text-base">
               Courses are individual purchases with portal access. The flagship programme is a live
-              cohort with review, mentorship, and community —{" "}
+              cohort with review, mentorship, and community.{" "}
               <Link href="/apply" className="text-baby-blue transition hover:text-white">
-                apply separately
+                Apply separately
               </Link>
               .
             </p>
@@ -107,66 +92,85 @@ export default async function CoursesPage() {
           </div>
 
           {!list.length ? (
-            <p className="mt-12 text-sm text-white/50">Courses will appear here when published.</p>
+            <div className="mt-12">
+              <EmptyProof
+                title="Courses will appear here when published"
+                body="The live cohort is open for applications while the catalogue is being prepared."
+                href={cta.applyCohort.href}
+                label={cta.applyCohort.label}
+              />
+            </div>
           ) : (
             <div className="mt-12 space-y-6 sm:mt-14">
               {featured ? (
-                <article className="grid overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface sm:rounded-[2rem] lg:grid-cols-[1.15fr_0.85fr]">
-                  <div className="relative min-h-[240px] sm:min-h-[320px] lg:min-h-[420px]">
-                    <Image
-                      src={featured.image}
-                      alt=""
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 55vw"
-                      priority
-                    />
-                    <div className="image-matte" />
-                  </div>
-                  <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-white/40">
-                      {featured.badge ? (
-                        <span className="rounded-full bg-deep-blue px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
-                          {featured.badge}
-                        </span>
-                      ) : (
-                        <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-mint">
-                          Featured
-                        </span>
-                      )}
-                      <span>
-                        {featured.lessons} lessons · {featured.duration}
-                      </span>
+                <article className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface sm:rounded-[2rem]">
+                  <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
+                    <div className="relative min-h-[240px] sm:min-h-[320px] lg:min-h-[480px]">
+                      <Image
+                        src={featured.image}
+                        alt={featured.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 1024px) 100vw, 55vw"
+                        priority
+                      />
+                      <div className="image-matte" />
                     </div>
-                    <h3 className="mt-4 font-display text-3xl text-white sm:text-4xl">{featured.title}</h3>
-                    <p className="mt-4 text-sm leading-relaxed text-white/60 sm:text-base">
-                      {featured.summary}
-                    </p>
-                    {featured.outcomes?.length ? (
-                      <ul className="mt-5 space-y-1.5 text-sm text-white/45">
-                        {featured.outcomes.slice(0, 4).map((outcome) => (
-                          <li key={outcome} className="flex gap-2">
-                            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-baby-blue" />
-                            {outcome}
+                    <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
+                      <div className="flex flex-wrap items-center gap-2 text-xs text-white/40">
+                        {featured.badge ? (
+                          <span className="rounded-full bg-deep-blue px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
+                            {featured.badge}
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-medium uppercase tracking-[0.16em] text-mint">
+                            Featured
+                          </span>
+                        )}
+                        <span>
+                          {featured.lessons} lessons · {featured.duration}
+                          {featured.delivery ? ` · ${featured.delivery}` : ""}
+                        </span>
+                      </div>
+                      <h3 className="mt-4 font-display text-3xl text-white sm:text-4xl">
+                        {featured.title}
+                      </h3>
+                      <p className="mt-4 text-sm leading-relaxed text-white/60 sm:text-base">
+                        {featured.summary}
+                      </p>
+                      <div className="mt-8 flex flex-wrap items-center gap-4">
+                        <span className="font-display text-xl text-baby-blue">
+                          {priceFor(featured)}
+                        </span>
+                        {featured.id ? (
+                          <CourseCheckoutButton
+                            courseId={featured.id}
+                            amount={featured.amount}
+                            label={cta.buyCourse.label}
+                            signedIn={Boolean(member)}
+                            variant="button"
+                          />
+                        ) : (
+                          <span className="text-xs text-white/35">Configure in staff catalogue</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  {featured.outcomes?.length ? (
+                    <div className="border-t border-white/10 px-6 py-8 sm:px-8 lg:px-10">
+                      <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-white/40">
+                        What you work through
+                      </p>
+                      <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        {featured.outcomes.map((outcome) => (
+                          <li key={outcome} className="flex gap-3 text-sm leading-relaxed text-white/60">
+                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-baby-blue" />
+                            <span>{outcome}</span>
                           </li>
                         ))}
                       </ul>
-                    ) : null}
-                    <div className="mt-8 flex flex-wrap items-center gap-4">
-                      <span className="font-display text-xl text-baby-blue">{priceFor(featured)}</span>
-                      {featured.id ? (
-                        <CourseCheckoutButton
-                          courseId={featured.id}
-                          amount={featured.amount}
-                          label={cta.buyCourse.label}
-                          signedIn={Boolean(member)}
-                          variant="button"
-                        />
-                      ) : (
-                        <span className="text-xs text-white/35">Configure in staff catalogue</span>
-                      )}
                     </div>
-                  </div>
+                  ) : null}
                 </article>
               ) : null}
 
@@ -181,7 +185,7 @@ export default async function CoursesPage() {
                       <div className="relative aspect-[16/10] overflow-hidden">
                         <Image
                           src={course.image}
-                          alt=""
+                          alt={course.title}
                           fill
                           className="object-cover transition duration-700 group-hover:scale-[1.03]"
                           sizes="(max-width: 768px) 100vw, 33vw"
@@ -235,7 +239,7 @@ export default async function CoursesPage() {
             <div className="max-w-lg">
               <h2 className="font-display text-3xl text-white">Want the live cohort instead?</h2>
               <p className="mt-3 text-sm text-white/55">
-                Apply for review, mentorship, and a shared intake — separate from catalogue checkout.
+                Apply for review, mentorship, and a shared intake. Separate from catalogue checkout.
               </p>
             </div>
             <div className="btn-row-mobile">

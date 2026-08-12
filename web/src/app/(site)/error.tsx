@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { Button } from "@/components/ui/Button";
+import { cta } from "@/lib/cta";
 
 export default function SiteError({
   error,
@@ -23,14 +24,14 @@ export default function SiteError({
         We couldn’t load this page
       </h1>
       <p className="mt-4 max-w-md text-sm leading-relaxed text-white/55 sm:text-base">
-        This is on us, not you. Try again in a moment, or head back to the homepage.
+        This is on us, not you. Try again in a moment, or apply for the next cohort.
       </p>
       <div className="btn-row-mobile mt-8">
         <Button type="button" onClick={reset}>
           Try again
         </Button>
-        <Button href="/" variant="secondary">
-          Back to home
+        <Button href={cta.applyCohort.href} variant="secondary">
+          {cta.applyCohort.shortLabel}
         </Button>
       </div>
     </section>
