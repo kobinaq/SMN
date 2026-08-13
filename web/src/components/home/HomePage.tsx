@@ -7,7 +7,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { HeroPhotoGallery } from "@/components/home/HeroPhotoGallery";
 import { CohortSpotlight } from "@/components/home/CohortSpotlight";
 import { GooeyText } from "@/components/motion/GooeyText";
-import { ecosystem, instructor } from "@/lib/content";
+import { ecosystem, excerptStoryQuote, instructor } from "@/lib/content";
 import { img } from "@/lib/images";
 import { cta } from "@/lib/cta";
 import {
@@ -31,6 +31,7 @@ export async function HomePage() {
 
   const featuredEvents = events.slice(0, 3);
   const featuredCourses = courses.slice(0, 3);
+  const homeStories = stories.slice(0, 4);
 
   return (
     <HomeStory>
@@ -290,7 +291,7 @@ export async function HomePage() {
         </div>
       </section>
 
-      {stories.length ? (
+      {homeStories.length ? (
         <section data-section-fade className="border-y border-white/10 bg-surface py-16 sm:py-24 md:py-32">
           <div className="container-wide">
             <SectionHeading
@@ -298,7 +299,7 @@ export async function HomePage() {
               description="See the work members build, and how SMN helps them show it with clarity."
             />
             <div data-stagger className="mt-8 grid gap-4 sm:mt-14 sm:gap-6 md:grid-cols-2">
-              {stories.map((story) => (
+              {homeStories.map((story) => (
                 <figure
                   key={story.name}
                   data-stagger-item
@@ -317,7 +318,7 @@ export async function HomePage() {
                     </div>
                   </div>
                   <blockquote className="mt-6 text-base leading-relaxed text-white/75">
-                    “{story.quote}”
+                    “{excerptStoryQuote(story.quote)}”
                   </blockquote>
                 </figure>
               ))}

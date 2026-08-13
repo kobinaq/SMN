@@ -29,8 +29,12 @@ export default async function EditStoryPage({ params }: { params: Promise<{ id: 
           initial={{
             name: doc.name,
             role: doc.role,
+            programme: doc.programme,
             quote: doc.quote,
             image: relationId(doc.image),
+            portfolioUrl: doc.portfolioUrl,
+            permissionConfirmed: doc.permissionConfirmed,
+            published: doc.published,
           }}
           submitLabel="Save story"
           onSuccessHref={`/staff/website/stories/${doc.id}`}

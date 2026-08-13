@@ -19,11 +19,16 @@ export default async function WebsiteStoriesPage() {
       <StaffPanel>
         {stories.docs.length ? (
           <StaffTable
-            columns={["Name", "Role", "Updated"]}
+            columns={["Name", "Role", "Status", "Updated"]}
             rows={stories.docs.map((doc) => ({
               key: String(doc.id),
               href: `/staff/website/stories/${doc.id}`,
-              cells: [doc.name, doc.role, doc.updatedAt ? new Date(doc.updatedAt).toLocaleDateString("en-GH") : "—"],
+              cells: [
+                doc.name,
+                doc.role,
+                doc.published && doc.permissionConfirmed ? "Live" : "Draft",
+                doc.updatedAt ? new Date(doc.updatedAt).toLocaleDateString("en-GH") : "-",
+              ],
             }))}
           />
         ) : (

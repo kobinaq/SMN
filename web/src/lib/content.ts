@@ -389,6 +389,14 @@ export const stories: {
   portfolioUrl?: string;
 }[] = [];
 
+/** Short teaser for homepage and community. The stories page uses the full quote. */
+export function excerptStoryQuote(quote: string, maxChars = 160) {
+  const text = quote.replace(/\s+/g, " ").trim();
+  if (text.length <= maxChars) return text;
+  const clipped = text.slice(0, maxChars).replace(/\s+\S*$/, "").trim();
+  return `${clipped || text.slice(0, maxChars)}…`;
+}
+
 export type BlogPost = {
   slug: string;
   title: string;

@@ -19,7 +19,7 @@ export type StaffField =
       advanced?: boolean;
     }
   | { name: string; label: string; type: "select"; required?: boolean; options: Array<{ label: string; value: string }>; advanced?: boolean }
-  | { name: string; label: string; type: "checkbox"; required?: boolean; advanced?: boolean }
+  | { name: string; label: string; type: "checkbox"; required?: boolean; advanced?: boolean; description?: string }
   | { name: string; label: string; type: "media"; required?: boolean; advanced?: boolean };
 
 export function StaffRecordForm({
@@ -67,6 +67,11 @@ export function StaffRecordForm({
       else if (field.type === "number") data[field.name] = raw === "" ? null : Number(raw);
       else data[field.name] = raw;
     }
+    if (collection === "stories" && data.published && !data.permissionConfirmed) {
+      setMessage("Confirm the member gave permission before publishing.");
+      setBusy(false);
+      return;
+    }
     try {
       const response = await fetch("/api/staff/records", {
         method: "POST",
@@ -92,12 +97,35 @@ export function StaffRecordForm({
 
   function renderField(field: StaffField) {
     const wide = field.type === "textarea" || field.type === "checkbox" || field.type === "media";
+    if (field.type === "checkbox") {
+      return (
+        <label
+          key={field.name}
+          className="flex items-start gap-3 text-sm text-white/70 md:col-span-2"
+        >
+          <input
+            className="mt-1 h-4 w-4 shrink-0 accent-baby-blue"
+            type="checkbox"
+            checked={Boolean(values[field.name])}
+            onChange={(event) =>
+              setValues((current) => ({ ...current, [field.name]: event.target.checked }))
+            }
+          />
+          <span>
+            <span className="block text-white">{field.label}</span>
+            {field.description ? (
+              <span className="mt-1 block text-xs leading-relaxed text-white/45">{field.description}</span>
+            ) : null}
+          </span>
+        </label>
+      );
+    }
     return (
       <label key={field.name} className={`block text-sm text-white/70 ${wide ? "md:col-span-2" : ""}`}>
         {field.label}
         {field.type === "textarea" ? (
           <textarea
-            className={`${staffFieldClass} min-h-36`}
+            className={`${staffFieldClass} min-h-44`}
             required={field.required}
             value={String(values[field.name] || "")}
             placeholder={field.placeholder}
@@ -117,13 +145,6 @@ export function StaffRecordForm({
               </option>
             ))}
           </Select>
-        ) : field.type === "checkbox" ? (
-          <input
-            className="ml-3 mt-3"
-            type="checkbox"
-            checked={Boolean(values[field.name])}
-            onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.checked }))}
-          />
         ) : field.type === "media" ? (
           <StaffMediaField
             name={field.name}

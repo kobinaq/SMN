@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { HomePage } from "@/components/home/HomePage";
 import { getSiteSettings } from "@/lib/cms";
 
+export const revalidate = 60;
+
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSiteSettings();
   return {

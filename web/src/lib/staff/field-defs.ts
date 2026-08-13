@@ -137,8 +137,28 @@ export const eventFields: StaffField[] = [
 export const storyFields: StaffField[] = [
   { name: "name", label: "Name", type: "text", required: true },
   { name: "role", label: "Role", type: "text", required: true },
-  { name: "quote", label: "Quote", type: "textarea", required: true },
+  { name: "programme", label: "Programme (optional)", type: "text", placeholder: "Cohort or course name" },
+  {
+    name: "quote",
+    label: "Quote",
+    type: "textarea",
+    required: true,
+    placeholder: "Full testimonial. The homepage shows a short excerpt. /stories shows this in full.",
+  },
   { name: "image", label: "Image", type: "media" },
+  { name: "portfolioUrl", label: "Portfolio URL (optional)", type: "url" },
+  {
+    name: "permissionConfirmed",
+    label: "Member gave permission to publish",
+    type: "checkbox",
+    description: "Required before a story can go live on the public site.",
+  },
+  {
+    name: "published",
+    label: "Published on the public site",
+    type: "checkbox",
+    description: "Shows on the homepage stories band and /stories once permission is confirmed.",
+  },
 ];
 
 export const lmsModuleFields: StaffField[] = [

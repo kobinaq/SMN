@@ -11,6 +11,7 @@ import {
   Briefcase,
 } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
+import { excerptStoryQuote } from "@/lib/content";
 import { img } from "@/lib/images";
 import { site } from "@/lib/site";
 import { getStories } from "@/lib/cms";
@@ -20,6 +21,8 @@ export const metadata: Metadata = {
   description:
     "Join the Social Marketers Network WhatsApp community. Feedback, accountability, opportunities, and people who get it.",
 };
+
+export const revalidate = 60;
 
 const whoFor = [
   {
@@ -112,6 +115,7 @@ const steps = [
 
 export default async function CommunityPage() {
   const stories = await getStories();
+  const communityStories = stories.slice(0, 4);
   return (
     <>
       {/* Hero */}
@@ -303,7 +307,7 @@ export default async function CommunityPage() {
         </div>
       </section>
 
-      {stories.length ? (
+      {communityStories.length ? (
         <section className="bg-near-black py-16 sm:py-24">
           <div className="container-wide">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -320,7 +324,7 @@ export default async function CommunityPage() {
               </Link>
             </div>
             <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-2">
-              {stories.map((story) => (
+              {communityStories.map((story) => (
                 <figure
                   key={story.name}
                   className="rounded-2xl border border-white/10 bg-surface p-5 sm:rounded-[1.75rem] sm:p-7"
@@ -341,7 +345,7 @@ export default async function CommunityPage() {
                     </div>
                   </div>
                   <blockquote className="mt-5 text-sm leading-relaxed text-white/70 sm:text-base">
-                    “{story.quote}”
+                    “{excerptStoryQuote(story.quote)}”
                   </blockquote>
                 </figure>
               ))}

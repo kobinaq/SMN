@@ -1,4 +1,4 @@
-import type { CollectionConfig } from "payload";
+import { APIError, type CollectionConfig } from "payload";
 
 const staffOnly = ({ req }: { req: { user?: { collection?: string } | null } }) =>
   req.user?.collection === "users";
@@ -57,7 +57,12 @@ export const Stories: CollectionConfig = {
     beforeChange: [
       ({ data }) => {
         if (data?.published && !data?.permissionConfirmed) {
-          data.published = false;
+          throw new APIError(
+            "Confirm the member gave permission before publishing this story.",
+            400,
+            undefined,
+            true,
+          );
         }
         return data;
       },

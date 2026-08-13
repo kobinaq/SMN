@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { cta } from "@/lib/cta";
 import { site } from "@/lib/site";
-import { courses, stories } from "@/lib/content";
+import { courses, excerptStoryQuote, stories } from "@/lib/content";
 
 describe("marketing defaults", () => {
   it("withholds unconfirmed cohort pricing", () => {
@@ -19,6 +19,15 @@ describe("marketing defaults", () => {
 
   it("does not ship seed testimonials as public fallbacks", () => {
     expect(stories).toEqual([]);
+  });
+
+  it("shortens homepage story quotes without changing the full quote", () => {
+    const full =
+      "SMN gave me a way to talk about my work that finally made sense to clients, and the community kept me shipping when I would have stalled.";
+    const excerpt = excerptStoryQuote(full, 80);
+    expect(excerpt.length).toBeLessThan(full.length);
+    expect(excerpt.endsWith("…")).toBe(true);
+    expect(excerptStoryQuote("Short quote.")).toBe("Short quote.");
   });
 
   it("keeps apply / purchase / sign-in terminology distinct", () => {

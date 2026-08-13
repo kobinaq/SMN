@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/stories" },
 };
 
+export const revalidate = 60;
+
 export default async function StoriesPage() {
   const stories = await getStories();
   const [featured, ...rest] = stories;
