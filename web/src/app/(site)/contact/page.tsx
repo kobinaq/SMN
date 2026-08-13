@@ -32,8 +32,8 @@ const channels = [
   },
   {
     icon: Briefcase,
-    label: "Employers",
-    title: "Hire SMN talent",
+    label: "Partners",
+    title: "Partner with us",
     href: "/employers",
     external: false,
     body: "Share a role or ask about marketers from the Network.",
@@ -48,7 +48,12 @@ const channels = [
   },
 ];
 
-export default function ContactPage() {
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string }>;
+}) {
+  const { type } = await searchParams;
   return (
     <>
       <CinematicPageHero
@@ -117,7 +122,7 @@ export default function ContactPage() {
               inbox.
             </p>
             <div className="mt-8 rounded-[1.75rem] border border-white/10 bg-surface p-5 sm:rounded-[2rem] sm:p-8 md:p-10">
-              <ContactForm />
+              <ContactForm defaultType={type} />
             </div>
           </div>
         </div>

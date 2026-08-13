@@ -7,18 +7,19 @@ const footerLinks = [
     title: "Academy",
     links: [
       { label: "Flagship cohort", href: "/programs/cohort" },
-      { label: "Self-paced courses", href: "/programs/courses" },
+      { label: "Courses", href: "/programs/courses" },
+      { label: "Experience", href: "/experience" },
       { label: "Apply", href: "/apply" },
     ],
   },
   {
     title: "Network",
     links: [
-      { label: "Job opportunities", href: "/careers/jobs" },
+      { label: "Jobs", href: "/careers/jobs" },
       { label: "Community", href: "/community" },
       { label: "Events", href: "/events" },
       { label: "About", href: "/about" },
-      { label: "Hire Talent", href: "/employers" },
+      { label: "Partner with us", href: "/employers" },
       { label: "Contact", href: "/contact" },
     ],
   },

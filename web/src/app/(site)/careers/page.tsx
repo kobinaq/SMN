@@ -5,12 +5,13 @@ import { ArrowRight } from "@/components/ui/icons";
 import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
 import { cta } from "@/lib/cta";
+import { seoTitle } from "@/lib/brand";
 import { img } from "@/lib/images";
 
 export const metadata: Metadata = {
-  title: "Careers",
+  title: seoTitle("Marketing Career Training"),
   description:
-    "Marketing job opportunities, internships, and mentorship through Social Marketers Network.",
+    "Marketing jobs, internships, and mentorship through Social Marketers Network. Browse openings publicly. Apply from a member account.",
   alternates: { canonical: "/careers" },
 };
 
@@ -22,7 +23,7 @@ export default function CareersHubPage() {
         alt="Two marketers collaborating with a tablet"
         kicker="Careers"
         title="Jobs, internships, and mentorship for marketers."
-        description="Browse openings publicly. Apply and track activity from a member account when you are ready."
+        description="Browse openings publicly. Apply and track activity from a member account. Internships and Experience Programme placements are how many members turn training into workplace proof."
         actions={
           <>
             <Button href={cta.browseJobs.href}>{cta.browseJobs.label}</Button>
@@ -77,7 +78,8 @@ export default function CareersHubPage() {
                   Find internship pathways
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-white/60">
-                  Entry roles and briefs for marketers building workplace proof.
+                  Entry roles, briefs, and Experience Programme placements for marketers building
+                  workplace proof.
                 </p>
               </div>
               <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/85">
@@ -114,7 +116,8 @@ export default function CareersHubPage() {
           <div className="max-w-xl">
             <h2 className="font-display text-2xl text-white sm:text-3xl">Hiring marketers?</h2>
             <p className="mt-3 text-sm leading-relaxed text-white/55">
-              Share roles, request interns, or hire SMN talent with portfolio evidence.
+              Share roles, request interns, host an Experience placement, or hire SMN talent with
+              portfolio evidence. Employment is not guaranteed.
             </p>
           </div>
           <div className="btn-row-mobile">

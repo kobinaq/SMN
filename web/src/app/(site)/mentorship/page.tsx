@@ -2,27 +2,32 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
+import { seoTitle } from "@/lib/brand";
 import { img } from "@/lib/images";
 
 export const metadata: Metadata = {
-  title: "Mentorship",
+  title: seoTitle("Marketing Mentorship"),
   description:
-    "Get guidance from brand marketers, agency leaders, consultants, and alumni in the Social Marketers Network.",
+    "Learn from people already doing the work. SMN connects mentees with experienced marketing professionals for guidance, perspective, and practical advice.",
   alternates: { canonical: "/mentorship" },
 };
 
 const sessions = [
   {
-    title: "Portfolio review",
-    body: "Walk through a case study with someone who hires or briefs marketers. Leave with a clearer story, not a pile of vague compliments.",
-  },
-  {
-    title: "Career question",
+    title: "Career decisions",
     body: "Stuck on positioning, a role change, or what to learn next? Bring one decision. Get a direct read from someone who has made it.",
   },
   {
-    title: "Stuck campaign",
-    body: "A live brief, a quiet channel, or a client who will not lock a goal. Mentors help you choose the next move, not a new template.",
+    title: "Marketing skills",
+    body: "A live brief, a quiet channel, or a client who will not lock a goal. Mentors help you choose the next move.",
+  },
+  {
+    title: "Portfolio and personal brand",
+    body: "Walk through a case study with someone who hires or briefs marketers. Leave with a clearer story.",
+  },
+  {
+    title: "Freelancing and professional development",
+    body: "Offers, rates, client communication, and how to navigate the industry without guessing alone.",
   },
 ];
 
@@ -51,11 +56,11 @@ export default function MentorshipPage() {
         image={img.mentorshipPair}
         alt="Mentor and member sitting together"
         kicker="Mentorship"
-        title="Guidance from people who have done the work."
-        description="Brand marketers, agency leads, consultants, founders, and alumni. You bring a real question. They help you move."
+        title="Learn from people already doing the work."
+        description="Marketing careers rarely follow a straight line. Sometimes what you need is not another course. It is a conversation with someone who has already been where you are trying to go."
         actions={
           <>
-            <Button href="/app/mentors">Browse mentors</Button>
+            <Button href="/app/mentors">Find a mentor</Button>
             <Button href="/mentorship/become-a-mentor" variant="secondary">
               Become a mentor
             </Button>
@@ -67,11 +72,11 @@ export default function MentorshipPage() {
         <div className="container-wide grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
           <div>
             <h2 className="font-display text-3xl text-white sm:text-4xl md:text-5xl">
-              What a session is for
+              For mentees
             </h2>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-white/55 sm:text-base">
-              Mentorship at SMN is not a lecture series. It is a working conversation about one
-              problem you actually have.
+              SMN connects mentees with experienced marketing professionals who can offer guidance,
+              perspective, and practical advice on real questions you actually have.
             </p>
           </div>
           <div className="space-y-0 border-t border-white/10">
@@ -119,14 +124,18 @@ export default function MentorshipPage() {
         <div className="container-wide">
           <div className="grid gap-8 overflow-hidden rounded-2xl border border-white/10 bg-surface p-6 sm:rounded-[2rem] sm:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div>
-              <h2 className="font-display text-2xl text-white sm:text-3xl">Find your mentor</h2>
+              <h2 className="font-display text-2xl text-white sm:text-3xl">Find a mentor</h2>
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/55">
                 The directory lives in the member portal so requests stay relevant and easy to
-                coordinate. Create an account if you do not have one yet.
+                coordinate. Create an account if you do not have one yet. Mentors apply separately
+                and are reviewed by SMN before they appear.
               </p>
             </div>
             <div className="btn-row-mobile lg:justify-end">
-              <Button href="/app/mentors">Browse mentors</Button>
+              <Button href="/app/mentors">Find a mentor</Button>
+              <Button href="/mentorship/become-a-mentor" variant="secondary">
+                Become a mentor
+              </Button>
             </div>
           </div>
         </div>

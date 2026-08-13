@@ -5,12 +5,13 @@ import { BlogCategoryNav } from "@/components/blog/BlogCategoryNav";
 import { BlogNewsletter } from "@/components/blog/BlogNewsletter";
 import { FeaturedPost } from "@/components/blog/FeaturedPost";
 import { getBlogPosts } from "@/lib/blog";
+import { seoTitle } from "@/lib/brand";
 import { blogCategories } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Insights",
+  title: seoTitle("Social Media Marketing Tips"),
   description:
-    "The SMN blog: strategy, AI, social media, and career advice for modern marketers.",
+    "Practical insights, frameworks and perspectives on social media, marketing strategy, AI, careers and the changing world of work.",
 };
 
 type Props = {
@@ -48,11 +49,11 @@ export default async function InsightsPage({ searchParams }: Props) {
           <div className="mt-3 flex flex-col gap-6 lg:mt-4 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
               <h1 className="font-display text-[1.85rem] leading-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
-                The SMN blog
+                Ideas for marketers navigating what is next.
               </h1>
               <p className="mt-3 text-sm leading-relaxed text-white/60 sm:mt-4 sm:text-base md:text-lg">
-                Strategy, AI, social systems, and career notes for marketers who want to think
-                clearly and ship better work.
+                Practical insights, frameworks, and perspectives on social media, marketing
+                strategy, AI, careers, and the changing world of work.
               </p>
             </div>
             <p className="text-sm text-white/40">

@@ -22,13 +22,14 @@ export default function RequestInternPage() {
     <section className="border-b border-white/10 bg-ink pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-28">
       <div className="container-wide grid gap-12 py-14 sm:py-20 lg:grid-cols-2 lg:gap-16">
         <div>
-          <p className="font-display text-sm tracking-[0.08em] text-baby-blue">Employers</p>
+          <p className="text-sm font-display tracking-[0.08em] text-baby-blue">Partners</p>
           <h1 className="mt-4 font-display text-4xl text-white sm:text-5xl md:text-6xl">
             Request an SMN intern for your next campaign.
           </h1>
           <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/60 sm:text-base">
             Tell us the role, timeline, and skills you need. We match motivated marketers from the
-            Network. Placements are not guaranteed.
+            Network, including Experience Programme participants where the fit is right. Placements
+            are not guaranteed.
           </p>
           <ul className="mt-8 space-y-3 text-sm text-white/70">
             {needs.map((item) => (

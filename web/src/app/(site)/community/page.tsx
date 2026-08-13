@@ -12,67 +12,68 @@ import {
 } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
 import { excerptStoryQuote } from "@/lib/content";
+import { seoTitle } from "@/lib/brand";
 import { img } from "@/lib/images";
 import { site } from "@/lib/site";
 import { getStories } from "@/lib/cms";
 
 export const metadata: Metadata = {
-  title: "Community",
+  title: seoTitle("Marketing Community in Ghana"),
   description:
-    "Join the Social Marketers Network WhatsApp community. Feedback, accountability, opportunities, and people who get it.",
+    "Join a growing community of aspiring and professional marketers learning, connecting, finding mentors and discovering opportunities.",
 };
 
 export const revalidate = 60;
 
 const whoFor = [
   {
-    title: "Beginners",
-    body: "Starting out and tired of learning alone. Get direction, language, and people who have been where you are.",
+    title: "Starting out",
+    body: "Build your foundation, discover your strengths, and stop learning marketing in isolation.",
   },
   {
-    title: "Social media managers",
-    body: "You already post. You want strategy, feedback, and a network that helps you level up past content execution.",
+    title: "Building your career",
+    body: "Develop strategic skills, get feedback, and strengthen your professional profile.",
   },
   {
-    title: "Freelancers & creatives",
-    body: "Build systems, position your offer, and meet peers who take the craft seriously.",
+    title: "Already in marketing",
+    body: "Stay current, sharpen your thinking, and connect with people across the industry.",
   },
   {
-    title: "Marketers & business owners",
-    body: "Stay sharp on AI, social, and growth. Share problems, get honest takes, keep learning.",
+    title: "Building a business",
+    body: "Understand marketing better and meet people who can help you grow.",
   },
 ];
 
 const channels = [
   {
-    icon: MessageCircle,
-    title: "Daily conversation",
-    body: "Ask questions, share wins, drop work-in-progress. Fast feedback from people who speak marketing.",
-  },
-  {
     icon: Sparkles,
-    title: "Feedback & critique",
-    body: "Campaigns, captions, calendars, and portfolios. Get specific notes, not empty praise.",
+    title: "Learn together",
+    body: "Discuss marketing ideas, industry changes, tools, and trends.",
   },
   {
-    icon: CalendarDays,
-    title: "Events & sessions",
-    body: "Webinars, workshops, and live drop-ins announced first in community so you never miss a seat.",
-  },
-  {
-    icon: Briefcase,
-    title: "Opportunities",
-    body: "Roles, freelance leads, collabs, and calls for talent when members and partners share openings.",
-  },
-  {
-    icon: Users,
-    title: "Accountability",
-    body: "Weekly energy to ship. Find partners for practice projects and stay consistent.",
+    icon: MessageCircle,
+    title: "Ask questions",
+    body: "Get perspectives from other members and experienced professionals.",
   },
   {
     icon: Handshake,
-    title: "Mentor moments",
-    body: "Office hours, AMAs, and guidance from experienced marketers, including Arielle and guests.",
+    title: "Find mentors",
+    body: "Connect with people who can help you navigate your career.",
+  },
+  {
+    icon: Briefcase,
+    title: "Discover opportunities",
+    body: "Access relevant jobs, internships, projects, and industry opportunities.",
+  },
+  {
+    icon: Users,
+    title: "Build relationships",
+    body: "Meet people who could become collaborators, colleagues, clients, or friends.",
+  },
+  {
+    icon: CalendarDays,
+    title: "Keep growing",
+    body: "Stay connected to learning long after you have completed a course.",
   },
 ];
 
@@ -127,16 +128,17 @@ export default async function CommunityPage() {
                 Community
               </p>
               <h1 className="mt-3 max-w-2xl font-display text-[1.85rem] leading-tight text-white sm:mt-4 sm:text-4xl md:text-5xl lg:text-6xl">
-                The room marketers wish they had earlier
+                You should not have to figure out your marketing career alone
               </h1>
               <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/60 sm:mt-5 sm:text-base md:text-lg">
-                Social Marketers Network is more than classes. It is a living WhatsApp community for
-                beginners, social managers, freelancers, and marketers who want strategy, practice,
-                and people in their corner.
+                The Social Marketers Network is a community for people learning, working, and
+                growing in marketing. A place to ask questions, exchange ideas, find mentors,
+                discover opportunities, and build relationships with people who understand the
+                industry you are navigating.
               </p>
               <div className="btn-row-mobile mt-8 sm:mt-10">
                 <Button href={site.whatsappInvite} target="_blank" rel="noreferrer">
-                  Join WhatsApp
+                  Join the Network
                 </Button>
                 <Button href="/events" variant="secondary">
                   See upcoming events
@@ -209,7 +211,7 @@ export default async function CommunityPage() {
       <section className="bg-near-black py-16 sm:py-24">
         <div className="container-wide">
           <h2 className="max-w-2xl font-display text-2xl text-white sm:text-3xl md:text-4xl">
-            Built for people who take marketing seriously
+            Built for people learning, working, and growing in marketing
           </h2>
           <div className="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
             {whoFor.map((item) => (
@@ -231,7 +233,7 @@ export default async function CommunityPage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-xl">
               <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
-                What actually happens in the community
+                What happens inside the Network?
               </h2>
             </div>
             <p className="max-w-sm text-sm text-white/50">
@@ -268,11 +270,11 @@ export default async function CommunityPage() {
           </div>
           <div>
             <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
-              Helpful, honest, and serious about growth
+              The marketing community you wish you had started with.
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-white/65 sm:mt-5 sm:text-base">
-              SMN exists because marketing careers move faster with community. We celebrate wins,
-              critique work with care, and stay curious about strategy and AI without the noise.
+              Whether you are taking your first steps into marketing or have years of experience,
+              there is room for you here. Helpful, honest, and serious about growth.
             </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {principles.map((p) => (
@@ -363,22 +365,22 @@ export default async function CommunityPage() {
           <div className="mt-10 grid gap-4 sm:mt-12 sm:grid-cols-3 sm:gap-5">
             {[
               {
-                title: "Flagship cohort",
-                body: "Live Social Media Marketing & AI with practice, portfolio work, and community.",
+                title: "Flagship training",
+                body: "Live Social Media Marketing and AI with practice, portfolio work, and community.",
                 href: "/programs/cohort",
-                cta: "View cohort",
+                cta: "View training",
               },
               {
-                title: "Free resources",
-                body: "Templates, prompts, and checklists you can use this week.",
-                href: "/resources",
-                cta: "Browse library",
+                title: "Mentorship",
+                body: "Guidance from people already doing the work. Bring one clear question.",
+                href: "/mentorship",
+                cta: "How mentorship works",
               },
               {
-                title: "Insights",
-                body: "Strategy, AI, and career notes from Arielle and the Network.",
-                href: "/insights",
-                cta: "Read the blog",
+                title: "Events",
+                body: "Webinars, workshops, and community gatherings announced first in the Network.",
+                href: "/events",
+                cta: "See upcoming events",
               },
             ].map((card) => (
               <Link
@@ -406,7 +408,7 @@ export default async function CommunityPage() {
           <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div>
               <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
-                You do not have to figure marketing out alone
+                You should not have to figure marketing out alone
               </h2>
               <p className="mt-4 max-w-xl text-sm text-white/70 sm:text-base">
                 Come introduce yourself, ask a question, or share what you are building. The Network

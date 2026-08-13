@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { cta } from "@/lib/cta";
-import { site } from "@/lib/site";
+import { site, nav } from "@/lib/site";
 import { courses, excerptStoryQuote, stories } from "@/lib/content";
 
 describe("marketing defaults", () => {
@@ -35,5 +35,15 @@ describe("marketing defaults", () => {
     expect(cta.buyCourse.label).toMatch(/Enroll/i);
     expect(cta.memberSignIn.href).toBe("/login");
     expect(cta.hireTalent.href).toBe("/employers");
+    expect(cta.hireTalent.label).toMatch(/Hire SMN talent/i);
+  });
+
+  it("exposes Experience and Partners in public navigation", () => {
+    const academy = nav.find((item) => item.label === "Academy");
+    const partners = nav.find((item) => item.label === "Partners");
+    expect(academy && "children" in academy && academy.children.some((child) => child.href === "/experience")).toBe(
+      true,
+    );
+    expect(partners?.href).toBe("/employers");
   });
 });

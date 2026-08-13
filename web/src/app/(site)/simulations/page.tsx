@@ -1,21 +1,18 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { Button } from "@/components/ui/Button";
+import { seoTitle, simulationPractice } from "@/lib/brand";
 import { img } from "@/lib/images";
 
 export const metadata: Metadata = {
-  title: "Marketing Simulations",
+  title: seoTitle("Marketing Simulations"),
   description:
-    "Join the waitlist for SMN marketing simulations: campaign briefs and decision drills. The live practice product is not open yet.",
+    "Practise marketing judgement with realistic challenges. SMN simulations are on a waitlist. Register your interest for the next window.",
   alternates: { canonical: "/simulations" },
 };
-
-const upcoming = [
-  "Brand crisis desk: triage a public thread and decide what stays in-public",
-  "Growth experiment lab: pick a hypothesis, design a light test, report what you would measure",
-];
 
 export default function SimulationsPage() {
   return (
@@ -24,8 +21,8 @@ export default function SimulationsPage() {
         image={img.resAudit}
         alt="Marketing audit workbook and notes"
         kicker="Academy · Waitlist"
-        title="Simulations are on the way."
-        description="Practice briefs and decision drills are not live yet. Register your interest and we will write when the next window opens."
+        title="Do not just learn marketing. Practise it."
+        description="Marketing becomes easier to understand when you have a problem to solve. SMN simulations will let you step into the role of a marketer and work through realistic challenges. The live practice product is not open yet."
         actions={
           <>
             <Button href="#simulation-interest">Join the waitlist</Button>
@@ -50,16 +47,16 @@ export default function SimulationsPage() {
           </div>
           <div>
             <h2 className="font-display text-3xl text-white sm:text-4xl md:text-5xl">
-              First up: Campaign war room
+              What you will practise
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-white/60 sm:text-base">
-              A timed brief covering audience, offer, channel mix, and a one-week content plan. You
-              ship decisions, not a slide deck for its own sake.
+              When simulations open, you will work through briefs that ask you to research, decide,
+              and defend your ideas. Join the waitlist and we will write when the next window is
+              ready.
             </p>
-            <p className="mt-6 text-sm text-white/40">Also on the list</p>
-            <ul className="mt-3 space-y-3 text-sm text-white/70">
-              {upcoming.map((item) => (
-                <li key={item} className="flex gap-3">
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+              {simulationPractice.map((item) => (
+                <li key={item} className="flex gap-3 text-sm text-white/70">
                   <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-mint" />
                   <span>{item}</span>
                 </li>
@@ -69,18 +66,39 @@ export default function SimulationsPage() {
         </div>
       </section>
 
-      <section
-        id="simulation-interest"
-        className="scroll-mt-24 bg-near-black py-16 sm:py-24"
-      >
+      <section className="border-b border-white/10 bg-near-black py-16 sm:py-24">
+        <div className="container-wide max-w-3xl">
+          <h2 className="font-display text-3xl text-white sm:text-4xl md:text-5xl">
+            From classroom knowledge to marketing judgement.
+          </h2>
+          <p className="mt-5 text-sm leading-relaxed text-white/65 sm:text-base">
+            Real marketers rarely receive a perfect brief with every answer provided. They research.
+            They ask questions. They make decisions. They defend their ideas. They adapt. Our
+            simulations are designed to help you develop that kind of thinking.
+          </p>
+          <p className="mt-4 text-sm leading-relaxed text-white/45">
+            Until they open, the{" "}
+            <Link href="/programs/cohort" className="text-baby-blue transition hover:text-white">
+              live training programme
+            </Link>{" "}
+            and{" "}
+            <Link href="/programs/courses" className="text-baby-blue transition hover:text-white">
+              self-paced courses
+            </Link>{" "}
+            are the live learning paths.
+          </p>
+        </div>
+      </section>
+
+      <section id="simulation-interest" className="scroll-mt-24 bg-ink py-16 sm:py-24">
         <div className="container-wide grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
           <div>
             <h2 className="font-display text-3xl text-white sm:text-4xl">
               Register your interest
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-white/55 sm:text-base">
-              No member account required. Tell us which scenario you want first. We follow up when
-              a window is ready. Until then, the cohort and self-paced courses are the live paths.
+              No member account required. Tell us which kind of challenge you want first. We follow
+              up when a window is ready.
             </p>
           </div>
           <div className="rounded-[1.75rem] border border-white/10 bg-surface p-6 sm:rounded-[2rem] sm:p-8 md:p-10">

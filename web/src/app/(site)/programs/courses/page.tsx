@@ -9,13 +9,14 @@ import { Button } from "@/components/ui/Button";
 import { getMember } from "@/lib/auth/member";
 import { getCourses } from "@/lib/cms";
 import { cta } from "@/lib/cta";
+import { courseCategories, seoTitle } from "@/lib/brand";
 import { img } from "@/lib/images";
 import { formatMinorAmount } from "@/lib/payments/paystack";
 
 export const metadata: Metadata = {
-  title: "Self-paced courses",
+  title: seoTitle("Social Media Marketing Courses"),
   description:
-    "Individual marketing programmes with checkout on SMN. Separate from the flagship cohort application.",
+    "Explore practical social media marketing, AI and digital marketing courses designed for modern marketers.",
   alternates: { canonical: "/programs/courses" },
 };
 
@@ -43,13 +44,13 @@ export default async function CoursesPage() {
         image={img.learnSolo}
         alt="Marketer learning on a phone in the lounge"
         kicker="Academy · Courses"
-        title="Self-paced courses on your schedule."
-        description="Enroll on SMN to unlock LMS or Classroom access. The flagship cohort still requires an application."
+        title="Learn marketing at your own pace."
+        description="Practical, focused courses designed to help you build specific marketing skills without committing to a full training programme. Enroll on SMN to unlock portal access."
         actions={
           <>
-            <Button href="#catalogue">Browse catalogue</Button>
+            <Button href="#catalogue">Explore courses</Button>
             <Button href="/programs/cohort" variant="secondary">
-              Prefer the live cohort?
+              Prefer live training?
             </Button>
           </>
         }
@@ -59,8 +60,9 @@ export default async function CoursesPage() {
         <div className="container-wide flex flex-col gap-4 border-y border-white/10 py-8 sm:flex-row sm:items-end sm:justify-between sm:py-10">
           <div className="max-w-2xl">
             <p className="text-sm leading-relaxed text-white/60 sm:text-base">
-              Courses are individual purchases with portal access. The flagship programme is a live
-              cohort with review, mentorship, and community.{" "}
+              Whether you are starting out, developing existing skills, or learning something new,
+              these courses are designed around the realities of modern marketing. The flagship
+              programme is a live cohort with review, mentorship, and community.{" "}
               <Link href="/apply" className="text-baby-blue transition hover:text-white">
                 Apply separately
               </Link>
@@ -83,6 +85,15 @@ export default async function CoursesPage() {
             <h2 className="font-display text-3xl text-white sm:text-4xl md:text-5xl">
               Pick a programme and enroll.
             </h2>
+          </div>
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            {courseCategories.map((item) => (
+              <div key={item.title} className="rounded-2xl border border-white/10 bg-surface p-4 sm:p-5">
+                <h3 className="font-display text-base text-white sm:text-lg">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/55">{item.body}</p>
+              </div>
+            ))}
           </div>
 
           {!list.length ? (

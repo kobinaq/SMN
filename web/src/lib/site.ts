@@ -8,9 +8,9 @@ import { COURSE_FEE_PENDING_LABEL, FEE_PENDING_LABEL } from "@/lib/currency";
 export const site = {
   name: "Social Marketers Network",
   shortName: "SMN",
-  tagline: "We develop marketers, not just content creators.",
+  tagline: "Learn social media marketing. Lead with AI. Grow with a community.",
   description:
-    "A professional learning network for modern marketers: practical skills, mentorship, portfolios, credentials, and career opportunities, with a native member platform.",
+    "A marketing academy and community for beginners, early-career marketers, professionals, and business owners. Skills, training, mentorship, practical experience, and a professional network.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://socialmarketers.network",
   email: process.env.OPS_EMAIL ?? "hello@socialmarketers.network",
   whatsappInvite:
@@ -21,15 +21,16 @@ export const site = {
     twitter: "https://x.com/smn_africa",
   },
   homepage: {
-    headline: "Learn marketing that gets results.",
-    supportingCopy: "Strategy, mentorship, and portfolio-ready work, with a network that keeps you growing.",
+    headline: "Learn. Practice. Connect. Grow.",
+    supportingCopy:
+      "Social Marketers Network brings learning, community, experience, and opportunity together so marketers can think, practise, and grow in one place.",
     primaryCtaLabel: "Apply for the next cohort",
-    secondaryCtaLabel: "Explore the Academy",
-    secondaryCtaHref: "/programs",
+    secondaryCtaLabel: "Join the community",
+    secondaryCtaHref: "/community",
   },
   announcementBanner: "",
   footerBlurb:
-    "Member portal with courses, progress tracking, mentorship, opportunities, portfolios, and verifiable credentials. Community on WhatsApp. Catalogue courses enroll on-platform.",
+    "Learn, practise, connect, and grow in one ecosystem. Member portal for courses, mentorship, opportunities, portfolios, and credentials. Community on WhatsApp.",
   cohort: {
     name: "Social Media Marketing & AI Cohort",
     startDate: "September 2026",
@@ -42,7 +43,8 @@ export const site = {
     priceLabel: FEE_PENDING_LABEL,
     priceNote: "Payment is requested after acceptance. Payment plans may be available.",
     priceConfirmed: false,
-    audience: "Beginners, social media managers, freelancers, and marketers ready for strategy-level work",
+    audience:
+      "Aspiring social media managers, students and graduates, freelancers, creators moving into marketing, and early-career marketers",
   },
 } as const;
 
@@ -88,36 +90,37 @@ export const nav = [
     label: "Academy",
     href: "/programs",
     children: [
-      { label: "Training Programs", href: "/programs" },
-      { label: "Self-Paced Courses", href: "/programs/courses" },
+      { label: "Training", href: "/programs/cohort" },
+      { label: "Courses", href: "/programs/courses" },
       { label: "Simulations", href: "/simulations" },
+      { label: "Experience", href: "/experience" },
     ],
   },
   {
     label: "Careers",
     href: "/careers",
     children: [
-      { label: "Job opportunities", href: "/careers/jobs" },
+      { label: "Jobs", href: "/careers/jobs" },
       { label: "Internships", href: "/careers/internships" },
       { label: "Mentorship", href: "/mentorship" },
     ],
   },
   {
-    label: "Employers",
+    label: "Partners",
     href: "/employers",
     children: [
-      { label: "Hire Talent", href: "/employers" },
-      { label: "Request an Intern", href: "/employers/request-intern" },
-      { label: "Post a Job", href: "/employers/post-a-job" },
+      { label: "Partner with us", href: "/employers" },
+      { label: "Request intern", href: "/employers/request-intern" },
+      { label: "Post a job", href: "/employers/post-a-job" },
     ],
   },
   {
     label: "Community",
     href: "/community",
     children: [
-      { label: "WhatsApp Community", href: "/community" },
-      { label: "Events/Webinar", href: "/events" },
-      { label: "Member Stories", href: "/stories" },
+      { label: "Network", href: "/community" },
+      { label: "Events", href: "/events" },
+      { label: "Member stories", href: "/stories" },
     ],
   },
   {
@@ -125,7 +128,7 @@ export const nav = [
     href: "/resources",
     children: [
       { label: "Insights", href: "/insights" },
-      { label: "Free Resources", href: "/resources" },
+      { label: "Free resources", href: "/resources" },
       { label: "Templates", href: "/resources/templates" },
       { label: "Guides", href: "/resources/guides" },
     ],

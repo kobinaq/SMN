@@ -2,7 +2,7 @@ import { img } from "@/lib/images";
 
 export const instructor = {
   name: "Arielle Adodo",
-  role: "Founder & Lead Instructor · Social Media Strategist (B2B & B2C)",
+  role: "Founder & Lead Marketing Strategist, Social Marketers Network",
   image: img.instructor,
   headline: "Arielle Adodo",
   linkedin: "https://www.linkedin.com/in/arielle-adodo/",
@@ -20,8 +20,8 @@ export const instructor = {
 
 export const beliefs = [
   {
-    title: "Strategy over content tricks",
-    body: "Businesses hire marketers to solve problems and drive results, not just to post.",
+    title: "Think like a marketer",
+    body: "Tools and trends do not automatically make you a marketer. Audiences, objectives, and business outcomes do.",
   },
   {
     title: "Practice beats theory alone",
@@ -36,19 +36,19 @@ export const beliefs = [
 export const ecosystem = [
   {
     title: "Learn",
-    body: "Strategy, social media, and AI, taught with real examples you can use on the job.",
+    body: "Training programmes, self-paced courses, webinars, and practical resources.",
   },
   {
     title: "Practice",
-    body: "Assignments, simulations, and client projects that give you work to show.",
+    body: "Simulations, projects, and real-world marketing experiences.",
   },
   {
     title: "Connect",
-    body: "WhatsApp community, mentors, and peers you keep learning with after a programme ends.",
+    body: "Community, events, mentorship, and professional relationships.",
   },
   {
     title: "Grow",
-    body: "Portfolios, verifiable credentials, opportunity tracking, and introductions to employers.",
+    body: "Career development, opportunities, and continuous learning.",
   },
 ];
 
@@ -547,50 +547,40 @@ export const blogCategories = [
 export const curriculum = [
   {
     week: "01",
-    title: "Marketing Foundations & Positioning",
-    topics: ["Market insight", "Positioning", "Offer clarity"],
+    title: "Marketing Foundations",
+    topics: ["Business and marketing objectives", "Target audiences", "Market and competitor research"],
   },
   {
     week: "02",
-    title: "Audience & Research",
-    topics: ["Personas that work", "Jobs to be done", "Research habits"],
+    title: "Content, Distribution and AI-Powered Marketing",
+    topics: ["Content systems", "Distribution", "AI in the workflow"],
   },
   {
     week: "03",
-    title: "Social Strategy",
-    topics: ["Content systems", "Platform strategy", "Community loops"],
+    title: "Audience Growth and Community Building",
+    topics: ["Audience growth", "Community", "Relationship building"],
   },
   {
     week: "04",
-    title: "AI for Marketing Work",
-    topics: ["Prompt systems", "Ops automation", "Quality control"],
+    title: "Analytics, Optimisation and Reporting",
+    topics: ["Measurement", "Optimisation", "Reporting"],
   },
   {
     week: "05",
-    title: "Campaign Design & Execution",
-    topics: ["Briefs", "Creative direction", "Measurement plans"],
+    title: "Personal Branding, Portfolio and Career Growth",
+    topics: ["Personal brand", "Portfolio", "Career positioning"],
   },
   {
     week: "06",
-    title: "Analytics & Decision Making",
-    topics: ["Dashboards", "Experiments", "Reporting that tells a story"],
-  },
-  {
-    week: "07",
-    title: "Portfolio & Career Craft",
-    topics: ["Case studies", "Personal brand", "Interview prep"],
-  },
-  {
-    week: "08",
-    title: "Client Experience Sprint",
-    topics: ["Live project", "Feedback", "Presentation day"],
+    title: "Practical Experience",
+    topics: ["Challenges", "Simulations", "Applied work"],
   },
 ];
 
 export const cohortFaqs = [
   {
     q: "Who is this cohort for?",
-    a: "Beginners, social media managers, freelancers, and marketers who want real strategy, not only content tips.",
+    a: "Aspiring social media managers, students and graduates, freelancers, creators moving into marketing, early-career marketers, and existing social media professionals.",
   },
   {
     q: "How are live sessions delivered?",

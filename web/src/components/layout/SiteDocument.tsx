@@ -25,7 +25,7 @@ function safeMetadataBase() {
 export const siteMetadata: Metadata = {
   metadataBase: safeMetadataBase(),
   title: {
-    default: `${site.name} | Professional Learning Network`,
+    default: `${site.name} | Learn. Practice. Connect. Grow.`,
     template: `%s · ${site.name}`,
   },
   description: site.description,

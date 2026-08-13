@@ -5,11 +5,13 @@ import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
 import { getStories } from "@/lib/cms";
 import { cta } from "@/lib/cta";
+import { seoTitle } from "@/lib/brand";
 import { img } from "@/lib/images";
 
 export const metadata: Metadata = {
-  title: "Member stories",
-  description: "Published member testimonials and outcomes from the Social Marketers Network.",
+  title: seoTitle("Member Stories"),
+  description:
+    "See what happens when learning becomes practice. Published member stories from Social Marketers Network.",
   alternates: { canonical: "/stories" },
 };
 
@@ -25,8 +27,8 @@ export default async function StoriesPage() {
         image={img.storiesLounge}
         alt="Members talking in the SMN lounge"
         kicker="Social Marketers Network"
-        title="Outcomes from people in the Network."
-        description="Real progress from marketers learning, shipping, and growing with SMN."
+        title="See what happens when learning becomes practice."
+        description="Our participants are not just completing programmes. They are building skills, portfolios, confidence, relationships, and experience."
         imageClassName="object-[center_30%]"
         actions={
           <>
@@ -86,7 +88,7 @@ export default async function StoriesPage() {
             <>
               <div className="max-w-2xl">
                 <h2 className="font-display text-3xl text-white sm:text-4xl">
-                  Marketers finding clarity, craft, and community.
+                  Marketers building skills, portfolios, and experience.
                 </h2>
               </div>
               <div data-stagger className="mt-12 columns-1 gap-6 md:columns-2 md:gap-8">

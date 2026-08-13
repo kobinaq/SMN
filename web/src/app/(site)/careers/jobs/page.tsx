@@ -4,11 +4,12 @@ import { EmptyProof } from "@/components/layout/EmptyProof";
 import { OpportunityDirectory } from "@/components/app/OpportunityDirectory";
 import { Button } from "@/components/ui/Button";
 import { cta } from "@/lib/cta";
+import { seoTitle } from "@/lib/brand";
 import { img } from "@/lib/images";
 import { getPublishedOpportunities } from "@/lib/opportunities";
 
 export const metadata: Metadata = {
-  title: "Job opportunities",
+  title: seoTitle("Social Media Marketing Jobs Ghana"),
   description:
     "Browse marketing jobs and gigs from Social Marketers Network and partner employers. Open to the public. Sign in to apply.",
   alternates: { canonical: "/careers/jobs" },
@@ -26,7 +27,7 @@ export default async function CareersJobsPage() {
         alt="Marketers in a professional lounge conversation"
         kicker="Careers · Jobs"
         title="Marketing jobs and gigs."
-        description="Browse published roles publicly. Create a member account to apply, track activity, and strengthen your profile."
+        description="Browse published roles publicly. Create a member account to apply, track activity, and strengthen your profile. Training and Experience help you show proof of work. We do not guarantee employment."
         size="compact"
         actions={
           <>

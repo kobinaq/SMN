@@ -14,16 +14,28 @@ export const cta = {
     href: "/programs",
   },
   viewCohort: {
-    label: "View cohort details",
+    label: "View the curriculum",
     href: "/programs/cohort",
   },
+  viewCurriculum: {
+    label: "View the curriculum",
+    href: "/programs/cohort#curriculum",
+  },
   viewCourses: {
-    label: "View courses",
+    label: "Explore courses",
     href: "/programs/courses",
   },
   viewSimulations: {
     label: "Join the waitlist",
     href: "/simulations",
+  },
+  viewExperience: {
+    label: "Learn about Experience",
+    href: "/experience",
+  },
+  joinCommunity: {
+    label: "Join the community",
+    href: "/community",
   },
   /** On-platform Paystack purchase */
   buyCourse: {
@@ -54,7 +66,7 @@ export const cta = {
     href: "/employers/post-a-job",
   },
   partner: {
-    label: "Partner with SMN",
+    label: "Partner with us",
     href: "/employers",
   },
   browseJobs: {

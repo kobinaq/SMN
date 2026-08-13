@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { ResourceFilterPage } from "@/components/resources/ResourceFilterPage";
+import { seoTitle } from "@/lib/brand";
 import { img } from "@/lib/images";
 
 export const metadata: Metadata = {
-  title: "Guides",
+  title: seoTitle("Guides"),
   description:
     "Practical marketing guides from Social Marketers Network for social, AI, and campaign work.",
   alternates: { canonical: "/resources/guides" },

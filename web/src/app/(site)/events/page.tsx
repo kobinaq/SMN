@@ -5,6 +5,7 @@ import {
   Sparkles,
   Users,
   Video,
+  MessageCircle,
 } from "@/components/ui/icons";
 import { EventCard } from "@/components/events/EventCard";
 import { EventTypeNav } from "@/components/events/EventTypeNav";
@@ -12,15 +13,16 @@ import { FeaturedEvent } from "@/components/events/FeaturedEvent";
 import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { EmptyProof } from "@/components/layout/EmptyProof";
 import { Button } from "@/components/ui/Button";
+import { seoTitle } from "@/lib/brand";
 import { eventTypes } from "@/lib/content";
 import { formatEventDate, getEventCalendar, getNextEvent } from "@/lib/events";
 import { img } from "@/lib/images";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Events",
+  title: seoTitle("Marketing Events Ghana"),
   description:
-    "Upcoming SMN webinars, workshops, and networking sessions for social media marketers.",
+    "Come learn with us. Free webinars, workshops, community events, and industry conversations from Social Marketers Network.",
 };
 
 type Props = {
@@ -31,17 +33,22 @@ const formats = [
   {
     icon: Video,
     title: "Webinars",
-    body: "Live teaching on strategy, AI, and social systems. Free and open to the Network.",
+    body: "Accessible sessions on practical marketing topics.",
   },
   {
     icon: Sparkles,
     title: "Workshops",
-    body: "Hands-on sessions where you brief, build, present, and get critique in real time.",
+    body: "Hands-on learning around specific skills and challenges.",
   },
   {
     icon: Users,
-    title: "Networking",
-    body: "Small-group nights for portfolios, feedback, and meeting people in the craft.",
+    title: "Community events",
+    body: "Spaces for marketers to meet, connect, and share.",
+  },
+  {
+    icon: MessageCircle,
+    title: "Industry conversations",
+    body: "Conversations with practitioners about the realities and future of marketing.",
   },
 ];
 
@@ -87,8 +94,8 @@ export default async function EventsPage({ searchParams }: Props) {
         image={img.eventsGathering}
         alt="Circle discussion during an SMN workshop"
         kicker="Events"
-        title="Learn live. Meet people. Ship better work."
-        description="Webinars, workshops, and networking for marketers who want strategy, AI skills, and a real community."
+        title="Come learn with us."
+        description="From free webinars and workshops to community events and industry conversations, SMN creates spaces where marketers can learn, connect, and exchange ideas."
         actions={
           <>
             {next ? <Button href={`/events/${next.slug}`}>Register for next event</Button> : null}
@@ -182,10 +189,10 @@ export default async function EventsPage({ searchParams }: Props) {
       {/* Formats */}
       <section className="border-y border-white/10 bg-near-black py-16 sm:py-20">
         <div className="container-wide">
-          <h2 className="max-w-xl font-display text-2xl text-white sm:text-3xl">
-            Three ways to show up
-          </h2>
-          <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-3 sm:gap-5">
+            <h2 className="max-w-xl font-display text-2xl text-white sm:text-3xl">
+              Event types
+            </h2>
+            <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
             {formats.map((item) => (
               <div
                 key={item.title}
@@ -237,11 +244,11 @@ export default async function EventsPage({ searchParams }: Props) {
           <div className="grid gap-6 rounded-2xl border border-white/10 bg-ink p-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-10 sm:rounded-[2rem] sm:p-8 md:p-10">
             <div>
               <h2 className="font-display text-xl text-white sm:text-2xl md:text-3xl">
-                Events are better with the community
+                Come learn with us
               </h2>
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/55">
-                Join WhatsApp for reminders and recaps, or apply to the flagship cohort when you
-                want live training every week.
+                Join the community for reminders and recaps, or apply to live training when you
+                want a full programme.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:items-end">

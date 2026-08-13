@@ -3,28 +3,17 @@ import Image from "next/image";
 import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { Button } from "@/components/ui/Button";
-import { instructor } from "@/lib/content";
+import { audienceStages, seoTitle, thinkPillars } from "@/lib/brand";
+import { ecosystem, instructor } from "@/lib/content";
+import { cta } from "@/lib/cta";
 import { img } from "@/lib/images";
-import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "About",
-  description: `Mission, story, and instructor behind ${site.name}.`,
+  title: seoTitle("Social Media Marketing Academy"),
+  description:
+    "Social Marketers Network is a professional home for marketers. Learn strategy, social media and AI, gain experience, and grow with a community in Ghana and across Africa.",
   alternates: { canonical: "/about" },
 };
-
-const forWho = [
-  "Beginners who want strategy, not a new posting trick every week",
-  "Social media managers ready to think past the content calendar",
-  "Freelancers who need proof of how they think, not only pretty work",
-  "Marketers and owners who want AI with judgment still in the room",
-];
-
-const notFor = [
-  "Anyone expecting a guaranteed job or income at the end",
-  "People who want theory with no practice or feedback",
-  "Employers looking to hire. That path is Hire Talent, not this page",
-];
 
 export default function AboutPage() {
   return (
@@ -32,14 +21,14 @@ export default function AboutPage() {
       <CinematicPageHero
         image={img.aboutMission}
         alt="Instructor presenting to marketers in the room"
-        kicker="About"
-        title="A place where marketers do not have to figure it out alone."
-        description="Social Marketers Network started in Ghana as an academy and community for people who want strategy, practice, and a network that lasts after a course ends."
+        kicker="About Social Marketers Network"
+        title="Building the community modern marketers need."
+        description="Social Marketers Network is a professional learning network helping aspiring, early-career, and marketing professionals build the skills, experience, and relationships they need to thrive in a rapidly changing industry."
         actions={
           <>
-            <Button href="/apply">Apply for the next cohort</Button>
-            <Button href="/contact" variant="secondary">
-              Contact us
+            <Button href={cta.explorePrograms.href}>{cta.explorePrograms.label}</Button>
+            <Button href={cta.joinCommunity.href} variant="secondary">
+              {cta.joinCommunity.label}
             </Button>
           </>
         }
@@ -48,19 +37,18 @@ export default function AboutPage() {
       <section className="border-b border-white/10 bg-ink py-16 sm:py-24">
         <div className="container-wide grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
           <Reveal>
-            <p className="font-display text-sm tracking-[0.08em] text-baby-blue">How we started</p>
-            <h2 className="mt-4 font-display text-3xl text-white sm:text-4xl md:text-5xl">
-              Built for marketers who are tired of learning in isolation.
+            <h2 className="font-display text-3xl text-white sm:text-4xl md:text-5xl">
+              Marketing is changing. How we learn it should too.
             </h2>
             <p className="mt-5 text-sm leading-relaxed text-white/65 sm:text-base">
-              Arielle Adodo founded SMN to help beginners, social media managers, and marketing
-              professionals move past random posting. The work is strategy, AI used with care, and
-              real practice with other people in the room.
+              Social media has evolved from simply posting content into an important part of how
+              businesses build brands, communities, and revenue. At the same time, AI is changing
+              how marketers research, create, analyse, and work.
             </p>
             <p className="mt-4 text-sm leading-relaxed text-white/65 sm:text-base">
-              Today that means live training, a member platform, WhatsApp community, and a path
-              toward portfolios, credentials, and introductions. The aim is simple: be a home for
-              modern marketers across Africa and beyond.
+              Learning marketing is still often fragmented. People learn a tool here, a platform
+              there, and a collection of content tricks without understanding how everything
+              connects. We want to change that.
             </p>
           </Reveal>
           <Reveal delay={0.08}>
@@ -79,40 +67,73 @@ export default function AboutPage() {
       </section>
 
       <section className="bg-near-black py-16 sm:py-24">
-        <div className="container-wide grid gap-12 lg:grid-cols-2 lg:gap-16">
-          <div>
-            <h2 className="font-display text-3xl text-white sm:text-4xl">Who thrives here</h2>
-            <ul className="mt-6 space-y-4">
-              {forWho.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/70 sm:text-base">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-baby-blue" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+        <div className="container-wide">
+          <h2 className="max-w-3xl font-display text-3xl text-white sm:text-4xl md:text-5xl">
+            We do not just teach marketers what to do. We teach them how to think.
+          </h2>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2">
+            {thinkPillars.map((item) => (
+              <article
+                key={item.title}
+                className="rounded-[1.75rem] border border-white/10 bg-surface p-6 sm:p-8"
+              >
+                <h3 className="font-display text-2xl text-white">{item.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/60 sm:text-base">{item.body}</p>
+              </article>
+            ))}
           </div>
-          <div>
-            <h2 className="font-display text-3xl text-white sm:text-4xl">Who should go elsewhere</h2>
-            <ul className="mt-6 space-y-4">
-              {notFor.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/70 sm:text-base">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-white/25" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-6 text-sm text-white/45">
-              Hiring or partnering?{" "}
-              <a href="/employers" className="text-baby-blue transition hover:text-white">
-                Hire SMN talent
-              </a>
-              .
-            </p>
+        </div>
+      </section>
+
+      <section className="border-y border-white/10 bg-ink py-16 sm:py-24">
+        <div className="container-wide max-w-3xl">
+          <h2 className="font-display text-3xl text-white sm:text-4xl md:text-5xl">
+            More than an academy.
+          </h2>
+          <p className="mt-5 text-sm leading-relaxed text-white/65 sm:text-base">
+            Courses can teach you a skill. A network can change the trajectory of your career. SMN
+            brings together learning, community, mentorship, practical experience, and industry
+            connections in one ecosystem.
+          </p>
+          <p className="mt-4 text-sm leading-relaxed text-white/65 sm:text-base">
+            You can join us to learn something new, find a mentor, meet other marketers, work on a
+            simulation, attend an event, access an opportunity, or simply stay connected to an
+            industry that never stops changing.
+          </p>
+        </div>
+      </section>
+
+      <section className="bg-near-black py-16 sm:py-24">
+        <div className="container-wide">
+          <h2 className="max-w-2xl font-display text-3xl text-white sm:text-4xl">
+            Built for marketers at different stages of the journey.
+          </h2>
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
+            {audienceStages.map((item) => (
+              <div key={item.title} className="rounded-[1.75rem] border border-white/10 bg-surface p-6 sm:p-8">
+                <h3 className="font-display text-xl text-white sm:text-2xl">{item.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/60 sm:text-base">{item.body}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       <section className="border-t border-white/10 bg-ink py-16 sm:py-24">
+        <div className="container-wide">
+          <h2 className="font-display text-3xl text-white sm:text-4xl">Learn. Practice. Connect. Grow.</h2>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            {ecosystem.map((item) => (
+              <div key={item.title} className="rounded-[1.75rem] border border-white/10 bg-surface p-6 sm:p-8">
+                <h3 className="font-display text-2xl text-white">{item.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/60">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/10 bg-near-black py-16 sm:py-24">
         <div className="container-wide grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="relative aspect-[4/5] overflow-hidden rounded-2xl sm:rounded-[2rem]">
             <Image
@@ -125,7 +146,7 @@ export default function AboutPage() {
             <div className="image-matte" />
           </div>
           <div>
-            <p className="font-display text-sm tracking-[0.08em] text-baby-blue">Lead instructor</p>
+            <p className="font-display text-sm tracking-[0.08em] text-baby-blue">Meet the lead instructor</p>
             <h2 className="mt-3 font-display text-3xl text-white sm:text-4xl md:text-5xl">
               {instructor.name}
             </h2>
@@ -149,6 +170,27 @@ export default function AboutPage() {
                 View LinkedIn
               </Button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/10 bg-ink py-16 sm:py-20">
+        <div className="container-wide overflow-hidden rounded-2xl border border-white/10 bg-deep-blue p-6 sm:rounded-[2rem] sm:p-10 md:p-14">
+          <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
+            This is only the beginning.
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/70 sm:text-base">
+            We are building toward a future where marketers can learn, gain experience, find
+            mentors, discover opportunities, and build meaningful careers within one connected
+            ecosystem.
+          </p>
+          <div className="btn-row-mobile mt-8">
+            <Button href={cta.joinCommunity.href} variant="light">
+              {cta.joinCommunity.label}
+            </Button>
+            <Button href={cta.applyCohort.href} variant="secondary">
+              {cta.applyCohort.shortLabel}
+            </Button>
           </div>
         </div>
       </section>

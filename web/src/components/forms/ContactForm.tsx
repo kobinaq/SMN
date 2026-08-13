@@ -9,6 +9,9 @@ import { trackEvent } from "@/lib/analytics";
 const types = [
   "General enquiry",
   "Partnership",
+  "Training request",
+  "Collaboration",
+  "Sponsorship",
   "Speaking request",
   "Talent request",
   "Intern request",
@@ -16,12 +19,21 @@ const types = [
   "Other",
 ] as const;
 
-const employerTypes = new Set(["Talent request", "Partnership", "Intern request", "Job posting"]);
+const employerTypes = new Set([
+  "Talent request",
+  "Partnership",
+  "Training request",
+  "Collaboration",
+  "Sponsorship",
+  "Intern request",
+  "Job posting",
+]);
 
 export function ContactForm({ defaultType }: { defaultType?: string }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
-  const isEmployer = Boolean(defaultType && employerTypes.has(defaultType));
+  const selectedType = types.includes(defaultType as (typeof types)[number]) ? defaultType : undefined;
+  const isEmployer = Boolean(selectedType && employerTypes.has(selectedType));
 
   useEffect(() => {
     if (isEmployer) trackEvent("employer_enquiry_start", { location: "contact_form" });
@@ -97,7 +109,7 @@ export function ContactForm({ defaultType }: { defaultType?: string }) {
           className={cn(field, "bg-surface")}
           name="type"
           required
-          defaultValue={defaultType ?? ""}
+          defaultValue={selectedType ?? ""}
         >
           <option value="" disabled>
             Enquiry type

@@ -11,6 +11,7 @@ const staticRoutes = [
   "/programs/cohort",
   "/programs/courses",
   "/simulations",
+  "/experience",
   "/apply",
   "/careers",
   "/careers/jobs",
@@ -50,7 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const priorityFor = (path: string) => {
     if (path === "/") return 1;
-    if (path === "/apply" || path === "/programs/cohort") return 0.9;
+    if (path === "/apply" || path === "/programs/cohort" || path === "/experience") return 0.9;
     if (path.startsWith("/insights/") || path.startsWith("/resources/") || path.startsWith("/careers/jobs/"))
       return 0.5;
     return 0.6;

@@ -6,14 +6,15 @@ import { NewsletterForm } from "@/components/forms/NewsletterForm";
 import { ResourceRow } from "@/components/resources/ResourceRow";
 import { ResourceTypeNav } from "@/components/resources/ResourceTypeNav";
 import { Button } from "@/components/ui/Button";
+import { seoTitle } from "@/lib/brand";
 import { resourceTypes } from "@/lib/content";
 import { getResourceLibrary } from "@/lib/resources";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Resources",
+  title: seoTitle("Social Media Marketing Resources"),
   description:
-    "Free templates, AI prompts, checklists, and toolkits for social media marketers.",
+    "Practical marketing resources you can actually use. Templates, frameworks, checklists, AI prompts, and guides from Social Marketers Network.",
 };
 
 type Props = {
@@ -60,11 +61,12 @@ export default async function ResourcesPage({ searchParams }: Props) {
                 Resource library
               </div>
               <h1 className="mt-4 font-display text-2xl leading-tight text-white sm:text-3xl md:text-4xl">
-                Marketing tools & downloads
+                Practical marketing resources you can actually use.
               </h1>
               <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/55 sm:text-base">
-                Practical files for planning, AI, audits, and portfolios. Grab what you need,
-                use it on real work this week.
+                Free and practical files to help you plan, create, analyse, and improve your
+                marketing. You do not always need another course. Sometimes you just need the right
+                framework, template, or example to help you get started.
               </p>
               <div className="mt-6 flex flex-wrap gap-6 border-t border-white/10 pt-5 text-sm">
                 <div>

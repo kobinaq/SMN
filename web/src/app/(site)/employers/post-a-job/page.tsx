@@ -22,7 +22,7 @@ export default function PostJobPage() {
     <section className="border-b border-white/10 bg-ink pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-28">
       <div className="container-wide grid gap-12 py-14 sm:py-20 lg:grid-cols-2 lg:gap-16">
         <div>
-          <p className="font-display text-sm tracking-[0.08em] text-baby-blue">Employers</p>
+          <p className="font-display text-sm tracking-[0.08em] text-baby-blue">Partners</p>
           <h1 className="mt-4 font-display text-4xl text-white sm:text-5xl md:text-6xl">
             Post a marketing role to the Network.
           </h1>

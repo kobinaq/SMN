@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Target, Users } from "@/components/ui/icons";
+import { ArrowRight, BookOpen, Handshake, Target, Users } from "@/components/ui/icons";
 import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
+import { seoTitle } from "@/lib/brand";
 import { getSiteSettings } from "@/lib/cms";
 import { cta } from "@/lib/cta";
 import { img } from "@/lib/images";
 
 export const metadata: Metadata = {
-  title: "Academy",
+  title: seoTitle("Marketing Academy Ghana"),
   description:
-    "Training programs, self-paced courses, and marketing simulations from Social Marketers Network.",
+    "Training programmes, self-paced courses, marketing simulations, and the SMN Experience Programme from Social Marketers Network.",
   alternates: { canonical: "/programs" },
 };
 
@@ -25,7 +26,7 @@ export default async function ProgramsPage() {
         alt="Social Marketers Network members gathered together"
         kicker="SMN Academy"
         title="Choose how you learn with SMN."
-        description="Training programs, self-paced courses, and a simulation waitlist. Practical paths into the Network."
+        description="Live training, self-paced courses, a simulation waitlist, and the Experience Programme. Practical paths into the Network."
         actions={
           <>
             <Button href={cta.applyCohort.href}>{cta.applyCohort.shortLabel}</Button>
@@ -40,7 +41,7 @@ export default async function ProgramsPage() {
         <div className="container-wide">
           <div className="max-w-2xl">
             <h2 className="font-display text-3xl text-white sm:text-4xl md:text-5xl">
-              Train live, learn self-paced, or join the simulation waitlist.
+              Train live, learn self-paced, practise, then gain experience.
             </h2>
           </div>
 
@@ -60,14 +61,14 @@ export default async function ProgramsPage() {
               <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 md:p-10">
                 <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-near-black/50 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-mint backdrop-blur-sm">
                   <Users className="h-3 w-3" strokeWidth={1.75} />
-                  Training Programs · Application
+                  Training · Application
                 </span>
                 <h3 className="mt-4 font-display text-3xl text-white sm:text-4xl md:text-5xl">
                   {site.cohort.name}
                 </h3>
                 <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/70 sm:text-base">
-                  Live Social Media Marketing & AI with mentorship, portfolio work, member-platform
-                  access, and community.
+                  Become the marketer businesses need. Live Social Media Marketing and AI with
+                  mentorship, portfolio work, and community.
                 </p>
                 <p className="mt-4 text-xs uppercase tracking-[0.14em] text-white/45">
                   {site.cohort.duration} · {site.cohort.startDate} · {site.cohort.seats} seats
@@ -82,30 +83,30 @@ export default async function ProgramsPage() {
             <div className="grid gap-5">
               <Link
                 href="/programs/courses"
-                className="group relative flex min-h-[16rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface p-6 sm:rounded-[2rem] sm:p-7"
+                className="group relative flex min-h-[12rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface p-6 sm:rounded-[2rem] sm:p-7"
               >
                 <div className="pointer-events-none absolute -right-8 top-0 h-40 w-40 rounded-full bg-baby-blue/10 blur-3xl transition duration-500 group-hover:bg-baby-blue/20" />
                 <div className="relative">
                   <span className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-baby-blue">
                     <BookOpen className="h-3.5 w-3.5" strokeWidth={1.75} />
-                    Self-Paced Courses
+                    Courses
                   </span>
                   <h3 className="mt-4 font-display text-2xl text-white sm:text-3xl">
-                    Learn on your schedule
+                    Learn marketing at your own pace
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-white/65">
-                    Strategy, AI, and social systems. Purchase unlocks portal access.
+                    Practical, focused courses for specific skills. Purchase unlocks portal access.
                   </p>
                 </div>
                 <span className="relative mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/85 transition group-hover:text-baby-blue">
-                  View courses
+                  {cta.viewCourses.label}
                   <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
                 </span>
               </Link>
 
               <Link
                 href="/simulations"
-                className="group relative flex min-h-[14rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-near-black p-6 sm:rounded-[2rem] sm:p-7"
+                className="group relative flex min-h-[11rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-near-black p-6 sm:rounded-[2rem] sm:p-7"
               >
                 <div className="relative">
                   <span className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-mint">
@@ -113,14 +114,37 @@ export default async function ProgramsPage() {
                     Simulations · Waitlist
                   </span>
                   <h3 className="mt-4 font-display text-2xl text-white sm:text-3xl">
-                    Practice scenarios, when they open
+                    Do not just learn marketing. Practise it.
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-white/65">
-                    Campaign briefs and decision drills. Join the waitlist for the next window.
+                    Realistic challenges, when they open. Join the waitlist for the next window.
                   </p>
                 </div>
                 <span className="relative mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/85 transition group-hover:text-baby-blue">
                   Join the waitlist
+                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+
+              <Link
+                href="/experience"
+                className="group relative flex min-h-[11rem] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface p-6 sm:rounded-[2rem] sm:p-7"
+              >
+                <div className="relative">
+                  <span className="inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-baby-blue">
+                    <Handshake className="h-3.5 w-3.5" strokeWidth={1.75} />
+                    Experience Programme
+                  </span>
+                  <h3 className="mt-4 font-display text-2xl text-white sm:text-3xl">
+                    From training into professional experience
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-white/65">
+                    Selected participants are matched with brands, agencies, and marketers for
+                    applied work.
+                  </p>
+                </div>
+                <span className="relative mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/85 transition group-hover:text-baby-blue">
+                  {cta.viewExperience.label}
                   <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
                 </span>
               </Link>
@@ -131,19 +155,23 @@ export default async function ProgramsPage() {
 
       <section data-section-fade className="bg-near-black py-16 sm:py-20">
         <div className="container-wide">
-          <div className="grid gap-10 border-y border-white/10 py-10 sm:grid-cols-3 sm:gap-8 sm:py-14">
+          <div className="grid gap-10 border-y border-white/10 py-10 sm:grid-cols-2 lg:grid-cols-4 sm:gap-8 sm:py-14">
             {[
               {
-                label: "Training programs",
+                label: "Training",
                 body: "Scheduled classes, review, mentors, and a shared cohort energy.",
               },
               {
-                label: "Self-paced",
+                label: "Courses",
                 body: "Buy a course, learn in the portal, move at the speed that fits your week.",
               },
               {
                 label: "Simulations",
                 body: "Upcoming practice scenarios. Join the waitlist for the next window.",
+              },
+              {
+                label: "Experience",
+                body: "Applied placements after training. Intern, volunteer, or project-based work.",
               },
             ].map((item) => (
               <div key={item.label}>
@@ -157,7 +185,7 @@ export default async function ProgramsPage() {
             <div className="max-w-xl">
               <h2 className="font-display text-3xl text-white sm:text-4xl">Not sure which path fits?</h2>
               <p className="mt-3 text-sm leading-relaxed text-white/55">
-                Ask about the live cohort, self-paced courses, or the simulation waitlist.
+                Ask about the live cohort, self-paced courses, the simulation waitlist, or Experience.
               </p>
             </div>
             <div className="btn-row-mobile">

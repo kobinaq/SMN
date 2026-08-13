@@ -7,6 +7,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { HeroPhotoGallery } from "@/components/home/HeroPhotoGallery";
 import { CohortSpotlight } from "@/components/home/CohortSpotlight";
 import { GooeyText } from "@/components/motion/GooeyText";
+import { audienceStages } from "@/lib/brand";
 import { ecosystem, excerptStoryQuote, instructor } from "@/lib/content";
 import { img } from "@/lib/images";
 import { cta } from "@/lib/cta";
@@ -68,20 +69,22 @@ export async function HomePage() {
           <div>
             <div data-rule className="mb-6 h-px w-24 bg-baby-blue/60 sm:mb-8" />
             <p data-line className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-              Our philosophy
+              Our belief
             </p>
             <h2
               data-line
               className="mt-3 font-display text-2xl leading-tight text-white sm:mt-4 sm:text-3xl md:text-5xl"
             >
-              We develop marketers, not content creators.
+              Marketing is changing. How we learn it should too.
             </h2>
             <p data-line className="mt-4 text-base leading-relaxed text-white/65 sm:mt-6 sm:text-lg">
-              Businesses hire marketers to understand audiences, solve problems, communicate
-              clearly, use AI wisely, and show results.
+              People learn Canva, Reels, and AI tools without necessarily learning how to think like
+              marketers. Businesses need people who understand audiences, communicate clearly, and
+              connect activity to outcomes.
             </p>
             <p data-line className="mt-3 text-base leading-relaxed text-white/65 sm:mt-4 sm:text-lg">
-              Learning continues on the member platform and in the Network after a course ends.
+              SMN exists to close that gap. Learning, community, experience, and opportunity live in
+              one ecosystem, not a single class.
             </p>
           </div>
           <div
@@ -105,8 +108,8 @@ export async function HomePage() {
         <div className="container-wide">
           <div data-rule className="mb-8 h-px w-full bg-white/10 sm:mb-10" />
           <SectionHeading
-            title="One connected path from learning to opportunity."
-            description="Members learn, practise, get support, build proof, earn credentials, and track opportunities inside one network."
+            title="Learn. Practice. Connect. Grow."
+            description="Members learn, practise, get support, and find opportunities inside one network. A course can teach a skill. A network can change the trajectory of a career."
           />
 
           <div className="relative mx-auto mt-10 max-w-4xl text-center sm:mt-16">
@@ -137,6 +140,27 @@ export async function HomePage() {
         </div>
       </section>
 
+      <section data-section-fade className="border-t border-white/10 bg-ink py-16 sm:py-24 md:py-32">
+        <div className="container-wide">
+          <SectionHeading
+            title="Built for marketers at different stages of the journey."
+            description="Whether you are starting out, already in the work, or building a business, there is a place in the Network."
+          />
+          <div data-stagger className="mt-8 grid gap-4 sm:mt-12 sm:gap-5 md:grid-cols-2">
+            {audienceStages.map((item) => (
+              <div
+                key={item.title}
+                data-stagger-item
+                className="rounded-2xl border border-white/10 bg-surface p-6 sm:rounded-[1.75rem] sm:p-8"
+              >
+                <h3 className="font-display text-xl text-white sm:text-2xl">{item.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/60 sm:text-base">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <CohortSpotlight />
 
       {/* Learning experience */}
@@ -144,9 +168,8 @@ export async function HomePage() {
         <div className="container-wide">
           <div className="flex flex-col justify-between gap-4 sm:gap-6 md:flex-row md:items-end">
             <SectionHeading
-              eyebrow="Learning experience"
-              title="Courses, progress, and a native member portal."
-              description="Members access learning through the SMN platform: courses, modules, lessons, progress tracking, resources, and certificates. Self-paced catalogue courses enroll on-platform."
+              title="Learn marketing at your own pace."
+              description="Focused courses for specific skills when you are not committing to the full training programme. Purchase unlocks portal access."
             />
             <Button href={cta.viewCourses.href} variant="secondary" className="w-full self-start sm:w-auto">
               {cta.viewCourses.label}
@@ -223,7 +246,7 @@ export async function HomePage() {
           </Reveal>
           <Reveal delay={0.08}>
             <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-              Lead instructor
+              Meet the lead instructor
             </p>
             <h2 className="mt-3 font-display text-2xl leading-tight text-white sm:mt-4 sm:text-3xl md:text-5xl">
               {instructor.name}
@@ -269,9 +292,8 @@ export async function HomePage() {
           <Reveal delay={0.08}>
             <div data-rule className="mb-8 h-px w-24 bg-mint/50" />
             <SectionHeading
-              eyebrow="Mentorship & community"
-              title="Support inside the platform and on WhatsApp."
-              description="Members can request mentorship through the portal. The WhatsApp community provides day-to-day feedback, accountability, and peer connection."
+              title="You should not have to figure out your marketing career alone."
+              description="Ask questions, find mentors, discover opportunities, and stay connected after a course ends. Mentorship lives in the portal. Day-to-day conversation lives on WhatsApp."
             />
             <ul className="mt-8 space-y-3 text-white/70">
               <li>· Mentorship requests with topic, goal, and preferred format</li>
@@ -295,8 +317,8 @@ export async function HomePage() {
         <section data-section-fade className="border-y border-white/10 bg-surface py-16 sm:py-24 md:py-32">
           <div className="container-wide">
             <SectionHeading
-              title="Portfolios, stories, and credentials."
-              description="See the work members build, and how SMN helps them show it with clarity."
+              title="See what happens when learning becomes practice."
+              description="Members build skills, portfolios, confidence, and experience. Stories appear here when they are published with permission."
             />
             <div data-stagger className="mt-8 grid gap-4 sm:mt-14 sm:gap-6 md:grid-cols-2">
               {homeStories.map((story) => (
@@ -343,9 +365,8 @@ export async function HomePage() {
           <div className="container-wide">
             <div className="flex flex-col justify-between gap-4 sm:gap-6 md:flex-row md:items-end">
               <SectionHeading
-                eyebrow="Events"
-                title="Learn live. Meet your people."
-                description="Webinars, workshops, and networking."
+                title="Come learn with us."
+                description="Webinars, workshops, community events, and industry conversations."
               />
               <Button href="/events" variant="secondary" className="w-full sm:w-auto">
                 All events
@@ -388,22 +409,22 @@ export async function HomePage() {
           <div className="grid gap-6 sm:gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-center">
             <div>
               <p className="text-[10px] uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-                Employers & partners
+                Partners
               </p>
               <h2 className="mt-3 font-display text-2xl text-white sm:mt-4 sm:text-3xl md:text-4xl">
-                Hire marketers who can think, and verify their credentials.
+                Build with the next generation of marketers.
               </h2>
               <p className="mt-3 max-w-xl text-sm text-white/70 sm:mt-4 sm:text-base">
-                Review portfolios, verify certificates, share opportunities, and partner with SMN on
-                hiring, projects, mentoring, and events.
+                Train teams, hire SMN talent, collaborate on events and briefs, or sponsor access to
+                training and experience.
               </p>
             </div>
             <div className="btn-row-mobile lg:justify-end">
-              <Button href={cta.hireTalent.href} variant="light">
-                {cta.hireTalent.label}
+              <Button href={cta.partner.href} variant="light">
+                {cta.partner.label}
               </Button>
-              <Button href={cta.shareOpportunity.href} variant="secondary">
-                {cta.shareOpportunity.label}
+              <Button href={cta.hireTalent.href} variant="secondary">
+                {cta.hireTalent.label}
               </Button>
             </div>
           </div>
@@ -418,11 +439,11 @@ export async function HomePage() {
               Next step
             </p>
             <h2 className="mx-auto mt-3 max-w-3xl font-display text-2xl text-white sm:mt-4 sm:text-3xl md:text-5xl">
-              Apply for the next cohort
+              This is only the beginning.
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-sm text-white/65 sm:mt-5 sm:text-base">
-              Submit an application. SMN reviews it within a few business days. Payment comes after
-              acceptance, not before you apply. Next intake {site.cohort.startDate}.
+              Apply to the next cohort, or join the community and stay connected while you decide.
+              Payment comes after acceptance, not before you apply. Next intake {site.cohort.startDate}.
             </p>
             <div className="btn-row-mobile mt-8 sm:mt-10">
               <Button href={cta.applyCohort.href}>{cta.applyCohort.label}</Button>
