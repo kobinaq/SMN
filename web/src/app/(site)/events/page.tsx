@@ -212,7 +212,7 @@ export default async function EventsPage({ searchParams }: Props) {
         <div className="container-wide grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
           <div>
             <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
-              Built for people who take marketing seriously
+              Spaces where marketers can learn, connect, and exchange ideas
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-white/60 sm:text-base">
               Most sessions are free. Some have limited seats so the room stays useful. Register

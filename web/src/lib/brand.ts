@@ -47,12 +47,13 @@ export const trainingModules = [
   {
     module: "01",
     title: "Marketing Foundations",
-    body: "Understand how marketing works beyond social media. Identify objectives, research audiences and markets, and connect activity to business outcomes.",
+    body: "Understand how marketing works beyond social media.",
     topics: [
-      "Business and marketing objectives",
-      "Target audiences",
-      "Market and competitor research",
-      "Activity tied to outcomes",
+      "Identify business and marketing objectives",
+      "Understand target audiences",
+      "Research markets and competitors",
+      "Develop marketing objectives",
+      "Connect marketing activity to business outcomes",
     ],
   },
   {
@@ -223,7 +224,7 @@ export const partnerTracks = [
     n: "02",
     kicker: "Hire interns and experience",
     title: "Hire SMN talent",
-    body: "Find emerging talent and create real-world opportunities. Partner with SMN to connect with marketers who are building practical skills and looking to apply them.",
+    body: "Find emerging talent. Create real-world opportunities. Partner with SMN to connect with marketers who are building practical skills and looking to apply them. We can help match opportunities with participants based on their skills, interests, and career direction.",
     items: [
       "Hire interns",
       "Recruit junior talent",
@@ -264,7 +265,7 @@ export const partnerTracks = [
     n: "04",
     kicker: "Sponsor the next generation",
     title: "Invest in access. Invest in opportunity.",
-    body: "Help create more opportunities for aspiring and emerging marketers who may not otherwise have access to quality training, mentorship, professional networks, and industry experience.",
+    body: "Help create more opportunities for aspiring and emerging marketers who may not otherwise have access to quality training, mentorship, professional networks, and industry experience. Your organisation can help someone move from learning marketing to building a career in it.",
     items: [
       "Scholarships",
       "Training programmes",
@@ -281,3 +282,60 @@ export const partnerTracks = [
     formType: "Sponsorship",
   },
 ] as const;
+
+export const trainingAudience = [
+  "Aspiring social media managers",
+  "Students and graduates",
+  "Freelancers",
+  "Creators moving into marketing",
+  "Early-career marketers",
+  "Existing social media professionals",
+];
+
+export const experienceOpportunities = [
+  "Volunteer",
+  "Intern",
+  "Support real projects",
+  "Build their portfolios",
+  "Gain professional experience",
+  "Develop industry relationships",
+];
+
+export const experienceReview = [
+  "What the participant worked on",
+  "What they learned",
+  "Portfolio deliverables completed",
+  "Skills developed",
+  "Mentor feedback",
+  "Areas for continued development",
+];
+
+export const menteeTopics = [
+  "Career decisions",
+  "Marketing skills",
+  "Portfolio development",
+  "Personal branding",
+  "Freelancing",
+  "Professional development",
+  "Navigating the marketing industry",
+];
+
+export const resourceOfferings = [
+  "Content calendars",
+  "Marketing templates",
+  "Strategy frameworks",
+  "Checklists",
+  "AI prompts",
+  "Guides",
+  "Worksheets",
+  "Career resources",
+];
+
+export const insightTopics = [
+  { title: "Social Media", body: "Strategies, platforms, and content." },
+  { title: "Marketing Strategy", body: "How marketers approach business problems." },
+  { title: "AI", body: "How AI is changing marketing work." },
+  { title: "Careers", body: "Skills, portfolios, and professional development." },
+  { title: "Industry", body: "Trends, shifts, and lessons from the marketing industry." },
+  { title: "Case Studies", body: "What brands and marketers can learn from real campaigns." },
+];

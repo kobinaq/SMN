@@ -538,10 +538,12 @@ export const posts: BlogPost[] = [
 
 export const blogCategories = [
   "All",
+  "Social Media",
   "Marketing Strategy",
   "AI",
-  "Social Media",
   "Career Development",
+  "Industry Trends",
+  "Case Studies",
 ] as const;
 
 export const curriculum = [

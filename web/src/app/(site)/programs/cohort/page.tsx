@@ -4,7 +4,9 @@ import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
+  experienceOpportunities,
   seoTitle,
+  trainingAudience,
   trainingLearnApply,
   trainingModules,
   trainingOutcomes,
@@ -105,9 +107,20 @@ export default async function CohortPage() {
                   <p className="text-xs text-baby-blue">Module {module.module}</p>
                   <h3 className="mt-2 font-display text-2xl text-white">{module.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-white/60">{module.body}</p>
-                  <p className="mt-4 text-xs uppercase tracking-[0.12em] text-white/35">
-                    {module.topics.join(" · ")}
-                  </p>
+                  {module.topics.length > 3 ? (
+                    <ul className="mt-4 space-y-2">
+                      {module.topics.map((topic) => (
+                        <li key={topic} className="flex gap-3 text-sm text-white/65">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-baby-blue" />
+                          <span>{topic}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="mt-4 text-xs uppercase tracking-[0.12em] text-white/35">
+                      {module.topics.join(" · ")}
+                    </p>
+                  )}
                 </article>
               ))}
             </div>
@@ -195,8 +208,17 @@ export default async function CohortPage() {
           <div>
             <h2 className="font-display text-3xl text-white sm:text-4xl">Who is this for?</h2>
             <p className="mt-4 text-sm leading-relaxed text-white/60 sm:text-base">
-              {site.cohort.audience}.
+              This programme is designed for people moving from content execution toward strategic
+              marketing work.
             </p>
+            <ul className="mt-6 space-y-3">
+              {trainingAudience.map((item) => (
+                <li key={item} className="flex gap-3 text-sm text-white/70 sm:text-base">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-baby-blue" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
           <div>
             <h2 className="font-display text-3xl text-white sm:text-4xl">
@@ -207,10 +229,17 @@ export default async function CohortPage() {
               into the SMN Experience Programme, where they can be considered for practical
               opportunities with brands, agencies, and marketing professionals.
             </p>
-            <p className="mt-4 text-sm leading-relaxed text-white/60 sm:text-base">
-              Participants may volunteer, intern, support real projects, build portfolios, gain
-              professional experience, and develop industry relationships. Employment is not
-              guaranteed.
+            <ul className="mt-6 space-y-3">
+              {experienceOpportunities.map((item) => (
+                <li key={item} className="flex gap-3 text-sm text-white/70">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-mint" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 text-sm leading-relaxed text-white/45">
+              Employment is not guaranteed. Experience placements depend on fit, readiness, and
+              partner availability.
             </p>
             <div className="btn-row-mobile mt-8">
               <Button href={cta.viewExperience.href}>{cta.viewExperience.label}</Button>

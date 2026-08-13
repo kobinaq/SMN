@@ -362,7 +362,7 @@ export default async function CommunityPage() {
           <h2 className="max-w-xl font-display text-2xl text-white sm:text-3xl md:text-4xl">
             Community is the base. Learning goes further.
           </h2>
-          <div className="mt-10 grid gap-4 sm:mt-12 sm:grid-cols-3 sm:gap-5">
+          <div className="mt-10 grid gap-4 sm:mt-12 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
             {[
               {
                 title: "Flagship training",
@@ -371,16 +371,22 @@ export default async function CommunityPage() {
                 cta: "View training",
               },
               {
+                title: "Events",
+                body: "Webinars, workshops, and community gatherings announced first in the Network.",
+                href: "/events",
+                cta: "See upcoming events",
+              },
+              {
                 title: "Mentorship",
                 body: "Guidance from people already doing the work. Bring one clear question.",
                 href: "/mentorship",
                 cta: "How mentorship works",
               },
               {
-                title: "Events",
-                body: "Webinars, workshops, and community gatherings announced first in the Network.",
-                href: "/events",
-                cta: "See upcoming events",
+                title: "Free resources",
+                body: "Templates, frameworks, and prompts you can use this week.",
+                href: "/resources",
+                cta: "Explore free resources",
               },
             ].map((card) => (
               <Link
@@ -417,7 +423,7 @@ export default async function CommunityPage() {
             </div>
             <div className="btn-row-mobile lg:justify-end">
               <Button href={site.whatsappInvite} target="_blank" rel="noreferrer" variant="light">
-                Join WhatsApp
+                Join SMN
               </Button>
               <Button href="/contact" variant="secondary">
                 Contact us

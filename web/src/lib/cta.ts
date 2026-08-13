@@ -30,7 +30,7 @@ export const cta = {
     href: "/simulations",
   },
   viewExperience: {
-    label: "Learn about Experience",
+    label: "Learn about the Experience Programme",
     href: "/experience",
   },
   joinCommunity: {

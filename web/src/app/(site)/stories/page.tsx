@@ -55,8 +55,13 @@ export default async function StoriesPage() {
               <div className="image-matte" />
             </div>
             <div>
-              <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-mint">Featured story</p>
-              <blockquote className="mt-6 font-display text-2xl leading-snug text-white sm:text-3xl md:text-4xl md:leading-[1.2]">
+              <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-mint">
+                Featured participant
+              </p>
+              <p className="mt-4 font-display text-sm tracking-[0.04em] text-white/50">
+                Meet {featured.name}
+              </p>
+              <blockquote className="mt-4 font-display text-2xl leading-snug text-white sm:text-3xl md:text-4xl md:leading-[1.2]">
                 “{featured.quote}”
               </blockquote>
               <div className="mt-8 border-t border-white/10 pt-6">
@@ -171,8 +176,9 @@ export default async function StoriesPage() {
                 </p>
               </div>
               <div className="btn-row-mobile">
-                <Button href="/programs" variant="secondary">
-                  Explore the Academy
+                <Button href={cta.applyCohort.href}>{cta.applyCohort.shortLabel}</Button>
+                <Button href="/community" variant="secondary">
+                  Join the community
                 </Button>
               </div>
             </div>

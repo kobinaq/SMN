@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
-import { seoTitle } from "@/lib/brand";
+import { menteeTopics, seoTitle } from "@/lib/brand";
 import { img } from "@/lib/images";
 
 export const metadata: Metadata = {
@@ -15,19 +15,31 @@ export const metadata: Metadata = {
 const sessions = [
   {
     title: "Career decisions",
-    body: "Stuck on positioning, a role change, or what to learn next? Bring one decision. Get a direct read from someone who has made it.",
+    body: "Stuck on positioning, a role change, or what to learn next? Bring one decision.",
   },
   {
     title: "Marketing skills",
-    body: "A live brief, a quiet channel, or a client who will not lock a goal. Mentors help you choose the next move.",
+    body: "A live brief, a quiet channel, or a client who will not lock a goal.",
   },
   {
-    title: "Portfolio and personal brand",
-    body: "Walk through a case study with someone who hires or briefs marketers. Leave with a clearer story.",
+    title: "Portfolio development",
+    body: "Walk through a case study with someone who hires or briefs marketers.",
   },
   {
-    title: "Freelancing and professional development",
-    body: "Offers, rates, client communication, and how to navigate the industry without guessing alone.",
+    title: "Personal branding",
+    body: "Get a clearer read on how you present your skills and the work you want next.",
+  },
+  {
+    title: "Freelancing",
+    body: "Offers, rates, client communication, and how to hold a professional relationship.",
+  },
+  {
+    title: "Professional development",
+    body: "What to learn next, and how to grow without collecting another unused course.",
+  },
+  {
+    title: "Navigating the marketing industry",
+    body: "The work rarely follows a straight line. Mentors help you choose the next move.",
   },
 ];
 
@@ -75,9 +87,17 @@ export default function MentorshipPage() {
               For mentees
             </h2>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-white/55 sm:text-base">
-              SMN connects mentees with experienced marketing professionals who can offer guidance,
-              perspective, and practical advice on real questions you actually have.
+              Get guidance on the questions that actually stall a marketing career. SMN connects
+              mentees with experienced professionals who can offer perspective and practical advice.
             </p>
+            <ul className="mt-6 space-y-2">
+              {menteeTopics.map((item) => (
+                <li key={item} className="flex gap-3 text-sm text-white/70">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-baby-blue" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
           <div className="space-y-0 border-t border-white/10">
             {sessions.map((item) => (

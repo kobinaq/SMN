@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { BlogCategoryNav } from "@/components/blog/BlogCategoryNav";
@@ -105,6 +106,21 @@ export default async function InsightsPage({ searchParams }: Props) {
           )}
 
           <BlogNewsletter />
+
+          <div className="flex flex-col gap-3 border-t border-white/10 pt-10 sm:flex-row sm:flex-wrap sm:gap-x-6">
+            <Link href="/programs/cohort" className="text-sm text-baby-blue transition hover:text-white">
+              Social media marketing training
+            </Link>
+            <Link href="/programs/courses" className="text-sm text-baby-blue transition hover:text-white">
+              Self-paced courses
+            </Link>
+            <Link href="/community" className="text-sm text-baby-blue transition hover:text-white">
+              Join the community
+            </Link>
+            <Link href="/resources" className="text-sm text-baby-blue transition hover:text-white">
+              Free resources
+            </Link>
+          </div>
         </div>
       </section>
     </>

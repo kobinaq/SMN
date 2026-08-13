@@ -296,10 +296,10 @@ export async function HomePage() {
               description="Ask questions, find mentors, discover opportunities, and stay connected after a course ends. Mentorship lives in the portal. Day-to-day conversation lives on WhatsApp."
             />
             <ul className="mt-8 space-y-3 text-white/70">
-              <li>· Mentorship requests with topic, goal, and preferred format</li>
-              <li>· Approved mentor directory for members</li>
-              <li>· WhatsApp channels for feedback and opportunities</li>
-              <li>· Events that keep learning live and social</li>
+              <li>· Learn together: ideas, tools, and industry changes</li>
+              <li>· Ask questions and find mentors</li>
+              <li>· Discover jobs, internships, and projects</li>
+              <li>· Stay connected after a course ends</li>
             </ul>
             <div className="btn-row-mobile mt-8 sm:mt-10">
               <Button href="/mentorship" variant="secondary">

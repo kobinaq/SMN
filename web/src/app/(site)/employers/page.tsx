@@ -73,7 +73,7 @@ export default function EmployersPage() {
               {otherTracks.map((item) => (
                 <Link
                   key={item.id}
-                  href={item.href}
+                  href={`/contact?type=${encodeURIComponent(item.formType)}#message`}
                   className="group flex flex-col justify-between rounded-[1.75rem] border border-white/10 bg-surface p-6 transition hover:border-baby-blue/35 sm:rounded-[2rem] sm:p-7"
                 >
                   <div>
@@ -188,6 +188,12 @@ export default function EmployersPage() {
             organisation could contribute to or benefit from the Social Marketers Network, let us
             explore it together.
           </p>
+          <div className="btn-row-mobile mt-8">
+            <Button href="#employer-form">{cta.partner.label}</Button>
+            <Button href="/contact#message" variant="secondary">
+              Contact SMN
+            </Button>
+          </div>
         </div>
       </section>
 

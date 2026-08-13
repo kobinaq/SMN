@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
-import { experienceDeliverables, seoTitle } from "@/lib/brand";
+import { experienceDeliverables, experienceReview, seoTitle } from "@/lib/brand";
 import { cta } from "@/lib/cta";
 import { img } from "@/lib/images";
 
@@ -248,10 +248,16 @@ export default function ExperiencePage() {
           <div>
             <h2 className="font-display text-3xl text-white sm:text-4xl">At the end of the experience</h2>
             <p className="mt-4 text-sm leading-relaxed text-white/60 sm:text-base">
-              SMN will conduct a simple Experience Review with both the participant and partner. We
-              review what the participant worked on, what they learned, portfolio deliverables,
-              skills developed, mentor feedback, and areas for continued development.
+              SMN will conduct a simple Experience Review with both the participant and partner.
             </p>
+            <ul className="mt-6 space-y-3">
+              {experienceReview.map((item) => (
+                <li key={item} className="flex gap-3 text-sm text-white/70">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-mint" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
@@ -260,7 +266,8 @@ export default function ExperiencePage() {
         <div className="container-wide overflow-hidden rounded-2xl border border-white/10 bg-deep-blue p-6 sm:rounded-[2rem] sm:p-10 md:p-14">
           <h2 className="max-w-3xl font-display text-2xl text-white sm:text-3xl md:text-4xl">
             I did not just take a marketing course. I have actually worked through a marketing
-            problem.
+            problem, applied what I learned, received professional feedback, and can show evidence
+            of what I can do.
           </h2>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/70 sm:text-base">
             That is the shared outcome. Applied learning, professional feedback, and evidence of

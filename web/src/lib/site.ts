@@ -44,7 +44,7 @@ export const site = {
     priceNote: "Payment is requested after acceptance. Payment plans may be available.",
     priceConfirmed: false,
     audience:
-      "Aspiring social media managers, students and graduates, freelancers, creators moving into marketing, and early-career marketers",
+      "Aspiring social media managers, students and graduates, freelancers, creators moving into marketing, early-career marketers, and existing social media professionals",
   },
 } as const;
 

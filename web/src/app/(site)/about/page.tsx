@@ -34,6 +34,28 @@ export default function AboutPage() {
         }
       />
 
+      <section className="border-b border-white/10 bg-near-black py-16 sm:py-24">
+        <div className="container-wide grid gap-10 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <h2 className="font-display text-3xl text-white sm:text-4xl">Our mission</h2>
+            <p className="mt-4 text-sm leading-relaxed text-white/65 sm:text-base">
+              Empower aspiring marketers, professionals, and entrepreneurs with the skills,
+              practical experience, community, and industry connections they need to build
+              successful careers, grow businesses, and make meaningful impact through modern
+              marketing.
+            </p>
+          </div>
+          <div>
+            <h2 className="font-display text-3xl text-white sm:text-4xl">Our vision</h2>
+            <p className="mt-4 text-sm leading-relaxed text-white/65 sm:text-base">
+              To build Africa&apos;s leading marketing ecosystem where learning, community, and
+              industry come together to develop exceptional marketing talent and create
+              opportunities for growth.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="border-b border-white/10 bg-ink py-16 sm:py-24">
         <div className="container-wide grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
           <Reveal>

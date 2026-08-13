@@ -8,6 +8,7 @@ const footerLinks = [
     links: [
       { label: "Flagship cohort", href: "/programs/cohort" },
       { label: "Courses", href: "/programs/courses" },
+      { label: "Simulations", href: "/simulations" },
       { label: "Experience", href: "/experience" },
       { label: "Apply", href: "/apply" },
     ],

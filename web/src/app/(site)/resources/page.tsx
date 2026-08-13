@@ -6,7 +6,7 @@ import { NewsletterForm } from "@/components/forms/NewsletterForm";
 import { ResourceRow } from "@/components/resources/ResourceRow";
 import { ResourceTypeNav } from "@/components/resources/ResourceTypeNav";
 import { Button } from "@/components/ui/Button";
-import { seoTitle } from "@/lib/brand";
+import { resourceOfferings, seoTitle } from "@/lib/brand";
 import { resourceTypes } from "@/lib/content";
 import { getResourceLibrary } from "@/lib/resources";
 import { site } from "@/lib/site";
@@ -68,6 +68,16 @@ export default async function ResourcesPage({ searchParams }: Props) {
                 marketing. You do not always need another course. Sometimes you just need the right
                 framework, template, or example to help you get started.
               </p>
+              <ul className="mt-5 flex flex-wrap gap-2">
+                {resourceOfferings.map((item) => (
+                  <li
+                    key={item}
+                    className="rounded-full border border-white/10 bg-surface px-3 py-1.5 text-xs text-white/60"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
               <div className="mt-6 flex flex-wrap gap-6 border-t border-white/10 pt-5 text-sm">
                 <div>
                   <p className="font-display text-2xl text-white">{all.length}</p>
@@ -201,7 +211,6 @@ export default async function ResourcesPage({ searchParams }: Props) {
                 </div>
               )}
 
-              {/* Utility footer strip — not blog newsletter clone */}
               <div className="mt-12 grid gap-4 rounded-xl border border-white/10 bg-ink p-5 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-8 sm:p-6">
                 <div className="flex gap-4">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-deep-blue text-white">
@@ -221,6 +230,17 @@ export default async function ResourcesPage({ searchParams }: Props) {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </div>
+              <p className="mt-8 text-sm text-white/45">
+                Want the thinking behind the files? Read{" "}
+                <Link href="/insights" className="text-baby-blue transition hover:text-white">
+                  Insights
+                </Link>{" "}
+                or{" "}
+                <Link href="/programs/cohort" className="text-baby-blue transition hover:text-white">
+                  apply to live training
+                </Link>
+                .
+              </p>
             </div>
           </div>
         </div>
