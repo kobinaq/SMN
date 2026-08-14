@@ -116,6 +116,7 @@ export type CourseItem = {
   currency?: string;
   programKey?: string;
   delivery?: string;
+  commerce?: "purchase" | "apply";
 };
 
 export const courses: CourseItem[] = [
@@ -131,6 +132,7 @@ export const courses: CourseItem[] = [
     selarUrl: "",
     badge: "Recommended" as string | null,
     image: img.courseGrowth,
+    commerce: "purchase",
   },
   {
     slug: "ai-for-marketers",
@@ -620,7 +622,7 @@ export const cohortFaqs = [
   },
   {
     q: "How do self-paced courses work?",
-    a: "Self-paced courses are purchased on SMN via Paystack. Browse the catalogue, enroll, then access lessons in the member portal. Cohort membership is a separate application path.",
+    a: "Purchase courses checkout on SMN via Paystack, then unlock in the member portal. Apply-first programmes use /apply. Staff grant access or send a payment link after review.",
   },
   {
     q: "What is the fee?",

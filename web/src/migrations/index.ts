@@ -4,6 +4,7 @@ import * as migration_20260717_events_paystack from './20260717_events_paystack'
 import * as migration_20260814_wave3_cohort_applications from './20260814_wave3_cohort_applications';
 import * as migration_20260814_wave4_drop_learning_items from './20260814_wave4_drop_learning_items';
 import * as migration_20260814_lms_cohort_delivery from './20260814_lms_cohort_delivery';
+import * as migration_20260814_course_domain_rebuild from './20260814_course_domain_rebuild';
 
 export const migrations = [
   {
@@ -35,5 +36,10 @@ export const migrations = [
     up: migration_20260814_lms_cohort_delivery.up,
     down: migration_20260814_lms_cohort_delivery.down,
     name: '20260814_lms_cohort_delivery'
+  },
+  {
+    up: migration_20260814_course_domain_rebuild.up,
+    down: migration_20260814_course_domain_rebuild.down,
+    name: '20260814_course_domain_rebuild'
   },
 ];

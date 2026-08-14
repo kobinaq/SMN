@@ -10,27 +10,34 @@ export function numericId(value: unknown): number {
   return Number.isFinite(n) ? n : 0;
 }
 
-export function checkoutCourseGate(course: {
+export function checkoutPublishedAmountGate(course: {
   status?: unknown;
   amount?: unknown;
-  lmsCourse?: unknown;
-  lmsStatus?: unknown;
-}): { ok: true; lmsId: string; amount: number } | { ok: false; error: string; status: number } {
-  if (course.status === "coming-soon") {
-    return { ok: false, error: "This programme is coming soon.", status: 400 };
+  priceConfirmed?: unknown;
+}): { ok: true; amount: number } | { ok: false; error: string; status: number } {
+  if (course.status !== "published") {
+    return { ok: false, error: "This programme is not available.", status: 400 };
+  }
+  if (course.priceConfirmed === false) {
+    return { ok: false, error: "Programme price is not configured.", status: 400 };
   }
   const amount = Number(course.amount || 0);
   if (!amount || amount < 100) {
     return { ok: false, error: "Programme price is not configured.", status: 400 };
   }
-  const lmsId = relationId(course.lmsCourse);
-  if (!lmsId) {
-    return { ok: false, error: "This programme has no lessons yet.", status: 400 };
+  return { ok: true, amount };
+}
+
+export function checkoutCourseGate(course: {
+  status?: unknown;
+  commerce?: unknown;
+  amount?: unknown;
+  priceConfirmed?: unknown;
+}): { ok: true; amount: number } | { ok: false; error: string; status: number } {
+  if (course.commerce !== "purchase") {
+    return { ok: false, error: "This programme is application-only.", status: 400 };
   }
-  if (course.lmsStatus !== "published") {
-    return { ok: false, error: "This programme has no published lessons yet.", status: 400 };
-  }
-  return { ok: true, lmsId, amount };
+  return checkoutPublishedAmountGate(course);
 }
 
 export function paymentStatusAfterFailedDelivery(refunded: boolean): "refunded" | "needs_refund" {

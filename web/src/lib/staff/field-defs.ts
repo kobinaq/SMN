@@ -199,8 +199,7 @@ export const lmsLessonFields: StaffField[] = [
       { label: "Video", value: "video" },
       { label: "Reading / article", value: "reading" },
       { label: "Download / documents", value: "download" },
-      { label: "Assignment", value: "assignment" },
-      { label: "Google Classroom", value: "classroom" },
+      { label: "Google Classroom session", value: "classroom" },
     ],
   },
   {
@@ -208,6 +207,11 @@ export const lmsLessonFields: StaffField[] = [
     label: "Classroom link (optional)",
     type: "url",
     placeholder: "Blank uses the cohort invite on the course",
+  },
+  {
+    name: "sessionAt",
+    label: "Session starts at",
+    type: "datetime-local",
   },
   {
     name: "youtubeUrl",

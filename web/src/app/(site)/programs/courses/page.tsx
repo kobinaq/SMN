@@ -147,7 +147,9 @@ export default async function CoursesPage() {
                         <span className="font-display text-xl text-baby-blue">
                           {priceFor(featured)}
                         </span>
-                        {featured.id ? (
+                        {featured.commerce === "apply" ? (
+                          <Button href="/apply">{cta.applyCohort.shortLabel}</Button>
+                        ) : featured.id ? (
                           <CourseCheckoutButton
                             courseId={featured.id}
                             amount={featured.amount}
@@ -156,7 +158,7 @@ export default async function CoursesPage() {
                             variant="button"
                           />
                         ) : (
-                          <span className="text-xs text-white/35">Configure in staff catalogue</span>
+                          <span className="text-xs text-white/35">Coming soon</span>
                         )}
                       </div>
                     </div>
@@ -221,7 +223,11 @@ export default async function CoursesPage() {
                         ) : null}
                         <div className="mt-6 flex items-center justify-between gap-3 border-t border-white/10 pt-5">
                           <span className="text-sm font-medium text-baby-blue">{priceFor(course)}</span>
-                          {course.id ? (
+                          {course.commerce === "apply" ? (
+                            <Button href="/apply" variant="secondary">
+                              {cta.applyCohort.shortLabel}
+                            </Button>
+                          ) : course.id ? (
                             <CourseCheckoutButton
                               courseId={course.id}
                               amount={course.amount}

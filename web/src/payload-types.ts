@@ -82,6 +82,8 @@ export interface Config {
     'lms-modules': LmsModule;
     'lms-lessons': LmsLesson;
     'lms-lesson-progress': LmsLessonProgress;
+    'lms-assessments': LmsAssessment;
+    'lms-submissions': LmsSubmission;
     portfolios: Portfolio;
     certificates: Certificate;
     'audit-events': AuditEvent;
@@ -120,6 +122,8 @@ export interface Config {
     'lms-modules': LmsModulesSelect<false> | LmsModulesSelect<true>;
     'lms-lessons': LmsLessonsSelect<false> | LmsLessonsSelect<true>;
     'lms-lesson-progress': LmsLessonProgressSelect<false> | LmsLessonProgressSelect<true>;
+    'lms-assessments': LmsAssessmentsSelect<false> | LmsAssessmentsSelect<true>;
+    'lms-submissions': LmsSubmissionsSelect<false> | LmsSubmissionsSelect<true>;
     portfolios: PortfoliosSelect<false> | PortfoliosSelect<true>;
     certificates: CertificatesSelect<false> | CertificatesSelect<true>;
     'audit-events': AuditEventsSelect<false> | AuditEventsSelect<true>;
@@ -538,9 +542,23 @@ export interface LmsCourse {
     | null;
   programKey: string;
   /**
-   * Cohorts appear on the marketing site when published. Self-paced stays in the member LMS.
+   * Self-paced lessons live in SMN. Cohort sessions use the Google Classroom invite. Assessments stay in SMN for both.
    */
   delivery: 'self-paced' | 'cohort';
+  /**
+   * Purchase courses checkout on the public catalogue. Apply-first courses use /apply, then staff grant access or send a payment link.
+   */
+  commerce: 'purchase' | 'apply';
+  /**
+   * Checkout amount in pesewas. Required for Buy now once the fee is confirmed.
+   */
+  amount?: number | null;
+  currency?: string | null;
+  /**
+   * Optional public price label. Blank uses the confirmed GH₵ format from amount.
+   */
+  price?: string | null;
+  badge?: string | null;
   /**
    * Use this published cohort as the next intake on the homepage and apply page.
    */
@@ -664,9 +682,13 @@ export interface LmsLesson {
   summary: string;
   lessonType: 'video' | 'reading' | 'download' | 'assignment' | 'classroom';
   /**
-   * Optional Classroom link for this lesson. Blank uses the cohort invite on the course.
+   * Optional Classroom link for this session. Blank uses the cohort invite on the course.
    */
   classroomUrl?: string | null;
+  /**
+   * When this live session starts.
+   */
+  sessionAt?: string | null;
   /**
    * Optional unlisted YouTube watch/share/embed URL. Videos are streamed by YouTube, not stored in R2.
    */
@@ -710,6 +732,111 @@ export interface LmsLessonProgress {
   lesson: number | LmsLesson;
   status: 'not-started' | 'in-progress' | 'completed';
   completedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lms-assessments".
+ */
+export interface LmsAssessment {
+  id: number;
+  course: number | LmsCourse;
+  module?: (number | null) | LmsModule;
+  lesson?: (number | null) | LmsLesson;
+  title: string;
+  slug: string;
+  kind: 'assignment' | 'quiz';
+  instructions: string;
+  availableFrom?: string | null;
+  dueAt?: string | null;
+  allowLate?: boolean | null;
+  maxAttempts?: number | null;
+  totalMarks?: number | null;
+  questions?:
+    | {
+        prompt: string;
+        type: 'multiple-choice' | 'short-answer';
+        options?:
+          | {
+              option: string;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Hidden from learners. Used to auto-score multiple choice.
+         */
+        answer?: string | null;
+        marks: number;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Used when staff score assignments and short answers.
+   */
+  rubric?:
+    | {
+        criterion: string;
+        description?: string | null;
+        levels?:
+          | {
+              label: string;
+              descriptor?: string | null;
+              marks: number;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  order?: number | null;
+  status: 'draft' | 'published' | 'archived';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lms-submissions".
+ */
+export interface LmsSubmission {
+  id: number;
+  assessment: number | LmsAssessment;
+  course: number | LmsCourse;
+  member: number | Member;
+  attemptNumber: number;
+  status: 'in-progress' | 'submitted' | 'graded' | 'returned';
+  answers?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  textResponse?: string | null;
+  files?:
+    | {
+        label: string;
+        file: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  late?: boolean | null;
+  submittedAt?: string | null;
+  score?: number | null;
+  maxScore?: number | null;
+  feedback?: string | null;
+  rubricScores?:
+    | {
+        criterion: string;
+        marks: number;
+        comment?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  gradedBy?: (number | null) | User;
+  gradedAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -910,7 +1037,9 @@ export interface Payment {
   paystackReference: string;
   paystackAccessCode?: string | null;
   event?: (number | null) | Event;
+  course?: (number | null) | LmsCourse;
   catalogueCourse?: (number | null) | Course;
+  application?: (number | null) | CohortApplication;
   enrollment?: (number | null) | Enrollment;
   eventRegistration?: (number | null) | EventRegistration;
   metadata?:
@@ -1281,6 +1410,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'lms-lesson-progress';
         value: number | LmsLessonProgress;
+      } | null)
+    | ({
+        relationTo: 'lms-assessments';
+        value: number | LmsAssessment;
+      } | null)
+    | ({
+        relationTo: 'lms-submissions';
+        value: number | LmsSubmission;
       } | null)
     | ({
         relationTo: 'portfolios';
@@ -1660,6 +1797,11 @@ export interface LmsCoursesSelect<T extends boolean = true> {
       };
   programKey?: T;
   delivery?: T;
+  commerce?: T;
+  amount?: T;
+  currency?: T;
+  price?: T;
+  badge?: T;
   featured?: T;
   startDate?: T;
   applicationDeadline?: T;
@@ -1713,6 +1855,7 @@ export interface LmsLessonsSelect<T extends boolean = true> {
   summary?: T;
   lessonType?: T;
   classroomUrl?: T;
+  sessionAt?: T;
   youtubeUrl?: T;
   durationMinutes?: T;
   body?: T;
@@ -1740,6 +1883,95 @@ export interface LmsLessonProgressSelect<T extends boolean = true> {
   lesson?: T;
   status?: T;
   completedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lms-assessments_select".
+ */
+export interface LmsAssessmentsSelect<T extends boolean = true> {
+  course?: T;
+  module?: T;
+  lesson?: T;
+  title?: T;
+  slug?: T;
+  kind?: T;
+  instructions?: T;
+  availableFrom?: T;
+  dueAt?: T;
+  allowLate?: T;
+  maxAttempts?: T;
+  totalMarks?: T;
+  questions?:
+    | T
+    | {
+        prompt?: T;
+        type?: T;
+        options?:
+          | T
+          | {
+              option?: T;
+              id?: T;
+            };
+        answer?: T;
+        marks?: T;
+        id?: T;
+      };
+  rubric?:
+    | T
+    | {
+        criterion?: T;
+        description?: T;
+        levels?:
+          | T
+          | {
+              label?: T;
+              descriptor?: T;
+              marks?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  order?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lms-submissions_select".
+ */
+export interface LmsSubmissionsSelect<T extends boolean = true> {
+  assessment?: T;
+  course?: T;
+  member?: T;
+  attemptNumber?: T;
+  status?: T;
+  answers?: T;
+  textResponse?: T;
+  files?:
+    | T
+    | {
+        label?: T;
+        file?: T;
+        id?: T;
+      };
+  late?: T;
+  submittedAt?: T;
+  score?: T;
+  maxScore?: T;
+  feedback?: T;
+  rubricScores?:
+    | T
+    | {
+        criterion?: T;
+        marks?: T;
+        comment?: T;
+        id?: T;
+      };
+  gradedBy?: T;
+  gradedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1864,7 +2096,9 @@ export interface PaymentsSelect<T extends boolean = true> {
   paystackReference?: T;
   paystackAccessCode?: T;
   event?: T;
+  course?: T;
   catalogueCourse?: T;
+  application?: T;
   enrollment?: T;
   eventRegistration?: T;
   metadata?: T;

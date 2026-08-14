@@ -110,17 +110,16 @@ export async function POST(request: Request) {
       if (!parsed.data.courseId) return Response.json({ error: "Course required." }, { status: 400 });
       courseId = numericId(parsed.data.courseId);
       const course = await payload.findByID({
-        collection: "courses",
+        collection: "lms-courses",
         id: courseId,
-        depth: 1,
+        depth: 0,
         overrideAccess: true,
       });
-      const lms = typeof course.lmsCourse === "object" && course.lmsCourse ? course.lmsCourse : null;
       const gate = checkoutCourseGate({
         status: course.status,
+        commerce: course.commerce,
         amount: course.amount,
-        lmsCourse: lms || course.lmsCourse,
-        lmsStatus: lms && "status" in lms ? lms.status : undefined,
+        priceConfirmed: course.priceConfirmed,
       });
       if (!gate.ok) return Response.json({ error: gate.error }, { status: gate.status });
       amount = gate.amount;
@@ -158,7 +157,7 @@ export async function POST(request: Request) {
         paystackReference: init.reference,
         paystackAccessCode: init.accessCode,
         event: eventId,
-        catalogueCourse: courseId,
+        course: courseId,
         eventRegistration: registrationId,
         metadata: { callbackUrl },
       },

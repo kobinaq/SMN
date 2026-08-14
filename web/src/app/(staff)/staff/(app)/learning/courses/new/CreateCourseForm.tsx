@@ -11,6 +11,7 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
   const router = useRouter();
   const [mode, setMode] = useState<Mode>(aiEnabled ? "ai" : "blank");
   const [delivery, setDelivery] = useState<"cohort" | "self-paced">("self-paced");
+  const [commerce, setCommerce] = useState<"purchase" | "apply">("purchase");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -24,6 +25,7 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
     const summary = String(form.get("summary") || "").trim();
     const programKey = String(form.get("programKey") || "").trim();
     const deliveryValue = String(form.get("delivery") || "self-paced") === "cohort" ? "cohort" : "self-paced";
+    const commerceValue = String(form.get("commerce") || "purchase") === "apply" ? "apply" : "purchase";
     const classroomUrl = String(form.get("classroomUrl") || "").trim();
     const startDate = String(form.get("startDate") || "").trim();
     const applicationDeadline = String(form.get("applicationDeadline") || "").trim();
@@ -44,6 +46,7 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
             status: "draft",
             accessRule: "enrolled",
             delivery: deliveryValue,
+            commerce: commerceValue,
             classroomUrl: deliveryValue === "cohort" ? classroomUrl || undefined : undefined,
             startDate: deliveryValue === "cohort" ? startDate || undefined : undefined,
             applicationDeadline: deliveryValue === "cohort" ? applicationDeadline || undefined : undefined,
@@ -214,6 +217,17 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
               <option value="cohort">Live cohort</option>
             </Select>
           </StaffFormField>
+          <StaffFormField label="How people join">
+            <Select
+              className={staffFieldClass}
+              name="commerce"
+              value={commerce}
+              onChange={(event) => setCommerce(event.target.value === "apply" ? "apply" : "purchase")}
+            >
+              <option value="purchase">Buy now (Paystack)</option>
+              <option value="apply">Apply first</option>
+            </Select>
+          </StaffFormField>
           {delivery === "cohort" ? (
             <>
               <StaffFormField label="Google Classroom invite">
@@ -239,7 +253,10 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
           <p className="text-xs text-white/40">
             Status is set to draft. {delivery === "cohort"
               ? "Published cohorts appear on the marketing site. Classroom lessons can reuse this invite."
-              : "Self-paced programmes stay in the member LMS and the public catalogue."}
+              : "Self-paced programmes appear on /programs/courses once published."}{" "}
+            {commerce === "apply"
+              ? "Apply-first programmes use /apply. Staff then grant access or send a Paystack link."
+              : "Buy-now programmes checkout on Paystack after the fee is confirmed."}
           </p>
           {error ? (
             <p className="rounded-2xl border border-red-300/30 bg-red-300/10 px-4 py-3 text-sm text-red-100" role="alert">

@@ -18,7 +18,7 @@ export const LmsCourses: CollectionConfig = {
   slug: "lms-courses",
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "delivery", "programKey", "status", "updatedAt"],
+    defaultColumns: ["title", "delivery", "commerce", "programKey", "status", "updatedAt"],
     group: "Learning",
   },
   access: {
@@ -53,9 +53,26 @@ export const LmsCourses: CollectionConfig = {
         { label: "Cohort", value: "cohort" },
       ],
       admin: {
-        description: "Cohorts appear on the marketing site when published. Self-paced stays in the member LMS.",
+        description: "Self-paced lessons live in SMN. Cohort sessions use the Google Classroom invite. Assessments stay in SMN for both.",
       },
     },
+    {
+      name: "commerce",
+      type: "select",
+      required: true,
+      defaultValue: "purchase",
+      options: [
+        { label: "Buy now (Paystack)", value: "purchase" },
+        { label: "Apply first", value: "apply" },
+      ],
+      admin: {
+        description: "Purchase courses checkout on the public catalogue. Apply-first courses use /apply, then staff grant access or send a payment link.",
+      },
+    },
+    { name: "amount", type: "number", min: 0, admin: { description: "Checkout amount in pesewas. Required for Buy now once the fee is confirmed." } },
+    { name: "currency", type: "text", defaultValue: "GHS" },
+    { name: "price", type: "text", admin: { description: "Optional public price label. Blank uses the confirmed GH₵ format from amount." } },
+    { name: "badge", type: "text" },
     {
       name: "featured",
       type: "checkbox",
@@ -107,7 +124,6 @@ export const LmsCourses: CollectionConfig = {
       defaultValue: false,
       admin: {
         description: "Only enable after the fee is confirmed. When off, the site shows Contact SMN for current fees.",
-        condition: (_, siblingData) => siblingData?.delivery === "cohort",
       },
     },
     {
@@ -115,13 +131,11 @@ export const LmsCourses: CollectionConfig = {
       type: "text",
       admin: {
         description: "Public fee once confirmed, e.g. GH₵2,500.",
-        condition: (_, siblingData) => siblingData?.delivery === "cohort",
       },
     },
     {
       name: "priceNote",
       type: "textarea",
-      admin: { condition: (_, siblingData) => siblingData?.delivery === "cohort" },
     },
     {
       name: "accessRule",

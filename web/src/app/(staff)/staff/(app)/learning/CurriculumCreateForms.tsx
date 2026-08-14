@@ -70,10 +70,12 @@ export function AddLessonForm({
   courseId,
   moduleId,
   order,
+  delivery,
 }: {
   courseId: string | number;
   moduleId: string | number;
   order: number;
+  delivery?: string | null;
 }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -100,7 +102,7 @@ export function AddLessonForm({
             title,
             slug: `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60)}-${Date.now().toString(36)}`,
             summary: "Draft lesson summary",
-            lessonType: "reading",
+            lessonType: delivery === "cohort" ? "classroom" : "reading",
             status: "draft",
             order: Number(order) || 0,
           },

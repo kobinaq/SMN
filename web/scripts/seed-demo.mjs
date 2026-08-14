@@ -180,6 +180,7 @@ const course = await upsert(
     programKey: "demo-cohort",
     accessRule: "enrolled",
     delivery: "self-paced",
+    commerce: "purchase",
     level: "foundation",
     estimatedHours: 3,
     order: 1,

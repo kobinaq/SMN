@@ -4,6 +4,7 @@ import { CheckCircle2, Circle, Clock, PlayCircle } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/Feedback";
 import { requireMember } from "@/lib/auth/member";
+import { assessmentHref, getMemberCourseAssessments } from "@/lib/lms-assess";
 import { getLmsCourse } from "@/lib/lms";
 
 export const metadata = { title: "Course" };
@@ -11,7 +12,10 @@ export const metadata = { title: "Course" };
 export default async function LmsCoursePage(props: { params: Promise<{ courseSlug: string }> }) {
   const { courseSlug } = await props.params;
   const member = await requireMember(`/app/learning/courses/${courseSlug}`);
-  const course = await getLmsCourse(member, courseSlug);
+  const [course, gradebook] = await Promise.all([
+    getLmsCourse(member, courseSlug),
+    getMemberCourseAssessments(member, courseSlug),
+  ]);
   if (!course) notFound();
 
   return (
@@ -35,13 +39,16 @@ export default async function LmsCoursePage(props: { params: Promise<{ courseSlu
             {course.estimatedHours ? ` · ${course.estimatedHours}h` : ""}
           </span>
         </div>
-        <div className="mt-6">
+        <div className="mt-6 flex flex-wrap gap-3">
           <Button href={course.continueHref}>
             {course.percentage > 0 && course.percentage < 100
               ? "Resume lesson"
               : course.percentage >= 100
                 ? "Review course"
                 : "Start course"}
+          </Button>
+          <Button href={`/app/learning/courses/${course.slug}/grades`} variant="secondary">
+            Grades
           </Button>
         </div>
       </div>
@@ -127,6 +134,37 @@ export default async function LmsCoursePage(props: { params: Promise<{ courseSlu
           </section>
         ))}
       </div>
+
+      {gradebook?.assessments.length ? (
+        <section className="space-y-3">
+          <div className="flex items-end justify-between gap-3">
+            <h2 className="font-display text-xl text-white">Assessments</h2>
+            <Link href={`/app/learning/courses/${course.slug}/grades`} className="text-sm text-baby-blue hover:underline">
+              All grades
+            </Link>
+          </div>
+          {gradebook.assessments.map((item) => (
+            <Link
+              key={String(item.id)}
+              href={assessmentHref(course.slug, item.id)}
+              className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-surface p-4 transition hover:border-baby-blue/35"
+            >
+              <span>
+                <span className="block font-display text-base text-white">{item.title}</span>
+                <span className="mt-1 block text-xs text-white/40">
+                  {item.kind}
+                  {item.dueAt ? ` · due ${new Date(item.dueAt).toLocaleDateString("en-GH")}` : ""}
+                </span>
+              </span>
+              <span className="text-xs text-mint">
+                {item.latest && item.latest.score != null
+                  ? `${item.latest.score}/${item.latest.maxScore ?? item.totalMarks}`
+                  : "Open"}
+              </span>
+            </Link>
+          ))}
+        </section>
+      ) : null}
     </div>
   );
 }

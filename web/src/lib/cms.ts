@@ -10,7 +10,7 @@ import {
   type EventItem,
   type ResourceItem,
 } from "@/lib/content";
-import { COURSE_FEE_PENDING_LABEL, formatGhsLabel } from "@/lib/currency";
+import { FEE_PENDING_LABEL, formatGhs, formatGhsLabel } from "@/lib/currency";
 import { img } from "@/lib/images";
 import { site as fallbackSite, type SiteConfig } from "@/lib/site";
 import { loadPublicList, safePayloadQuery } from "@/lib/payload";
@@ -27,44 +27,45 @@ function uploadUrl(value: unknown): string | undefined {
   return typeof url === "string" && url.trim() ? url : undefined;
 }
 
-function resolveCoursePrice(raw: string | null | undefined) {
-  const value = (raw || "").trim();
-  if (!value) return COURSE_FEE_PENDING_LABEL;
-  if (/250,?000|45,?000|38,?000|42,?000/i.test(value)) return COURSE_FEE_PENDING_LABEL;
-  return formatGhsLabel(value) || COURSE_FEE_PENDING_LABEL;
-}
-
 export async function getCourses(): Promise<CourseItem[]> {
   return loadPublicList(async () => {
     const { getPayloadClient } = await import("@/lib/payload");
     const payload = await getPayloadClient();
     const result = await payload.find({
-      collection: "courses",
+      collection: "lms-courses",
+      depth: 1,
       limit: 50,
-      overrideAccess: false,
-      where: { status: { in: ["published", "coming-soon"] } },
+      sort: "order",
+      overrideAccess: true,
+      where: { status: { equals: "published" } },
     });
     return result.docs.map((doc): CourseItem => {
-      const record = doc as unknown as Record<string, unknown>;
+      const confirmed = Boolean(doc.priceConfirmed);
+      const amount = typeof doc.amount === "number" ? doc.amount : null;
+      const price = !confirmed
+        ? FEE_PENDING_LABEL
+        : amount && amount >= 100
+          ? formatGhs(amount / 100)
+          : formatGhsLabel(doc.priceLabel || doc.price) || FEE_PENDING_LABEL;
       return {
-        slug: doc.slug as string,
-        title: doc.title as string,
-        summary: doc.summary as string,
-        outcomes: ((doc.outcomes as { item: string }[]) || []).map((o) => o.item),
-        duration: (doc.duration as string) || "",
-        lessons: (doc.lessons as number) || 0,
-        price: resolveCoursePrice(doc.price as string),
+        slug: doc.slug,
+        title: doc.title,
+        summary: doc.summary,
+        outcomes: (doc.learningOutcomes || [])
+          .map((item) => item.outcome)
+          .filter((item): item is string => Boolean(item)),
+        duration: pickString(doc.duration, doc.estimatedHours ? `${doc.estimatedHours} hours` : ""),
+        lessons: 0,
+        price,
         selarUrl: "",
         id: doc.id,
-        amount: typeof record.amount === "number" ? record.amount : null,
-        currency: (record.currency as string) || "GHS",
-        programKey: (record.programKey as string) || "",
-        delivery: (record.delivery as string) || "self-paced",
-        badge: (doc.badge as string) || null,
-        image:
-          typeof doc.image === "object" && doc.image && "url" in doc.image && doc.image.url
-            ? (doc.image.url as string)
-            : img.default,
+        amount: confirmed ? amount : null,
+        currency: doc.currency || "GHS",
+        programKey: doc.programKey,
+        delivery: doc.delivery || "self-paced",
+        commerce: doc.commerce === "apply" ? "apply" : "purchase",
+        badge: doc.badge || null,
+        image: uploadUrl(doc.cover) || img.default,
       };
     });
   }, fallbackCourses);
@@ -227,6 +228,33 @@ async function loadPublishedCohorts() {
 }
 
 export const getPublicCohorts = cache(async () => loadPublicList(loadPublishedCohorts, []));
+
+export const getApplyCourses = cache(async () =>
+  loadPublicList(async () => {
+    const { getPayloadClient } = await import("@/lib/payload");
+    const payload = await getPayloadClient();
+    const result = await payload.find({
+      collection: "lms-courses",
+      depth: 0,
+      limit: 50,
+      sort: "order",
+      overrideAccess: true,
+      where: {
+        and: [
+          { status: { equals: "published" } },
+          { commerce: { equals: "apply" } },
+          { enrollmentOpen: { equals: true } },
+        ],
+      },
+    });
+    return result.docs.map((doc) => ({
+      id: doc.id,
+      name: doc.title,
+      slug: doc.slug,
+      delivery: doc.delivery,
+    }));
+  }, []),
+);
 
 async function loadSiteSettings(): Promise<SiteConfig> {
   const empty: SiteConfig = { ...fallbackSite, impactStats: [] };

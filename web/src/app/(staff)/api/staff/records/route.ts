@@ -11,10 +11,13 @@ const writeRoles: Record<string, StaffRole[]> = {
   courses: ["content"],
   events: ["content"],
   stories: ["content"],
-  "cohort-applications": ["content", "support"],
+  "cohort-applications": ["content", "support", "learning"],
   "lms-courses": ["learning"],
   "lms-modules": ["learning"],
   "lms-lessons": ["learning"],
+  "lms-assessments": ["learning"],
+  "lms-submissions": ["learning", "support"],
+  enrollments: ["learning", "support"],
   users: [], // super-admin only
   opportunities: ["opportunity"],
 };
@@ -93,7 +96,15 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
     if (iso) body.endsAt = iso;
     else if (body.endsAt === "") body.endsAt = null;
   }
-  for (const key of ["amount", "capacity", "lessons", "seats"]) {
+  for (const key of ["availableFrom", "dueAt", "sessionAt", "submittedAt", "gradedAt"]) {
+    if (!(key in body)) continue;
+    if (body[key] === "" || body[key] == null) body[key] = null;
+    else {
+      const iso = toIsoDate(body[key]);
+      if (iso) body[key] = iso;
+    }
+  }
+  for (const key of ["amount", "capacity", "lessons", "seats", "maxAttempts", "totalMarks", "attemptNumber", "score", "maxScore", "marks"]) {
     if (typeof body[key] === "string") body[key] = body[key] === "" ? null : Number(body[key]);
   }
   if (typeof body.order === "string") body.order = body.order === "" ? 0 : Number(body.order);
@@ -116,6 +127,34 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
         const file = coerceRelationId(row.file);
         if (!label || file === undefined) return null;
         return { label, file };
+      })
+      .filter(Boolean);
+  }
+  if (Array.isArray(body.questions)) {
+    body.questions = body.questions
+      .map((item) => {
+        if (!item || typeof item !== "object") return null;
+        const row = item as Record<string, unknown>;
+        const prompt = typeof row.prompt === "string" ? row.prompt.trim() : "";
+        if (!prompt) return null;
+        const options = Array.isArray(row.options)
+          ? row.options
+              .map((option) => {
+                if (typeof option === "string") return { option: option.trim() };
+                if (option && typeof option === "object" && "option" in option) {
+                  return { option: String((option as { option?: unknown }).option || "").trim() };
+                }
+                return null;
+              })
+              .filter((option) => option?.option)
+          : [];
+        return {
+          ...row,
+          prompt,
+          type: row.type === "short-answer" ? "short-answer" : "multiple-choice",
+          options,
+          marks: typeof row.marks === "string" ? Number(row.marks) : row.marks,
+        };
       })
       .filter(Boolean);
   }

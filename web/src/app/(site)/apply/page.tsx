@@ -3,7 +3,7 @@ import { ApplicationForm } from "@/components/forms/ApplicationForm";
 import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getPublicCohorts, getSiteSettings } from "@/lib/cms";
+import { getApplyCourses, getSiteSettings } from "@/lib/cms";
 import { img } from "@/lib/images";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -44,8 +44,7 @@ const steps = [
 ];
 
 export default async function ApplyPage() {
-  const [site, cohorts] = await Promise.all([getSiteSettings(), getPublicCohorts()]);
-  const openCohorts = cohorts.filter((cohort) => cohort.enrollmentOpen);
+  const [site, applyCourses] = await Promise.all([getSiteSettings(), getApplyCourses()]);
 
   return (
     <>
@@ -95,7 +94,7 @@ export default async function ApplyPage() {
             </p>
             <div className="mt-8 rounded-[1.75rem] border border-white/10 bg-surface p-5 sm:rounded-[2rem] sm:p-8 md:p-10">
               <ApplicationForm
-                cohorts={openCohorts.map((cohort) => ({ id: cohort.id, name: cohort.name }))}
+                cohorts={applyCourses.map((course) => ({ id: course.id, name: course.name }))}
               />
             </div>
           </div>

@@ -1,4 +1,5 @@
 import type { MemberUser } from "@/lib/auth/member";
+import { memberHasEnrollment } from "@/lib/lms-enroll";
 import { getPayloadClient } from "@/lib/payload";
 import { youtubeEmbedUrl } from "@/lib/youtube";
 
@@ -78,6 +79,7 @@ type LmsLessonDoc = {
   lessonType: "video" | "reading" | "download" | "assignment" | "classroom";
   youtubeUrl?: string | null;
   classroomUrl?: string | null;
+  sessionAt?: string | null;
   durationMinutes?: number | null;
   body?: string | null;
   resourceLabel?: string | null;
@@ -148,6 +150,7 @@ export type LmsLessonDetail = LmsLessonListItem & {
   resourceUrl: string;
   attachments: { label: string; url: string }[];
   classroomUrl: string;
+  sessionAt: string;
   previousHref: string;
   nextHref: string;
 };
@@ -163,13 +166,7 @@ function mediaUrl(value: Relation<MediaDoc>) {
 function hasCourseAccess(member: MemberUser, course: LmsCourseDoc, enrollments: EnrollmentDoc[]) {
   if (course.status !== "published") return false;
   if (course.accessRule === "member") return true;
-  const enrolled = enrollments.some(
-    (enrollment) =>
-      ["active", "completed"].includes(enrollment.status) &&
-      (relationId(enrollment.course) === course.id || enrollment.programKey === course.programKey),
-  );
-  if (course.accessRule === "enrolled") return enrolled;
-  return enrolled || member.cohortStatus === "active" || member.cohortStatus === "completed";
+  return memberHasEnrollment(enrollments, course);
 }
 
 async function getEnrollments(member: MemberUser) {
@@ -321,6 +318,7 @@ export async function getLmsLesson(member: MemberUser, courseSlug: string, lesso
       .map((item) => ({ label: item.label || "Download", url: mediaUrl(item.file) }))
       .filter((item) => item.url),
     classroomUrl: lesson.classroomUrl?.trim() || course.classroomUrl || "",
+    sessionAt: lesson.sessionAt || "",
     previousHref: flat[currentIndex - 1]?.href || "",
     nextHref: flat[currentIndex + 1]?.href || "",
   } satisfies LmsLessonDetail;

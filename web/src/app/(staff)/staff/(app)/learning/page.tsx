@@ -24,6 +24,8 @@ import { AddLessonForm, AddModuleForm } from "./CurriculumCreateForms";
 const allTabs = [
   ["overview", "Overview"],
   ["curriculum", "Curriculum"],
+  ["assessments", "Assessments"],
+  ["gradebook", "Gradebook"],
   ["learners", "Learners"],
   ["analytics", "Analytics"],
   ["settings", "Settings"],
@@ -66,12 +68,6 @@ export default async function StaffLearningPage({
           hint="Build programs members take inside the portal."
           action={{ href: "/staff/learning/courses/new", label: "Create program" }}
         />
-        <p className="text-xs text-white/40">
-          Looking for public website cards?{" "}
-          <Link href="/staff/website/courses" className="text-baby-blue hover:underline">
-            Public catalogue →
-          </Link>
-        </p>
         <StaffEmptyState
           title="Create your first program"
           steps={[
@@ -86,11 +82,20 @@ export default async function StaffLearningPage({
   }
 
   const courseID = String(selected.id);
-  const [modules, lessons, enrollments, progress] = await Promise.all([
+  const [modules, lessons, enrollments, progress, assessments, submissions] = await Promise.all([
     payload.find({ collection: "lms-modules", depth: 0, limit: 500, sort: "order", where: { course: { equals: selected.id } }, ...access }),
     payload.find({ collection: "lms-lessons", depth: 0, limit: 1000, sort: "order", where: { course: { equals: selected.id } }, ...access }),
     payload.find({ collection: "enrollments", depth: 1, limit: 500, where: { programKey: { equals: selected.programKey } }, ...access }),
     payload.find({ collection: "lms-lesson-progress", depth: 0, limit: 2000, where: { course: { equals: selected.id } }, ...access }),
+    payload.find({ collection: "lms-assessments", depth: 0, limit: 200, sort: "order", where: { course: { equals: selected.id } }, ...access }),
+    payload.find({
+      collection: "lms-submissions",
+      depth: 1,
+      limit: 200,
+      sort: "-updatedAt",
+      where: { and: [{ course: { equals: selected.id } }, { status: { in: ["submitted", "returned"] } }] },
+      ...access,
+    }),
   ]);
 
   const lessonsByModule = new Map<string, typeof lessons.docs>();
@@ -167,12 +172,6 @@ export default async function StaffLearningPage({
         hint="Build and operate programs."
         action={{ href: "/staff/learning/courses/new", label: "New program" }}
       />
-      <p className="text-xs text-white/40">
-        Looking for public website cards?{" "}
-        <Link href="/staff/website/courses" className="text-baby-blue hover:underline">
-          Public catalogue →
-        </Link>
-      </p>
 
       <StaffPanel>
         <LearningCourseSwitcher
@@ -349,7 +348,12 @@ export default async function StaffLearningPage({
                         </li>
                       ))}
                     </ol>
-                    <AddLessonForm courseId={courseID} moduleId={courseModule.id} order={moduleLessons.length} />
+                    <AddLessonForm
+                      courseId={courseID}
+                      moduleId={courseModule.id}
+                      order={moduleLessons.length}
+                      delivery={(selected as { delivery?: string | null }).delivery}
+                    />
                   </article>
                 );
               })}
@@ -358,6 +362,79 @@ export default async function StaffLearningPage({
             <StaffEmpty>No modules yet. Add the first module below.</StaffEmpty>
           )}
           <AddModuleForm courseId={courseID} order={modules.docs.length} />
+        </StaffPanel>
+      ) : null}
+
+      {activeTab === "assessments" ? (
+        <StaffPanel>
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Gradebook</p>
+              <h3 className="mt-2 font-display text-xl text-white">Assessments</h3>
+            </div>
+            <Link
+              href={`/staff/learning/assessments/new?course=${courseID}`}
+              className="text-sm text-baby-blue hover:underline"
+            >
+              New assessment
+            </Link>
+          </div>
+          {assessments.docs.length ? (
+            <div className="space-y-2">
+              {assessments.docs.map((item) => (
+                <Link
+                  key={item.id}
+                  href={`/staff/learning/assessments/${item.id}`}
+                  className="flex items-center justify-between gap-3 rounded-xl border border-white/10 px-4 py-3 transition hover:border-baby-blue/35"
+                >
+                  <span>
+                    <span className="block text-sm font-semibold text-white">{item.title}</span>
+                    <span className="text-xs text-white/40">
+                      {item.kind} · {item.status}
+                      {item.dueAt ? ` · due ${new Date(item.dueAt).toLocaleDateString("en-GH")}` : ""}
+                    </span>
+                  </span>
+                  <span className="text-xs text-white/45">{item.totalMarks || 0} marks</span>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <StaffEmpty>No assessments yet. Create a quiz or assignment.</StaffEmpty>
+          )}
+        </StaffPanel>
+      ) : null}
+
+      {activeTab === "gradebook" ? (
+        <StaffPanel>
+          <h3 className="font-display text-xl text-white">Submitted work</h3>
+          <p className="mt-2 mb-4 text-sm text-white/55">Queue of work waiting for a score or return.</p>
+          {submissions.docs.length ? (
+            <div className="space-y-2">
+              {submissions.docs.map((item) => {
+                const assessment = item.assessment && typeof item.assessment === "object" ? item.assessment : null;
+                const member = item.member && typeof item.member === "object" ? item.member : null;
+                return (
+                  <Link
+                    key={item.id}
+                    href={`/staff/learning/submissions/${item.id}`}
+                    className="flex items-center justify-between gap-3 rounded-xl border border-white/10 px-4 py-3 transition hover:border-baby-blue/35"
+                  >
+                    <span>
+                      <span className="block text-sm font-semibold text-white">
+                        {assessment?.title || "Assessment"}
+                      </span>
+                      <span className="text-xs text-white/40">
+                        {member?.name || member?.email || "Learner"} · attempt {item.attemptNumber || 1} · {item.status}
+                      </span>
+                    </span>
+                    <span className="text-xs text-baby-blue">Grade</span>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <StaffEmpty>No submitted work waiting.</StaffEmpty>
+          )}
         </StaffPanel>
       ) : null}
 
@@ -454,8 +531,9 @@ export default async function StaffLearningPage({
         <StaffPanel>
           <h3 className="font-display text-xl text-white">Course settings</h3>
           <p className="mt-2 mb-5 text-sm text-white/55">
-            Set instructor, category, whether this is a cohort or self-paced, Classroom invite, public
+            Set instructor, category, delivery, how people join, Classroom invite, public
             intake copy, and publishing. Curriculum lessons are edited from the Curriculum tab.
+            Quizzes and assignments live under Assessments.
           </p>
           {!readiness.ready ? (
             <div className="mb-5 rounded-2xl border border-amber-300/30 bg-amber-300/10 px-4 py-3 text-sm text-amber-100" role="status">
@@ -488,6 +566,20 @@ export default async function StaffLearningPage({
                   { label: "Live cohort", value: "cohort" },
                 ],
               },
+              {
+                name: "commerce",
+                label: "How people join",
+                type: "select",
+                required: true,
+                options: [
+                  { label: "Buy now (Paystack)", value: "purchase" },
+                  { label: "Apply first", value: "apply" },
+                ],
+              },
+              { name: "amount", label: "Amount (pesewas)", type: "number", placeholder: "e.g. 250000 for GH₵2,500" },
+              { name: "currency", label: "Currency", type: "text", placeholder: "GHS" },
+              { name: "price", label: "Price label (optional)", type: "text", placeholder: "Blank uses the confirmed amount" },
+              { name: "badge", label: "Badge", type: "text", placeholder: "Recommended" },
               {
                 name: "classroomUrl",
                 label: "Google Classroom invite",
@@ -527,7 +619,6 @@ export default async function StaffLearningPage({
                 options: [
                   { label: "Matching enrollment", value: "enrolled" },
                   { label: "Any member", value: "member" },
-                  { label: "Active/completed cohort member", value: "cohort" },
                 ],
               },
               {
@@ -573,6 +664,11 @@ export default async function StaffLearningPage({
               category: selected.category || "",
               programKey: selected.programKey,
               delivery: (selected as { delivery?: string | null }).delivery || "self-paced",
+              commerce: (selected as { commerce?: string | null }).commerce || "purchase",
+              amount: (selected as { amount?: number | null }).amount ?? "",
+              currency: (selected as { currency?: string | null }).currency || "GHS",
+              price: (selected as { price?: string | null }).price || "",
+              badge: (selected as { badge?: string | null }).badge || "",
               classroomUrl: (selected as { classroomUrl?: string | null }).classroomUrl || "",
               featured: Boolean((selected as { featured?: boolean | null }).featured),
               startDate: (selected as { startDate?: string | null }).startDate || "",

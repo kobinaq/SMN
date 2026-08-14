@@ -1,18 +1,35 @@
 import { describe, expect, it } from "vitest";
-import { checkoutCourseGate, paymentStatusAfterFailedDelivery, relationId } from "@/lib/payments/checkout";
+import {
+  checkoutCourseGate,
+  checkoutPublishedAmountGate,
+  paymentStatusAfterFailedDelivery,
+  relationId,
+} from "@/lib/payments/checkout";
 
 describe("checkoutCourseGate", () => {
-  const ready = { status: "published", amount: 25000, lmsCourse: 12, lmsStatus: "published" };
+  const ready = { status: "published", commerce: "purchase", amount: 25000, priceConfirmed: true };
 
-  it("requires a published LMS course before checkout", () => {
-    expect(checkoutCourseGate({ ...ready, lmsCourse: null }).ok).toBe(false);
-    expect(checkoutCourseGate({ ...ready, lmsStatus: "draft" }).ok).toBe(false);
-    expect(checkoutCourseGate(ready)).toEqual({ ok: true, lmsId: "12", amount: 25000 });
+  it("allows a published buy-now course with a confirmed amount", () => {
+    expect(checkoutCourseGate(ready)).toEqual({ ok: true, amount: 25000 });
   });
 
-  it("blocks coming-soon catalogue rows", () => {
-    const result = checkoutCourseGate({ ...ready, status: "coming-soon" });
-    expect(result.ok).toBe(false);
+  it("blocks apply-first and unpriced courses", () => {
+    expect(checkoutCourseGate({ ...ready, commerce: "apply" }).ok).toBe(false);
+    expect(checkoutCourseGate({ ...ready, amount: 0 }).ok).toBe(false);
+    expect(checkoutCourseGate({ ...ready, priceConfirmed: false }).ok).toBe(false);
+    expect(checkoutCourseGate({ ...ready, status: "draft" }).ok).toBe(false);
+  });
+});
+
+describe("checkoutPublishedAmountGate", () => {
+  it("allows a confirmed fee on an apply-first course for staff pay links", () => {
+    expect(
+      checkoutPublishedAmountGate({
+        status: "published",
+        amount: 25000,
+        priceConfirmed: true,
+      }),
+    ).toEqual({ ok: true, amount: 25000 });
   });
 });
 

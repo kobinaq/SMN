@@ -6,6 +6,7 @@ import { StatusBadge } from "@/components/ui/Feedback";
 import { AiMarkdown } from "@/components/ui/AiMarkdown";
 import { useToast } from "@/components/ui/Toast";
 import { cn } from "@/lib/utils";
+import { assessmentCreateDataFromStudio } from "@/lib/lms-gradebook";
 
 type ID = string | number;
 type Provenance = { provider: string; model: string; generatedAt: string };
@@ -357,6 +358,42 @@ export function ContentStudio({
     }
   }
 
+  async function insertAssessment(form: HTMLFormElement) {
+    if (!selected || (kind !== "quiz" && kind !== "rubric")) return;
+    const data = new FormData(form);
+    let content: unknown = edited || selected.content;
+    if (typeof content === "string") {
+      try {
+        content = JSON.parse(content);
+      } catch {
+        toast.push("Structured drafts must remain valid JSON before inserting.", "error");
+        return;
+      }
+    }
+    setBusy(true);
+    try {
+      const payload = assessmentCreateDataFromStudio({
+        courseId,
+        kind,
+        content,
+        lessonId: data.get("lessonId") ? String(data.get("lessonId")) : undefined,
+      });
+      const response = await fetch("/api/staff/records", {
+        method: "POST",
+        credentials: "include",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ collection: "lms-assessments", action: "create", data: payload }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Unable to insert assessment.");
+      toast.push("Inserted as a draft assessment. Review it in Assessments before publishing.", "success");
+    } catch (caught) {
+      toast.push(caught instanceof Error ? caught.message : "Insert failed.", "error");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function copyCandidate(content: unknown) {
     const text = typeof content === "string" ? content : JSON.stringify(content, null, 2);
     try {
@@ -632,6 +669,20 @@ export function ContentStudio({
                 >
                   {busy ? "Saving…" : "Save reviewed draft"}
                 </button>
+                {kind === "quiz" || kind === "rubric" ? (
+                  <button
+                    className="mt-3 ml-3 inline-flex min-h-10 items-center justify-center rounded-full border border-baby-blue/40 px-5 py-2 text-sm text-baby-blue transition hover:bg-baby-blue/15 disabled:opacity-50"
+                    disabled={busy}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      const form = event.currentTarget.form;
+                      if (form) void insertAssessment(form);
+                    }}
+                    type="button"
+                  >
+                    Insert as assessment
+                  </button>
+                ) : null}
               </div>
             ) : null}
           </section>

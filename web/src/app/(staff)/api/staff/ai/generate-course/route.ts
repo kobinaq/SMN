@@ -106,6 +106,7 @@ export async function POST(request: Request) {
           accessRule: "enrolled",
           status: "draft",
           delivery: "self-paced",
+          commerce: "purchase",
           level: outline.level || level,
           enrollmentOpen: true,
           learningOutcomes: outline.learningOutcomes.map((outcome) => ({ outcome })),

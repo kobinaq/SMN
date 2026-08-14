@@ -211,10 +211,10 @@ export async function HomePage() {
                   <div className="mt-6 flex items-center justify-between gap-3">
                     <span className="text-sm font-medium text-baby-blue">{course.price}</span>
                     <a
-                      href="/programs/courses"
+                      href={course.commerce === "apply" ? "/apply" : "/programs/courses"}
                       className="inline-flex items-center gap-1 text-sm text-white/80 transition hover:text-white"
                     >
-                      {cta.buyCourse.label}
+                      {course.commerce === "apply" ? cta.applyCohort.shortLabel : cta.buyCourse.label}
                       <ArrowUpRight className="h-4 w-4" />
                     </a>
                   </div>

@@ -6,7 +6,7 @@ import { StaffPageHeader, StaffPanel } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { lmsLessonFields } from "@/lib/staff/field-defs";
-import { getCollectionDoc, relationId } from "@/lib/staff/records";
+import { getCollectionDoc, relationId, toDateTimeLocal } from "@/lib/staff/records";
 
 export default async function EditLessonPage({ params }: { params: Promise<{ id: string }> }) {
   const staff = await requireStaff(["learning", "content", "support"], "/staff/learning");
@@ -62,7 +62,7 @@ export default async function EditLessonPage({ params }: { params: Promise<{ id:
           <p className="font-medium text-white">Learning materials for this lesson</p>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-white/60">
             <li>
-              <b className="text-white/80">Lesson type.</b> Choose Video, Reading, Download, Assignment, or Google Classroom.
+              <b className="text-white/80">Lesson type.</b> Video, reading, and downloads are hosted in SMN. Classroom sessions open the Google Classroom invite. Assignments and quizzes live in Assessments, not as lesson types.
             </li>
             <li>
               <b className="text-white/80">Lesson text.</b> Paste or write the reading content / instructions.
@@ -90,6 +90,7 @@ export default async function EditLessonPage({ params }: { params: Promise<{ id:
             lessonType: doc.lessonType,
             youtubeUrl: doc.youtubeUrl || "",
             classroomUrl: doc.classroomUrl || "",
+            sessionAt: toDateTimeLocal(doc.sessionAt),
             durationMinutes: doc.durationMinutes ?? "",
             body: doc.body || "",
             resourceLabel: doc.resourceLabel || "",

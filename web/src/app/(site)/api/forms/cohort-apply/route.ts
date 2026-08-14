@@ -54,12 +54,12 @@ export async function POST(req: Request) {
           depth: 0,
           overrideAccess: true,
         });
-        if (course.status !== "published" || course.delivery !== "cohort") {
-          return NextResponse.json({ error: "That cohort is not open for applications." }, { status: 400 });
+        if (course.status !== "published" || course.commerce !== "apply" || course.enrollmentOpen === false) {
+          return NextResponse.json({ error: "That programme is not open for applications." }, { status: 400 });
         }
         courseId = Number(course.id);
       } catch {
-        return NextResponse.json({ error: "That cohort is not open for applications." }, { status: 400 });
+        return NextResponse.json({ error: "That programme is not open for applications." }, { status: 400 });
       }
     }
 
@@ -92,15 +92,15 @@ export async function POST(req: Request) {
 
     const opsMail = await sendEmail({
       to: ops,
-      subject: `Cohort application: ${data.name}`,
+        subject: `Programme application: ${data.name}`,
       text: applicationText,
     });
 
     if (emailWasSent(opsMail)) {
       await sendEmail({
         to: data.email,
-        subject: "We received your SMN cohort application",
-        text: `Hi ${data.name},\n\nThanks for applying to the ${settings.cohort.name}. Our team will review your application and follow up within 3 to 5 business days.\n\n${settings.name}`,
+        subject: "We received your SMN application",
+        text: `Hi ${data.name},\n\nThanks for applying. Our team will review your application and follow up within 3 to 5 business days.\n\n${settings.name}`,
       });
     }
 

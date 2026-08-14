@@ -1,5 +1,6 @@
 import type { Payload } from "payload";
 import { sendEmail } from "@/lib/email";
+import { grantCourseEnrollment } from "@/lib/lms-enroll";
 import { paymentStatusAfterFailedDelivery, relationId } from "@/lib/payments/checkout";
 import { formatMinorAmount, newTicketCode, paystackRefund } from "@/lib/payments/paystack";
 import { getServerURL } from "@/lib/server-url";
@@ -231,94 +232,37 @@ export async function fulfillSuccessfulPayment(payload: Payload, reference: stri
   }
 
   if (kind === "course") {
-    const courseId = relId(payment.catalogueCourse);
+    const courseId = relId(payment.course) || relId(payment.catalogueCourse);
     const course = await p.findByID({
-      collection: "courses",
+      collection: "lms-courses",
       id: courseId,
-      depth: 1,
+      depth: 0,
       overrideAccess: true,
     });
 
-    const lmsId = relId(course.lmsCourse);
-    let classroomUrl = "";
-    let programKey = String(course.programKey || course.slug || "");
-    let lmsStatus = "";
-
-    if (lmsId) {
-      try {
-        const lms =
-          typeof course.lmsCourse === "object" && course.lmsCourse
-            ? (course.lmsCourse as Record<string, unknown>)
-            : await p.findByID({
-                collection: "lms-courses",
-                id: lmsId,
-                depth: 0,
-                overrideAccess: true,
-              });
-        lmsStatus = String(lms.status || "");
-        if (typeof lms.classroomUrl === "string" && lms.classroomUrl) classroomUrl = lms.classroomUrl;
-        if (typeof lms.programKey === "string" && lms.programKey) programKey = lms.programKey;
-      } catch {
-        lmsStatus = "";
-      }
-    }
-
-    if (typeof course.classroomUrl === "string" && course.classroomUrl) {
-      classroomUrl = course.classroomUrl;
-    }
-
-    if (!lmsId || lmsStatus !== "published") {
+    if (String(course.status || "") !== "published") {
       await refundUndeliveredPayment(payload, payment, { missingPublishedLms: true });
       return { ok: false as const, reason: "missing_lms" as const };
     }
 
-    const prior = await p.find({
-      collection: "enrollments",
-      limit: 1,
-      depth: 0,
-      where: {
-        and: [{ member: { equals: memberId } }, { programKey: { equals: programKey } }],
+    const enrollment = await grantCourseEnrollment(payload, {
+      memberId,
+      course: {
+        id: course.id as string | number,
+        title: String(course.title || "Programme"),
+        programKey: String(course.programKey || course.slug || ""),
+        slug: String(course.slug || ""),
+        delivery: typeof course.delivery === "string" ? course.delivery : "self-paced",
+        classroomUrl: typeof course.classroomUrl === "string" ? course.classroomUrl : "",
       },
-      overrideAccess: true,
+      source: "paystack",
+      externalReference: reference,
     });
-
-    let enrollment = prior.docs[0];
-    if (enrollment) {
-      enrollment = await p.update({
-        collection: "enrollments",
-        id: enrollment.id,
-        data: {
-          status: "active",
-          source: "paystack",
-          externalReference: reference,
-          classroomUrl: classroomUrl || enrollment.classroomUrl || undefined,
-          course: lmsId,
-        },
-        overrideAccess: true,
-      });
-    } else {
-      enrollment = await p.create({
-        collection: "enrollments",
-        data: {
-          member: memberId,
-          programName: String(course.title || "Programme"),
-          programKey,
-          programType: course.delivery === "live" ? "Cohort" : "Self-paced course",
-          source: "paystack",
-          externalReference: reference,
-          status: "active",
-          classroomUrl: classroomUrl || undefined,
-          course: lmsId,
-          startedAt: new Date().toISOString(),
-        },
-        overrideAccess: true,
-      });
-    }
 
     await p.update({
       collection: "payments",
       id: payment.id,
-      data: { status: "success", enrollment: enrollment.id },
+      data: { status: "success", enrollment: enrollment.id, course: course.id },
       overrideAccess: true,
     });
 
@@ -328,7 +272,7 @@ export async function fulfillSuccessfulPayment(payload: Payload, reference: stri
       String(course.title || "Programme"),
       Number(payment.amount || 0),
       String(payment.currency || "GHS"),
-      classroomUrl || undefined,
+      typeof course.classroomUrl === "string" ? course.classroomUrl : undefined,
     );
 
     return { ok: true as const, kind: "course" as const, enrollment, payment };

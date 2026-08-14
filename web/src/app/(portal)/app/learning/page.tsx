@@ -78,8 +78,8 @@ export default async function LearningPage({ searchParams }: Props) {
         <div className="rounded-2xl border border-dashed border-white/15 bg-surface p-6 sm:p-8">
           <p className="font-display text-lg text-white">Nothing unlocked yet</p>
           <p className="mt-2 max-w-xl text-sm text-white/50">
-            Access unlocks when you join a cohort or complete a catalogue purchase. Classroom links
-            and courses will appear here.
+            Access unlocks when staff grant enrollment or you complete a Paystack purchase. Classroom
+            links and courses will appear here.
           </p>
           <div className="btn-row-mobile mt-6">
             <Button href="/programs/cohort">Flagship cohort</Button>

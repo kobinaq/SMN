@@ -19,7 +19,13 @@ export default async function LmsLessonPage(
   if (!lesson) notFound();
 
   const showVideoEmpty = lesson.lessonType === "video" && !lesson.youtubeEmbedUrl;
-  const hasMaterials = Boolean(lesson.youtubeEmbedUrl || lesson.body || lesson.resourceUrl || lesson.attachments.length);
+  const hasMaterials = Boolean(
+    lesson.youtubeEmbedUrl ||
+      lesson.body ||
+      lesson.resourceUrl ||
+      lesson.attachments.length ||
+      lesson.lessonType === "classroom",
+  );
 
   return (
     <div className="space-y-7">
@@ -83,6 +89,15 @@ export default async function LmsLessonPage(
           <p className="mt-2 text-sm text-white/60">
             Join with the invite for your cohort, then mark the lesson complete here when you are done.
           </p>
+          {lesson.sessionAt ? (
+            <p className="mt-3 text-sm text-white/70">
+              Session ·{" "}
+              {new Date(lesson.sessionAt).toLocaleString("en-GH", {
+                dateStyle: "medium",
+                timeStyle: "short",
+              })}
+            </p>
+          ) : null}
           {lesson.classroomUrl ? (
             <Button href={lesson.classroomUrl} target="_blank" rel="noreferrer" className="mt-5">
               Open Classroom <ExternalLink className="h-3.5 w-3.5" />

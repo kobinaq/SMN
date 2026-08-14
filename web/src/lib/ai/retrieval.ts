@@ -11,8 +11,21 @@ export async function assertCourseEntitlement(payload: Payload, memberId: string
   const course = await payload.findByID({ collection: "lms-courses", id: courseId, depth: 0, overrideAccess: true });
   if (course.status !== "published") throw new AIError("This course is not available for Tutor access.", "unauthorized");
   if (course.accessRule === "member") return course;
-  if (course.accessRule === "cohort") { const member = await payload.findByID({ collection: "members", id: memberId, depth: 0, overrideAccess: true }); if (["active", "alumni", "completed"].includes(String(member.cohortStatus).toLowerCase())) return course; }
-  const enrollment = await payload.find({ collection: "enrollments", depth: 0, limit: 1, overrideAccess: true, where: { and: [{ member: { equals: memberId } }, { programKey: { equals: course.programKey } }, { status: { in: ["active", "completed"] } }] } });
+  const enrollment = await payload.find({
+    collection: "enrollments",
+    depth: 0,
+    limit: 1,
+    overrideAccess: true,
+    where: {
+      and: [
+        { member: { equals: memberId } },
+        { status: { in: ["active", "completed"] } },
+        {
+          or: [{ course: { equals: course.id } }, { programKey: { equals: course.programKey } }],
+        },
+      ],
+    },
+  });
   if (!enrollment.totalDocs) throw new AIError("You are not enrolled in this course.", "unauthorized");
   return course;
 }

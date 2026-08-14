@@ -25,6 +25,8 @@ import { LmsCourses } from "./collections/LmsCourses";
 import { LmsModules } from "./collections/LmsModules";
 import { LmsLessons } from "./collections/LmsLessons";
 import { LmsLessonProgress } from "./collections/LmsLessonProgress";
+import { LmsAssessments } from "./collections/LmsAssessments";
+import { LmsSubmissions } from "./collections/LmsSubmissions";
 import { Portfolios } from "./collections/Portfolios";
 import { Certificates } from "./collections/Certificates";
 import { AuditEvents } from "./collections/AuditEvents";
@@ -119,6 +121,8 @@ export default buildConfig({
     LmsModules,
     LmsLessons,
     LmsLessonProgress,
+    LmsAssessments,
+    LmsSubmissions,
     Portfolios,
     Certificates,
     AuditEvents,

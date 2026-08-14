@@ -27,10 +27,12 @@ function readCurriculumCueUnseen() {
 const PRIMARY_TABS = [
   ["overview", "Overview"],
   ["curriculum", "Curriculum"],
+  ["assessments", "Assessments"],
   ["settings", "Settings"],
 ] as const;
 
 const MORE_TABS = [
+  ["gradebook", "Gradebook"],
   ["learners", "Learners"],
   ["analytics", "Analytics"],
   ["ai-content-studio", "AI Studio"],

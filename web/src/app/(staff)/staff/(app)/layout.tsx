@@ -34,7 +34,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
     links.push({ href: "/staff/events", label: "Events" });
   }
 
-  if (canStaff(staff, "content", "support", "analyst")) {
+  if (canStaff(staff, "content", "support", "analyst", "learning")) {
     links.push({ href: "/staff/applications", label: "Applications" });
   }
 
@@ -43,7 +43,6 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
       { href: "/staff/content/posts", label: "Posts" },
       { href: "/staff/content/resources", label: "Resources" },
       { href: "/staff/content/media", label: "Media" },
-      { href: "/staff/website/courses", label: "Catalogue" },
       { href: "/staff/website/events", label: "Event editor" },
       { href: "/staff/website/stories", label: "Stories" },
       { href: "/staff/website/settings", label: "Site settings" },
