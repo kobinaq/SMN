@@ -41,7 +41,7 @@ export const Courses: CollectionConfig = {
       name: "programKey",
       type: "text",
       index: true,
-      admin: { description: "Must match LMS / learning-items key to unlock access after Paystack." },
+      admin: { description: "Must match the LMS course program key to unlock access after Paystack." },
     },
     {
       name: "delivery",

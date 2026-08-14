@@ -53,6 +53,9 @@ jobs:
         # CI uses file:./payload.db. Create schema once with an explicit push (connect never auto-pushes).
         run: npm run db:ensure-sqlite
 
+      - name: CMS-path access smoke
+        run: npm run test:cms-path
+
       - name: Production build
         run: npm run build
 

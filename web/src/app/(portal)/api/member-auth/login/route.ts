@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { setMemberTokenCookie } from "@/lib/auth/member-cookies";
 import { getPayloadClient } from "@/lib/payload";
+import { clientKey, rateLimit, rateLimitedResponse } from "@/lib/rate-limit";
 
 const schema = z.object({
   email: z.string().email(),
@@ -9,6 +10,9 @@ const schema = z.object({
 
 export async function POST(request: Request) {
   try {
+    const limited = rateLimit({ key: `member-login:${clientKey(request)}`, limit: 10, windowMs: 15 * 60 * 1000 });
+    if (!limited.ok) return rateLimitedResponse(limited.retryAfterSec);
+
     const parsed = schema.safeParse(await request.json());
     if (!parsed.success) {
       return Response.json({ error: "Enter a valid email and password." }, { status: 400 });

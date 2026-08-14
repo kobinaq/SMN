@@ -13,7 +13,7 @@ export const Enrollments: CollectionConfig = {
   fields: [
     { name: "member", type: "relationship", relationTo: "members", required: true, maxDepth: 1 },
     { name: "programName", type: "text", required: true },
-    { name: "programKey", type: "text", required: true, index: true, admin: { description: "Stable key shared with learning items, e.g. cohort-2026 or ai-marketers." } },
+    { name: "programKey", type: "text", required: true, index: true, admin: { description: "Stable key shared with the LMS course, e.g. cohort-2026 or ai-marketers." } },
     { name: "course", type: "relationship", relationTo: "lms-courses", maxDepth: 1, index: true },
     { name: "programType", type: "select", required: true, options: ["Cohort", "Self-paced course", "Workshop", "Community track"] },
     { name: "source", type: "select", required: true, defaultValue: "staff", options: [

@@ -1,10 +1,9 @@
 import { headers as nextHeaders } from "next/headers";
 import { redirect } from "next/navigation";
 import { getPayloadClient } from "@/lib/payload";
+import { memberSessionHeaders } from "@/lib/auth/session";
 
-export const ADMIN_COOKIE_PREFIX = "smn-admin";
-export const ADMIN_TOKEN_COOKIE = `${ADMIN_COOKIE_PREFIX}-token`;
-export const MEMBER_TOKEN_COOKIE = "smn-member-token";
+export { ADMIN_COOKIE_PREFIX, ADMIN_TOKEN_COOKIE, MEMBER_TOKEN_COOKIE } from "@/lib/auth/session";
 
 export type MemberUser = {
   id: string | number;
@@ -26,35 +25,9 @@ export type MemberUser = {
   avatar?: { url?: string | null } | string | number | null;
 };
 
-function cookieParts(cookieHeader: string) {
-  return cookieHeader
-    .split(";")
-    .map((part) => part.trim())
-    .filter(Boolean);
-}
-
-export async function memberAuthHeaders() {
-  const incoming = await nextHeaders();
-  const headers = new Headers(incoming);
-  const cookieHeader = headers.get("cookie") || "";
-  const parts = cookieParts(cookieHeader);
-  const memberToken = parts
-    .find((part) => part.startsWith(`${MEMBER_TOKEN_COOKIE}=`))
-    ?.slice(MEMBER_TOKEN_COOKIE.length + 1);
-  const filtered = parts.filter(
-    (part) =>
-      !part.startsWith(`${ADMIN_TOKEN_COOKIE}=`) &&
-      !part.startsWith(`${MEMBER_TOKEN_COOKIE}=`),
-  );
-
-  if (memberToken) {
-    filtered.push(`${ADMIN_TOKEN_COOKIE}=${memberToken}`);
-  }
-
-  if (filtered.length) headers.set("cookie", filtered.join("; "));
-  else headers.delete("cookie");
-
-  return headers;
+export async function memberAuthHeaders(request?: Request) {
+  const incoming = request?.headers ?? (await nextHeaders());
+  return memberSessionHeaders(incoming);
 }
 
 /** Current session if authenticated as a network member (not staff). */

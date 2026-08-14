@@ -14,7 +14,8 @@ describe("minimal staff permission matrix", () => {
     expect(canStaff({ collection: "users", role: "super-admin" }, "opportunity")).toBe(true);
   });
 
-  it("keeps pre-migration staff functional as super-admin", () => {
-    expect(staffRole({ collection: "users", role: null })).toBe("super-admin");
+  it("does not treat a missing role as super-admin", () => {
+    expect(staffRole({ collection: "users", role: null })).toBeNull();
+    expect(canStaff({ collection: "users", role: null }, "support")).toBe(false);
   });
 });

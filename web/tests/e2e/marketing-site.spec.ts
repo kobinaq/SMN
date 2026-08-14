@@ -38,7 +38,7 @@ test.describe("marketing navigation and CTAs", () => {
 
   test("employer page keeps hire CTAs separate from apply", async ({ page }) => {
     await page.goto("/employers");
-    await expect(page.getByRole("heading", { name: /hire smn talent/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /hire smn talent/i }).first()).toBeVisible();
     await expect(page.getByRole("link", { name: /hire smn talent/i }).first()).toBeVisible();
     await expect(page.getByText(/not a member application/i)).toBeVisible();
   });
@@ -57,6 +57,7 @@ test.describe("marketing navigation and CTAs", () => {
     expect(robots.ok()).toBeTruthy();
     const body = await robots.text();
     expect(body).toContain("sitemap");
+    expect(body).toMatch(/disallow: \/staff/i);
     await page.goto("/");
     await expect(page.locator('script[type="application/ld+json"]').first()).toHaveCount(1);
   });

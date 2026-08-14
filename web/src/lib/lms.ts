@@ -7,10 +7,35 @@ type Status = "not-started" | "in-progress" | "completed";
 
 type EnrollmentDoc = {
   id: string | number;
+  programName?: string | null;
   programKey: string;
+  programType?: string | null;
   status: string;
+  classroomUrl?: string | null;
+  courseUrl?: string | null;
   course?: Relation<{ id: string | number }>;
 };
+
+export type MemberEnrollment = {
+  id: string | number;
+  programName: string;
+  programType: string;
+  status: string;
+  classroomUrl: string;
+  courseUrl: string;
+};
+
+export async function getMemberEnrollments(member: MemberUser): Promise<MemberEnrollment[]> {
+  const docs = await getEnrollments(member);
+  return docs.map((doc) => ({
+    id: doc.id,
+    programName: doc.programName || "Programme",
+    programType: doc.programType || "",
+    status: doc.status,
+    classroomUrl: doc.classroomUrl || "",
+    courseUrl: doc.courseUrl || "",
+  }));
+}
 
 type MediaDoc = { url?: string | null };
 type LmsCourseDoc = {

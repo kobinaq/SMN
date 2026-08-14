@@ -41,6 +41,7 @@ export async function getCourses(): Promise<CourseItem[]> {
     const result = await payload.find({
       collection: "courses",
       limit: 50,
+      overrideAccess: false,
       where: { status: { in: ["published", "coming-soon"] } },
     });
     return result.docs.map((doc): CourseItem => {
@@ -77,6 +78,7 @@ export async function getEvents(): Promise<EventItem[]> {
       collection: "events",
       limit: 50,
       sort: "startsAt",
+      overrideAccess: false,
       where: { status: { equals: "published" } },
     });
     return result.docs.map((doc): EventItem => {
@@ -134,6 +136,7 @@ export async function getPosts(): Promise<BlogPost[]> {
       collection: "posts",
       limit: 50,
       sort: "-publishedAt",
+      overrideAccess: false,
       where: {
         and: [{ publishedAt: { exists: true } }, { publishedAt: { less_than_equal: now } }],
       },
@@ -168,6 +171,7 @@ export async function getStories() {
     const result = await payload.find({
       collection: "stories",
       limit: 20,
+      overrideAccess: false,
       where: {
         and: [{ published: { equals: true } }, { permissionConfirmed: { equals: true } }],
       },
@@ -190,7 +194,7 @@ export async function getResources(): Promise<ResourceItem[]> {
   return loadPublicList(async () => {
     const { getPayloadClient } = await import("@/lib/payload");
     const payload = await getPayloadClient();
-    const result = await payload.find({ collection: "resources", limit: 50 });
+    const result = await payload.find({ collection: "resources", limit: 50, overrideAccess: false });
     return result.docs.map((doc): ResourceItem => ({
       slug: doc.slug as string,
       title: doc.title as string,
@@ -213,7 +217,7 @@ async function loadSiteSettings(): Promise<SiteConfig> {
   return safePayloadQuery(async () => {
     const { getPayloadClient } = await import("@/lib/payload");
     const payload = await getPayloadClient();
-    const doc = await payload.findGlobal({ slug: "site-settings" });
+    const doc = await payload.findGlobal({ slug: "site-settings", overrideAccess: false });
     if (!doc?.siteName) return empty;
 
     const cohortDoc = (doc.cohort || {}) as Record<string, unknown>;

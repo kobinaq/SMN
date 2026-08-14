@@ -78,8 +78,6 @@ export interface Config {
     'opportunity-applications': OpportunityApplication;
     'cohort-applications': CohortApplication;
     enrollments: Enrollment;
-    'learning-items': LearningItem;
-    progress: Progress;
     'lms-courses': LmsCourse;
     'lms-modules': LmsModule;
     'lms-lessons': LmsLesson;
@@ -118,8 +116,6 @@ export interface Config {
     'opportunity-applications': OpportunityApplicationsSelect<false> | OpportunityApplicationsSelect<true>;
     'cohort-applications': CohortApplicationsSelect<false> | CohortApplicationsSelect<true>;
     enrollments: EnrollmentsSelect<false> | EnrollmentsSelect<true>;
-    'learning-items': LearningItemsSelect<false> | LearningItemsSelect<true>;
-    progress: ProgressSelect<false> | ProgressSelect<true>;
     'lms-courses': LmsCoursesSelect<false> | LmsCoursesSelect<true>;
     'lms-modules': LmsModulesSelect<false> | LmsModulesSelect<true>;
     'lms-lessons': LmsLessonsSelect<false> | LmsLessonsSelect<true>;
@@ -521,7 +517,7 @@ export interface Enrollment {
   member: number | Member;
   programName: string;
   /**
-   * Stable key shared with learning items, e.g. cohort-2026 or ai-marketers.
+   * Stable key shared with the LMS course, e.g. cohort-2026 or ai-marketers.
    */
   programKey: string;
   course?: (number | null) | LmsCourse;
@@ -609,58 +605,6 @@ export interface LmsCourse {
   tutorGuidance?: string | null;
   order?: number | null;
   status: 'draft' | 'published' | 'archived';
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "learning-items".
- */
-export interface LearningItem {
-  id: number;
-  title: string;
-  slug: string;
-  summary: string;
-  programKey: string;
-  kind: 'Milestone' | 'Classroom session' | 'Resource' | 'Assignment' | 'External course' | 'Announcement';
-  /**
-   * Use 0 for onboarding/general items.
-   */
-  week?: number | null;
-  order?: number | null;
-  estimatedMinutes?: number | null;
-  accessRule: 'member' | 'enrolled' | 'cohort';
-  externalUrl?: string | null;
-  resource?: (number | null) | Resource;
-  status: 'draft' | 'published' | 'archived';
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "resources".
- */
-export interface Resource {
-  id: number;
-  title: string;
-  slug: string;
-  type: 'Template' | 'Guide' | 'AI Prompts' | 'Checklist' | 'Toolkit' | 'Download';
-  description: string;
-  file?: (number | null) | Media;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "progress".
- */
-export interface Progress {
-  id: number;
-  member: number | Member;
-  learningItem: number | LearningItem;
-  enrollment?: (number | null) | Enrollment;
-  status: 'not-started' | 'in-progress' | 'completed';
-  completedAt?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -976,7 +920,7 @@ export interface Course {
   amount?: number | null;
   currency?: string | null;
   /**
-   * Must match LMS / learning-items key to unlock access after Paystack.
+   * Must match the LMS course program key to unlock access after Paystack.
    */
   programKey?: string | null;
   delivery?: ('self-paced' | 'live') | null;
@@ -1214,6 +1158,20 @@ export interface Story {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "resources".
+ */
+export interface Resource {
+  id: number;
+  title: string;
+  slug: string;
+  type: 'Template' | 'Guide' | 'AI Prompts' | 'Checklist' | 'Toolkit' | 'Download';
+  description: string;
+  file?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -1275,14 +1233,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'enrollments';
         value: number | Enrollment;
-      } | null)
-    | ({
-        relationTo: 'learning-items';
-        value: number | LearningItem;
-      } | null)
-    | ({
-        relationTo: 'progress';
-        value: number | Progress;
       } | null)
     | ({
         relationTo: 'lms-courses';
@@ -1655,39 +1605,6 @@ export interface EnrollmentsSelect<T extends boolean = true> {
   completedAt?: T;
   completionPercent?: T;
   certificateEligible?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "learning-items_select".
- */
-export interface LearningItemsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  summary?: T;
-  programKey?: T;
-  kind?: T;
-  week?: T;
-  order?: T;
-  estimatedMinutes?: T;
-  accessRule?: T;
-  externalUrl?: T;
-  resource?: T;
-  status?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "progress_select".
- */
-export interface ProgressSelect<T extends boolean = true> {
-  member?: T;
-  learningItem?: T;
-  enrollment?: T;
-  status?: T;
-  completedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }

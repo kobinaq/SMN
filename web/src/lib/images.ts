@@ -5,7 +5,7 @@
  * Exception: instructor / author avatar may reuse the same portrait
  * (same person). Logos may appear in header + footer. Journey tiles
  * may reuse the destination page photo (cohort tile, jobs tile).
- * Internships and simulations share a lounge conversation photo.
+ * Internships and simulations use different photos.
  * CMS fallbacks may reuse a primary photo.
  *
  * Homepage hero fan (hero1–5) and cohort photos (cohortSpotlight, cohortPage)
@@ -69,7 +69,7 @@ export const img = {
   contactTalk: "/images/photo_29_2026-07-11_04-15-51.jpg",
   storiesLounge: "/images/photo_5_2026-07-11_04-15-50.jpg",
   storiesEmpty: "/images/photo_7_2026-07-11_04-15-50.jpg",
-  practicePair: "/images/photo_22_2026-07-11_04-15-51.jpg",
+  practicePair: "/images/photo_7_2026-07-11_04-15-50.jpg",
 
   // Resources library — conceptual object photography
   resCalendar: "/images/resource-calendar.jpg",

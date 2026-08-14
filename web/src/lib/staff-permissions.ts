@@ -7,8 +7,7 @@ type StaffUser = { collection?: string; role?: StaffRole | null } | null | undef
 
 export function staffRole(user: StaffUser): StaffRole | null {
   if (user?.collection !== "users") return null;
-  // Existing staff rows predate roles and retain access until the migration default is applied.
-  return user.role || "super-admin";
+  return user.role || null;
 }
 
 export function canStaff(user: StaffUser, ...roles: StaffRole[]) {

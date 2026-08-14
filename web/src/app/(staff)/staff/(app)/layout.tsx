@@ -13,15 +13,26 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   const badgeFor = (...parts: string[]) =>
     badges.find((item) => parts.some((part) => item.href.includes(part) || item.href === part))?.count;
 
-  const links: StaffLinkInput[] = [
-    { href: "/staff", label: "Today", count: badgeFor("/admin", "/staff") },
-    { href: "/staff/learning", label: "Learning", count: badgeFor("course-builder", "learning") },
-    { href: "/staff/members", label: "People" },
-    { href: "/staff/mentorship", label: "Mentorship", count: badgeFor("mentorship") },
-    { href: "/staff/opportunities", label: "Jobs", count: badgeFor("opportunity") },
-    { href: "/staff/certificates", label: "Certificates", count: badgeFor("certificate") },
-    { href: "/staff/events", label: "Events" },
-  ];
+  const links: StaffLinkInput[] = [{ href: "/staff", label: "Today", count: badgeFor("/admin", "/staff") }];
+
+  if (canStaff(staff, "learning", "content", "support")) {
+    links.push({ href: "/staff/learning", label: "Learning", count: badgeFor("course-builder", "learning") });
+  }
+  if (canStaff(staff, "support", "learning", "mentorship", "analyst")) {
+    links.push({ href: "/staff/members", label: "People" });
+  }
+  if (canStaff(staff, "mentorship", "support")) {
+    links.push({ href: "/staff/mentorship", label: "Mentorship", count: badgeFor("mentorship") });
+  }
+  if (canStaff(staff, "opportunity", "support")) {
+    links.push({ href: "/staff/opportunities", label: "Jobs", count: badgeFor("opportunity") });
+  }
+  if (canStaff(staff, "learning", "support")) {
+    links.push({ href: "/staff/certificates", label: "Certificates", count: badgeFor("certificate") });
+  }
+  if (canStaff(staff, "content", "support", "analyst")) {
+    links.push({ href: "/staff/events", label: "Events" });
+  }
 
   if (canStaff(staff, "content", "support", "analyst")) {
     links.push({ href: "/staff/applications", label: "Applications" });

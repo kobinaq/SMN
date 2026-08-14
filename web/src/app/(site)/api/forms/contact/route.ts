@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getSiteSettings } from "@/lib/cms";
 import { emailWasSent, sendEmail } from "@/lib/email";
+import { clientKey, rateLimit, rateLimitedResponse } from "@/lib/rate-limit";
 
 const schema = z.object({
   name: z.string().min(2),
@@ -13,6 +14,9 @@ const schema = z.object({
 
 export async function POST(req: Request) {
   try {
+    const limited = rateLimit({ key: `contact:${clientKey(req)}`, limit: 8, windowMs: 15 * 60 * 1000 });
+    if (!limited.ok) return rateLimitedResponse(limited.retryAfterSec);
+
     const body = await req.json();
     const parsed = schema.safeParse(body);
     if (!parsed.success) {

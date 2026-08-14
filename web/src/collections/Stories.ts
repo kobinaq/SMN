@@ -12,7 +12,10 @@ export const Stories: CollectionConfig = {
       "Member testimonials. Only stories with Published enabled appear on the public site. Do not publish fictional or seed content.",
   },
   access: {
-    read: () => true,
+    read: ({ req }) =>
+      req.user?.collection === "users"
+        ? true
+        : { published: { equals: true }, permissionConfirmed: { equals: true } },
     create: staffOnly,
     update: staffOnly,
     delete: staffOnly,

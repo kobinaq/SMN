@@ -2,6 +2,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { sqliteAdapter } from "@payloadcms/db-sqlite";
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { migrations } from "../migrations";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -24,6 +25,17 @@ function shouldPushSchema() {
 }
 
 /**
+ * `next build` sets NODE_ENV=production, which would otherwise auto-run
+ * prodMigrations against whatever DATABASE_URL is in .env (often Neon).
+ * Only auto-migrate on Vercel production, or when an explicit migrate script runs.
+ */
+export function shouldRunProdMigrations() {
+  if (process.env.PAYLOAD_SKIP_PROD_MIGRATIONS === "true") return false;
+  if (process.env.PAYLOAD_MIGRATING === "true") return true;
+  return process.env.VERCEL_ENV === "production";
+}
+
+/**
  * Postgres when DATABASE_URL is a postgres connection string.
  * Otherwise SQLite (local file, or /tmp on Vercel without remote DB).
  */
@@ -43,6 +55,7 @@ export function createDbAdapter() {
         connectionTimeoutMillis: 15_000,
       },
       push: shouldPushSchema(),
+      prodMigrations: shouldRunProdMigrations() ? migrations : undefined,
     });
   }
 

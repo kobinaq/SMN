@@ -256,35 +256,6 @@ await upsert(
   { member: ama.id, course: course.id, lesson: lesson2.id, status: "in-progress" },
 );
 
-const learningItems = [
-  {
-    slug: "demo-week1-audience-map",
-    title: "Map your audience and content pillars",
-    kind: "Milestone",
-    week: 1,
-    order: 1,
-    estimatedMinutes: 45,
-    summary: "Define who you serve and the three content pillars everything ladders up to.",
-  },
-  {
-    slug: "demo-week1-brand-brief",
-    title: "Draft a one-page brand brief",
-    kind: "Assignment",
-    week: 1,
-    order: 2,
-    estimatedMinutes: 30,
-    summary: "Turn the strategy into a short brief you can share with a team or client.",
-  },
-];
-
-for (const item of learningItems) {
-  await upsert(
-    "learning-items",
-    { slug: { equals: item.slug } },
-    { ...item, programKey: "demo-cohort", accessRule: "enrolled", status: "published" },
-  );
-}
-
 await upsert(
   "portfolios",
   { slug: { equals: "demo-ama-campaign-refresh" } },

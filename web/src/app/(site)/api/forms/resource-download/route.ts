@@ -4,6 +4,7 @@ import { getSiteSettings } from "@/lib/cms";
 import { sendEmail } from "@/lib/email";
 import { subscribeToNewsletter } from "@/lib/newsletter";
 import { getResource } from "@/lib/resources";
+import { clientKey, rateLimit, rateLimitedResponse } from "@/lib/rate-limit";
 
 const schema = z.object({
   email: z.string().email(),
@@ -22,6 +23,9 @@ function absoluteUrl(pathOrUrl: string, base: string) {
 
 export async function POST(req: Request) {
   try {
+    const limited = rateLimit({ key: `resource-download:${clientKey(req)}`, limit: 8, windowMs: 15 * 60 * 1000 });
+    if (!limited.ok) return rateLimitedResponse(limited.retryAfterSec);
+
     const parsed = schema.safeParse(await req.json());
     if (!parsed.success) {
       return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });

@@ -25,10 +25,6 @@ export const cta = {
     label: "Explore courses",
     href: "/programs/courses",
   },
-  viewSimulations: {
-    label: "Join the waitlist",
-    href: "/simulations",
-  },
   viewExperience: {
     label: "Learn about the Experience Programme",
     href: "/experience",

@@ -3,12 +3,11 @@ import { LearningDashboard } from "@/components/app/LearningDashboard";
 import { PaymentSuccessBeacon } from "@/components/payments/PaymentSuccessBeacon";
 import { Button } from "@/components/ui/Button";
 import { requireMember } from "@/lib/auth/member";
-import { getLearningDashboard } from "@/lib/learning";
-import { getLmsCourses } from "@/lib/lms";
+import { getLmsCourses, getMemberEnrollments } from "@/lib/lms";
 import { getPayloadClient } from "@/lib/payload";
 import { fulfillSuccessfulPayment } from "@/lib/payments/fulfill";
 import { paystackConfigured, paystackVerify } from "@/lib/payments/paystack";
-import { site } from "@/lib/site";
+import { getSiteSettings } from "@/lib/cms";
 
 export const metadata = { title: "Learning" };
 
@@ -30,11 +29,12 @@ export default async function LearningPage({ searchParams }: Props) {
     }
   }
 
-  const [dashboard, lmsCourses] = await Promise.all([
-    getLearningDashboard(member),
+  const [enrollments, lmsCourses, settings] = await Promise.all([
+    getMemberEnrollments(member).catch(() => []),
     getLmsCourses(member).catch(() => []),
+    getSiteSettings(),
   ]);
-  const hasAccess = dashboard.enrollments.length || dashboard.items.length;
+  const hasAccess = enrollments.length > 0 || lmsCourses.length > 0;
   const resumeCourse = lmsCourses.find((course) => course.percentage > 0 && course.percentage < 100);
 
   return (
@@ -46,8 +46,7 @@ export default async function LearningPage({ searchParams }: Props) {
         </p>
         <h1 className="mt-3 font-display text-2xl text-white sm:text-3xl">Your learning home</h1>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/55">
-          Courses, Classroom links, resources, and weekly milestones organized around the programs
-          you have unlocked.
+          Courses and Classroom links for the programmes you have unlocked.
         </p>
         {resumeCourse ? (
           <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-baby-blue/30 bg-gradient-to-br from-baby-blue/10 to-surface p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
@@ -74,13 +73,13 @@ export default async function LearningPage({ searchParams }: Props) {
       </div>
 
       {hasAccess ? (
-        <LearningDashboard initialItems={dashboard.items} enrollments={dashboard.enrollments} />
+        <LearningDashboard enrollments={enrollments} />
       ) : (
         <div className="rounded-2xl border border-dashed border-white/15 bg-surface p-6 sm:p-8">
           <p className="font-display text-lg text-white">Nothing unlocked yet</p>
           <p className="mt-2 max-w-xl text-sm text-white/50">
-            Access unlocks when you join a cohort or complete a catalogue purchase. Your Classroom
-            links and learning checklist will appear here.
+            Access unlocks when you join a cohort or complete a catalogue purchase. Classroom links
+            and courses will appear here.
           </p>
           <div className="btn-row-mobile mt-6">
             <Button href="/programs/cohort">Flagship cohort</Button>
@@ -92,7 +91,7 @@ export default async function LearningPage({ searchParams }: Props) {
       )}
 
       <p className="text-sm text-white/40">
-        Next intake: {site.cohort.startDate}.{" "}
+        Next intake: {settings.cohort.startDate}.{" "}
         <Link href="/apply" className="text-baby-blue hover:text-white">
           Apply
         </Link>

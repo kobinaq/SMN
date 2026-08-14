@@ -53,6 +53,14 @@ export const Users: CollectionConfig = {
     update: isSuperAdmin,
     delete: isSuperAdmin,
   },
+  hooks: {
+    beforeValidate: [
+      ({ data }) => {
+        if (data && !data.role) data.role = "super-admin";
+        return data;
+      },
+    ],
+  },
   fields: [
     {
       name: "name",

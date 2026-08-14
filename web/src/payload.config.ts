@@ -21,8 +21,6 @@ import { Opportunities } from "./collections/Opportunities";
 import { OpportunityApplications } from "./collections/OpportunityApplications";
 import { CohortApplications } from "./collections/CohortApplications";
 import { Enrollments } from "./collections/Enrollments";
-import { LearningItems } from "./collections/LearningItems";
-import { Progress } from "./collections/Progress";
 import { LmsCourses } from "./collections/LmsCourses";
 import { LmsModules } from "./collections/LmsModules";
 import { LmsLessons } from "./collections/LmsLessons";
@@ -48,6 +46,7 @@ const dirname = path.dirname(filename);
 
 const r2Enabled = isR2Configured();
 const serverURL = getServerURL();
+const isProduction = process.env.VERCEL_ENV === "production" || process.env.NODE_ENV === "production";
 const csrfOrigins = Array.from(
   new Set(
     [
@@ -55,8 +54,7 @@ const csrfOrigins = Array.from(
       process.env.SITE_URL?.replace(/\/$/, "") || "",
       process.env.PLAYWRIGHT_BASE_URL?.replace(/\/$/, "") || "",
       process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "",
-      "http://localhost:3000",
-      "http://127.0.0.1:3000",
+      ...(isProduction ? [] : ["http://localhost:3000", "http://127.0.0.1:3000"]),
       process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "",
       process.env.VERCEL_BRANCH_URL ? `https://${process.env.VERCEL_BRANCH_URL}` : "",
       process.env.VERCEL_PROJECT_PRODUCTION_URL
@@ -71,6 +69,9 @@ export default buildConfig({
   cookiePrefix: "smn-admin",
   // Allow admin cookies / server actions from deployment origins
   csrf: csrfOrigins,
+  graphQL: {
+    disablePlaygroundInProduction: true,
+  },
   admin: {
     user: Users.slug,
     importMap: {
@@ -114,8 +115,6 @@ export default buildConfig({
     OpportunityApplications,
     CohortApplications,
     Enrollments,
-    LearningItems,
-    Progress,
     LmsCourses,
     LmsModules,
     LmsLessons,

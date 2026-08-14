@@ -14,8 +14,6 @@ const domains: Record<string, Domain> = {
   "opportunity-applications": { read: ["opportunity", "support", "analyst"], write: ["opportunity", "support"] },
   "cohort-applications": { read: ["content", "support", "analyst"], write: ["content", "support"] },
   enrollments: { read: ["learning", "support", "analyst"], write: ["learning", "support"] },
-  "learning-items": { read: ["learning", "analyst"], write: ["learning"] },
-  progress: { read: ["learning", "support", "analyst"], write: ["learning", "support"] },
   "lms-courses": { read: ["learning", "analyst"], write: ["learning"] },
   "lms-modules": { read: ["learning", "analyst"], write: ["learning"] },
   "lms-lessons": { read: ["learning", "analyst"], write: ["learning"] },
