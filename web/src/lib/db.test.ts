@@ -15,11 +15,11 @@ describe("shouldRunProdMigrations", () => {
     expect(shouldRunProdMigrations()).toBe(false);
   });
 
-  it("runs on Vercel production", () => {
+  it("stays off on Vercel production so next build does not migrate", () => {
     process.env.VERCEL_ENV = "production";
     delete process.env.PAYLOAD_MIGRATING;
     delete process.env.PAYLOAD_SKIP_PROD_MIGRATIONS;
-    expect(shouldRunProdMigrations()).toBe(true);
+    expect(shouldRunProdMigrations()).toBe(false);
   });
 
   it("runs when the migrate script sets PAYLOAD_MIGRATING", () => {

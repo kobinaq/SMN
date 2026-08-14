@@ -16,6 +16,7 @@ describe("validateProductionEnv", () => {
 
   it("throws when production validation is enabled and required values are missing", () => {
     process.env.SMN_VALIDATE_PROD_ENV = "true";
+    delete process.env.PAYLOAD_SKIP_PROD_ENV_VALIDATION;
     delete process.env.DATABASE_URL;
     delete process.env.PAYLOAD_SECRET;
     delete process.env.NEXT_PUBLIC_SITE_URL;
@@ -25,6 +26,7 @@ describe("validateProductionEnv", () => {
 
   it("requires complete R2 configuration when any R2 variable is present", () => {
     process.env.SMN_VALIDATE_PROD_ENV = "true";
+    delete process.env.PAYLOAD_SKIP_PROD_ENV_VALIDATION;
     process.env.DATABASE_URL = "postgresql://user:pass@example.com/db";
     process.env.PAYLOAD_SECRET = "a-long-production-secret";
     process.env.NEXT_PUBLIC_SITE_URL = "https://example.com";
@@ -34,8 +36,18 @@ describe("validateProductionEnv", () => {
     expect(() => validateProductionEnv()).toThrow(/R2_ACCESS_KEY_ID/);
   });
 
+  it("skips validation during import-map generation on Vercel", () => {
+    process.env.VERCEL_ENV = "production";
+    process.env.PAYLOAD_SKIP_PROD_ENV_VALIDATION = "true";
+    process.env.DATABASE_URL = "file:./payload.importmap-1.db";
+    delete process.env.PAYLOAD_SECRET;
+    delete process.env.NEXT_PUBLIC_SITE_URL;
+    expect(() => validateProductionEnv()).not.toThrow();
+  });
+
   it("rejects SQLite and /tmp databases when production validation is on", () => {
     process.env.SMN_VALIDATE_PROD_ENV = "true";
+    delete process.env.PAYLOAD_SKIP_PROD_ENV_VALIDATION;
     process.env.PAYLOAD_SECRET = "a-long-production-secret";
     process.env.NEXT_PUBLIC_SITE_URL = "https://example.com";
     process.env.DATABASE_URL = "file:/tmp/payload.db";

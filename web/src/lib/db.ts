@@ -27,12 +27,13 @@ function shouldPushSchema() {
 /**
  * `next build` sets NODE_ENV=production, which would otherwise auto-run
  * prodMigrations against whatever DATABASE_URL is in .env (often Neon).
- * Only auto-migrate on Vercel production, or when an explicit migrate script runs.
+ * Vercel production builds also init Payload; a leftover schema-push row
+ * (`batch === -1`) then blocks on an interactive prompt and fails the deploy.
+ * Migrate only from `npm run db:migrate`.
  */
 export function shouldRunProdMigrations() {
   if (process.env.PAYLOAD_SKIP_PROD_MIGRATIONS === "true") return false;
-  if (process.env.PAYLOAD_MIGRATING === "true") return true;
-  return process.env.VERCEL_ENV === "production";
+  return process.env.PAYLOAD_MIGRATING === "true";
 }
 
 /**

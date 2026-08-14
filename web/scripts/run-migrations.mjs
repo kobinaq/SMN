@@ -1,5 +1,6 @@
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import prompts from "prompts";
 import { loadEnv } from "./load-env.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -10,6 +11,8 @@ process.env.PAYLOAD_DB_PUSH = "false";
 const { default: config } = await import(pathToFileURL(path.join(root, "scripts", ".payload.config.bundle.mjs")).href);
 const { default: payload } = await import("payload");
 await payload.init({ config, disableOnInit: true });
+// Dedicated migrate command: do not wait on the interactive push-vs-migrate warning.
+prompts.inject([true]);
 await payload.db.migrate();
 if (typeof payload.db.destroy === "function") await payload.db.destroy();
 console.log("Payload migrations completed.");

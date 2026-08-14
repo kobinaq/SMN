@@ -12,6 +12,8 @@ function isPostgresUrl(url: string) {
 }
 
 export function validateProductionEnv() {
+  if (process.env.PAYLOAD_SKIP_PROD_ENV_VALIDATION === "true") return;
+
   const productionValidationEnabled =
     process.env.VERCEL_ENV === "production" || process.env.SMN_VALIDATE_PROD_ENV === "true";
 

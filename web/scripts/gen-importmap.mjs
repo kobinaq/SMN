@@ -17,6 +17,9 @@ for (const entry of readdirSync(root)) {
 // Import map generation only needs Payload config. Avoid schema push against a
 // shared/committed SQLite file (CI fails with "index already exists").
 process.env.PAYLOAD_DB_PUSH = "false";
+process.env.PAYLOAD_SKIP_PROD_MIGRATIONS = "true";
+// Throwaway SQLite is not the production DATABASE_URL. Skip the Vercel postgres check.
+process.env.PAYLOAD_SKIP_PROD_ENV_VALIDATION = "true";
 const ephemeralDb = path.join(root, `payload.importmap-${process.pid}.db`);
 if (!process.env.IMPORTMAP_DATABASE_URL) {
   process.env.DATABASE_URL = `file:${ephemeralDb}`;
