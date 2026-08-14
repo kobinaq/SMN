@@ -1,6 +1,7 @@
 import type { Payload } from "payload";
 import { sendEmail } from "@/lib/email";
-import { formatMinorAmount, newTicketCode } from "@/lib/payments/paystack";
+import { paymentStatusAfterFailedDelivery, relationId } from "@/lib/payments/checkout";
+import { formatMinorAmount, newTicketCode, paystackRefund } from "@/lib/payments/paystack";
 import { getServerURL } from "@/lib/server-url";
 
 /** Loose Payload surface until generate:types includes payments / event-registrations. */
@@ -17,8 +18,40 @@ function db(payload: Payload): DB {
 }
 
 function relId(value: unknown) {
-  if (value && typeof value === "object" && "id" in value) return String((value as { id: string | number }).id);
-  return value == null ? "" : String(value);
+  return relationId(value);
+}
+
+function paymentMeta(payment: Record<string, unknown>): Record<string, unknown> {
+  const value = payment.metadata;
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? { ...(value as Record<string, unknown>) }
+    : {};
+}
+
+async function refundUndeliveredPayment(
+  payload: Payload,
+  payment: Record<string, unknown>,
+  extra: Record<string, unknown>,
+) {
+  const p = db(payload);
+  let refunded = false;
+  try {
+    await paystackRefund(String(payment.paystackReference || ""));
+    refunded = true;
+  } catch (error) {
+    extra.refundError = error instanceof Error ? error.message : "Refund failed.";
+  }
+  const status = paymentStatusAfterFailedDelivery(refunded);
+  await p.update({
+    collection: "payments",
+    id: payment.id,
+    data: {
+      status,
+      metadata: { ...paymentMeta(payment), ...extra, refunded },
+    },
+    overrideAccess: true,
+  });
+  return { refunded, status };
 }
 
 async function memberEmail(payload: Payload, memberId: string) {
@@ -106,12 +139,7 @@ export async function fulfillSuccessfulPayment(payload: Payload, reference: stri
     if (event.capacity) {
       const taken = await countConfirmedRegistrations(payload, eventId, { excludePendingRef: reference });
       if (taken >= Number(event.capacity)) {
-        await p.update({
-          collection: "payments",
-          id: payment.id,
-          data: { status: "failed", metadata: { ...(payment.metadata as object), capacityExceeded: true } },
-          overrideAccess: true,
-        });
+        await refundUndeliveredPayment(payload, payment, { capacityExceeded: true });
         const pending = await p.find({
           collection: "event-registrations",
           limit: 1,
@@ -207,26 +235,41 @@ export async function fulfillSuccessfulPayment(payload: Payload, reference: stri
     const course = await p.findByID({
       collection: "courses",
       id: courseId,
-      depth: 0,
+      depth: 1,
       overrideAccess: true,
     });
 
-    const programKey = String(course.programKey || course.slug || "");
-    let classroomUrl = typeof course.classroomUrl === "string" ? course.classroomUrl : "";
-    const lmsCourseId = relId(course.lmsCourse) || undefined;
+    const lmsId = relId(course.lmsCourse);
+    let classroomUrl = "";
+    let programKey = String(course.programKey || course.slug || "");
+    let lmsStatus = "";
 
-    if (!classroomUrl && lmsCourseId) {
+    if (lmsId) {
       try {
-        const lms = await p.findByID({
-          collection: "lms-courses",
-          id: lmsCourseId,
-          depth: 0,
-          overrideAccess: true,
-        });
+        const lms =
+          typeof course.lmsCourse === "object" && course.lmsCourse
+            ? (course.lmsCourse as Record<string, unknown>)
+            : await p.findByID({
+                collection: "lms-courses",
+                id: lmsId,
+                depth: 0,
+                overrideAccess: true,
+              });
+        lmsStatus = String(lms.status || "");
         if (typeof lms.classroomUrl === "string" && lms.classroomUrl) classroomUrl = lms.classroomUrl;
+        if (typeof lms.programKey === "string" && lms.programKey) programKey = lms.programKey;
       } catch {
-        /* optional */
+        lmsStatus = "";
       }
+    }
+
+    if (typeof course.classroomUrl === "string" && course.classroomUrl) {
+      classroomUrl = course.classroomUrl;
+    }
+
+    if (!lmsId || lmsStatus !== "published") {
+      await refundUndeliveredPayment(payload, payment, { missingPublishedLms: true });
+      return { ok: false as const, reason: "missing_lms" as const };
     }
 
     const prior = await p.find({
@@ -249,7 +292,7 @@ export async function fulfillSuccessfulPayment(payload: Payload, reference: stri
           source: "paystack",
           externalReference: reference,
           classroomUrl: classroomUrl || enrollment.classroomUrl || undefined,
-          course: lmsCourseId || enrollment.course || undefined,
+          course: lmsId,
         },
         overrideAccess: true,
       });
@@ -265,7 +308,7 @@ export async function fulfillSuccessfulPayment(payload: Payload, reference: stri
           externalReference: reference,
           status: "active",
           classroomUrl: classroomUrl || undefined,
-          course: lmsCourseId || undefined,
+          course: lmsId,
           startedAt: new Date().toISOString(),
         },
         overrideAccess: true,
@@ -407,9 +450,6 @@ export async function cancelEventRegistration(
   let refunded = false;
   const reference = typeof registration.paystackReference === "string" ? registration.paystackReference : "";
   if (opts?.refund && reference && Number(registration.amountPaid || 0) > 0) {
-    const { paystackRefund } = await import("@/lib/payments/paystack");
-    await paystackRefund(reference);
-    refunded = true;
     const payments = await p.find({
       collection: "payments",
       limit: 1,
@@ -418,15 +458,8 @@ export async function cancelEventRegistration(
       overrideAccess: true,
     });
     if (payments.docs[0]) {
-      await p.update({
-        collection: "payments",
-        id: payments.docs[0].id,
-        data: {
-          status: "failed",
-          metadata: { ...(payments.docs[0].metadata as object), refunded: true },
-        },
-        overrideAccess: true,
-      });
+      const outcome = await refundUndeliveredPayment(payload, payments.docs[0], { cancelledRegistration: true });
+      refunded = outcome.refunded;
     }
   }
 

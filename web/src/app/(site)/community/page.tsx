@@ -14,8 +14,7 @@ import { Button } from "@/components/ui/Button";
 import { excerptStoryQuote } from "@/lib/content";
 import { seoTitle } from "@/lib/brand";
 import { img } from "@/lib/images";
-import { site } from "@/lib/site";
-import { getStories } from "@/lib/cms";
+import { getSiteSettings, getStories } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: seoTitle("Marketing Community in Ghana"),
@@ -115,7 +114,7 @@ const steps = [
 ];
 
 export default async function CommunityPage() {
-  const stories = await getStories();
+  const [site, stories] = await Promise.all([getSiteSettings(), getStories()]);
   const communityStories = stories.slice(0, 4);
   return (
     <>

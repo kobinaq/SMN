@@ -42,3 +42,22 @@ export async function safePayloadQuery<T>(
     return fallback;
   }
 }
+
+export function cmsFailClosed(): boolean {
+  return process.env.NODE_ENV === "production" || Boolean(process.env.VERCEL);
+}
+
+/** Public catalogues. Seed only when shouldUseCms is false. Empty CMS stays empty. */
+export async function loadPublicList<T>(
+  query: () => Promise<T[]>,
+  seed: T[],
+): Promise<T[]> {
+  if (!shouldUseCms()) return seed;
+  try {
+    return await query();
+  } catch (error) {
+    console.warn("[payload] public list query failed", error);
+    if (cmsFailClosed()) return [];
+    return seed;
+  }
+}

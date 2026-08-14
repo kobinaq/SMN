@@ -44,6 +44,8 @@ export const Payments: CollectionConfig = {
         { label: "Initialized", value: "initialized" },
         { label: "Success", value: "success" },
         { label: "Failed", value: "failed" },
+        { label: "Needs refund", value: "needs_refund" },
+        { label: "Refunded", value: "refunded" },
       ],
     },
     { name: "paystackReference", type: "text", required: true, unique: true, index: true },

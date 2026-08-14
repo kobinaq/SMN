@@ -16,6 +16,7 @@ const types = [
   "Talent request",
   "Intern request",
   "Job posting",
+  "Simulation waitlist",
   "Other",
 ] as const;
 

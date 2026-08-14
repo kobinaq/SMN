@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { Resend } from "resend";
-import { site } from "@/lib/site";
+import { getSiteSettings } from "@/lib/cms";
+import { emailWasSent, sendEmail } from "@/lib/email";
 
 const schema = z.object({
   name: z.string().min(2),
@@ -21,20 +21,19 @@ export async function POST(req: Request) {
     const data = parsed.data;
     if (data.website) return NextResponse.json({ ok: true });
 
-    const apiKey = process.env.RESEND_API_KEY;
-    const ops = process.env.OPS_EMAIL ?? site.email;
-    const from = process.env.RESEND_FROM ?? "SMN <onboarding@resend.dev>";
+    const settings = await getSiteSettings();
+    const ops = process.env.OPS_EMAIL ?? settings.email;
+    const delivery = await sendEmail({
+      to: ops,
+      subject: `Contact (${data.type}): ${data.name}`,
+      text: `From: ${data.name} <${data.email}>\nType: ${data.type}\n\n${data.message}`,
+    });
 
-    if (apiKey) {
-      const resend = new Resend(apiKey);
-      await resend.emails.send({
-        from,
-        to: ops,
-        subject: `Contact (${data.type}): ${data.name}`,
-        text: `From: ${data.name} <${data.email}>\nType: ${data.type}\n\n${data.message}`,
-      });
-    } else {
-      console.log("[contact]", data);
+    if (!emailWasSent(delivery)) {
+      return NextResponse.json(
+        { error: "We could not send that message yet. Email SMN directly or try again later." },
+        { status: 503 },
+      );
     }
 
     return NextResponse.json({ ok: true });

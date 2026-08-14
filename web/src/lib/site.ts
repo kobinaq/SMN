@@ -31,6 +31,7 @@ export const site = {
   announcementBanner: "",
   footerBlurb:
     "Learn, practise, connect, and grow in one ecosystem. Member portal for courses, mentorship, opportunities, portfolios, and credentials. Community on WhatsApp.",
+  impactStats: [] as { label: string; value: string }[],
   cohort: {
     name: "Social Media Marketing & AI Cohort",
     startDate: "September 2026",
@@ -70,6 +71,7 @@ export type SiteConfig = {
   };
   announcementBanner: string;
   footerBlurb: string;
+  impactStats: { label: string; value: string }[];
   cohort: {
     name: string;
     startDate: string;

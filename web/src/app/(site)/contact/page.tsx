@@ -4,8 +4,8 @@ import { ContactForm } from "@/components/forms/ContactForm";
 import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
 import { cta } from "@/lib/cta";
+import { getSiteSettings } from "@/lib/cms";
 import { img } from "@/lib/images";
-import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -13,47 +13,47 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
-const channels = [
-  {
-    icon: Mail,
-    label: "Email",
-    title: site.email,
-    href: `mailto:${site.email}`,
-    external: false,
-    body: "Partnerships, programme questions, and general enquiries.",
-  },
-  {
-    icon: MessageCircle,
-    label: "Community",
-    title: "WhatsApp",
-    href: site.whatsappInvite,
-    external: true,
-    body: "Join the Network chat for daily conversation and feedback.",
-  },
-  {
-    icon: Briefcase,
-    label: "Partners",
-    title: "Partner with us",
-    href: "/employers",
-    external: false,
-    body: "Share a role or ask about marketers from the Network.",
-  },
-  {
-    icon: Mic2,
-    label: "Speaking",
-    title: "Book a conversation",
-    href: `mailto:${site.email}?subject=Speaking%20request`,
-    external: false,
-    body: "Workshops, panels, and guest sessions with SMN.",
-  },
-];
-
 export default async function ContactPage({
   searchParams,
 }: {
   searchParams: Promise<{ type?: string }>;
 }) {
   const { type } = await searchParams;
+  const site = await getSiteSettings();
+  const channels = [
+    {
+      icon: Mail,
+      label: "Email",
+      title: site.email,
+      href: `mailto:${site.email}`,
+      external: false,
+      body: "Partnerships, programme questions, and general enquiries.",
+    },
+    {
+      icon: MessageCircle,
+      label: "Community",
+      title: "WhatsApp",
+      href: site.whatsappInvite,
+      external: true,
+      body: "Join the Network chat for daily conversation and feedback.",
+    },
+    {
+      icon: Briefcase,
+      label: "Partners",
+      title: "Partner with us",
+      href: "/employers",
+      external: false,
+      body: "Share a role or ask about marketers from the Network.",
+    },
+    {
+      icon: Mic2,
+      label: "Speaking",
+      title: "Book a conversation",
+      href: `mailto:${site.email}?subject=Speaking%20request`,
+      external: false,
+      body: "Workshops, panels, and guest sessions with SMN.",
+    },
+  ];
   return (
     <>
       <CinematicPageHero

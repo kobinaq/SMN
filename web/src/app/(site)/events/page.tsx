@@ -17,7 +17,7 @@ import { seoTitle } from "@/lib/brand";
 import { eventTypes } from "@/lib/content";
 import { formatEventDate, getEventCalendar, getNextEvent } from "@/lib/events";
 import { img } from "@/lib/images";
-import { site } from "@/lib/site";
+import { getSiteSettings } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: seoTitle("Marketing Events Ghana"),
@@ -69,7 +69,7 @@ const expect = [
 
 export default async function EventsPage({ searchParams }: Props) {
   const { type } = await searchParams;
-  const all = await getEventCalendar();
+  const [site, all] = await Promise.all([getSiteSettings(), getEventCalendar()]);
   const active =
     type && eventTypes.includes(type as (typeof eventTypes)[number]) ? type : "All";
 

@@ -18,6 +18,12 @@ export async function POST(req: Request) {
     if (website) return NextResponse.json({ ok: true });
 
     const result = await subscribeToNewsletter(email);
+    if (result.ok && result.skipped) {
+      return NextResponse.json(
+        { error: "Email signup is not available yet. Join the WhatsApp community instead." },
+        { status: 503 },
+      );
+    }
     if (!result.ok) return NextResponse.json({ error: result.error }, { status: 502 });
 
     return NextResponse.json({ ok: true });

@@ -9,6 +9,7 @@ type EnrollmentDoc = {
   id: string | number;
   programKey: string;
   status: string;
+  course?: Relation<{ id: string | number }>;
 };
 
 type MediaDoc = { url?: string | null };
@@ -134,7 +135,8 @@ function hasCourseAccess(member: MemberUser, course: LmsCourseDoc, enrollments: 
   if (course.accessRule === "member") return true;
   const enrolled = enrollments.some(
     (enrollment) =>
-      enrollment.programKey === course.programKey && ["active", "completed"].includes(enrollment.status),
+      ["active", "completed"].includes(enrollment.status) &&
+      (relationId(enrollment.course) === course.id || enrollment.programKey === course.programKey),
   );
   if (course.accessRule === "enrolled") return enrolled;
   return enrolled || member.cohortStatus === "active" || member.cohortStatus === "completed";

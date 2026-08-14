@@ -7,13 +7,13 @@ import { BlogCard } from "@/components/blog/BlogCard";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { formatBlogDate, getBlogPost, getBlogPosts, getRelatedPosts } from "@/lib/blog";
-import { posts as seedPosts } from "@/lib/content";
-import { site } from "@/lib/site";
+import { getSiteSettings } from "@/lib/cms";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  return seedPosts.map((p) => ({ slug: p.slug }));
+  const posts = await getBlogPosts();
+  return posts.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function InsightArticlePage({ params }: Props) {
   const { slug } = await params;
-  const all = await getBlogPosts();
+  const [site, all] = await Promise.all([getSiteSettings(), getBlogPosts()]);
   const post = all.find((p) => p.slug === slug);
   if (!post) notFound();
 

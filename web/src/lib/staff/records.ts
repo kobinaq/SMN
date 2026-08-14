@@ -95,6 +95,8 @@ export async function deleteCollectionDoc(
   return doc as unknown as StaffRecord;
 }
 
+export { lexicalToPlainText } from "@/lib/lexical-text";
+
 /** Convert plain text into a minimal Lexical document for richText fields. */
 export function plainTextToLexical(text: string) {
   const paragraphs = text.split(/\n+/).map((line) => line.trim()).filter(Boolean);
@@ -117,16 +119,6 @@ export function plainTextToLexical(text: string) {
       })),
     },
   };
-}
-
-export function lexicalToPlainText(value: unknown) {
-  if (!value || typeof value !== "object") return "";
-  const root = (value as { root?: { children?: Array<{ children?: Array<{ text?: string }> }> } }).root;
-  if (!root?.children) return "";
-  return root.children
-    .map((node) => (node.children || []).map((child) => child.text || "").join(""))
-    .filter(Boolean)
-    .join("\n\n");
 }
 
 export function slugify(value: string) {

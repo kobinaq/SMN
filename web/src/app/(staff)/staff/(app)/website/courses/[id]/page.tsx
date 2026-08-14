@@ -4,7 +4,7 @@ import { StaffPageHeader, StaffPanel } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { courseFields } from "@/lib/staff/field-defs";
-import { getCollectionDoc, relationId } from "@/lib/staff/records";
+import { getCollectionDoc, relationId, staffAccess } from "@/lib/staff/records";
 
 function fieldValue(value: unknown, fallback: string | number | boolean | null = "") {
   if (value == null) return fallback;
@@ -30,6 +30,18 @@ export default async function EditWebsiteCoursePage({ params }: { params: Promis
         .join("\n")
     : "";
 
+  const lms = await payload.find({
+    collection: "lms-courses",
+    depth: 0,
+    limit: 100,
+    sort: "title",
+    ...staffAccess(staff),
+  });
+  const lmsOptions = lms.docs.map((item) => ({
+    label: `${item.title} (${item.status})`,
+    value: String(item.id),
+  }));
+
   return (
     <div className="space-y-6">
       <StaffPageHeader eyebrow="Website" title={String(doc.title)} description={`Slug · ${String(doc.slug)}`} />
@@ -38,7 +50,7 @@ export default async function EditWebsiteCoursePage({ params }: { params: Promis
           collection="courses"
           action="update"
           id={doc.id as string | number}
-          fields={courseFields}
+          fields={courseFields(lmsOptions)}
           initial={{
             title: fieldValue(doc.title),
             slug: fieldValue(doc.slug),
@@ -50,6 +62,7 @@ export default async function EditWebsiteCoursePage({ params }: { params: Promis
             amount: fieldValue(doc.amount, ""),
             currency: fieldValue(doc.currency, "GHS"),
             programKey: fieldValue(doc.programKey),
+            lmsCourse: relationId(doc.lmsCourse),
             delivery: fieldValue(doc.delivery, "self-paced"),
             classroomUrl: fieldValue(doc.classroomUrl),
             badge: fieldValue(doc.badge),

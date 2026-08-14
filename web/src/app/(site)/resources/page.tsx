@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { resourceOfferings, seoTitle } from "@/lib/brand";
 import { resourceTypes } from "@/lib/content";
 import { getResourceLibrary } from "@/lib/resources";
-import { site } from "@/lib/site";
+import { getSiteSettings } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: seoTitle("Social Media Marketing Resources"),
@@ -23,7 +23,7 @@ type Props = {
 
 export default async function ResourcesPage({ searchParams }: Props) {
   const { type } = await searchParams;
-  const all = await getResourceLibrary();
+  const [site, all] = await Promise.all([getSiteSettings(), getResourceLibrary()]);
   const active =
     type && resourceTypes.includes(type as (typeof resourceTypes)[number]) ? type : "All";
 
@@ -168,10 +168,21 @@ export default async function ResourcesPage({ searchParams }: Props) {
 
               {filtered.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-white/15 px-6 py-16 text-center">
-                  <p className="font-display text-lg text-white">Nothing in this category</p>
-                  <p className="mt-2 text-sm text-white/45">Try another type from the filters.</p>
-                  <Button href="/resources" variant="secondary" className="mt-6">
-                    Show all tools
+                  <p className="font-display text-lg text-white">
+                    {all.length === 0 ? "No downloads published yet" : "Nothing in this category"}
+                  </p>
+                  <p className="mt-2 text-sm text-white/45">
+                    {all.length === 0
+                      ? "Staff will add files here. Join WhatsApp if you want a ping when the first pack drops."
+                      : "Try another type from the filters."}
+                  </p>
+                  <Button
+                    href={all.length === 0 ? site.whatsappInvite : "/resources"}
+                    variant="secondary"
+                    className="mt-6"
+                    {...(all.length === 0 ? { target: "_blank", rel: "noreferrer" } : {})}
+                  >
+                    {all.length === 0 ? "Join WhatsApp" : "Show all tools"}
                   </Button>
                 </div>
               ) : active === "All" ? (
@@ -225,10 +236,12 @@ export default async function ResourcesPage({ searchParams }: Props) {
                     </p>
                   </div>
                 </div>
-                <Button href="/resources/content-calendar-system" variant="secondary" className="sm:shrink-0">
-                  Try a free template
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
+                {all[0] ? (
+                  <Button href={`/resources/${all[0].slug}`} variant="secondary" className="sm:shrink-0">
+                    Try a free template
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                ) : null}
               </div>
               <p className="mt-8 text-sm text-white/45">
                 Want the thinking behind the files? Read{" "}

@@ -100,7 +100,25 @@ export const capabilityAreas = [
   "Career readiness",
 ];
 
-export const courses = [
+export type CourseItem = {
+  slug: string;
+  title: string;
+  summary: string;
+  outcomes: string[];
+  duration: string;
+  lessons: number;
+  price: string;
+  selarUrl: string;
+  badge: string | null;
+  image: string;
+  id?: string | number;
+  amount?: number | null;
+  currency?: string;
+  programKey?: string;
+  delivery?: string;
+};
+
+export const courses: CourseItem[] = [
   {
     slug: "growth-marketing-foundations",
     title: "Growth Marketing Foundations",

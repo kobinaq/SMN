@@ -98,9 +98,13 @@ export default async function InsightsPage({ searchParams }: Props) {
             </div>
           ) : (
             <div className="rounded-2xl border border-white/10 bg-surface px-6 py-16 text-center">
-              <p className="font-display text-xl text-white">No articles in this category yet</p>
+              <p className="font-display text-xl text-white">
+                {all.length === 0 ? "No articles published yet" : "No articles in this category yet"}
+              </p>
               <p className="mt-2 text-sm text-white/50">
-                Try another filter or check back soon.
+                {all.length === 0
+                  ? "Insights will appear here when staff publish them."
+                  : "Try another filter or check back soon."}
               </p>
             </div>
           )}

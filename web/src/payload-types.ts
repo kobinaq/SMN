@@ -76,6 +76,7 @@ export interface Config {
     'opportunity-sources': OpportunitySource;
     opportunities: Opportunity;
     'opportunity-applications': OpportunityApplication;
+    'cohort-applications': CohortApplication;
     enrollments: Enrollment;
     'learning-items': LearningItem;
     progress: Progress;
@@ -87,6 +88,8 @@ export interface Config {
     certificates: Certificate;
     'audit-events': AuditEvent;
     'member-notes': MemberNote;
+    'event-registrations': EventRegistration;
+    payments: Payment;
     'ai-usage-records': AiUsageRecord;
     'ai-feedback': AiFeedback;
     'ai-knowledge-sources': AiKnowledgeSource;
@@ -113,6 +116,7 @@ export interface Config {
     'opportunity-sources': OpportunitySourcesSelect<false> | OpportunitySourcesSelect<true>;
     opportunities: OpportunitiesSelect<false> | OpportunitiesSelect<true>;
     'opportunity-applications': OpportunityApplicationsSelect<false> | OpportunityApplicationsSelect<true>;
+    'cohort-applications': CohortApplicationsSelect<false> | CohortApplicationsSelect<true>;
     enrollments: EnrollmentsSelect<false> | EnrollmentsSelect<true>;
     'learning-items': LearningItemsSelect<false> | LearningItemsSelect<true>;
     progress: ProgressSelect<false> | ProgressSelect<true>;
@@ -124,6 +128,8 @@ export interface Config {
     certificates: CertificatesSelect<false> | CertificatesSelect<true>;
     'audit-events': AuditEventsSelect<false> | AuditEventsSelect<true>;
     'member-notes': MemberNotesSelect<false> | MemberNotesSelect<true>;
+    'event-registrations': EventRegistrationsSelect<false> | EventRegistrationsSelect<true>;
+    payments: PaymentsSelect<false> | PaymentsSelect<true>;
     'ai-usage-records': AiUsageRecordsSelect<false> | AiUsageRecordsSelect<true>;
     'ai-feedback': AiFeedbackSelect<false> | AiFeedbackSelect<true>;
     'ai-knowledge-sources': AiKnowledgeSourcesSelect<false> | AiKnowledgeSourcesSelect<true>;
@@ -197,7 +203,7 @@ export interface MemberAuthOperations {
   };
 }
 /**
- * Staff accounts for the Payload CMS admin panel.
+ * Staff accounts for the SMN staff app at /staff.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
@@ -483,6 +489,30 @@ export interface OpportunityApplication {
   createdAt: string;
 }
 /**
+ * Public flagship cohort applications from /apply.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cohort-applications".
+ */
+export interface CohortApplication {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  country: string;
+  role: string;
+  level: string;
+  linkedin?: string | null;
+  portfolio?: string | null;
+  goals: string;
+  source?: string | null;
+  status: 'received' | 'reviewing' | 'accepted' | 'waitlisted' | 'declined';
+  member?: (number | null) | Member;
+  staffNotes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "enrollments".
  */
@@ -496,15 +526,18 @@ export interface Enrollment {
   programKey: string;
   course?: (number | null) | LmsCourse;
   programType: 'Cohort' | 'Self-paced course' | 'Workshop' | 'Community track';
-  source: 'staff' | 'cohort' | 'selar';
+  source: 'staff' | 'cohort' | 'paystack' | 'selar';
   /**
-   * Optional Selar order/product reference.
+   * Paystack reference or legacy order id.
    */
   externalReference?: string | null;
   status: 'active' | 'completed' | 'paused' | 'cancelled';
+  /**
+   * Google Classroom / live class link.
+   */
   classroomUrl?: string | null;
   /**
-   * Optional external Selar learning URL.
+   * Optional external learning URL.
    */
   courseUrl?: string | null;
   startsAt?: string | null;
@@ -546,6 +579,10 @@ export interface LmsCourse {
   level?: ('foundation' | 'intermediate' | 'advanced') | null;
   cover?: (number | null) | Media;
   estimatedHours?: number | null;
+  /**
+   * Optional default Google Classroom / live join link for live cohorts using this course.
+   */
+  classroomUrl?: string | null;
   enrollmentOpen?: boolean | null;
   certificateEnabled?: boolean | null;
   previewEnabled?: boolean | null;
@@ -655,14 +692,25 @@ export interface LmsLesson {
   summary: string;
   lessonType: 'video' | 'reading' | 'download' | 'assignment';
   /**
-   * Use an unlisted YouTube watch/share/embed URL. Videos are streamed by YouTube, not stored in R2.
+   * Optional unlisted YouTube watch/share/embed URL. Videos are streamed by YouTube, not stored in R2.
    */
   youtubeUrl?: string | null;
   durationMinutes?: number | null;
   /**
-   * Lesson notes, prompts, or assignment instructions.
+   * Lesson text, reading content, article notes, prompts, or assignment instructions.
    */
   body?: string | null;
+  /**
+   * Optional label for an external article or resource link.
+   */
+  resourceLabel?: string | null;
+  /**
+   * Optional external article, Notion page, Google Doc, or other resource URL.
+   */
+  resourceUrl?: string | null;
+  /**
+   * Downloadable documents and files for learners.
+   */
   attachments?:
     | {
         label: string;
@@ -802,6 +850,151 @@ export interface MemberNote {
   author: number | User;
   category: 'support' | 'learning' | 'mentorship' | 'opportunity' | 'conduct' | 'other';
   note: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-registrations".
+ */
+export interface EventRegistration {
+  id: number;
+  event: number | Event;
+  member: number | Member;
+  status: 'pending_payment' | 'confirmed' | 'cancelled' | 'checked_in' | 'no_show';
+  ticketCode?: string | null;
+  paystackReference?: string | null;
+  amountPaid?: number | null;
+  currency?: string | null;
+  registeredAt?: string | null;
+  checkedInAt?: string | null;
+  checkedInBy?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: number;
+  title: string;
+  slug: string;
+  status: 'draft' | 'published' | 'cancelled';
+  type: 'Webinar' | 'Workshop' | 'Networking' | 'Conference';
+  format: 'online' | 'onsite' | 'hybrid';
+  pricing: 'free' | 'paid';
+  /**
+   * Price in minor units (pesewas). Required when paid.
+   */
+  amount?: number | null;
+  currency?: string | null;
+  capacity?: number | null;
+  venue?: string | null;
+  address?: string | null;
+  /**
+   * Meet / Classroom / Zoom link shown after registration.
+   */
+  onlineUrl?: string | null;
+  startsAt: string;
+  endsAt?: string | null;
+  /**
+   * Legacy display date; prefer startsAt.
+   */
+  date?: string | null;
+  /**
+   * Legacy time label.
+   */
+  time?: string | null;
+  host?: string | null;
+  summary: string;
+  body?: string | null;
+  /**
+   * Legacy external URL — leave blank for first-party registration.
+   */
+  registrationUrl?: string | null;
+  image?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payments".
+ */
+export interface Payment {
+  id: number;
+  kind: 'event' | 'course';
+  member: number | Member;
+  /**
+   * Amount in minor units (e.g. pesewas).
+   */
+  amount: number;
+  currency: string;
+  status: 'initialized' | 'success' | 'failed' | 'needs_refund' | 'refunded';
+  paystackReference: string;
+  paystackAccessCode?: string | null;
+  event?: (number | null) | Event;
+  catalogueCourse?: (number | null) | Course;
+  enrollment?: (number | null) | Enrollment;
+  eventRegistration?: (number | null) | EventRegistration;
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses".
+ */
+export interface Course {
+  id: number;
+  title: string;
+  slug: string;
+  summary: string;
+  outcomes?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  duration?: string | null;
+  lessons?: number | null;
+  /**
+   * Display label (optional if amount is set).
+   */
+  price?: string | null;
+  /**
+   * Checkout amount in minor units (pesewas). 0 = free catalog item.
+   */
+  amount?: number | null;
+  currency?: string | null;
+  /**
+   * Must match LMS / learning-items key to unlock access after Paystack.
+   */
+  programKey?: string | null;
+  delivery?: ('self-paced' | 'live') | null;
+  /**
+   * Default Google Classroom link for live programmes.
+   */
+  classroomUrl?: string | null;
+  /**
+   * Optional link to the native LMS course.
+   */
+  lmsCourse?: (number | null) | LmsCourse;
+  /**
+   * Legacy Selar URL — unused for new checkouts.
+   */
+  selarUrl?: string | null;
+  badge?: string | null;
+  image?: (number | null) | Media;
+  status?: ('published' | 'coming-soon') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -989,48 +1182,8 @@ export interface Post {
   createdAt: string;
 }
 /**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "courses".
- */
-export interface Course {
-  id: number;
-  title: string;
-  slug: string;
-  summary: string;
-  outcomes?:
-    | {
-        item: string;
-        id?: string | null;
-      }[]
-    | null;
-  duration?: string | null;
-  lessons?: number | null;
-  price?: string | null;
-  selarUrl: string;
-  badge?: string | null;
-  image?: (number | null) | Media;
-  status?: ('published' | 'coming-soon') | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "events".
- */
-export interface Event {
-  id: number;
-  title: string;
-  slug: string;
-  type: 'Webinar' | 'Workshop' | 'Networking' | 'Conference';
-  date: string;
-  time?: string | null;
-  summary: string;
-  registrationUrl: string;
-  image?: (number | null) | Media;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
+ * Member testimonials. Only stories with Published enabled appear on the public site. Do not publish fictional or seed content.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "stories".
  */
@@ -1038,11 +1191,23 @@ export interface Story {
   id: number;
   name: string;
   role: string;
+  /**
+   * Programme or cohort name (optional)
+   */
   programme?: string | null;
   quote: string;
   image?: (number | null) | Media;
+  /**
+   * Optional public portfolio or case-study link
+   */
   portfolioUrl?: string | null;
+  /**
+   * Confirm the member gave permission to publish this testimonial
+   */
   permissionConfirmed?: boolean | null;
+  /**
+   * Public site only shows published testimonials with permission confirmed
+   */
   published?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -1104,6 +1269,10 @@ export interface PayloadLockedDocument {
         value: number | OpportunityApplication;
       } | null)
     | ({
+        relationTo: 'cohort-applications';
+        value: number | CohortApplication;
+      } | null)
+    | ({
         relationTo: 'enrollments';
         value: number | Enrollment;
       } | null)
@@ -1146,6 +1315,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'member-notes';
         value: number | MemberNote;
+      } | null)
+    | ({
+        relationTo: 'event-registrations';
+        value: number | EventRegistration;
+      } | null)
+    | ({
+        relationTo: 'payments';
+        value: number | Payment;
       } | null)
     | ({
         relationTo: 'ai-usage-records';
@@ -1437,6 +1614,27 @@ export interface OpportunityApplicationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cohort-applications_select".
+ */
+export interface CohortApplicationsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  country?: T;
+  role?: T;
+  level?: T;
+  linkedin?: T;
+  portfolio?: T;
+  goals?: T;
+  source?: T;
+  status?: T;
+  member?: T;
+  staffNotes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "enrollments_select".
  */
 export interface EnrollmentsSelect<T extends boolean = true> {
@@ -1515,6 +1713,7 @@ export interface LmsCoursesSelect<T extends boolean = true> {
   level?: T;
   cover?: T;
   estimatedHours?: T;
+  classroomUrl?: T;
   enrollmentOpen?: T;
   certificateEnabled?: T;
   previewEnabled?: T;
@@ -1554,6 +1753,8 @@ export interface LmsLessonsSelect<T extends boolean = true> {
   youtubeUrl?: T;
   durationMinutes?: T;
   body?: T;
+  resourceLabel?: T;
+  resourceUrl?: T;
   attachments?:
     | T
     | {
@@ -1666,6 +1867,44 @@ export interface MemberNotesSelect<T extends boolean = true> {
   author?: T;
   category?: T;
   note?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-registrations_select".
+ */
+export interface EventRegistrationsSelect<T extends boolean = true> {
+  event?: T;
+  member?: T;
+  status?: T;
+  ticketCode?: T;
+  paystackReference?: T;
+  amountPaid?: T;
+  currency?: T;
+  registeredAt?: T;
+  checkedInAt?: T;
+  checkedInBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payments_select".
+ */
+export interface PaymentsSelect<T extends boolean = true> {
+  kind?: T;
+  member?: T;
+  amount?: T;
+  currency?: T;
+  status?: T;
+  paystackReference?: T;
+  paystackAccessCode?: T;
+  event?: T;
+  catalogueCourse?: T;
+  enrollment?: T;
+  eventRegistration?: T;
+  metadata?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1834,6 +2073,12 @@ export interface CoursesSelect<T extends boolean = true> {
   duration?: T;
   lessons?: T;
   price?: T;
+  amount?: T;
+  currency?: T;
+  programKey?: T;
+  delivery?: T;
+  classroomUrl?: T;
+  lmsCourse?: T;
   selarUrl?: T;
   badge?: T;
   image?: T;
@@ -1848,10 +2093,23 @@ export interface CoursesSelect<T extends boolean = true> {
 export interface EventsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  status?: T;
   type?: T;
+  format?: T;
+  pricing?: T;
+  amount?: T;
+  currency?: T;
+  capacity?: T;
+  venue?: T;
+  address?: T;
+  onlineUrl?: T;
+  startsAt?: T;
+  endsAt?: T;
   date?: T;
   time?: T;
+  host?: T;
   summary?: T;
+  body?: T;
   registrationUrl?: T;
   image?: T;
   updatedAt?: T;
@@ -1864,8 +2122,12 @@ export interface EventsSelect<T extends boolean = true> {
 export interface StoriesSelect<T extends boolean = true> {
   name?: T;
   role?: T;
+  programme?: T;
   quote?: T;
   image?: T;
+  portfolioUrl?: T;
+  permissionConfirmed?: T;
+  published?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1923,6 +2185,8 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * Public marketing settings. Confirm pricing before publishing fee amounts. Unconfirmed fees should stay as “Contact SMN for current fees”.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
@@ -1930,10 +2194,22 @@ export interface SiteSetting {
   id: number;
   siteName: string;
   tagline?: string | null;
+  /**
+   * Default meta description
+   */
   description?: string | null;
-  whatsappInvite?: string | null;
   opsEmail?: string | null;
+  /**
+   * Full WhatsApp invite URL
+   */
+  whatsappInvite?: string | null;
+  /**
+   * Optional sitewide banner. Leave blank to hide.
+   */
   announcementBanner?: string | null;
+  /**
+   * Short footer explanation of the platform
+   */
   footerBlurb?: string | null;
   homepage?: {
     headline?: string | null;
@@ -1950,20 +2226,32 @@ export interface SiteSetting {
     seats?: number | null;
     audience?: string | null;
     format?: string | null;
+    sessions?: string | null;
+    /**
+     * Only enable after the client confirms the public fee. When off, the site shows the safe pending label.
+     */
     priceConfirmed?: boolean | null;
+    /**
+     * Preferred format when confirmed: GH₵2,500. Otherwise keep pending wording.
+     */
     priceLabel?: string | null;
     priceNote?: string | null;
-    sessions?: string | null;
   };
   social?: {
     instagram?: string | null;
     linkedin?: string | null;
     twitter?: string | null;
   };
+  /**
+   * Only publish verifiable figures. Leave empty until the client supplies real metrics.
+   */
   impactStats?:
     | {
         label: string;
         value: string;
+        /**
+         * Must be checked to appear on the public site
+         */
         verified?: boolean | null;
         id?: string | null;
       }[]
@@ -1978,18 +2266,34 @@ export interface SiteSetting {
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
   tagline?: T;
-  whatsappInvite?: T;
+  description?: T;
   opsEmail?: T;
+  whatsappInvite?: T;
+  announcementBanner?: T;
+  footerBlurb?: T;
+  homepage?:
+    | T
+    | {
+        headline?: T;
+        supportingCopy?: T;
+        primaryCtaLabel?: T;
+        secondaryCtaLabel?: T;
+        secondaryCtaHref?: T;
+      };
   cohort?:
     | T
     | {
         name?: T;
         startDate?: T;
+        applicationDeadline?: T;
         duration?: T;
         seats?: T;
+        audience?: T;
+        format?: T;
+        sessions?: T;
+        priceConfirmed?: T;
         priceLabel?: T;
         priceNote?: T;
-        sessions?: T;
       };
   social?:
     | T
@@ -1997,6 +2301,14 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         instagram?: T;
         linkedin?: T;
         twitter?: T;
+      };
+  impactStats?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        verified?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

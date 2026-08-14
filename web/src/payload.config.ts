@@ -19,6 +19,7 @@ import { MentorshipRelationships } from "./collections/MentorshipRelationships";
 import { OpportunitySources } from "./collections/OpportunitySources";
 import { Opportunities } from "./collections/Opportunities";
 import { OpportunityApplications } from "./collections/OpportunityApplications";
+import { CohortApplications } from "./collections/CohortApplications";
 import { Enrollments } from "./collections/Enrollments";
 import { LearningItems } from "./collections/LearningItems";
 import { Progress } from "./collections/Progress";
@@ -111,6 +112,7 @@ export default buildConfig({
     OpportunitySources,
     Opportunities,
     OpportunityApplications,
+    CohortApplications,
     Enrollments,
     LearningItems,
     Progress,

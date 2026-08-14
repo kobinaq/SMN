@@ -1,7 +1,6 @@
 import type { EventItem } from "@/lib/content";
-import { events as seedEvents, eventTypes } from "@/lib/content";
+import { eventTypes } from "@/lib/content";
 import { getEvents as getCmsEvents } from "@/lib/cms";
-import { img } from "@/lib/images";
 
 export { eventTypes };
 
@@ -33,33 +32,9 @@ export function isUpcoming(dateStr: string, now = new Date()) {
   return end.getTime() >= now.getTime();
 }
 
-/** Normalize CMS records with seed detail when available */
 export async function getEventCalendar(): Promise<EventItem[]> {
   const fromCms = await getCmsEvents();
-  const seedBySlug = Object.fromEntries(seedEvents.map((e) => [e.slug, e]));
-
-  const merged = fromCms.map((e) => {
-    const seed = seedBySlug[e.slug];
-    return {
-      ...seed,
-      ...e,
-      id: e.id,
-      image: e.image || seed?.image || img.defaultEvent,
-      format: e.format || seed?.format || "Online",
-      price: e.price || seed?.price || "Free",
-      host: e.host || seed?.host || "SMN",
-      highlights: e.highlights?.length ? e.highlights : seed?.highlights || [],
-      registrationUrl: `/events/${e.slug}`,
-    } satisfies EventItem;
-  });
-
-  // Seed-only fallbacks have no DB id and cannot accept first-party registration.
-  if (merged.length === 0) return seedEvents;
-
-  // Prefer CMS docs (with ids). Only add seed extras for calendar preview, not as registerable rows.
-  const slugs = new Set(merged.map((e) => e.slug));
-  const extras = seedEvents.filter((e) => !slugs.has(e.slug));
-  return [...merged, ...extras].sort(
+  return [...fromCms].sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
   );
 }

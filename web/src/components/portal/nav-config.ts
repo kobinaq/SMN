@@ -62,6 +62,7 @@ const staffIconByHref: Record<string, PortalNavItem["icon"]> = {
   "/staff/opportunities": Briefcase,
   "/staff/certificates": Award,
   "/staff/events": Calendar,
+  "/staff/applications": FileText,
   "/staff/content/posts": FileText,
   "/staff/content/resources": FolderOpen,
   "/staff/content/media": Image,
@@ -82,6 +83,7 @@ const workHrefs = new Set([
   "/staff/opportunities",
   "/staff/certificates",
   "/staff/events",
+  "/staff/applications",
 ]);
 
 const siteHrefs = new Set([

@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { Resend } from "resend";
-import { site } from "@/lib/site";
+import { getSiteSettings } from "@/lib/cms";
+import { emailWasSent, sendEmail } from "@/lib/email";
+import { getPayloadClient } from "@/lib/payload";
 
 const schema = z.object({
   name: z.string().min(2),
@@ -14,7 +15,7 @@ const schema = z.object({
   portfolio: z.string().optional(),
   goals: z.string().min(10),
   source: z.string().optional(),
-  website: z.string().optional(), // honeypot
+  website: z.string().optional(),
 });
 
 export async function POST(req: Request) {
@@ -30,32 +31,56 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true });
     }
 
-    const apiKey = process.env.RESEND_API_KEY;
-    const ops = process.env.OPS_EMAIL ?? site.email;
-    const from = process.env.RESEND_FROM ?? "SMN <onboarding@resend.dev>";
+    const payload = await getPayloadClient();
+    const existingMember = await payload.find({
+      collection: "members",
+      limit: 1,
+      depth: 0,
+      overrideAccess: true,
+      where: { email: { equals: data.email } },
+    });
 
-    if (apiKey) {
-      const resend = new Resend(apiKey);
-      await resend.emails.send({
-        from,
-        to: ops,
-        subject: `Cohort application: ${data.name}`,
-        text: Object.entries(data)
-          .filter(([k]) => k !== "website")
-          .map(([k, v]) => `${k}: ${v ?? ""}`)
-          .join("\n"),
-      });
-      await resend.emails.send({
-        from,
+    await payload.create({
+      collection: "cohort-applications",
+      overrideAccess: true,
+      data: {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        country: data.country,
+        role: data.role,
+        level: data.level,
+        linkedin: data.linkedin || undefined,
+        portfolio: data.portfolio || undefined,
+        goals: data.goals,
+        source: data.source || undefined,
+        status: "received",
+        member: existingMember.docs[0]?.id,
+      },
+    });
+
+    const settings = await getSiteSettings();
+    const ops = process.env.OPS_EMAIL ?? settings.email;
+    const applicationText = Object.entries(data)
+      .filter(([k]) => k !== "website")
+      .map(([k, v]) => `${k}: ${v ?? ""}`)
+      .join("\n");
+
+    const opsMail = await sendEmail({
+      to: ops,
+      subject: `Cohort application: ${data.name}`,
+      text: applicationText,
+    });
+
+    if (emailWasSent(opsMail)) {
+      await sendEmail({
         to: data.email,
         subject: "We received your SMN cohort application",
-        text: `Hi ${data.name},\n\nThanks for applying to the ${site.cohort.name}. Our team will review your application and follow up within 3-5 business days.\n\n${site.name}`,
+        text: `Hi ${data.name},\n\nThanks for applying to the ${settings.cohort.name}. Our team will review your application and follow up within 3-5 business days.\n\n${settings.name}`,
       });
-    } else {
-      console.log("[cohort-apply]", data);
     }
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, emailed: emailWasSent(opsMail) });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Server error." }, { status: 500 });

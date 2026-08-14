@@ -102,7 +102,7 @@ export default function SimulationsPage() {
             </p>
           </div>
           <div className="rounded-[1.75rem] border border-white/10 bg-surface p-6 sm:rounded-[2rem] sm:p-8 md:p-10">
-            <ContactForm defaultType="General enquiry" />
+            <ContactForm defaultType="Simulation waitlist" />
           </div>
         </div>
       </section>

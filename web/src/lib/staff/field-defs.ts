@@ -42,40 +42,48 @@ export const resourceFields: StaffField[] = [
   { name: "file", label: "File", type: "media" },
 ];
 
-export const courseFields: StaffField[] = [
-  { name: "title", label: "Title", type: "text", required: true },
-  { name: "slug", label: "Slug", type: "text", placeholder: "Auto from title if blank", advanced: true },
-  { name: "summary", label: "Summary", type: "textarea", required: true },
-  { name: "outcomesText", label: "Outcomes (one per line)", type: "textarea" },
-  { name: "duration", label: "Duration", type: "text" },
-  { name: "lessons", label: "Lesson count", type: "number" },
-  { name: "price", label: "Price label", type: "text", placeholder: "Optional display text" },
-  { name: "amount", label: "Amount (pesewas)", type: "number", placeholder: "e.g. 4500000 for GHS 450" },
-  { name: "currency", label: "Currency", type: "text", placeholder: "GHS" },
-  { name: "programKey", label: "Program key", type: "text", placeholder: "Must match LMS enrollment key" },
-  {
-    name: "delivery",
-    label: "Delivery",
-    type: "select",
-    options: [
-      { label: "Self-paced (LMS)", value: "self-paced" },
-      { label: "Live (Classroom)", value: "live" },
-    ],
-  },
-  { name: "classroomUrl", label: "Classroom / live link", type: "url" },
-  { name: "badge", label: "Badge", type: "text" },
-  { name: "image", label: "Image", type: "media" },
-  {
-    name: "status",
-    label: "Status",
-    type: "select",
-    required: true,
-    options: [
-      { label: "Published", value: "published" },
-      { label: "Coming soon", value: "coming-soon" },
-    ],
-  },
-];
+export function courseFields(lmsOptions: Array<{ label: string; value: string }> = []): StaffField[] {
+  return [
+    { name: "title", label: "Title", type: "text", required: true },
+    { name: "slug", label: "Slug", type: "text", placeholder: "Auto from title if blank", advanced: true },
+    { name: "summary", label: "Summary", type: "textarea", required: true },
+    { name: "outcomesText", label: "Outcomes (one per line)", type: "textarea" },
+    { name: "duration", label: "Duration", type: "text" },
+    { name: "lessons", label: "Lesson count", type: "number" },
+    { name: "price", label: "Price label", type: "text", placeholder: "Optional display text" },
+    { name: "amount", label: "Amount (pesewas)", type: "number", placeholder: "e.g. 4500000 for GHS 450" },
+    { name: "currency", label: "Currency", type: "text", placeholder: "GHS" },
+    { name: "programKey", label: "Program key", type: "text", placeholder: "Must match LMS enrollment key" },
+    {
+      name: "lmsCourse",
+      label: "LMS course",
+      type: "select",
+      options: [{ label: "None", value: "" }, ...lmsOptions],
+    },
+    {
+      name: "delivery",
+      label: "Delivery",
+      type: "select",
+      options: [
+        { label: "Self-paced (LMS)", value: "self-paced" },
+        { label: "Live (Classroom)", value: "live" },
+      ],
+    },
+    { name: "classroomUrl", label: "Classroom / live link", type: "url" },
+    { name: "badge", label: "Badge", type: "text" },
+    { name: "image", label: "Image", type: "media" },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      required: true,
+      options: [
+        { label: "Published", value: "published" },
+        { label: "Coming soon", value: "coming-soon" },
+      ],
+    },
+  ];
+}
 
 export const eventFields: StaffField[] = [
   { name: "title", label: "Title", type: "text", required: true },

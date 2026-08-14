@@ -1,7 +1,5 @@
 import type { BlogPost } from "@/lib/content";
-import { posts as seedPosts } from "@/lib/content";
 import { getPosts } from "@/lib/cms";
-import { img } from "@/lib/images";
 
 export function formatBlogDate(dateStr: string) {
   const d = new Date(dateStr);
@@ -13,37 +11,9 @@ export function formatBlogDate(dateStr: string) {
   });
 }
 
-/** Merge CMS list fields with seed bodies/covers when CMS returns thin records */
 export async function getBlogPosts(): Promise<BlogPost[]> {
-  const fromCms = await getPosts();
-  const seedBySlug = Object.fromEntries(seedPosts.map((p) => [p.slug, p]));
-
-  const merged = fromCms.map((p) => {
-    const seed = seedBySlug[p.slug];
-    return {
-      slug: p.slug,
-      title: p.title,
-      category: p.category,
-      excerpt: p.excerpt,
-      date: p.date,
-      readTime: p.readTime,
-      cover: ("cover" in p && p.cover ? p.cover : seed?.cover) || img.defaultPost,
-      featured: seed?.featured ?? false,
-      author: seed?.author ?? "Arielle Adodo",
-      authorRole: seed?.authorRole ?? "Founder & Lead Instructor",
-      authorImage: seed?.authorImage ?? img.instructor,
-      body: seed?.body ?? [p.excerpt],
-    } satisfies BlogPost;
-  });
-
-  // Prefer seed list order + extras if CMS returned empty/fallback already seed
-  if (merged.length === 0) return seedPosts;
-
-  const slugs = new Set(merged.map((p) => p.slug));
-  const extras = seedPosts.filter((p) => !slugs.has(p.slug));
-  return [...merged, ...extras].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-  );
+  const posts = await getPosts();
+  return [...posts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 export async function getBlogPost(slug: string): Promise<BlogPost | undefined> {

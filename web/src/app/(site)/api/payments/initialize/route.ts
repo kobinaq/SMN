@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { memberAuthHeaders } from "@/lib/auth/member";
 import { getPayloadClient } from "@/lib/payload";
-import { getServerURL } from "@/lib/server-url";
+import { checkoutCourseGate, numericId } from "@/lib/payments/checkout";
 import { countConfirmedRegistrations } from "@/lib/payments/fulfill";
 import {
   newPaystackReference,
@@ -9,19 +9,13 @@ import {
   paystackConfigured,
   paystackInitialize,
 } from "@/lib/payments/paystack";
+import { getServerURL } from "@/lib/server-url";
 
 const schema = z.object({
   kind: z.enum(["event", "course"]),
   eventId: z.union([z.string(), z.number()]).optional(),
   courseId: z.union([z.string(), z.number()]).optional(),
 });
-
-type DB = {
-  find(args: Record<string, unknown>): Promise<{ docs: Array<Record<string, unknown>> }>;
-  findByID(args: Record<string, unknown>): Promise<Record<string, unknown>>;
-  create(args: Record<string, unknown>): Promise<Record<string, unknown>>;
-  update(args: Record<string, unknown>): Promise<Record<string, unknown>>;
-};
 
 export async function POST(request: Request) {
   try {
@@ -40,7 +34,6 @@ export async function POST(request: Request) {
       return Response.json({ error: "Invalid checkout request." }, { status: 400 });
     }
 
-    const p = payload as unknown as DB;
     const memberEmail = String((user as { email?: string }).email || "");
     if (!memberEmail) {
       return Response.json({ error: "Member email is required for checkout." }, { status: 400 });
@@ -50,14 +43,19 @@ export async function POST(request: Request) {
     let amount = 0;
     let currency = "GHS";
     let reference = "";
-    let eventId: string | number | undefined;
-    let courseId: string | number | undefined;
-    let registrationId: string | number | undefined;
+    let eventId: number | undefined;
+    let courseId: number | undefined;
+    let registrationId: number | undefined;
 
     if (parsed.data.kind === "event") {
       if (!parsed.data.eventId) return Response.json({ error: "Event required." }, { status: 400 });
-      eventId = parsed.data.eventId;
-      const event = await p.findByID({ collection: "events", id: eventId, depth: 0, overrideAccess: true });
+      eventId = numericId(parsed.data.eventId);
+      const event = await payload.findByID({
+        collection: "events",
+        id: eventId,
+        depth: 0,
+        overrideAccess: true,
+      });
       if (event.status !== "published") {
         return Response.json({ error: "Event is not open for registration." }, { status: 400 });
       }
@@ -76,7 +74,7 @@ export async function POST(request: Request) {
         }
       }
 
-      const prior = await p.find({
+      const prior = await payload.find({
         collection: "event-registrations",
         limit: 1,
         depth: 0,
@@ -94,11 +92,11 @@ export async function POST(request: Request) {
       }
 
       reference = newPaystackReference("evt");
-      const registration = await p.create({
+      const registration = await payload.create({
         collection: "event-registrations",
         data: {
           event: eventId,
-          member: user.id,
+          member: numericId(user.id),
           status: "pending_payment",
           ticketCode: newTicketCode(),
           paystackReference: reference,
@@ -107,22 +105,26 @@ export async function POST(request: Request) {
         },
         overrideAccess: true,
       });
-      registrationId = registration.id as string | number;
+      registrationId = numericId(registration.id);
     } else {
       if (!parsed.data.courseId) return Response.json({ error: "Course required." }, { status: 400 });
-      courseId = parsed.data.courseId;
-      const course = await p.findByID({ collection: "courses", id: courseId, depth: 0, overrideAccess: true });
-      if (course.status === "coming-soon") {
-        return Response.json({ error: "This programme is coming soon." }, { status: 400 });
-      }
-      amount = Number(course.amount || 0);
+      courseId = numericId(parsed.data.courseId);
+      const course = await payload.findByID({
+        collection: "courses",
+        id: courseId,
+        depth: 1,
+        overrideAccess: true,
+      });
+      const lms = typeof course.lmsCourse === "object" && course.lmsCourse ? course.lmsCourse : null;
+      const gate = checkoutCourseGate({
+        status: course.status,
+        amount: course.amount,
+        lmsCourse: lms || course.lmsCourse,
+        lmsStatus: lms && "status" in lms ? lms.status : undefined,
+      });
+      if (!gate.ok) return Response.json({ error: gate.error }, { status: gate.status });
+      amount = gate.amount;
       currency = String(course.currency || "GHS");
-      if (!amount || amount < 100) {
-        return Response.json({ error: "Programme price is not configured." }, { status: 400 });
-      }
-      if (!course.programKey) {
-        return Response.json({ error: "Programme access key is missing." }, { status: 400 });
-      }
       reference = newPaystackReference("crs");
     }
 
@@ -145,11 +147,11 @@ export async function POST(request: Request) {
       },
     });
 
-    await p.create({
+    await payload.create({
       collection: "payments",
       data: {
         kind: parsed.data.kind,
-        member: user.id,
+        member: numericId(user.id),
         amount,
         currency,
         status: "initialized",

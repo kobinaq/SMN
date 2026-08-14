@@ -37,7 +37,7 @@ export async function POST(request: Request) {
         const certificate = await payload.findByID({ collection: "certificates", id: certificateId, depth: 1, ...access });
         const member = certificate.member && typeof certificate.member === "object" ? certificate.member : await payload.findByID({ collection: "members", id: relationshipId(certificate.member), depth: 0, overrideAccess: true });
         const result = await sendEmail({ to: member.email, subject: `Your ${certificate.programName} certificate`, text: `Hi ${member.name || "there"},\n\nYour SMN certificate has been issued. Credential code: ${certificate.credentialCode}.\n\nSocial Marketers Network` });
-        await payload.update({ collection: "certificates", id: certificate.id, data: { notificationStatus: "error" in result ? "failed" : "skipped" in result ? "skipped" : "sent" }, ...access });
+        await payload.update({ collection: "certificates", id: certificate.id, data: { notificationStatus: result.ok ? "sent" : result.reason === "unconfigured" ? "skipped" : "failed" }, ...access });
         await payload.create({ collection: "audit-events", data: { actor: user.id, action: "certificate.issued", entityType: "certificates", entityId: String(certificate.id), reason: "Eligible enrollment selected in the certificate issuing wizard.", after: { enrollment: relationshipId(certificate.enrollment), credentialCode: certificate.credentialCode }, visibility: "staff" }, ...access });
       }
       return Response.json({ ok: true, issued: created.length });

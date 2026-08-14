@@ -6,13 +6,13 @@ import { ArrowLeft, Download } from "@/components/ui/icons";
 import { ResourceDownloadForm } from "@/components/resources/ResourceDownloadForm";
 import { ResourceRow } from "@/components/resources/ResourceRow";
 import { Button } from "@/components/ui/Button";
-import { resources as seedResources } from "@/lib/content";
 import { getRelatedResources, getResource, getResourceLibrary } from "@/lib/resources";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  return seedResources.map((r) => ({ slug: r.slug }));
+  const resources = await getResourceLibrary();
+  return resources.map((r) => ({ slug: r.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

@@ -7,10 +7,14 @@ export type EmailMessage = {
   to: string;
 };
 
-export async function sendEmail(message: EmailMessage) {
+export type EmailResult =
+  | { ok: true }
+  | { ok: false; reason: "unconfigured" | "error"; error?: unknown };
+
+export async function sendEmail(message: EmailMessage): Promise<EmailResult> {
   if (!process.env.RESEND_API_KEY) {
-    console.info("[email:skipped]", message.subject);
-    return { skipped: true };
+    console.info("[email:unconfigured]", message.subject);
+    return { ok: false, reason: "unconfigured" };
   }
 
   try {
@@ -23,13 +27,17 @@ export async function sendEmail(message: EmailMessage) {
     });
     if (result.error) {
       console.error("[email:error]", result.error);
-      return { error: result.error };
+      return { ok: false, reason: "error", error: result.error };
     }
     return { ok: true };
   } catch (error) {
     console.error("[email:error]", error);
-    return { error };
+    return { ok: false, reason: "error", error };
   }
+}
+
+export function emailWasSent(result: EmailResult): result is { ok: true } {
+  return result.ok;
 }
 
 export function opsEmail() {

@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { getSiteSettings } from "@/lib/cms";
 import { sendEmail } from "@/lib/email";
 import { subscribeToNewsletter } from "@/lib/newsletter";
 import { getResource } from "@/lib/resources";
-import { site } from "@/lib/site";
 
 const schema = z.object({
   email: z.string().email(),
@@ -11,10 +11,10 @@ const schema = z.object({
   website: z.string().optional(), // honeypot
 });
 
-function absoluteUrl(pathOrUrl: string) {
+function absoluteUrl(pathOrUrl: string, base: string) {
   if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
   try {
-    return new URL(pathOrUrl, site.url).toString();
+    return new URL(pathOrUrl, base).toString();
   } catch {
     return pathOrUrl;
   }
@@ -45,7 +45,8 @@ export async function POST(req: Request) {
 
     // Staff may not have attached a file yet; the resource page still carries the
     // material, so it is the honest fallback target rather than a dead link.
-    const downloadUrl = absoluteUrl(resource.fileUrl ?? `/resources/${slug}`);
+    const settings = await getSiteSettings();
+    const downloadUrl = absoluteUrl(resource.fileUrl ?? `/resources/${slug}`, settings.url);
     const delivery = await sendEmail({
       to: email,
       subject: `Your download: ${resource.title}`,
@@ -57,11 +58,11 @@ export async function POST(req: Request) {
         ``,
         `You are also on the SMN list for occasional strategy notes. Unsubscribe anytime.`,
         ``,
-        site.name,
+        settings.name,
       ].join("\n"),
     });
 
-    if ("error" in delivery) {
+    if (!delivery.ok && delivery.reason === "error") {
       return NextResponse.json(
         { error: "We could not send that email. Use the direct link below.", downloadUrl },
         { status: 502 },
@@ -70,7 +71,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       ok: true,
-      delivered: !("skipped" in delivery && delivery.skipped),
+      delivered: delivery.ok,
       downloadUrl,
       hasFile: Boolean(resource.fileUrl),
     });
