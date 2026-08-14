@@ -179,6 +179,7 @@ const course = await upsert(
     learningOutcomes: [{ outcome: "Create a focused content strategy before building a calendar." }],
     programKey: "demo-cohort",
     accessRule: "enrolled",
+    delivery: "self-paced",
     level: "foundation",
     estimatedHours: 3,
     order: 1,

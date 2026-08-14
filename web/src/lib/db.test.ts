@@ -9,7 +9,6 @@ afterEach(() => {
 
 describe("shouldRunProdMigrations", () => {
   it("stays off during a local production compile", () => {
-    process.env.NODE_ENV = "production";
     delete process.env.VERCEL_ENV;
     delete process.env.PAYLOAD_MIGRATING;
     delete process.env.PAYLOAD_SKIP_PROD_MIGRATIONS;

@@ -181,7 +181,7 @@ export default async function StaffLearningPage({
           courses={courses.docs.map((course) => ({
             id: course.id,
             title: String(course.title),
-            status: course.status,
+            status: `${course.status || "draft"} · ${(course as { delivery?: string }).delivery === "cohort" ? "cohort" : "self-paced"}`,
           }))}
         />
       </StaffPanel>
@@ -454,8 +454,8 @@ export default async function StaffLearningPage({
         <StaffPanel>
           <h3 className="font-display text-xl text-white">Course settings</h3>
           <p className="mt-2 mb-5 text-sm text-white/55">
-            Set instructor, category, learning outcomes (one per line), access, publishing, certificate, and Tutor
-            controls here. Curriculum lessons are edited from the Curriculum tab.
+            Set instructor, category, whether this is a cohort or self-paced, Classroom invite, public
+            intake copy, and publishing. Curriculum lessons are edited from the Curriculum tab.
           </p>
           {!readiness.ready ? (
             <div className="mb-5 rounded-2xl border border-amber-300/30 bg-amber-300/10 px-4 py-3 text-sm text-amber-100" role="status">
@@ -479,11 +479,46 @@ export default async function StaffLearningPage({
               { name: "category", label: "Category", type: "text" },
               { name: "programKey", label: "Program key", type: "text", required: true },
               {
-                name: "classroomUrl",
-                label: "Default Classroom / live link",
-                type: "url",
-                placeholder: "Paste invite link for live cohorts",
+                name: "delivery",
+                label: "Programme type",
+                type: "select",
+                required: true,
+                options: [
+                  { label: "Self-paced course", value: "self-paced" },
+                  { label: "Live cohort", value: "cohort" },
+                ],
               },
+              {
+                name: "classroomUrl",
+                label: "Google Classroom invite",
+                type: "url",
+                placeholder: "Paste invite link for this cohort",
+              },
+              {
+                name: "featured",
+                label: "Next intake on the marketing site",
+                type: "checkbox",
+                description: "Homepage, /programs/cohort, and /apply use this published cohort.",
+              },
+              { name: "startDate", label: "Start (public)", type: "text", placeholder: "September 2026" },
+              {
+                name: "applicationDeadline",
+                label: "Application deadline",
+                type: "text",
+                placeholder: "Rolling. Apply early",
+              },
+              { name: "duration", label: "Duration", type: "text", placeholder: "8 weeks" },
+              { name: "seats", label: "Seats", type: "number" },
+              { name: "sessions", label: "Sessions", type: "text", placeholder: "2 live sessions per week" },
+              { name: "format", label: "Format", type: "text" },
+              { name: "audience", label: "Audience", type: "textarea" },
+              {
+                name: "priceConfirmed",
+                label: "Fee is confirmed for the public site",
+                type: "checkbox",
+              },
+              { name: "priceLabel", label: "Price label", type: "text", placeholder: "GH₵2,500" },
+              { name: "priceNote", label: "Price note", type: "textarea" },
               {
                 name: "accessRule",
                 label: "Access rule",
@@ -537,7 +572,19 @@ export default async function StaffLearningPage({
               instructor: selected.instructor || "",
               category: selected.category || "",
               programKey: selected.programKey,
+              delivery: (selected as { delivery?: string | null }).delivery || "self-paced",
               classroomUrl: (selected as { classroomUrl?: string | null }).classroomUrl || "",
+              featured: Boolean((selected as { featured?: boolean | null }).featured),
+              startDate: (selected as { startDate?: string | null }).startDate || "",
+              applicationDeadline: (selected as { applicationDeadline?: string | null }).applicationDeadline || "",
+              duration: (selected as { duration?: string | null }).duration || "",
+              seats: (selected as { seats?: number | null }).seats ?? "",
+              sessions: (selected as { sessions?: string | null }).sessions || "",
+              format: (selected as { format?: string | null }).format || "",
+              audience: (selected as { audience?: string | null }).audience || "",
+              priceConfirmed: Boolean((selected as { priceConfirmed?: boolean | null }).priceConfirmed),
+              priceLabel: (selected as { priceLabel?: string | null }).priceLabel || "",
+              priceNote: (selected as { priceNote?: string | null }).priceNote || "",
               accessRule: selected.accessRule || "enrolled",
               level: selected.level || "foundation",
               estimatedHours: selected.estimatedHours ?? "",

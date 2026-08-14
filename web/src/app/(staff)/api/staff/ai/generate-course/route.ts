@@ -105,6 +105,7 @@ export async function POST(request: Request) {
           programKey,
           accessRule: "enrolled",
           status: "draft",
+          delivery: "self-paced",
           level: outline.level || level,
           enrollmentOpen: true,
           learningOutcomes: outline.learningOutcomes.map((outcome) => ({ outcome })),

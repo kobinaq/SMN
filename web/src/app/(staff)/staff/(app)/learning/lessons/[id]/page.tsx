@@ -62,19 +62,19 @@ export default async function EditLessonPage({ params }: { params: Promise<{ id:
           <p className="font-medium text-white">Learning materials for this lesson</p>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-white/60">
             <li>
-              <b className="text-white/80">Lesson type</b> — choose Video, Reading/article, Download, or Assignment
+              <b className="text-white/80">Lesson type.</b> Choose Video, Reading, Download, Assignment, or Google Classroom.
             </li>
             <li>
-              <b className="text-white/80">Lesson text</b> — paste or write the reading content / instructions
+              <b className="text-white/80">Lesson text.</b> Paste or write the reading content / instructions.
             </li>
             <li>
-              <b className="text-white/80">External resource URL</b> — link to an article, Notion page, or Google Doc
+              <b className="text-white/80">External resource URL.</b> Link to an article, Notion page, or Google Doc.
             </li>
             <li>
-              <b className="text-white/80">YouTube URL</b> — only if this lesson has a video
+              <b className="text-white/80">YouTube URL.</b> Only if this lesson has a video.
             </li>
             <li>
-              <b className="text-white/80">Documents</b> — upload PDFs and files in the section below
+              <b className="text-white/80">Documents.</b> Upload PDFs and files in the section below.
             </li>
           </ul>
         </div>
@@ -89,6 +89,7 @@ export default async function EditLessonPage({ params }: { params: Promise<{ id:
             summary: doc.summary,
             lessonType: doc.lessonType,
             youtubeUrl: doc.youtubeUrl || "",
+            classroomUrl: doc.classroomUrl || "",
             durationMinutes: doc.durationMinutes ?? "",
             body: doc.body || "",
             resourceLabel: doc.resourceLabel || "",

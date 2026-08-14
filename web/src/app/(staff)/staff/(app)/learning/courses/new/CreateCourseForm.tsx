@@ -10,6 +10,7 @@ type Mode = "blank" | "ai";
 export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
   const router = useRouter();
   const [mode, setMode] = useState<Mode>(aiEnabled ? "ai" : "blank");
+  const [delivery, setDelivery] = useState<"cohort" | "self-paced">("self-paced");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -22,6 +23,10 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
     const slug = String(form.get("slug") || "").trim();
     const summary = String(form.get("summary") || "").trim();
     const programKey = String(form.get("programKey") || "").trim();
+    const deliveryValue = String(form.get("delivery") || "self-paced") === "cohort" ? "cohort" : "self-paced";
+    const classroomUrl = String(form.get("classroomUrl") || "").trim();
+    const startDate = String(form.get("startDate") || "").trim();
+    const applicationDeadline = String(form.get("applicationDeadline") || "").trim();
 
     try {
       const response = await fetch("/api/staff/records", {
@@ -38,6 +43,11 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
             programKey,
             status: "draft",
             accessRule: "enrolled",
+            delivery: deliveryValue,
+            classroomUrl: deliveryValue === "cohort" ? classroomUrl || undefined : undefined,
+            startDate: deliveryValue === "cohort" ? startDate || undefined : undefined,
+            applicationDeadline: deliveryValue === "cohort" ? applicationDeadline || undefined : undefined,
+            featured: deliveryValue === "cohort" && form.get("featured") === "on",
           },
         }),
       });
@@ -193,7 +203,44 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
               placeholder="e.g. digital-marketing-foundations"
             />
           </StaffFormField>
-          <p className="text-xs text-white/40">Status is set to draft. Access defaults to matching enrollment.</p>
+          <StaffFormField label="Programme type">
+            <Select
+              className={staffFieldClass}
+              name="delivery"
+              value={delivery}
+              onChange={(event) => setDelivery(event.target.value === "cohort" ? "cohort" : "self-paced")}
+            >
+              <option value="self-paced">Self-paced course</option>
+              <option value="cohort">Live cohort</option>
+            </Select>
+          </StaffFormField>
+          {delivery === "cohort" ? (
+            <>
+              <StaffFormField label="Google Classroom invite">
+                <input
+                  className={staffFieldClass}
+                  name="classroomUrl"
+                  type="url"
+                  placeholder="https://classroom.google.com/..."
+                />
+              </StaffFormField>
+              <StaffFormField label="Start (public)">
+                <input className={staffFieldClass} name="startDate" placeholder="September 2026" />
+              </StaffFormField>
+              <StaffFormField label="Application deadline">
+                <input className={staffFieldClass} name="applicationDeadline" placeholder="Rolling. Apply early" />
+              </StaffFormField>
+              <label className="flex items-start gap-3 text-sm text-white/70">
+                <input className="mt-1 h-4 w-4 accent-baby-blue" type="checkbox" name="featured" />
+                <span>Show as the next intake on the marketing site</span>
+              </label>
+            </>
+          ) : null}
+          <p className="text-xs text-white/40">
+            Status is set to draft. {delivery === "cohort"
+              ? "Published cohorts appear on the marketing site. Classroom lessons can reuse this invite."
+              : "Self-paced programmes stay in the member LMS and the public catalogue."}
+          </p>
           {error ? (
             <p className="rounded-2xl border border-red-300/30 bg-red-300/10 px-4 py-3 text-sm text-red-100" role="alert">
               {error}

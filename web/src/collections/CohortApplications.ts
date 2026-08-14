@@ -30,6 +30,14 @@ export const CohortApplications: CollectionConfig = {
     { name: "goals", type: "textarea", required: true },
     { name: "source", type: "text" },
     {
+      name: "course",
+      type: "relationship",
+      relationTo: "lms-courses",
+      maxDepth: 1,
+      index: true,
+      admin: { description: "Published cohort this application is for." },
+    },
+    {
       name: "status",
       type: "select",
       required: true,

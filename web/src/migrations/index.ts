@@ -3,6 +3,7 @@ import * as migration_20260714_marketing_cms_fields from './20260714_marketing_c
 import * as migration_20260717_events_paystack from './20260717_events_paystack';
 import * as migration_20260814_wave3_cohort_applications from './20260814_wave3_cohort_applications';
 import * as migration_20260814_wave4_drop_learning_items from './20260814_wave4_drop_learning_items';
+import * as migration_20260814_lms_cohort_delivery from './20260814_lms_cohort_delivery';
 
 export const migrations = [
   {
@@ -29,5 +30,10 @@ export const migrations = [
     up: migration_20260814_wave4_drop_learning_items.up,
     down: migration_20260814_wave4_drop_learning_items.down,
     name: '20260814_wave4_drop_learning_items'
+  },
+  {
+    up: migration_20260814_lms_cohort_delivery.up,
+    down: migration_20260814_lms_cohort_delivery.down,
+    name: '20260814_lms_cohort_delivery'
   },
 ];

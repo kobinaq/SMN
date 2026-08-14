@@ -8,7 +8,6 @@ export default async function SiteSettingsPage() {
   const staff = await requireStaff(["content"], "/staff/website/settings");
   const payload = await getPayloadClient();
   const settings = await payload.findGlobal({ slug: "site-settings", depth: 0, ...staffAccess(staff) });
-  const cohort = (settings.cohort || {}) as Record<string, string | number | boolean | null | undefined>;
   const social = (settings.social || {}) as Record<string, string | null | undefined>;
   const homepage = (settings.homepage || {}) as Record<string, string | null | undefined>;
   const impactStats = Array.isArray(settings.impactStats)
@@ -24,7 +23,7 @@ export default async function SiteSettingsPage() {
       <StaffPageHeader
         eyebrow="Website"
         title="Site settings"
-        description="Public brand, homepage, cohort fee confirmation, banner, and verified stats."
+        description="Public brand, homepage, banner, and verified stats. Cohort copy lives on Learning programmes marked Cohort."
       />
       <StaffPanel>
         <SiteSettingsForm
@@ -41,17 +40,6 @@ export default async function SiteSettingsPage() {
             homepagePrimaryCtaLabel: String(homepage.primaryCtaLabel || ""),
             homepageSecondaryCtaLabel: String(homepage.secondaryCtaLabel || ""),
             homepageSecondaryCtaHref: String(homepage.secondaryCtaHref || ""),
-            cohortName: String(cohort.name || ""),
-            cohortStartDate: String(cohort.startDate || ""),
-            cohortApplicationDeadline: String(cohort.applicationDeadline || ""),
-            cohortDuration: String(cohort.duration || ""),
-            cohortSeats: cohort.seats == null ? "" : String(cohort.seats),
-            cohortAudience: String(cohort.audience || ""),
-            cohortFormat: String(cohort.format || ""),
-            cohortSessions: String(cohort.sessions || ""),
-            cohortPriceLabel: String(cohort.priceLabel || ""),
-            cohortPriceNote: String(cohort.priceNote || ""),
-            cohortPriceConfirmed: Boolean(cohort.priceConfirmed),
             instagram: String(social.instagram || ""),
             linkedin: String(social.linkedin || ""),
             twitter: String(social.twitter || ""),

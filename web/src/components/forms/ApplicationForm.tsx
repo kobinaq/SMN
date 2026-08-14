@@ -9,7 +9,11 @@ import { cta } from "@/lib/cta";
 
 const levels = ["Beginner", "Intermediate", "Advanced"] as const;
 
-export function ApplicationForm() {
+export function ApplicationForm({
+  cohorts = [],
+}: {
+  cohorts?: Array<{ id: string | number; name: string }>;
+}) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
   const [submittedKey, setSubmittedKey] = useState("");
@@ -61,7 +65,7 @@ export function ApplicationForm() {
         <p className="font-display text-2xl text-white">Application received</p>
         <p className="mt-4">
           Thank you. Your cohort application has been submitted. We will email you within{" "}
-          <strong className="text-white">3–5 business days</strong> with a decision or follow-up
+          <strong className="text-white">3 to 5 business days</strong> with a decision or follow-up
           questions.
         </p>
         <ul className="mt-4 list-disc space-y-2 pl-5 text-white/65">
@@ -91,6 +95,25 @@ export function ApplicationForm() {
         className="hidden"
         aria-hidden
       />
+      {cohorts.length > 1 ? (
+        <div>
+          <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-course">
+            Which cohort?
+          </label>
+          <Select id="apply-course" className={cn(field, "bg-surface")} name="course" required defaultValue="">
+            <option value="" disabled>
+              Select a cohort
+            </option>
+            {cohorts.map((cohort) => (
+              <option key={String(cohort.id)} value={String(cohort.id)}>
+                {cohort.name}
+              </option>
+            ))}
+          </Select>
+        </div>
+      ) : cohorts.length === 1 ? (
+        <input type="hidden" name="course" value={String(cohorts[0].id)} />
+      ) : null}
       <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
         <div>
           <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-name">

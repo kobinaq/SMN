@@ -3,7 +3,7 @@ import { ApplicationForm } from "@/components/forms/ApplicationForm";
 import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { getSiteSettings } from "@/lib/cms";
+import { getPublicCohorts, getSiteSettings } from "@/lib/cms";
 import { img } from "@/lib/images";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -24,7 +24,7 @@ const steps = [
   {
     n: "02",
     title: "SMN reviews",
-    body: "Expect a response within 3–5 business days.",
+    body: "Expect a response within 3 to 5 business days.",
   },
   {
     n: "03",
@@ -44,7 +44,8 @@ const steps = [
 ];
 
 export default async function ApplyPage() {
-  const site = await getSiteSettings();
+  const [site, cohorts] = await Promise.all([getSiteSettings(), getPublicCohorts()]);
+  const openCohorts = cohorts.filter((cohort) => cohort.enrollmentOpen);
 
   return (
     <>
@@ -93,7 +94,9 @@ export default async function ApplyPage() {
               form.
             </p>
             <div className="mt-8 rounded-[1.75rem] border border-white/10 bg-surface p-5 sm:rounded-[2rem] sm:p-8 md:p-10">
-              <ApplicationForm />
+              <ApplicationForm
+                cohorts={openCohorts.map((cohort) => ({ id: cohort.id, name: cohort.name }))}
+              />
             </div>
           </div>
 

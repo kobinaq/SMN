@@ -76,6 +76,25 @@ export default async function LmsLessonPage(
         </section>
       ) : null}
 
+      {lesson.lessonType === "classroom" ? (
+        <section className="rounded-2xl border border-baby-blue/25 bg-baby-blue/10 p-6">
+          <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-baby-blue">Live class</p>
+          <h2 className="mt-3 font-display text-xl text-white">This lesson runs in Google Classroom</h2>
+          <p className="mt-2 text-sm text-white/60">
+            Join with the invite for your cohort, then mark the lesson complete here when you are done.
+          </p>
+          {lesson.classroomUrl ? (
+            <Button href={lesson.classroomUrl} target="_blank" rel="noreferrer" className="mt-5">
+              Open Classroom <ExternalLink className="h-3.5 w-3.5" />
+            </Button>
+          ) : (
+            <p className="mt-4 text-sm text-white/45">
+              Staff have not added a Classroom invite for this cohort yet.
+            </p>
+          )}
+        </section>
+      ) : null}
+
       {lesson.resourceUrl ? (
         <section className="rounded-2xl border border-white/10 bg-surface p-5">
           <h2 className="font-display text-lg text-white">External resource</h2>

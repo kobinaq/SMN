@@ -17,6 +17,7 @@ const schema = z.object({
   goals: z.string().min(10),
   source: z.string().optional(),
   website: z.string().optional(),
+  course: z.coerce.number().int().positive().optional(),
 });
 
 export async function POST(req: Request) {
@@ -44,6 +45,24 @@ export async function POST(req: Request) {
       where: { email: { equals: data.email } },
     });
 
+    let courseId: number | undefined;
+    if (data.course) {
+      try {
+        const course = await payload.findByID({
+          collection: "lms-courses",
+          id: data.course,
+          depth: 0,
+          overrideAccess: true,
+        });
+        if (course.status !== "published" || course.delivery !== "cohort") {
+          return NextResponse.json({ error: "That cohort is not open for applications." }, { status: 400 });
+        }
+        courseId = Number(course.id);
+      } catch {
+        return NextResponse.json({ error: "That cohort is not open for applications." }, { status: 400 });
+      }
+    }
+
     await payload.create({
       collection: "cohort-applications",
       overrideAccess: true,
@@ -60,6 +79,7 @@ export async function POST(req: Request) {
         source: data.source || undefined,
         status: "received",
         member: existingMember.docs[0]?.id,
+        course: courseId,
       },
     });
 
@@ -80,7 +100,7 @@ export async function POST(req: Request) {
       await sendEmail({
         to: data.email,
         subject: "We received your SMN cohort application",
-        text: `Hi ${data.name},\n\nThanks for applying to the ${settings.cohort.name}. Our team will review your application and follow up within 3-5 business days.\n\n${settings.name}`,
+        text: `Hi ${data.name},\n\nThanks for applying to the ${settings.cohort.name}. Our team will review your application and follow up within 3 to 5 business days.\n\n${settings.name}`,
       });
     }
 

@@ -18,7 +18,7 @@ export const LmsCourses: CollectionConfig = {
   slug: "lms-courses",
   admin: {
     useAsTitle: "title",
-    defaultColumns: ["title", "programKey", "accessRule", "status", "updatedAt"],
+    defaultColumns: ["title", "delivery", "programKey", "status", "updatedAt"],
     group: "Learning",
   },
   access: {
@@ -44,6 +44,86 @@ export const LmsCourses: CollectionConfig = {
     { name: "learningOutcomes", type: "array", fields: [{ name: "outcome", type: "text", required: true }] },
     { name: "programKey", type: "text", required: true, index: true },
     {
+      name: "delivery",
+      type: "select",
+      required: true,
+      defaultValue: "self-paced",
+      options: [
+        { label: "Self-paced", value: "self-paced" },
+        { label: "Cohort", value: "cohort" },
+      ],
+      admin: {
+        description: "Cohorts appear on the marketing site when published. Self-paced stays in the member LMS.",
+      },
+    },
+    {
+      name: "featured",
+      type: "checkbox",
+      defaultValue: false,
+      admin: {
+        description: "Use this published cohort as the next intake on the homepage and apply page.",
+        condition: (_, siblingData) => siblingData?.delivery === "cohort",
+      },
+    },
+    {
+      name: "startDate",
+      type: "text",
+      admin: { condition: (_, siblingData) => siblingData?.delivery === "cohort" },
+    },
+    {
+      name: "applicationDeadline",
+      type: "text",
+      admin: { condition: (_, siblingData) => siblingData?.delivery === "cohort" },
+    },
+    {
+      name: "duration",
+      type: "text",
+      admin: { condition: (_, siblingData) => siblingData?.delivery === "cohort" },
+    },
+    {
+      name: "seats",
+      type: "number",
+      min: 0,
+      admin: { condition: (_, siblingData) => siblingData?.delivery === "cohort" },
+    },
+    {
+      name: "audience",
+      type: "textarea",
+      admin: { condition: (_, siblingData) => siblingData?.delivery === "cohort" },
+    },
+    {
+      name: "format",
+      type: "text",
+      admin: { condition: (_, siblingData) => siblingData?.delivery === "cohort" },
+    },
+    {
+      name: "sessions",
+      type: "text",
+      admin: { condition: (_, siblingData) => siblingData?.delivery === "cohort" },
+    },
+    {
+      name: "priceConfirmed",
+      type: "checkbox",
+      defaultValue: false,
+      admin: {
+        description: "Only enable after the fee is confirmed. When off, the site shows Contact SMN for current fees.",
+        condition: (_, siblingData) => siblingData?.delivery === "cohort",
+      },
+    },
+    {
+      name: "priceLabel",
+      type: "text",
+      admin: {
+        description: "Public fee once confirmed, e.g. GH₵2,500.",
+        condition: (_, siblingData) => siblingData?.delivery === "cohort",
+      },
+    },
+    {
+      name: "priceNote",
+      type: "textarea",
+      admin: { condition: (_, siblingData) => siblingData?.delivery === "cohort" },
+    },
+    {
       name: "accessRule",
       type: "select",
       required: true,
@@ -66,7 +146,8 @@ export const LmsCourses: CollectionConfig = {
       name: "classroomUrl",
       type: "text",
       admin: {
-        description: "Optional default Google Classroom / live join link for live cohorts using this course.",
+        description: "Google Classroom invite for this cohort. Copied onto enrollments and Classroom lessons.",
+        condition: (_, siblingData) => siblingData?.delivery === "cohort",
       },
     },
     { name: "enrollmentOpen", type: "checkbox", defaultValue: true, admin: { position: "sidebar" } },

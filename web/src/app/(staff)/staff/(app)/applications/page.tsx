@@ -9,7 +9,7 @@ export default async function CohortApplicationsPage() {
   const payload = await getPayloadClient();
   const result = await payload.find({
     collection: "cohort-applications",
-    depth: 0,
+    depth: 1,
     limit: 200,
     sort: "-createdAt",
     ...staffAccess(staff),
@@ -25,7 +25,13 @@ export default async function CohortApplicationsPage() {
     level?: string;
     status?: string;
     createdAt?: string;
+    course?: { title?: string | null } | number | string | null;
   }>;
+
+  function courseTitle(value: (typeof docs)[number]["course"]) {
+    if (value && typeof value === "object" && value.title) return value.title;
+    return "—";
+  }
 
   return (
     <div className="space-y-6">
@@ -37,12 +43,13 @@ export default async function CohortApplicationsPage() {
       <StaffPanel>
         {docs.length ? (
           <StaffTable
-            columns={["Name", "Email", "Role", "Level", "Received", "Status"]}
+            columns={["Name", "Email", "Cohort", "Role", "Level", "Received", "Status"]}
             rows={docs.map((doc) => ({
               key: String(doc.id),
               cells: [
                 doc.name || "—",
                 doc.email || "—",
+                courseTitle(doc.course),
                 doc.role || "—",
                 doc.level || "—",
                 doc.createdAt ? new Date(doc.createdAt).toLocaleDateString("en-GH") : "—",

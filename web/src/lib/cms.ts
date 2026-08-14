@@ -14,7 +14,7 @@ import { COURSE_FEE_PENDING_LABEL, formatGhsLabel } from "@/lib/currency";
 import { img } from "@/lib/images";
 import { site as fallbackSite, type SiteConfig } from "@/lib/site";
 import { loadPublicList, safePayloadQuery } from "@/lib/payload";
-import { blogAuthorDefaults, blogBodyFromCms, resolveCohortPrice } from "@/lib/public-content";
+import { blogAuthorDefaults, blogBodyFromCms, cohortFromLmsDoc, pickFeaturedCohort } from "@/lib/public-content";
 
 function pickString(value: unknown, fallback: string): string {
   return typeof value === "string" && value.trim() ? value.trim() : fallback;
@@ -212,6 +212,22 @@ export async function getResources(): Promise<ResourceItem[]> {
   }, fallbackResources);
 }
 
+async function loadPublishedCohorts() {
+  const { getPayloadClient } = await import("@/lib/payload");
+  const payload = await getPayloadClient();
+  const result = await payload.find({
+    collection: "lms-courses",
+    depth: 0,
+    limit: 50,
+    sort: "order",
+    overrideAccess: true,
+    where: { and: [{ status: { equals: "published" } }, { delivery: { equals: "cohort" } }] },
+  });
+  return result.docs.map((doc) => cohortFromLmsDoc(doc, fallbackSite.cohort));
+}
+
+export const getPublicCohorts = cache(async () => loadPublicList(loadPublishedCohorts, []));
+
 async function loadSiteSettings(): Promise<SiteConfig> {
   const empty: SiteConfig = { ...fallbackSite, impactStats: [] };
   return safePayloadQuery(async () => {
@@ -220,11 +236,10 @@ async function loadSiteSettings(): Promise<SiteConfig> {
     const doc = await payload.findGlobal({ slug: "site-settings", overrideAccess: false });
     if (!doc?.siteName) return empty;
 
-    const cohortDoc = (doc.cohort || {}) as Record<string, unknown>;
     const homepageDoc = (doc.homepage || {}) as Record<string, unknown>;
     const socialDoc = (doc.social || {}) as Record<string, unknown>;
-    const priceConfirmed = Boolean(cohortDoc.priceConfirmed);
-    const priceLabel = resolveCohortPrice(cohortDoc.priceLabel as string, priceConfirmed);
+    const publishedCohorts = await loadPublishedCohorts();
+    const featured = pickFeaturedCohort(publishedCohorts);
 
     const impactStats = Array.isArray(doc.impactStats)
       ? (doc.impactStats as { label?: string; value?: string; verified?: boolean }[])
@@ -258,26 +273,21 @@ async function loadSiteSettings(): Promise<SiteConfig> {
           fallbackSite.homepage.secondaryCtaHref,
         ),
       },
-      cohort: {
-        ...fallbackSite.cohort,
-        name: pickString(cohortDoc.name, fallbackSite.cohort.name),
-        startDate: pickString(cohortDoc.startDate, fallbackSite.cohort.startDate),
-        applicationDeadline: pickString(
-          cohortDoc.applicationDeadline,
-          fallbackSite.cohort.applicationDeadline,
-        ),
-        duration: pickString(cohortDoc.duration, fallbackSite.cohort.duration),
-        seats:
-          typeof cohortDoc.seats === "number" && cohortDoc.seats > 0
-            ? cohortDoc.seats
-            : fallbackSite.cohort.seats,
-        audience: pickString(cohortDoc.audience, fallbackSite.cohort.audience),
-        format: pickString(cohortDoc.format, fallbackSite.cohort.format),
-        sessions: pickString(cohortDoc.sessions, fallbackSite.cohort.sessions),
-        priceConfirmed,
-        priceLabel,
-        priceNote: pickString(cohortDoc.priceNote, fallbackSite.cohort.priceNote),
-      },
+      cohort: featured
+        ? {
+            name: featured.name,
+            startDate: featured.startDate,
+            applicationDeadline: featured.applicationDeadline,
+            duration: featured.duration,
+            seats: featured.seats,
+            audience: featured.audience,
+            format: featured.format,
+            sessions: featured.sessions,
+            priceConfirmed: featured.priceConfirmed,
+            priceLabel: featured.priceLabel,
+            priceNote: featured.priceNote,
+          }
+        : fallbackSite.cohort,
       social: {
         instagram: pickString(socialDoc.instagram, fallbackSite.social.instagram),
         linkedin: pickString(socialDoc.linkedin, fallbackSite.social.linkedin),

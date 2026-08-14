@@ -502,9 +502,99 @@ export interface CohortApplication {
   portfolio?: string | null;
   goals: string;
   source?: string | null;
+  /**
+   * Published cohort this application is for.
+   */
+  course?: (number | null) | LmsCourse;
   status: 'received' | 'reviewing' | 'accepted' | 'waitlisted' | 'declined';
   member?: (number | null) | Member;
   staffNotes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lms-courses".
+ */
+export interface LmsCourse {
+  id: number;
+  title: string;
+  slug: string;
+  summary: string;
+  /**
+   * Instructor or facilitator shown for this course.
+   */
+  instructor?: string | null;
+  category?: string | null;
+  /**
+   * Use ‘None’ when the course has no prerequisites.
+   */
+  prerequisites?: string | null;
+  learningOutcomes?:
+    | {
+        outcome: string;
+        id?: string | null;
+      }[]
+    | null;
+  programKey: string;
+  /**
+   * Cohorts appear on the marketing site when published. Self-paced stays in the member LMS.
+   */
+  delivery: 'self-paced' | 'cohort';
+  /**
+   * Use this published cohort as the next intake on the homepage and apply page.
+   */
+  featured?: boolean | null;
+  startDate?: string | null;
+  applicationDeadline?: string | null;
+  duration?: string | null;
+  seats?: number | null;
+  audience?: string | null;
+  format?: string | null;
+  sessions?: string | null;
+  /**
+   * Only enable after the fee is confirmed. When off, the site shows Contact SMN for current fees.
+   */
+  priceConfirmed?: boolean | null;
+  /**
+   * Public fee once confirmed, e.g. GH₵2,500.
+   */
+  priceLabel?: string | null;
+  priceNote?: string | null;
+  accessRule: 'enrolled' | 'member' | 'cohort';
+  level?: ('foundation' | 'intermediate' | 'advanced') | null;
+  cover?: (number | null) | Media;
+  estimatedHours?: number | null;
+  /**
+   * Google Classroom invite for this cohort. Copied onto enrollments and Classroom lessons.
+   */
+  classroomUrl?: string | null;
+  enrollmentOpen?: boolean | null;
+  certificateEnabled?: boolean | null;
+  previewEnabled?: boolean | null;
+  /**
+   * Requires the environment Tutor feature flag and approved course material.
+   */
+  tutorEnabled?: boolean | null;
+  tutorModes?:
+    | (
+        | 'explain'
+        | 'simplify'
+        | 'example'
+        | 'summary'
+        | 'revision'
+        | 'socratic'
+        | 'feedback'
+        | 'compare'
+        | 'next-lesson'
+      )[]
+    | null;
+  /**
+   * Optional instructor guidance. This never overrides safety or grounding policy.
+   */
+  tutorGuidance?: string | null;
+  order?: number | null;
+  status: 'draft' | 'published' | 'archived';
   updatedAt: string;
   createdAt: string;
 }
@@ -548,68 +638,6 @@ export interface Enrollment {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "lms-courses".
- */
-export interface LmsCourse {
-  id: number;
-  title: string;
-  slug: string;
-  summary: string;
-  /**
-   * Instructor or facilitator shown for this course.
-   */
-  instructor?: string | null;
-  category?: string | null;
-  /**
-   * Use ‘None’ when the course has no prerequisites.
-   */
-  prerequisites?: string | null;
-  learningOutcomes?:
-    | {
-        outcome: string;
-        id?: string | null;
-      }[]
-    | null;
-  programKey: string;
-  accessRule: 'enrolled' | 'member' | 'cohort';
-  level?: ('foundation' | 'intermediate' | 'advanced') | null;
-  cover?: (number | null) | Media;
-  estimatedHours?: number | null;
-  /**
-   * Optional default Google Classroom / live join link for live cohorts using this course.
-   */
-  classroomUrl?: string | null;
-  enrollmentOpen?: boolean | null;
-  certificateEnabled?: boolean | null;
-  previewEnabled?: boolean | null;
-  /**
-   * Requires the environment Tutor feature flag and approved course material.
-   */
-  tutorEnabled?: boolean | null;
-  tutorModes?:
-    | (
-        | 'explain'
-        | 'simplify'
-        | 'example'
-        | 'summary'
-        | 'revision'
-        | 'socratic'
-        | 'feedback'
-        | 'compare'
-        | 'next-lesson'
-      )[]
-    | null;
-  /**
-   * Optional instructor guidance. This never overrides safety or grounding policy.
-   */
-  tutorGuidance?: string | null;
-  order?: number | null;
-  status: 'draft' | 'published' | 'archived';
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "lms-modules".
  */
 export interface LmsModule {
@@ -634,7 +662,11 @@ export interface LmsLesson {
   title: string;
   slug: string;
   summary: string;
-  lessonType: 'video' | 'reading' | 'download' | 'assignment';
+  lessonType: 'video' | 'reading' | 'download' | 'assignment' | 'classroom';
+  /**
+   * Optional Classroom link for this lesson. Blank uses the cohort invite on the course.
+   */
+  classroomUrl?: string | null;
   /**
    * Optional unlisted YouTube watch/share/embed URL. Videos are streamed by YouTube, not stored in R2.
    */
@@ -1577,6 +1609,7 @@ export interface CohortApplicationsSelect<T extends boolean = true> {
   portfolio?: T;
   goals?: T;
   source?: T;
+  course?: T;
   status?: T;
   member?: T;
   staffNotes?: T;
@@ -1626,6 +1659,18 @@ export interface LmsCoursesSelect<T extends boolean = true> {
         id?: T;
       };
   programKey?: T;
+  delivery?: T;
+  featured?: T;
+  startDate?: T;
+  applicationDeadline?: T;
+  duration?: T;
+  seats?: T;
+  audience?: T;
+  format?: T;
+  sessions?: T;
+  priceConfirmed?: T;
+  priceLabel?: T;
+  priceNote?: T;
   accessRule?: T;
   level?: T;
   cover?: T;
@@ -1667,6 +1712,7 @@ export interface LmsLessonsSelect<T extends boolean = true> {
   slug?: T;
   summary?: T;
   lessonType?: T;
+  classroomUrl?: T;
   youtubeUrl?: T;
   durationMinutes?: T;
   body?: T;
@@ -2102,7 +2148,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Public marketing settings. Confirm pricing before publishing fee amounts. Unconfirmed fees should stay as “Contact SMN for current fees”.
+ * Public brand, homepage, and social settings. Cohort copy and fees live on Learning programmes marked Cohort.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
@@ -2134,25 +2180,6 @@ export interface SiteSetting {
     primaryCtaLabel?: string | null;
     secondaryCtaLabel?: string | null;
     secondaryCtaHref?: string | null;
-  };
-  cohort?: {
-    name?: string | null;
-    startDate?: string | null;
-    applicationDeadline?: string | null;
-    duration?: string | null;
-    seats?: number | null;
-    audience?: string | null;
-    format?: string | null;
-    sessions?: string | null;
-    /**
-     * Only enable after the client confirms the public fee. When off, the site shows the safe pending label.
-     */
-    priceConfirmed?: boolean | null;
-    /**
-     * Preferred format when confirmed: GH₵2,500. Otherwise keep pending wording.
-     */
-    priceLabel?: string | null;
-    priceNote?: string | null;
   };
   social?: {
     instagram?: string | null;
@@ -2196,21 +2223,6 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         primaryCtaLabel?: T;
         secondaryCtaLabel?: T;
         secondaryCtaHref?: T;
-      };
-  cohort?:
-    | T
-    | {
-        name?: T;
-        startDate?: T;
-        applicationDeadline?: T;
-        duration?: T;
-        seats?: T;
-        audience?: T;
-        format?: T;
-        sessions?: T;
-        priceConfirmed?: T;
-        priceLabel?: T;
-        priceNote?: T;
       };
   social?:
     | T

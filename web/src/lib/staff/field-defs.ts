@@ -200,7 +200,14 @@ export const lmsLessonFields: StaffField[] = [
       { label: "Reading / article", value: "reading" },
       { label: "Download / documents", value: "download" },
       { label: "Assignment", value: "assignment" },
+      { label: "Google Classroom", value: "classroom" },
     ],
+  },
+  {
+    name: "classroomUrl",
+    label: "Classroom link (optional)",
+    type: "url",
+    placeholder: "Blank uses the cohort invite on the course",
   },
   {
     name: "youtubeUrl",

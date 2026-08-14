@@ -32,7 +32,15 @@ export const LmsLessons: CollectionConfig = {
       type: "select",
       required: true,
       defaultValue: "video",
-      options: ["video", "reading", "download", "assignment"],
+      options: ["video", "reading", "download", "assignment", "classroom"],
+    },
+    {
+      name: "classroomUrl",
+      type: "text",
+      admin: {
+        description: "Optional Classroom link for this lesson. Blank uses the cohort invite on the course.",
+        condition: (_, siblingData) => siblingData?.lessonType === "classroom",
+      },
     },
     {
       name: "youtubeUrl",

@@ -20,17 +20,6 @@ export type SiteSettingsFormValues = {
   homepagePrimaryCtaLabel: string;
   homepageSecondaryCtaLabel: string;
   homepageSecondaryCtaHref: string;
-  cohortName: string;
-  cohortStartDate: string;
-  cohortApplicationDeadline: string;
-  cohortDuration: string;
-  cohortSeats: string;
-  cohortAudience: string;
-  cohortFormat: string;
-  cohortSessions: string;
-  cohortPriceLabel: string;
-  cohortPriceNote: string;
-  cohortPriceConfirmed: boolean;
   instagram: string;
   linkedin: string;
   twitter: string;
@@ -103,19 +92,6 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
             primaryCtaLabel: values.homepagePrimaryCtaLabel,
             secondaryCtaLabel: values.homepageSecondaryCtaLabel,
             secondaryCtaHref: values.homepageSecondaryCtaHref,
-          },
-          cohort: {
-            name: values.cohortName,
-            startDate: values.cohortStartDate,
-            applicationDeadline: values.cohortApplicationDeadline,
-            duration: values.cohortDuration,
-            seats: values.cohortSeats ? Number(values.cohortSeats) : undefined,
-            audience: values.cohortAudience,
-            format: values.cohortFormat,
-            sessions: values.cohortSessions,
-            priceLabel: values.cohortPriceLabel,
-            priceNote: values.cohortPriceNote,
-            priceConfirmed: values.cohortPriceConfirmed,
           },
           social: {
             instagram: values.instagram,
@@ -207,53 +183,6 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
           value={values.homepageSecondaryCtaHref}
           onChange={(value) => setField("homepageSecondaryCtaHref", value)}
           className="md:col-span-2"
-        />
-      </section>
-
-      <section className="grid gap-4 md:grid-cols-2">
-        <h2 className="font-display text-lg text-white md:col-span-2">Cohort</h2>
-        <Field label="Cohort name" value={values.cohortName} onChange={(value) => setField("cohortName", value)} />
-        <Field label="Start" value={values.cohortStartDate} onChange={(value) => setField("cohortStartDate", value)} />
-        <Field
-          label="Application deadline"
-          value={values.cohortApplicationDeadline}
-          onChange={(value) => setField("cohortApplicationDeadline", value)}
-        />
-        <Field label="Duration" value={values.cohortDuration} onChange={(value) => setField("cohortDuration", value)} />
-        <Field label="Seats" value={values.cohortSeats} onChange={(value) => setField("cohortSeats", value)} />
-        <Field label="Sessions" value={values.cohortSessions} onChange={(value) => setField("cohortSessions", value)} />
-        <Field
-          label="Format"
-          value={values.cohortFormat}
-          onChange={(value) => setField("cohortFormat", value)}
-          className="md:col-span-2"
-        />
-        <Field
-          label="Audience"
-          value={values.cohortAudience}
-          onChange={(value) => setField("cohortAudience", value)}
-          multiline
-          className="md:col-span-2"
-        />
-        <label className="flex items-center gap-3 text-sm text-white/80 md:col-span-2">
-          <input
-            type="checkbox"
-            checked={values.cohortPriceConfirmed}
-            onChange={(event) => setField("cohortPriceConfirmed", event.target.checked)}
-            className="h-4 w-4 rounded border-white/20 bg-white/5"
-          />
-          Fee is confirmed for the public site
-        </label>
-        <Field
-          label="Price label"
-          value={values.cohortPriceLabel}
-          onChange={(value) => setField("cohortPriceLabel", value)}
-        />
-        <Field
-          label="Price note"
-          value={values.cohortPriceNote}
-          onChange={(value) => setField("cohortPriceNote", value)}
-          multiline
         />
       </section>
 

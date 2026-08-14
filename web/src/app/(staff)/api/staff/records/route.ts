@@ -93,7 +93,7 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
     if (iso) body.endsAt = iso;
     else if (body.endsAt === "") body.endsAt = null;
   }
-  for (const key of ["amount", "capacity", "lessons"]) {
+  for (const key of ["amount", "capacity", "lessons", "seats"]) {
     if (typeof body[key] === "string") body[key] = body[key] === "" ? null : Number(body[key]);
   }
   if (typeof body.order === "string") body.order = body.order === "" ? 0 : Number(body.order);
@@ -106,6 +106,7 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
   if (body.youtubeUrl === "") body.youtubeUrl = null;
   if (body.resourceUrl === "") body.resourceUrl = null;
   if (body.resourceLabel === "") body.resourceLabel = null;
+  if (body.classroomUrl === "") body.classroomUrl = null;
   if (Array.isArray(body.attachments)) {
     body.attachments = body.attachments
       .map((item) => {

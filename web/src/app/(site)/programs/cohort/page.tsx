@@ -14,7 +14,7 @@ import {
 import { cohortFaqs } from "@/lib/content";
 import { img } from "@/lib/images";
 import { cta } from "@/lib/cta";
-import { getSiteSettings } from "@/lib/cms";
+import { getPublicCohorts, getSiteSettings } from "@/lib/cms";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -26,7 +26,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CohortPage() {
-  const site = await getSiteSettings();
+  const [site, cohorts] = await Promise.all([getSiteSettings(), getPublicCohorts()]);
+  const openCohorts = cohorts.filter((cohort) => cohort.enrollmentOpen);
 
   return (
     <>
@@ -265,6 +266,39 @@ export default async function CohortPage() {
           </div>
         </div>
       </section>
+
+      {openCohorts.length ? (
+        <section className="border-b border-white/10 bg-surface py-16 sm:py-24">
+          <div className="container-wide">
+            <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Intakes</p>
+            <h2 className="mt-3 font-display text-3xl text-white sm:text-4xl">Open cohorts</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/55">
+              Apply to the intake that matches your dates. Payment comes after acceptance.
+            </p>
+            <div className="mt-10 grid gap-5 md:grid-cols-2">
+              {openCohorts.map((cohort) => (
+                <article
+                  key={String(cohort.id)}
+                  className="rounded-[1.75rem] border border-white/10 bg-ink p-6 sm:p-8"
+                >
+                  <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-mint">
+                    {cohort.startDate}
+                  </p>
+                  <h3 className="mt-3 font-display text-2xl text-white">{cohort.name}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-white/55">{cohort.format}</p>
+                  <p className="mt-4 text-sm text-white/40">
+                    {cohort.duration} · {cohort.seats} seats · Apply by {cohort.applicationDeadline}
+                  </p>
+                  <p className="mt-2 text-sm text-baby-blue">{cohort.priceLabel}</p>
+                  <div className="mt-6">
+                    <Button href="/apply">Apply</Button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <section className="bg-near-black py-16 sm:py-24">
         <div className="container-wide max-w-3xl">

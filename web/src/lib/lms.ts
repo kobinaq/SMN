@@ -45,6 +45,8 @@ type LmsCourseDoc = {
   summary: string;
   programKey: string;
   accessRule: "enrolled" | "member" | "cohort";
+  delivery?: "cohort" | "self-paced" | null;
+  classroomUrl?: string | null;
   level?: string | null;
   estimatedHours?: number | null;
   instructor?: string | null;
@@ -73,8 +75,9 @@ type LmsLessonDoc = {
   title: string;
   slug: string;
   summary: string;
-  lessonType: "video" | "reading" | "download" | "assignment";
+  lessonType: "video" | "reading" | "download" | "assignment" | "classroom";
   youtubeUrl?: string | null;
+  classroomUrl?: string | null;
   durationMinutes?: number | null;
   body?: string | null;
   resourceLabel?: string | null;
@@ -129,6 +132,7 @@ export type LmsCourseCard = {
   prerequisites: string;
   learningOutcomes: string[];
   certificateEnabled: boolean;
+  classroomUrl: string;
 };
 
 export type LmsCourseDetail = LmsCourseCard & {
@@ -143,6 +147,7 @@ export type LmsLessonDetail = LmsLessonListItem & {
   resourceLabel: string;
   resourceUrl: string;
   attachments: { label: string; url: string }[];
+  classroomUrl: string;
   previousHref: string;
   nextHref: string;
 };
@@ -216,6 +221,7 @@ function toCourseCard(course: LmsCourseDoc, lessons: LmsLessonDoc[], progress: M
       .map((item) => item?.outcome?.trim() || "")
       .filter(Boolean),
     certificateEnabled: Boolean(course.certificateEnabled),
+    classroomUrl: course.classroomUrl || "",
   };
 }
 
@@ -314,6 +320,7 @@ export async function getLmsLesson(member: MemberUser, courseSlug: string, lesso
     attachments: (lesson.attachments || [])
       .map((item) => ({ label: item.label || "Download", url: mediaUrl(item.file) }))
       .filter((item) => item.url),
+    classroomUrl: lesson.classroomUrl?.trim() || course.classroomUrl || "",
     previousHref: flat[currentIndex - 1]?.href || "",
     nextHref: flat[currentIndex + 1]?.href || "",
   } satisfies LmsLessonDetail;
