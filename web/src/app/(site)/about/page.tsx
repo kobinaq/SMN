@@ -4,7 +4,7 @@ import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { Button } from "@/components/ui/Button";
 import { audienceStages, seoTitle, thinkPillars } from "@/lib/brand";
-import { ecosystem, instructor } from "@/lib/content";
+import { ecosystem, founderBeliefs, founderStory, founderValues, instructor } from "@/lib/content";
 import { cta } from "@/lib/cta";
 import { img } from "@/lib/images";
 
@@ -168,30 +168,57 @@ export default function AboutPage() {
             <div className="image-matte" />
           </div>
           <div>
-            <p className="font-display text-sm tracking-[0.08em] text-baby-blue">Meet the lead instructor</p>
+            <p className="font-display text-sm tracking-[0.08em] text-baby-blue">Meet the founder</p>
             <h2 className="mt-3 font-display text-3xl text-white sm:text-4xl md:text-5xl">
               {instructor.name}
             </h2>
-            <p className="mt-2 text-sm text-white/45">{instructor.role}</p>
-            <p className="mt-5 text-sm leading-relaxed text-white/65 sm:text-base">
-              {instructor.bio}
-            </p>
-            <p className="mt-4 text-sm leading-relaxed text-white/65 sm:text-base">
-              {instructor.philosophy}
-            </p>
-            <ul className="mt-6 space-y-3 text-sm text-white/70">
-              {instructor.highlights.map((item) => (
-                <li key={item} className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-baby-blue" />
-                  <span>{item}</span>
-                </li>
+            <p className="mt-2 text-sm text-white/45">{instructor.title}</p>
+            <div className="mt-5 space-y-4 text-sm leading-relaxed text-white/65 sm:text-base">
+              {founderStory.map((paragraph, index) => (
+                <p key={index} className={index === 0 ? "text-white/85" : undefined}>
+                  {paragraph}
+                </p>
               ))}
-            </ul>
+            </div>
             <div className="btn-row-mobile mt-8">
               <Button href={instructor.linkedin} target="_blank" rel="noreferrer">
                 View LinkedIn
               </Button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/10 bg-ink py-16 sm:py-24">
+        <div className="container-wide">
+          <p className="font-display text-sm tracking-[0.08em] text-baby-blue">What I believe</p>
+          <h2 className="mt-3 max-w-3xl font-display text-3xl text-white sm:text-4xl">
+            The principles behind how we teach.
+          </h2>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2">
+            {founderBeliefs.map((item) => (
+              <article key={item.title} className="rounded-[1.75rem] border border-white/10 bg-surface p-6 sm:p-8">
+                <h3 className="font-display text-xl text-white sm:text-2xl">{item.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/60 sm:text-base">{item.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-white/10 bg-near-black py-16 sm:py-24">
+        <div className="container-wide">
+          <p className="font-display text-sm tracking-[0.08em] text-baby-blue">Our values</p>
+          <h2 className="mt-3 max-w-3xl font-display text-3xl text-white sm:text-4xl">
+            The principles we build the Network on.
+          </h2>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {founderValues.map((item) => (
+              <div key={item.title} className="rounded-2xl border border-white/10 bg-surface p-6 sm:p-8">
+                <h3 className="font-display text-lg text-white sm:text-xl">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/60">{item.body}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
