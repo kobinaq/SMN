@@ -164,6 +164,7 @@ export async function HomePage() {
       <CohortSpotlight />
 
       {/* Learning experience */}
+      {featuredCourses.length ? (
       <section data-section-fade className="bg-ink py-16 sm:py-24 md:py-32">
         <div className="container-wide">
           <div className="flex flex-col justify-between gap-4 sm:gap-6 md:flex-row md:items-end">
@@ -224,6 +225,7 @@ export async function HomePage() {
           </div>
         </div>
       </section>
+      ) : null}
 
       {/* Instructor */}
       <section data-section-fade className="bg-ink py-16 sm:py-24 md:py-32">

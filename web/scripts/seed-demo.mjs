@@ -259,25 +259,6 @@ await upsert(
 );
 
 await upsert(
-  "portfolios",
-  { slug: { equals: "demo-ama-campaign-refresh" } },
-  {
-    member: ama.id,
-    title: "Campaign refresh for a local skincare brand",
-    slug: "demo-ama-campaign-refresh",
-    summary: "Fictional demo case study for the public portfolio flow.",
-    challenge: "The brand needed clearer positioning and a practical content rhythm.",
-    approach: "Ama mapped audience segments, clarified content pillars, and rebuilt the weekly calendar.",
-    outcome: "The fictional campaign improved consistency and gave the team a clearer reporting structure.",
-    skills: [{ skill: "Content strategy" }, { skill: "Reporting" }],
-    status: "published",
-    visibility: "public",
-    featured: true,
-    order: 1,
-  },
-);
-
-await upsert(
   "certificates",
   { credentialCode: { equals: "SMN-DEMO-001" } },
   {
@@ -298,60 +279,7 @@ await upsert(
   },
 );
 
-await upsert(
-  "events",
-  { slug: { equals: "demo-portfolio-clinic" } },
-  {
-    title: "Demo Portfolio Clinic",
-    slug: "demo-portfolio-clinic",
-    status: "published",
-    type: "Workshop",
-    format: "online",
-    pricing: "free",
-    startsAt: future,
-    onlineUrl: "https://example.com/meet/demo-portfolio-clinic",
-    host: "SMN",
-    date: future,
-    time: "6:00 PM GMT",
-    summary: "A fictional event for testing public event pages.",
-  },
+payload.logger.info(
+  "E2E fixture seed complete. Test-only accounts use *@smn.example emails; no public demo content is seeded.",
 );
-
-await upsert(
-  "resources",
-  { slug: { equals: "demo-campaign-brief" } },
-  {
-    title: "Demo Campaign Brief",
-    slug: "demo-campaign-brief",
-    type: "Template",
-    description: "A fictional downloadable resource entry for QA.",
-  },
-);
-
-await upsert(
-  "posts",
-  { slug: { equals: "demo-strategy-before-content" } },
-  {
-    title: "Strategy before content",
-    slug: "demo-strategy-before-content",
-    category: "Marketing Strategy",
-    excerpt: "A fictional post used to verify CMS-backed insights.",
-    publishedAt: now.toISOString(),
-    readTime: "4 min",
-  },
-);
-
-await upsert(
-  "stories",
-  { name: { equals: "Efua Demo" } },
-  {
-    name: "Efua Demo",
-    role: "Fictional alumna",
-    quote: "SMN helped me explain my work with more clarity.",
-    published: false,
-    permissionConfirmed: false,
-  },
-);
-
-payload.logger.info("Demo seed complete. Fictional accounts use *@smn.example emails.");
 process.exit(0);
