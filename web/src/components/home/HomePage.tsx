@@ -246,7 +246,7 @@ export async function HomePage() {
           </Reveal>
           <Reveal delay={0.08}>
             <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue sm:text-xs">
-              Meet the lead instructor
+              Meet the founder
             </p>
             <h2 className="mt-3 font-display text-2xl leading-tight text-white sm:mt-4 sm:text-3xl md:text-5xl">
               {instructor.name}

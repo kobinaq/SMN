@@ -8,9 +8,9 @@ import { COURSE_FEE_PENDING_LABEL, FEE_PENDING_LABEL } from "@/lib/currency";
 export const site = {
   name: "Social Marketers Network",
   shortName: "SMN",
-  tagline: "Learn social media marketing. Lead with AI. Grow with a community.",
+  tagline: "Learn Social Media Marketing. Lead with AI. Gain Real-World Experience. Grow with Community.",
   description:
-    "A marketing academy and community for beginners, early-career marketers, professionals, and business owners. Skills, training, mentorship, practical experience, and a professional network.",
+    "A professional learning network where beginners, early-career, and marketing professionals build the skills, experience, and network they need to thrive in a rapidly changing digital industry.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://socialmarketers.network",
   email: process.env.OPS_EMAIL ?? "hello@socialmarketers.network",
   whatsappInvite:
@@ -21,9 +21,9 @@ export const site = {
     twitter: "https://x.com/smn_africa",
   },
   homepage: {
-    headline: "Learn. Practice. Connect. Grow.",
+    headline: "You shouldn’t have to build your marketing career alone.",
     supportingCopy:
-      "Social Marketers Network brings learning, community, experience, and opportunity together so marketers can think, practise, and grow in one place.",
+      "Social Marketers Network is a professional learning network where beginners, early-career, and marketing professionals build the skills, experience, and network they need to thrive in a rapidly changing digital industry.",
     primaryCtaLabel: "Apply for the next cohort",
     secondaryCtaLabel: "Join the community",
     secondaryCtaHref: "/community",

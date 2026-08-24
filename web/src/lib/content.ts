@@ -2,21 +2,66 @@ import { img } from "@/lib/images";
 
 export const instructor = {
   name: "Arielle Adodo",
-  role: "Founder & Lead Marketing Strategist, Social Marketers Network",
+  role: "Founder & Lead Instructor, Social Marketers Network",
+  title: "Marketing Strategist · Educator · Founder",
   image: img.instructor,
   headline: "Arielle Adodo",
   linkedin: "https://www.linkedin.com/in/arielle-adodo/",
-  bio: "Arielle is a social media specialist and creative strategist based in Ghana. She builds stories that connect brands and creators to their audiences, with experience across B2B and B2C, including SaaS and tech.",
+  bio: "I didn’t start in marketing. I had to figure my way into it — no traditional marketing degree, no clear roadmap. I started with social media and content, learning through experience, experimenting, and working with brands until I realised there was much more to marketing than making good-looking content.",
   philosophy:
-    "She founded the Social Marketers Network to help beginners, social media managers, marketing professionals, and business owners move beyond random posting. SMN is more than an academy. It is a community and network for people who want strategy, AI skills, and real practice.",
+    "The more I worked across social, content, and digital — from FMCG and lifestyle to consumer and tech brands — the more I noticed a problem: social media marketing was evolving, but the way we teach it wasn’t. People were learning how to post before they learned how to think. I founded Social Marketers Network to close that gap, and to build the marketing community I wish I had when I started.",
   highlights: [
-    "Social media strategist for B2B and B2C brands",
-    "Content strategy, brand storytelling, and digital marketing education",
+    "Social and digital marketing across FMCG, lifestyle, consumer, and technology brands",
+    "Content strategy, brand storytelling, and marketing education",
     "Leads the Social Media Marketing & AI training path at SMN",
-    "Building a community for marketers across Africa and beyond",
+    "Building a marketing community across Africa and beyond",
   ],
   note: null as string | null,
 };
+
+/** Founder story for the About page — first-person, per the SMN brand voice. */
+export const founderStory = [
+  "I didn’t start in marketing. I had to figure my way into it.",
+  "I didn’t have a traditional marketing degree or a clear roadmap telling me what to learn next. I started with social media and content — learning through experience, experimenting, working with brands, and gradually figuring out that there was much more to marketing than making good-looking content.",
+  "Over the years, I worked across social media, content, and digital marketing, with experience spanning FMCG, lifestyle, consumer, and technology brands. But the more I worked in the industry, the more I noticed a problem: social media marketing was evolving, and the way we were teaching it wasn’t.",
+  "Social media managers were no longer just being asked to keep a page active or create aesthetically pleasing content. Businesses wanted marketers who could understand the audience, develop strategy, contribute to campaigns, and ultimately help drive results. Yet many people entering the field were learning how to post before they learned how to think.",
+  "There was also very little guidance around the things that actually help someone build a career: how to build a portfolio, how to price your work, how to communicate with clients, how to understand the business behind a brief, and what you actually need to learn to stay relevant as AI changes the industry.",
+  "I know, because I spent years figuring it out myself. That’s why I founded Social Marketers Network — combining marketing strategy, social media, AI, practical application, career development, and professional experience. We’re building something bigger than a course: the marketing community I wish I had when I started, where learning can lead to experience, relationships, and opportunity.",
+];
+
+/** Founder philosophy — "What I believe". */
+export const founderBeliefs = [
+  {
+    title: "Strategy before aesthetics",
+    body: "Good marketing isn’t just about making something look good. It should have a reason to exist and a result it’s trying to create.",
+  },
+  {
+    title: "Practice matters",
+    body: "You can consume all the marketing content in the world. At some point, you have to do the work.",
+  },
+  {
+    title: "The industry belongs to people who keep learning",
+    body: "Marketing changes constantly. Staying relevant means staying curious.",
+  },
+  {
+    title: "You shouldn’t have to figure it out alone",
+    body: "The right community can shorten the learning curve, open doors, and make the journey much less isolating.",
+  },
+  {
+    title: "Education should create opportunity",
+    body: "A course shouldn’t be the finish line. It should help you become more capable, confident, and ready for what’s next.",
+  },
+];
+
+/** SMN-specific values for the founder / about page. */
+export const founderValues = [
+  { title: "Practicality", body: "We teach what people can actually use." },
+  { title: "Curiosity", body: "We stay open to new ideas, tools, and ways of working." },
+  { title: "Community", body: "We believe people grow faster when they have people to grow with." },
+  { title: "Relevance", body: "Our learning evolves with the industry." },
+  { title: "Excellence", body: "We care about the quality of the work, not just completing the work." },
+  { title: "Opportunity", body: "Education should create pathways to experience and careers." },
+];
 
 export const beliefs = [
   {
