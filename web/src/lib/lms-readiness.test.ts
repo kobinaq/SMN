@@ -29,17 +29,39 @@ describe("evaluateCourseReadiness", () => {
     );
     expect(result.ready).toBe(false);
     expect(result.missing).toEqual(
-      expect.arrayContaining(["Google Classroom invite", "Public start date", "At least one Classroom session"]),
+      expect.arrayContaining(["Google Classroom invite", "Public start date", "At least one live session"]),
     );
   });
 
-  it("publishes a cohort with an invite, date, and classroom session", () => {
+  it("publishes a cohort with an invite, date, and a legacy classroom lesson", () => {
     const result = evaluateCourseReadiness(
       { ...completeCourse, delivery: "cohort", classroomUrl: "https://classroom.google.com/c/demo", startDate: "September 2026" },
       [{ id: 1 }],
       [{ module: 1, status: "published", lessonType: "classroom" }],
     );
     expect(result.ready).toBe(true);
+  });
+
+  it("publishes a cohort with an invite, date, and a published live session — no modules required", () => {
+    const result = evaluateCourseReadiness(
+      { ...completeCourse, delivery: "cohort", classroomUrl: "https://classroom.google.com/c/demo", startDate: "September 2026" },
+      [],
+      [],
+      [{ status: "published" }],
+    );
+    expect(result.ready).toBe(true);
+    expect(result.missing).toEqual([]);
+  });
+
+  it("does not publish a cohort whose only session is a draft", () => {
+    const result = evaluateCourseReadiness(
+      { ...completeCourse, delivery: "cohort", classroomUrl: "https://classroom.google.com/c/demo", startDate: "September 2026" },
+      [],
+      [],
+      [{ status: "draft" }],
+    );
+    expect(result.ready).toBe(false);
+    expect(result.missing).toContain("At least one live session");
   });
 
   it("requires a hosted lesson for self-paced courses", () => {

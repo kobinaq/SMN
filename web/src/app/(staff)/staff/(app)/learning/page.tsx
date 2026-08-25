@@ -76,7 +76,7 @@ export default async function StaffLearningPage({
   const activeTab = requestedTab && allowedTabs.has(requestedTab) ? requestedTab : "overview";
 
   const courseID = String(selected.id);
-  const [modules, lessons, enrollments, progress, assessments, submissions] = await Promise.all([
+  const [modules, lessons, enrollments, progress, assessments, submissions, sessions] = await Promise.all([
     payload.find({ collection: "lms-modules", depth: 0, limit: 500, sort: "order", where: { course: { equals: selected.id } }, ...access }),
     payload.find({ collection: "lms-lessons", depth: 0, limit: 1000, sort: "order", where: { course: { equals: selected.id } }, ...access }),
     payload.find({ collection: "enrollments", depth: 1, limit: 500, where: { programKey: { equals: selected.programKey } }, ...access }),
@@ -90,6 +90,9 @@ export default async function StaffLearningPage({
       where: { and: [{ course: { equals: selected.id } }, { status: { in: ["submitted", "returned"] } }] },
       ...access,
     }),
+    isCohort
+      ? payload.find({ collection: "lms-sessions", depth: 0, limit: 500, sort: "sessionAt", where: { course: { equals: selected.id } }, ...access })
+      : Promise.resolve({ docs: [], totalDocs: 0 }),
   ]);
 
   const lessonsByModule = new Map<string, typeof lessons.docs>();
@@ -102,6 +105,7 @@ export default async function StaffLearningPage({
     selected as unknown as CourseReadinessInput,
     modules.docs,
     lessons.docs as unknown as CurriculumLesson[],
+    sessions.docs as unknown as { status?: unknown }[],
   );
   const completed = progress.docs.filter((item) => item.status === "completed").length;
   const base = `/staff/learning?course=${courseID}`;
@@ -159,14 +163,18 @@ export default async function StaffLearningPage({
       : [{ totalDocs: 0, docs: [] }, { totalDocs: 0, docs: [] }, { totalDocs: 0, docs: [] }, { totalDocs: 0, docs: [] }];
 
   const roster = learnerOptions.map((item) => ({ id: item.id, label: String(item.label) }));
-  const [sessions, attendance, announcements] =
-    isCohort && (activeTab === "sessions" || activeTab === "announcements")
+  const [attendance, announcements] =
+    isCohort && activeTab === "sessions"
       ? await Promise.all([
-          payload.find({ collection: "lms-sessions", depth: 0, limit: 500, sort: "sessionAt", where: { course: { equals: selected.id } }, ...access }),
           payload.find({ collection: "lms-attendance", depth: 0, limit: 2000, where: { course: { equals: selected.id } }, ...access }),
-          payload.find({ collection: "lms-announcements", depth: 1, limit: 100, sort: "-publishedAt", where: { course: { equals: selected.id } }, ...access }),
+          Promise.resolve({ docs: [], totalDocs: 0 }),
         ])
-      : [{ docs: [], totalDocs: 0 }, { docs: [], totalDocs: 0 }, { docs: [], totalDocs: 0 }];
+      : isCohort && activeTab === "announcements"
+        ? await Promise.all([
+            Promise.resolve({ docs: [], totalDocs: 0 }),
+            payload.find({ collection: "lms-announcements", depth: 1, limit: 100, sort: "-publishedAt", where: { course: { equals: selected.id } }, ...access }),
+          ])
+        : [{ docs: [], totalDocs: 0 }, { docs: [], totalDocs: 0 }];
 
   const attendanceBySession = new Map<string, Record<string, string>>();
   for (const row of attendance.docs as Array<{ session?: unknown; member?: unknown; status?: string }>) {
