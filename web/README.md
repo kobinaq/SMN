@@ -46,7 +46,7 @@ Production requires PostgreSQL. Normal startup never pushes schema.
 
 Existing production predates the baseline; follow [../docs/database-migrations.md](../docs/database-migrations.md) and never replay the baseline over existing tables.
 
-Current migrations are listed in `src/migrations/index.ts`. Apply new ones with `npm run db:migrate` after deploy. The 20260825 lock-rels migration is required before Payload document-lock queries can succeed against collections added after the baseline.
+Current migrations are listed in `src/migrations/index.ts`. Apply new ones with `npm run db:migrate` after deploy. `20260825_locked_documents_missing_rels` adds lock-table columns for collections created after the baseline.
 
 ## Quality
 
