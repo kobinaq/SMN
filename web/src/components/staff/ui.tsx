@@ -271,12 +271,12 @@ export const staffFieldClass =
 
 /** Styles Payload action/form chrome when reused on the staff portal. */
 export const staffOpsChrome =
-  "[&_.smn-ops-actions]:flex [&_.smn-ops-actions]:flex-wrap [&_.smn-ops-actions]:justify-end [&_.smn-ops-actions]:gap-1.5 " +
+  "[&_.smn-ops-actions]:flex [&_.smn-ops-actions]:max-w-full [&_.smn-ops-actions]:flex-wrap [&_.smn-ops-actions]:justify-end [&_.smn-ops-actions]:gap-1.5 " +
   "[&_.smn-ops-actions_button]:rounded-full [&_.smn-ops-actions_button]:border [&_.smn-ops-actions_button]:border-white/15 " +
   "[&_.smn-ops-actions_button]:bg-white/5 [&_.smn-ops-actions_button]:px-3 [&_.smn-ops-actions_button]:py-1.5 " +
   "[&_.smn-ops-actions_button]:text-xs [&_.smn-ops-actions_button]:text-white/80 " +
   "[&_.smn-ops-actions_button:hover:not(:disabled)]:border-baby-blue/40 [&_.smn-ops-actions_button:disabled]:opacity-40 " +
-  "[&_.smn-ops-actions_span]:text-xs [&_.smn-ops-actions_span]:text-red-300 " +
+  "[&_.smn-ops-actions_span]:basis-full [&_.smn-ops-actions_span]:max-w-full [&_.smn-ops-actions_span]:text-right [&_.smn-ops-actions_span]:text-xs [&_.smn-ops-actions_span]:text-red-300 [&_.smn-ops-actions_span]:whitespace-normal " +
   "[&_.smn-curriculum-actions]:flex [&_.smn-curriculum-actions]:flex-wrap [&_.smn-curriculum-actions]:items-center [&_.smn-curriculum-actions]:gap-1.5 " +
   "[&_.smn-curriculum-actions_button]:rounded-full [&_.smn-curriculum-actions_button]:border [&_.smn-curriculum-actions_button]:border-white/15 " +
   "[&_.smn-curriculum-actions_button]:bg-white/5 [&_.smn-curriculum-actions_button]:px-2.5 [&_.smn-curriculum-actions_button]:py-1 " +
@@ -356,12 +356,12 @@ export function StaffOpsRow({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-3 border-b border-white/5 py-3 transition last:border-0 hover:bg-white/[.02] sm:flex-row sm:items-center sm:justify-between">
+    <div className="grid grid-cols-1 items-start gap-x-4 gap-y-2 border-b border-white/5 py-3 transition last:border-0 hover:bg-white/[.02] sm:grid-cols-[minmax(0,1fr)_minmax(0,auto)]">
       <div className="min-w-0">
-        <b className="block text-sm text-white">{title}</b>
-        {detail ? <span className="mt-1 block text-xs text-white/45">{detail}</span> : null}
+        <b className="block truncate text-sm text-white">{title}</b>
+        {detail ? <span className="mt-1 block truncate text-xs text-white/45">{detail}</span> : null}
       </div>
-      {children ? <div className={`shrink-0 ${staffOpsChrome}`}>{children}</div> : null}
+      {children ? <div className={`min-w-0 max-w-full sm:max-w-[18rem] sm:justify-self-end ${staffOpsChrome}`}>{children}</div> : null}
     </div>
   );
 }
