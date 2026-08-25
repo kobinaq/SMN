@@ -5,9 +5,9 @@ import Image, { ImageProps } from "next/image";
 import { motion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
-import { useSiteSettings } from "@/components/layout/SiteSettingsProvider";
 import { img } from "@/lib/images";
 import { cta } from "@/lib/cta";
+import { homepageHero } from "@/lib/content";
 import { trackEvent } from "@/lib/analytics";
 
 type Direction = "left" | "right";
@@ -86,18 +86,18 @@ const spreads: Record<Breakpoint, { x: string; y: string }[]> = {
     { x: "72px", y: "22px" },
   ],
   md: [
-    { x: "-140px", y: "12px" },
-    { x: "-70px", y: "22px" },
+    { x: "-100px", y: "12px" },
+    { x: "-50px", y: "22px" },
     { x: "0px", y: "6px" },
-    { x: "70px", y: "18px" },
-    { x: "140px", y: "28px" },
+    { x: "50px", y: "18px" },
+    { x: "100px", y: "28px" },
   ],
   lg: [
-    { x: "-320px", y: "15px" },
-    { x: "-160px", y: "32px" },
+    { x: "-140px", y: "15px" },
+    { x: "-70px", y: "32px" },
     { x: "0px", y: "8px" },
-    { x: "160px", y: "22px" },
-    { x: "320px", y: "44px" },
+    { x: "70px", y: "22px" },
+    { x: "140px", y: "44px" },
   ],
 };
 
@@ -120,7 +120,6 @@ function useBreakpoint(): Breakpoint {
 }
 
 export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: number }) {
-  const site = useSiteSettings();
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const bp = useBreakpoint();
@@ -173,106 +172,102 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
   return (
     <section
       data-hero
-      className="grain relative flex min-h-[100svh] flex-col overflow-hidden bg-near-black pt-[calc(5rem+env(safe-area-inset-top))] md:pt-32"
+      className="grain relative flex min-h-[100dvh] flex-col overflow-hidden bg-near-black pt-[calc(5rem+env(safe-area-inset-top))] md:pt-24"
     >
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-4 text-center sm:px-6">
-        <p
-          data-hero-item
-          className="text-[10px] font-medium uppercase tracking-[0.28em] text-baby-blue sm:text-[11px] md:text-xs"
-        >
-          Social Marketers Network
-        </p>
-        <h1
-          data-hero-item
-          className="font-display mx-auto mt-3 max-w-4xl text-[2rem] leading-[1.1] text-white sm:mt-4 sm:text-5xl md:text-6xl lg:text-7xl"
-        >
-          {site.homepage.headline}
-        </h1>
-        <p
-          data-hero-item
-          className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-white/60 sm:mt-5 md:text-base"
-        >
-          {site.homepage.supportingCopy}
-        </p>
-      </div>
+      <div className="container-wide relative z-10 flex flex-1 flex-col justify-center gap-10 py-8 lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center lg:gap-12 lg:py-0">
+        <div className="max-w-xl">
+          <p
+            data-hero-item
+            className="text-[10px] font-medium uppercase tracking-[0.28em] text-baby-blue sm:text-[11px]"
+          >
+            {homepageHero.eyebrow}
+          </p>
+          <h1
+            data-hero-item
+            className="font-display mt-4 text-[1.7rem] leading-[1.12] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem]"
+          >
+            {homepageHero.lines.map((line) => (
+              <span key={line} className="block text-balance">
+                {line}
+              </span>
+            ))}
+          </h1>
+          <p
+            data-hero-item
+            className="mt-5 max-w-[42rem] text-sm leading-relaxed text-white/65 sm:mt-6 sm:text-base"
+          >
+            {homepageHero.body}
+          </p>
+          <div data-hero-item className="btn-row-mobile mt-7 sm:mt-8">
+            <Button
+              href={cta.exploreServices.href}
+              className="sm:min-w-[160px]"
+              onClick={() => trackEvent("primary_cta_click", { location: "hero" })}
+            >
+              {cta.exploreServices.label}
+            </Button>
+            <Button
+              href={cta.joinCommunity.href}
+              variant="secondary"
+              className="sm:min-w-[140px]"
+              onClick={() => trackEvent("secondary_cta_click", { location: "hero" })}
+            >
+              Join the Community
+            </Button>
+          </div>
+        </div>
 
-      {/* Fan photo gallery — tighter on small screens, clipped overflow */}
-      <div
-        className={cn(
-          "relative z-10 mb-4 mt-8 w-full overflow-hidden sm:mb-6 sm:mt-10",
-          "flex h-[210px] items-center justify-center sm:h-[280px] md:h-[320px] lg:h-[360px]",
-        )}
-      >
-        <motion.div
-          className="relative mx-auto flex w-full max-w-7xl justify-center px-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isVisible ? 1 : 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
+        <div
+          className={cn(
+            "relative w-full overflow-hidden",
+            "flex h-[200px] items-center justify-center sm:h-[260px] lg:h-[380px]",
+          )}
         >
           <motion.div
-            className="relative flex w-full justify-center"
-            variants={containerVariants}
-            initial="hidden"
-            animate={isLoaded ? "visible" : "hidden"}
+            className="relative mx-auto flex w-full justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isVisible ? 1 : 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
           >
-            <div className="relative h-[120px] w-[120px] sm:h-[180px] sm:w-[180px] md:h-[200px] md:w-[200px] lg:h-[220px] lg:w-[220px]">
-              {[...photos].reverse().map((photo, reverseIndex) => {
-                const index = photos.length - 1 - reverseIndex;
-                const spread = spreads[bp][index] || { x: photo.x, y: photo.y };
+            <motion.div
+              className="relative flex w-full justify-center"
+              variants={containerVariants}
+              initial="hidden"
+              animate={isLoaded ? "visible" : "hidden"}
+            >
+              <div className="relative h-[110px] w-[110px] sm:h-[160px] sm:w-[160px] lg:h-[200px] lg:w-[200px]">
+                {[...photos].reverse().map((photo, reverseIndex) => {
+                  const index = photos.length - 1 - reverseIndex;
+                  const spread = spreads[bp][index] || { x: photo.x, y: photo.y };
 
-                return (
-                  <motion.div
-                    key={photo.id}
-                    className="absolute left-0 top-0"
-                    style={{ zIndex: photo.zIndex }}
-                    variants={photoVariants}
-                    custom={{
-                      x: spread.x,
-                      y: spread.y,
-                      order: photo.order,
-                    }}
-                  >
-                    <Photo
-                      width={220}
-                      height={220}
-                      src={photo.src}
-                      alt={photo.alt}
-                      direction={photo.direction}
-                      priority={photo.order === 2}
-                      enableDrag={bp === "lg"}
-                    />
-                  </motion.div>
-                );
-              })}
-            </div>
+                  return (
+                    <motion.div
+                      key={photo.id}
+                      className="absolute left-0 top-0"
+                      style={{ zIndex: photo.zIndex }}
+                      variants={photoVariants}
+                      custom={{
+                        x: spread.x,
+                        y: spread.y,
+                        order: photo.order,
+                      }}
+                    >
+                      <Photo
+                        width={220}
+                        height={220}
+                        src={photo.src}
+                        alt={photo.alt}
+                        direction={photo.direction}
+                        priority={photo.order === 2}
+                        enableDrag={bp === "lg"}
+                      />
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      </div>
-
-      <div
-        data-hero-item
-        className="relative z-10 mt-auto flex w-full flex-col items-center px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-6 sm:pb-10"
-      >
-        <div className="btn-row-mobile">
-          <Button
-            href={cta.applyCohort.href}
-            className="sm:min-w-[160px]"
-            onClick={() => trackEvent("primary_cta_click", { location: "hero" })}
-          >
-            {site.homepage.primaryCtaLabel}
-          </Button>
-          <Button
-            href={site.homepage.secondaryCtaHref || cta.explorePrograms.href}
-            variant="secondary"
-            className="sm:min-w-[140px]"
-            onClick={() => trackEvent("secondary_cta_click", { location: "hero" })}
-          >
-            {site.homepage.secondaryCtaLabel}
-          </Button>
         </div>
-        <p className="mt-6 max-w-[20rem] text-center text-[10px] leading-relaxed tracking-[0.14em] text-white/35 uppercase sm:mt-8 sm:max-w-none sm:text-xs sm:tracking-[0.18em] md:mt-10">
-          Next cohort {site.cohort.startDate} · {site.cohort.seats} seats · {site.cohort.duration}
-        </p>
       </div>
     </section>
   );
@@ -345,7 +340,7 @@ function Photo({
       }}
       className={cn(
         className,
-        "relative mx-auto h-[110px] w-[110px] shrink-0 sm:h-[160px] sm:w-[160px] md:h-[200px] md:w-[200px] lg:h-[220px] lg:w-[220px]",
+        "relative mx-auto h-[110px] w-[110px] shrink-0 sm:h-[160px] sm:w-[160px] lg:h-[200px] lg:w-[200px]",
         enableDrag && "cursor-grab active:cursor-grabbing",
       )}
       draggable={false}
@@ -357,7 +352,7 @@ function Photo({
           fill
           src={src}
           alt={alt}
-          sizes="(max-width: 640px) 110px, (max-width: 1024px) 200px, 220px"
+          sizes="(max-width: 640px) 110px, (max-width: 1024px) 160px, 200px"
           priority={priority}
           draggable={false}
         />

@@ -155,6 +155,10 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
 
       <section className="grid gap-4 md:grid-cols-2">
         <h2 className="font-display text-lg text-white md:col-span-2">Homepage</h2>
+        <p className="text-sm text-white/45 md:col-span-2">
+          The public hero uses the coded brand promise and CTAs. These fields stay available for
+          metadata and later campaigns.
+        </p>
         <Field
           label="Headline"
           value={values.homepageHeadline}
@@ -207,7 +211,10 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
             Add stat
           </Button>
         </div>
-        <p className="text-sm text-white/45">Only verified rows appear on the public homepage.</p>
+        <p className="text-sm text-white/45">
+          Verified figures are stored here for later use. They do not currently appear on the public
+          homepage.
+        </p>
         {values.impactStats.length === 0 ? (
           <p className="text-sm text-white/40">None yet.</p>
         ) : (
