@@ -46,13 +46,7 @@ Production requires PostgreSQL. Normal startup never pushes schema.
 
 Existing production predates the baseline; follow [../docs/database-migrations.md](../docs/database-migrations.md) and never replay the baseline over existing tables.
 
-Current migrations are:
-
-1. baseline
-2. marketing CMS fields
-3. events and Paystack
-
-Production application of the events/Paystack migration is not confirmed in repository documentation.
+Current migrations are listed in `src/migrations/index.ts`. Apply new ones with `npm run db:migrate` after deploy. `20260825_locked_documents_missing_rels` adds lock-table columns for collections created after the baseline.
 
 ## Quality
 

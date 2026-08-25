@@ -136,8 +136,13 @@ export default buildConfig({
     Events,
     Stories,
     Resources,
-  ]),
-  globals: [SiteSettings],
+  ]).map((collection) => ({
+    ...collection,
+    // /staff does not use Payload's concurrent-edit locks. Those queries
+    // require a rel column per collection; missing columns broke event saves.
+    lockDocuments: false,
+  })),
+  globals: [{ ...SiteSettings, lockDocuments: false }],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "smn-dev-secret-change-me-in-production",
   typescript: {
