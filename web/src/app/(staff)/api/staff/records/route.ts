@@ -15,6 +15,10 @@ const writeRoles: Record<string, StaffRole[]> = {
   "lms-courses": ["learning"],
   "lms-modules": ["learning"],
   "lms-lessons": ["learning"],
+  "lms-sessions": ["learning"],
+  "lms-attendance": ["learning", "support"],
+  "lms-announcements": ["learning"],
+  "lms-discussion-posts": ["learning", "support"],
   "lms-assessments": ["learning"],
   "lms-submissions": ["learning", "support"],
   enrollments: ["learning", "support"],
@@ -66,7 +70,7 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
       .map((outcome) => ({ outcome }));
     delete body.learningOutcomesText;
   }
-  for (const key of ["cover", "file", "image", "course", "module", "member", "mentor", "source", "lmsCourse"]) {
+  for (const key of ["cover", "file", "image", "course", "module", "member", "mentor", "source", "lmsCourse", "session", "author"]) {
     if (!(key in body)) continue;
     const next = coerceRelationId(body[key]);
     if (next === undefined) {

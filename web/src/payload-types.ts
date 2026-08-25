@@ -82,6 +82,10 @@ export interface Config {
     'lms-modules': LmsModule;
     'lms-lessons': LmsLesson;
     'lms-lesson-progress': LmsLessonProgress;
+    'lms-sessions': LmsSession;
+    'lms-attendance': LmsAttendance;
+    'lms-announcements': LmsAnnouncement;
+    'lms-discussion-posts': LmsDiscussionPost;
     'lms-assessments': LmsAssessment;
     'lms-submissions': LmsSubmission;
     portfolios: Portfolio;
@@ -102,7 +106,6 @@ export interface Config {
     stories: Story;
     resources: Resource;
     'payload-kv': PayloadKv;
-    'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
@@ -122,6 +125,10 @@ export interface Config {
     'lms-modules': LmsModulesSelect<false> | LmsModulesSelect<true>;
     'lms-lessons': LmsLessonsSelect<false> | LmsLessonsSelect<true>;
     'lms-lesson-progress': LmsLessonProgressSelect<false> | LmsLessonProgressSelect<true>;
+    'lms-sessions': LmsSessionsSelect<false> | LmsSessionsSelect<true>;
+    'lms-attendance': LmsAttendanceSelect<false> | LmsAttendanceSelect<true>;
+    'lms-announcements': LmsAnnouncementsSelect<false> | LmsAnnouncementsSelect<true>;
+    'lms-discussion-posts': LmsDiscussionPostsSelect<false> | LmsDiscussionPostsSelect<true>;
     'lms-assessments': LmsAssessmentsSelect<false> | LmsAssessmentsSelect<true>;
     'lms-submissions': LmsSubmissionsSelect<false> | LmsSubmissionsSelect<true>;
     portfolios: PortfoliosSelect<false> | PortfoliosSelect<true>;
@@ -142,7 +149,6 @@ export interface Config {
     stories: StoriesSelect<false> | StoriesSelect<true>;
     resources: ResourcesSelect<false> | ResourcesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
-    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
@@ -732,6 +738,95 @@ export interface LmsLessonProgress {
   lesson: number | LmsLesson;
   status: 'not-started' | 'in-progress' | 'completed';
   completedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lms-sessions".
+ */
+export interface LmsSession {
+  id: number;
+  course: number | LmsCourse;
+  title: string;
+  /**
+   * What this live session covers.
+   */
+  summary?: string | null;
+  /**
+   * When this live session starts.
+   */
+  sessionAt: string;
+  durationMinutes?: number | null;
+  /**
+   * Live meeting link (Google Meet, Zoom, or Classroom) members open to join.
+   */
+  joinUrl?: string | null;
+  /**
+   * Link to the recording, added after the session runs.
+   */
+  recordingUrl?: string | null;
+  /**
+   * Slides, worksheets, and files shared for this session.
+   */
+  resources?:
+    | {
+        label: string;
+        file: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  order?: number | null;
+  status: 'draft' | 'published' | 'archived';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lms-attendance".
+ */
+export interface LmsAttendance {
+  id: number;
+  session: number | LmsSession;
+  course: number | LmsCourse;
+  member: number | Member;
+  status: 'present' | 'late' | 'excused' | 'absent';
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lms-announcements".
+ */
+export interface LmsAnnouncement {
+  id: number;
+  course: number | LmsCourse;
+  title: string;
+  body: string;
+  pinned?: boolean | null;
+  author?: (number | null) | User;
+  publishedAt?: string | null;
+  status: 'draft' | 'published';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lms-discussion-posts".
+ */
+export interface LmsDiscussionPost {
+  id: number;
+  course: number | LmsCourse;
+  body: string;
+  authorMember?: (number | null) | Member;
+  authorStaff?: (number | null) | User;
+  authorName?: string | null;
+  authorRole?: ('member' | 'staff') | null;
+  /**
+   * Hide to moderate a post out of the member board.
+   */
+  status: 'visible' | 'hidden';
   updatedAt: string;
   createdAt: string;
 }
@@ -1350,158 +1445,6 @@ export interface PayloadKv {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-locked-documents".
- */
-export interface PayloadLockedDocument {
-  id: number;
-  document?:
-    | ({
-        relationTo: 'users';
-        value: number | User;
-      } | null)
-    | ({
-        relationTo: 'members';
-        value: number | Member;
-      } | null)
-    | ({
-        relationTo: 'mentors';
-        value: number | Mentor;
-      } | null)
-    | ({
-        relationTo: 'mentorship-requests';
-        value: number | MentorshipRequest;
-      } | null)
-    | ({
-        relationTo: 'mentorship-relationships';
-        value: number | MentorshipRelationship;
-      } | null)
-    | ({
-        relationTo: 'opportunity-sources';
-        value: number | OpportunitySource;
-      } | null)
-    | ({
-        relationTo: 'opportunities';
-        value: number | Opportunity;
-      } | null)
-    | ({
-        relationTo: 'opportunity-applications';
-        value: number | OpportunityApplication;
-      } | null)
-    | ({
-        relationTo: 'cohort-applications';
-        value: number | CohortApplication;
-      } | null)
-    | ({
-        relationTo: 'enrollments';
-        value: number | Enrollment;
-      } | null)
-    | ({
-        relationTo: 'lms-courses';
-        value: number | LmsCourse;
-      } | null)
-    | ({
-        relationTo: 'lms-modules';
-        value: number | LmsModule;
-      } | null)
-    | ({
-        relationTo: 'lms-lessons';
-        value: number | LmsLesson;
-      } | null)
-    | ({
-        relationTo: 'lms-lesson-progress';
-        value: number | LmsLessonProgress;
-      } | null)
-    | ({
-        relationTo: 'lms-assessments';
-        value: number | LmsAssessment;
-      } | null)
-    | ({
-        relationTo: 'lms-submissions';
-        value: number | LmsSubmission;
-      } | null)
-    | ({
-        relationTo: 'portfolios';
-        value: number | Portfolio;
-      } | null)
-    | ({
-        relationTo: 'certificates';
-        value: number | Certificate;
-      } | null)
-    | ({
-        relationTo: 'audit-events';
-        value: number | AuditEvent;
-      } | null)
-    | ({
-        relationTo: 'member-notes';
-        value: number | MemberNote;
-      } | null)
-    | ({
-        relationTo: 'event-registrations';
-        value: number | EventRegistration;
-      } | null)
-    | ({
-        relationTo: 'payments';
-        value: number | Payment;
-      } | null)
-    | ({
-        relationTo: 'ai-usage-records';
-        value: number | AiUsageRecord;
-      } | null)
-    | ({
-        relationTo: 'ai-feedback';
-        value: number | AiFeedback;
-      } | null)
-    | ({
-        relationTo: 'ai-knowledge-sources';
-        value: number | AiKnowledgeSource;
-      } | null)
-    | ({
-        relationTo: 'ai-drafts';
-        value: number | AiDraft;
-      } | null)
-    | ({
-        relationTo: 'ai-career-states';
-        value: number | AiCareerState;
-      } | null)
-    | ({
-        relationTo: 'media';
-        value: number | Media;
-      } | null)
-    | ({
-        relationTo: 'posts';
-        value: number | Post;
-      } | null)
-    | ({
-        relationTo: 'courses';
-        value: number | Course;
-      } | null)
-    | ({
-        relationTo: 'events';
-        value: number | Event;
-      } | null)
-    | ({
-        relationTo: 'stories';
-        value: number | Story;
-      } | null)
-    | ({
-        relationTo: 'resources';
-        value: number | Resource;
-      } | null);
-  globalSlug?: string | null;
-  user:
-    | {
-        relationTo: 'users';
-        value: number | User;
-      }
-    | {
-        relationTo: 'members';
-        value: number | Member;
-      };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
@@ -1883,6 +1826,73 @@ export interface LmsLessonProgressSelect<T extends boolean = true> {
   lesson?: T;
   status?: T;
   completedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lms-sessions_select".
+ */
+export interface LmsSessionsSelect<T extends boolean = true> {
+  course?: T;
+  title?: T;
+  summary?: T;
+  sessionAt?: T;
+  durationMinutes?: T;
+  joinUrl?: T;
+  recordingUrl?: T;
+  resources?:
+    | T
+    | {
+        label?: T;
+        file?: T;
+        id?: T;
+      };
+  order?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lms-attendance_select".
+ */
+export interface LmsAttendanceSelect<T extends boolean = true> {
+  session?: T;
+  course?: T;
+  member?: T;
+  status?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lms-announcements_select".
+ */
+export interface LmsAnnouncementsSelect<T extends boolean = true> {
+  course?: T;
+  title?: T;
+  body?: T;
+  pinned?: T;
+  author?: T;
+  publishedAt?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "lms-discussion-posts_select".
+ */
+export interface LmsDiscussionPostsSelect<T extends boolean = true> {
+  course?: T;
+  body?: T;
+  authorMember?: T;
+  authorStaff?: T;
+  authorName?: T;
+  authorRole?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2348,17 +2358,6 @@ export interface ResourcesSelect<T extends boolean = true> {
 export interface PayloadKvSelect<T extends boolean = true> {
   key?: T;
   data?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-locked-documents_select".
- */
-export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
-  document?: T;
-  globalSlug?: T;
-  user?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -24,14 +24,30 @@ function readCurriculumCueUnseen() {
   return curriculumCueUnseen;
 }
 
-const PRIMARY_TABS = [
+const SELF_PACED_PRIMARY = [
   ["overview", "Overview"],
   ["curriculum", "Curriculum"],
   ["assessments", "Assessments"],
   ["settings", "Settings"],
 ] as const;
 
-const MORE_TABS = [
+const COHORT_PRIMARY = [
+  ["overview", "Overview"],
+  ["sessions", "Sessions"],
+  ["announcements", "Announcements"],
+  ["assessments", "Assessments"],
+  ["settings", "Settings"],
+] as const;
+
+const SELF_PACED_MORE = [
+  ["gradebook", "Gradebook"],
+  ["learners", "Learners"],
+  ["analytics", "Analytics"],
+  ["ai-content-studio", "AI Studio"],
+] as const;
+
+const COHORT_MORE = [
+  ["curriculum", "Curriculum"],
   ["gradebook", "Gradebook"],
   ["learners", "Learners"],
   ["analytics", "Analytics"],
@@ -67,12 +83,16 @@ export function LearningTabNav({
   activeTab,
   studioEnabled,
   highlightCurriculum,
+  cohort,
 }: {
   base: string;
   activeTab: string;
   studioEnabled: boolean;
   highlightCurriculum?: boolean;
+  cohort?: boolean;
 }) {
+  const PRIMARY_TABS = cohort ? COHORT_PRIMARY : SELF_PACED_PRIMARY;
+  const MORE_TABS = cohort ? COHORT_MORE : SELF_PACED_MORE;
   const [moreOpen, setMoreOpen] = useState(
     MORE_TABS.some(([key]) => key === activeTab) || (studioEnabled && activeTab === "ai-content-studio"),
   );

@@ -31,15 +31,34 @@ export async function getCourses(): Promise<CourseItem[]> {
   return loadPublicList(async () => {
     const { getPayloadClient } = await import("@/lib/payload");
     const payload = await getPayloadClient();
-    const result = await payload.find({
-      collection: "lms-courses",
-      depth: 1,
-      limit: 50,
-      sort: "order",
-      overrideAccess: true,
-      where: { status: { equals: "published" } },
-    });
-    return result.docs.map((doc): CourseItem => {
+    const [result, lessonResult] = await Promise.all([
+      payload.find({
+        collection: "lms-courses",
+        depth: 1,
+        limit: 50,
+        sort: "order",
+        overrideAccess: true,
+        where: { status: { equals: "published" } },
+      }),
+      payload.find({
+        collection: "lms-lessons",
+        depth: 0,
+        limit: 2000,
+        overrideAccess: true,
+        where: { status: { equals: "published" } },
+      }),
+    ]);
+    const lessonCounts = new Map<string, number>();
+    for (const lesson of lessonResult.docs) {
+      const courseRef = (lesson as { course?: unknown }).course;
+      const courseKey = String(courseRef && typeof courseRef === "object" && "id" in courseRef ? (courseRef as { id: unknown }).id : courseRef);
+      lessonCounts.set(courseKey, (lessonCounts.get(courseKey) || 0) + 1);
+    }
+    // The catalog at /programs/courses is the self-paced catalogue; live cohorts
+    // are sold through /programs/cohort, so exclude them here.
+    return result.docs
+      .filter((doc) => (doc as { delivery?: string | null }).delivery !== "cohort")
+      .map((doc): CourseItem => {
       const confirmed = Boolean(doc.priceConfirmed);
       const amount = typeof doc.amount === "number" ? doc.amount : null;
       const price = !confirmed
@@ -55,7 +74,7 @@ export async function getCourses(): Promise<CourseItem[]> {
           .map((item) => item.outcome)
           .filter((item): item is string => Boolean(item)),
         duration: pickString(doc.duration, doc.estimatedHours ? `${doc.estimatedHours} hours` : ""),
-        lessons: 0,
+        lessons: lessonCounts.get(String(doc.id)) || 0,
         price,
         selarUrl: "",
         id: doc.id,

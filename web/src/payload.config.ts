@@ -25,6 +25,10 @@ import { LmsCourses } from "./collections/LmsCourses";
 import { LmsModules } from "./collections/LmsModules";
 import { LmsLessons } from "./collections/LmsLessons";
 import { LmsLessonProgress } from "./collections/LmsLessonProgress";
+import { LmsSessions } from "./collections/LmsSessions";
+import { LmsAttendance } from "./collections/LmsAttendance";
+import { LmsAnnouncements } from "./collections/LmsAnnouncements";
+import { LmsDiscussionPosts } from "./collections/LmsDiscussionPosts";
 import { LmsAssessments } from "./collections/LmsAssessments";
 import { LmsSubmissions } from "./collections/LmsSubmissions";
 import { Portfolios } from "./collections/Portfolios";
@@ -121,6 +125,10 @@ export default buildConfig({
     LmsModules,
     LmsLessons,
     LmsLessonProgress,
+    LmsSessions,
+    LmsAttendance,
+    LmsAnnouncements,
+    LmsDiscussionPosts,
     LmsAssessments,
     LmsSubmissions,
     Portfolios,
