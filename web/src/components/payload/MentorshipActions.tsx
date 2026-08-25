@@ -21,6 +21,38 @@ type PendingAction =
   | { kind: "request"; status: string }
   | null;
 
+function ReasonField({
+  label,
+  value,
+  minChars,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  minChars: number;
+  onChange: (value: string) => void;
+}) {
+  const remaining = Math.max(0, minChars - value.trim().length);
+  return (
+    <label className="block text-sm text-white/70">
+      {label}
+      <textarea
+        className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
+        rows={3}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        minLength={minChars}
+        required
+      />
+      <span className="mt-1 block text-xs text-white/40">
+        {remaining
+          ? `${remaining} more character${remaining === 1 ? "" : "s"} needed`
+          : "Ready to send"}
+      </span>
+    </label>
+  );
+}
+
 export function MentorDecision({ mentorId }: { mentorId: string | number }) {
   const router = useRouter();
   const toast = useToast();
@@ -32,7 +64,7 @@ export function MentorDecision({ mentorId }: { mentorId: string | number }) {
   async function confirm() {
     if (!pending || pending.kind !== "mentor") return;
     if (pending.decision === "rejected" && reason.trim().length < 10) {
-      setError("Provide at least 10 characters explaining the rejection.");
+      setError("Write at least 10 characters so the applicant knows why.");
       return;
     }
     setBusy(true);
@@ -59,12 +91,20 @@ export function MentorDecision({ mentorId }: { mentorId: string | number }) {
 
   return (
     <div className="smn-ops-actions">
-      <button disabled={busy} onClick={() => setPending({ kind: "mentor", decision: "approved" })} type="button">
+      <button
+        disabled={busy}
+        onClick={() => {
+          setError("");
+          setPending({ kind: "mentor", decision: "approved" });
+        }}
+        type="button"
+      >
         Approve
       </button>
       <button
         disabled={busy}
         onClick={() => {
+          setError("");
           setReason("");
           setPending({ kind: "mentor", decision: "rejected" });
         }}
@@ -72,33 +112,35 @@ export function MentorDecision({ mentorId }: { mentorId: string | number }) {
       >
         Reject
       </button>
-      {error ? <span role="alert">{error}</span> : null}
       <ConfirmDialog
         open={Boolean(pending && pending.kind === "mentor")}
         title={pending?.kind === "mentor" && pending.decision === "approved" ? "Approve mentor?" : "Reject mentor application?"}
         description={
           pending?.kind === "mentor" && pending.decision === "approved"
             ? "The applicant will be marked as an approved mentor."
-            : "Explain the decision so the applicant understands what to improve."
+            : "This note is emailed to the applicant. Be specific about what to improve."
         }
         confirmLabel={pending?.kind === "mentor" && pending.decision === "approved" ? "Approve" : "Reject"}
         destructive={pending?.kind === "mentor" && pending.decision === "rejected"}
         busy={busy}
-        onClose={() => !busy && setPending(null)}
+        error={error}
+        onClose={() => {
+          if (busy) return;
+          setPending(null);
+          setError("");
+        }}
         onConfirm={confirm}
       >
         {pending?.kind === "mentor" && pending.decision === "rejected" ? (
-          <label className="block text-sm text-white/70">
-            Rejection reason
-            <textarea
-              className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
-              rows={3}
-              value={reason}
-              onChange={(event) => setReason(event.target.value)}
-              minLength={10}
-              required
-            />
-          </label>
+          <ReasonField
+            label="Rejection reason"
+            value={reason}
+            minChars={10}
+            onChange={(value) => {
+              setReason(value);
+              if (error) setError("");
+            }}
+          />
         ) : null}
       </ConfirmDialog>
     </div>
@@ -116,7 +158,7 @@ export function RequestTransition({ requestId, current }: { requestId: string | 
   async function confirm() {
     if (!pending) return;
     if (pending === "declined" && reason.trim().length < 10) {
-      setError("Provide at least 10 characters explaining the decline.");
+      setError("Write at least 10 characters explaining the decline.");
       return;
     }
     setBusy(true);
@@ -143,18 +185,19 @@ export function RequestTransition({ requestId, current }: { requestId: string | 
 
   return (
     <div className="smn-ops-actions">
-      <button disabled={busy || current === "reviewing"} onClick={() => setPending("reviewing")} type="button">
+      <button disabled={busy || current === "reviewing"} onClick={() => { setError(""); setPending("reviewing"); }} type="button">
         Review
       </button>
-      <button disabled={busy || current === "introduced"} onClick={() => setPending("introduced")} type="button">
+      <button disabled={busy || current === "introduced"} onClick={() => { setError(""); setPending("introduced"); }} type="button">
         Introduce
       </button>
-      <button disabled={busy || current === "completed"} onClick={() => setPending("completed")} type="button">
+      <button disabled={busy || current === "completed"} onClick={() => { setError(""); setPending("completed"); }} type="button">
         Complete
       </button>
       <button
         disabled={busy || current === "declined"}
         onClick={() => {
+          setError("");
           setReason("");
           setPending("declined");
         }}
@@ -162,7 +205,6 @@ export function RequestTransition({ requestId, current }: { requestId: string | 
       >
         Decline
       </button>
-      {error ? <span role="alert">{error}</span> : null}
       <ConfirmDialog
         open={Boolean(pending)}
         title={`Move request to ${pending}?`}
@@ -170,20 +212,24 @@ export function RequestTransition({ requestId, current }: { requestId: string | 
         confirmLabel="Update status"
         destructive={pending === "declined"}
         busy={busy}
-        onClose={() => !busy && setPending(null)}
+        error={error}
+        onClose={() => {
+          if (busy) return;
+          setPending(null);
+          setError("");
+        }}
         onConfirm={confirm}
       >
         {pending === "declined" ? (
-          <label className="block text-sm text-white/70">
-            Decline reason
-            <textarea
-              className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
-              rows={3}
-              value={reason}
-              onChange={(event) => setReason(event.target.value)}
-              minLength={10}
-            />
-          </label>
+          <ReasonField
+            label="Decline reason"
+            value={reason}
+            minChars={10}
+            onChange={(value) => {
+              setReason(value);
+              if (error) setError("");
+            }}
+          />
         ) : null}
       </ConfirmDialog>
     </div>
