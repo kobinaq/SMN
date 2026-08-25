@@ -68,10 +68,10 @@ export function PortalShell({
   }
 
   return (
-    <div className="flex h-svh overflow-hidden bg-near-black">
+    <div className="flex h-svh overflow-hidden bg-canvas">
       <div
         className={cn(
-          "hidden h-full shrink-0 self-stretch overflow-hidden border-r border-white/10 md:block",
+          "hidden h-full shrink-0 self-stretch overflow-hidden border-r border-edge-subtle md:block",
           "transition-[width,opacity] duration-[320ms] ease-[cubic-bezier(0.32,0.72,0,1)]",
           sidebarOpen ? "w-[260px] opacity-100" : "pointer-events-none w-0 border-none opacity-0",
         )}
@@ -84,7 +84,7 @@ export function PortalShell({
           homeHref={homeHref}
           loggingOut={loggingOut}
           onLogout={logout}
-          className="w-[260px] border-none bg-surface/90"
+          className="w-[260px] border-none bg-raised"
         />
       </div>
 
@@ -92,7 +92,7 @@ export function PortalShell({
         <div className="fixed inset-0 z-50 md:hidden">
           <button
             type="button"
-            className="absolute inset-0 bg-near-black/60 backdrop-blur-md animate-[staff-fade-in_200ms_cubic-bezier(0.32,0.72,0,1)_both]"
+            className="absolute inset-0 bg-canvas/70 backdrop-blur-md animate-[staff-fade-in_200ms_var(--ease-out)_both]"
             aria-label="Close navigation"
             onClick={() => setMobileOpen(false)}
           />
@@ -111,11 +111,11 @@ export function PortalShell({
       ) : null}
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-        <header className="z-40 flex h-14 shrink-0 items-center justify-between gap-3 border-b border-white/10 bg-near-black/90 px-4 backdrop-blur-md sm:px-6">
+        <header className="z-40 flex h-14 shrink-0 items-center justify-between gap-3 border-b border-edge-subtle bg-canvas/85 px-4 backdrop-blur-xl sm:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <button
               type="button"
-              className="hidden min-h-11 min-w-11 items-center justify-center rounded-md p-1.5 text-white/50 transition hover:bg-white/5 hover:text-white md:inline-flex"
+              className="hidden min-h-11 min-w-11 items-center justify-center rounded-[var(--radius-sm)] p-1.5 text-text-3 transition-colors hover:bg-inset hover:text-text-1 md:inline-flex"
               aria-label={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
               onClick={() => setSidebarOpen((value) => !value)}
             >
@@ -127,16 +127,16 @@ export function PortalShell({
             </button>
             <button
               type="button"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-md border border-white/15 text-white transition hover:bg-white/5 md:hidden"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-[var(--radius-sm)] border border-edge text-text-1 transition-colors hover:bg-inset md:hidden"
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               onClick={() => setMobileOpen((value) => !value)}
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
-            <div className="flex min-w-0 items-center gap-2 text-sm text-white/45">
+            <div className="flex min-w-0 items-center gap-2 text-sm text-text-3">
               <span className="truncate">{portalLabel}</span>
-              <span className="text-white/25">/</span>
-              <span className="truncate font-medium text-white">{activeTitle}</span>
+              <span className="text-text-3/50">/</span>
+              <span className="truncate font-medium text-text-1">{activeTitle}</span>
             </div>
           </div>
         </header>

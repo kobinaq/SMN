@@ -2,13 +2,17 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { ComponentProps, ReactNode } from "react";
 
-type Variant = "primary" | "secondary" | "ghost" | "light";
+type Variant = "primary" | "secondary" | "ghost" | "light" | "ai" | "danger";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-deep-blue text-white hover:bg-[#0c3ab0]",
-  secondary: "bg-white/10 text-white border border-white/15 hover:bg-white/15",
-  ghost: "bg-transparent text-white hover:bg-white/10 border border-transparent",
+  // Accent-strong rather than deep-blue: the old primary sat too close to the
+  // dark ground to read as the obvious action on a page.
+  primary: "bg-accent-strong text-[#08111f] hover:bg-accent shadow-[var(--shadow-1)]",
+  secondary: "bg-inset text-text-1 border border-edge hover:border-edge-strong",
+  ghost: "bg-transparent text-text-2 border border-transparent hover:bg-inset hover:text-text-1",
   light: "bg-white text-near-black hover:bg-off-white",
+  ai: "bg-ai text-[#07160f] hover:bg-ai-strong shadow-[var(--shadow-1)]",
+  danger: "bg-transparent text-danger border border-danger/35 hover:bg-danger-bg",
 };
 
 type Common = {
@@ -36,9 +40,11 @@ export function Button({
   ...props
 }: ButtonAsButton | ButtonAsLink) {
   const classes = cn(
-    "inline-flex min-h-10 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium tracking-wide transition duration-300 sm:min-h-0 sm:px-6 sm:py-3",
-    "touch-manipulation select-none active:scale-[0.97]",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-baby-blue",
+    "inline-flex min-h-10 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold tracking-wide",
+    "transition-[background,border-color,transform,box-shadow] duration-[var(--dur-fast)] ease-[var(--ease-out)]",
+    "touch-manipulation select-none active:scale-[0.97] motion-reduce:active:scale-100",
+    "disabled:pointer-events-none disabled:opacity-40",
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
     variants[variant],
     className,
   );

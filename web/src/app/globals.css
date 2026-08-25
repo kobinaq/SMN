@@ -15,6 +15,56 @@
   --header-h: 4rem;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-top: env(safe-area-inset-top, 0px);
+
+  /* Elevation ladder. Each step is a deliberate layer: page ground, resting
+     card, inset/hover, then anything that floats above the page. Using these
+     instead of one flat surface is what makes panels read as raised. */
+  --canvas: #0a0c10;
+  --raised: #12151c;
+  --inset: #171b23;
+  --overlay: #1b202b;
+
+  /* Borders: subtle for resting dividers, base for interactive edges,
+     strong only on hover/focus so emphasis has somewhere to go. */
+  --edge-subtle: rgba(255, 255, 255, 0.07);
+  --edge: rgba(255, 255, 255, 0.13);
+  --edge-strong: rgba(255, 255, 255, 0.24);
+
+  /* Text ramp — three weights of attention, not arbitrary opacities. */
+  --text-1: #f4f6fb;
+  --text-2: rgba(244, 246, 251, 0.66);
+  --text-3: rgba(244, 246, 251, 0.4);
+
+  /* One job per color. Accent = interactive. AI = assistant surfaces and
+     success. Warn = needs attention. Danger = destructive/error. Keeping
+     these disjoint is what stops "AI is thinking" reading like "succeeded". */
+  --accent: #7eb6ff;
+  --accent-strong: #4f8ff0;
+  --accent-bg: rgba(126, 182, 255, 0.12);
+  --ai: #6fcfb0;
+  --ai-strong: #49b592;
+  --ai-bg: rgba(111, 207, 176, 0.12);
+  --warn: #e3a13f;
+  --warn-bg: rgba(227, 161, 63, 0.12);
+  --danger: #ef7a6f;
+  --danger-bg: rgba(239, 122, 111, 0.12);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 12px 32px -12px rgba(0, 0, 0, 0.55);
+  --shadow-3: 0 24px 64px -20px rgba(0, 0, 0, 0.65);
+
+  /* Motion. A single easing curve used everywhere is most of what makes an
+     interface feel considered rather than twitchy. */
+  --ease-out: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 140ms;
+  --dur-base: 220ms;
+  --dur-slow: 320ms;
 }
 
 @theme inline {
@@ -29,8 +79,43 @@
   --color-off-white: var(--off-white);
   --color-line: var(--line);
   --color-white: var(--white);
+
+  --color-canvas: var(--canvas);
+  --color-raised: var(--raised);
+  --color-inset: var(--inset);
+  --color-overlay: var(--overlay);
+  --color-edge-subtle: var(--edge-subtle);
+  --color-edge: var(--edge);
+  --color-edge-strong: var(--edge-strong);
+  --color-text-1: var(--text-1);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-bg: var(--accent-bg);
+  --color-ai: var(--ai);
+  --color-ai-strong: var(--ai-strong);
+  --color-ai-bg: var(--ai-bg);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --shadow-e1: var(--shadow-1);
+  --shadow-e2: var(--shadow-2);
+  --shadow-e3: var(--shadow-3);
+
+  --ease-out: var(--ease-out);
+  --ease-spring: var(--ease-spring);
+
   --font-display: var(--font-league-spartan);
   --font-sans: var(--font-inter);
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 @media (min-width: 768px) {
@@ -104,6 +189,53 @@ h4,
 
 .text-balance {
   text-wrap: balance;
+}
+
+/* Data figures: Inter's tabular numerals keep columns of numbers aligned and
+   stop percentages jittering as they change. Applied to any number the reader
+   compares or watches update — stats, progress, prices, timers. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Small uppercase section labels. Consolidated here because the same
+   three declarations were being repeated inline across every panel. */
+.eyebrow {
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Staggered entrance for lists/grids. Children fade up in sequence, which
+   reads as the page assembling rather than snapping in. Index is set per item
+   via --i; anything past the 8th lands together to avoid a slow trickle. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: rise-in var(--dur-slow) var(--ease-out) both;
+}
+
+.rise-stagger > * {
+  animation: rise-in var(--dur-slow) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .rise-stagger > * {
+    animation: none;
+  }
 }
 
 @keyframes staff-fade-in {

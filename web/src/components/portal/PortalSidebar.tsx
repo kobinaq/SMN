@@ -47,10 +47,11 @@ function NavItem({
         <button
           type="button"
           className={cn(
-            "group flex w-full cursor-pointer items-center justify-between rounded-[6px] px-2.5 py-[7px] transition-all duration-200 select-none",
+            "group flex w-full cursor-pointer items-center justify-between rounded-[var(--radius-sm)] px-2.5 py-2 select-none",
+            "transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)]",
             childActive
-              ? "bg-white/10 font-medium text-white"
-              : "text-white/50 hover:bg-white/5 hover:text-white/90",
+              ? "bg-inset font-medium text-text-1"
+              : "text-text-2 hover:bg-inset hover:text-text-1",
           )}
           style={{ paddingLeft: `${level * 12 + 10}px` }}
           onClick={() => setIsOpen((value) => !value)}
@@ -60,7 +61,7 @@ function NavItem({
             <item.icon
               className={cn(
                 "h-4 w-4 transition-colors",
-                childActive ? "text-white" : "text-white/40 group-hover:text-white/70",
+                childActive ? "text-text-1" : "text-text-3 group-hover:text-text-2",
               )}
               strokeWidth={1.5}
             />
@@ -68,13 +69,13 @@ function NavItem({
           </div>
           <div className="flex items-center gap-2">
             {item.badge ? (
-              <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-baby-blue/15 px-1.5 text-[10px] font-medium text-baby-blue">
+              <span className="tnum flex h-5 min-w-[20px] items-center justify-center rounded-full bg-accent-bg px-1.5 text-[10px] font-semibold text-accent">
                 {item.badge > 99 ? "99+" : item.badge}
               </span>
             ) : null}
             <ChevronRight
               className={cn(
-                "h-3.5 w-3.5 text-white/35 transition-transform duration-200",
+                "h-3.5 w-3.5 text-text-3 transition-transform duration-[var(--dur-base)] ease-[var(--ease-out)]",
                 isOpen && "rotate-90",
               )}
               strokeWidth={2}
@@ -89,7 +90,7 @@ function NavItem({
         >
           <div className="relative mt-0.5 flex min-h-0 flex-col gap-0.5 overflow-hidden">
             <div
-              className="absolute top-0 bottom-0 border-l border-white/5"
+              className="absolute top-0 bottom-0 border-l border-edge-subtle"
               style={{ left: `${level * 12 + 17.5}px` }}
             />
             {item.children!.map((child) => (
@@ -112,29 +113,29 @@ function NavItem({
       href={item.href}
       onClick={onNavigate}
       className={cn(
-        "group relative flex min-h-11 items-center justify-between rounded-[8px] px-2.5 py-[7px] transition-all duration-200 select-none md:min-h-0",
-        "ease-[cubic-bezier(0.32,0.72,0,1)]",
+        "group relative flex min-h-11 items-center justify-between rounded-[var(--radius-sm)] px-2.5 py-2 select-none md:min-h-0",
+        "transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)]",
         active
-          ? "bg-white/[.08] font-medium text-white"
-          : "text-white/50 hover:bg-white/5 hover:text-white/90",
+          ? "bg-accent-bg font-medium text-text-1"
+          : "text-text-2 hover:bg-inset hover:text-text-1",
       )}
       style={{ paddingLeft: `${level * 12 + 10}px` }}
     >
       {active ? (
-        <span className="absolute top-1/2 left-0 h-4 w-[2px] -translate-y-1/2 rounded-full bg-baby-blue" aria-hidden />
+        <span className="absolute top-1/2 left-0 h-4 w-[2px] -translate-y-1/2 rounded-full bg-accent" aria-hidden />
       ) : null}
       <div className="flex items-center gap-2.5">
         <item.icon
           className={cn(
             "h-4 w-4 transition-colors",
-            active ? "text-baby-blue" : "text-white/40 group-hover:text-white/70",
+            active ? "text-accent" : "text-text-3 group-hover:text-text-2",
           )}
           strokeWidth={1.5}
         />
         <span className="truncate text-[13px] tracking-wide">{item.label}</span>
       </div>
       {item.badge ? (
-        <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-baby-blue/15 px-1.5 text-[10px] font-medium text-baby-blue">
+        <span className="tnum flex h-5 min-w-[20px] items-center justify-center rounded-full bg-accent-bg px-1.5 text-[10px] font-semibold text-accent">
           {item.badge > 99 ? "99+" : item.badge}
         </span>
       ) : null}
@@ -170,7 +171,7 @@ export function PortalSidebar({
   return (
     <aside
       className={cn(
-        "flex h-full max-h-full w-[260px] flex-col border-r border-white/10 bg-surface/90 p-3 font-sans backdrop-blur-md",
+        "flex h-full max-h-full w-[260px] flex-col border-r border-edge-subtle bg-raised p-3 font-sans",
         className,
       )}
     >
@@ -179,18 +180,18 @@ export function PortalSidebar({
           href={homeHref}
           onClick={onNavigate}
           aria-label={`SMN ${portalLabel.toLowerCase()} home`}
-          className="flex min-w-0 items-center gap-3 rounded-md transition hover:bg-white/5"
+          className="flex min-w-0 items-center gap-3 rounded-[var(--radius-sm)] p-1 transition-colors hover:bg-inset"
         >
           <BrandLogo width={96} height={24} className="h-5 shrink-0 sm:h-6" />
           <div className="flex min-w-0 flex-col overflow-hidden">
-            <span className="truncate text-[13px] font-medium leading-none text-white">{portalLabel}</span>
-            <span className="mt-1 truncate text-[11px] leading-none text-white/40">portal</span>
+            <span className="truncate text-[13px] font-medium leading-none text-text-1">{portalLabel}</span>
+            <span className="mt-1 truncate text-[11px] leading-none text-text-3">portal</span>
           </div>
         </Link>
       </div>
 
-      <div className="mb-3 flex shrink-0 items-center gap-2.5 rounded-lg border border-white/10 bg-white/[.03] px-2.5 py-2">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[6px] bg-baby-blue/15 text-[13px] font-semibold text-baby-blue ring-1 ring-inset ring-baby-blue/20">
+      <div className="mb-3 flex shrink-0 items-center gap-2.5 rounded-[var(--radius-md)] border border-edge-subtle bg-inset px-2.5 py-2">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[var(--radius-sm)] bg-accent-bg text-[13px] font-semibold text-accent">
           {identity.avatarUrl ? (
             <img src={identity.avatarUrl} alt="" className="h-full w-full object-cover" />
           ) : (
@@ -198,9 +199,9 @@ export function PortalSidebar({
           )}
         </span>
         <div className="flex min-w-0 flex-col overflow-hidden">
-          <span className="truncate text-[13px] font-medium leading-none text-white">{identity.name}</span>
+          <span className="truncate text-[13px] font-medium leading-none text-text-1">{identity.name}</span>
           {identity.subtitle ? (
-            <span className="mt-1 truncate text-[11px] leading-none text-white/40">{identity.subtitle}</span>
+            <span className="mt-1 truncate text-[11px] leading-none text-text-3">{identity.subtitle}</span>
           ) : null}
         </div>
       </div>
@@ -209,7 +210,7 @@ export function PortalSidebar({
         {groups.map((group, idx) => (
           <div key={group.heading ?? idx} className="flex flex-col gap-0.5">
             {group.heading ? (
-              <span className="mb-1 px-2.5 text-[11px] font-semibold tracking-wider text-white/35 uppercase">
+              <span className="eyebrow mb-1.5 px-2.5 text-text-3">
                 {group.heading}
               </span>
             ) : null}
@@ -225,14 +226,14 @@ export function PortalSidebar({
         ))}
       </div>
 
-      <div className="mt-auto flex shrink-0 flex-col gap-0.5 border-t border-white/10 pt-4">
+      <div className="mt-auto flex shrink-0 flex-col gap-0.5 border-t border-edge-subtle pt-4">
         {variant === "staff" ? (
           <Link
             href="/"
             onClick={onNavigate}
-            className="group flex items-center gap-2.5 rounded-[6px] px-2.5 py-[7px] text-white/50 transition hover:bg-white/5 hover:text-white/90"
+            className="group flex items-center gap-2.5 rounded-[var(--radius-sm)] px-2.5 py-2 text-text-2 transition-colors hover:bg-inset hover:text-text-1"
           >
-            <Globe className="h-4 w-4 text-white/40 group-hover:text-white/70" strokeWidth={1.5} />
+            <Globe className="h-4 w-4 text-text-3 group-hover:text-text-2" strokeWidth={1.5} />
             <span className="text-[13px] tracking-wide">Public website</span>
           </Link>
         ) : null}
@@ -240,9 +241,9 @@ export function PortalSidebar({
           type="button"
           onClick={onLogout}
           disabled={loggingOut}
-          className="group flex items-center gap-2.5 rounded-[6px] px-2.5 py-[7px] text-left text-white/50 transition hover:bg-white/5 hover:text-white/90 disabled:opacity-60"
+          className="group flex items-center gap-2.5 rounded-[var(--radius-sm)] px-2.5 py-2 text-left text-text-2 transition-colors hover:bg-inset hover:text-text-1 disabled:opacity-60"
         >
-          <LogOut className="h-4 w-4 text-white/40 group-hover:text-white/70" strokeWidth={1.5} />
+          <LogOut className="h-4 w-4 text-text-3 group-hover:text-text-2" strokeWidth={1.5} />
           <span className="text-[13px] tracking-wide">{loggingOut ? "…" : logoutLabel}</span>
         </button>
       </div>

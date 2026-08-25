@@ -1,13 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Copy, ListPlus, Lock, Sparkles } from "@/components/ui/icons";
+import { useMemo, useState } from "react";
+import { ListPlus, Lock } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
-import { AiMarkdown } from "@/components/ui/AiMarkdown";
+import { Card, Eyebrow } from "@/components/ui/Surface";
+import { Input, Textarea } from "@/components/ui/Field";
+import { Chip } from "@/components/ui/Chip";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { useToast } from "@/components/ui/Toast";
-import { cn } from "@/lib/utils";
+import {
+  AiComposer,
+  AiFeedback,
+  AiHeader,
+  AiSuggestions,
+  AiThread,
+  type AiMessage,
+} from "@/components/ai/AiPanel";
 
 type Match = {
   id: string | number;
@@ -37,11 +46,8 @@ type Snapshot = {
   state: { goalSummary?: string | null; confirmedPlan?: unknown } | null;
 };
 
-type Conversation = { role: "member" | "coach"; content: string; offerAsPlan?: boolean };
-
-const panel = "rounded-2xl border border-white/10 bg-surface p-4 sm:p-5";
-const input =
-  "w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white placeholder:text-white/30";
+/** Coach replies that contain a step list can be pushed into the plan checklist. */
+type CoachMessage = AiMessage & { offerAsPlan?: boolean };
 
 function planToLines(value: unknown): string[] {
   if (typeof value === "string") {
@@ -97,11 +103,10 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
   const [planItems, setPlanItems] = useState<string[]>(() => planToLines(initial.state?.confirmedPlan));
   const [newPlanItem, setNewPlanItem] = useState("");
   const [question, setQuestion] = useState("");
-  const [conversation, setConversation] = useState<Conversation[]>([]);
+  const [conversation, setConversation] = useState<CoachMessage[]>([]);
   const [busy, setBusy] = useState("");
   const [error, setError] = useState("");
   const [pendingClear, setPendingClear] = useState<null | { deleteUsage: boolean }>(null);
-  const threadRef = useRef<HTMLDivElement>(null);
   const toast = useToast();
 
   const topGaps = useMemo(() => {
@@ -129,12 +134,6 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
     return prompts.slice(0, 3);
   }, [topMatch, topGaps]);
 
-  useEffect(() => {
-    const node = threadRef.current;
-    if (!node) return;
-    node.scrollTop = node.scrollHeight;
-  }, [conversation, busy]);
-
   async function request(body: Record<string, unknown>) {
     const response = await fetch("/api/ai/career-coach", {
       method: "POST",
@@ -161,7 +160,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
       const answer = result.answer || "No explanation was returned.";
       setConversation((current) => [
         ...current,
-        { role: "coach", content: answer, offerAsPlan: extractPlanSteps(answer).length >= 2 },
+        { role: "assistant", content: answer, offerAsPlan: extractPlanSteps(answer).length >= 2 },
       ]);
       if (result.notice) toast.push(result.notice, "info");
     } catch (caught) {
@@ -183,7 +182,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
       const answer = result.answer || "No response was returned.";
       setConversation((current) => [
         ...current,
-        { role: "coach", content: answer, offerAsPlan: extractPlanSteps(answer).length >= 2 },
+        { role: "assistant", content: answer, offerAsPlan: extractPlanSteps(answer).length >= 2 },
       ]);
       if (result.notice) toast.push(result.notice, "info");
     } catch (caught) {
@@ -284,18 +283,17 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
   }
 
   return (
-    <div className="space-y-5 sm:space-y-6">
+    <div className="space-y-6">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <div className="flex items-center gap-2">
-            <p className="text-[10px] font-medium tracking-[0.22em] text-mint uppercase">Private AI workspace</p>
-            <span className="inline-flex items-center gap-1 rounded-full border border-mint/25 bg-mint/10 px-2 py-0.5 text-[10px] font-medium text-mint">
-              <Lock className="h-3 w-3" aria-hidden />
+          <div className="flex flex-wrap items-center gap-2">
+            <Eyebrow tone="ai">Private AI workspace</Eyebrow>
+            <Chip tone="ai" icon={<Lock className="h-3 w-3" aria-hidden />}>
               Private to you
-            </span>
+            </Chip>
           </div>
-          <h1 className="mt-2 font-display text-3xl text-white">Career Coach</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/55">
+          <h1 className="mt-2 font-display text-2xl text-text-1 sm:text-3xl">Career Coach</h1>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-2">
             Ask for practical next steps. Matches and gaps stay visible so guidance stays grounded in your profile —
             not hiring decisions.
           </p>
@@ -308,35 +306,35 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
       {error ? (
         <div
           aria-live="polite"
-          className="rounded-xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-200"
+          className="rounded-[var(--radius-md)] bg-danger-bg px-4 py-3 text-sm text-danger"
           role="alert"
         >
           {error}
         </div>
       ) : null}
 
-      <div className="grid gap-5 lg:grid-cols-[minmax(280px,360px)_minmax(0,1fr)] lg:items-start">
-        {/* Left rail */}
-        <aside className="space-y-4 lg:sticky lg:top-20">
-          <section className={panel}>
+      <div className="grid gap-5 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)] lg:items-start">
+        {/* Left rail — the grounding inputs the Coach reasons over */}
+        <aside className="rise-stagger space-y-4 lg:sticky lg:top-4">
+          <Card style={{ "--i": 0 } as React.CSSProperties}>
             <button
               type="button"
               className="flex w-full items-center justify-between gap-3 text-left"
               onClick={() => setGoalOpen((value) => !value)}
+              aria-expanded={goalOpen}
             >
               <div>
-                <p className="text-[10px] font-medium tracking-[0.18em] text-baby-blue uppercase">Your direction</p>
-                <h2 className="mt-1 font-display text-lg text-white">Goal</h2>
+                <Eyebrow>Your direction</Eyebrow>
+                <h2 className="mt-1 font-display text-lg text-text-1">Goal</h2>
               </div>
-              <span className="text-xs text-white/40">{goalOpen ? "Hide" : "Edit"}</span>
+              <span className="text-xs text-text-3">{goalOpen ? "Hide" : "Edit"}</span>
             </button>
             {!goalOpen && savedGoal ? (
-              <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-white/60">{savedGoal}</p>
+              <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-text-2">{savedGoal}</p>
             ) : null}
             {goalOpen ? (
               <div className="mt-3 space-y-3">
-                <textarea
-                  className={`${input} min-h-24 resize-y`}
+                <Textarea
                   maxLength={5000}
                   value={goal}
                   onChange={(event) => setGoal(event.target.value)}
@@ -347,37 +345,40 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
                 </Button>
               </div>
             ) : null}
-          </section>
+          </Card>
 
-          <section className={panel}>
+          <Card style={{ "--i": 1 } as React.CSSProperties}>
             <div className="flex items-end justify-between gap-3">
               <div>
-                <p className="text-[10px] font-medium tracking-[0.18em] text-baby-blue uppercase">Matches</p>
-                <h2 className="mt-1 font-display text-lg text-white">Top opportunities</h2>
+                <Eyebrow>Matches</Eyebrow>
+                <h2 className="mt-1 font-display text-lg text-text-1">Top opportunities</h2>
               </div>
-              <Link className="text-xs text-mint hover:underline" href="/app/opportunities">
+              <Link className="text-xs text-ai hover:underline" href="/app/opportunities">
                 View all
               </Link>
             </div>
-            <div className="mt-4 space-y-3">
+            <div className="mt-4 space-y-2">
               {initial.matches.slice(0, 4).map((match) => (
-                <article key={match.id} className="rounded-xl border border-white/10 bg-black/15 p-3">
+                <article
+                  key={match.id}
+                  className="rounded-[var(--radius-md)] border border-edge-subtle bg-inset p-3"
+                >
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <h3 className="truncate text-sm font-medium text-white">{match.title}</h3>
-                      <p className="truncate text-xs text-white/45">{match.company}</p>
+                      <h3 className="truncate text-sm font-medium text-text-1">{match.title}</h3>
+                      <p className="truncate text-xs text-text-3">{match.company}</p>
                     </div>
-                    <span className="shrink-0 rounded-full bg-baby-blue/10 px-2 py-0.5 text-[10px] text-baby-blue">
+                    <span className="tnum shrink-0 rounded-full bg-accent-bg px-2 py-0.5 text-xs font-medium text-accent">
                       {match.score}
                     </span>
                   </div>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <Link className="text-xs text-baby-blue hover:underline" href={`/app/opportunities/${match.slug}`}>
+                  <div className="mt-3 flex flex-wrap gap-3">
+                    <Link className="text-xs text-accent hover:underline" href={`/app/opportunities/${match.slug}`}>
                       Open
                     </Link>
                     <button
                       type="button"
-                      className="text-xs text-white/55 hover:text-white disabled:opacity-50"
+                      className="text-xs text-text-2 transition-colors hover:text-text-1 disabled:opacity-50"
                       disabled={busy === `match:${match.id}`}
                       onClick={() => void explain(match)}
                     >
@@ -387,40 +388,40 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
                 </article>
               ))}
               {!initial.matches.length ? (
-                <p className="text-sm text-white/45">No published opportunities to rank yet.</p>
+                <p className="text-sm text-text-3">No published opportunities to rank yet.</p>
               ) : null}
             </div>
-          </section>
+          </Card>
 
-          <section className={panel}>
-            <p className="text-[10px] font-medium tracking-[0.18em] text-baby-blue uppercase">Gaps</p>
-            <h2 className="mt-1 font-display text-lg text-white">Common skill gaps</h2>
+          <Card style={{ "--i": 2 } as React.CSSProperties}>
+            <Eyebrow>Gaps</Eyebrow>
+            <h2 className="mt-1 font-display text-lg text-text-1">Common skill gaps</h2>
             <div className="mt-3 flex flex-wrap gap-2">
               {topGaps.map((gap) => (
                 <button
                   key={gap}
                   type="button"
-                  className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-white/65 transition hover:border-baby-blue/40 hover:text-white"
                   onClick={() => void chat(`How do I close my gap around “${gap}” with concrete proof of work?`)}
+                  className="transition-transform duration-[var(--dur-fast)] hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
                 >
-                  {gap}
+                  <Chip tone="warn">{gap}</Chip>
                 </button>
               ))}
               {!topGaps.length ? (
-                <p className="text-sm text-white/45">Add skills and goals for stronger gap analysis.</p>
+                <p className="text-sm text-text-3">Add skills and goals for stronger gap analysis.</p>
               ) : null}
             </div>
-          </section>
+          </Card>
 
-          <section className={panel}>
-            <p className="text-[10px] font-medium tracking-[0.18em] text-baby-blue uppercase">Plan</p>
-            <h2 className="mt-1 font-display text-lg text-white">Action checklist</h2>
-            <ul className="mt-3 space-y-2">
+          <Card style={{ "--i": 3 } as React.CSSProperties}>
+            <Eyebrow>Plan</Eyebrow>
+            <h2 className="mt-1 font-display text-lg text-text-1">Action checklist</h2>
+            <ul className="mt-3 space-y-1.5">
               {planItems.map((item, index) => (
                 <li key={`${item}-${index}`} className="flex items-start gap-2">
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-mint/70" />
+                  <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-ai" />
                   <input
-                    className="min-w-0 flex-1 rounded-lg border border-transparent bg-transparent px-1 py-0.5 text-sm text-white/75 outline-none hover:border-white/10 focus:border-white/20"
+                    className="min-w-0 flex-1 rounded-[var(--radius-sm)] border border-transparent bg-transparent px-1.5 py-1 text-sm text-text-2 outline-none transition-colors hover:border-edge-subtle focus:border-accent focus:text-text-1"
                     value={item}
                     onChange={(event) =>
                       setPlanItems((current) =>
@@ -430,31 +431,29 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
                   />
                   <button
                     type="button"
-                    className="text-xs text-white/35 hover:text-red-200"
+                    className="mt-1 text-xs text-text-3 transition-colors hover:text-danger"
                     onClick={() => setPlanItems((current) => current.filter((_, lineIndex) => lineIndex !== index))}
                     aria-label="Remove plan item"
                   >
-                    ×
+                    ✕
                   </button>
                 </li>
               ))}
             </ul>
-            <div className="mt-3 flex gap-2">
-              <input
-                className={`${input} flex-1 py-2`}
-                value={newPlanItem}
-                onChange={(event) => setNewPlanItem(event.target.value)}
-                placeholder="Add a next step"
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    event.preventDefault();
-                    if (!newPlanItem.trim()) return;
-                    setPlanItems((current) => [...current, newPlanItem.trim()]);
-                    setNewPlanItem("");
-                  }
-                }}
-              />
-            </div>
+            <Input
+              className="mt-3"
+              value={newPlanItem}
+              onChange={(event) => setNewPlanItem(event.target.value)}
+              placeholder="Add a next step"
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  if (!newPlanItem.trim()) return;
+                  setPlanItems((current) => [...current, newPlanItem.trim()]);
+                  setNewPlanItem("");
+                }
+              }}
+            />
             <Button
               className="mt-3"
               type="button"
@@ -463,142 +462,81 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
             >
               {busy === "plan" ? "Saving…" : "Confirm and save plan"}
             </Button>
-          </section>
+          </Card>
         </aside>
 
-        {/* Chat workspace */}
-        <section className={`${panel} flex min-h-[70vh] flex-col lg:min-h-[calc(100svh-10rem)]`}>
-          <div className="border-b border-white/10 pb-4">
-            <p className="text-[10px] font-medium tracking-[0.18em] text-mint uppercase">Conversation</p>
-            <h2 className="mt-1 font-display text-xl text-white">Ask for practical guidance</h2>
-            <p className="mt-3 flex items-center gap-2 rounded-lg border border-mint/20 bg-mint/5 px-3 py-2 text-xs text-mint/90">
-              <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden />
-              Grounded in your profile · AI can be wrong — review before acting.
-            </p>
-          </div>
+        {/* Conversation — same shell the Tutor uses, mounted inline */}
+        <Card
+          padded={false}
+          className="flex min-h-[70vh] flex-col overflow-hidden lg:min-h-[calc(100svh-8rem)]"
+        >
+          <AiHeader
+            eyebrow="Conversation"
+            title="Ask for practical guidance"
+            grounding="Grounded in your profile · AI can be wrong — review before acting"
+          />
 
-          <div ref={threadRef} className="mt-4 flex-1 space-y-3 overflow-y-auto pr-1">
-            {!conversation.length ? (
-              <div className="space-y-3 py-2">
-                <div className="rounded-xl border border-white/10 bg-white/[.02] p-4">
-                  <p className="text-sm font-medium text-white">What the Coach can do</p>
-                  <p className="mt-1 text-sm leading-relaxed text-white/55">
+          <AiThread
+            messages={conversation.map((item) =>
+              item.role === "assistant" && item.offerAsPlan
+                ? {
+                    ...item,
+                    action: {
+                      label: "Add to plan",
+                      icon: <ListPlus className="h-3.5 w-3.5" aria-hidden />,
+                      onClick: () => addToPlan(item.content),
+                    },
+                  }
+                : item,
+            )}
+            busy={busy === "chat" || busy.startsWith("match:")}
+            onCopy={copyMessage}
+            empty={
+              <div className="space-y-4">
+                <div className="rounded-[var(--radius-md)] border border-edge-subtle bg-inset p-4">
+                  <p className="text-sm font-medium text-text-1">What the Coach can do</p>
+                  <p className="mt-1 text-sm leading-relaxed text-text-2">
                     Build preparation plans, close skill gaps with proof-of-work ideas, and prioritize profile
                     improvements — always tied to your real matches. It won’t make hiring decisions or guarantee
                     outcomes.
                   </p>
                 </div>
-                <p className="text-sm text-white/45">Start with a focused ask, or pick a prompt:</p>
-                <div className="grid gap-2">
-                  {starterPrompts.map((prompt) => (
-                    <button
-                      key={prompt}
-                      type="button"
-                      className="rounded-xl border border-white/10 bg-white/[.03] p-3 text-left text-sm text-white/70 transition hover:border-mint/40 hover:text-white"
-                      onClick={() => void chat(prompt)}
-                    >
-                      {prompt}
-                    </button>
-                  ))}
-                </div>
+                <AiSuggestions
+                  title="Start with a focused ask, or pick a prompt"
+                  suggestions={starterPrompts}
+                  onPick={(prompt) => void chat(prompt)}
+                />
               </div>
-            ) : null}
+            }
+          />
 
-            {conversation.map((item, index) => (
-              <div
-                key={`${item.role}-${index}`}
-                className={cn(
-                  "max-w-3xl rounded-xl p-4 text-sm leading-relaxed",
-                  item.role === "member"
-                    ? "ml-auto bg-deep-blue/35 text-white"
-                    : "border-l-2 border-mint/40 bg-white/[.04] text-white/70",
-                )}
-              >
-                <p className="mb-1 flex items-center gap-1.5 text-[10px] tracking-wider text-white/35 uppercase">
-                  {item.role === "coach" ? <Sparkles className="h-3 w-3 text-mint" aria-hidden /> : null}
-                  {item.role === "member" ? "You" : "Career Coach"}
-                </p>
-                {item.role === "coach" ? <AiMarkdown content={item.content} /> : <p className="whitespace-pre-wrap">{item.content}</p>}
-                {item.role === "coach" ? (
-                  <div className="mt-3 flex flex-wrap items-center gap-4 text-xs">
-                    {item.offerAsPlan ? (
-                      <button
-                        type="button"
-                        className="inline-flex items-center gap-1.5 text-mint transition hover:underline"
-                        onClick={() => addToPlan(item.content)}
-                      >
-                        <ListPlus className="h-3.5 w-3.5" aria-hidden />
-                        Add to plan
-                      </button>
-                    ) : null}
-                    <button
-                      type="button"
-                      className="inline-flex items-center gap-1.5 text-white/45 transition hover:text-white"
-                      onClick={() => void copyMessage(item.content)}
-                    >
-                      <Copy className="h-3.5 w-3.5" aria-hidden />
-                      Copy
-                    </button>
-                  </div>
-                ) : null}
-              </div>
-            ))}
-
-            {busy === "chat" || busy.startsWith("match:") ? (
-              <div className="max-w-md rounded-xl bg-white/[.04] p-4" aria-live="polite">
-                <div className="h-3 w-24 animate-pulse rounded bg-white/10" />
-                <div className="mt-3 h-3 w-full animate-pulse rounded bg-white/10" />
-                <div className="mt-2 h-3 w-[80%] animate-pulse rounded bg-white/10" />
-                <div className="mt-2 h-3 w-[65%] animate-pulse rounded bg-white/10" />
-              </div>
-            ) : null}
-          </div>
-
-          <div className="mt-4 border-t border-white/10 pt-4">
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <textarea
-                className={`${input} min-h-20 flex-1 resize-y`}
-                value={question}
-                maxLength={12000}
-                onChange={(event) => setQuestion(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" && !event.shiftKey) {
-                    event.preventDefault();
-                    void chat();
-                  }
-                }}
-                placeholder="Ask about a role, skill gap, portfolio, or next step…"
-              />
-              <Button type="button" onClick={() => void chat()} disabled={busy === "chat" || !question.trim()}>
-                {busy === "chat" ? "Thinking…" : "Ask Coach"}
-              </Button>
-            </div>
-            {conversation.some((item) => item.role === "coach") ? (
-              <div className="mt-3 flex items-center gap-3 text-xs text-white/45">
-                <span>Was this useful?</span>
-                <button type="button" onClick={() => void rate("helpful")} className="hover:text-mint">
-                  Yes
-                </button>
-                <button type="button" onClick={() => void rate("not-helpful")} className="hover:text-red-200">
-                  No
-                </button>
-              </div>
-            ) : null}
-          </div>
-        </section>
+          <AiComposer
+            value={question}
+            onChange={setQuestion}
+            onSubmit={() => void chat()}
+            busy={busy === "chat"}
+            submitLabel="Ask Coach"
+            placeholder="Ask about a role, skill gap, portfolio, or next step…"
+            footer={
+              conversation.some((item) => item.role === "assistant") ? (
+                <AiFeedback onRate={(rating) => void rate(rating)} />
+              ) : null
+            }
+          />
+        </Card>
       </div>
 
-      <footer className="rounded-xl border border-white/5 px-4 py-3 text-xs leading-relaxed text-white/40">
+      <footer className="rounded-[var(--radius-md)] border border-edge-subtle px-4 py-3 text-xs leading-relaxed text-text-3">
         <p>
           Only the minimum profile, learning, credential, portfolio, and opportunity context needed for your request is
           sent to the AI provider. Full prompts and answers are not stored in usage logs.
         </p>
-        <div className="mt-2 flex flex-wrap gap-3">
+        <div className="mt-2 flex flex-wrap gap-4">
           <button
             type="button"
             disabled={busy === "reset"}
             onClick={() => setPendingClear({ deleteUsage: false })}
-            className="text-white/55 hover:text-white"
+            className="text-text-2 transition-colors hover:text-text-1"
           >
             Reset saved Coach data
           </button>
@@ -606,12 +544,12 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
             type="button"
             disabled={busy === "reset"}
             onClick={() => setPendingClear({ deleteUsage: true })}
-            className="text-red-200/70 hover:text-red-200"
+            className="text-danger/80 transition-colors hover:text-danger"
           >
             Delete Coach and retained AI data
           </button>
           {initial.learning[0] ? (
-            <Link className="text-mint/80 hover:text-mint" href={`/app/learning/courses/${initial.learning[0].slug}`}>
+            <Link className="text-ai/80 transition-colors hover:text-ai" href={`/app/learning/courses/${initial.learning[0].slug}`}>
               Suggested learning: {initial.learning[0].title}
             </Link>
           ) : null}

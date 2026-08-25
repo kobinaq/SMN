@@ -1,3 +1,4 @@
+import { Chip } from "@/components/ui/Chip";
 import { cn } from "@/lib/utils";
 
 export function EmptyState({
@@ -12,10 +13,15 @@ export function EmptyState({
   className?: string;
 }) {
   return (
-    <div className={cn("rounded-2xl border border-dashed border-white/15 bg-surface px-5 py-8 text-center", className)}>
-      <p className="font-display text-lg text-white">{title}</p>
-      {description ? <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-white/50">{description}</p> : null}
-      {action ? <div className="mt-5 flex flex-wrap justify-center gap-2">{action}</div> : null}
+    <div
+      className={cn(
+        "rounded-[var(--radius-lg)] border border-dashed border-edge bg-raised px-5 py-10 text-center",
+        className,
+      )}
+    >
+      <p className="font-display text-lg text-text-1">{title}</p>
+      {description ? <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-text-2">{description}</p> : null}
+      {action ? <div className="mt-6 flex flex-wrap justify-center gap-2">{action}</div> : null}
     </div>
   );
 }
@@ -38,6 +44,11 @@ export function ErrorState({
   );
 }
 
+/**
+ * Semantic status label. Kept as a thin mapping over Chip so the product has
+ * one pill implementation — this exists for its status vocabulary
+ * (success/warning/info), not a second set of styles.
+ */
 export function StatusBadge({
   label,
   tone = "neutral",
@@ -45,18 +56,14 @@ export function StatusBadge({
   label: string;
   tone?: "neutral" | "success" | "warning" | "danger" | "info";
 }) {
-  const tones = {
-    neutral: "border-white/15 text-white/60",
-    success: "border-mint/35 text-mint",
-    warning: "border-amber-300/35 text-amber-100",
-    danger: "border-red-300/35 text-red-100",
-    info: "border-baby-blue/35 text-baby-blue",
-  };
-  return (
-    <span className={cn("inline-flex rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-wide", tones[tone])}>
-      {label}
-    </span>
-  );
+  const toChipTone = {
+    neutral: "neutral",
+    success: "ai",
+    warning: "warn",
+    danger: "danger",
+    info: "accent",
+  } as const;
+  return <Chip tone={toChipTone[tone]}>{label}</Chip>;
 }
 
 export function FormField({

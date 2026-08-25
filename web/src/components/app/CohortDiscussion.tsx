@@ -4,6 +4,9 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { MessageCircle } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Surface";
+import { Chip } from "@/components/ui/Chip";
+import { Textarea } from "@/components/ui/Field";
 import type { CohortPost } from "@/lib/lms";
 
 function formatWhen(value: string) {
@@ -44,54 +47,60 @@ export function CohortDiscussion({ courseId, posts }: { courseId: string | numbe
   }
 
   return (
-    <section className="rounded-2xl border border-white/10 bg-surface p-5">
-      <div className="flex items-center gap-2 text-baby-blue">
+    <Card as="section">
+      <div className="flex items-center gap-2 text-accent">
         <MessageCircle className="h-4 w-4" />
-        <h2 className="font-display text-lg text-white">Cohort discussion</h2>
+        <h2 className="font-display text-lg text-text-1">Cohort discussion</h2>
       </div>
-      <p className="mt-1 text-sm text-white/45">Ask questions and share with your cohort and facilitators.</p>
+      <p className="mt-1 text-sm text-text-3">Ask questions and share with your cohort and facilitators.</p>
 
       <form onSubmit={onSubmit} className="mt-4">
-        <textarea
-          className="min-h-24 w-full rounded-xl border border-white/12 bg-ink px-3.5 py-3 text-sm text-white placeholder:text-white/30 focus:border-baby-blue/45 focus:outline-none"
+        <Textarea
           value={body}
           maxLength={4000}
           placeholder="Write a message to your cohort…"
           onChange={(event) => setBody(event.target.value)}
         />
-        <div className="mt-2 flex items-center gap-3">
+        <div className="mt-3 flex items-center gap-3">
           <Button type="submit" disabled={busy || !body.trim()}>
             {busy ? "Posting…" : "Post"}
           </Button>
-          {error ? <span className="text-xs text-red-300" role="alert">{error}</span> : null}
+          {error ? (
+            <span className="text-xs text-danger" role="alert">
+              {error}
+            </span>
+          ) : null}
         </div>
       </form>
 
-      <div className="mt-5 space-y-3">
+      <div className="rise-stagger mt-5 space-y-3">
         {posts.length ? (
-          posts.map((post) => (
+          posts.map((post, index) => (
             <article
               key={String(post.id)}
-              className={`rounded-xl border p-4 ${post.authorRole === "staff" ? "border-baby-blue/25 bg-baby-blue/[.06]" : "border-white/10 bg-ink"}`}
+              style={{ "--i": index } as React.CSSProperties}
+              className={`rise rounded-[var(--radius-md)] border p-4 ${
+                post.authorRole === "staff" ? "border-accent/25 bg-accent-bg" : "border-edge-subtle bg-inset"
+              }`}
             >
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-sm font-semibold text-white">{post.authorName}</span>
+                <span className="text-sm font-semibold text-text-1">{post.authorName}</span>
                 {post.authorRole === "staff" ? (
-                  <span className="rounded-full border border-baby-blue/30 px-2 py-0.5 text-[10px] uppercase tracking-wide text-baby-blue">Facilitator</span>
+                  <Chip tone="accent">Facilitator</Chip>
                 ) : post.isSelf ? (
-                  <span className="rounded-full border border-white/15 px-2 py-0.5 text-[10px] uppercase tracking-wide text-white/45">You</span>
+                  <Chip tone="neutral">You</Chip>
                 ) : null}
-                <span className="ml-auto text-xs text-white/35">{formatWhen(post.createdAt)}</span>
+                <span className="ml-auto text-xs text-text-3">{formatWhen(post.createdAt)}</span>
               </div>
-              <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-white/70">{post.body}</p>
+              <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-text-2">{post.body}</p>
             </article>
           ))
         ) : (
-          <p className="rounded-xl border border-dashed border-white/12 bg-ink px-4 py-6 text-center text-sm text-white/40">
+          <p className="rounded-[var(--radius-md)] border border-dashed border-edge bg-inset px-4 py-6 text-center text-sm text-text-3">
             No messages yet. Start the conversation.
           </p>
         )}
       </div>
-    </section>
+    </Card>
   );
 }
