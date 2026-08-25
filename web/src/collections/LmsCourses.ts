@@ -9,7 +9,13 @@ const enforcePublicationReadiness: CollectionBeforeChangeHook = async ({ data, o
   const courseID = originalDoc?.id;
   const modules = courseID ? await req.payload.find({ collection: "lms-modules", depth: 0, limit: 500, overrideAccess: true, where: { course: { equals: courseID } }, req }) : { docs: [] };
   const lessons = courseID ? await req.payload.find({ collection: "lms-lessons", depth: 0, limit: 1000, overrideAccess: true, where: { course: { equals: courseID } }, req }) : { docs: [] };
-  const readiness = evaluateCourseReadiness({ ...originalDoc, ...data }, modules.docs, lessons.docs as unknown as CurriculumLesson[]);
+  const sessions = courseID ? await req.payload.find({ collection: "lms-sessions", depth: 0, limit: 500, overrideAccess: true, where: { course: { equals: courseID } }, req }) : { docs: [] };
+  const readiness = evaluateCourseReadiness(
+    { ...originalDoc, ...data },
+    modules.docs,
+    lessons.docs as unknown as CurriculumLesson[],
+    sessions.docs as unknown as { status?: unknown }[],
+  );
   if (!readiness.ready) throw new APIError(`Course cannot be published yet. Missing: ${readiness.missing.join(", ")}.`, 400, { missing: readiness.missing, operation }, true);
   return data;
 };

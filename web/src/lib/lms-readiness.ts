@@ -16,6 +16,7 @@ export type CurriculumLesson = {
   status?: unknown;
   lessonType?: unknown;
 };
+export type CurriculumSession = { status?: unknown };
 
 function present(value: unknown) {
   return typeof value === "string" ? value.trim().length > 0 : Boolean(value);
@@ -38,6 +39,7 @@ export function evaluateCourseReadiness(
   course: CourseReadinessInput,
   modules: CurriculumModule[],
   lessons: CurriculumLesson[],
+  sessions: CurriculumSession[] = [],
 ) {
   const cohort = isCohort(course);
   const checks = [
@@ -51,37 +53,42 @@ export function evaluateCourseReadiness(
       label: "At least one learning outcome",
       ready: Boolean(course.learningOutcomes?.some((item) => present(item.outcome))),
     },
-    { key: "modules", label: "At least one module", ready: modules.length > 0 },
-    {
-      key: "moduleLessons",
-      label: "Every module has a lesson",
-      ready:
-        modules.length > 0 &&
-        modules.every((module) => lessons.some((lesson) => relationID(lesson.module) === String(module.id))),
-    },
-    {
-      key: "publishedLessons",
-      label: "All lessons published",
-      ready: lessons.length > 0 && lessons.every((lesson) => lesson.status === "published"),
-    },
   ];
 
   if (cohort) {
+    // Cohort curriculum lives in the session schedule, not in self-paced modules/lessons.
     checks.push(
       { key: "classroomUrl", label: "Google Classroom invite", ready: present(course.classroomUrl) },
       { key: "startDate", label: "Public start date", ready: present(course.startDate) },
       {
-        key: "classroomSession",
-        label: "At least one Classroom session",
-        ready: lessons.some((lesson) => lesson.lessonType === "classroom"),
+        key: "liveSessions",
+        label: "At least one live session",
+        ready:
+          sessions.some((session) => session.status === "published") ||
+          lessons.some((lesson) => lesson.lessonType === "classroom"),
       },
     );
   } else {
-    checks.push({
-      key: "hostedLessons",
-      label: "At least one hosted lesson",
-      ready: lessons.some(isHostedLesson),
-    });
+    checks.push(
+      { key: "modules", label: "At least one module", ready: modules.length > 0 },
+      {
+        key: "moduleLessons",
+        label: "Every module has a lesson",
+        ready:
+          modules.length > 0 &&
+          modules.every((module) => lessons.some((lesson) => relationID(lesson.module) === String(module.id))),
+      },
+      {
+        key: "publishedLessons",
+        label: "All lessons published",
+        ready: lessons.length > 0 && lessons.every((lesson) => lesson.status === "published"),
+      },
+      {
+        key: "hostedLessons",
+        label: "At least one hosted lesson",
+        ready: lessons.some(isHostedLesson),
+      },
+    );
   }
 
   return {
