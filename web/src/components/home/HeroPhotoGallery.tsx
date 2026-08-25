@@ -2,7 +2,7 @@
 
 import { Ref, forwardRef, useState, useEffect } from "react";
 import Image, { ImageProps } from "next/image";
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { img } from "@/lib/images";
@@ -93,11 +93,11 @@ const spreads: Record<Breakpoint, { x: string; y: string }[]> = {
     { x: "100px", y: "28px" },
   ],
   lg: [
-    { x: "-140px", y: "15px" },
-    { x: "-70px", y: "32px" },
+    { x: "-210px", y: "18px" },
+    { x: "-105px", y: "36px" },
     { x: "0px", y: "8px" },
-    { x: "70px", y: "22px" },
-    { x: "140px", y: "44px" },
+    { x: "105px", y: "24px" },
+    { x: "210px", y: "42px" },
   ],
 };
 
@@ -119,63 +119,16 @@ function useBreakpoint(): Breakpoint {
   return bp;
 }
 
-export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: number }) {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+export function HeroPhotoGallery() {
   const bp = useBreakpoint();
-
-  useEffect(() => {
-    const visibilityTimer = setTimeout(() => setIsVisible(true), animationDelay * 1000);
-    const animationTimer = setTimeout(
-      () => setIsLoaded(true),
-      (animationDelay + 0.4) * 1000,
-    );
-    return () => {
-      clearTimeout(visibilityTimer);
-      clearTimeout(animationTimer);
-    };
-  }, [animationDelay]);
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 1 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.08,
-      },
-    },
-  };
-
-  const photoVariants: Variants = {
-    hidden: {
-      x: 0,
-      y: 0,
-      rotate: 0,
-      scale: 1,
-    },
-    visible: (custom: { x: string; y: string; order: number }) => ({
-      x: custom.x,
-      y: custom.y,
-      rotate: 0,
-      scale: 1,
-      transition: {
-        type: "spring",
-        stiffness: bp === "sm" ? 90 : 70,
-        damping: 14,
-        mass: 1,
-        delay: custom.order * (bp === "sm" ? 0.1 : 0.15),
-      },
-    }),
-  };
 
   return (
     <section
       data-hero
-      className="grain relative flex min-h-[100dvh] flex-col overflow-hidden bg-near-black pt-[calc(5rem+env(safe-area-inset-top))] md:pt-24"
+      className="grain relative flex min-h-[100dvh] flex-col overflow-x-hidden bg-near-black pt-[calc(5rem+env(safe-area-inset-top))] md:pt-24"
     >
       <div className="container-wide relative z-10 flex flex-1 flex-col justify-center gap-10 py-8 lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center lg:gap-12 lg:py-0">
-        <div className="max-w-xl">
+        <div className="max-w-2xl">
           <p
             data-hero-item
             className="text-[10px] font-medium uppercase tracking-[0.28em] text-baby-blue sm:text-[11px]"
@@ -184,10 +137,10 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
           </p>
           <h1
             data-hero-item
-            className="font-display mt-4 text-[1.7rem] leading-[1.12] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[3.25rem]"
+            className="font-display mt-4 text-[1.45rem] leading-[1.15] tracking-tight text-white sm:text-3xl md:text-4xl lg:text-[2.55rem]"
           >
             {homepageHero.lines.map((line) => (
-              <span key={line} className="block text-balance">
+              <span key={line} className="block sm:whitespace-nowrap">
                 {line}
               </span>
             ))}
@@ -219,37 +172,24 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
 
         <div
           className={cn(
-            "relative w-full overflow-hidden",
-            "flex h-[200px] items-center justify-center sm:h-[260px] lg:h-[380px]",
+            "relative w-full overflow-visible",
+            "flex h-[200px] items-center justify-center sm:h-[280px] lg:h-[420px]",
           )}
         >
-          <motion.div
-            className="relative mx-auto flex w-full justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isVisible ? 1 : 0 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-          >
-            <motion.div
-              className="relative flex w-full justify-center"
-              variants={containerVariants}
-              initial="hidden"
-              animate={isLoaded ? "visible" : "hidden"}
-            >
-              <div className="relative h-[110px] w-[110px] sm:h-[160px] sm:w-[160px] lg:h-[200px] lg:w-[200px]">
+          <div className="relative mx-auto flex w-full justify-center">
+            <div className="relative flex w-full justify-center">
+              <div className="relative h-[110px] w-[110px] sm:h-[150px] sm:w-[150px] lg:h-[170px] lg:w-[170px]">
                 {[...photos].reverse().map((photo, reverseIndex) => {
                   const index = photos.length - 1 - reverseIndex;
                   const spread = spreads[bp][index] || { x: photo.x, y: photo.y };
 
                   return (
-                    <motion.div
+                    <div
                       key={photo.id}
                       className="absolute left-0 top-0"
-                      style={{ zIndex: photo.zIndex }}
-                      variants={photoVariants}
-                      custom={{
-                        x: spread.x,
-                        y: spread.y,
-                        order: photo.order,
+                      style={{
+                        zIndex: photo.zIndex,
+                        transform: `translate(${spread.x}, ${spread.y})`,
                       }}
                     >
                       <Photo
@@ -261,12 +201,12 @@ export function HeroPhotoGallery({ animationDelay = 0.35 }: { animationDelay?: n
                         priority={photo.order === 2}
                         enableDrag={bp === "lg"}
                       />
-                    </motion.div>
+                    </div>
                   );
                 })}
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -340,7 +280,7 @@ function Photo({
       }}
       className={cn(
         className,
-        "relative mx-auto h-[110px] w-[110px] shrink-0 sm:h-[160px] sm:w-[160px] lg:h-[200px] lg:w-[200px]",
+        "relative mx-auto h-[110px] w-[110px] shrink-0 sm:h-[150px] sm:w-[150px] lg:h-[170px] lg:w-[170px]",
         enableDrag && "cursor-grab active:cursor-grabbing",
       )}
       draggable={false}
