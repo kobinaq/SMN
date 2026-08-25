@@ -13,6 +13,10 @@ export const cta = {
     label: "Explore the Academy",
     href: "/programs",
   },
+  exploreServices: {
+    label: "Explore our Services",
+    href: "/programs",
+  },
   viewCohort: {
     label: "View the curriculum",
     href: "/programs/cohort",

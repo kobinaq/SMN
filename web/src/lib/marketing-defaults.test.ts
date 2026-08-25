@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { cta } from "@/lib/cta";
 import { site, nav } from "@/lib/site";
-import { courses, excerptStoryQuote, stories } from "@/lib/content";
+import { courses, excerptStoryQuote, homepageHero, smnValues, stories } from "@/lib/content";
 
 describe("marketing defaults", () => {
   it("withholds unconfirmed cohort pricing", () => {
@@ -36,6 +36,8 @@ describe("marketing defaults", () => {
     expect(cta.memberSignIn.href).toBe("/login");
     expect(cta.hireTalent.href).toBe("/employers");
     expect(cta.hireTalent.label).toMatch(/Hire SMN talent/i);
+    expect(cta.exploreServices.label).toBe("Explore our Services");
+    expect(cta.exploreServices.href).toBe("/programs");
   });
 
   it("exposes Experience and Partners in public navigation", () => {
@@ -45,5 +47,21 @@ describe("marketing defaults", () => {
       true,
     );
     expect(partners?.href).toBe("/employers");
+  });
+
+  it("keeps homepage hero promise and values in code", () => {
+    expect(homepageHero.lines).toEqual([
+      "Learn Social Media Marketing.",
+      "Lead with AI.",
+      "Gain Real-World Experience.",
+      "Grow with Community",
+    ]);
+    expect(smnValues.map((value) => value.title)).toEqual([
+      "Practicality",
+      "Strategy over aesthetics",
+      "Community",
+      "Relevance",
+      "Opportunity",
+    ]);
   });
 });

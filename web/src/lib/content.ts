@@ -78,22 +78,86 @@ export const beliefs = [
   },
 ];
 
-export const ecosystem = [
+export const homepageHero = {
+  eyebrow: "About Social Marketers Network",
+  lines: [
+    "Learn Social Media Marketing.",
+    "Lead with AI.",
+    "Gain Real-World Experience.",
+    "Grow with Community",
+  ],
+  body: "Social Marketers Network is a professional learning network where beginners, early-career and marketing professionals build the skills, experience and network they need to thrive in a rapidly changing digital industry.",
+} as const;
+
+/** Homepage founder essay. About keeps founderStory. */
+export const homepageFounderStory = [
+  "I didn't start in marketing. I had to figure my way into it.",
+  "I didn't have a traditional marketing degree or a clear roadmap telling me what to learn next. I started with social media and content, learning through experience, experimenting, working with brands and gradually figuring out that there was much more to marketing than making good-looking content.",
+  "Over the years, I worked across social media, content and digital marketing, with experience spanning FMCG, consumer and lifestyle brands.",
+  "Social media has evolved from simply posting content into an important part of how businesses build brands, communities and revenue. At the same time, AI is changing how marketers research, create, analyse and work but learning marketing is still often fragmented. People learn a tool here, a platform there, and a collection of content tricks without understanding how it all connects.",
+  "Now social media managers are no longer just being asked to keep a page active or create aesthetically pleasing content. Businesses want marketers who could understand the audience, develop strategy, contribute to campaigns and ultimately help drive results.",
+  "However, many people entering the field are learning how to post before they learned how to think. There is also very little guidance around the things that actually help someone build a portfolio, experience and eventually, a career.",
+  "We want to change that. At the Social Marketers Network, we combine social media strategy, AI and practical application to generate results for brands and businesses.",
+  "We're building something bigger than a course, we offer career development and professional experience and a community that shares resources to help you stay ahead. At SMN, learning leads to experience, experience leads to relationships, and relationships lead to opportunity.",
+];
+
+export const smnValues = [
+  {
+    title: "Practicality",
+    body: "We teach what people can actually use.",
+  },
+  {
+    title: "Strategy over aesthetics",
+    body: "Good marketing isn't just about making something look good. It should have a reason to exist and a result it's trying to create.",
+  },
+  {
+    title: "Community",
+    body: "We believe people grow faster when they have people to grow with.",
+  },
+  {
+    title: "Relevance",
+    body: "Our learning evolves with the industry.",
+  },
+  {
+    title: "Opportunity",
+    body: "Education should create pathways to experience and careers.",
+  },
+];
+
+export const homepageClose = {
+  lead: "Access a network",
+  title: "More than an academy.",
+  paragraphs: [
+    "Courses can teach you a skill. A network can change the trajectory of your career.",
+    "SMN brings together learning, community, mentorship, practical experience and industry connections in one ecosystem.",
+    "You can join us to learn something new, find a mentor, meet other marketers, work on a simulation, attend an event, access an opportunity, or simply stay connected to an industry that never stops changing.",
+    "We are building toward a future where marketers can learn, gain experience, find mentors, discover opportunities and build meaningful careers within one connected ecosystem.",
+  ],
+} as const;
+
+export const homepagePartners = {
+  title: "Build with the next generations of marketers.",
+  body: "Train teams, hire interns, collaborate on events or sponsor access to training and experience programs.",
+  close: "Marketing is changing. How we learn it should too.",
+} as const;
+
+export const ecosystem: { title: string; body: string; kicker?: string }[] = [
   {
     title: "Learn",
-    body: "Training programmes, self-paced courses, webinars, and practical resources.",
+    body: "Training programmes, self-paced courses, webinars and practical resources.",
   },
   {
     title: "Practice",
-    body: "Simulations, projects, and real-world marketing experiences.",
+    kicker: "SMN Experience Program",
+    body: "We work with brands, agencies and marketing professionals to create internships, volunteer placements, projects and mentorship opportunities.",
   },
   {
     title: "Connect",
-    body: "Community, events, mentorship, and professional relationships.",
+    body: "Community, events, mentorship and professional relationships.",
   },
   {
     title: "Grow",
-    body: "Career development, opportunities, and continuous learning.",
+    body: "Career development, opportunities and continuous learning.",
   },
 ];
 

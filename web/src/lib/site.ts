@@ -21,11 +21,11 @@ export const site = {
     twitter: "https://x.com/smn_africa",
   },
   homepage: {
-    headline: "You shouldn’t have to build your marketing career alone.",
+    headline: "Learn Social Media Marketing. Lead with AI. Gain Real-World Experience. Grow with Community.",
     supportingCopy:
-      "Social Marketers Network is a professional learning network where beginners, early-career, and marketing professionals build the skills, experience, and network they need to thrive in a rapidly changing digital industry.",
-    primaryCtaLabel: "Apply for the next cohort",
-    secondaryCtaLabel: "Join the community",
+      "Social Marketers Network is a professional learning network where beginners, early-career and marketing professionals build the skills, experience and network they need to thrive in a rapidly changing digital industry.",
+    primaryCtaLabel: "Explore our Services",
+    secondaryCtaLabel: "Join the Community",
     secondaryCtaHref: "/community",
   },
   announcementBanner: "",
