@@ -86,18 +86,18 @@ const spreads: Record<Breakpoint, { x: string; y: string }[]> = {
     { x: "72px", y: "22px" },
   ],
   md: [
-    { x: "-100px", y: "12px" },
-    { x: "-50px", y: "22px" },
+    { x: "-140px", y: "12px" },
+    { x: "-70px", y: "22px" },
     { x: "0px", y: "6px" },
-    { x: "50px", y: "18px" },
-    { x: "100px", y: "28px" },
+    { x: "70px", y: "18px" },
+    { x: "140px", y: "28px" },
   ],
   lg: [
-    { x: "-210px", y: "18px" },
-    { x: "-105px", y: "36px" },
+    { x: "-320px", y: "15px" },
+    { x: "-160px", y: "32px" },
     { x: "0px", y: "8px" },
-    { x: "105px", y: "24px" },
-    { x: "210px", y: "42px" },
+    { x: "160px", y: "22px" },
+    { x: "320px", y: "44px" },
   ],
 };
 
@@ -125,88 +125,92 @@ export function HeroPhotoGallery() {
   return (
     <section
       data-hero
-      className="grain relative flex min-h-[100dvh] flex-col overflow-x-hidden bg-near-black pt-[calc(5rem+env(safe-area-inset-top))] md:pt-24"
+      className="grain relative flex min-h-[100dvh] flex-col overflow-hidden bg-near-black pt-[calc(5rem+env(safe-area-inset-top))] md:pt-24"
     >
-      <div className="container-wide relative z-10 flex flex-1 flex-col justify-center gap-10 py-8 lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center lg:gap-12 lg:py-0">
-        <div className="max-w-2xl">
-          <p
-            data-hero-item
-            className="text-[10px] font-medium uppercase tracking-[0.28em] text-baby-blue sm:text-[11px]"
-          >
-            {homepageHero.eyebrow}
-          </p>
-          <h1
-            data-hero-item
-            className="font-display mt-4 text-[1.45rem] leading-[1.15] tracking-tight text-white sm:text-3xl md:text-4xl lg:text-[2.55rem]"
-          >
-            {homepageHero.lines.map((line) => (
-              <span key={line} className="block sm:whitespace-nowrap">
-                {line}
-              </span>
-            ))}
-          </h1>
-          <p
-            data-hero-item
-            className="mt-5 max-w-[42rem] text-sm leading-relaxed text-white/65 sm:mt-6 sm:text-base"
-          >
-            {homepageHero.body}
-          </p>
-          <div data-hero-item className="btn-row-mobile mt-7 sm:mt-8">
-            <Button
-              href={cta.exploreServices.href}
-              className="sm:min-w-[160px]"
-              onClick={() => trackEvent("primary_cta_click", { location: "hero" })}
-            >
-              {cta.exploreServices.label}
-            </Button>
-            <Button
-              href={cta.joinCommunity.href}
-              variant="secondary"
-              className="sm:min-w-[140px]"
-              onClick={() => trackEvent("secondary_cta_click", { location: "hero" })}
-            >
-              Join the Community
-            </Button>
-          </div>
-        </div>
-
-        <div
-          className={cn(
-            "relative w-full overflow-visible",
-            "flex h-[200px] items-center justify-center sm:h-[280px] lg:h-[420px]",
-          )}
+      <div className="relative z-10 mx-auto w-full max-w-5xl px-4 text-center sm:px-6">
+        <p
+          data-hero-item
+          className="text-[10px] font-medium uppercase tracking-[0.28em] text-baby-blue sm:text-[11px] md:text-xs"
         >
-          <div className="relative mx-auto flex w-full justify-center">
-            <div className="relative flex w-full justify-center">
-              <div className="relative h-[110px] w-[110px] sm:h-[150px] sm:w-[150px] lg:h-[170px] lg:w-[170px]">
-                {[...photos].reverse().map((photo, reverseIndex) => {
-                  const index = photos.length - 1 - reverseIndex;
-                  const spread = spreads[bp][index] || { x: photo.x, y: photo.y };
+          {homepageHero.eyebrow}
+        </p>
+        <h1
+          data-hero-item
+          className="font-display mx-auto mt-3 text-[1.55rem] leading-[1.15] tracking-tight text-white sm:mt-4 sm:text-4xl md:text-5xl"
+        >
+          {homepageHero.lines.map((line) => (
+            <span key={line} className="block">
+              {line}
+            </span>
+          ))}
+        </h1>
+        <p
+          data-hero-item
+          className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/60 sm:mt-5 md:text-base"
+        >
+          {homepageHero.body}
+        </p>
+      </div>
 
-                  return (
-                    <div
-                      key={photo.id}
-                      className="absolute left-0 top-0"
-                      style={{
-                        zIndex: photo.zIndex,
-                        transform: `translate(${spread.x}, ${spread.y})`,
-                      }}
-                    >
-                      <Photo
-                        width={220}
-                        height={220}
-                        src={photo.src}
-                        alt={photo.alt}
-                        direction={photo.direction}
-                        priority={photo.order === 2}
-                        enableDrag={bp === "lg"}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+      <div
+        className={cn(
+          "relative z-10 mb-4 mt-8 w-full overflow-hidden sm:mb-6 sm:mt-10",
+          "flex h-[210px] items-center justify-center sm:h-[280px] md:h-[320px] lg:h-[360px]",
+        )}
+      >
+        <div className="relative mx-auto flex w-full max-w-7xl justify-center px-2">
+          <div className="relative flex w-full justify-center">
+            <div className="relative h-[120px] w-[120px] sm:h-[180px] sm:w-[180px] md:h-[200px] md:w-[200px] lg:h-[220px] lg:w-[220px]">
+              {[...photos].reverse().map((photo, reverseIndex) => {
+                const index = photos.length - 1 - reverseIndex;
+                const spread = spreads[bp][index] || { x: photo.x, y: photo.y };
+
+                return (
+                  <div
+                    key={photo.id}
+                    className="absolute left-0 top-0"
+                    style={{
+                      zIndex: photo.zIndex,
+                      transform: `translate(${spread.x}, ${spread.y})`,
+                    }}
+                  >
+                    <Photo
+                      width={220}
+                      height={220}
+                      src={photo.src}
+                      alt={photo.alt}
+                      direction={photo.direction}
+                      priority={photo.order === 2}
+                      enableDrag={bp === "lg"}
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
+        </div>
+      </div>
+
+      <div
+        data-hero-item
+        className="relative z-10 mt-auto flex w-full flex-col items-center px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-6 sm:pb-10"
+      >
+        <div className="btn-row-mobile">
+          <Button
+            href={cta.exploreServices.href}
+            className="sm:min-w-[160px]"
+            onClick={() => trackEvent("primary_cta_click", { location: "hero" })}
+          >
+            {cta.exploreServices.label}
+          </Button>
+          <Button
+            href={cta.joinCommunity.href}
+            variant="secondary"
+            className="sm:min-w-[140px]"
+            onClick={() => trackEvent("secondary_cta_click", { location: "hero" })}
+          >
+            Join the Community
+          </Button>
         </div>
       </div>
     </section>
@@ -280,7 +284,7 @@ function Photo({
       }}
       className={cn(
         className,
-        "relative mx-auto h-[110px] w-[110px] shrink-0 sm:h-[150px] sm:w-[150px] lg:h-[170px] lg:w-[170px]",
+        "relative mx-auto h-[110px] w-[110px] shrink-0 sm:h-[160px] sm:w-[160px] md:h-[200px] md:w-[200px] lg:h-[220px] lg:w-[220px]",
         enableDrag && "cursor-grab active:cursor-grabbing",
       )}
       draggable={false}
@@ -292,7 +296,7 @@ function Photo({
           fill
           src={src}
           alt={alt}
-          sizes="(max-width: 640px) 110px, (max-width: 1024px) 160px, 200px"
+          sizes="(max-width: 640px) 110px, (max-width: 1024px) 200px, 220px"
           priority={priority}
           draggable={false}
         />
