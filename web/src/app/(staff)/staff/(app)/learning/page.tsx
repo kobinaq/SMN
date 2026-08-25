@@ -18,19 +18,9 @@ import { evaluateCourseReadiness, type CourseReadinessInput, type CurriculumLess
 import { getPayloadClient } from "@/lib/payload";
 import { staffAccess } from "@/lib/staff/records";
 import { cn } from "@/lib/utils";
-import { StaffRecordForm } from "@/components/staff/StaffRecordForm";
+import { StaffRecordForm, StaffDeleteButton } from "@/components/staff/StaffRecordForm";
 import { AddLessonForm, AddModuleForm } from "./CurriculumCreateForms";
-
-const allTabs = [
-  ["overview", "Overview"],
-  ["curriculum", "Curriculum"],
-  ["assessments", "Assessments"],
-  ["gradebook", "Gradebook"],
-  ["learners", "Learners"],
-  ["analytics", "Analytics"],
-  ["settings", "Settings"],
-  ["ai-content-studio", "AI Content Studio"],
-] as const;
+import { AddSessionForm, AnnouncementComposer, AttendanceRegister } from "./CohortOpsForms";
 
 function relationID(value: unknown) {
   return String(value && typeof value === "object" && "id" in value ? value.id : value ?? "");
@@ -47,13 +37,8 @@ export default async function StaffLearningPage({
   const params = await searchParams;
   const studioEnabled = isAIFeatureEnabled("content-studio");
 
-  const tabs = (studioEnabled
-    ? allTabs
-    : allTabs.filter(([key]) => key !== "ai-content-studio")) as ReadonlyArray<readonly [string, string]>;
-
   const requestedID = typeof params.course === "string" ? params.course : undefined;
   const requestedTab = typeof params.tab === "string" ? params.tab : undefined;
-  const activeTab = tabs.some(([key]) => key === requestedTab) ? requestedTab! : "overview";
   const focusMember = typeof params.member === "string" ? params.member : undefined;
 
   const courses = await payload.find({ collection: "lms-courses", depth: 0, limit: 100, sort: "order", ...access });
@@ -80,6 +65,15 @@ export default async function StaffLearningPage({
       </div>
     );
   }
+
+  const isCohort = (selected as { delivery?: string | null }).delivery === "cohort";
+  const allowedTabs = new Set(["overview", "curriculum", "assessments", "gradebook", "learners", "analytics", "settings"]);
+  if (studioEnabled) allowedTabs.add("ai-content-studio");
+  if (isCohort) {
+    allowedTabs.add("sessions");
+    allowedTabs.add("announcements");
+  }
+  const activeTab = requestedTab && allowedTabs.has(requestedTab) ? requestedTab : "overview";
 
   const courseID = String(selected.id);
   const [modules, lessons, enrollments, progress, assessments, submissions] = await Promise.all([
@@ -164,6 +158,25 @@ export default async function StaffLearningPage({
         ])
       : [{ totalDocs: 0, docs: [] }, { totalDocs: 0, docs: [] }, { totalDocs: 0, docs: [] }, { totalDocs: 0, docs: [] }];
 
+  const roster = learnerOptions.map((item) => ({ id: item.id, label: String(item.label) }));
+  const [sessions, attendance, announcements] =
+    isCohort && (activeTab === "sessions" || activeTab === "announcements")
+      ? await Promise.all([
+          payload.find({ collection: "lms-sessions", depth: 0, limit: 500, sort: "sessionAt", where: { course: { equals: selected.id } }, ...access }),
+          payload.find({ collection: "lms-attendance", depth: 0, limit: 2000, where: { course: { equals: selected.id } }, ...access }),
+          payload.find({ collection: "lms-announcements", depth: 1, limit: 100, sort: "-publishedAt", where: { course: { equals: selected.id } }, ...access }),
+        ])
+      : [{ docs: [], totalDocs: 0 }, { docs: [], totalDocs: 0 }, { docs: [], totalDocs: 0 }];
+
+  const attendanceBySession = new Map<string, Record<string, string>>();
+  for (const row of attendance.docs as Array<{ session?: unknown; member?: unknown; status?: string }>) {
+    const sessionKey = relationID(row.session);
+    const memberKey = relationID(row.member);
+    const map = attendanceBySession.get(sessionKey) ?? {};
+    map[memberKey] = row.status || "";
+    attendanceBySession.set(sessionKey, map);
+  }
+
   return (
     <div className={`space-y-6 ${staffOpsChrome}`}>
       <StaffPageHeader
@@ -212,6 +225,7 @@ export default async function StaffLearningPage({
         activeTab={activeTab}
         studioEnabled={studioEnabled}
         highlightCurriculum={!readiness.ready}
+        cohort={isCohort}
       />
 
       {activeTab === "overview" ? (
@@ -362,6 +376,140 @@ export default async function StaffLearningPage({
             <StaffEmpty>No modules yet. Add the first module below.</StaffEmpty>
           )}
           <AddModuleForm courseId={courseID} order={modules.docs.length} />
+        </StaffPanel>
+      ) : null}
+
+      {activeTab === "sessions" && isCohort ? (
+        <StaffPanel>
+          <div className="mb-4">
+            <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Cohort</p>
+            <h3 className="mt-2 font-display text-xl text-white">Live sessions</h3>
+            <p className="mt-1 text-sm text-white/55">
+              Schedule live sessions, share the join link and recording, and take attendance. Attendance drives each learner&apos;s cohort progress.
+            </p>
+          </div>
+          {sessions.docs.length ? (
+            <div className="space-y-3">
+              {sessions.docs.map((session) => {
+                const when = session.sessionAt ? new Date(String(session.sessionAt)) : null;
+                const initialAttendance = attendanceBySession.get(String(session.id)) ?? {};
+                return (
+                  <article key={session.id} className="rounded-2xl border border-white/10 bg-near-black/30 p-4">
+                    <header className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <h4 className="text-lg text-white">{session.title}</h4>
+                        <small className="text-xs text-white/40">
+                          {when && !Number.isNaN(when.getTime())
+                            ? when.toLocaleString("en-GH", { dateStyle: "medium", timeStyle: "short" })
+                            : "Date not set"}
+                          {session.durationMinutes ? ` · ${session.durationMinutes} min` : ""} · {session.status}
+                        </small>
+                      </div>
+                      {session.joinUrl ? (
+                        <a href={String(session.joinUrl)} target="_blank" rel="noreferrer" className="text-xs text-baby-blue hover:underline">
+                          Join link
+                        </a>
+                      ) : null}
+                    </header>
+                    <details className="mt-3 rounded-xl border border-white/10 bg-ink/40 p-3">
+                      <summary className="cursor-pointer text-sm text-white/70">Take attendance ({roster.length})</summary>
+                      <AttendanceRegister
+                        sessionId={session.id}
+                        courseId={courseID}
+                        roster={roster}
+                        initial={initialAttendance}
+                      />
+                    </details>
+                    <details className="mt-2 rounded-xl border border-white/10 bg-ink/40 p-3">
+                      <summary className="cursor-pointer text-sm text-white/70">Edit session</summary>
+                      <div className="mt-4">
+                        <StaffRecordForm
+                          collection="lms-sessions"
+                          action="update"
+                          id={session.id}
+                          submitLabel="Save session"
+                          fields={[
+                            { name: "title", label: "Title", type: "text", required: true },
+                            { name: "sessionAt", label: "Starts at", type: "datetime-local", required: true },
+                            { name: "durationMinutes", label: "Duration (minutes)", type: "number" },
+                            { name: "joinUrl", label: "Join link", type: "url" },
+                            { name: "recordingUrl", label: "Recording link", type: "url" },
+                            { name: "summary", label: "Summary", type: "textarea" },
+                            {
+                              name: "status",
+                              label: "Status",
+                              type: "select",
+                              required: true,
+                              options: [
+                                { label: "Draft", value: "draft" },
+                                { label: "Published", value: "published" },
+                                { label: "Archived", value: "archived" },
+                              ],
+                            },
+                          ]}
+                          initial={{
+                            title: String(session.title || ""),
+                            sessionAt: session.sessionAt ? String(session.sessionAt).slice(0, 16) : "",
+                            durationMinutes: (session as { durationMinutes?: number | null }).durationMinutes ?? "",
+                            joinUrl: (session as { joinUrl?: string | null }).joinUrl || "",
+                            recordingUrl: (session as { recordingUrl?: string | null }).recordingUrl || "",
+                            summary: (session as { summary?: string | null }).summary || "",
+                            status: String(session.status || "published"),
+                          }}
+                        />
+                        <div className="mt-3">
+                          <StaffDeleteButton collection="lms-sessions" id={session.id} redirectTo={`${base}&tab=sessions`} />
+                        </div>
+                      </div>
+                    </details>
+                  </article>
+                );
+              })}
+            </div>
+          ) : (
+            <StaffEmpty>No sessions scheduled yet. Add the first one below.</StaffEmpty>
+          )}
+          <AddSessionForm courseId={courseID} order={sessions.docs.length} />
+        </StaffPanel>
+      ) : null}
+
+      {activeTab === "announcements" && isCohort ? (
+        <StaffPanel>
+          <div className="mb-4">
+            <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Cohort</p>
+            <h3 className="mt-2 font-display text-xl text-white">Announcements</h3>
+            <p className="mt-1 text-sm text-white/55">Broadcast updates to everyone in this cohort. Pinned posts stay at the top of their feed.</p>
+          </div>
+          <AnnouncementComposer courseId={courseID} />
+          <div className="mt-4 space-y-2">
+            {announcements.docs.length ? (
+              announcements.docs.map((announcement) => {
+                const author = announcement.author;
+                const authorName = author && typeof author === "object" ? (author as { name?: string }).name || "SMN team" : "SMN team";
+                return (
+                  <article key={announcement.id} className="rounded-2xl border border-white/10 bg-near-black/30 p-4">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {announcement.pinned ? (
+                        <span className="rounded-full border border-baby-blue/30 bg-baby-blue/10 px-2 py-0.5 text-[10px] uppercase tracking-wide text-baby-blue">Pinned</span>
+                      ) : null}
+                      <h4 className="text-base text-white">{announcement.title}</h4>
+                      <span className="ml-auto text-xs text-white/40">
+                        {authorName}
+                        {announcement.publishedAt ? ` · ${new Date(String(announcement.publishedAt)).toLocaleDateString("en-GH", { dateStyle: "medium" })}` : ""}
+                        {" · "}{announcement.status}
+                      </span>
+                    </div>
+                    <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-white/60">{announcement.body}</p>
+                    <div className="mt-3">
+                      <StaffDeleteButton collection="lms-announcements" id={announcement.id} redirectTo={`${base}&tab=announcements`} />
+                    </div>
+                  </article>
+                );
+              })
+            ) : (
+              <StaffEmpty>No announcements yet.</StaffEmpty>
+            )}
+          </div>
         </StaffPanel>
       ) : null}
 
@@ -619,6 +767,7 @@ export default async function StaffLearningPage({
                 options: [
                   { label: "Matching enrollment", value: "enrolled" },
                   { label: "Any member", value: "member" },
+                  { label: "Active/completed cohort member", value: "cohort" },
                 ],
               },
               {

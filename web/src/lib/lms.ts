@@ -1,5 +1,6 @@
 import type { MemberUser } from "@/lib/auth/member";
 import { memberHasEnrollment } from "@/lib/lms-enroll";
+import { calculateCohortCompletion, isAttended, pickNextSession } from "@/lib/lms-cohort";
 import { getPayloadClient } from "@/lib/payload";
 import { youtubeEmbedUrl } from "@/lib/youtube";
 
@@ -48,6 +49,10 @@ type LmsCourseDoc = {
   accessRule: "enrolled" | "member" | "cohort";
   delivery?: "cohort" | "self-paced" | null;
   classroomUrl?: string | null;
+  startDate?: string | null;
+  duration?: string | null;
+  sessions?: string | null;
+  seats?: number | null;
   level?: string | null;
   estimatedHours?: number | null;
   instructor?: string | null;
@@ -135,10 +140,65 @@ export type LmsCourseCard = {
   learningOutcomes: string[];
   certificateEnabled: boolean;
   classroomUrl: string;
+  delivery: "cohort" | "self-paced";
+  startDate: string;
+  duration: string;
+  sessionsNote: string;
+  seats: number;
 };
 
 export type LmsCourseDetail = LmsCourseCard & {
   modules: LmsModule[];
+};
+
+export type CohortSession = {
+  id: string | number;
+  title: string;
+  summary: string;
+  sessionAt: string;
+  durationMinutes: number;
+  joinUrl: string;
+  recordingUrl: string;
+  resources: { label: string; url: string }[];
+  attendance: string;
+  attended: boolean;
+  isPast: boolean;
+};
+
+export type CohortAnnouncement = {
+  id: string | number;
+  title: string;
+  body: string;
+  pinned: boolean;
+  publishedAt: string;
+  author: string;
+};
+
+export type CohortRosterMember = {
+  id: string | number;
+  name: string;
+  handle: string;
+};
+
+export type CohortPost = {
+  id: string | number;
+  body: string;
+  authorName: string;
+  authorRole: string;
+  createdAt: string;
+  isSelf: boolean;
+};
+
+export type CohortWorkspace = {
+  course: LmsCourseDetail;
+  sessions: CohortSession[];
+  nextSession: CohortSession | null;
+  announcements: CohortAnnouncement[];
+  roster: CohortRosterMember[];
+  discussion: CohortPost[];
+  sessionCount: number;
+  attendedCount: number;
+  percentage: number;
 };
 
 export type LmsLessonDetail = LmsLessonListItem & {
@@ -166,6 +226,10 @@ function mediaUrl(value: Relation<MediaDoc>) {
 function hasCourseAccess(member: MemberUser, course: LmsCourseDoc, enrollments: EnrollmentDoc[]) {
   if (course.status !== "published") return false;
   if (course.accessRule === "member") return true;
+  if (course.accessRule === "cohort") {
+    const cohortMember = member.cohortStatus === "active" || member.cohortStatus === "completed";
+    return cohortMember || memberHasEnrollment(enrollments, course);
+  }
   return memberHasEnrollment(enrollments, course);
 }
 
@@ -219,6 +283,11 @@ function toCourseCard(course: LmsCourseDoc, lessons: LmsLessonDoc[], progress: M
       .filter(Boolean),
     certificateEnabled: Boolean(course.certificateEnabled),
     classroomUrl: course.classroomUrl || "",
+    delivery: (course.delivery === "cohort" ? "cohort" : "self-paced") as "cohort" | "self-paced",
+    startDate: course.startDate?.trim() || "",
+    duration: course.duration?.trim() || "",
+    sessionsNote: course.sessions?.trim() || "",
+    seats: course.seats ?? 0,
   };
 }
 
@@ -322,4 +391,125 @@ export async function getLmsLesson(member: MemberUser, courseSlug: string, lesso
     previousHref: flat[currentIndex - 1]?.href || "",
     nextHref: flat[currentIndex + 1]?.href || "",
   } satisfies LmsLessonDetail;
+}
+
+type SessionDoc = {
+  id: string | number;
+  title: string;
+  summary?: string | null;
+  sessionAt?: string | null;
+  durationMinutes?: number | null;
+  joinUrl?: string | null;
+  recordingUrl?: string | null;
+  resources?: { label?: string | null; file?: Relation<MediaDoc> }[] | null;
+};
+type AttendanceDoc = { session?: Relation<{ id: string | number }>; status?: string | null };
+type AnnouncementDoc = {
+  id: string | number;
+  title: string;
+  body: string;
+  pinned?: boolean | null;
+  publishedAt?: string | null;
+  author?: Relation<{ name?: string | null }>;
+};
+type RosterEnrollmentDoc = { member?: Relation<{ id: string | number; name?: string | null; handle?: string | null }>; status: string };
+type DiscussionDoc = {
+  id: string | number;
+  body: string;
+  authorName?: string | null;
+  authorRole?: string | null;
+  createdAt: string;
+  authorMember?: Relation<{ id: string | number }>;
+};
+
+export async function getCohortWorkspace(member: MemberUser, courseSlug: string): Promise<CohortWorkspace | null> {
+  const course = await getLmsCourse(member, courseSlug);
+  if (!course) return null;
+
+  const payload = await getPayloadClient();
+  const [sessionResult, attendanceResult, announcementResult, rosterResult, discussionResult] = await Promise.all([
+    payload.find({ collection: "lms-sessions", depth: 1, limit: 500, sort: "sessionAt", overrideAccess: true, where: { and: [{ course: { equals: course.id } }, { status: { equals: "published" } }] } }),
+    payload.find({ collection: "lms-attendance", depth: 0, limit: 500, overrideAccess: true, where: { and: [{ course: { equals: course.id } }, { member: { equals: member.id } }] } }),
+    payload.find({ collection: "lms-announcements", depth: 1, limit: 100, sort: "-publishedAt", overrideAccess: true, where: { and: [{ course: { equals: course.id } }, { status: { equals: "published" } }] } }),
+    payload.find({ collection: "enrollments", depth: 1, limit: 500, overrideAccess: true, where: { and: [{ programKey: { equals: course.programKey } }, { status: { in: ["active", "completed"] } }] } }),
+    payload.find({ collection: "lms-discussion-posts", depth: 0, limit: 200, sort: "createdAt", overrideAccess: true, where: { and: [{ course: { equals: course.id } }, { status: { equals: "visible" } }] } }),
+  ]);
+
+  const attendanceBySession = new Map<string, string>();
+  for (const row of attendanceResult.docs as AttendanceDoc[]) {
+    attendanceBySession.set(String(relationId(row.session)), row.status || "");
+  }
+
+  const now = Date.now();
+  const sessions: CohortSession[] = (sessionResult.docs as SessionDoc[]).map((session) => {
+    const status = attendanceBySession.get(String(session.id)) || "";
+    const startMs = session.sessionAt ? new Date(session.sessionAt).getTime() : 0;
+    return {
+      id: session.id,
+      title: session.title,
+      summary: session.summary?.trim() || "",
+      sessionAt: session.sessionAt || "",
+      durationMinutes: session.durationMinutes || 0,
+      joinUrl: session.joinUrl?.trim() || course.classroomUrl || "",
+      recordingUrl: session.recordingUrl?.trim() || "",
+      resources: (session.resources || [])
+        .map((item) => ({ label: item.label || "Resource", url: mediaUrl(item.file) }))
+        .filter((item) => item.url),
+      attendance: status,
+      attended: isAttended(status),
+      isPast: startMs > 0 && startMs < now,
+    };
+  });
+
+  const completion = calculateCohortCompletion(
+    sessions.length,
+    sessions.filter((session) => session.attended).map((session) => session.id),
+  );
+
+  const announcements: CohortAnnouncement[] = (announcementResult.docs as AnnouncementDoc[])
+    .map((item) => ({
+      id: item.id,
+      title: item.title,
+      body: item.body,
+      pinned: Boolean(item.pinned),
+      publishedAt: item.publishedAt || "",
+      author: typeof item.author === "object" && item.author ? item.author.name?.trim() || "SMN team" : "SMN team",
+    }))
+    .sort((a, b) => Number(b.pinned) - Number(a.pinned));
+
+  const rosterSeen = new Set<string>();
+  const roster: CohortRosterMember[] = [];
+  for (const enrollment of rosterResult.docs as RosterEnrollmentDoc[]) {
+    const rosterMember = enrollment.member;
+    if (typeof rosterMember !== "object" || !rosterMember) continue;
+    const key = String(rosterMember.id);
+    if (rosterSeen.has(key)) continue;
+    rosterSeen.add(key);
+    roster.push({
+      id: rosterMember.id,
+      name: rosterMember.name?.trim() || "SMN member",
+      handle: rosterMember.handle?.trim() || "",
+    });
+  }
+
+  const discussion: CohortPost[] = (discussionResult.docs as DiscussionDoc[]).map((post) => ({
+    id: post.id,
+    body: post.body,
+    authorName: post.authorName?.trim() || "SMN member",
+    authorRole: post.authorRole || "member",
+    createdAt: post.createdAt,
+    isSelf: String(relationId(post.authorMember)) === String(member.id),
+  }));
+
+  return {
+    course: { ...course, percentage: completion.percent },
+    sessions,
+    nextSession: pickNextSession(sessions.filter((session) => session.sessionAt)),
+    announcements,
+    roster,
+    discussion,
+    sessionCount: sessions.length,
+    attendedCount: completion.attended,
+    percentage: completion.percent,
+  };
 }

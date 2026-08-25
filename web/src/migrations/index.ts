@@ -6,6 +6,7 @@ import * as migration_20260814_wave4_drop_learning_items from './20260814_wave4_
 import * as migration_20260814_lms_cohort_delivery from './20260814_lms_cohort_delivery';
 import * as migration_20260814_course_domain_rebuild from './20260814_course_domain_rebuild';
 import * as migration_20260825_locked_documents_missing_rels from './20260825_locked_documents_missing_rels';
+import * as migration_20260825_lms_cohort_workspace from './20260825_lms_cohort_workspace';
 
 export const migrations = [
   {
@@ -47,5 +48,10 @@ export const migrations = [
     up: migration_20260825_locked_documents_missing_rels.up,
     down: migration_20260825_locked_documents_missing_rels.down,
     name: '20260825_locked_documents_missing_rels'
+  },
+  {
+    up: migration_20260825_lms_cohort_workspace.up,
+    down: migration_20260825_lms_cohort_workspace.down,
+    name: '20260825_lms_cohort_workspace'
   },
 ];

@@ -46,7 +46,7 @@ export default async function LearningPage({ searchParams }: Props) {
         </p>
         <h1 className="mt-3 font-display text-2xl text-white sm:text-3xl">Your learning home</h1>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/55">
-          Courses and Classroom links for the programmes you have unlocked.
+          Self-paced courses and live cohort workspaces for the programmes you have unlocked.
         </p>
         {resumeCourse ? (
           <div className="mt-5 flex flex-col gap-3 rounded-2xl border border-baby-blue/30 bg-gradient-to-br from-baby-blue/10 to-surface p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
