@@ -127,7 +127,7 @@ export default async function StaffMentorshipPage() {
                   />
                 ))
             ) : (
-              <p className="text-sm text-white/45">No approved mentors yet.</p>
+              <p className="text-sm text-text-3">No approved mentors yet.</p>
             )}
           </StaffPanel>
 
@@ -142,10 +142,10 @@ export default async function StaffMentorshipPage() {
                 />
               ))
             ) : (
-              <p className="text-sm text-white/45">No relationships yet.</p>
+              <p className="text-sm text-text-3">No relationships yet.</p>
             )}
-            <p className="mt-4 text-xs text-white/35">
-              <Link href="/staff/members" className="text-baby-blue hover:underline">
+            <p className="mt-4 text-xs text-text-3">
+              <Link href="/staff/members" className="text-accent hover:underline">
                 Open People →
               </Link>
             </p>

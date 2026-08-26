@@ -37,8 +37,8 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
         title={String(doc.name || "Application")}
         hint="Grant portal access now, or email a Paystack link first."
       />
-      <p className="text-sm text-white/45">
-        <Link href="/staff/applications" className="text-baby-blue hover:underline">
+      <p className="text-sm text-text-3">
+        <Link href="/staff/applications" className="text-accent hover:underline">
           ← All applications
         </Link>
       </p>
@@ -46,28 +46,28 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
       <StaffPanel>
         <dl className="grid gap-4 sm:grid-cols-2">
           <div>
-            <dt className="text-xs uppercase tracking-wider text-white/40">Email</dt>
-            <dd className="mt-1 text-white">{doc.email}</dd>
+            <dt className="text-xs uppercase tracking-wider text-text-3">Email</dt>
+            <dd className="mt-1 text-text-1">{doc.email}</dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-wider text-white/40">Phone</dt>
-            <dd className="mt-1 text-white">{doc.phone || "—"}</dd>
+            <dt className="text-xs uppercase tracking-wider text-text-3">Phone</dt>
+            <dd className="mt-1 text-text-1">{doc.phone || "—"}</dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-wider text-white/40">Role / level</dt>
-            <dd className="mt-1 text-white">
+            <dt className="text-xs uppercase tracking-wider text-text-3">Role / level</dt>
+            <dd className="mt-1 text-text-1">
               {doc.role || "—"} · {doc.level || "—"}
             </dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-wider text-white/40">Course</dt>
-            <dd className="mt-1 text-white">{course?.title || "Not attached"}</dd>
+            <dt className="text-xs uppercase tracking-wider text-text-3">Course</dt>
+            <dd className="mt-1 text-text-1">{course?.title || "Not attached"}</dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-wider text-white/40">Member</dt>
-            <dd className="mt-1 text-white">
+            <dt className="text-xs uppercase tracking-wider text-text-3">Member</dt>
+            <dd className="mt-1 text-text-1">
               {member ? (
-                <Link href={`/staff/members?member=${member.id}`} className="text-baby-blue hover:underline">
+                <Link href={`/staff/members?member=${member.id}`} className="text-accent hover:underline">
                   {member.name || member.email || member.id}
                 </Link>
               ) : (
@@ -76,21 +76,21 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
             </dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-wider text-white/40">Status</dt>
-            <dd className="mt-1 text-white">{doc.status || "received"}</dd>
+            <dt className="text-xs uppercase tracking-wider text-text-3">Status</dt>
+            <dd className="mt-1 text-text-1">{doc.status || "received"}</dd>
           </div>
         </dl>
         {doc.goals ? (
           <div className="mt-6">
-            <p className="text-xs uppercase tracking-wider text-white/40">Goals</p>
-            <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-white/65">{doc.goals}</p>
+            <p className="text-xs uppercase tracking-wider text-text-3">Goals</p>
+            <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-text-2">{doc.goals}</p>
           </div>
         ) : null}
       </StaffPanel>
 
       <StaffPanel>
-        <h2 className="font-display text-xl text-white">Admit</h2>
-        <p className="mt-2 mb-4 text-sm text-white/55">
+        <h2 className="font-display text-xl text-text-1">Admit</h2>
+        <p className="mt-2 mb-4 text-sm text-text-2">
           Granting access creates the enrollment immediately. A payment link uses the same Paystack fulfillment as
           buy-now once the fee is confirmed.
         </p>
@@ -102,7 +102,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
       </StaffPanel>
 
       <StaffPanel>
-        <h2 className="mb-4 font-display text-xl text-white">Record</h2>
+        <h2 className="mb-4 font-display text-xl text-text-1">Record</h2>
         <StaffRecordForm
           collection="cohort-applications"
           action="update"

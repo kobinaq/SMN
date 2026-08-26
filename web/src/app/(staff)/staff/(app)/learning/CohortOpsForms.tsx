@@ -11,7 +11,7 @@ function asRelationId(value: string | number) {
 }
 
 const submitClass =
-  "shrink-0 rounded-full border border-white/15 bg-white/5 px-4 py-3 text-sm text-white/80 transition hover:border-baby-blue/40 disabled:opacity-50";
+  "shrink-0 rounded-full border border-edge bg-inset px-4 py-3 text-sm text-text-1 transition hover:border-accent/40 disabled:opacity-50";
 
 async function postRecord(body: unknown) {
   const response = await fetch("/api/staff/records", {
@@ -60,7 +60,7 @@ export function AddSessionForm({ courseId, order }: { courseId: string | number;
   }
 
   return (
-    <form onSubmit={onSubmit} className="mt-4 grid gap-3 rounded-2xl border border-white/10 bg-near-black/30 p-4 sm:grid-cols-2">
+    <form onSubmit={onSubmit} className="mt-4 grid gap-3 rounded-[var(--radius-lg)] border border-edge-subtle bg-inset p-4 sm:grid-cols-2">
       <StaffFormField label="Session title">
         <input className={staffFieldClass} name="title" required maxLength={200} placeholder="e.g. Week 1 · Positioning" />
       </StaffFormField>
@@ -77,7 +77,7 @@ export function AddSessionForm({ courseId, order }: { courseId: string | number;
         <button type="submit" disabled={busy} className={submitClass}>
           {busy ? "Adding…" : "Add session"}
         </button>
-        {error ? <span className="text-xs text-red-300" role="alert">{error}</span> : null}
+        {error ? <span className="text-xs text-danger" role="alert">{error}</span> : null}
       </div>
     </form>
   );
@@ -140,23 +140,23 @@ export function AttendanceRegister({
   }
 
   if (!roster.length) {
-    return <p className="mt-3 text-sm text-white/45">No enrolled members to mark yet.</p>;
+    return <p className="mt-3 text-sm text-text-3">No enrolled members to mark yet.</p>;
   }
 
   return (
     <div className="mt-3">
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <button type="button" onClick={() => setAll("present")} className="rounded-full border border-white/15 px-3 py-1 text-xs text-white/70 hover:border-mint/40">
+        <button type="button" onClick={() => setAll("present")} className="rounded-full border border-edge px-3 py-1 text-xs text-text-2 hover:border-ai/40">
           Mark all present
         </button>
-        <button type="button" onClick={() => setAll("")} className="rounded-full border border-white/15 px-3 py-1 text-xs text-white/70 hover:border-white/30">
+        <button type="button" onClick={() => setAll("")} className="rounded-full border border-edge px-3 py-1 text-xs text-text-2 hover:border-edge-strong">
           Clear all
         </button>
       </div>
       <div className="space-y-1">
         {roster.map((person) => (
-          <div key={String(person.id)} className="flex items-center justify-between gap-3 rounded-xl border border-white/5 px-3 py-2">
-            <span className="text-sm text-white/75">{person.label}</span>
+          <div key={String(person.id)} className="flex items-center justify-between gap-3 rounded-[var(--radius-md)] border border-edge-subtle px-3 py-2">
+            <span className="text-sm text-text-2">{person.label}</span>
             <Select
               className="w-36"
               value={values[String(person.id)] || ""}
@@ -173,7 +173,7 @@ export function AttendanceRegister({
         <button type="button" onClick={save} disabled={busy} className={submitClass}>
           {busy ? "Saving…" : "Save attendance"}
         </button>
-        {message ? <span className="text-xs text-white/50" aria-live="polite">{message}</span> : null}
+        {message ? <span className="text-xs text-text-2" aria-live="polite">{message}</span> : null}
       </div>
     </div>
   );
@@ -212,22 +212,22 @@ export function AnnouncementComposer({ courseId }: { courseId: string | number }
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-3 rounded-2xl border border-white/10 bg-near-black/30 p-4">
+    <form onSubmit={onSubmit} className="grid gap-3 rounded-[var(--radius-lg)] border border-edge-subtle bg-inset p-4">
       <StaffFormField label="Announcement title">
         <input className={staffFieldClass} name="title" required maxLength={200} placeholder="e.g. This week's brief" />
       </StaffFormField>
       <StaffFormField label="Message">
         <textarea className={`${staffFieldClass} min-h-28`} name="body" required placeholder="Share an update with the cohort…" />
       </StaffFormField>
-      <label className="flex items-center gap-2 text-sm text-white/70">
-        <input type="checkbox" name="pinned" className="h-4 w-4 accent-baby-blue" />
+      <label className="flex items-center gap-2 text-sm text-text-2">
+        <input type="checkbox" name="pinned" className="h-4 w-4 accent-accent" />
         Pin to the top of the cohort feed
       </label>
       <div className="flex items-center gap-3">
         <button type="submit" disabled={busy} className={submitClass}>
           {busy ? "Posting…" : "Post announcement"}
         </button>
-        {error ? <span className="text-xs text-red-300" role="alert">{error}</span> : null}
+        {error ? <span className="text-xs text-danger" role="alert">{error}</span> : null}
       </div>
     </form>
   );

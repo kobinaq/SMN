@@ -58,7 +58,7 @@ export default async function EditEventPage({ params }: { params: Promise<{ id: 
           submitLabel="Save event"
           onSuccessHref={`/staff/website/events/${doc.id}`}
         />
-        <div className="mt-6 border-t border-white/10 pt-4">
+        <div className="mt-6 border-t border-edge-subtle pt-4">
           <StaffDeleteButton collection="events" id={doc.id as string | number} redirectTo="/staff/website/events" />
         </div>
       </StaffPanel>

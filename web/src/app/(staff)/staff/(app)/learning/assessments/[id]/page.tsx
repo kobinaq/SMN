@@ -30,8 +30,8 @@ export default async function EditAssessmentPage({ params }: { params: Promise<{
   return (
     <div className="space-y-6">
       <StaffPageHeader eyebrow="Gradebook" title={String(doc.title || "Assessment")} />
-      <p className="text-sm text-white/45">
-        <Link href={`/staff/learning?course=${courseId}&tab=assessments`} className="text-baby-blue hover:underline">
+      <p className="text-sm text-text-3">
+        <Link href={`/staff/learning/courses/${courseId}?tab=assessments`} className="text-accent hover:underline">
           ← Assessments
         </Link>
       </p>
@@ -63,7 +63,7 @@ export default async function EditAssessmentPage({ params }: { params: Promise<{
         <StaffDeleteButton
           collection="lms-assessments"
           id={doc.id}
-          redirectTo={`/staff/learning?course=${courseId}&tab=assessments`}
+          redirectTo={`/staff/learning/courses/${courseId}?tab=assessments`}
         />
       </StaffPanel>
     </div>

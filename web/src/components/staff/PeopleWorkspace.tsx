@@ -73,21 +73,21 @@ export function PeopleWorkspace({
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h2 className="font-display text-2xl text-white">{member.name}</h2>
+                <h2 className="font-display text-2xl text-text-1">{member.name}</h2>
                 {member.cohortStatus ? (
-                  <span className="rounded-full border border-white/15 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-white/50">
+                  <span className="rounded-full border border-edge px-2.5 py-0.5 eyebrow text-text-3">
                     {member.cohortStatus}
                   </span>
                 ) : null}
               </div>
-              <p className="mt-1 text-sm text-white/55">{member.headline || member.email}</p>
-              <p className="mt-2 text-xs text-white/40">
+              <p className="mt-1 text-sm text-text-2">{member.headline || member.email}</p>
+              <p className="mt-2 text-xs text-text-3">
                 {member.location || "Location not set"}
                 {member.handle ? ` · @${member.handle}` : ""}
               </p>
             </div>
             {member.handle ? (
-              <Link href={`/u/${member.handle}`} className="text-sm text-baby-blue hover:underline">
+              <Link href={`/u/${member.handle}`} className="text-sm text-accent hover:underline">
                 Public profile
               </Link>
             ) : null}
@@ -131,13 +131,13 @@ export function PeopleWorkspace({
                 <Link
                   key={`${item.href}-${item.at}-${item.label}`}
                   href={item.href}
-                  className="flex items-center justify-between gap-4 rounded-xl px-3 py-3 transition hover:bg-white/[.03]"
+                  className="flex items-center justify-between gap-4 rounded-xl px-3 py-3 transition hover:bg-inset"
                 >
                   <span>
-                    <b className="block text-sm text-white">{item.label}</b>
-                    <small className="text-xs text-white/40">{item.state}</small>
+                    <b className="block text-sm text-text-1">{item.label}</b>
+                    <small className="text-xs text-text-3">{item.state}</small>
                   </span>
-                  <time className="text-xs text-white/35">{readableDate(item.at)}</time>
+                  <time className="text-xs text-text-3">{readableDate(item.at)}</time>
                 </Link>
               ))}
             </div>
@@ -156,10 +156,10 @@ export function PeopleWorkspace({
                 <Link
                   key={item.id}
                   href={`/staff/learning?tab=learners&member=${member.id}`}
-                  className="flex items-center justify-between gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[.03]"
+                  className="flex items-center justify-between gap-3 rounded-xl px-3 py-3 transition hover:bg-inset"
                 >
-                  <b className="text-sm text-white">{item.programName}</b>
-                  <span className="text-xs text-white/45">
+                  <b className="text-sm text-text-1">{item.programName}</b>
+                  <span className="text-xs text-text-3">
                     {item.status} · {item.completionPercent ?? 0}%
                   </span>
                 </Link>
@@ -180,16 +180,16 @@ export function PeopleWorkspace({
                 <Link
                   key={item.id}
                   href="/staff/certificates"
-                  className="flex items-center justify-between gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[.03]"
+                  className="flex items-center justify-between gap-3 rounded-xl px-3 py-3 transition hover:bg-inset"
                 >
-                  <b className="text-sm text-white">{item.title}</b>
-                  <span className="text-xs text-white/45">{item.status}</span>
+                  <b className="text-sm text-text-1">{item.title}</b>
+                  <span className="text-xs text-text-3">{item.status}</span>
                 </Link>
               ))}
               {portfolios.map((item) => (
                 <div key={item.id} className="flex items-center justify-between gap-3 rounded-xl px-3 py-3">
-                  <b className="text-sm text-white">{item.title}</b>
-                  <span className="text-xs text-white/45">
+                  <b className="text-sm text-text-1">{item.title}</b>
+                  <span className="text-xs text-text-3">
                     {item.status} · {item.visibility}
                   </span>
                 </div>
@@ -204,7 +204,7 @@ export function PeopleWorkspace({
       {section === "mentorship" ? (
         <StaffPanel>
           <StaffSection title="Mentorship" />
-          <p className="mb-3 text-sm text-white/55">
+          <p className="mb-3 text-sm text-text-2">
             {mentorProfilesCount ? "Mentor profile on file." : "No mentor profile."}
           </p>
           {mentorship.length ? (
@@ -213,10 +213,10 @@ export function PeopleWorkspace({
                 <Link
                   key={item.id}
                   href="/staff/mentorship"
-                  className="flex items-center justify-between gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[.03]"
+                  className="flex items-center justify-between gap-3 rounded-xl px-3 py-3 transition hover:bg-inset"
                 >
-                  <b className="text-sm text-white">{item.topic}</b>
-                  <span className="text-xs text-white/45">{item.status}</span>
+                  <b className="text-sm text-text-1">{item.topic}</b>
+                  <span className="text-xs text-text-3">{item.status}</span>
                 </Link>
               ))}
             </div>
@@ -235,10 +235,10 @@ export function PeopleWorkspace({
                 <Link
                   key={item.id}
                   href="/staff/opportunities"
-                  className="flex items-center justify-between gap-3 rounded-xl px-3 py-3 transition hover:bg-white/[.03]"
+                  className="flex items-center justify-between gap-3 rounded-xl px-3 py-3 transition hover:bg-inset"
                 >
-                  <b className="text-sm text-white">{item.title}</b>
-                  <span className="text-xs text-white/45">{item.status}</span>
+                  <b className="text-sm text-text-1">{item.title}</b>
+                  <span className="text-xs text-text-3">{item.status}</span>
                 </Link>
               ))}
             </div>
@@ -254,10 +254,10 @@ export function PeopleWorkspace({
           <MemberNoteForm memberId={member.id} />
           <div className="mt-4 space-y-3">
             {notes.map((item) => (
-              <div key={item.id} className="rounded-xl border border-white/10 bg-near-black/30 p-3">
-                <b className="text-xs uppercase tracking-wider text-baby-blue">{item.category}</b>
-                <p className="mt-2 text-sm text-white/75">{item.note}</p>
-                <small className="mt-2 block text-xs text-white/35">
+              <div key={item.id} className="rounded-[var(--radius-md)] border border-edge-subtle bg-inset p-3">
+                <b className="text-xs uppercase tracking-wider text-accent">{item.category}</b>
+                <p className="mt-2 text-sm text-text-2">{item.note}</p>
+                <small className="mt-2 block text-xs text-text-3">
                   {item.author} · {readableDate(item.createdAt)}
                 </small>
               </div>

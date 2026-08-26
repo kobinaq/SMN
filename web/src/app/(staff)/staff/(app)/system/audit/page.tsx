@@ -41,9 +41,9 @@ export default async function StaffAuditPage({
             name="q"
             defaultValue={q || ""}
             placeholder="Search action, entity, or reason"
-            className="field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/35"
+            className="field w-full rounded-[var(--radius-lg)] border border-edge-subtle bg-inset px-4 py-3 text-text-1 placeholder:text-text-3"
           />
-          <button type="submit" className="rounded-full border border-baby-blue/40 bg-baby-blue/15 px-4 py-3 text-sm text-baby-blue">
+          <button type="submit" className="rounded-full border border-accent/40 bg-accent-bg px-4 py-3 text-sm text-accent">
             Search
           </button>
         </form>
@@ -56,8 +56,8 @@ export default async function StaffAuditPage({
                 key: String(doc.id),
                 cells: [
                   <span key="a">
-                    <b className="block text-white">{doc.action}</b>
-                    <small className="text-xs text-white/40">{doc.reason}</small>
+                    <b className="block text-text-1">{doc.action}</b>
+                    <small className="text-xs text-text-3">{doc.reason}</small>
                   </span>,
                   `${doc.entityType} · ${doc.entityId}`,
                   actor && "email" in actor ? String(actor.email) : relationId(doc.actor) || "—",

@@ -19,7 +19,7 @@ export function DashboardInlineQueues({
     <div className="smn-inline-queues grid gap-4 lg:grid-cols-2">
       {mentors.length ? (
         <article>
-          <h3 className="mb-2 text-sm font-medium text-white/70">Mentor applications</h3>
+          <h3 className="mb-2 text-sm font-medium text-text-2">Mentor applications</h3>
           {mentors.map((item) => (
             <div className="smn-ops-row" key={item.id}>
               <div>
@@ -33,7 +33,7 @@ export function DashboardInlineQueues({
       ) : null}
       {opportunities.length ? (
         <article>
-          <h3 className="mb-2 text-sm font-medium text-white/70">Pending jobs</h3>
+          <h3 className="mb-2 text-sm font-medium text-text-2">Pending jobs</h3>
           {opportunities.map((item) => (
             <div className="smn-ops-row" key={item.id}>
               <div>

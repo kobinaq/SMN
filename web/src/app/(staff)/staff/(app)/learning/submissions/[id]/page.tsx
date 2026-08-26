@@ -34,25 +34,25 @@ export default async function SubmissionGradePage({ params }: { params: Promise<
         title={String(assessment?.title || "Submission")}
         hint={`${member?.name || member?.email || "Learner"} · attempt ${submission.attemptNumber || 1}`}
       />
-      <p className="text-sm text-white/45">
-        <Link href={`/staff/learning?course=${courseId}&tab=gradebook`} className="text-baby-blue hover:underline">
+      <p className="text-sm text-text-3">
+        <Link href={`/staff/learning/courses/${courseId}?tab=gradebook`} className="text-accent hover:underline">
           ← Gradebook
         </Link>
       </p>
       <StaffPanel>
-        <p className="text-sm text-white/55 whitespace-pre-line">{assessment?.instructions}</p>
+        <p className="text-sm text-text-2 whitespace-pre-line">{assessment?.instructions}</p>
         {submission.textResponse ? (
           <div className="mt-4">
-            <p className="text-xs uppercase tracking-wider text-white/40">Written response</p>
-            <p className="mt-2 whitespace-pre-line text-sm text-white/75">{submission.textResponse}</p>
+            <p className="text-xs uppercase tracking-wider text-text-3">Written response</p>
+            <p className="mt-2 whitespace-pre-line text-sm text-text-2">{submission.textResponse}</p>
           </div>
         ) : null}
         {Object.keys(answers).length ? (
           <div className="mt-4 space-y-2">
-            <p className="text-xs uppercase tracking-wider text-white/40">Answers</p>
+            <p className="text-xs uppercase tracking-wider text-text-3">Answers</p>
             {Object.entries(answers as Record<string, unknown>).map(([key, value]) => (
-              <p key={key} className="text-sm text-white/70">
-                <span className="text-white/40">{key}:</span> {String(value)}
+              <p key={key} className="text-sm text-text-2">
+                <span className="text-text-3">{key}:</span> {String(value)}
               </p>
             ))}
           </div>

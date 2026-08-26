@@ -42,10 +42,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
-const card = "rounded-2xl border border-white/10 bg-near-black/30 p-4";
+const card = "rounded-[var(--radius-lg)] border border-edge-subtle bg-inset p-4";
 const field =
-  "mt-1 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-white placeholder:text-white/30";
-const labelCls = "block text-xs font-medium text-white/60";
+  "mt-1 w-full rounded-[var(--radius-md)] border border-edge-subtle bg-black/20 px-3 py-2 text-sm text-text-1 placeholder:text-text-3";
+const labelCls = "block text-xs font-medium text-text-2";
 
 /* ---------- structured preview shapes (loose; content is unknown from the API) ---------- */
 type OutlineSection = { heading?: string; summary?: string; minutes?: number };
@@ -72,7 +72,7 @@ type RubricLevel = { label?: string; descriptor?: string; marks?: number };
 type RubricCriterion = { criterion?: string; description?: string; levels?: RubricLevel[] };
 type Rubric = { title?: string; criteria?: RubricCriterion[]; totalMarks?: number };
 
-const eyebrow = "text-[10px] font-medium uppercase tracking-[0.18em] text-baby-blue";
+const eyebrow = "eyebrow text-accent";
 
 function CandidatePreview({ kind, content }: { kind: Kind; content: unknown }) {
   // Text drafts (lesson / example / revision / faq) arrive as Markdown strings.
@@ -80,46 +80,46 @@ function CandidatePreview({ kind, content }: { kind: Kind; content: unknown }) {
     return content.trim() ? (
       <AiMarkdown content={content} />
     ) : (
-      <p className="text-sm text-white/40">Empty draft.</p>
+      <p className="text-sm text-text-3">Empty draft.</p>
     );
   }
   if (!isRecord(content)) {
-    return <pre className="overflow-auto text-xs text-white/70">{JSON.stringify(content, null, 2)}</pre>;
+    return <pre className="overflow-auto text-xs text-text-2">{JSON.stringify(content, null, 2)}</pre>;
   }
 
   if (kind === "quiz") {
     const quiz = content as Quiz;
     return (
       <div className="space-y-3">
-        {quiz.title ? <h4 className="font-display text-base text-white">{quiz.title}</h4> : null}
-        {quiz.instructions ? <p className="text-sm text-white/55">{quiz.instructions}</p> : null}
+        {quiz.title ? <h4 className="font-display text-base text-text-1">{quiz.title}</h4> : null}
+        {quiz.instructions ? <p className="text-sm text-text-2">{quiz.instructions}</p> : null}
         <ol className="space-y-2">
           {(quiz.questions ?? []).map((q, index) => (
             <li key={index} className={card}>
               <div className="flex items-center justify-between gap-2">
-                <span className="text-[10px] uppercase tracking-wider text-white/40">
+                <span className="text-[10px] uppercase tracking-wider text-text-3">
                   Q{index + 1} · {q.type}
                 </span>
-                {typeof q.marks === "number" ? <span className="text-xs text-mint">{q.marks} marks</span> : null}
+                {typeof q.marks === "number" ? <span className="text-xs text-ai">{q.marks} marks</span> : null}
               </div>
-              <p className="mt-1 text-sm text-white">{q.prompt}</p>
+              <p className="mt-1 text-sm text-text-1">{q.prompt}</p>
               {q.options?.length ? (
-                <ul className="mt-2 space-y-1 text-sm text-white/70">
+                <ul className="mt-2 space-y-1 text-sm text-text-2">
                   {q.options.map((option, optionIndex) => (
                     <li key={optionIndex} className="flex gap-2">
-                      <span className="text-white/35">{String.fromCharCode(65 + optionIndex)}.</span>
+                      <span className="text-text-3">{String.fromCharCode(65 + optionIndex)}.</span>
                       {option}
                     </li>
                   ))}
                 </ul>
               ) : null}
-              {q.answer ? <p className="mt-2 text-xs text-mint/90">Answer: {q.answer}</p> : null}
-              {q.rationale ? <p className="mt-1 text-xs text-white/45">{q.rationale}</p> : null}
+              {q.answer ? <p className="mt-2 text-xs text-ai">Answer: {q.answer}</p> : null}
+              {q.rationale ? <p className="mt-1 text-xs text-text-3">{q.rationale}</p> : null}
             </li>
           ))}
         </ol>
         {typeof quiz.totalMarks === "number" ? (
-          <p className="text-xs text-white/45">Total marks: {quiz.totalMarks}</p>
+          <p className="text-xs text-text-3">Total marks: {quiz.totalMarks}</p>
         ) : null}
       </div>
     );
@@ -129,30 +129,30 @@ function CandidatePreview({ kind, content }: { kind: Kind; content: unknown }) {
     const rubric = content as Rubric;
     return (
       <div className="space-y-3">
-        {rubric.title ? <h4 className="font-display text-base text-white">{rubric.title}</h4> : null}
+        {rubric.title ? <h4 className="font-display text-base text-text-1">{rubric.title}</h4> : null}
         {(rubric.criteria ?? []).map((criterion, index) => (
           <div key={index} className={card}>
-            <p className="text-sm font-medium text-white">{criterion.criterion}</p>
+            <p className="text-sm font-medium text-text-1">{criterion.criterion}</p>
             {criterion.description ? (
-              <p className="mt-1 text-xs text-white/50">{criterion.description}</p>
+              <p className="mt-1 text-xs text-text-2">{criterion.description}</p>
             ) : null}
             <div className="mt-3 grid gap-2 sm:grid-cols-2">
               {(criterion.levels ?? []).map((level, levelIndex) => (
-                <div key={levelIndex} className="rounded-lg border border-white/10 px-3 py-2">
+                <div key={levelIndex} className="rounded-lg border border-edge-subtle px-3 py-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium text-white/80">{level.label}</span>
+                    <span className="text-xs font-medium text-text-1">{level.label}</span>
                     {typeof level.marks === "number" ? (
-                      <span className="text-[11px] text-mint">{level.marks}</span>
+                      <span className="text-[11px] text-ai">{level.marks}</span>
                     ) : null}
                   </div>
-                  <p className="mt-1 text-xs text-white/45">{level.descriptor}</p>
+                  <p className="mt-1 text-xs text-text-3">{level.descriptor}</p>
                 </div>
               ))}
             </div>
           </div>
         ))}
         {typeof rubric.totalMarks === "number" ? (
-          <p className="text-xs text-white/45">Total marks: {rubric.totalMarks}</p>
+          <p className="text-xs text-text-3">Total marks: {rubric.totalMarks}</p>
         ) : null}
       </div>
     );
@@ -162,14 +162,14 @@ function CandidatePreview({ kind, content }: { kind: Kind; content: unknown }) {
     const outline = content as LessonOutline;
     return (
       <div className="space-y-3">
-        {outline.title ? <h4 className="font-display text-base text-white">{outline.title}</h4> : null}
+        {outline.title ? <h4 className="font-display text-base text-text-1">{outline.title}</h4> : null}
         {outline.objectives?.length ? (
           <div>
             <p className={eyebrow}>Objectives</p>
-            <ul className="mt-1 space-y-1 text-sm text-white/70">
+            <ul className="mt-1 space-y-1 text-sm text-text-2">
               {outline.objectives.map((objective, index) => (
                 <li key={index} className="flex gap-2">
-                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-mint/70" />
+                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-ai/70" />
                   {objective}
                 </li>
               ))}
@@ -180,17 +180,17 @@ function CandidatePreview({ kind, content }: { kind: Kind; content: unknown }) {
           {(outline.sections ?? []).map((section, index) => (
             <li key={index} className={card}>
               <div className="flex items-center justify-between gap-2">
-                <p className="text-sm font-medium text-white">{section.heading}</p>
+                <p className="text-sm font-medium text-text-1">{section.heading}</p>
                 {typeof section.minutes === "number" ? (
-                  <span className="text-xs text-white/40">{section.minutes} min</span>
+                  <span className="text-xs text-text-3">{section.minutes} min</span>
                 ) : null}
               </div>
-              {section.summary ? <p className="mt-1 text-sm text-white/55">{section.summary}</p> : null}
+              {section.summary ? <p className="mt-1 text-sm text-text-2">{section.summary}</p> : null}
             </li>
           ))}
         </ol>
         {outline.assessmentIdea ? (
-          <div className="rounded-xl border border-mint/20 bg-mint/5 px-3 py-2 text-sm text-mint/90">
+          <div className="rounded-xl border border-ai/25 bg-ai-bg px-3 py-2 text-sm text-ai">
             Assessment idea: {outline.assessmentIdea}
           </div>
         ) : null}
@@ -202,15 +202,15 @@ function CandidatePreview({ kind, content }: { kind: Kind; content: unknown }) {
     const outline = content as CourseOutline;
     return (
       <div className="space-y-3">
-        {outline.title ? <h4 className="font-display text-base text-white">{outline.title}</h4> : null}
-        {outline.summary ? <p className="text-sm text-white/55">{outline.summary}</p> : null}
+        {outline.title ? <h4 className="font-display text-base text-text-1">{outline.title}</h4> : null}
+        {outline.summary ? <p className="text-sm text-text-2">{outline.summary}</p> : null}
         {outline.learningOutcomes?.length ? (
           <div>
             <p className={eyebrow}>Learning outcomes</p>
-            <ul className="mt-1 space-y-1 text-sm text-white/70">
+            <ul className="mt-1 space-y-1 text-sm text-text-2">
               {outline.learningOutcomes.map((outcome, index) => (
                 <li key={index} className="flex gap-2">
-                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-mint/70" />
+                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-ai/70" />
                   {outcome}
                 </li>
               ))}
@@ -219,16 +219,16 @@ function CandidatePreview({ kind, content }: { kind: Kind; content: unknown }) {
         ) : null}
         {(outline.modules ?? []).map((module, index) => (
           <div key={index} className={card}>
-            <p className="text-sm font-medium text-white">
+            <p className="text-sm font-medium text-text-1">
               Module {index + 1}: {module.title}
             </p>
-            {module.summary ? <p className="mt-1 text-xs text-white/50">{module.summary}</p> : null}
-            <ul className="mt-2 space-y-1 text-sm text-white/65">
+            {module.summary ? <p className="mt-1 text-xs text-text-2">{module.summary}</p> : null}
+            <ul className="mt-2 space-y-1 text-sm text-text-2">
               {(module.lessons ?? []).map((lesson, lessonIndex) => (
                 <li key={lessonIndex} className="flex flex-wrap items-center gap-2">
                   <span>{lesson.title}</span>
                   {lesson.lessonType ? (
-                    <span className="text-[10px] uppercase tracking-wider text-white/35">{lesson.lessonType}</span>
+                    <span className="eyebrow text-text-3">{lesson.lessonType}</span>
                   ) : null}
                 </li>
               ))}
@@ -239,7 +239,7 @@ function CandidatePreview({ kind, content }: { kind: Kind; content: unknown }) {
     );
   }
 
-  return <pre className="overflow-auto text-xs text-white/70">{JSON.stringify(content, null, 2)}</pre>;
+  return <pre className="overflow-auto text-xs text-text-2">{JSON.stringify(content, null, 2)}</pre>;
 }
 
 export function ContentStudio({
@@ -416,14 +416,14 @@ export function ContentStudio({
     <div className="space-y-5">
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
         {metrics.map((metric) => (
-          <div key={metric.label} className="rounded-xl border border-white/10 bg-near-black/30 px-3 py-3 text-center">
-            <strong className="block text-xl text-baby-blue">{metric.value}</strong>
-            <span className="text-[11px] text-white/45">{metric.label}</span>
+          <div key={metric.label} className="rounded-[var(--radius-md)] border border-edge-subtle bg-inset px-3 py-3 text-center">
+            <strong className="block text-xl text-accent">{metric.value}</strong>
+            <span className="text-[11px] text-text-3">{metric.label}</span>
           </div>
         ))}
       </div>
 
-      <p className="flex items-center gap-2 rounded-xl border border-mint/20 bg-mint/5 px-3 py-2 text-xs text-mint/90">
+      <p className="flex items-center gap-2 rounded-xl border border-ai/25 bg-ai-bg px-3 py-2 text-xs text-ai">
         <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden />
         AI-generated drafts — review before publishing. Saving stores a versioned draft and never publishes it.
       </p>
@@ -524,8 +524,8 @@ export function ContentStudio({
               </label>
             </div>
 
-            <details className="mt-3 rounded-xl border border-white/10 px-3 py-2">
-              <summary className="cursor-pointer text-xs text-white/55 select-none">
+            <details className="mt-3 rounded-[var(--radius-md)] border border-edge-subtle px-3 py-2">
+              <summary className="cursor-pointer text-xs text-text-2 select-none">
                 Advanced assessment controls
               </summary>
               <div className="mt-3 grid grid-cols-2 gap-3">
@@ -557,7 +557,7 @@ export function ContentStudio({
             </details>
 
             <button
-              className="mt-4 inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-deep-blue px-5 py-2 text-sm font-medium text-white transition hover:bg-[#0c3ab0] active:scale-[0.97] disabled:opacity-50"
+              className="mt-4 inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-deep-blue px-5 py-2 text-sm font-medium text-text-1 transition hover:bg-[#0c3ab0] active:scale-[0.97] disabled:opacity-50"
               disabled={busy}
               type="submit"
             >
@@ -565,7 +565,7 @@ export function ContentStudio({
               {busy ? "Generating…" : candidates.length ? "Regenerate candidate" : "Generate candidate"}
             </button>
             {error ? (
-              <p className="mt-3 text-sm text-red-300" role="alert">
+              <p className="mt-3 text-sm text-danger" role="alert">
                 {error}
               </p>
             ) : null}
@@ -575,7 +575,7 @@ export function ContentStudio({
         {candidates.length ? (
           <section className="space-y-4">
             <div className="flex items-center justify-between gap-3">
-              <h3 className="font-display text-lg text-white">Compare candidates</h3>
+              <h3 className="font-display text-lg text-text-1">Compare candidates</h3>
               <StatusBadge label="Draft · not published" tone="warning" />
             </div>
 
@@ -586,21 +586,21 @@ export function ContentStudio({
                   <article
                     key={candidate.id}
                     className={cn(
-                      "flex flex-col rounded-2xl border bg-surface p-4 transition",
-                      isSelected ? "border-mint/50 ring-1 ring-mint/30" : "border-white/10",
+                      "flex flex-col rounded-2xl border bg-raised p-4 transition",
+                      isSelected ? "border-ai/50 ring-1 ring-ai/30" : "border-edge-subtle",
                     )}
                   >
                     <div className="mb-3 flex items-center justify-between gap-2">
-                      <span className="text-[10px] uppercase tracking-wider text-mint">{kindLabel[kind]}</span>
+                      <span className="text-[10px] uppercase tracking-wider text-ai">{kindLabel[kind]}</span>
                       {isSelected ? <StatusBadge label="Selected" tone="success" /> : null}
                     </div>
                     <div className="min-h-0 flex-1 overflow-auto">
                       <CandidatePreview kind={kind} content={candidate.content} />
                     </div>
-                    <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-white/10 pt-3 text-xs">
+                    <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-edge-subtle pt-3 text-xs">
                       <button
                         type="button"
-                        className="rounded-full border border-white/15 px-3 py-1 text-white/70 transition hover:border-mint/40 hover:text-white active:scale-[0.97]"
+                        className="rounded-full border border-edge px-3 py-1 text-text-2 transition hover:border-ai/40 hover:text-text-1 active:scale-[0.97]"
                         onClick={() =>
                           setCandidates((current) =>
                             current.map((item) => ({ ...item, selected: item.id === candidate.id })),
@@ -611,7 +611,7 @@ export function ContentStudio({
                       </button>
                       <button
                         type="button"
-                        className="inline-flex items-center gap-1.5 text-white/45 transition hover:text-white"
+                        className="inline-flex items-center gap-1.5 text-text-3 transition hover:text-text-1"
                         onClick={() => void copyCandidate(candidate.content)}
                       >
                         <Copy className="h-3.5 w-3.5" aria-hidden />
@@ -619,12 +619,12 @@ export function ContentStudio({
                       </button>
                       <button
                         type="button"
-                        className="text-white/40 transition hover:text-red-200"
+                        className="text-text-3 transition hover:text-danger"
                         onClick={() => setCandidates((current) => current.filter((item) => item.id !== candidate.id))}
                       >
                         Reject
                       </button>
-                      <span className="ml-auto text-[10px] text-white/30">
+                      <span className="ml-auto text-[10px] text-text-3">
                         {candidate.provenance.provider} · {candidate.provenance.model}
                       </span>
                     </div>
@@ -640,7 +640,7 @@ export function ContentStudio({
                   <button
                     type="button"
                     onClick={() => setShowJson((value) => !value)}
-                    className="inline-flex items-center gap-1.5 text-xs text-white/50 transition hover:text-white"
+                    className="inline-flex items-center gap-1.5 text-xs text-text-2 transition hover:text-text-1"
                   >
                     <FileJson className="h-3.5 w-3.5" aria-hidden />
                     {showJson ? "Hide raw" : "Edit raw"}
@@ -658,7 +658,7 @@ export function ContentStudio({
                   </div>
                 )}
                 <button
-                  className="mt-4 inline-flex min-h-10 items-center justify-center rounded-full bg-mint px-5 py-2 text-sm font-semibold text-[#07110c] transition hover:bg-[#63c3a4] active:scale-[0.97] disabled:opacity-50"
+                  className="mt-4 inline-flex min-h-10 items-center justify-center rounded-full bg-ai px-5 py-2 text-sm font-semibold text-[#07110c] transition hover:bg-[#63c3a4] active:scale-[0.97] disabled:opacity-50"
                   disabled={busy}
                   onClick={(event) => {
                     event.preventDefault();
@@ -671,7 +671,7 @@ export function ContentStudio({
                 </button>
                 {kind === "quiz" || kind === "rubric" ? (
                   <button
-                    className="mt-3 ml-3 inline-flex min-h-10 items-center justify-center rounded-full border border-baby-blue/40 px-5 py-2 text-sm text-baby-blue transition hover:bg-baby-blue/15 disabled:opacity-50"
+                    className="mt-3 ml-3 inline-flex min-h-10 items-center justify-center rounded-full border border-accent/40 px-5 py-2 text-sm text-accent transition hover:bg-accent-bg disabled:opacity-50"
                     disabled={busy}
                     onClick={(event) => {
                       event.preventDefault();
@@ -689,7 +689,7 @@ export function ContentStudio({
         ) : null}
       </form>
 
-      <p className="text-xs leading-relaxed text-white/40">
+      <p className="text-xs leading-relaxed text-text-3">
         Generated material is a versioned draft. Saving never publishes it — use the ordinary Course Builder readiness
         and publication flow after human review.
       </p>

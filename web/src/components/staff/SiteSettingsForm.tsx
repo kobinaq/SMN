@@ -40,7 +40,7 @@ function Field({
   className?: string;
 }) {
   return (
-    <label className={`block text-sm text-white/70 ${className || ""}`}>
+    <label className={`block text-sm text-text-2 ${className || ""}`}>
       {label}
       {multiline ? (
         <textarea
@@ -115,7 +115,7 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
   return (
     <form onSubmit={submit} className="grid gap-8">
       <section className="grid gap-4 md:grid-cols-2">
-        <h2 className="font-display text-lg text-white md:col-span-2">Brand</h2>
+        <h2 className="font-display text-lg text-text-1 md:col-span-2">Brand</h2>
         <Field label="Site name" value={values.siteName} onChange={(value) => setField("siteName", value)} />
         <Field label="Operations email" value={values.opsEmail} onChange={(value) => setField("opsEmail", value)} />
         <Field
@@ -154,8 +154,8 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">
-        <h2 className="font-display text-lg text-white md:col-span-2">Homepage</h2>
-        <p className="text-sm text-white/45 md:col-span-2">
+        <h2 className="font-display text-lg text-text-1 md:col-span-2">Homepage</h2>
+        <p className="text-sm text-text-3 md:col-span-2">
           The public hero uses the coded brand promise and CTAs. These fields stay available for
           metadata and later campaigns.
         </p>
@@ -191,7 +191,7 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">
-        <h2 className="font-display text-lg text-white md:col-span-2">Social</h2>
+        <h2 className="font-display text-lg text-text-1 md:col-span-2">Social</h2>
         <Field label="Instagram" value={values.instagram} onChange={(value) => setField("instagram", value)} />
         <Field label="LinkedIn" value={values.linkedin} onChange={(value) => setField("linkedin", value)} />
         <Field label="Twitter / X" value={values.twitter} onChange={(value) => setField("twitter", value)} />
@@ -199,7 +199,7 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
 
       <section className="grid gap-4">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="font-display text-lg text-white">Impact stats</h2>
+          <h2 className="font-display text-lg text-text-1">Impact stats</h2>
           <Button
             type="button"
             variant="secondary"
@@ -211,15 +211,15 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
             Add stat
           </Button>
         </div>
-        <p className="text-sm text-white/45">
+        <p className="text-sm text-text-3">
           Verified figures are stored here for later use. They do not currently appear on the public
           homepage.
         </p>
         {values.impactStats.length === 0 ? (
-          <p className="text-sm text-white/40">None yet.</p>
+          <p className="text-sm text-text-3">None yet.</p>
         ) : (
           values.impactStats.map((row, index) => (
-            <div key={index} className="grid gap-3 rounded-2xl border border-white/10 p-4 md:grid-cols-[1fr_1fr_auto_auto]">
+            <div key={index} className="grid gap-3 rounded-[var(--radius-lg)] border border-edge-subtle p-4 md:grid-cols-[1fr_1fr_auto_auto]">
               <input
                 className={staffFieldClass}
                 placeholder="Label"
@@ -240,7 +240,7 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
                   setField("impactStats", next);
                 }}
               />
-              <label className="flex items-center gap-2 text-sm text-white/70">
+              <label className="flex items-center gap-2 text-sm text-text-2">
                 <input
                   type="checkbox"
                   checked={row.verified}
@@ -269,7 +269,7 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
         <Button type="submit" disabled={busy}>
           {busy ? "Saving…" : "Save site settings"}
         </Button>
-        {message ? <span className="text-sm text-white/50">{message}</span> : null}
+        {message ? <span className="text-sm text-text-2">{message}</span> : null}
       </div>
     </form>
   );

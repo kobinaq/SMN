@@ -36,7 +36,7 @@ export function EventCheckInForm({ eventId }: { eventId: string | number }) {
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-3 sm:flex-row sm:items-end">
-      <label className="block flex-1 text-sm text-white/70">
+      <label className="block flex-1 text-sm text-text-2">
         Ticket code
         <input
           className={staffFieldClass}
@@ -50,7 +50,7 @@ export function EventCheckInForm({ eventId }: { eventId: string | number }) {
       <Button type="submit" disabled={busy}>
         {busy ? "Checking…" : "Check in"}
       </Button>
-      {last ? <p className="text-sm text-mint sm:pb-3">{last}</p> : null}
+      {last ? <p className="text-sm text-ai sm:pb-3">{last}</p> : null}
     </form>
   );
 }

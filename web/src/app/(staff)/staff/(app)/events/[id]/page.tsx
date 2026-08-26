@@ -76,12 +76,12 @@ export default async function StaffEventAttendeesPage({ params }: Props) {
             );
           })
         ) : (
-          <p className="text-sm text-white/45">No registrations yet.</p>
+          <p className="text-sm text-text-3">No registrations yet.</p>
         )}
       </StaffPanel>
-      <p className="text-xs text-white/35">
+      <p className="text-xs text-text-3">
         Public page:{" "}
-        <Link href={`/events/${event.slug}`} className="text-baby-blue hover:underline">
+        <Link href={`/events/${event.slug}`} className="text-accent hover:underline">
           /events/{String(event.slug)}
         </Link>
       </p>
