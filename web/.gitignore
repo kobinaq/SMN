@@ -48,6 +48,9 @@ yarn-error.log*
 scripts/.payload.config.bundle.mjs
 scripts/.migrations.bundle.mjs
 
+# ad hoc, dot-prefixed scratch scripts (manual QA/repro, never committed)
+scripts/.*.mjs
+
 # vercel
 .vercel
 
