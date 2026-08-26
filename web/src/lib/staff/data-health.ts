@@ -74,3 +74,62 @@ export async function loadOrDescribe<T>(
     return { data: null, failure: describeDataFailure(error, context) };
   }
 }
+
+
+/* ------------------------------------------------------------------------ *
+ * Schema drift probe
+ *
+ * A deployed environment can be running code whose collections were never
+ * migrated into its database. Rather than let each of the ~37 staff pages
+ * discover that separately, probe once and let the staff chrome say it — one
+ * check that covers every page, including the ones nobody has opened yet.
+ * ------------------------------------------------------------------------ */
+
+type Probe = { missing: string[]; checkedAt: number };
+
+/** Cached per process. A migration needs a deploy or a manual run, so a short
+ *  TTL is enough to clear the banner without probing on every request. */
+let cachedProbe: Probe | null = null;
+const PROBE_TTL_MS = 5 * 60 * 1000;
+
+type ProbeClient = {
+  config: { collections: Array<{ slug: string }> };
+  find(args: Record<string, unknown>): Promise<unknown>;
+};
+
+/**
+ * Returns the collections this database cannot answer for. The probe reads a
+ * single row per collection — cheap enough to run behind the cache, and it
+ * touches the same code path the pages use, so it cannot disagree with them.
+ */
+export async function probeSchema(payload: unknown): Promise<string[]> {
+  const now = Date.now();
+  if (cachedProbe && now - cachedProbe.checkedAt < PROBE_TTL_MS) return cachedProbe.missing;
+
+  const client = payload as ProbeClient;
+  const slugs = client.config?.collections?.map((collection) => collection.slug) ?? [];
+
+  const results = await Promise.all(
+    slugs.map(async (slug) => {
+      try {
+        await client.find({ collection: slug, limit: 1, depth: 0, pagination: false, overrideAccess: true });
+        return null;
+      } catch (error) {
+        // Only schema drift belongs in this banner. A permissions or query
+        // error on one collection is a different problem and would only make
+        // the message wrong.
+        const detail = errorText(error);
+        return MISSING_RELATION.some((pattern) => pattern.test(detail)) ? slug : null;
+      }
+    }),
+  );
+
+  const missing = results.filter((slug): slug is string => Boolean(slug));
+  cachedProbe = { missing, checkedAt: now };
+  return missing;
+}
+
+/** Test seam: forget what the last probe found. */
+export function resetSchemaProbe() {
+  cachedProbe = null;
+}
