@@ -8,8 +8,8 @@ import { homepageFounderStory, instructor, smnValues } from "@/lib/content";
 export function FounderStory() {
   return (
     <Band tone="raised" size="lg" fade>
-      <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-16">
-        <Reveal className="lg:sticky lg:top-28">
+      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+        <Reveal>
           <div className="relative aspect-[4/5] overflow-hidden" data-parallax-wrap>
             <Image
               src={instructor.image}
