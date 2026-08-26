@@ -50,21 +50,33 @@ const nextConfig: NextConfig = {
       { source: "/employers/request-intern", destination: "/employers?request=intern", permanent: true },
       { source: "/mentorship/become-a-mentor", destination: "/mentorship#become-a-mentor", permanent: true },
       { source: "/simulations", destination: "/experience#simulations", permanent: true },
+      // Events had two staff surfaces over the same records — an ops list and a
+      // "website" editor list. One workspace per event now.
+      { source: "/staff/website/events", destination: "/staff/events", permanent: true },
+      { source: "/staff/website/events/new", destination: "/staff/events/new", permanent: true },
+      { source: "/staff/website/events/:id", destination: "/staff/events/:id", permanent: true },
     ];
   },
 
   async headers() {
+    // Vercel injects its live-feedback widget into preview deployments only.
+    // Without this the widget is blocked and every preview logs a CSP error
+    // that looks like an app fault; production stays locked down.
+    const preview = process.env.VERCEL_ENV === "preview";
+    const previewScripts = preview ? " https://vercel.live" : "";
+    const previewFrames = preview ? " https://vercel.live" : "";
+    const previewConnect = preview ? " https://vercel.live wss://vercel.live" : "";
     const csp = [
       "default-src 'self'",
       "base-uri 'self'",
       "form-action 'self'",
       "frame-ancestors 'none'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://analytics.ahrefs.com",
+      `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://analytics.ahrefs.com${previewScripts}`,
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: blob: https:",
-      "connect-src 'self' https://analytics.ahrefs.com https://api.paystack.co https://checkout.paystack.com",
-      "frame-src https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://checkout.paystack.com",
+      `connect-src 'self' https://analytics.ahrefs.com https://api.paystack.co https://checkout.paystack.com${previewConnect}`,
+      `frame-src https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://checkout.paystack.com${previewFrames}`,
     ].join("; ");
     return [
       {

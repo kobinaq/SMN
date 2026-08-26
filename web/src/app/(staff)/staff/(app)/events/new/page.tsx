@@ -4,7 +4,7 @@ import { requireStaff } from "@/lib/auth/staff";
 import { eventFields } from "@/lib/staff/field-defs";
 
 export default async function NewEventPage() {
-  await requireStaff(["content"], "/staff/website/events/new");
+  await requireStaff(["content"], "/staff/events/new");
   return (
     <div className="space-y-6">
       <StaffPageHeader

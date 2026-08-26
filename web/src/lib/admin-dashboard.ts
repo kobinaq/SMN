@@ -453,7 +453,7 @@ function quickActionsFor(role: StaffRole | null) {
     { href: "/staff/mentorship", label: "Review mentors", roles: roles("super-admin", "mentorship", "support") },
     { href: "/staff/certificates", label: "Issue certificate", roles: roles("super-admin", "learning", "support") },
     { href: "/staff/members", label: "Open People", roles: roles("super-admin", "support", "mentorship", "learning", "analyst") },
-    { href: "/staff/website/events/new", label: "Create event", roles: roles("super-admin", "content") },
+    { href: "/staff/events/new", label: "Create event", roles: roles("super-admin", "content") },
     { href: "/staff/content/posts/new", label: "Publish article", roles: roles("super-admin", "content") },
     { href: "/staff/content/resources/new", label: "Add resource", roles: roles("super-admin", "content", "learning") },
     { href: "/staff/members", label: "View people", roles: staffRolesAll() },
