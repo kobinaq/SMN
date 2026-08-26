@@ -81,7 +81,6 @@ export function OpportunityActions({
       >
         Archive
       </button>
-      {error ? <span role="alert">{error}</span> : null}
       <ConfirmDialog
         open={Boolean(pending)}
         title={`Change opportunity to ${pending}?`}
@@ -89,7 +88,12 @@ export function OpportunityActions({
         confirmLabel="Confirm"
         destructive={pending === "archived" || pending === "closed"}
         busy={busy}
-        onClose={() => !busy && setPending(null)}
+        error={error}
+        onClose={() => {
+          if (busy) return;
+          setPending(null);
+          setError("");
+        }}
         onConfirm={confirm}
       >
         <label className="block text-sm text-text-2">
@@ -98,7 +102,10 @@ export function OpportunityActions({
             className="mt-2 w-full rounded-[var(--radius-md)] border border-edge-subtle bg-inset px-3 py-2 text-sm text-text-1"
             rows={3}
             value={reason}
-            onChange={(event) => setReason(event.target.value)}
+            onChange={(event) => {
+              setReason(event.target.value);
+              if (error) setError("");
+            }}
             minLength={5}
           />
         </label>
