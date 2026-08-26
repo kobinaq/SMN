@@ -10,6 +10,7 @@ export function AudienceStages() {
   return (
     <Band size="lg" fade>
       <SectionHead
+        align="stacked"
         kicker="Who it is for"
         title="Built for marketers at different stages."
         lede="You do not need a marketing degree or an existing job in the field. You do need to be ready to do the work."

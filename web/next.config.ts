@@ -71,11 +71,14 @@ const nextConfig: NextConfig = {
       "base-uri 'self'",
       "form-action 'self'",
       "frame-ancestors 'none'",
-      `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://analytics.ahrefs.com${previewScripts}`,
+      `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://analytics.ahrefs.com https://static.cloudflareinsights.com${previewScripts}`,
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: blob: https:",
-      `connect-src 'self' https://analytics.ahrefs.com https://api.paystack.co https://checkout.paystack.com${previewConnect}`,
+      // static.cloudflareinsights.com is Cloudflare's own edge-injected analytics
+      // beacon (present whenever the zone is proxied through Cloudflare) — not
+      // something this app loads itself, so it needs an explicit CSP allowance.
+      `connect-src 'self' https://analytics.ahrefs.com https://api.paystack.co https://checkout.paystack.com https://cloudflareinsights.com${previewConnect}`,
       `frame-src https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://checkout.paystack.com${previewFrames}`,
     ].join("; ");
     return [
