@@ -27,6 +27,11 @@ const DEPENDENTS = [
   "lms-assessments",
   "lms-lessons",
   "lms-modules",
+  // Both of these require a course and would otherwise block the delete with
+  // a not-null constraint violation — every other relationship to
+  // lms-courses is optional and Postgres detaches it (ON DELETE SET NULL).
+  "ai-drafts",
+  "ai-knowledge-sources",
 ] as const;
 
 export async function POST(request: Request) {
