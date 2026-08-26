@@ -24,7 +24,7 @@ export default async function PublicProfilePage({ params }: Props) {
 
   return (
     <>
-      <header className="border-b border-white/10 bg-near-black pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-28">
+      <header className="border-b border-edge-subtle bg-canvas pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-28">
         <div className="container-wide pb-12 sm:pb-16">
           <Reveal>
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
@@ -32,23 +32,23 @@ export default async function PublicProfilePage({ params }: Props) {
                 <img
                   src={member.avatarUrl}
                   alt={member.name}
-                  className="h-24 w-24 rounded-[1.75rem] object-cover sm:h-28 sm:w-28"
+                  className="h-24 w-24 object-cover sm:h-28 sm:w-28"
                 />
               ) : (
-                <div className="flex h-24 w-24 items-center justify-center rounded-[1.75rem] bg-deep-blue font-display text-3xl text-white sm:h-28 sm:w-28">
+                <div className="flex h-24 w-24 items-center justify-center bg-accent-strong font-display text-3xl text-text-1 sm:h-28 sm:w-28">
                   {member.name.slice(0, 1)}
                 </div>
               )}
               <div>
-                <p className="font-display text-sm tracking-[0.08em] text-baby-blue">SMN member</p>
-                <h1 className="mt-2 font-display text-4xl text-white sm:text-5xl md:text-6xl">
+                <p className="font-display text-sm tracking-[0.08em] text-accent">SMN member</p>
+                <h1 className="mt-2 font-display text-4xl text-text-1 sm:text-5xl md:text-6xl">
                   {member.name}
                 </h1>
                 {member.headline ? (
-                  <p className="mt-2 max-w-2xl text-base text-white/55 sm:text-lg">{member.headline}</p>
+                  <p className="mt-2 max-w-2xl text-base text-text-2 sm:text-lg">{member.headline}</p>
                 ) : null}
                 {member.location ? (
-                  <p className="mt-2 flex items-center gap-1.5 text-sm text-white/40">
+                  <p className="mt-2 flex items-center gap-1.5 text-sm text-text-3">
                     <MapPin className="h-4 w-4" />
                     {member.location}
                   </p>
@@ -56,7 +56,7 @@ export default async function PublicProfilePage({ params }: Props) {
               </div>
             </div>
             {member.bio ? (
-              <p className="mt-8 max-w-3xl text-sm leading-relaxed text-white/60 sm:text-base sm:leading-8">
+              <p className="mt-8 max-w-3xl text-sm leading-relaxed text-text-2 sm:text-base sm:leading-8">
                 {member.bio}
               </p>
             ) : null}
@@ -66,7 +66,7 @@ export default async function PublicProfilePage({ params }: Props) {
                   href={member.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-baby-blue transition hover:text-white"
+                  className="inline-flex items-center gap-2 text-sm text-accent transition hover:text-text-1"
                 >
                   <ExternalLink className="h-4 w-4" />
                   LinkedIn
@@ -77,7 +77,7 @@ export default async function PublicProfilePage({ params }: Props) {
                   href={member.portfolioUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-baby-blue transition hover:text-white"
+                  className="inline-flex items-center gap-2 text-sm text-accent transition hover:text-text-1"
                 >
                   <ExternalLink className="h-4 w-4" />
                   Website
@@ -88,15 +88,15 @@ export default async function PublicProfilePage({ params }: Props) {
         </div>
       </header>
 
-      <section className="bg-ink py-12 sm:py-16 md:py-20">
+      <section className="bg-raised py-12 sm:py-16 md:py-20">
         <div className="container-wide">
-          <h2 className="font-display text-2xl text-white sm:text-3xl">Selected work</h2>
+          <h2 className="font-display display-3 text-text-1">Selected work</h2>
           {portfolios.length ? (
             <div className="mt-8 space-y-8">
               {portfolios.map((item) => (
                 <article
                   key={item.id}
-                  className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface sm:rounded-[2rem]"
+                  className="overflow-hidden border border-edge-subtle bg-raised"
                 >
                   {item.coverUrl ? (
                     <img
@@ -106,34 +106,34 @@ export default async function PublicProfilePage({ params }: Props) {
                     />
                   ) : null}
                   <div className="p-6 sm:p-10">
-                    <h3 className="font-display text-2xl text-white sm:text-3xl">{item.title}</h3>
+                    <h3 className="font-display display-3 text-text-1">{item.title}</h3>
                     {item.summary ? (
-                      <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/55 sm:text-base">
+                      <p className="mt-3 max-w-3xl text-sm leading-relaxed text-text-2 sm:text-base">
                         {item.summary}
                       </p>
                     ) : null}
-                    <div className="mt-8 space-y-7 border-t border-white/10 pt-8">
+                    <div className="mt-8 space-y-7 border-t border-edge-subtle pt-8">
                       <div>
-                        <h4 className="text-[10px] font-medium uppercase tracking-[0.16em] text-baby-blue">
+                        <h4 className="eyebrow text-accent">
                           Challenge
                         </h4>
-                        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/60">
+                        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-2">
                           {item.challenge}
                         </p>
                       </div>
                       <div>
-                        <h4 className="text-[10px] font-medium uppercase tracking-[0.16em] text-baby-blue">
+                        <h4 className="eyebrow text-accent">
                           Approach
                         </h4>
-                        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/60">
+                        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-2">
                           {item.approach}
                         </p>
                       </div>
                       <div>
-                        <h4 className="text-[10px] font-medium uppercase tracking-[0.16em] text-baby-blue">
+                        <h4 className="eyebrow text-accent">
                           Outcome
                         </h4>
-                        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/60">
+                        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-2">
                           {item.outcome}
                         </p>
                       </div>
@@ -143,7 +143,7 @@ export default async function PublicProfilePage({ params }: Props) {
                         {item.skills.map((skill) => (
                           <span
                             key={skill}
-                            className="rounded-full border border-white/10 px-3 py-1 text-xs text-white/45"
+                            className="rounded-full border border-edge-subtle px-3 py-1 text-xs text-text-3"
                           >
                             {skill}
                           </span>
@@ -155,7 +155,7 @@ export default async function PublicProfilePage({ params }: Props) {
                         href={item.projectUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="mt-7 inline-flex items-center gap-2 text-sm text-baby-blue transition hover:text-white"
+                        className="mt-7 inline-flex items-center gap-2 text-sm text-accent transition hover:text-text-1"
                       >
                         View project
                         <ExternalLink className="h-4 w-4" />

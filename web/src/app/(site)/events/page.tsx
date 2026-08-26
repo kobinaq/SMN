@@ -10,7 +10,7 @@ import {
 import { EventCard } from "@/components/events/EventCard";
 import { EventTypeNav } from "@/components/events/EventTypeNav";
 import { FeaturedEvent } from "@/components/events/FeaturedEvent";
-import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
+import { Masthead } from "@/components/site/kit";
 import { EmptyProof } from "@/components/layout/EmptyProof";
 import { Button } from "@/components/ui/Button";
 import { seoTitle } from "@/lib/brand";
@@ -90,12 +90,12 @@ export default async function EventsPage({ searchParams }: Props) {
 
   return (
     <>
-      <CinematicPageHero
+      <Masthead
         image={img.eventsGathering}
         alt="Circle discussion during an SMN workshop"
         kicker="Events"
         title="Come learn with us."
-        description="From free webinars and workshops to community events and industry conversations, SMN creates spaces where marketers can learn, connect, and exchange ideas."
+        lede="From free webinars and workshops to community events and industry conversations, SMN creates spaces where marketers can learn, connect, and exchange ideas."
         actions={
           <>
             {next ? <Button href={`/events/${next.slug}`}>Register for next event</Button> : null}
@@ -111,32 +111,32 @@ export default async function EventsPage({ searchParams }: Props) {
         }
       />
 
-      <section className="border-b border-white/10 bg-near-black">
+      <section className="border-b border-edge-subtle bg-canvas">
         <div className="container-wide py-8 sm:py-10">
           <div className="grid grid-cols-3 gap-3 sm:gap-4">
-            <div className="rounded-2xl border border-white/10 bg-ink p-4 sm:p-5">
-              <p className="font-display text-2xl text-white sm:text-3xl">{all.length}</p>
-              <p className="mt-1 text-[11px] leading-snug text-white/40 sm:text-xs">
+            <div className=" border border-edge-subtle bg-raised p-4 sm:p-5">
+              <p className="font-display display-3 text-text-1">{all.length}</p>
+              <p className="mt-1 text-[11px] leading-snug text-text-3 sm:text-xs">
                 upcoming sessions
               </p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-ink p-4 sm:p-5">
-              <p className="font-display text-2xl text-mint sm:text-3xl">{freeCount}</p>
-              <p className="mt-1 text-[11px] leading-snug text-white/40 sm:text-xs">
+            <div className=" border border-edge-subtle bg-raised p-4 sm:p-5">
+              <p className="font-display text-2xl text-ai sm:text-3xl">{freeCount}</p>
+              <p className="mt-1 text-[11px] leading-snug text-text-3 sm:text-xs">
                 free or open entry
               </p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-ink p-4 sm:p-5">
-              <p className="font-display text-lg leading-tight text-white sm:text-xl">
+            <div className=" border border-edge-subtle bg-raised p-4 sm:p-5">
+              <p className="font-display text-lg leading-tight text-text-1 sm:text-xl">
                 {next ? formatEventDate(next.date).split(",")[0] : "TBA"}
               </p>
-              <p className="mt-1 text-[11px] leading-snug text-white/40 sm:text-xs">
+              <p className="mt-1 text-[11px] leading-snug text-text-3 sm:text-xs">
                 next on the calendar
               </p>
             </div>
           </div>
           <div className="mt-8 sm:mt-10">
-            <Suspense fallback={<div className="h-10 animate-pulse rounded-full bg-white/5" />}>
+            <Suspense fallback={<div className="h-10 animate-pulse rounded-full bg-inset" />}>
               <EventTypeNav counts={counts} />
             </Suspense>
           </div>
@@ -144,7 +144,7 @@ export default async function EventsPage({ searchParams }: Props) {
       </section>
 
       {/* Featured + list */}
-      <section className="bg-ink pb-16 pt-8 sm:pb-24 sm:pt-12 md:pb-28">
+      <section className="bg-raised pb-16 pt-8 sm:pb-24 sm:pt-12 md:pb-28">
         <div className="container-wide space-y-12 sm:space-y-16">
           {showFeatured && next ? <FeaturedEvent event={next} /> : null}
 
@@ -152,10 +152,10 @@ export default async function EventsPage({ searchParams }: Props) {
             <div>
               <div className="mb-6 flex flex-wrap items-end justify-between gap-3 sm:mb-8">
                 <div>
-                  <h2 className="font-display text-xl text-white sm:text-2xl">
+                  <h2 className="font-display text-xl text-text-1 sm:text-2xl">
                     {active === "All" ? "More on the calendar" : active}
                   </h2>
-                  <p className="mt-1 text-sm text-white/40">
+                  <p className="mt-1 text-sm text-text-3">
                     {displayList.length} event{displayList.length === 1 ? "" : "s"}
                     {active === "All" ? " · register via the event link" : ""}
                   </p>
@@ -187,20 +187,20 @@ export default async function EventsPage({ searchParams }: Props) {
       </section>
 
       {/* Formats */}
-      <section className="border-y border-white/10 bg-near-black py-16 sm:py-20">
+      <section className="border-y border-edge-subtle bg-canvas py-16 sm:py-20">
         <div className="container-wide">
-            <h2 className="max-w-xl font-display text-2xl text-white sm:text-3xl">
+            <h2 className="max-w-xl font-display display-3 text-text-1">
               Event types
             </h2>
             <div className="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
             {formats.map((item) => (
               <div
                 key={item.title}
-                className="rounded-2xl border border-white/10 bg-ink p-5 sm:rounded-[1.5rem] sm:p-6"
+                className=" border border-edge-subtle bg-raised p-5 sm:p-6"
               >
-                <item.icon className="h-5 w-5 text-baby-blue" strokeWidth={1.75} />
-                <h3 className="mt-4 font-display text-lg text-white sm:text-xl">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/55">{item.body}</p>
+                <item.icon className="h-5 w-5 text-accent" strokeWidth={1.75} />
+                <h3 className="mt-4 font-display text-lg text-text-1 sm:text-xl">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-text-2">{item.body}</p>
               </div>
             ))}
           </div>
@@ -208,13 +208,13 @@ export default async function EventsPage({ searchParams }: Props) {
       </section>
 
       {/* What to expect */}
-      <section className="bg-ink py-16 sm:py-20">
+      <section className="bg-raised py-16 sm:py-20">
         <div className="container-wide grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
           <div>
-            <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
+            <h2 className="font-display display-3 text-text-1">
               Spaces where marketers can learn, connect, and exchange ideas
             </h2>
-            <p className="mt-4 text-sm leading-relaxed text-white/60 sm:text-base">
+            <p className="mt-4 text-sm leading-relaxed text-text-2 sm:text-base">
               Most sessions are free. Some have limited seats so the room stays useful. Register
               early, show up ready to participate, and bring a real question when you can.
             </p>
@@ -223,14 +223,14 @@ export default async function EventsPage({ searchParams }: Props) {
             {expect.map((item, i) => (
               <div
                 key={item.title}
-                className="flex gap-4 rounded-2xl border border-white/10 bg-surface p-5 sm:p-6"
+                className="flex gap-4 border border-edge-subtle bg-raised p-5 sm:p-6"
               >
-                <span className="font-display text-sm text-baby-blue">
+                <span className="font-display text-sm text-accent">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div>
-                  <h3 className="font-display text-lg text-white">{item.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-white/55">{item.body}</p>
+                  <h3 className="font-display text-lg text-text-1">{item.title}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-text-2">{item.body}</p>
                 </div>
               </div>
             ))}
@@ -239,14 +239,14 @@ export default async function EventsPage({ searchParams }: Props) {
       </section>
 
       {/* Bottom CTA */}
-      <section className="border-t border-white/10 bg-near-black py-14 sm:py-16">
+      <section className="border-t border-edge-subtle bg-canvas py-14 sm:py-16">
         <div className="container-wide">
-          <div className="grid gap-6 rounded-2xl border border-white/10 bg-ink p-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-10 sm:rounded-[2rem] sm:p-8 md:p-10">
+          <div className="grid gap-6 border border-edge-subtle bg-raised p-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-10 sm:p-8 md:p-10">
             <div>
-              <h2 className="font-display text-xl text-white sm:text-2xl md:text-3xl">
+              <h2 className="font-display text-xl text-text-1 sm:text-2xl md:text-3xl">
                 Come learn with us
               </h2>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/55">
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-text-2">
                 Join the community for reminders and recaps, or apply to live training when you
                 want a full programme.
               </p>

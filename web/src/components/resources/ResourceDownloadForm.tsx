@@ -59,7 +59,7 @@ export function ResourceDownloadForm({
       <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
       <label
         htmlFor="resource-download-email"
-        className="block text-xs tracking-wider text-white/40 uppercase"
+        className="block text-xs tracking-wider text-text-3 uppercase"
       >
         Work email
       </label>
@@ -72,7 +72,7 @@ export function ResourceDownloadForm({
           placeholder="you@company.com"
           autoComplete="email"
           inputMode="email"
-          className="field min-w-0 flex-1 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-white placeholder:text-white/35"
+          className="field min-w-0 flex-1 rounded-full border border-edge-subtle bg-inset px-5 py-3 text-text-1 placeholder:text-text-3"
         />
         <Button type="submit" disabled={status === "loading"} className="shrink-0 sm:min-w-[140px]">
           {status === "loading" ? "Sending…" : "Get free download"}
@@ -83,7 +83,7 @@ export function ResourceDownloadForm({
           <p
             className={cn(
               "text-sm leading-relaxed",
-              status === "success" ? "text-mint" : "text-red-300",
+              status === "success" ? "text-ai" : "text-red-300",
             )}
           >
             {message}
@@ -91,14 +91,14 @@ export function ResourceDownloadForm({
           {downloadUrl ? (
             <a
               href={downloadUrl}
-              className="inline-flex min-h-10 items-center text-sm font-medium text-baby-blue underline underline-offset-4 transition hover:text-white"
+              className="inline-flex min-h-10 items-center text-sm font-medium text-accent underline underline-offset-4 transition hover:text-text-1"
             >
               Open {resourceTitle}
             </a>
           ) : null}
         </div>
       ) : (
-        <p className="text-xs text-white/35">
+        <p className="text-xs text-text-3">
           Free for the community. We may also send occasional strategy notes. Unsubscribe anytime.
         </p>
       )}

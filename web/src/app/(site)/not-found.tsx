@@ -14,11 +14,11 @@ export default async function SiteNotFound() {
 
   return (
     <section className="container-page flex flex-col items-center justify-center py-28 text-center sm:py-36">
-      <p className="text-[11px] font-medium tracking-[0.28em] text-baby-blue uppercase">
+      <p className="text-[11px] font-medium tracking-[0.28em] text-accent uppercase">
         Error 404
       </p>
-      <h1 className="mt-4 font-display text-4xl text-white sm:text-6xl">This page isn’t here</h1>
-      <p className="mt-4 max-w-md text-sm leading-relaxed text-white/55 sm:text-base">
+      <h1 className="mt-4 font-display text-4xl text-text-1 sm:text-6xl">This page isn’t here</h1>
+      <p className="mt-4 max-w-md text-sm leading-relaxed text-text-2 sm:text-base">
         The page you are looking for may have moved or never existed. Apply for the next cohort, or
         pick up from a live session.
       </p>
@@ -36,10 +36,10 @@ export default async function SiteNotFound() {
       </div>
       <nav
         aria-label="Popular pages"
-        className="mt-10 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm text-white/45"
+        className="mt-10 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm text-text-3"
       >
         {quickLinks.map((link) => (
-          <Link key={link.href} href={link.href} className="transition hover:text-white">
+          <Link key={link.href} href={link.href} className="transition hover:text-text-1">
             {link.label}
           </Link>
         ))}

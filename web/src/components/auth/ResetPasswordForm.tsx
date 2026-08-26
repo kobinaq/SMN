@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 
 const field =
-  "field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/35 sm:py-3";
+  "field w-full border border-edge-subtle bg-inset px-4 py-3.5 text-text-1 placeholder:text-text-3 sm:py-3";
 
 export function ResetPasswordForm() {
   const router = useRouter();
@@ -54,9 +54,9 @@ export function ResetPasswordForm() {
 
   if (!token) {
     return (
-      <p className="text-sm text-white/55">
+      <p className="text-sm text-text-2">
         This reset link is missing a token.{" "}
-        <Link href="/forgot-password" className="text-baby-blue hover:text-white">
+        <Link href="/forgot-password" className="text-accent hover:text-text-1">
           Request a new link
         </Link>
         .
@@ -66,7 +66,7 @@ export function ResetPasswordForm() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
-      <label className="block text-sm text-white/70" htmlFor="reset-password">
+      <label className="block text-sm text-text-2" htmlFor="reset-password">
         New password
         <input
           id="reset-password"
@@ -78,7 +78,7 @@ export function ResetPasswordForm() {
           autoComplete="new-password"
         />
       </label>
-      <label className="block text-sm text-white/70" htmlFor="reset-confirm">
+      <label className="block text-sm text-text-2" htmlFor="reset-confirm">
         Confirm password
         <input
           id="reset-confirm"
@@ -94,12 +94,12 @@ export function ResetPasswordForm() {
         {status === "loading" ? "Saving…" : "Update password"}
       </Button>
       {message ? (
-        <p className={`text-sm ${status === "error" ? "text-red-300" : "text-mint"}`} role="status" aria-live="polite">
+        <p className={`text-sm ${status === "error" ? "text-red-300" : "text-ai"}`} role="status" aria-live="polite">
           {message}
         </p>
       ) : null}
-      <p className="pt-2 text-center text-sm text-white/45">
-        <Link href="/login" className="text-baby-blue hover:text-white">
+      <p className="pt-2 text-center text-sm text-text-3">
+        <Link href="/login" className="text-accent hover:text-text-1">
           Back to sign in
         </Link>
       </p>

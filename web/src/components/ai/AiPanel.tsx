@@ -222,6 +222,7 @@ export function AiComposer({
   onChange,
   onSubmit,
   busy,
+  label = "Your question",
   placeholder = "Ask a question…",
   hint = "⌘ + Enter to send",
   submitLabel = "Ask",
@@ -231,6 +232,12 @@ export function AiComposer({
   onChange: (value: string) => void;
   onSubmit: () => void;
   busy?: boolean;
+  /**
+   * Accessible name for the input. A placeholder is not a label — it
+   * disappears the moment someone types, which leaves screen-reader users
+   * with an anonymous text box.
+   */
+  label?: string;
   placeholder?: string;
   hint?: string;
   submitLabel?: string;
@@ -240,6 +247,7 @@ export function AiComposer({
     <div className="shrink-0 border-t border-edge-subtle px-5 py-4">
       <Textarea
         value={value}
+        aria-label={label}
         maxLength={12000}
         placeholder={placeholder}
         className="min-h-20 focus:border-ai focus:ring-ai-bg"

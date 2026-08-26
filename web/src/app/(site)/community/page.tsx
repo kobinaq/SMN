@@ -119,17 +119,17 @@ export default async function CommunityPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-near-black pt-[calc(5.5rem+env(safe-area-inset-top))] pb-14 sm:pt-32 sm:pb-20 md:pt-36 md:pb-24">
+      <section className="relative overflow-hidden border-b border-edge-subtle bg-canvas pt-[calc(5.5rem+env(safe-area-inset-top))] pb-14 sm:pt-32 sm:pb-20 md:pt-36 md:pb-24">
         <div className="container-wide">
           <div className="grid items-end gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
             <div>
-              <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-baby-blue sm:text-xs">
+              <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-accent sm:text-xs">
                 Community
               </p>
-              <h1 className="mt-3 max-w-2xl font-display text-[1.85rem] leading-tight text-white sm:mt-4 sm:text-4xl md:text-5xl lg:text-6xl">
+              <h1 className="mt-3 max-w-2xl font-display text-[1.85rem] leading-tight text-text-1 sm:mt-4 sm:text-4xl md:text-5xl lg:text-6xl">
                 You should not have to figure out your marketing career alone
               </h1>
-              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/60 sm:mt-5 sm:text-base md:text-lg">
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-text-2 sm:mt-5 sm:text-base md:text-lg">
                 The Social Marketers Network is a community for people learning, working, and
                 growing in marketing. A place to ask questions, exchange ideas, find mentors,
                 discover opportunities, and build relationships with people who understand the
@@ -143,13 +143,13 @@ export default async function CommunityPage() {
                   See upcoming events
                 </Button>
               </div>
-              <p className="mt-5 text-xs text-white/35 sm:text-sm">
+              <p className="mt-5 text-xs text-text-3 sm:text-sm">
                 Free to join · Cohort members get private groups after acceptance
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              <div className="relative aspect-[3/4] overflow-hidden rounded-2xl sm:rounded-[1.5rem]">
+              <div className="relative aspect-[3/4] overflow-hidden">
                 <Image
                   src={img.communityPortrait}
                   alt="Two SMN members sitting together"
@@ -158,10 +158,9 @@ export default async function CommunityPage() {
                   sizes="40vw"
                   priority
                 />
-                <div className="image-matte" />
               </div>
               <div className="mt-6 grid gap-3 sm:mt-10 sm:gap-4">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:rounded-[1.5rem]">
+                <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
                     src={img.communityCollab}
                     alt="Members in a focused table conversation"
@@ -169,9 +168,8 @@ export default async function CommunityPage() {
                     className="object-cover"
                     sizes="40vw"
                   />
-                  <div className="image-matte" />
                 </div>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:rounded-[1.5rem]">
+                <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
                     src={img.communityEvent}
                     alt="Two members at an SMN gathering"
@@ -179,7 +177,6 @@ export default async function CommunityPage() {
                     className="object-cover"
                     sizes="40vw"
                   />
-                  <div className="image-matte" />
                 </div>
               </div>
             </div>
@@ -188,7 +185,7 @@ export default async function CommunityPage() {
       </section>
 
       {/* Stats strip */}
-      <section className="border-b border-white/10 bg-ink">
+      <section className="border-b border-edge-subtle bg-raised">
         <div className="container-wide grid grid-cols-2 gap-6 py-8 sm:grid-cols-4 sm:gap-4 sm:py-10">
           {[
             { label: "Home base", value: "WhatsApp" },
@@ -197,29 +194,29 @@ export default async function CommunityPage() {
             { label: "Vibe", value: "Helpful, not hype" },
           ].map((item) => (
             <div key={item.label} className="text-center sm:text-left">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/35 sm:text-xs">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-text-3 sm:text-xs">
                 {item.label}
               </p>
-              <p className="mt-2 font-display text-lg text-white sm:text-xl">{item.value}</p>
+              <p className="mt-2 font-display text-lg text-text-1 sm:text-xl">{item.value}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Who it's for */}
-      <section className="bg-near-black py-16 sm:py-24">
+      <section className="bg-canvas py-16 sm:py-24">
         <div className="container-wide">
-          <h2 className="max-w-2xl font-display text-2xl text-white sm:text-3xl md:text-4xl">
+          <h2 className="max-w-2xl font-display display-3 text-text-1">
             Built for people learning, working, and growing in marketing
           </h2>
           <div className="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
             {whoFor.map((item) => (
               <div
                 key={item.title}
-                className="rounded-2xl border border-white/10 bg-surface p-5 sm:rounded-[1.5rem] sm:p-6"
+                className=" border border-edge-subtle bg-raised p-5 sm:p-6"
               >
-                <h3 className="font-display text-lg text-white sm:text-xl">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/60">{item.body}</p>
+                <h3 className="font-display text-lg text-text-1 sm:text-xl">{item.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-text-2">{item.body}</p>
               </div>
             ))}
           </div>
@@ -227,15 +224,15 @@ export default async function CommunityPage() {
       </section>
 
       {/* What you get */}
-      <section className="border-y border-white/10 bg-ink py-16 sm:py-24">
+      <section className="border-y border-edge-subtle bg-raised py-16 sm:py-24">
         <div className="container-wide">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-xl">
-              <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
+              <h2 className="font-display display-3 text-text-1">
                 What happens inside the Network?
               </h2>
             </div>
-            <p className="max-w-sm text-sm text-white/50">
+            <p className="max-w-sm text-sm text-text-3">
               Not a silent group. A working room for questions, drafts, and real marketing work.
             </p>
           </div>
@@ -243,11 +240,11 @@ export default async function CommunityPage() {
             {channels.map((item) => (
               <div
                 key={item.title}
-                className="rounded-2xl border border-white/10 bg-surface p-5 transition hover:border-baby-blue/30 sm:rounded-[1.5rem] sm:p-6"
+                className=" border border-edge-subtle bg-raised p-5 transition hover:border-accent/30 sm:p-6"
               >
-                <item.icon className="h-5 w-5 text-baby-blue" strokeWidth={1.75} />
-                <h3 className="mt-4 font-display text-lg text-white">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/60">{item.body}</p>
+                <item.icon className="h-5 w-5 text-accent" strokeWidth={1.75} />
+                <h3 className="mt-4 font-display text-lg text-text-1">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-text-2">{item.body}</p>
               </div>
             ))}
           </div>
@@ -255,9 +252,9 @@ export default async function CommunityPage() {
       </section>
 
       {/* Culture + image */}
-      <section className="bg-near-black py-16 sm:py-24">
+      <section className="bg-canvas py-16 sm:py-24">
         <div className="container-wide grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:rounded-[2rem] lg:aspect-[5/4]">
+          <div className="relative aspect-[4/3] overflow-hidden lg:aspect-[5/4]">
             <Image
               src={img.communityCulture}
               alt="Networking during an SMN session"
@@ -265,21 +262,20 @@ export default async function CommunityPage() {
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
-            <div className="image-matte" />
           </div>
           <div>
-            <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
+            <h2 className="font-display display-3 text-text-1">
               The marketing community you wish you had started with.
             </h2>
-            <p className="mt-4 text-sm leading-relaxed text-white/65 sm:mt-5 sm:text-base">
+            <p className="mt-4 text-sm leading-relaxed text-text-2 sm:mt-5 sm:text-base">
               Whether you are taking your first steps into marketing or have years of experience,
               there is room for you here. Helpful, honest, and serious about growth.
             </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {principles.map((p) => (
-                <div key={p.title} className="rounded-2xl border border-white/10 bg-surface p-4 sm:p-5">
-                  <h3 className="font-display text-base text-white">{p.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/55">{p.body}</p>
+                <div key={p.title} className=" border border-edge-subtle bg-raised p-4 sm:p-5">
+                  <h3 className="font-display text-base text-text-1">{p.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-text-2">{p.body}</p>
                 </div>
               ))}
             </div>
@@ -288,20 +284,20 @@ export default async function CommunityPage() {
       </section>
 
       {/* How to join */}
-      <section className="border-y border-white/10 bg-ink py-16 sm:py-24">
+      <section className="border-y border-edge-subtle bg-raised py-16 sm:py-24">
         <div className="container-wide">
-          <h2 className="max-w-xl font-display text-2xl text-white sm:text-3xl md:text-4xl">
+          <h2 className="max-w-xl font-display display-3 text-text-1">
             Three simple steps
           </h2>
           <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-3">
             {steps.map((item) => (
               <div
                 key={item.step}
-                className="relative rounded-2xl border border-white/10 bg-surface p-6 sm:rounded-[1.5rem] sm:p-8"
+                className="relative border border-edge-subtle bg-raised p-6 sm:p-8"
               >
-                <p className="font-display text-sm text-baby-blue">{item.step}</p>
-                <h3 className="mt-3 font-display text-xl text-white">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/60">{item.body}</p>
+                <p className="font-display text-sm text-accent">{item.step}</p>
+                <h3 className="mt-3 font-display text-xl text-text-1">{item.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-text-2">{item.body}</p>
               </div>
             ))}
           </div>
@@ -309,17 +305,17 @@ export default async function CommunityPage() {
       </section>
 
       {communityStories.length ? (
-        <section className="bg-near-black py-16 sm:py-24">
+        <section className="bg-canvas py-16 sm:py-24">
           <div className="container-wide">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
+                <h2 className="font-display display-3 text-text-1">
                   What people say about the room
                 </h2>
               </div>
               <Link
                 href="/stories"
-                className="inline-flex items-center gap-1.5 text-sm text-baby-blue transition hover:text-white"
+                className="inline-flex items-center gap-1.5 text-sm text-accent transition hover:text-text-1"
               >
                 More stories <ArrowRight className="h-4 w-4" />
               </Link>
@@ -328,10 +324,10 @@ export default async function CommunityPage() {
               {communityStories.map((story) => (
                 <figure
                   key={story.name}
-                  className="rounded-2xl border border-white/10 bg-surface p-5 sm:rounded-[1.75rem] sm:p-7"
+                  className=" border border-edge-subtle bg-raised p-5 sm:p-7"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="relative h-14 w-14 overflow-hidden rounded-full border border-white/10">
+                    <div className="relative h-14 w-14 overflow-hidden rounded-full border border-edge-subtle">
                       <Image
                         src={story.image}
                         alt={story.name}
@@ -341,11 +337,11 @@ export default async function CommunityPage() {
                       />
                     </div>
                     <div>
-                      <figcaption className="font-display text-lg text-white">{story.name}</figcaption>
-                      <p className="text-sm text-white/45">{story.role}</p>
+                      <figcaption className="font-display text-lg text-text-1">{story.name}</figcaption>
+                      <p className="text-sm text-text-3">{story.role}</p>
                     </div>
                   </div>
-                  <blockquote className="mt-5 text-sm leading-relaxed text-white/70 sm:text-base">
+                  <blockquote className="mt-5 text-sm leading-relaxed text-text-2 sm:text-base">
                     “{excerptStoryQuote(story.quote)}”
                   </blockquote>
                 </figure>
@@ -356,9 +352,9 @@ export default async function CommunityPage() {
       ) : null}
 
       {/* Pathways */}
-      <section className="border-t border-white/10 bg-ink py-16 sm:py-24">
+      <section className="border-t border-edge-subtle bg-raised py-16 sm:py-24">
         <div className="container-wide">
-          <h2 className="max-w-xl font-display text-2xl text-white sm:text-3xl md:text-4xl">
+          <h2 className="max-w-xl font-display display-3 text-text-1">
             Community is the base. Learning goes further.
           </h2>
           <div className="mt-10 grid gap-4 sm:mt-12 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
@@ -391,13 +387,13 @@ export default async function CommunityPage() {
               <Link
                 key={card.href}
                 href={card.href}
-                className="group flex flex-col rounded-2xl border border-white/10 bg-surface p-6 transition hover:border-baby-blue/35 sm:rounded-[1.5rem] sm:p-7"
+                className="group flex flex-col border border-edge-subtle bg-raised p-6 transition hover:border-accent/35 sm:p-7"
               >
-                <h3 className="font-display text-xl text-white group-hover:text-baby-blue">
+                <h3 className="font-display text-xl text-text-1 group-hover:text-accent">
                   {card.title}
                 </h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-white/60">{card.body}</p>
-                <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-baby-blue">
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-text-2">{card.body}</p>
+                <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-accent">
                   {card.cta}
                   <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
                 </span>
@@ -408,14 +404,14 @@ export default async function CommunityPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="bg-near-black py-16 sm:py-20">
-        <div className="container-wide overflow-hidden rounded-2xl border border-white/10 bg-deep-blue p-6 sm:rounded-[2rem] sm:p-10 md:p-14">
+      <section className="bg-canvas py-16 sm:py-20">
+        <div className="container-wide overflow-hidden border border-edge-subtle bg-accent-strong p-6 sm:p-10 md:p-14">
           <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div>
-              <h2 className="font-display text-2xl text-white sm:text-3xl md:text-4xl">
+              <h2 className="font-display display-3 text-text-1">
                 You should not have to figure marketing out alone
               </h2>
-              <p className="mt-4 max-w-xl text-sm text-white/70 sm:text-base">
+              <p className="mt-4 max-w-xl text-sm text-text-2 sm:text-base">
                 Come introduce yourself, ask a question, or share what you are building. The Network
                 is ready when you are.
               </p>

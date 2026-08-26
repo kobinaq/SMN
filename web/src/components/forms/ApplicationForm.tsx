@@ -57,18 +57,18 @@ export function ApplicationForm({
   }
 
   const field =
-    "field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/35 sm:py-3";
+    "field w-full border border-edge-subtle bg-inset px-4 py-3.5 text-text-1 placeholder:text-text-3 sm:py-3";
 
   if (status === "success") {
     return (
-      <div className="rounded-2xl border border-mint/25 bg-mint/5 p-6 text-sm leading-relaxed text-white/80">
-        <p className="font-display text-2xl text-white">Application received</p>
+      <div className=" border border-mint/25 bg-ai/5 p-6 text-sm leading-relaxed text-text-2">
+        <p className="font-display text-2xl text-text-1">Application received</p>
         <p className="mt-4">
           Thank you. Your cohort application has been submitted. We will email you within{" "}
-          <strong className="text-white">3 to 5 business days</strong> with a decision or follow-up
+          <strong className="text-text-1">3 to 5 business days</strong> with a decision or follow-up
           questions.
         </p>
-        <ul className="mt-4 list-disc space-y-2 pl-5 text-white/65">
+        <ul className="mt-4 list-disc space-y-2 pl-5 text-text-2">
           <li>No payment is due until after acceptance.</li>
           <li>Check your inbox (and spam folder) for confirmation from SMN.</li>
           <li>If you do not hear back after five business days, contact us.</li>
@@ -97,10 +97,10 @@ export function ApplicationForm({
       />
       {cohorts.length > 1 ? (
         <div>
-          <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-course">
+          <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-course">
             Which programme?
           </label>
-          <Select id="apply-course" className={cn(field, "bg-surface")} name="course" required defaultValue="">
+          <Select id="apply-course" className={cn(field, "bg-raised")} name="course" required defaultValue="">
             <option value="" disabled>
               Select a programme
             </option>
@@ -116,7 +116,7 @@ export function ApplicationForm({
       ) : null}
       <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-name">
+          <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-name">
             Full name
           </label>
           <input
@@ -130,7 +130,7 @@ export function ApplicationForm({
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-email">
+          <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-email">
             Email
           </label>
           <input
@@ -145,7 +145,7 @@ export function ApplicationForm({
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-phone">
+          <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-phone">
             WhatsApp / phone
           </label>
           <input
@@ -159,7 +159,7 @@ export function ApplicationForm({
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-country">
+          <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-country">
             City / country
           </label>
           <input
@@ -172,18 +172,18 @@ export function ApplicationForm({
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-role">
+          <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-role">
             Current role
           </label>
           <input id="apply-role" className={field} name="role" required placeholder="Current role" />
         </div>
         <div>
-          <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-level">
+          <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-level">
             Experience level
           </label>
           <Select
             id="apply-level"
-            className={cn(field, "bg-surface")}
+            className={cn(field, "bg-raised")}
             name="level"
             required
             defaultValue=""
@@ -199,7 +199,7 @@ export function ApplicationForm({
           </Select>
         </div>
         <div>
-          <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-linkedin">
+          <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-linkedin">
             LinkedIn URL (optional)
           </label>
           <input
@@ -211,7 +211,7 @@ export function ApplicationForm({
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-portfolio">
+          <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-portfolio">
             Portfolio URL (optional)
           </label>
           <input
@@ -224,7 +224,7 @@ export function ApplicationForm({
         </div>
       </div>
       <div>
-        <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-goals">
+        <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-goals">
           What do you want from this cohort?
         </label>
         <textarea
@@ -237,7 +237,7 @@ export function ApplicationForm({
         />
       </div>
       <div>
-        <label className="mb-1.5 block text-xs text-white/50" htmlFor="apply-source">
+        <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-source">
           How did you hear about SMN? (optional)
         </label>
         <input
@@ -251,7 +251,7 @@ export function ApplicationForm({
         {status === "loading" ? "Submitting…" : cta.submitApplication.label}
       </Button>
       {message ? (
-        <p className={cn("text-sm", status === "error" ? "text-red-300" : "text-mint")} role="alert">
+        <p className={cn("text-sm", status === "error" ? "text-red-300" : "text-ai")} role="alert">
           {message}
         </p>
       ) : null}

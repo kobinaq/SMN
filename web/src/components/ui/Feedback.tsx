@@ -36,7 +36,7 @@ export function ErrorState({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-red-300/30 bg-red-400/10 px-5 py-6" role="alert">
+    <div className=" border border-red-300/30 bg-red-400/10 px-5 py-6" role="alert">
       <p className="font-display text-lg text-red-100">{title}</p>
       {description ? <p className="mt-2 text-sm text-red-100/80">{description}</p> : null}
       {action ? <div className="mt-4">{action}</div> : null}
@@ -80,10 +80,10 @@ export function FormField({
   children: React.ReactNode;
 }) {
   return (
-    <label htmlFor={htmlFor} className="block text-sm text-white/70">
+    <label htmlFor={htmlFor} className="block text-sm text-text-2">
       <span>{label}</span>
       <div className="mt-2">{children}</div>
-      {hint && !error ? <span className="mt-1 block text-xs text-white/40">{hint}</span> : null}
+      {hint && !error ? <span className="mt-1 block text-xs text-text-3">{hint}</span> : null}
       {error ? (
         <span className="mt-1 block text-xs text-red-200" role="alert">
           {error}
@@ -94,5 +94,5 @@ export function FormField({
 }
 
 export function Skeleton({ className }: { className?: string }) {
-  return <div className={cn("animate-pulse rounded-2xl bg-white/10", className)} aria-hidden />;
+  return <div className={cn("animate-pulse bg-white/10", className)} aria-hidden />;
 }

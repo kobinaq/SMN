@@ -28,29 +28,29 @@ export default async function PublicJobPage({ params }: Props) {
     getMember(),
   ]);
 
-  const backHref = opportunity.type === "Internship" ? "/careers/internships" : "/careers/jobs";
+  const backHref = opportunity.type === "Internship" ? "/careers/jobs?type=Internship" : "/careers/jobs";
   const backLabel = opportunity.type === "Internship" ? "Internships" : "Job opportunities";
   const applyHref = member
     ? `/app/opportunities/${opportunity.slug}`
     : `/login?callbackUrl=${encodeURIComponent(`/app/opportunities/${opportunity.slug}`)}`;
 
   return (
-    <article className="bg-near-black">
-      <header className="border-b border-white/10 pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-28">
+    <article className="bg-canvas">
+      <header className="border-b border-edge-subtle pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-28">
         <div className="container-wide pb-12 sm:pb-16">
           <Link
             href={backHref}
-            className="text-sm text-white/50 transition hover:text-white"
+            className="text-sm text-text-3 transition hover:text-text-1"
           >
             {backLabel}
           </Link>
-          <p className="mt-6 text-[10px] font-medium uppercase tracking-[0.18em] text-baby-blue">
+          <p className="mt-6 eyebrow text-accent">
             {opportunity.company}
           </p>
-          <h1 className="mt-3 max-w-3xl font-display text-4xl text-white sm:text-5xl md:text-6xl">
+          <h1 className="mt-3 max-w-3xl font-display text-4xl text-text-1 sm:text-5xl md:text-6xl">
             {opportunity.title}
           </h1>
-          <div className="mt-5 flex flex-wrap gap-x-3 gap-y-1 text-sm text-white/50">
+          <div className="mt-5 flex flex-wrap gap-x-3 gap-y-1 text-sm text-text-3">
             <span>{opportunity.type}</span>
             <span>·</span>
             <span>{opportunity.workMode}</span>
@@ -63,33 +63,33 @@ export default async function PublicJobPage({ params }: Props) {
             </span>
           </div>
           {opportunity.salary ? (
-            <p className="mt-4 text-sm text-mint">{opportunity.salary}</p>
+            <p className="mt-4 text-sm text-ai">{opportunity.salary}</p>
           ) : null}
         </div>
       </header>
 
-      <div className="bg-ink py-12 sm:py-16">
+      <div className="bg-raised py-12 sm:py-16">
         <div className="container-wide grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-16">
           <div>
-            <p className="max-w-2xl text-base leading-relaxed text-white/65">{opportunity.summary}</p>
-            <div className="mt-8 max-w-2xl whitespace-pre-line text-sm leading-7 text-white/60">
+            <p className="max-w-2xl text-base leading-relaxed text-text-2">{opportunity.summary}</p>
+            <div className="mt-8 max-w-2xl whitespace-pre-line text-sm leading-7 text-text-2">
               {opportunity.description}
             </div>
           </div>
           <aside>
-            <div className="rounded-[1.75rem] border border-white/10 bg-surface p-6 sm:p-7 lg:sticky lg:top-28">
-              <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-white/40">
+            <div className=" border border-edge-subtle bg-raised p-6 sm:p-7 lg:sticky lg:top-28">
+              <p className="eyebrow text-text-3">
                 Apply
               </p>
-              <p className="mt-3 font-display text-xl text-white">
+              <p className="mt-3 font-display text-xl text-text-1">
                 {opportunity.expired ? "This listing has closed" : "Apply from a member account"}
               </p>
-              <p className="mt-2 text-sm leading-relaxed text-white/50">
+              <p className="mt-2 text-sm leading-relaxed text-text-3">
                 Applications happen on the employer site. SMN records that you opened it so you can
                 find it again.
               </p>
               {opportunity.expiresAt ? (
-                <p className="mt-4 text-xs text-white/40">
+                <p className="mt-4 text-xs text-text-3">
                   Closing date ·{" "}
                   {new Intl.DateTimeFormat("en-GH", { dateStyle: "medium" }).format(
                     new Date(opportunity.expiresAt),

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
+import { Band, SectionHead } from "@/components/site/kit";
 import { excerptStoryQuote } from "@/lib/content";
 
 type HomeStoryItem = {
@@ -10,44 +11,44 @@ type HomeStoryItem = {
   image: string;
 };
 
+/** Members in their own words. The quote leads at display size; the person
+ *  follows underneath, because the claim matters more than the headshot. */
 export function Testimonials({ stories }: { stories: HomeStoryItem[] }) {
   if (!stories.length) return null;
 
   return (
-    <section data-section-fade className="border-y border-white/10 bg-surface py-16 sm:py-24 md:py-32">
-      <div className="container-wide">
-        <h2 className="font-display text-2xl text-white sm:text-3xl md:text-5xl">Testimonials</h2>
-        <div data-stagger className="mt-8 grid gap-4 sm:mt-14 sm:gap-6 md:grid-cols-2">
-          {stories.map((story) => (
-            <figure
-              key={story.name}
-              data-stagger-item
-              className="rounded-[1.75rem] border border-white/10 bg-surface-2 p-6 md:p-8"
-            >
-              <blockquote className="text-base leading-relaxed text-white/75">
-                {`"${excerptStoryQuote(story.quote)}"`}
-              </blockquote>
-              <div className="mt-6 flex items-center gap-4">
-                <div className="relative h-12 w-12 overflow-hidden rounded-2xl">
-                  <Image src={story.image} alt={story.name} fill className="object-cover" />
-                </div>
-                <div>
-                  <figcaption className="font-display text-lg text-white">{story.name}</figcaption>
-                  <p className="text-sm text-white/50">{story.role}</p>
-                  {story.programme ? (
-                    <p className="mt-1 text-xs text-white/35">{story.programme}</p>
-                  ) : null}
-                </div>
-              </div>
-            </figure>
-          ))}
-        </div>
-        <div className="mt-10">
+    <Band tone="raised" size="lg" fade>
+      <SectionHead
+        kicker="In their words"
+        title="What members say"
+        lede="Written by people who finished the work, not by us."
+        actions={
           <Button href="/stories" variant="secondary">
             Member stories
           </Button>
-        </div>
+        }
+      />
+      <div data-stagger className="mt-12 grid gap-px overflow-hidden border border-edge-subtle bg-edge-subtle md:grid-cols-2">
+        {stories.map((story) => (
+          <figure key={story.name} data-stagger-item className="flex flex-col bg-canvas p-7 sm:p-9">
+            <blockquote className="font-display text-xl leading-snug text-text-1 sm:text-2xl">
+              &ldquo;{excerptStoryQuote(story.quote)}&rdquo;
+            </blockquote>
+            <figcaption className="mt-auto flex items-center gap-4 rule pt-6 mt-8">
+              <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full">
+                <Image src={story.image} alt="" fill className="object-cover" sizes="44px" />
+              </span>
+              <span>
+                <span className="block text-sm font-semibold text-text-1">{story.name}</span>
+                <span className="block text-sm text-text-3">{story.role}</span>
+                {story.programme ? (
+                  <span className="mt-0.5 block eyebrow text-text-3">{story.programme}</span>
+                ) : null}
+              </span>
+            </figcaption>
+          </figure>
+        ))}
       </div>
-    </section>
+    </Band>
   );
 }

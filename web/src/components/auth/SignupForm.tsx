@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 
 const field =
-  "field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/35 sm:py-3";
+  "field w-full border border-edge-subtle bg-inset px-4 py-3.5 text-text-1 placeholder:text-text-3 sm:py-3";
 
 export function SignupForm() {
   const router = useRouter();
@@ -117,9 +117,9 @@ export function SignupForm() {
         {status === "loading" ? "Creating account…" : "Create account"}
       </Button>
       {message ? <p className="text-sm text-red-300">{message}</p> : null}
-      <p className="pt-2 text-center text-sm text-white/45">
+      <p className="pt-2 text-center text-sm text-text-3">
         Already have an account?{" "}
-        <Link href="/login" className="text-baby-blue hover:text-white">
+        <Link href="/login" className="text-accent hover:text-text-1">
           Sign in
         </Link>
       </p>

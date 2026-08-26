@@ -70,8 +70,8 @@ export function CourseCheckoutButton({
       className={cn(
         "inline-flex items-center gap-1.5 transition disabled:opacity-40",
         variant === "button"
-          ? "rounded-full bg-baby-blue px-5 py-2.5 text-sm font-medium text-near-black hover:bg-white"
-          : "text-sm text-white hover:text-baby-blue",
+          ? "rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-near-black hover:bg-off-white"
+          : "text-sm text-text-1 hover:text-accent",
         className,
       )}
     >

@@ -23,8 +23,8 @@ export function BlogCategoryNav() {
             className={cn(
               "shrink-0 rounded-full border px-3.5 py-2 text-xs font-medium transition sm:px-4 sm:text-sm",
               isActive
-                ? "border-deep-blue bg-deep-blue text-white"
-                : "border-white/15 bg-white/5 text-white/65 hover:border-white/25 hover:text-white",
+                ? "border-deep-blue bg-accent-strong text-text-1"
+                : "border-edge bg-inset text-text-2 hover:border-edge hover:text-text-1",
             )}
           >
             {cat}

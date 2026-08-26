@@ -66,14 +66,14 @@ export function ContactForm({ defaultType }: { defaultType?: string }) {
   }
 
   const field =
-    "field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/35 sm:py-3";
+    "field w-full border border-edge-subtle bg-inset px-4 py-3.5 text-text-1 placeholder:text-text-3 sm:py-3";
 
   return (
     <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
       <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
       <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-xs text-white/50" htmlFor="contact-name">
+          <label className="mb-1.5 block text-xs text-text-3" htmlFor="contact-name">
             Full name
           </label>
           <input
@@ -86,7 +86,7 @@ export function ContactForm({ defaultType }: { defaultType?: string }) {
           />
         </div>
         <div>
-          <label className="mb-1.5 block text-xs text-white/50" htmlFor="contact-email">
+          <label className="mb-1.5 block text-xs text-text-3" htmlFor="contact-email">
             Email
           </label>
           <input
@@ -102,12 +102,12 @@ export function ContactForm({ defaultType }: { defaultType?: string }) {
         </div>
       </div>
       <div>
-        <label className="mb-1.5 block text-xs text-white/50" htmlFor="contact-type">
+        <label className="mb-1.5 block text-xs text-text-3" htmlFor="contact-type">
           Enquiry type
         </label>
         <Select
           id="contact-type"
-          className={cn(field, "bg-surface")}
+          className={cn(field, "bg-raised")}
           name="type"
           required
           defaultValue={selectedType ?? ""}
@@ -123,7 +123,7 @@ export function ContactForm({ defaultType }: { defaultType?: string }) {
         </Select>
       </div>
       <div>
-        <label className="mb-1.5 block text-xs text-white/50" htmlFor="contact-message">
+        <label className="mb-1.5 block text-xs text-text-3" htmlFor="contact-message">
           Message
         </label>
         <textarea
@@ -140,7 +140,7 @@ export function ContactForm({ defaultType }: { defaultType?: string }) {
       </Button>
       {message ? (
         <p
-          className={cn("text-sm", status === "success" ? "text-mint" : "text-red-300")}
+          className={cn("text-sm", status === "success" ? "text-ai" : "text-red-300")}
           role="alert"
         >
           {message}

@@ -16,9 +16,9 @@ export function EmptyProof({
   secondaryLabel?: string;
 }) {
   return (
-    <div className="rounded-2xl border border-dashed border-white/15 bg-surface p-7 sm:rounded-[1.75rem] sm:p-10">
-      <h2 className="font-display text-xl text-white">{title}</h2>
-      <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/50">{body}</p>
+    <div className=" border border-dashed border-edge bg-raised p-7 sm:p-10">
+      <h2 className="font-display text-xl text-text-1">{title}</h2>
+      <p className="mt-2 max-w-xl text-sm leading-relaxed text-text-3">{body}</p>
       {href && label ? (
         <div className="btn-row-mobile mt-6">
           <Button href={href} variant="secondary">

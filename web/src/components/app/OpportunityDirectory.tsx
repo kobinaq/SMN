@@ -17,12 +17,19 @@ const sourceLabel: Record<string, string> = {
 export function OpportunityDirectory({
   opportunities,
   hrefPrefix = "/app/opportunities",
+  initialType,
 }: {
   opportunities: OpportunityItem[];
   hrefPrefix?: string;
+  /**
+   * Preselects the type filter. The public board absorbed the separate
+   * internships page, so /careers/jobs?type=Internship lands here rather than
+   * on a page of its own.
+   */
+  initialType?: string;
 }) {
   const [query, setQuery] = useState("");
-  const [type, setType] = useState("All types");
+  const [type, setType] = useState(initialType || "All types");
   const [mode, setMode] = useState("All modes");
   const types = useMemo(
     () => ["All types", ...Array.from(new Set(opportunities.map((item) => item.type))).sort()],

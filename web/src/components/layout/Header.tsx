@@ -65,12 +65,12 @@ export function Header() {
         "fixed inset-x-0 top-0 z-50 transition duration-300",
         "pt-[env(safe-area-inset-top)]",
         scrolled || open
-          ? "border-b border-white/10 bg-near-black/90 backdrop-blur-xl"
+          ? "border-b border-edge-subtle bg-canvas/90 backdrop-blur-xl"
           : "bg-transparent",
       )}
     >
       {site.announcementBanner ? (
-        <div className="border-b border-white/10 bg-deep-blue/90 px-4 py-2 text-center text-xs text-white/80">
+        <div className="border-b border-edge-subtle bg-accent-strong/90 px-4 py-2 text-center text-xs text-text-2">
           {site.announcementBanner}
         </div>
       ) : null}
@@ -94,7 +94,7 @@ export function Header() {
               >
                 <button
                   type="button"
-                  className="inline-flex min-h-10 items-center gap-1 text-sm text-white/75 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-baby-blue"
+                  className="inline-flex min-h-10 items-center gap-1 text-sm text-text-2 transition hover:text-text-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   aria-expanded={openMenu === item.label}
                   aria-haspopup="true"
                   aria-controls={`${menuId}-${item.label}`}
@@ -116,7 +116,7 @@ export function Header() {
                   )}
                 >
                   <div
-                    className="rounded-2xl border border-white/10 bg-surface p-2 shadow-2xl"
+                    className=" border border-edge-subtle bg-raised p-2 shadow-2xl"
                     role="menu"
                   >
                     {item.children.map((child) => (
@@ -124,7 +124,7 @@ export function Header() {
                         key={child.href}
                         href={child.href}
                         role="menuitem"
-                        className="block rounded-xl px-4 py-3 text-sm text-white/80 transition hover:bg-white/5 hover:text-white focus-visible:bg-white/5 focus-visible:outline-none"
+                        className="block px-4 py-3 text-sm text-text-2 transition hover:bg-inset hover:text-text-1 focus-visible:bg-inset focus-visible:outline-none"
                         onClick={() => setOpenMenu(null)}
                       >
                         {child.label}
@@ -137,7 +137,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="inline-flex min-h-10 items-center text-sm text-white/75 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-baby-blue"
+                className="inline-flex min-h-10 items-center text-sm text-text-2 transition hover:text-text-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
                 {item.label}
               </Link>
@@ -149,7 +149,7 @@ export function Header() {
           <Button
             href={cta.memberSignIn.href}
             variant="ghost"
-            className="px-3 py-2 text-white/70"
+            className="px-3 py-2 text-text-2"
             onClick={() => trackEvent("member_signin_click", { location: "header" })}
           >
             {cta.memberSignIn.label}
@@ -173,7 +173,7 @@ export function Header() {
           </Button>
           <button
             type="button"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-baby-blue"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-edge text-text-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
@@ -185,7 +185,7 @@ export function Header() {
 
       <div
         className={cn(
-          "fixed inset-x-0 bottom-0 z-40 bg-near-black transition lg:hidden",
+          "fixed inset-x-0 bottom-0 z-40 bg-canvas transition lg:hidden",
           "top-[calc(3.5rem+env(safe-area-inset-top))] sm:top-[calc(4rem+env(safe-area-inset-top))]",
           open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
         )}
@@ -193,10 +193,10 @@ export function Header() {
       >
         <div className="flex h-full flex-col overflow-y-auto overscroll-contain px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-4 sm:px-6">
           {nav.map((item) => (
-            <div key={item.label} className="border-b border-white/10 py-1">
+            <div key={item.label} className="border-b border-edge-subtle py-1">
               <Link
                 href={item.href}
-                className="flex min-h-12 items-center font-display text-xl text-white sm:text-2xl"
+                className="flex min-h-12 items-center font-display text-xl text-text-1 sm:text-2xl"
                 onClick={() => setOpen(false)}
               >
                 {item.label}
@@ -207,7 +207,7 @@ export function Header() {
                     <Link
                       key={child.href}
                       href={child.href}
-                      className="flex min-h-11 items-center text-sm text-white/55"
+                      className="flex min-h-11 items-center text-sm text-text-2"
                       onClick={() => setOpen(false)}
                     >
                       {child.label}

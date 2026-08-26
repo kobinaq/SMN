@@ -59,7 +59,7 @@ const sections = [
     body: (
       <p className="mt-4">
         Questions:{" "}
-        <a className="text-baby-blue transition hover:text-white" href={`mailto:${site.email}`}>
+        <a className="text-accent transition hover:text-text-1" href={`mailto:${site.email}`}>
           {site.email}
         </a>
       </p>
@@ -70,7 +70,7 @@ const sections = [
 export default function TermsPage() {
   return (
     <>
-      <section className="relative overflow-hidden border-b border-white/10 bg-near-black pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-28">
+      <section className="relative overflow-hidden border-b border-edge-subtle bg-canvas pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-28">
         <div
           className="pointer-events-none absolute inset-0 opacity-80"
           style={{
@@ -79,37 +79,37 @@ export default function TermsPage() {
           }}
         />
         <div className="container-wide relative z-10 pb-14 pt-10 sm:pb-20 sm:pt-16">
-          <p className="font-display text-sm tracking-[0.08em] text-baby-blue sm:text-base">
+          <p className="font-display text-sm tracking-[0.08em] text-accent sm:text-base">
             Social Marketers Network
           </p>
-          <p className="mt-3 text-[10px] font-medium uppercase tracking-[0.22em] text-white/40">Legal</p>
-          <h1 className="mt-3 max-w-3xl text-balance font-display text-[2.35rem] leading-[1.05] text-white sm:text-5xl md:text-6xl">
+          <p className="mt-3 eyebrow text-text-3">Legal</p>
+          <h1 className="mt-3 max-w-3xl text-balance font-display text-[2.35rem] leading-[1.05] text-text-1 sm:text-5xl md:text-6xl">
             Terms and conditions
           </h1>
-          <p className="mt-5 max-w-xl text-sm leading-relaxed text-white/65 sm:text-base">
+          <p className="mt-5 max-w-xl text-sm leading-relaxed text-text-2 sm:text-base">
             Website, application, and programme terms at a high level.
           </p>
           <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/privacy" className="text-white/50 transition hover:text-baby-blue">
+            <Link href="/privacy" className="text-text-3 transition hover:text-accent">
               Privacy policy
             </Link>
-            <Link href="/contact" className="text-white/50 transition hover:text-baby-blue">
+            <Link href="/contact" className="text-text-3 transition hover:text-accent">
               Contact
             </Link>
           </div>
         </div>
       </section>
 
-      <section data-section-fade className="bg-ink py-16 sm:py-24">
+      <section data-section-fade className="bg-raised py-16 sm:py-24">
         <div className="container-wide grid gap-12 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-16">
           <nav className="hidden lg:block" aria-label="Terms sections">
-            <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/35">On this page</p>
-            <ul className="mt-4 sticky top-28 space-y-2 border-l border-white/10 pl-4">
+            <p className="eyebrow text-text-3">On this page</p>
+            <ul className="mt-4 sticky top-28 space-y-2 border-l border-edge-subtle pl-4">
               {sections.map((section) => (
                 <li key={section.id}>
                   <a
                     href={`#${section.id}`}
-                    className="block text-sm text-white/45 transition hover:text-baby-blue"
+                    className="block text-sm text-text-3 transition hover:text-accent"
                   >
                     {section.title}
                   </a>
@@ -123,10 +123,10 @@ export default function TermsPage() {
               <article
                 key={section.id}
                 id={section.id}
-                className="scroll-mt-28 border-b border-white/10 py-10 first:pt-0 last:border-b-0"
+                className="scroll-mt-28 border-b border-edge-subtle py-10 first:pt-0 last:border-b-0"
               >
-                <h2 className="font-display text-2xl text-white sm:text-3xl">{section.title}</h2>
-                <div className="text-sm leading-relaxed text-white/65 sm:text-[15px]">{section.body}</div>
+                <h2 className="font-display display-3 text-text-1">{section.title}</h2>
+                <div className="text-sm leading-relaxed text-text-2 sm:text-[15px]">{section.body}</div>
               </article>
             ))}
           </div>

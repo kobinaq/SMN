@@ -46,7 +46,7 @@ export function TagInput({
             <button
               type="button"
               aria-label={`Remove ${tag}`}
-              className="rounded-full p-0.5 transition-colors hover:bg-white/10"
+              className="rounded-full p-0.5 transition-colors hover:bg-off-white/10"
               onClick={() => setTags((current) => current.filter((item) => item !== tag))}
             >
               <X className="h-3 w-3" />
