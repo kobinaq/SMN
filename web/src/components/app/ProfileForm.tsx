@@ -3,12 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Field, Input, Textarea } from "@/components/ui/Field";
 import { Select } from "@/components/ui/Select";
 import { TagInput } from "@/components/ui/TagInput";
 import { useToast } from "@/components/ui/Toast";
-
-const field =
-  "field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/35 sm:py-3";
 
 type ProfileValues = {
   id: string | number;
@@ -84,148 +82,71 @@ export function ProfileForm({ initial }: { initial: ProfileValues }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
-      <div className="rounded-2xl border border-white/10 bg-near-black/40 px-4 py-3 text-xs leading-relaxed text-white/45">
+    <form onSubmit={onSubmit} className="space-y-5">
+      <div className="rounded-[var(--radius-md)] border border-edge-subtle bg-inset px-4 py-3 text-xs leading-relaxed text-text-3">
         <p>
-          <span className="text-white/70">Public when visibility is Public:</span> name, handle, headline, bio, skills,
+          <span className="text-text-2">Public when visibility is Public:</span> name, handle, headline, bio, skills,
           location, LinkedIn, portfolio URL.
         </p>
         <p className="mt-1">
-          <span className="text-white/70">Always private:</span> email, account security, and staff notes about you.
+          <span className="text-text-2">Always private:</span> email, account security, and staff notes about you.
         </p>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
-        <div>
-          <label className="mb-1.5 block text-xs text-white/40" htmlFor="profile-name">
-            Full name <span className="text-baby-blue">required</span>
-          </label>
-          <input id="profile-name" className={field} name="name" required defaultValue={initial.name} />
-        </div>
-        <div>
-          <label className="mb-1.5 block text-xs text-white/40" htmlFor="profile-handle">
-            Handle
-          </label>
-          <input
-            id="profile-handle"
-            className={field}
-            name="handle"
-            defaultValue={initial.handle}
-            placeholder="your-name"
-            pattern="[a-z0-9-]*"
-          />
-        </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Full name" htmlFor="profile-name" required>
+          <Input id="profile-name" name="name" required defaultValue={initial.name} />
+        </Field>
+        <Field label="Handle" htmlFor="profile-handle">
+          <Input id="profile-handle" name="handle" defaultValue={initial.handle} placeholder="your-name" pattern="[a-z0-9-]*" />
+        </Field>
       </div>
-      <div>
-        <label className="mb-1.5 block text-xs text-white/40" htmlFor="profile-headline">
-          Headline
-        </label>
-        <input
-          id="profile-headline"
-          className={field}
-          name="headline"
-          defaultValue={initial.headline}
-          placeholder="Social media strategist"
-        />
+
+      <Field label="Headline" htmlFor="profile-headline">
+        <Input id="profile-headline" name="headline" defaultValue={initial.headline} placeholder="Social media strategist" />
+      </Field>
+
+      <Field label="Bio" htmlFor="profile-bio">
+        <Textarea id="profile-bio" name="bio" defaultValue={initial.bio} placeholder="A short intro for mentors and employers" />
+      </Field>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <TagInput name="skills" label="Skills" initial={initial.skills} placeholder="Add a skill" hint="Press Enter to add. Used for opportunity matching." />
+        <TagInput name="careerInterests" label="Career interests" initial={initial.careerInterests} placeholder="Add an interest" hint="Press Enter to add areas you want to explore." />
       </div>
-      <div>
-        <label className="mb-1.5 block text-xs text-white/40" htmlFor="profile-bio">
-          Bio
-        </label>
-        <textarea
-          id="profile-bio"
-          className={`${field} min-h-28 resize-y`}
-          name="bio"
-          defaultValue={initial.bio}
-          placeholder="A short intro for mentors and employers"
-        />
-      </div>
-      <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
-        <TagInput
-          name="skills"
-          label="Skills"
-          initial={initial.skills}
-          placeholder="Add a skill"
-          hint="Press Enter to add. Used for opportunity matching."
-        />
-        <TagInput
-          name="careerInterests"
-          label="Career interests"
-          initial={initial.careerInterests}
-          placeholder="Add an interest"
-          hint="Press Enter to add areas you want to explore."
-        />
-      </div>
-      <div>
-        <label className="mb-1.5 block text-xs text-white/40" htmlFor="profile-goals">
-          Career goals
-        </label>
-        <textarea
+
+      <Field label="Career goals" htmlFor="profile-goals">
+        <Textarea
           id="profile-goals"
-          className={`${field} min-h-24 resize-y`}
           name="careerGoals"
           maxLength={5000}
           defaultValue={initial.careerGoals}
           placeholder="Describe the roles, outcomes, or direction you are working toward"
         />
-      </div>
-      <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
-        <div>
-          <label className="mb-1.5 block text-xs text-white/40" htmlFor="profile-location">
-            Location
-          </label>
-          <input
-            id="profile-location"
-            className={field}
-            name="location"
-            defaultValue={initial.location}
-            placeholder="Accra, Ghana"
-          />
-        </div>
-        <div>
-          <label className="mb-1.5 block text-xs text-white/40" htmlFor="profile-visibility">
-            Profile visibility
-          </label>
-          <Select
-            id="profile-visibility"
-            className={`${field} bg-surface`}
-            name="visibility"
-            defaultValue={initial.visibility || "private"}
-          >
+      </Field>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Location" htmlFor="profile-location">
+          <Input id="profile-location" name="location" defaultValue={initial.location} placeholder="Accra, Ghana" />
+        </Field>
+        <Field label="Profile visibility" htmlFor="profile-visibility">
+          <Select id="profile-visibility" name="visibility" defaultValue={initial.visibility || "private"}>
             <option value="private">Private — only you and staff</option>
             <option value="members">Members only — visible inside the network</option>
             <option value="public">Public — shareable portfolio profile</option>
           </Select>
-        </div>
+        </Field>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
-        <div>
-          <label className="mb-1.5 block text-xs text-white/40" htmlFor="profile-linkedin">
-            LinkedIn
-          </label>
-          <input
-            id="profile-linkedin"
-            className={field}
-            name="linkedin"
-            type="url"
-            defaultValue={initial.linkedin}
-            placeholder="https://linkedin.com/in/…"
-          />
-        </div>
-        <div>
-          <label className="mb-1.5 block text-xs text-white/40" htmlFor="profile-portfolio">
-            Portfolio URL
-          </label>
-          <input
-            id="profile-portfolio"
-            className={field}
-            name="portfolioUrl"
-            type="url"
-            defaultValue={initial.portfolioUrl}
-            placeholder="https://…"
-          />
-        </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="LinkedIn" htmlFor="profile-linkedin">
+          <Input id="profile-linkedin" name="linkedin" type="url" defaultValue={initial.linkedin} placeholder="https://linkedin.com/in/…" />
+        </Field>
+        <Field label="Portfolio URL" htmlFor="profile-portfolio">
+          <Input id="profile-portfolio" name="portfolioUrl" type="url" defaultValue={initial.portfolioUrl} placeholder="https://…" />
+        </Field>
       </div>
+
       <div className="flex flex-wrap items-center gap-3">
         <Button type="submit" disabled={status === "loading"} aria-busy={status === "loading"}>
           {status === "loading" ? "Saving…" : "Save profile"}
@@ -235,12 +156,12 @@ export function ProfileForm({ initial }: { initial: ProfileValues }) {
             Public preview
           </Button>
         ) : null}
+        {message ? (
+          <p className={`text-sm ${status === "error" ? "text-danger" : "text-ai"}`} role="status" aria-live="polite">
+            {message}
+          </p>
+        ) : null}
       </div>
-      {message ? (
-        <p className={`text-sm ${status === "error" ? "text-red-300" : "text-mint"}`} role="status" aria-live="polite">
-          {message}
-        </p>
-      ) : null}
     </form>
   );
 }

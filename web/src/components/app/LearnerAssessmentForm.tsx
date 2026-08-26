@@ -3,6 +3,9 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { PublicAssessment } from "@/lib/lms-assess";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Surface";
+import { Field, Textarea } from "@/components/ui/Field";
 
 export function LearnerAssessmentForm({
   assessment,
@@ -61,73 +64,59 @@ export function LearnerAssessmentForm({
 
   return (
     <form onSubmit={onSubmit} className="space-y-5">
-      {assessment.kind === "quiz"
-        ? assessment.questions.map((question, index) => {
-            const key = question.id || question.prompt;
-            return (
-              <fieldset key={key} className="rounded-2xl border border-white/10 bg-surface p-4">
-                <legend className="font-display text-base text-white">
-                  {index + 1}. {question.prompt}{" "}
-                  <span className="text-xs text-white/40">({question.marks} marks)</span>
+      {assessment.kind === "quiz" ? (
+        assessment.questions.map((question, index) => {
+          const key = question.id || question.prompt;
+          return (
+            <Card key={key} as="section" padded={false} className="p-4">
+              <fieldset>
+                <legend className="font-display text-base text-text-1">
+                  {index + 1}. {question.prompt} <span className="text-xs text-text-3">({question.marks} marks)</span>
                 </legend>
                 {question.type === "multiple-choice" ? (
                   <div className="mt-3 space-y-2">
                     {question.options.map((option) => (
-                      <label key={option} className="flex items-center gap-2 text-sm text-white/70">
-                        <input type="radio" name={`q-${key}`} value={option} required />
+                      <label key={option} className="flex items-center gap-2 text-sm text-text-2">
+                        <input type="radio" name={`q-${key}`} value={option} required className="accent-accent" />
                         {option}
                       </label>
                     ))}
                   </div>
                 ) : (
-                  <textarea
-                    className="field mt-3 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white"
-                    name={`q-${key}`}
-                    rows={4}
-                    required
-                  />
+                  <Textarea name={`q-${key}`} rows={4} required className="mt-3" />
                 )}
               </fieldset>
-            );
-          })
-        : (
-          <>
-            <label className="block text-sm text-white/70">
-              Your response
-              <textarea
-                className="field mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white"
-                name="textResponse"
-                rows={8}
-                required
-              />
-            </label>
-            <label className="block text-sm text-white/70">
-              PDF or image (optional)
-              <input
-                className="mt-2 block text-sm text-white/55"
-                type="file"
-                accept="application/pdf,image/*"
-                onChange={(event) => {
-                  const file = event.target.files?.[0];
-                  if (file) void onUpload(file).catch((caught) => setError(caught instanceof Error ? caught.message : "Upload failed."));
-                }}
-              />
-            </label>
-            {fileIds.length ? <p className="text-xs text-mint">{fileIds.length} file attached.</p> : null}
-          </>
-        )}
+            </Card>
+          );
+        })
+      ) : (
+        <>
+          <Field label="Your response" htmlFor="assessment-response" required>
+            <Textarea id="assessment-response" name="textResponse" rows={8} required />
+          </Field>
+          <Field label="PDF or image (optional)" htmlFor="assessment-file">
+            <input
+              id="assessment-file"
+              type="file"
+              accept="application/pdf,image/*"
+              className="block w-full text-sm text-text-2 file:mr-3 file:rounded-full file:border-0 file:bg-inset file:px-3 file:py-1.5 file:text-xs file:text-text-1"
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) void onUpload(file).catch((caught) => setError(caught instanceof Error ? caught.message : "Upload failed."));
+              }}
+            />
+          </Field>
+          {fileIds.length ? <p className="text-xs text-ai">{fileIds.length} file attached.</p> : null}
+        </>
+      )}
       {error ? (
-        <p className="text-sm text-red-300" role="alert">
+        <p className="text-sm text-danger" role="alert">
           {error}
         </p>
       ) : null}
-      <button
-        type="submit"
-        disabled={busy || closed}
-        className="rounded-full bg-deep-blue px-5 py-2.5 text-sm text-white disabled:opacity-50"
-      >
+      <Button type="submit" disabled={busy || closed}>
         {busy ? "Submitting…" : closed ? "Closed" : "Submit"}
-      </button>
+      </Button>
     </form>
   );
 }

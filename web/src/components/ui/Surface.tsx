@@ -28,7 +28,7 @@ export function Card({
     "rounded-[var(--radius-lg)] border border-edge-subtle bg-raised shadow-[var(--shadow-1)]",
     padded && "p-5",
     (interactive || href) && [
-      "transition-[transform,border-color,box-shadow] duration-[var(--dur-base)] ease-[var(--ease-out)]",
+      "group transition-[transform,border-color,box-shadow] duration-[var(--dur-base)] ease-[var(--ease-out)]",
       "hover:-translate-y-0.5 hover:border-edge hover:shadow-[var(--shadow-2)]",
       "focus-visible:-translate-y-0.5 focus-visible:border-accent",
       "motion-reduce:hover:translate-y-0 motion-reduce:focus-visible:translate-y-0",
@@ -81,7 +81,7 @@ export function PageHeader({
 }: {
   eyebrow?: string;
   title: string;
-  description?: string;
+  description?: ReactNode;
   action?: ReactNode;
   className?: string;
 }) {

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { TicketQr } from "@/components/events/TicketQr";
 import { PaymentSuccessBeacon } from "@/components/payments/PaymentSuccessBeacon";
 import { Button } from "@/components/ui/Button";
-import { StaffPageHeader, StaffPanel } from "@/components/staff/ui";
+import { Card, Eyebrow, PageHeader } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
 import { getPayloadClient } from "@/lib/payload";
 import { fulfillSuccessfulPayment } from "@/lib/payments/fulfill";
@@ -68,7 +68,7 @@ export default async function MemberTicketPage({ searchParams }: Props) {
   if (!registration || String((registration.member as { id?: string })?.id || registration.member) !== String(member.id)) {
     return (
       <div className="space-y-6">
-        <StaffPageHeader title="Ticket" hint="Ticket not found." />
+        <PageHeader title="Ticket" description="Ticket not found." />
         <Button href="/app/events" variant="secondary">
           Back to my events
         </Button>
@@ -76,10 +76,7 @@ export default async function MemberTicketPage({ searchParams }: Props) {
     );
   }
 
-  const event =
-    registration.event && typeof registration.event === "object"
-      ? (registration.event as Record<string, unknown>)
-      : null;
+  const event = registration.event && typeof registration.event === "object" ? (registration.event as Record<string, unknown>) : null;
   const code = String(registration.ticketCode || "");
   const status = String(registration.status);
   const onlineUrl = typeof event?.onlineUrl === "string" ? event.onlineUrl : "";
@@ -87,17 +84,17 @@ export default async function MemberTicketPage({ searchParams }: Props) {
   const confirmed = status === "confirmed" || status === "checked_in";
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-lg space-y-6">
       {params.reference ? <PaymentSuccessBeacon kind="event" reference={params.reference} /> : null}
-      <StaffPageHeader
-        eyebrow={String(event?.type || "Event")}
-        title={String(event?.title || "Your ticket")}
-        hint={confirmed ? "Show this QR at the door, or join online below." : "Payment still pending."}
-      />
-      <StaffPanel className="text-center">
+      <div>
+        <Eyebrow>{String(event?.type || "Event")}</Eyebrow>
+        <h1 className="mt-2 font-display text-2xl text-text-1 sm:text-3xl">{String(event?.title || "Your ticket")}</h1>
+        <p className="mt-2 text-sm text-text-2">{confirmed ? "Show this QR at the door, or join online below." : "Payment still pending."}</p>
+      </div>
+      <Card className="text-center">
         {code && confirmed ? <TicketQr code={code} /> : null}
-        <p className="mt-4 font-display text-2xl tracking-wide text-white">{code || "—"}</p>
-        <p className="mt-2 text-sm text-white/45">Status · {status.replace("_", " ")}</p>
+        <p className="tnum mt-4 font-display text-2xl tracking-wide text-text-1">{code || "—"}</p>
+        <p className="mt-2 text-sm text-text-3">Status · {status.replace("_", " ")}</p>
         {confirmed && onlineUrl && (format === "online" || format === "hybrid") ? (
           <div className="mt-6">
             <Button href={onlineUrl} target="_blank" rel="noreferrer">
@@ -106,11 +103,11 @@ export default async function MemberTicketPage({ searchParams }: Props) {
           </div>
         ) : null}
         <div className="mt-6">
-          <Link href="/app/events" className="text-sm text-baby-blue hover:underline">
+          <Link href="/app/events" className="text-sm text-accent hover:underline">
             All my tickets
           </Link>
         </div>
-      </StaffPanel>
+      </Card>
     </div>
   );
 }

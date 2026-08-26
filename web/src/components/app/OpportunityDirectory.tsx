@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowRight, Briefcase, MapPin, Search } from "@/components/ui/icons";
 import type { OpportunityItem } from "@/lib/opportunities";
+import { Card } from "@/components/ui/Surface";
+import { Chip } from "@/components/ui/Chip";
+import { Input } from "@/components/ui/Field";
 import { Select } from "@/components/ui/Select";
-
-const field =
-  "field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/35";
 
 const sourceLabel: Record<string, string> = {
   manual: "SMN verified",
@@ -35,9 +34,7 @@ export function OpportunityDirectory({
   );
   const filtered = opportunities.filter(
     (item) =>
-      `${item.title} ${item.company} ${item.summary} ${item.location}`
-        .toLowerCase()
-        .includes(query.toLowerCase()) &&
+      `${item.title} ${item.company} ${item.summary} ${item.location}`.toLowerCase().includes(query.toLowerCase()) &&
       (type === "All types" || item.type === type) &&
       (mode === "All modes" || item.workMode === mode),
   );
@@ -45,59 +42,41 @@ export function OpportunityDirectory({
   return (
     <div className="space-y-5">
       <div className="grid gap-3 md:grid-cols-[1fr_180px_180px]">
-        <label className="relative">
-          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
-          <input
+        <label className="relative block">
+          <Search className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-text-3" />
+          <Input
             aria-label="Search opportunities"
-            className={`${field} pl-11`}
+            className="pl-11"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search roles, companies, or locations"
           />
         </label>
-        <Select
-          aria-label="Filter by type"
-          className={`${field} bg-surface`}
-          value={type}
-          onChange={(event) => setType(event.target.value)}
-        >
+        <Select aria-label="Filter by type" value={type} onChange={(event) => setType(event.target.value)}>
           {types.map((item) => (
             <option key={item}>{item}</option>
           ))}
         </Select>
-        <Select
-          aria-label="Filter by work mode"
-          className={`${field} bg-surface`}
-          value={mode}
-          onChange={(event) => setMode(event.target.value)}
-        >
+        <Select aria-label="Filter by work mode" value={mode} onChange={(event) => setMode(event.target.value)}>
           {modes.map((item) => (
             <option key={item}>{item}</option>
           ))}
         </Select>
       </div>
       {filtered.length ? (
-        <div className="grid gap-4 lg:grid-cols-2">
-          {filtered.map((item) => (
-            <Link
-              key={item.id}
-              href={`${hrefPrefix}/${item.slug}`}
-              className="group rounded-2xl border border-white/10 bg-surface p-5 transition hover:border-baby-blue/35 sm:p-6"
-            >
+        <div className="rise-stagger grid gap-4 lg:grid-cols-2">
+          {filtered.map((item, index) => (
+            <Card key={item.id} href={`${hrefPrefix}/${item.slug}`} style={{ "--i": index } as React.CSSProperties}>
               <div className="flex items-start justify-between gap-4">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/5 text-baby-blue">
+                <div className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)] bg-accent-bg text-accent">
                   <Briefcase className="h-5 w-5" />
                 </div>
-                <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] uppercase tracking-wide text-white/40">
-                  {sourceLabel[item.sourceLabel] || "Opportunity"}
-                </span>
+                <Chip tone="neutral">{sourceLabel[item.sourceLabel] || "Opportunity"}</Chip>
               </div>
-              <h2 className="mt-5 font-display text-xl text-white group-hover:text-baby-blue">
-                {item.title}
-              </h2>
-              <p className="mt-1 text-sm text-baby-blue">{item.company}</p>
-              <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-white/50">{item.summary}</p>
-              <div className="mt-5 flex flex-wrap gap-2 text-xs text-white/45">
+              <h2 className="mt-5 font-display text-xl text-text-1 transition-colors group-hover:text-accent">{item.title}</h2>
+              <p className="mt-1 text-sm text-accent">{item.company}</p>
+              <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-text-2">{item.summary}</p>
+              <div className="mt-5 flex flex-wrap items-center gap-2 text-xs text-text-3">
                 <span>{item.type}</span>
                 <span>·</span>
                 <span>{item.workMode}</span>
@@ -107,16 +86,14 @@ export function OpportunityDirectory({
                   {item.location}
                 </span>
               </div>
-              <span className="mt-5 inline-flex items-center gap-1 text-sm text-baby-blue">
+              <span className="mt-5 inline-flex items-center gap-1 text-sm text-accent">
                 View opportunity <ArrowRight className="h-3.5 w-3.5" />
               </span>
-            </Link>
+            </Card>
           ))}
         </div>
       ) : (
-        <div className="rounded-2xl border border-dashed border-white/15 p-8 text-center text-sm text-white/50">
-          No opportunities match those filters.
-        </div>
+        <Card className="border-dashed text-center text-sm text-text-3">No opportunities match those filters.</Card>
       )}
     </div>
   );

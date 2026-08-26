@@ -12,7 +12,7 @@ const variants: Record<Variant, string> = {
   ghost: "bg-transparent text-text-2 border border-transparent hover:bg-inset hover:text-text-1",
   light: "bg-white text-near-black hover:bg-off-white",
   ai: "bg-ai text-[#07160f] hover:bg-ai-strong shadow-[var(--shadow-1)]",
-  danger: "bg-transparent text-danger border border-danger/35 hover:bg-danger-bg",
+  danger: "bg-danger text-[#2a0906] hover:bg-[#f2948b] shadow-[var(--shadow-1)]",
 };
 
 type Common = {
