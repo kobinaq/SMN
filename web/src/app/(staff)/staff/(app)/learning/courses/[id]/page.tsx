@@ -739,30 +739,37 @@ export default async function StaffCourseWorkspacePage({
               { name: "currency", label: "Currency", type: "text", placeholder: "GHS" },
               { name: "price", label: "Price label (optional)", type: "text", placeholder: "Blank uses the confirmed amount" },
               { name: "badge", label: "Badge", type: "text", placeholder: "Recommended" },
-              {
-                name: "classroomUrl",
-                label: "Google Classroom invite",
-                type: "url",
-                placeholder: "Paste invite link for this cohort",
-              },
-              {
-                name: "featured",
-                label: "Next intake on the marketing site",
-                type: "checkbox",
-                description: "Homepage, /programs/cohort, and /apply use this published cohort.",
-              },
-              { name: "startDate", label: "Start (public)", type: "text", placeholder: "September 2026" },
-              {
-                name: "applicationDeadline",
-                label: "Application deadline",
-                type: "text",
-                placeholder: "Rolling. Apply early",
-              },
-              { name: "duration", label: "Duration", type: "text", placeholder: "8 weeks" },
-              { name: "seats", label: "Seats", type: "number" },
-              { name: "sessions", label: "Sessions", type: "text", placeholder: "2 live sessions per week" },
-              { name: "format", label: "Format", type: "text" },
-              { name: "audience", label: "Audience", type: "textarea" },
+              // These mirror the cohort-only `admin.condition`s on the lms-courses
+              // schema itself — a self-paced course has no start date or seats, so
+              // showing them here was just noise the last redesign missed.
+              ...(isCohort
+                ? ([
+                    {
+                      name: "classroomUrl",
+                      label: "Google Classroom invite",
+                      type: "url",
+                      placeholder: "Paste invite link for this cohort",
+                    },
+                    {
+                      name: "featured",
+                      label: "Next intake on the marketing site",
+                      type: "checkbox",
+                      description: "Homepage, /programs/cohort, and /apply use this published cohort.",
+                    },
+                    { name: "startDate", label: "Start (public)", type: "text", placeholder: "September 2026" },
+                    {
+                      name: "applicationDeadline",
+                      label: "Application deadline",
+                      type: "text",
+                      placeholder: "Rolling. Apply early",
+                    },
+                    { name: "duration", label: "Duration", type: "text", placeholder: "8 weeks" },
+                    { name: "seats", label: "Seats", type: "number" },
+                    { name: "sessions", label: "Sessions", type: "text", placeholder: "2 live sessions per week" },
+                    { name: "format", label: "Format", type: "text" },
+                    { name: "audience", label: "Audience", type: "textarea" },
+                  ] as const)
+                : []),
               {
                 name: "priceConfirmed",
                 label: "Fee is confirmed for the public site",

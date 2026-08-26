@@ -20,9 +20,13 @@ export function ProgressOverrideForm({
   const [message, setMessage] = useState("");
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    // Capture the form before the await — the native event (and
+    // event.currentTarget with it) is gone once dispatch finishes, so
+    // reading it after the fetch throws and was silently skipping the refresh.
+    const formEl = event.currentTarget;
     setBusy(true);
     setMessage("");
-    const data = new FormData(event.currentTarget);
+    const data = new FormData(formEl);
     const response = await fetch("/api/admin/progress-overrides", {
       method: "POST",
       credentials: "include",
@@ -39,7 +43,7 @@ export function ProgressOverrideForm({
     setMessage(response.ok ? "Audited override saved." : result.error || "Unable to save override.");
     setBusy(false);
     if (response.ok) {
-      event.currentTarget.reset();
+      formEl.reset();
       router.refresh();
     }
   }

@@ -9,9 +9,13 @@ export function MemberNoteForm({ memberId }: { memberId: string | number }) {
   const [message, setMessage] = useState("");
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    // The native event (and event.currentTarget with it) is gone once dispatch
+    // finishes, so it must be captured before the first await — reading it
+    // after the fetch throws, which was silently swallowing the refresh below.
+    const formEl = event.currentTarget;
     setBusy(true);
     setMessage("");
-    const form = new FormData(event.currentTarget);
+    const form = new FormData(formEl);
     const response = await fetch("/api/admin/member-notes", {
       method: "POST",
       credentials: "include",
@@ -22,7 +26,7 @@ export function MemberNoteForm({ memberId }: { memberId: string | number }) {
     setMessage(response.ok ? "Private note saved." : result.error || "Unable to save note.");
     setBusy(false);
     if (response.ok) {
-      event.currentTarget.reset();
+      formEl.reset();
       router.refresh();
     }
   }

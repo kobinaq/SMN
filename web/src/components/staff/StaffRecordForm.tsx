@@ -106,6 +106,7 @@ export function StaffRecordForm({
           <input
             className="mt-1 h-4 w-4 shrink-0 accent-accent"
             type="checkbox"
+            name={field.name}
             checked={Boolean(values[field.name])}
             onChange={(event) =>
               setValues((current) => ({ ...current, [field.name]: event.target.checked }))
@@ -126,6 +127,7 @@ export function StaffRecordForm({
         {field.type === "textarea" ? (
           <textarea
             className={`${staffFieldClass} min-h-44`}
+            name={field.name}
             required={field.required}
             value={String(values[field.name] || "")}
             placeholder={field.placeholder}
@@ -134,6 +136,7 @@ export function StaffRecordForm({
         ) : field.type === "select" ? (
           <Select
             className={staffFieldClass}
+            name={field.name}
             required={field.required}
             value={String(values[field.name] || "")}
             onChange={(event) => setValues((current) => ({ ...current, [field.name]: event.target.value }))}
@@ -157,6 +160,7 @@ export function StaffRecordForm({
           <input
             className={staffFieldClass}
             type={field.type}
+            name={field.name}
             required={field.required}
             value={String(values[field.name] || "")}
             placeholder={field.placeholder}
