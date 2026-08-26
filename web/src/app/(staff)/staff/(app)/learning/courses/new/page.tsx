@@ -10,10 +10,10 @@ export default async function StaffNewCoursePage() {
   return (
     <div className="space-y-6">
       <StaffPageHeader
-        eyebrow="Learning"
+        eyebrow="Self-paced courses"
         title="New course"
         description="Create a blank draft, or let the SMN AI assistant draft the course, modules, and lessons for you to refine."
-        action={{ href: "/staff/learning", label: "All courses" }}
+        action={{ href: "/staff/learning/self-paced", label: "All courses" }}
       />
       <StaffPanel className="max-w-2xl">
         <CreateCourseForm aiEnabled={aiEnabled} />

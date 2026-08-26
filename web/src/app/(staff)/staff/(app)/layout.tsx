@@ -21,7 +21,15 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   const links: StaffLinkInput[] = [{ href: "/staff", label: "Today", count: badgeFor("/admin", "/staff") }];
 
   if (canStaff(staff, "learning", "content", "support")) {
-    links.push({ href: "/staff/learning", label: "Learning", count: badgeFor("course-builder", "learning") });
+    links.push({
+      href: "/staff/learning",
+      label: "Learning",
+      count: badgeFor("course-builder", "learning"),
+      children: [
+        { href: "/staff/learning/self-paced", label: "Self-paced courses" },
+        { href: "/staff/learning/cohorts", label: "Cohorts" },
+      ],
+    });
   }
   if (canStaff(staff, "support", "learning", "mentorship", "analyst")) {
     links.push({ href: "/staff/members", label: "People" });

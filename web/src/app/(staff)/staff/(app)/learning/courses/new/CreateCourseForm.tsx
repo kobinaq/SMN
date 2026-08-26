@@ -10,7 +10,6 @@ type Mode = "blank" | "ai";
 export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
   const router = useRouter();
   const [mode, setMode] = useState<Mode>(aiEnabled ? "ai" : "blank");
-  const [delivery, setDelivery] = useState<"cohort" | "self-paced">("self-paced");
   const [commerce, setCommerce] = useState<"purchase" | "apply">("purchase");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -24,11 +23,7 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
     const slug = String(form.get("slug") || "").trim();
     const summary = String(form.get("summary") || "").trim();
     const programKey = String(form.get("programKey") || "").trim();
-    const deliveryValue = String(form.get("delivery") || "self-paced") === "cohort" ? "cohort" : "self-paced";
     const commerceValue = String(form.get("commerce") || "purchase") === "apply" ? "apply" : "purchase";
-    const classroomUrl = String(form.get("classroomUrl") || "").trim();
-    const startDate = String(form.get("startDate") || "").trim();
-    const applicationDeadline = String(form.get("applicationDeadline") || "").trim();
 
     try {
       const response = await fetch("/api/staff/records", {
@@ -45,12 +40,8 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
             programKey,
             status: "draft",
             accessRule: "enrolled",
-            delivery: deliveryValue,
+            delivery: "self-paced",
             commerce: commerceValue,
-            classroomUrl: deliveryValue === "cohort" ? classroomUrl || undefined : undefined,
-            startDate: deliveryValue === "cohort" ? startDate || undefined : undefined,
-            applicationDeadline: deliveryValue === "cohort" ? applicationDeadline || undefined : undefined,
-            featured: deliveryValue === "cohort" && form.get("featured") === "on",
           },
         }),
       });
@@ -206,17 +197,6 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
               placeholder="e.g. digital-marketing-foundations"
             />
           </StaffFormField>
-          <StaffFormField label="Programme type">
-            <Select
-              className={staffFieldClass}
-              name="delivery"
-              value={delivery}
-              onChange={(event) => setDelivery(event.target.value === "cohort" ? "cohort" : "self-paced")}
-            >
-              <option value="self-paced">Self-paced course</option>
-              <option value="cohort">Live cohort</option>
-            </Select>
-          </StaffFormField>
           <StaffFormField label="How people join">
             <Select
               className={staffFieldClass}
@@ -228,35 +208,12 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
               <option value="apply">Apply first</option>
             </Select>
           </StaffFormField>
-          {delivery === "cohort" ? (
-            <>
-              <StaffFormField label="Google Classroom invite">
-                <input
-                  className={staffFieldClass}
-                  name="classroomUrl"
-                  type="url"
-                  placeholder="https://classroom.google.com/..."
-                />
-              </StaffFormField>
-              <StaffFormField label="Start (public)">
-                <input className={staffFieldClass} name="startDate" placeholder="September 2026" />
-              </StaffFormField>
-              <StaffFormField label="Application deadline">
-                <input className={staffFieldClass} name="applicationDeadline" placeholder="Rolling. Apply early" />
-              </StaffFormField>
-              <label className="flex items-start gap-3 text-sm text-text-2">
-                <input className="mt-1 h-4 w-4 accent-accent" type="checkbox" name="featured" />
-                <span>Show as the next intake on the marketing site</span>
-              </label>
-            </>
-          ) : null}
           <p className="text-xs text-text-3">
-            Status is set to draft. {delivery === "cohort"
-              ? "Published cohorts appear on the marketing site. Classroom lessons can reuse this invite."
-              : "Self-paced programmes appear on /programs/courses once published."}{" "}
+            Saved as a draft. Self-paced courses appear on /programs/courses once published.{" "}
             {commerce === "apply"
-              ? "Apply-first programmes use /apply. Staff then grant access or send a Paystack link."
-              : "Buy-now programmes checkout on Paystack after the fee is confirmed."}
+              ? "Apply-first courses use /apply. Staff then grant access or send a Paystack link."
+              : "Buy-now courses checkout on Paystack after the fee is confirmed."}{" "}
+            Running a live intake instead? <a href="/staff/learning/cohorts/new" className="text-accent hover:underline">Create a cohort</a>.
           </p>
           {error ? (
             <p className="rounded-[var(--radius-md)] border border-danger/30 bg-danger-bg px-4 py-3 text-sm text-danger" role="alert">
