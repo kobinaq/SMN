@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { BookOpen, Plus, Search, Trash2, Users } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Surface";
 import { Chip } from "@/components/ui/Chip";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Input } from "@/components/ui/Field";
 import { StaffEmptyState, StaffFilterChips } from "@/components/staff/ui";
 import { DeleteCourseDialog } from "@/components/staff/DeleteCourseDialog";
@@ -40,10 +42,38 @@ function relativeDate(value: string) {
   return date.toLocaleDateString("en-GH", { dateStyle: "medium" });
 }
 
-export function CourseIndex({ courses }: { courses: CourseSummary[] }) {
+/** Warning shown before opening a record whose edits ripple outward. */
+export type OpenWarning = { title: string; description: string };
+
+export function CourseIndex({
+  courses,
+  newHref = "/staff/learning/courses/new",
+  newLabel = "New course",
+  emptyTitle = "No courses yet",
+  emptyDescription = "Create your first programme — a self-paced course members work through on their own, or a live cohort with a scheduled session plan.",
+  warnOnOpen,
+}: {
+  courses: CourseSummary[];
+  /** Where the "create" affordances point. */
+  newHref?: string;
+  newLabel?: string;
+  emptyTitle?: string;
+  emptyDescription?: string;
+  /** When set, opening a course asks for confirmation first (live-cohort edits). */
+  warnOnOpen?: OpenWarning;
+}) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<StatusFilter>("all");
   const [pendingDelete, setPendingDelete] = useState<CourseSummary | null>(null);
+  const [pendingOpen, setPendingOpen] = useState<CourseSummary | null>(null);
+
+  const workspaceHref = (course: CourseSummary) => `/staff/learning/courses/${course.id}`;
+
+  function openCourse(course: CourseSummary) {
+    if (warnOnOpen) setPendingOpen(course);
+    else router.push(workspaceHref(course));
+  }
 
   const counts = useMemo(
     () => ({
@@ -63,14 +93,14 @@ export function CourseIndex({ courses }: { courses: CourseSummary[] }) {
   if (!courses.length) {
     return (
       <StaffEmptyState
-        title="No courses yet"
-        description="Create your first programme — a self-paced course members work through on their own, or a live cohort with a scheduled session plan."
+        title={emptyTitle}
+        description={emptyDescription}
         steps={[
-          { label: "Create course", href: "/staff/learning/courses/new", active: true },
+          { label: newLabel, href: newHref, active: true },
           { label: "Add content" },
           { label: "Publish" },
         ]}
-        action={{ href: "/staff/learning/courses/new", label: "Create course" }}
+        action={{ href: newHref, label: newLabel }}
       />
     );
   }
@@ -125,12 +155,22 @@ export function CourseIndex({ courses }: { courses: CourseSummary[] }) {
                 </div>
 
                 <h3 className="mt-4 font-display text-lg text-text-1">
-                  <Link
-                    href={`/staff/learning/courses/${course.id}`}
-                    className="transition-colors hover:text-accent"
-                  >
-                    {course.title}
-                  </Link>
+                  {warnOnOpen ? (
+                    <button
+                      type="button"
+                      onClick={() => openCourse(course)}
+                      className="text-left transition-colors hover:text-accent"
+                    >
+                      {course.title}
+                    </button>
+                  ) : (
+                    <Link
+                      href={workspaceHref(course)}
+                      className="transition-colors hover:text-accent"
+                    >
+                      {course.title}
+                    </Link>
+                  )}
                 </h3>
                 <p className="mt-1 font-mono text-xs text-text-3">{course.programKey}</p>
                 {course.summary ? (
@@ -154,9 +194,15 @@ export function CourseIndex({ courses }: { courses: CourseSummary[] }) {
                 ) : null}
 
                 <div className="mt-auto flex flex-wrap items-center gap-2 pt-5">
-                  <Button href={`/staff/learning/courses/${course.id}`} className="px-4 py-2 text-xs">
-                    Open
-                  </Button>
+                  {warnOnOpen ? (
+                    <Button type="button" onClick={() => openCourse(course)} className="px-4 py-2 text-xs">
+                      Open
+                    </Button>
+                  ) : (
+                    <Button href={workspaceHref(course)} className="px-4 py-2 text-xs">
+                      Open
+                    </Button>
+                  )}
                   {course.status === "published" ? (
                     <Button
                       href={`/app/learning/courses/${course.slug}`}
@@ -195,9 +241,9 @@ export function CourseIndex({ courses }: { courses: CourseSummary[] }) {
             >
               Clear filters
             </Button>
-            <Button href="/staff/learning/courses/new">
+            <Button href={newHref}>
               <Plus className="h-4 w-4" />
-              New course
+              {newLabel}
             </Button>
           </div>
         </Card>
@@ -209,6 +255,20 @@ export function CourseIndex({ courses }: { courses: CourseSummary[] }) {
         courseTitle={pendingDelete?.title ?? ""}
         onClose={() => setPendingDelete(null)}
       />
+
+      {warnOnOpen ? (
+        <ConfirmDialog
+          open={pendingOpen !== null}
+          title={warnOnOpen.title}
+          description={warnOnOpen.description}
+          confirmLabel="Edit cohort"
+          cancelLabel="Cancel"
+          onConfirm={() => {
+            if (pendingOpen) router.push(workspaceHref(pendingOpen));
+          }}
+          onClose={() => setPendingOpen(null)}
+        />
+      ) : null}
     </div>
   );
 }

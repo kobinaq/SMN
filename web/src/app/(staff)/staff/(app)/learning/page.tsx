@@ -1,147 +1,100 @@
-import { Plus } from "@/components/ui/icons";
-import { Button } from "@/components/ui/Button";
-import { CourseIndex, type CourseSummary } from "@/components/staff/CourseIndex";
+import Link from "next/link";
+import { BookOpen, Users } from "@/components/ui/icons";
+import { Card } from "@/components/ui/Surface";
 import { StaffDataFailure } from "@/components/staff/StaffDataFailure";
 import { StaffMetricGrid, StaffPageHeader } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
-import { evaluateCourseReadiness, type CourseReadinessInput, type CurriculumLesson } from "@/lib/lms-readiness";
 import { getPayloadClient } from "@/lib/payload";
-import { loadOrDescribe } from "@/lib/staff/data-health";
-import { staffAccess } from "@/lib/staff/records";
+import { loadCourseSummaries } from "@/lib/staff/learning-index";
 
 export const metadata = { title: "Learning" };
 
-function relationID(value: unknown) {
-  return String(value && typeof value === "object" && "id" in value ? (value as { id: unknown }).id : (value ?? ""));
-}
-
-/** Anything that belongs to a course — the only field these helpers need. */
-type CourseChild = { course?: unknown };
-
-/** Group child records by the course they belong to, in one pass. */
-function countByCourse(docs: CourseChild[]) {
-  const counts = new Map<string, number>();
-  for (const doc of docs) {
-    const key = relationID(doc.course);
-    counts.set(key, (counts.get(key) ?? 0) + 1);
-  }
-  return counts;
-}
-
-/** Bucket child records by course id, preserving each row for readiness checks. */
-function groupByCourse<T extends CourseChild>(docs: T[]) {
-  const groups = new Map<string, T[]>();
-  for (const doc of docs) {
-    const key = relationID(doc.course);
-    groups.set(key, [...(groups.get(key) ?? []), doc]);
-  }
-  return groups;
-}
-
-export default async function StaffLearningIndexPage() {
+export default async function StaffLearningHubPage() {
   const staff = await requireStaff(["learning", "content", "support"], "/staff/learning");
   const payload = await getPayloadClient();
-  const access = staffAccess(staff);
+  const loaded = await loadCourseSummaries(payload, staff);
 
-  // Fetch children once and bucket them locally rather than issuing 4 queries
-  // per course — that fanned out badly as the catalogue grew.
-  //
-  // Wrapped rather than left to throw: if this environment's database has not
-  // been migrated up to the code, the page says so instead of 500-ing with a
-  // message React strips in production.
-  const loaded = await loadOrDescribe("the course catalogue", () =>
-    Promise.all([
-      payload.find({ collection: "lms-courses", depth: 0, limit: 200, sort: "-updatedAt", ...access }),
-      payload.find({ collection: "lms-modules", depth: 0, limit: 2000, ...access }),
-      payload.find({ collection: "lms-lessons", depth: 0, limit: 5000, ...access }),
-      payload.find({ collection: "lms-sessions", depth: 0, limit: 2000, ...access }),
-      payload.find({ collection: "enrollments", depth: 0, limit: 5000, ...access }),
-    ]),
+  const header = (
+    <StaffPageHeader
+      eyebrow="Work"
+      title="Learning"
+      hint="Self-paced courses and live cohorts, each with its own workspace."
+    />
   );
 
   if (loaded.failure) {
     return (
       <div className="space-y-6">
-        <StaffPageHeader eyebrow="Work" title="Learning" hint="Every course and live cohort you run, in one place." />
+        {header}
         <StaffDataFailure failure={loaded.failure} />
       </div>
     );
   }
 
-  const [courses, modules, lessons, sessions, enrollments] = loaded.data;
-
-  const moduleCounts = countByCourse(modules.docs);
-  const lessonCounts = countByCourse(lessons.docs);
-  const sessionCounts = countByCourse(sessions.docs);
-
-  // Enrollments link by programKey (the stable key), not always by course id.
-  const learnersByProgramKey = new Map<string, number>();
-  for (const enrollment of enrollments.docs) {
-    const key = String(enrollment.programKey ?? "");
-    if (!key) continue;
-    learnersByProgramKey.set(key, (learnersByProgramKey.get(key) ?? 0) + 1);
-  }
-
-  const modulesByCourse = groupByCourse(modules.docs);
-  const lessonsByCourse = groupByCourse(lessons.docs);
-  const sessionsByCourse = groupByCourse(sessions.docs);
-
-  const summaries: CourseSummary[] = courses.docs.map((course) => {
-    const key = String(course.id);
-    const readiness = evaluateCourseReadiness(
-      course as unknown as CourseReadinessInput,
-      (modulesByCourse.get(key) ?? []) as unknown as Array<{ id: number | string }>,
-      (lessonsByCourse.get(key) ?? []) as unknown as CurriculumLesson[],
-      (sessionsByCourse.get(key) ?? []) as unknown as Array<{ status?: unknown }>,
-    );
-    return {
-      id: course.id,
-      title: String(course.title),
-      slug: String(course.slug ?? ""),
-      summary: String(course.summary ?? ""),
-      status: (course.status as CourseSummary["status"]) ?? "draft",
-      delivery: (course as { delivery?: string }).delivery === "cohort" ? "cohort" : "self-paced",
-      programKey: String(course.programKey ?? ""),
-      instructor: String(course.instructor ?? ""),
-      moduleCount: moduleCounts.get(key) ?? 0,
-      lessonCount: lessonCounts.get(key) ?? 0,
-      sessionCount: sessionCounts.get(key) ?? 0,
-      learnerCount: learnersByProgramKey.get(String(course.programKey ?? "")) ?? 0,
-      updatedAt: String(course.updatedAt ?? ""),
-      ready: readiness.ready,
-    };
-  });
-
+  const summaries = loaded.summaries;
+  const selfPaced = summaries.filter((course) => course.delivery === "self-paced");
+  const cohorts = summaries.filter((course) => course.delivery === "cohort");
   const published = summaries.filter((course) => course.status === "published").length;
-  const drafts = summaries.filter((course) => course.status === "draft").length;
-  const cohorts = summaries.filter((course) => course.delivery === "cohort").length;
   const learners = summaries.reduce((total, course) => total + course.learnerCount, 0);
+
+  const lanes = [
+    {
+      href: "/staff/learning/self-paced",
+      icon: BookOpen,
+      tone: "accent" as const,
+      title: "Self-paced courses",
+      body: "Courses members work through on their own — modules, lessons and assessments inside SMN.",
+      count: selfPaced.length,
+      unit: selfPaced.length === 1 ? "course" : "courses",
+    },
+    {
+      href: "/staff/learning/cohorts",
+      icon: Users,
+      tone: "ai" as const,
+      title: "Cohorts",
+      body: "Live intakes with a start date, seats and a session plan. Market them first; add materials later.",
+      count: cohorts.length,
+      unit: cohorts.length === 1 ? "cohort" : "cohorts",
+    },
+  ];
 
   return (
     <div className="space-y-6">
-      <StaffPageHeader
-        eyebrow="Work"
-        title="Learning"
-        hint="Every course and live cohort you run, in one place."
-      >
-        <Button href="/staff/learning/courses/new">
-          <Plus className="h-4 w-4" />
-          New course
-        </Button>
-      </StaffPageHeader>
+      {header}
 
       {summaries.length ? (
         <StaffMetricGrid
           items={[
+            { label: "Self-paced", value: selfPaced.length, tone: "accent" },
+            { label: "Cohorts", value: cohorts.length, tone: "ai" },
             { label: "Published", value: published, tone: "ai" },
-            { label: "Drafts", value: drafts, tone: "warn" },
-            { label: "Live cohorts", value: cohorts, tone: "accent" },
             { label: "Enrolled learners", value: learners, tone: "accent" },
           ]}
         />
       ) : null}
 
-      <CourseIndex courses={summaries} />
+      <div className="grid gap-3 sm:grid-cols-2">
+        {lanes.map((lane) => (
+          <Link key={lane.href} href={lane.href} className="group block">
+            <Card className="flex h-full flex-col transition-colors group-hover:border-edge-strong">
+              <span
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius-md)] ${
+                  lane.tone === "ai" ? "bg-ai-bg text-ai" : "bg-accent-bg text-accent"
+                }`}
+              >
+                <lane.icon className="h-5 w-5" />
+              </span>
+              <h2 className="mt-4 font-display text-xl text-text-1 transition-colors group-hover:text-accent">
+                {lane.title}
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-text-2">{lane.body}</p>
+              <p className="tnum mt-4 text-xs text-text-3">
+                {lane.count} {lane.unit}
+              </p>
+            </Card>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

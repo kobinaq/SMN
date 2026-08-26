@@ -56,6 +56,8 @@ export function buildMemberNavGroups({
 const staffIconByHref: Record<string, PortalNavItem["icon"]> = {
   "/staff": LayoutDashboard,
   "/staff/learning": BookOpen,
+  "/staff/learning/self-paced": BookOpen,
+  "/staff/learning/cohorts": Users,
   "/staff/members": Users,
   "/staff/mentorship": Handshake,
   "/staff/opportunities": Briefcase,
@@ -101,6 +103,7 @@ export type StaffLinkInput = {
   href: string;
   label: string;
   count?: number;
+  children?: StaffLinkInput[];
 };
 
 function toNavItem(link: StaffLinkInput): PortalNavItem {
@@ -109,6 +112,7 @@ function toNavItem(link: StaffLinkInput): PortalNavItem {
     label: link.label,
     icon: staffIconByHref[link.href] ?? FileText,
     badge: link.count,
+    children: link.children?.map(toNavItem),
   };
 }
 
