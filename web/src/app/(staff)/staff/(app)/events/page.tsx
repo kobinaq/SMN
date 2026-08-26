@@ -2,7 +2,6 @@ import Link from "next/link";
 import { StaffEmptyState, StaffMetricGrid, StaffPageHeader, StaffPanel, StaffSection, StaffTable } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
-import { Button } from "@/components/ui/Button";
 
 export default async function StaffEventsOpsPage() {
   const staff = await requireStaff(["content", "support", "analyst"], "/staff/events");
@@ -30,7 +29,7 @@ export default async function StaffEventsOpsPage() {
         eyebrow="Work"
         title="Events"
         hint="Publish sessions, manage capacity, and check people in."
-        action={{ href: "/staff/website/events/new", label: "New event" }}
+        action={{ href: "/staff/events/new", label: "New event" }}
       />
       <StaffMetricGrid
         items={[
@@ -53,11 +52,8 @@ export default async function StaffEventsOpsPage() {
                 String(doc.pricing || "—"),
                 String(doc.status || "—"),
                 <span key="actions" className="flex flex-wrap gap-2">
-                  <Link href={`/staff/website/events/${doc.id}`} className="text-xs text-accent hover:underline">
-                    Edit
-                  </Link>
                   <Link href={`/staff/events/${doc.id}`} className="text-xs text-accent hover:underline">
-                    Attendees
+                    Open
                   </Link>
                   <Link href={`/staff/events/${doc.id}/check-in`} className="text-xs text-accent hover:underline">
                     Check-in
@@ -70,17 +66,14 @@ export default async function StaffEventsOpsPage() {
           <StaffEmptyState
             title="No events yet"
             steps={[
-              { label: "Create event", href: "/staff/website/events/new", active: true },
+              { label: "Create event", href: "/staff/events/new", active: true },
               { label: "Publish" },
               { label: "Check in guests" },
             ]}
-            action={{ href: "/staff/website/events/new", label: "New event" }}
+            action={{ href: "/staff/events/new", label: "New event" }}
           />
         )}
       </StaffPanel>
-      <Button href="/staff/website/events" variant="secondary">
-        Website event list
-      </Button>
     </div>
   );
 }

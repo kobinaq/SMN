@@ -1,10 +1,12 @@
 import { Plus } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
 import { CourseIndex, type CourseSummary } from "@/components/staff/CourseIndex";
+import { StaffDataFailure } from "@/components/staff/StaffDataFailure";
 import { StaffMetricGrid, StaffPageHeader } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { evaluateCourseReadiness, type CourseReadinessInput, type CurriculumLesson } from "@/lib/lms-readiness";
 import { getPayloadClient } from "@/lib/payload";
+import { loadOrDescribe } from "@/lib/staff/data-health";
 import { staffAccess } from "@/lib/staff/records";
 
 export const metadata = { title: "Learning" };
@@ -43,13 +45,30 @@ export default async function StaffLearningIndexPage() {
 
   // Fetch children once and bucket them locally rather than issuing 4 queries
   // per course — that fanned out badly as the catalogue grew.
-  const [courses, modules, lessons, sessions, enrollments] = await Promise.all([
-    payload.find({ collection: "lms-courses", depth: 0, limit: 200, sort: "-updatedAt", ...access }),
-    payload.find({ collection: "lms-modules", depth: 0, limit: 2000, ...access }),
-    payload.find({ collection: "lms-lessons", depth: 0, limit: 5000, ...access }),
-    payload.find({ collection: "lms-sessions", depth: 0, limit: 2000, ...access }),
-    payload.find({ collection: "enrollments", depth: 0, limit: 5000, ...access }),
-  ]);
+  //
+  // Wrapped rather than left to throw: if this environment's database has not
+  // been migrated up to the code, the page says so instead of 500-ing with a
+  // message React strips in production.
+  const loaded = await loadOrDescribe("the course catalogue", () =>
+    Promise.all([
+      payload.find({ collection: "lms-courses", depth: 0, limit: 200, sort: "-updatedAt", ...access }),
+      payload.find({ collection: "lms-modules", depth: 0, limit: 2000, ...access }),
+      payload.find({ collection: "lms-lessons", depth: 0, limit: 5000, ...access }),
+      payload.find({ collection: "lms-sessions", depth: 0, limit: 2000, ...access }),
+      payload.find({ collection: "enrollments", depth: 0, limit: 5000, ...access }),
+    ]),
+  );
+
+  if (loaded.failure) {
+    return (
+      <div className="space-y-6">
+        <StaffPageHeader eyebrow="Work" title="Learning" hint="Every course and live cohort you run, in one place." />
+        <StaffDataFailure failure={loaded.failure} />
+      </div>
+    );
+  }
+
+  const [courses, modules, lessons, sessions, enrollments] = loaded.data;
 
   const moduleCounts = countByCourse(modules.docs);
   const lessonCounts = countByCourse(lessons.docs);

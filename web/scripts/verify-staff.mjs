@@ -13,7 +13,7 @@
 import { chromium } from "playwright";
 import { mkdir } from "node:fs/promises";
 
-const base = "http://localhost:3000";
+const base = process.env.BASE_URL || "http://localhost:3000";
 const shotDir = "/tmp/staff-shots";
 await mkdir(shotDir, { recursive: true });
 
@@ -315,7 +315,6 @@ const routes = [
   ["/staff/content/posts", "Posts", "17-posts.png"],
   ["/staff/content/resources", "Resources", "18-resources.png"],
   ["/staff/content/media", "Media", "19-media.png"],
-  ["/staff/website/events", "Website events", "20-web-events.png"],
   ["/staff/website/stories", "Stories", "21-stories.png"],
   ["/staff/website/settings", "Site settings", "22-site-settings.png"],
   ["/staff/system/users", "Staff users", "23-users.png"],
@@ -324,7 +323,7 @@ const routes = [
   ["/staff/content/posts/new", "New post", "26-new-post.png"],
   ["/staff/content/resources/new", "New resource", "27-new-resource.png"],
   ["/staff/website/stories/new", "New story", "28-new-story.png"],
-  ["/staff/website/events/new", "New website event", "29-new-web-event.png"],
+  ["/staff/events/new", "New event", "29-new-event.png"],
   ["/staff/system/users/new", "New staff user", "30-new-user.png"],
 ];
 for (const [path, label, shot] of routes) {
