@@ -1,6 +1,7 @@
 /* Expiry queues intentionally use the current server request time. */
 /* eslint-disable react-hooks/purity */
 import { OpportunityActions } from "@/components/payload/OpportunityActions";
+import { OpportunityBulkList } from "@/components/staff/OpportunityBulkList";
 import { StaffQueue } from "@/components/staff/StaffQueue";
 import {
   StaffEmptyState,
@@ -86,7 +87,7 @@ export default async function StaffOpportunitiesPage() {
         ]}
       />
 
-      {!triageItems.length && !duplicates.length && !sources.docs.length ? (
+      {!opportunities.docs.length && !sources.docs.length ? (
         <StaffEmptyState
           title="No jobs to review"
           steps={[
@@ -153,6 +154,24 @@ export default async function StaffOpportunitiesPage() {
           </StaffPanel>
         </div>
       )}
+
+      {opportunities.docs.length ? (
+        <StaffPanel>
+          <StaffSection
+            title="All listings"
+            aside={<span className="text-xs text-text-3">Every job, any status</span>}
+          />
+          <OpportunityBulkList
+            opportunities={opportunities.docs.map((item) => ({
+              id: item.id,
+              title: String(item.title),
+              company: String(item.company),
+              status: (item.status as "pending" | "published" | "closed" | "archived") ?? "pending",
+              applicationCount: applicationCounts.get(String(item.id)) || 0,
+            }))}
+          />
+        </StaffPanel>
+      ) : null}
     </div>
   );
 }
