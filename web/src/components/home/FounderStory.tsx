@@ -52,7 +52,6 @@ export function Values() {
       <SectionHead
         kicker="What we stand for"
         title="Our values"
-        lede="Four commitments that decide what we teach, who we admit, and what we refuse to promise."
       />
       <Sequence className="mt-12" items={smnValues} />
     </Band>
