@@ -21,7 +21,6 @@ export function Testimonials({ stories }: { stories: HomeStoryItem[] }) {
       <SectionHead
         kicker="In their words"
         title="What members say"
-        lede="Written by people who finished the work, not by us."
         actions={
           <Button href="/stories" variant="secondary">
             Member stories
