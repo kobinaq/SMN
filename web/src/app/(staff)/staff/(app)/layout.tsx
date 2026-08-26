@@ -1,14 +1,19 @@
 import { PortalShell } from "@/components/portal/PortalShell";
+import { SchemaDriftBanner } from "@/components/staff/SchemaDriftBanner";
 import type { StaffLinkInput } from "@/components/portal/nav-config";
 import { requireStaff, staffDisplayName, staffRoleLabel } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { getAdminWorkspaceBadges } from "@/lib/admin-dashboard";
+import { probeSchema } from "@/lib/staff/data-health";
 import { canStaff, staffRole } from "@/lib/staff-permissions";
 
 export default async function StaffAppLayout({ children }: { children: React.ReactNode }) {
   const staff = await requireStaff([], "/staff");
   const payload = await getPayloadClient();
   const badges = await getAdminWorkspaceBadges(payload, staff);
+  // Cached probe: tells every staff page at once when the database is behind
+  // the code, instead of each one failing separately with a stripped message.
+  const missingCollections = await probeSchema(payload).catch(() => []);
   const role = staffRole(staff);
   const badgeFor = (...parts: string[]) =>
     badges.find((item) => parts.some((part) => item.href.includes(part) || item.href === part))?.count;
@@ -71,6 +76,7 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
       staffLinks={links}
       maxWidth="7xl"
     >
+      <SchemaDriftBanner missing={missingCollections} />
       {children}
     </PortalShell>
   );

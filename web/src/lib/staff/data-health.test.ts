@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { describeDataFailure, loadOrDescribe } from "@/lib/staff/data-health";
+import { describeDataFailure, loadOrDescribe, probeSchema, resetSchemaProbe } from "@/lib/staff/data-health";
 
 describe("describeDataFailure", () => {
   it("names the missing table on Postgres", () => {
@@ -44,5 +44,50 @@ describe("loadOrDescribe", () => {
     });
     expect(result.data).toBeNull();
     expect(result.failure?.message).toContain("lms_sessions");
+  });
+});
+
+
+describe("probeSchema", () => {
+  function client(missing: string[], other: string[] = []) {
+    const calls: string[] = [];
+    return {
+      calls,
+      payload: {
+        config: { collections: [...missing, ...other, "users"].map((slug) => ({ slug })) },
+        async find({ collection }: { collection: string }) {
+          calls.push(collection);
+          if (missing.includes(collection)) throw new Error(`relation "${collection}" does not exist`);
+          if (other.includes(collection)) throw new Error("permission denied for something else");
+          return { docs: [] };
+        },
+      },
+    };
+  }
+
+  it("reports only the collections whose table is missing", async () => {
+    resetSchemaProbe();
+    const { payload } = client(["lms-sessions", "lms-attendance"]);
+    expect(await probeSchema(payload)).toEqual(["lms-sessions", "lms-attendance"]);
+  });
+
+  it("ignores failures that are not schema drift", async () => {
+    resetSchemaProbe();
+    const { payload } = client([], ["enrollments"]);
+    expect(await probeSchema(payload)).toEqual([]);
+  });
+
+  it("probes once and serves the cached answer after that", async () => {
+    resetSchemaProbe();
+    const { payload, calls } = client(["lms-sessions"]);
+    await probeSchema(payload);
+    const afterFirst = calls.length;
+    await probeSchema(payload);
+    expect(calls.length).toBe(afterFirst);
+  });
+
+  it("returns nothing rather than throwing when the config has no collections", async () => {
+    resetSchemaProbe();
+    expect(await probeSchema({} as unknown)).toEqual([]);
   });
 });
