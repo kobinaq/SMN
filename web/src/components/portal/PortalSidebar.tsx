@@ -267,7 +267,11 @@ export function findActiveNavTitle(
   exactRoots: string[],
   fallback: string,
 ) {
-  const flat = flattenNavItems(groups).filter((item) => !item.children?.length);
+  // Parents stay in the pool (not just leaves): a page under a parent's own
+  // href but not any specific child — e.g. /staff/learning/courses/2 under
+  // Learning's Self-paced/Cohorts split — still needs a title. Sorting by
+  // href length still prefers the more specific child when one matches.
+  const flat = flattenNavItems(groups);
   const match = flat
     .filter((item) => isActivePath(pathname, item.href, exactRoots))
     .sort((a, b) => b.href.length - a.href.length)[0];
