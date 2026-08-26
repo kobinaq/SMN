@@ -24,12 +24,18 @@ async function loginMember(page: Page) {
   await expect(page).toHaveURL(/\/app/);
 }
 
-async function openLearningMore(page: Page) {
-  const more = page.getByRole("button", { name: "More", exact: true });
-  if (await more.isVisible()) {
-    const expanded = await more.getAttribute("aria-expanded");
-    if (expanded !== "true") await more.click();
-  }
+/**
+ * Open one course's workspace from the course index and return its section
+ * tabs. The workspace has its own URL per course now, so every tab click in
+ * these tests goes through this nav rather than a query param on /staff/learning.
+ */
+async function openCourseWorkspace(page: Page, title = "Demo Content Strategy Sprint") {
+  await page.goto("/staff/learning");
+  await page.getByRole("link", { name: title }).first().click();
+  await expect(page).toHaveURL(/\/staff\/learning\/courses\/\d+/);
+  const sections = page.getByRole("navigation", { name: "Course sections" });
+  await expect(sections).toBeVisible();
+  return sections;
 }
 
 async function confirmDialog(page: Page, confirmName: string | RegExp, reason?: string) {
@@ -62,14 +68,18 @@ test("staff completes the audited admin operations workflows", async ({ page }) 
   });
   await loginStaff(page);
 
-  await page.goto("/staff/learning?tab=curriculum");
+  const sections = await openCourseWorkspace(page);
+  await sections.getByRole("link", { name: "Curriculum" }).click();
+  // Count only once the tab has actually rendered — the workspace tabs are
+  // server-rendered, so counting straight after the click races the response.
+  await expect(page.getByRole("heading", { name: "Modules and lessons" })).toBeVisible();
   const duplicateButtons = page.getByRole("button", { name: "Duplicate" });
+  await expect(duplicateButtons.first()).toBeVisible();
   const before = await duplicateButtons.count();
   await duplicateButtons.last().click();
   await expect(duplicateButtons).toHaveCount(before + 1);
 
-  await openLearningMore(page);
-  await page.getByRole("navigation", { name: "More learning tools" }).getByRole("link", { name: "Learners" }).click();
+  await sections.getByRole("link", { name: "Learners" }).click();
   await page.getByText("Progress override", { exact: true }).click();
   // Custom Select keeps a visually hidden native <select> for form posts; force bypasses actionability.
   await page.getByLabel("Learner").selectOption({ index: 1 }, { force: true });
@@ -80,8 +90,7 @@ test("staff completes the audited admin operations workflows", async ({ page }) 
   await page.getByRole("button", { name: "Save audited override" }).click();
   await expect(page.getByText("Audited override saved.")).toBeVisible();
 
-  await openLearningMore(page);
-  await page.getByRole("navigation", { name: "More learning tools" }).getByRole("link", { name: /AI Studio/i }).click();
+  await sections.getByRole("link", { name: /AI Studio/i }).click();
   await page.getByLabel("Instruction").fill("Create a concise outline grounded in this course.");
   await page.getByRole("button", { name: "Generate candidate" }).click();
   await expect(page.getByRole("heading", { name: "Compare candidates" })).toBeVisible();

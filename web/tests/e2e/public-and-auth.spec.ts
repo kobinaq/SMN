@@ -45,25 +45,28 @@ test("staff lands on the workflow-first staff dashboard", async ({ page }) => {
   await page.goto("/admin/login");
   await expect(page).toHaveURL(/\/staff\/?$/);
 
+  // /staff/learning is a course index now; the per-course workspace lives at
+  // its own URL behind the "Course sections" tabs.
   await page.goto("/staff/learning");
   await expect(page.getByRole("heading", { name: "Learning" })).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Learning sections" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Curriculum" })).toBeVisible();
-  await page.getByRole("navigation", { name: "Learning sections" }).getByRole("link", { name: "Curriculum" }).click();
+  await expect(page.getByRole("link", { name: "New course" }).first()).toBeVisible();
+  await page.getByRole("link", { name: "Demo Content Strategy Sprint" }).first().click();
+  await expect(page).toHaveURL(/\/staff\/learning\/courses\/\d+/);
+
+  const sections = page.getByRole("navigation", { name: "Course sections" });
+  await expect(sections).toBeVisible();
+  await sections.getByRole("link", { name: "Curriculum" }).click();
   await expect(page.getByRole("heading", { name: "Modules and lessons" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Move module up" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Duplicate" }).first()).toBeVisible();
 
-  const more = page.getByRole("button", { name: "More", exact: true });
-  if ((await more.getAttribute("aria-expanded")) !== "true") await more.click();
-  await page.getByRole("navigation", { name: "More learning tools" }).getByRole("link", { name: "Learners" }).click();
+  await sections.getByRole("link", { name: "Learners" }).click();
   await expect(page).toHaveURL(/tab=learners/);
   await expect(page.getByRole("heading", { name: "Learners" })).toBeVisible();
   await page.getByText("Progress override", { exact: true }).click();
   await expect(page.getByRole("button", { name: "Save audited override" })).toBeVisible();
 
-  if ((await more.getAttribute("aria-expanded")) !== "true") await more.click();
-  await page.getByRole("navigation", { name: "More learning tools" }).getByRole("link", { name: "Analytics" }).click();
+  await sections.getByRole("link", { name: "Analytics" }).click();
   await expect(page).toHaveURL(/tab=analytics/);
   await expect(page.getByText("Completion rate", { exact: true }).first()).toBeVisible();
   await expect(page.getByRole("heading", { name: "Module drop-off" })).toBeVisible();
@@ -86,6 +89,6 @@ test("staff lands on the workflow-first staff dashboard", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Jobs", exact: true })).toBeVisible();
   // Earlier workflow tests may have cleared the pending queue on the shared E2E DB.
   await expect(
-    page.getByRole("heading", { name: /Triage|No jobs to review|Possible duplicates|Sources/ }),
+    page.getByRole("heading", { name: /Triage|No jobs to review|Possible duplicates|Sources/ }).first(),
   ).toBeVisible();
 });

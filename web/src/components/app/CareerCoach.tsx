@@ -516,6 +516,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
             onSubmit={() => void chat()}
             busy={busy === "chat"}
             submitLabel="Ask Coach"
+            label="Your question for Coach"
             placeholder="Ask about a role, skill gap, portfolio, or next step…"
             footer={
               conversation.some((item) => item.role === "assistant") ? (
