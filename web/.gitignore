@@ -46,6 +46,7 @@ yarn-error.log*
 !.env.example
 # local schema tooling
 scripts/.payload.config.bundle.mjs
+scripts/.migrations.bundle.mjs
 
 # vercel
 .vercel
