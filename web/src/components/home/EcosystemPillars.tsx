@@ -10,8 +10,8 @@ export function EcosystemPillars() {
     <Band tone="light" size="lg" fade>
       <div className="text-center">
         <Kicker className="justify-center">The ecosystem</Kicker>
-        <h2 className="mt-5 font-display display-2 text-text-1">Learn. Practice. Connect. Grow.</h2>
-        <div className="relative mx-auto mt-8 h-20 max-w-4xl sm:h-28 md:h-36">
+        <h2 className="sr-only">Learn. Practice. Connect. Grow.</h2>
+        <div className="relative mx-auto mt-8 h-20 max-w-4xl sm:h-28 md:h-36" aria-hidden>
           <GooeyText
             texts={WORDS}
             morphTime={1.1}
