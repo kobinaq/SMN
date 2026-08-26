@@ -1,15 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams, usePathname } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { resourceTypes } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
+/**
+ * Type filter for the library. Templates and Guides used to be pages of their
+ * own; they are query-param views of /resources now, so the active state comes
+ * from the query alone — the old pathname comparison could never match, because
+ * a pathname never carries a query string.
+ */
 function hrefForType(type: string) {
-  if (type === "All") return "/resources";
-  if (type === "Template") return "/resources/templates";
-  if (type === "Guide") return "/resources/guides";
-  return `/resources?type=${encodeURIComponent(type)}`;
+  return type === "All" ? "/resources" : `/resources?type=${encodeURIComponent(type)}`;
 }
 
 export function ResourceTypeNav({
@@ -19,43 +22,28 @@ export function ResourceTypeNav({
   counts?: Record<string, number>;
   orientation?: "horizontal" | "vertical";
 }) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const queryType = searchParams.get("type");
-  const active =
-    pathname === "/resources/templates"
-      ? "Template"
-      : pathname === "/resources/guides"
-        ? "Guide"
-        : queryType || "All";
+  const active = useSearchParams().get("type") || "All";
 
   if (orientation === "vertical") {
     return (
-      <nav className="space-y-1">
+      <nav className="border-t border-edge-subtle" aria-label="Resource types">
         {resourceTypes.map((type) => {
-          const href = hrefForType(type);
           const isActive = active === type;
-          const count = type === "All" ? counts?.All : counts?.[type];
+          const count = counts?.[type];
           return (
             <Link
               key={type}
-              href={href}
+              href={hrefForType(type)}
               scroll={false}
+              aria-current={isActive ? "page" : undefined}
               className={cn(
-                "flex items-center justify-between rounded-lg px-3 py-2.5 text-sm transition",
-                isActive
-                  ? "bg-deep-blue text-white"
-                  : "text-white/60 hover:bg-white/5 hover:text-white",
+                "flex items-center justify-between border-b border-edge-subtle px-3 py-3 text-sm transition-colors",
+                isActive ? "bg-accent-bg text-text-1" : "text-text-2 hover:bg-inset hover:text-text-1",
               )}
             >
               <span>{type}</span>
               {typeof count === "number" ? (
-                <span
-                  className={cn(
-                    "text-xs tabular-nums",
-                    isActive ? "text-white/70" : "text-white/30",
-                  )}
-                >
+                <span className={cn("tnum text-xs", isActive ? "text-accent" : "text-text-3")}>
                   {count}
                 </span>
               ) : null}
@@ -67,20 +55,20 @@ export function ResourceTypeNav({
   }
 
   return (
-    <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 scrollbar-none">
+    <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1" role="group" aria-label="Resource types">
       {resourceTypes.map((type) => {
-        const href = hrefForType(type);
         const isActive = active === type;
         return (
           <Link
             key={type}
-            href={href}
+            href={hrefForType(type)}
             scroll={false}
+            aria-current={isActive ? "page" : undefined}
             className={cn(
-              "shrink-0 rounded-lg border px-3 py-2 text-xs font-medium transition sm:text-sm",
+              "shrink-0 border px-3.5 py-2 text-xs font-medium transition-colors sm:text-sm",
               isActive
-                ? "border-deep-blue bg-deep-blue text-white"
-                : "border-white/15 bg-transparent text-white/65 hover:border-white/25 hover:text-white",
+                ? "border-accent bg-accent-bg text-text-1"
+                : "border-edge text-text-2 hover:border-edge-strong hover:text-text-1",
             )}
           >
             {type}

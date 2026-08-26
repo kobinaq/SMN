@@ -66,8 +66,13 @@ export const siteViewport: Viewport = {
 export function SiteDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${leagueSpartan.variable} h-full`}>
-      <body className="min-h-full bg-near-black font-sans text-white antialiased">{children}</body>
-      <AhrefsAnalytics />
+      {/* Analytics belongs inside <body>: a sibling of <body> is invalid nesting,
+          and the browser relocating it is one of the documented causes of a
+          hydration mismatch. */}
+      <body className="min-h-full bg-canvas font-sans text-text-1 antialiased">
+        {children}
+        <AhrefsAnalytics />
+      </body>
     </html>
   );
 }

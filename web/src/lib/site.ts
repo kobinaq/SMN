@@ -87,40 +87,39 @@ export type SiteConfig = {
   };
 };
 
+/**
+ * Primary navigation. Each dropdown lists destinations, not variants of one
+ * destination — the consolidation folded the filtered pages into their parents,
+ * so "Templates" and "Guides" are views of /resources rather than pages of
+ * their own, and internships are a filter on the jobs board.
+ */
 export const nav = [
   {
     label: "Academy",
     href: "/programs",
     children: [
-      { label: "Training", href: "/programs/cohort" },
-      { label: "Courses", href: "/programs/courses" },
-      { label: "Simulations", href: "/simulations" },
-      { label: "Experience", href: "/experience" },
+      { label: "Training cohort", href: "/programs/cohort" },
+      { label: "Self-paced courses", href: "/programs/courses" },
+      { label: "Experience & simulations", href: "/experience" },
     ],
   },
   {
     label: "Careers",
     href: "/careers",
     children: [
-      { label: "Jobs", href: "/careers/jobs" },
-      { label: "Internships", href: "/careers/internships" },
+      { label: "Jobs & internships", href: "/careers/jobs" },
       { label: "Mentorship", href: "/mentorship" },
     ],
   },
   {
     label: "Partners",
     href: "/employers",
-    children: [
-      { label: "Partner with us", href: "/employers" },
-      { label: "Request intern", href: "/employers/request-intern" },
-      { label: "Post a job", href: "/employers/post-a-job" },
-    ],
   },
   {
     label: "Community",
     href: "/community",
     children: [
-      { label: "Network", href: "/community" },
+      { label: "The network", href: "/community" },
       { label: "Events", href: "/events" },
       { label: "Member stories", href: "/stories" },
     ],
@@ -130,9 +129,8 @@ export const nav = [
     href: "/resources",
     children: [
       { label: "Insights", href: "/insights" },
-      { label: "Free resources", href: "/resources" },
-      { label: "Templates", href: "/resources/templates" },
-      { label: "Guides", href: "/resources/guides" },
+      { label: "Templates", href: "/resources?type=Template" },
+      { label: "Guides", href: "/resources?type=Guide" },
     ],
   },
   {

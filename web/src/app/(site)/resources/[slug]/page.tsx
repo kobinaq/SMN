@@ -42,12 +42,12 @@ export default async function ResourceDetailPage({ params }: Props) {
   const related = getRelatedResources(resource, all, 3);
 
   return (
-    <article className="bg-near-black">
-      <header className="border-b border-white/10 pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-32">
+    <article className="bg-canvas">
+      <header className="border-b border-edge-subtle pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-32">
         <div className="container-wide pb-8 sm:pb-10">
           <Link
             href="/resources"
-            className="inline-flex min-h-10 items-center gap-2 text-sm text-white/50 transition hover:text-white"
+            className="inline-flex min-h-10 items-center gap-2 text-sm text-text-3 transition hover:text-text-1"
           >
             <ArrowLeft className="h-4 w-4" />
             All resources
@@ -56,30 +56,30 @@ export default async function ResourceDetailPage({ params }: Props) {
           <div className="mt-6 grid gap-8 lg:mt-8 lg:grid-cols-[1fr_0.95fr] lg:items-start lg:gap-12">
             <div>
               <div className="flex flex-wrap items-center gap-2 text-[11px] sm:text-xs">
-                <span className="rounded-full border border-baby-blue/40 bg-baby-blue/10 px-2.5 py-1 font-medium uppercase tracking-wider text-baby-blue">
+                <span className="rounded-full border border-accent/40 bg-accent/10 px-2.5 py-1 font-medium uppercase tracking-wider text-accent">
                   {resource.type}
                 </span>
                 {resource.free ? (
-                  <span className="rounded-full bg-mint/15 px-2.5 py-1 font-medium uppercase tracking-wider text-mint">
+                  <span className="rounded-full bg-ai/15 px-2.5 py-1 font-medium uppercase tracking-wider text-ai">
                     Free
                   </span>
                 ) : null}
-                <span className="text-white/35">
+                <span className="text-text-3">
                   {resource.format} · {resource.level}
                 </span>
               </div>
-              <h1 className="mt-4 font-display text-[1.75rem] leading-tight text-white sm:mt-5 sm:text-4xl md:text-5xl">
+              <h1 className="mt-4 font-display text-[1.75rem] leading-tight text-text-1 sm:mt-5 sm:text-4xl md:text-5xl">
                 {resource.title}
               </h1>
-              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/60 sm:mt-5 sm:text-base md:text-lg">
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-text-2 sm:mt-5 sm:text-base md:text-lg">
                 {resource.description}
               </p>
 
               {resource.highlights.length > 0 ? (
-                <ul className="mt-6 space-y-3 text-sm text-white/70 sm:mt-8">
+                <ul className="mt-6 space-y-3 text-sm text-text-2 sm:mt-8">
                   {resource.highlights.map((h) => (
                     <li key={h} className="flex gap-3">
-                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-baby-blue" />
+                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                       <span>{h}</span>
                     </li>
                   ))}
@@ -87,7 +87,7 @@ export default async function ResourceDetailPage({ params }: Props) {
               ) : null}
             </div>
 
-            <div className="relative aspect-[16/11] overflow-hidden rounded-2xl border border-white/10 sm:rounded-[1.75rem] lg:aspect-[4/3]">
+            <div className="relative aspect-[16/11] overflow-hidden border border-edge-subtle lg:aspect-[4/3]">
               <Image
                 src={resource.cover}
                 alt={resource.title}
@@ -96,21 +96,20 @@ export default async function ResourceDetailPage({ params }: Props) {
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 45vw"
               />
-              <div className="image-matte" />
             </div>
           </div>
         </div>
       </header>
 
-      <div className="border-b border-white/10 bg-ink">
+      <div className="border-b border-edge-subtle bg-raised">
         <div className="container-wide grid gap-10 py-10 sm:py-14 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-14 lg:py-16">
-          <div className="max-w-2xl space-y-5 text-[15px] leading-[1.75] text-white/75 sm:space-y-6 sm:text-base md:text-lg">
+          <div className="max-w-2xl space-y-5 text-[15px] leading-[1.75] text-text-2 sm:space-y-6 sm:text-base md:text-lg">
             {resource.body.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
-            <div className="rounded-2xl border border-white/10 bg-surface p-5 sm:p-6">
-              <h3 className="font-display text-lg text-white">How to use it</h3>
-              <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-white/70">
+            <div className=" border border-edge-subtle bg-raised p-5 sm:p-6">
+              <h3 className="font-display text-lg text-text-1">How to use it</h3>
+              <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm text-text-2">
                 <li>Download and open the file on desktop if possible.</li>
                 <li>Duplicate it for each client or brand.</li>
                 <li>Fill the first section fully before you skip ahead.</li>
@@ -121,18 +120,18 @@ export default async function ResourceDetailPage({ params }: Props) {
 
           <aside className="lg:pt-1">
             <div className="space-y-4 lg:sticky lg:top-28">
-              <div className="rounded-2xl border border-white/10 bg-surface p-5 sm:p-6">
-                <div className="flex items-center gap-2 text-baby-blue">
+              <div className=" border border-edge-subtle bg-raised p-5 sm:p-6">
+                <div className="flex items-center gap-2 text-accent">
                   <Download className="h-4 w-4" />
                   <p className="text-[10px] uppercase tracking-[0.2em]">
                     {resource.free ? "Free download" : "Get access"}
                   </p>
                 </div>
-                <p className="mt-3 font-display text-xl text-white">
+                <p className="mt-3 font-display text-xl text-text-1">
                   Send it to my email
                 </p>
-                <p className="mt-2 text-sm text-white/50">
-                  Enter your email and we will send <span className="text-white/80">{resource.title}</span>.
+                <p className="mt-2 text-sm text-text-3">
+                  Enter your email and we will send <span className="text-text-2">{resource.title}</span>.
                 </p>
                 <div className="mt-5">
                   <ResourceDownloadForm
@@ -142,14 +141,14 @@ export default async function ResourceDetailPage({ params }: Props) {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-deep-blue p-5 sm:p-6">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-baby-blue">
+              <div className=" border border-edge-subtle bg-accent-strong p-5 sm:p-6">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-accent">
                   Want more than templates?
                 </p>
-                <p className="mt-3 font-display text-lg text-white">
+                <p className="mt-3 font-display text-lg text-text-1">
                   Join the flagship cohort
                 </p>
-                <p className="mt-2 text-sm text-white/65">
+                <p className="mt-2 text-sm text-text-2">
                   Live strategy, AI workflows, practice, and community.
                 </p>
                 <Button href="/apply" className="mt-5 w-full text-xs sm:text-sm">
@@ -162,15 +161,15 @@ export default async function ResourceDetailPage({ params }: Props) {
       </div>
 
       {related.length > 0 ? (
-        <section className="bg-near-black py-12 sm:py-16 md:py-20">
+        <section className="bg-canvas py-12 sm:py-16 md:py-20">
           <div className="container-wide">
             <div className="mb-5 flex items-end justify-between gap-4 sm:mb-6">
-              <h2 className="font-display text-lg text-white sm:text-xl md:text-2xl">
+              <h2 className="font-display text-lg text-text-1 sm:text-xl md:text-2xl">
                 More tools
               </h2>
               <Link
                 href="/resources"
-                className="text-sm text-baby-blue transition hover:text-white"
+                className="text-sm text-accent transition hover:text-text-1"
               >
                 Full library
               </Link>

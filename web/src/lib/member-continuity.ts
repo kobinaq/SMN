@@ -151,7 +151,7 @@ export async function getMemberContinuity(member: MemberUser) {
       eyebrow: "Mentor application",
       title: `Application ${mentorStatus}`,
       detail: "Staff will update you when your mentor application advances.",
-      href: "/mentorship/become-a-mentor",
+      href: "/mentorship#become-a-mentor",
       cta: "View status",
       tone: "secondary",
     });

@@ -460,3 +460,137 @@ button {
   -webkit-line-clamp: 3;
   overflow: hidden;
 }
+
+/* ==========================================================================
+   Marketing site — studio scale
+   The public site carries a louder voice than the portal: oversized display
+   type, bands of flat colour, and visible rules. These are the pieces of that
+   voice that belong in CSS rather than in a component, because they are
+   either typographic scales or things Tailwind cannot express cleanly.
+   ========================================================================== */
+
+/* Display scale. Fluid so a headline holds its proportion from 360px to
+   1600px without a stack of breakpoint overrides at every call site. */
+.display-1 {
+  font-size: clamp(2.75rem, 1.2rem + 6.6vw, 7rem);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+}
+
+.display-2 {
+  font-size: clamp(2.1rem, 1.1rem + 4.2vw, 4.5rem);
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+}
+
+.display-3 {
+  font-size: clamp(1.6rem, 1.1rem + 2.1vw, 2.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+/* Oversized ordinals for numbered lists — the "01 / 02 / 03" spine that makes
+   a sequence read as a sequence rather than as three unrelated cards. */
+.ordinal {
+  font-family: var(--font-league-spartan), system-ui, sans-serif;
+  font-size: clamp(2.25rem, 1.4rem + 3vw, 4rem);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Inverted band. Overriding the text ramp and edges here rather than in every
+   child is what lets the same card markup sit on ink or on paper: the tokens
+   resolve at the point of use, so children need no light-mode variants. */
+.band-light {
+  --canvas: #f4f6fa;
+  --raised: #ffffff;
+  --inset: #eceff6;
+  --overlay: #ffffff;
+  --text-1: #0b0d12;
+  --text-2: rgba(11, 13, 18, 0.68);
+  --text-3: rgba(11, 13, 18, 0.45);
+  --edge-subtle: rgba(11, 13, 18, 0.09);
+  --edge: rgba(11, 13, 18, 0.16);
+  --edge-strong: rgba(11, 13, 18, 0.32);
+  --accent: #1e5fd0;
+  --accent-strong: #0a2f8f;
+  --accent-bg: rgba(30, 95, 208, 0.1);
+  --ai: #17795c;
+  --ai-bg: rgba(23, 121, 92, 0.1);
+  color: var(--text-1);
+}
+
+/* Deep-blue band — the brand colour used as ground, not as an accent. */
+.band-blue {
+  --canvas: #0a2f8f;
+  --raised: #0d379f;
+  --inset: #093080;
+  --overlay: #0d379f;
+  --text-1: #ffffff;
+  --text-2: rgba(255, 255, 255, 0.74);
+  --text-3: rgba(255, 255, 255, 0.5);
+  --edge-subtle: rgba(255, 255, 255, 0.14);
+  --edge: rgba(255, 255, 255, 0.24);
+  --edge-strong: rgba(255, 255, 255, 0.45);
+  --accent: #ffffff;
+  --accent-strong: #ffffff;
+  --accent-bg: rgba(255, 255, 255, 0.14);
+  color: var(--text-1);
+}
+
+/* Hairline rule that reads as part of the grid rather than as a border. */
+.rule {
+  border-top: 1px solid var(--edge-subtle);
+}
+
+/* Continuous logo/word marquee. Duplicated content plus a -50% translate is
+   what makes the loop seamless; the wrapper masks the ends so items fade
+   rather than clipping mid-glyph. */
+@keyframes marquee-track {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-track var(--marquee-duration, 40s) linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+  .marquee {
+    overflow-x: auto;
+  }
+}
+
+/* Link that underlines from the leading edge on hover — quieter than a colour
+   change and it survives on any band. */
+.link-wipe {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size var(--dur-base) var(--ease-out);
+}
+
+.link-wipe:hover,
+.link-wipe:focus-visible {
+  background-size: 100% 1px;
+}

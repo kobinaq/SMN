@@ -45,13 +45,13 @@ export function NewsletterForm({ className }: { className?: string }) {
         required
         autoComplete="email"
         placeholder="Email address"
-        className="field min-w-0 flex-1 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-white placeholder:text-white/35"
+        className="field min-w-0 flex-1 rounded-full border border-edge-subtle bg-inset px-5 py-3 text-text-1 placeholder:text-text-3"
       />
       <Button type="submit" disabled={status === "loading"} className="shrink-0">
         {status === "loading" ? "…" : "Subscribe"}
       </Button>
       {message ? (
-        <p className={cn("text-sm sm:basis-full", status === "success" ? "text-mint" : "text-red-300")}>
+        <p className={cn("text-sm sm:basis-full", status === "success" ? "text-ai" : "text-red-300")}>
           {message}
         </p>
       ) : null}

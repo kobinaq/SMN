@@ -1,46 +1,51 @@
+import Link from "next/link";
 import { ArrowUpRight } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
+import { Band, SectionHead } from "@/components/site/kit";
 import type { EventItem } from "@/lib/content";
 
+/** Next few events as a ruled schedule — a listing, not a card grid. */
 export function UpcomingEvents({ events }: { events: EventItem[] }) {
   if (!events.length) return null;
 
   return (
-    <section data-section-fade className="border-t border-white/10 bg-near-black py-12 sm:py-16">
-      <div className="container-wide">
-        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <h2 className="font-display text-2xl text-white sm:text-3xl">Upcoming</h2>
-          <Button href="/events" variant="ghost" className="w-full sm:w-auto">
+    <Band fade>
+      <SectionHead
+        align="stacked"
+        kicker="Diary"
+        title="What is coming up"
+        actions={
+          <Button href="/events" variant="secondary">
             All events
           </Button>
-        </div>
-        <ul className="mt-8 divide-y divide-white/10 border-y border-white/10">
-          {events.map((event) => (
-            <li key={event.slug}>
-              <a
-                href={`/events/${event.slug}`}
-                className="group flex flex-col gap-2 py-5 transition sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
-              >
-                <div>
-                  <p className="text-xs uppercase tracking-[0.16em] text-white/40">{event.type}</p>
-                  <p className="mt-1 font-display text-xl text-white group-hover:text-baby-blue">
-                    {event.title}
-                  </p>
-                </div>
-                <p className="flex items-center gap-2 text-sm text-white/50 sm:shrink-0">
-                  {new Date(event.date).toLocaleDateString("en-GB", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
-                  {event.time ? ` · ${event.time}` : ""}
-                  <ArrowUpRight className="h-4 w-4" />
-                </p>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
+        }
+      />
+      <ul className="mt-10 border-t border-edge-subtle">
+        {events.map((event) => (
+          <li key={event.slug} className="border-b border-edge-subtle">
+            <Link
+              href={`/events/${event.slug}`}
+              className="group grid gap-2 py-6 transition-colors hover:bg-raised sm:grid-cols-[10rem_minmax(0,1fr)_auto] sm:items-baseline sm:gap-8 sm:px-4"
+            >
+              <span className="tnum text-sm text-text-3">
+                {new Date(event.date).toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+                {event.time ? ` · ${event.time}` : ""}
+              </span>
+              <span className="font-display text-xl text-text-1 transition-colors group-hover:text-accent sm:text-2xl">
+                {event.title}
+              </span>
+              <span className="flex items-center gap-2 eyebrow text-text-3">
+                {event.type}
+                <ArrowUpRight className="h-4 w-4 transition-transform duration-[var(--dur-fast)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </Band>
   );
 }

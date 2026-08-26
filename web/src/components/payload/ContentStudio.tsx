@@ -190,7 +190,7 @@ function CandidatePreview({ kind, content }: { kind: Kind; content: unknown }) {
           ))}
         </ol>
         {outline.assessmentIdea ? (
-          <div className="rounded-xl border border-ai/25 bg-ai-bg px-3 py-2 text-sm text-ai">
+          <div className=" border border-ai/25 bg-ai-bg px-3 py-2 text-sm text-ai">
             Assessment idea: {outline.assessmentIdea}
           </div>
         ) : null}
@@ -423,7 +423,7 @@ export function ContentStudio({
         ))}
       </div>
 
-      <p className="flex items-center gap-2 rounded-xl border border-ai/25 bg-ai-bg px-3 py-2 text-xs text-ai">
+      <p className="flex items-center gap-2 border border-ai/25 bg-ai-bg px-3 py-2 text-xs text-ai">
         <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden />
         AI-generated drafts — review before publishing. Saving stores a versioned draft and never publishes it.
       </p>
@@ -557,7 +557,7 @@ export function ContentStudio({
             </details>
 
             <button
-              className="mt-4 inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-deep-blue px-5 py-2 text-sm font-medium text-text-1 transition hover:bg-[#0c3ab0] active:scale-[0.97] disabled:opacity-50"
+              className="mt-4 inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-accent-strong px-5 py-2 text-sm font-medium text-text-1 transition hover:bg-[#0c3ab0] active:scale-[0.97] disabled:opacity-50"
               disabled={busy}
               type="submit"
             >
@@ -586,7 +586,7 @@ export function ContentStudio({
                   <article
                     key={candidate.id}
                     className={cn(
-                      "flex flex-col rounded-2xl border bg-raised p-4 transition",
+                      "flex flex-col border bg-raised p-4 transition",
                       isSelected ? "border-ai/50 ring-1 ring-ai/30" : "border-edge-subtle",
                     )}
                   >

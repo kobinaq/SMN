@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
 import { Button } from "@/components/ui/Button";
+import { Band, CtaBand, Masthead, SectionHead, Sequence } from "@/components/site/kit";
 import { menteeTopics, seoTitle } from "@/lib/brand";
 import { img } from "@/lib/images";
 
 export const metadata: Metadata = {
   title: seoTitle("Marketing Mentorship"),
   description:
-    "Learn from people already doing the work. SMN connects mentees with experienced marketing professionals for guidance, perspective, and practical advice.",
+    "Learn from people already doing the work. SMN connects mentees with experienced marketing professionals, and reviews every mentor before they appear in the directory.",
   alternates: { canonical: "/mentorship" },
 };
 
@@ -45,74 +45,97 @@ const sessions = [
 
 const steps = [
   {
-    n: "01",
     title: "Browse approved mentors",
     body: "The directory is staff-reviewed. Filter by specialty and how they like to work.",
   },
   {
-    n: "02",
     title: "Send a focused request",
     body: "From your member account, say the topic, the goal, and the format you need.",
   },
   {
-    n: "03",
     title: "SMN coordinates",
     body: "We review the request and make the introduction so the time stays useful for both sides.",
+  },
+];
+
+const mentorFit = [
+  {
+    title: "You have done the work",
+    body: "Brand, agency, freelance, or in-house. You can talk about real briefs, not only theory.",
+  },
+  {
+    title: "You can spare a focused hour",
+    body: "Portfolio reviews, office hours, or one-to-one guidance. Set availability and pause whenever you need.",
+  },
+  {
+    title: "You give honest notes",
+    body: "Members come for a clear read. Kind is required. Vague praise is not useful.",
+  },
+];
+
+const mentorReview = [
+  {
+    title: "Apply from the portal",
+    body: "Complete your member profile, then submit a mentor application with specialties and how you like to work.",
+  },
+  {
+    title: "SMN reviews",
+    body: "Staff read for experience, clarity, and fit before a profile becomes visible in the directory.",
+  },
+  {
+    title: "You take requests",
+    body: "Members send focused requests. SMN coordinates introductions so your time stays protected.",
   },
 ];
 
 export default function MentorshipPage() {
   return (
     <>
-      <CinematicPageHero
+      <Masthead
         image={img.mentorshipPair}
         alt="Mentor and member sitting together"
         kicker="Mentorship"
         title="Learn from people already doing the work."
-        description="Marketing careers rarely follow a straight line. Sometimes what you need is not another course. It is a conversation with someone who has already been where you are trying to go."
+        lede="Marketing careers rarely follow a straight line. Sometimes what you need is not another course. It is a conversation with someone who has already been where you are trying to go."
         actions={
           <>
             <Button href="/app/mentors">Find a mentor</Button>
-            <Button href="/mentorship/become-a-mentor" variant="secondary">
+            <Button href="#become-a-mentor" variant="secondary">
               Become a mentor
             </Button>
           </>
         }
       />
 
-      <section className="border-b border-white/10 bg-ink py-16 sm:py-24">
-        <div className="container-wide grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-          <div>
-            <h2 className="font-display text-3xl text-white sm:text-4xl md:text-5xl">
-              For mentees
-            </h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-white/55 sm:text-base">
-              Get guidance on the questions that actually stall a marketing career. SMN connects
-              mentees with experienced professionals who can offer perspective and practical advice.
-            </p>
-            <ul className="mt-6 space-y-2">
-              {menteeTopics.map((item) => (
-                <li key={item} className="flex gap-3 text-sm text-white/70">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-baby-blue" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="space-y-0 border-t border-white/10">
+      <Band size="lg">
+        <SectionHead
+          kicker="For mentees"
+          title="Bring one real question."
+          lede="SMN connects mentees with experienced professionals who can offer perspective and practical advice on the things that actually stall a marketing career."
+        />
+        <div className="mt-12 grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+          <ul className="space-y-3">
+            {menteeTopics.map((item) => (
+              <li key={item} className="flex gap-3 text-sm leading-relaxed text-text-2">
+                <span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="border-t border-edge-subtle">
             {sessions.map((item) => (
-              <article key={item.title} className="border-b border-white/10 py-6 sm:py-7">
-                <h3 className="font-display text-xl text-white sm:text-2xl">{item.title}</h3>
-                <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/60">{item.body}</p>
+              <article key={item.title} className="border-b border-edge-subtle py-6">
+                <h3 className="font-display text-xl text-text-1 sm:text-2xl">{item.title}</h3>
+                <p className="mt-2 max-w-xl text-sm leading-relaxed text-text-2">{item.body}</p>
               </article>
             ))}
           </div>
         </div>
-      </section>
+      </Band>
 
-      <section className="bg-near-black py-16 sm:py-24">
-        <div className="container-wide grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:rounded-[2rem] lg:aspect-[5/4]">
+      <Band tone="raised" size="lg">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="relative aspect-[5/4] overflow-hidden">
             <Image
               src={img.mentorshipTalk}
               alt="Two marketers in a one-to-one mentorship conversation"
@@ -120,46 +143,63 @@ export default function MentorshipPage() {
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
-            <div className="image-matte" />
           </div>
           <div>
-            <h2 className="font-display text-3xl text-white sm:text-4xl">How it works</h2>
-            <ol className="mt-8 space-y-0 border-l border-white/10 pl-5">
-              {steps.map((step) => (
-                <li key={step.n} className="relative pb-7 last:pb-0">
-                  <span className="absolute -left-[1.4rem] top-1.5 h-2 w-2 rounded-full bg-baby-blue" />
-                  <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-white/35">
-                    {step.n}
-                  </p>
-                  <p className="mt-1.5 font-display text-lg text-white">{step.title}</p>
-                  <p className="mt-1.5 text-sm leading-relaxed text-white/55">{step.body}</p>
-                </li>
-              ))}
-            </ol>
+            <SectionHead align="stacked" kicker="How it works" title="Three steps, staff-coordinated." />
+            <Sequence className="mt-8" items={steps} />
           </div>
         </div>
-      </section>
+      </Band>
 
-      <section className="border-t border-white/10 bg-ink py-16 sm:py-20">
-        <div className="container-wide">
-          <div className="grid gap-8 overflow-hidden rounded-2xl border border-white/10 bg-surface p-6 sm:rounded-[2rem] sm:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-            <div>
-              <h2 className="font-display text-2xl text-white sm:text-3xl">Find a mentor</h2>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/55">
-                The directory lives in the member portal so requests stay relevant and easy to
-                coordinate. Create an account if you do not have one yet. Mentors apply separately
-                and are reviewed by SMN before they appear.
-              </p>
+      <Band id="become-a-mentor" tone="light" size="lg" className="scroll-mt-24">
+        <SectionHead
+          kicker="Give back"
+          title="Become a mentor."
+          lede="If you have real experience, help marketers in the Network grow with clear, honest guidance. This is a reviewed directory, not an open listing."
+          actions={<Button href="/app/mentors">Apply to mentor</Button>}
+        />
+
+        <div className="mt-14 grid gap-px overflow-hidden border border-edge-subtle bg-edge-subtle md:grid-cols-3">
+          {mentorFit.map((item) => (
+            <div key={item.title} className="bg-canvas p-7">
+              <h3 className="font-display text-xl text-text-1">{item.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-text-2">{item.body}</p>
             </div>
-            <div className="btn-row-mobile lg:justify-end">
-              <Button href="/app/mentors">Find a mentor</Button>
-              <Button href="/mentorship/become-a-mentor" variant="secondary">
-                Become a mentor
-              </Button>
-            </div>
+          ))}
+        </div>
+
+        <div className="mt-16 grid items-start gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+          <div>
+            <h3 className="font-display display-3 text-text-1">How review works</h3>
+            <Sequence className="mt-6" items={mentorReview} />
+          </div>
+          <div className="relative aspect-[4/5] overflow-hidden">
+            <Image
+              src={img.mentorListen}
+              alt="Two marketers talking through a mentorship session"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 45vw"
+            />
           </div>
         </div>
-      </section>
+      </Band>
+
+      <CtaBand
+        kicker="Both sides"
+        title="Find a mentor, or become one."
+        lede="The directory lives in the member portal so requests stay relevant and easy to coordinate. Mentors apply separately and are reviewed by SMN before they appear."
+        actions={
+          <>
+            <Button href="/app/mentors" variant="light">
+              Find a mentor
+            </Button>
+            <Button href="/signup" variant="secondary">
+              Create member account
+            </Button>
+          </>
+        }
+      />
     </>
   );
 }

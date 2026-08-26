@@ -55,15 +55,15 @@ export const cta = {
   },
   requestIntern: {
     label: "Request an intern",
-    href: "/employers/request-intern",
+    href: "/employers?request=intern",
   },
   postJob: {
     label: "Post a job",
-    href: "/employers/post-a-job",
+    href: "/employers?request=job",
   },
   shareOpportunity: {
     label: "Share an opportunity",
-    href: "/employers/post-a-job",
+    href: "/employers?request=job",
   },
   partner: {
     label: "Partner with us",
@@ -75,7 +75,7 @@ export const cta = {
   },
   browseInternships: {
     label: "Browse internships",
-    href: "/careers/internships",
+    href: "/careers/jobs?type=Internship",
   },
   contact: {
     label: "Contact SMN",

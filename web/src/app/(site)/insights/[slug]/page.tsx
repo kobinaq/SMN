@@ -55,7 +55,7 @@ export default async function InsightArticlePage({ params }: Props) {
   const absoluteCover = post.cover?.startsWith("http") ? post.cover : `${base}${post.cover}`;
 
   return (
-    <article className="bg-near-black">
+    <article className="bg-canvas">
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -76,11 +76,11 @@ export default async function InsightArticlePage({ params }: Props) {
         }}
       />
       {/* Hero */}
-      <header className="border-b border-white/10 pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-32">
+      <header className="border-b border-edge-subtle pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-32">
         <div className="container-wide pb-8 sm:pb-10 md:pb-12">
           <Link
             href="/insights"
-            className="inline-flex min-h-10 items-center gap-2 text-sm text-white/50 transition hover:text-white"
+            className="inline-flex min-h-10 items-center gap-2 text-sm text-text-3 transition hover:text-text-1"
           >
             <ArrowLeft className="h-4 w-4" />
             All insights
@@ -88,19 +88,19 @@ export default async function InsightArticlePage({ params }: Props) {
 
           <div className="mt-6 max-w-3xl sm:mt-8">
             <div className="flex flex-wrap items-center gap-2 text-[11px] sm:text-xs">
-              <span className="rounded-full border border-baby-blue/40 bg-baby-blue/10 px-2.5 py-1 font-medium uppercase tracking-wider text-baby-blue">
+              <span className="rounded-full border border-accent/40 bg-accent/10 px-2.5 py-1 font-medium uppercase tracking-wider text-accent">
                 {post.category}
               </span>
-              <span className="text-white/35">
+              <span className="text-text-3">
                 {formatBlogDate(post.date)} · {post.readTime} read
               </span>
             </div>
-            <h1 className="mt-4 font-display text-[1.75rem] leading-tight text-white sm:mt-5 sm:text-4xl md:text-5xl lg:text-[3.25rem]">
+            <h1 className="mt-4 font-display text-[1.75rem] leading-tight text-text-1 sm:mt-5 sm:text-4xl md:text-5xl lg:text-[3.25rem]">
               {post.title}
             </h1>
 
             <div className="mt-6 flex items-center gap-3 sm:mt-8">
-              <div className="relative h-11 w-11 overflow-hidden rounded-full border border-white/10 sm:h-12 sm:w-12">
+              <div className="relative h-11 w-11 overflow-hidden rounded-full border border-edge-subtle sm:h-12 sm:w-12">
                 <Image
                   src={post.authorImage}
                   alt={post.author}
@@ -110,15 +110,15 @@ export default async function InsightArticlePage({ params }: Props) {
                 />
               </div>
               <div>
-                <p className="text-sm font-medium text-white">{post.author}</p>
-                <p className="text-xs text-white/40">{post.authorRole}</p>
+                <p className="text-sm font-medium text-text-1">{post.author}</p>
+                <p className="text-xs text-text-3">{post.authorRole}</p>
               </div>
             </div>
           </div>
         </div>
 
         <div className="container-wide pb-10 sm:pb-14">
-          <div className="relative aspect-[16/10] overflow-hidden rounded-2xl sm:aspect-[21/9] sm:rounded-[1.75rem]">
+          <div className="relative aspect-[16/10] overflow-hidden sm:aspect-[21/9]">
             <Image
               src={post.cover}
               alt={post.title}
@@ -127,23 +127,22 @@ export default async function InsightArticlePage({ params }: Props) {
               className="object-cover"
               sizes="100vw"
             />
-            <div className="image-matte" />
           </div>
         </div>
       </header>
 
       {/* Body */}
-      <div className="border-b border-white/10 bg-ink">
+      <div className="border-b border-edge-subtle bg-raised">
         <div className="container-wide grid gap-10 py-10 sm:py-14 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-16 lg:py-16">
           <div className="mx-auto w-full max-w-2xl lg:mx-0">
-            <div className="space-y-5 text-[15px] leading-[1.75] text-white/75 sm:space-y-6 sm:text-base md:text-lg md:leading-[1.8]">
+            <div className="space-y-5 text-[15px] leading-[1.75] text-text-2 sm:space-y-6 sm:text-base md:text-lg md:leading-[1.8]">
               {post.body[0] ? (
-                <p className="text-lg leading-relaxed text-white/85 sm:text-xl sm:leading-[1.7]">
+                <p className="text-lg leading-relaxed text-text-1/85 sm:text-xl sm:leading-[1.7]">
                   {post.body[0]}
                 </p>
               ) : null}
               {post.excerpt ? (
-                <blockquote className="border-l-2 border-mint pl-5 text-base italic leading-relaxed text-white/70 sm:text-lg">
+                <blockquote className="border-l-2 border-mint pl-5 text-base italic leading-relaxed text-text-2 sm:text-lg">
                   {post.excerpt}
                 </blockquote>
               ) : null}
@@ -152,13 +151,13 @@ export default async function InsightArticlePage({ params }: Props) {
               ))}
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center gap-3 border-t border-white/10 pt-8 sm:mt-12">
-              <span className="text-xs uppercase tracking-wider text-white/35">Share</span>
+            <div className="mt-10 flex flex-wrap items-center gap-3 border-t border-edge-subtle pt-8 sm:mt-12">
+              <span className="text-xs uppercase tracking-wider text-text-3">Share</span>
               <a
                 href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${site.url}/insights/${post.slug}`)}`}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-full border border-white/15 px-3.5 py-1.5 text-xs text-white/70 transition hover:border-white/30 hover:text-white"
+                className="rounded-full border border-edge px-3.5 py-1.5 text-xs text-text-2 transition hover:border-edge-strong hover:text-text-1"
               >
                 LinkedIn
               </a>
@@ -166,7 +165,7 @@ export default async function InsightArticlePage({ params }: Props) {
                 href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`${site.url}/insights/${post.slug}`)}`}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-full border border-white/15 px-3.5 py-1.5 text-xs text-white/70 transition hover:border-white/30 hover:text-white"
+                className="rounded-full border border-edge px-3.5 py-1.5 text-xs text-text-2 transition hover:border-edge-strong hover:text-text-1"
               >
                 X / Twitter
               </a>
@@ -176,12 +175,12 @@ export default async function InsightArticlePage({ params }: Props) {
           {/* Sticky sidebar */}
           <aside className="lg:pt-1">
             <div className="space-y-4 lg:sticky lg:top-28">
-              <div className="rounded-2xl border border-white/10 bg-surface p-5 sm:p-6">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-white/40">
+              <div className=" border border-edge-subtle bg-raised p-5 sm:p-6">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-text-3">
                   Written by
                 </p>
                 <div className="mt-4 flex items-center gap-3">
-                  <div className="relative h-12 w-12 overflow-hidden rounded-full border border-white/10">
+                  <div className="relative h-12 w-12 overflow-hidden rounded-full border border-edge-subtle">
                     <Image
                       src={post.authorImage}
                       alt={post.author}
@@ -191,20 +190,20 @@ export default async function InsightArticlePage({ params }: Props) {
                     />
                   </div>
                   <div>
-                    <p className="font-medium text-white">{post.author}</p>
-                    <p className="text-xs text-white/45">{post.authorRole}</p>
+                    <p className="font-medium text-text-1">{post.author}</p>
+                    <p className="text-xs text-text-3">{post.authorRole}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-deep-blue p-5 sm:p-6">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-baby-blue">
+              <div className=" border border-edge-subtle bg-accent-strong p-5 sm:p-6">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-accent">
                   Keep learning
                 </p>
-                <p className="mt-3 font-display text-lg text-white sm:text-xl">
+                <p className="mt-3 font-display text-lg text-text-1 sm:text-xl">
                   Join the next cohort
                 </p>
-                <p className="mt-2 text-sm text-white/65">
+                <p className="mt-2 text-sm text-text-2">
                   Strategy, AI, practice, and community. Live on Google Classroom.
                 </p>
                 <Button href="/apply" className="mt-5 w-full text-xs sm:text-sm">
@@ -219,15 +218,15 @@ export default async function InsightArticlePage({ params }: Props) {
 
       {/* Related */}
       {related.length > 0 ? (
-        <section className="bg-near-black py-12 sm:py-16 md:py-20">
+        <section className="bg-canvas py-12 sm:py-16 md:py-20">
           <div className="container-wide">
             <div className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
-              <h2 className="font-display text-xl text-white sm:text-2xl md:text-3xl">
+              <h2 className="font-display text-xl text-text-1 sm:text-2xl md:text-3xl">
                 Keep reading
               </h2>
               <Link
                 href="/insights"
-                className="text-sm text-baby-blue transition hover:text-white"
+                className="text-sm text-accent transition hover:text-text-1"
               >
                 All insights
               </Link>

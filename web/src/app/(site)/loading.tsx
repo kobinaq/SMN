@@ -6,10 +6,10 @@ export default function SiteLoading() {
       aria-live="polite"
     >
       <span
-        className="h-8 w-8 animate-spin rounded-full border-2 border-white/15 border-t-baby-blue"
+        className="h-8 w-8 animate-spin rounded-full border-2 border-edge border-t-accent"
         aria-hidden
       />
-      <p className="text-sm text-white/45">Loading…</p>
+      <p className="text-sm text-text-3">Loading…</p>
     </div>
   );
 }

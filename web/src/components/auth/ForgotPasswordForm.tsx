@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { site } from "@/lib/site";
 
 const field =
-  "field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white placeholder:text-white/35 sm:py-3";
+  "field w-full border border-edge-subtle bg-inset px-4 py-3.5 text-text-1 placeholder:text-text-3 sm:py-3";
 
 export function ForgotPasswordForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -51,7 +51,7 @@ export function ForgotPasswordForm() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
-      <label className="block text-sm text-white/70" htmlFor="forgot-email">
+      <label className="block text-sm text-text-2" htmlFor="forgot-email">
         Email
         <input
           id="forgot-email"
@@ -68,12 +68,12 @@ export function ForgotPasswordForm() {
         {status === "loading" ? "Sending…" : "Send reset link"}
       </Button>
       {message ? (
-        <p className={`text-sm ${status === "error" ? "text-red-300" : "text-mint"}`} role="status" aria-live="polite">
+        <p className={`text-sm ${status === "error" ? "text-red-300" : "text-ai"}`} role="status" aria-live="polite">
           {message}
         </p>
       ) : null}
-      <p className="pt-2 text-center text-sm text-white/45">
-        <Link href="/login" className="text-baby-blue hover:text-white">
+      <p className="pt-2 text-center text-sm text-text-3">
+        <Link href="/login" className="text-accent hover:text-text-1">
           Back to sign in
         </Link>
       </p>

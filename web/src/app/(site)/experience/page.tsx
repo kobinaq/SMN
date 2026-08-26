@@ -1,15 +1,29 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { CinematicPageHero } from "@/components/layout/CinematicPageHero";
+import Link from "next/link";
+import { ContactForm } from "@/components/forms/ContactForm";
 import { Button } from "@/components/ui/Button";
-import { experienceDeliverables, experienceReview, seoTitle } from "@/lib/brand";
+import {
+  Band,
+  Checklist,
+  CtaBand,
+  DefinitionGrid,
+  Masthead,
+  SectionHead,
+} from "@/components/site/kit";
+import {
+  experienceDeliverables,
+  experienceReview,
+  seoTitle,
+  simulationPractice,
+} from "@/lib/brand";
 import { cta } from "@/lib/cta";
 import { img } from "@/lib/images";
 
 export const metadata: Metadata = {
   title: seoTitle("SMN Experience Programme"),
   description:
-    "After Social Media Marketing and AI training, selected SMN participants are matched with brands, agencies, and marketers for internships, projects, and portfolio-building experience.",
+    "After Social Media Marketing and AI training, selected SMN participants are matched with brands, agencies, and marketers for internships, projects, and portfolio-building experience. Practice simulations open on a waitlist.",
   alternates: { canonical: "/experience" },
 };
 
@@ -83,12 +97,12 @@ const partnerGains = [
 export default function ExperiencePage() {
   return (
     <>
-      <CinematicPageHero
+      <Masthead
         image={img.internPath}
         alt="Two emerging marketers talking in the lounge"
         kicker="SMN Experience Programme"
         title="From training into real marketing work."
-        description="After completing SMN's Social Media Marketing and AI Training Programme, selected participants are matched with marketing professionals, agencies, brands, and organisations based on skills, interests, and career direction."
+        lede="After completing SMN's Social Media Marketing and AI Training Programme, selected participants are matched with marketing professionals, agencies, brands, and organisations based on skills, interests, and career direction."
         actions={
           <>
             <Button href={cta.applyCohort.href}>{cta.applyCohort.shortLabel}</Button>
@@ -97,29 +111,20 @@ export default function ExperiencePage() {
             </Button>
           </>
         }
+        meta="Placements are not guaranteed. Eligible participants are considered on fit, readiness, and partner availability."
       />
 
-      <section className="border-b border-white/10 bg-ink py-16 sm:py-24">
-        <div className="container-wide max-w-3xl">
-          <h2 className="font-display text-3xl text-white sm:text-4xl md:text-5xl">
-            Learn. Apply. Build experience. Start your career with the community.
-          </h2>
-          <p className="mt-5 text-sm leading-relaxed text-white/65 sm:text-base">
-            The SMN Experience Programme helps participants transition from marketing education
-            into practical professional experience. The engagement may take the form of an
-            internship, volunteering, mentorship, project-based experience, or job shadowing. SMN
-            remains involved throughout.
-          </p>
-          <p className="mt-4 text-sm leading-relaxed text-white/45">
-            Placements are not guaranteed. Eligible participants from the training programme are
-            considered based on fit, readiness, and partner availability.
-          </p>
-        </div>
-      </section>
+      <Band size="lg">
+        <SectionHead
+          kicker="The shape of it"
+          title="Learn. Apply. Build experience."
+          lede="The engagement may take the form of an internship, volunteering, mentorship, project-based experience, or job shadowing. SMN remains involved throughout."
+        />
+      </Band>
 
-      <section className="border-b border-white/10 bg-near-black py-16 sm:py-24">
-        <div className="container-wide grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:rounded-[2rem]">
+      <Band tone="raised" size="lg">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="relative aspect-[4/3] overflow-hidden">
             <Image
               src={img.hireConversation}
               alt="A partner conversation about marketing work"
@@ -127,99 +132,51 @@ export default function ExperiencePage() {
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
-            <div className="image-matte" />
           </div>
           <div>
-            <h2 className="font-display text-3xl text-white sm:text-4xl">What the partner provides</h2>
-            <p className="mt-4 text-sm leading-relaxed text-white/55">
-              Depending on the agreed format, mentors and partners may provide:
-            </p>
-            <ul className="mt-6 space-y-3">
-              {partnerProvides.map((item) => (
-                <li key={item} className="flex gap-3 text-sm text-white/70">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-baby-blue" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+            <SectionHead
+              align="stacked"
+              kicker="Partner side"
+              title="What the partner provides"
+              lede="Depending on the agreed format, mentors and partners may provide:"
+            />
+            <Checklist className="mt-8" items={partnerProvides} />
           </div>
         </div>
-      </section>
+      </Band>
 
-      <section className="border-b border-white/10 bg-ink py-16 sm:py-24">
-        <div className="container-wide grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <Band size="lg">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
-            <h2 className="font-display text-3xl text-white sm:text-4xl">
-              What the participant is expected to do
-            </h2>
-            <ul className="mt-6 space-y-3">
-              {participantDoes.map((item) => (
-                <li key={item} className="flex gap-3 text-sm text-white/70">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-mint" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+            <h2 className="font-display display-3 text-text-1">What the participant does</h2>
+            <Checklist className="mt-7" tone="ai" items={participantDoes} />
           </div>
           <div>
-            <h2 className="font-display text-3xl text-white sm:text-4xl">
-              What the participant should learn
-            </h2>
-            <p className="mt-4 text-sm leading-relaxed text-white/55">
+            <h2 className="font-display display-3 text-text-1">What they should learn</h2>
+            <p className="mt-4 text-sm leading-relaxed text-text-2">
               The experience should expose participants to how marketing works beyond the classroom.
-              Depending on the placement, this may include:
             </p>
-            <ul className="mt-6 grid gap-2 sm:grid-cols-2">
-              {participantLearns.map((item) => (
-                <li key={item} className="flex gap-3 text-sm text-white/70">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-white/25" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+            <Checklist className="mt-7" tone="muted" columns={2} items={participantLearns} />
           </div>
         </div>
-      </section>
+      </Band>
 
-      <section className="border-b border-white/10 bg-near-black py-16 sm:py-24">
-        <div className="container-wide">
-          <h2 className="max-w-3xl font-display text-3xl text-white sm:text-4xl md:text-5xl">
-            Leave with evidence, not only notes.
-          </h2>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/60 sm:text-base">
-            The key objective is tangible experience for a portfolio. Depending on the placement,
-            participants should aim to complete three to five of the following.
-          </p>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2">
-            {experienceDeliverables.map((item) => (
-              <article
-                key={item.title}
-                className="rounded-[1.75rem] border border-white/10 bg-surface p-6 sm:p-8"
-              >
-                <h3 className="font-display text-xl text-white">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/60">{item.body}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Band tone="light" size="lg">
+        <SectionHead
+          kicker="Output"
+          title="Leave with evidence, not only notes."
+          lede="The key objective is tangible experience for a portfolio. Depending on the placement, participants should aim to complete three to five of the following."
+        />
+        <DefinitionGrid className="mt-12" items={[...experienceDeliverables]} />
+      </Band>
 
-      <section className="border-b border-white/10 bg-ink py-16 sm:py-24">
-        <div className="container-wide grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <Band size="lg">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
-            <h2 className="font-display text-3xl text-white sm:text-4xl">
-              What the participant leaves with
-            </h2>
-            <div className="mt-8 space-y-6">
-              {leavesWith.map((item) => (
-                <div key={item.title}>
-                  <h3 className="font-display text-xl text-white">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/60">{item.body}</p>
-                </div>
-              ))}
-            </div>
+            <SectionHead align="stacked" kicker="Outcome" title="What the participant leaves with" />
+            <DefinitionGrid className="mt-8" columns={2} items={leavesWith} />
           </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl sm:rounded-[2rem] lg:aspect-[5/4]">
+          <div className="relative aspect-[5/4] overflow-hidden">
             <Image
               src={img.practicePair}
               alt="Two marketers working through a brief"
@@ -227,63 +184,91 @@ export default function ExperiencePage() {
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
-            <div className="image-matte" />
           </div>
         </div>
-      </section>
+      </Band>
 
-      <section className="border-b border-white/10 bg-near-black py-16 sm:py-24">
-        <div className="container-wide grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <Band tone="raised" size="lg">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
-            <h2 className="font-display text-3xl text-white sm:text-4xl">What the partner gains</h2>
-            <ul className="mt-6 space-y-3">
-              {partnerGains.map((item) => (
-                <li key={item} className="flex gap-3 text-sm text-white/70">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-baby-blue" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+            <h2 className="font-display display-3 text-text-1">What the partner gains</h2>
+            <Checklist className="mt-7" items={partnerGains} />
           </div>
           <div>
-            <h2 className="font-display text-3xl text-white sm:text-4xl">At the end of the experience</h2>
-            <p className="mt-4 text-sm leading-relaxed text-white/60 sm:text-base">
-              SMN will conduct a simple Experience Review with both the participant and partner.
+            <h2 className="font-display display-3 text-text-1">At the end</h2>
+            <p className="mt-4 text-sm leading-relaxed text-text-2">
+              SMN conducts a simple Experience Review with both the participant and the partner.
             </p>
-            <ul className="mt-6 space-y-3">
-              {experienceReview.map((item) => (
-                <li key={item} className="flex gap-3 text-sm text-white/70">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-mint" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+            <Checklist className="mt-7" tone="ai" items={[...experienceReview]} />
           </div>
         </div>
-      </section>
+      </Band>
 
-      <section className="bg-ink py-16 sm:py-20">
-        <div className="container-wide overflow-hidden rounded-2xl border border-white/10 bg-deep-blue p-6 sm:rounded-[2rem] sm:p-10 md:p-14">
-          <h2 className="max-w-3xl font-display text-2xl text-white sm:text-3xl md:text-4xl">
-            I did not just take a marketing course. I have actually worked through a marketing
-            problem, applied what I learned, received professional feedback, and can show evidence
-            of what I can do.
-          </h2>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/70 sm:text-base">
-            That is the shared outcome. Applied learning, professional feedback, and evidence of
-            what you can do. Learn social media marketing. Lead with AI. Grow with a community.
-            Leave with real-world experience.
-          </p>
-          <div className="btn-row-mobile mt-8">
+      {/* Simulations used to be a page of its own. It is the same idea one step
+          earlier — practice before placement — so it lives here now. */}
+      <Band id="simulations" size="lg" className="scroll-mt-24">
+        <SectionHead
+          kicker="Simulations · Waitlist"
+          title="Practise before the placement."
+          lede="Marketing becomes easier to understand when you have a problem to solve. Simulations let you step into the role of a marketer and work through realistic challenges. The live practice product is not open yet."
+        />
+        <div className="mt-12 grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="relative aspect-[4/3] overflow-hidden">
+            <Image
+              src={img.practicePair}
+              alt="Two marketers talking through a practice session"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+          </div>
+          <div>
+            <h3 className="font-display text-2xl text-text-1">What you will practise</h3>
+            <Checklist className="mt-6" columns={2} tone="ai" items={[...simulationPractice]} />
+            <p className="mt-8 rule pt-6 text-sm leading-relaxed text-text-3">
+              Real marketers rarely receive a perfect brief with every answer provided. Until
+              simulations open, the{" "}
+              <Link href="/programs/cohort" className="link-wipe text-accent">
+                live training programme
+              </Link>{" "}
+              and{" "}
+              <Link href="/programs/courses" className="link-wipe text-accent">
+                self-paced courses
+              </Link>{" "}
+              are the live learning paths.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-16 grid gap-12 rule pt-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+          <div>
+            <h3 className="font-display display-3 text-text-1">Register your interest</h3>
+            <p className="mt-4 text-sm leading-relaxed text-text-2">
+              No member account required. Tell us which kind of challenge you want first. We follow
+              up when a window is ready.
+            </p>
+          </div>
+          <div className="border border-edge-subtle bg-raised p-6 sm:p-8">
+            <ContactForm defaultType="Simulation waitlist" />
+          </div>
+        </div>
+      </Band>
+
+      <CtaBand
+        kicker="The shared outcome"
+        title="Applied learning, professional feedback, evidence of what you can do."
+        lede="Not just another marketing course — a marketing problem you actually worked through, with something to show for it."
+        actions={
+          <>
             <Button href={cta.applyCohort.href} variant="light">
               {cta.applyCohort.label}
             </Button>
             <Button href={cta.partner.href} variant="secondary">
               {cta.partner.label}
             </Button>
-          </div>
-        </div>
-      </section>
+          </>
+        }
+      />
     </>
   );
 }

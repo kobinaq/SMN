@@ -38,7 +38,7 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
       <div
         ref={curtain}
         aria-hidden
-        className="pointer-events-none fixed inset-0 z-[60] origin-top bg-deep-blue"
+        className="pointer-events-none fixed inset-0 z-[60] origin-top bg-accent-strong"
         style={{ transform: "scaleY(0)" }}
       />
       <div ref={ref}>{children}</div>

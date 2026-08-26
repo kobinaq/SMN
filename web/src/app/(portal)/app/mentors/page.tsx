@@ -21,7 +21,7 @@ export default async function MentorsAppPage() {
         title="Find the right guide"
         description="Browse staff-approved mentors by specialty, then send a focused request. The SMN team reviews introductions to protect everyone's time."
         action={
-          <Button href="/mentorship/become-a-mentor" variant="secondary">
+          <Button href="/mentorship#become-a-mentor" variant="secondary">
             Become a mentor
           </Button>
         }

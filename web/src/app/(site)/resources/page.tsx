@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { ArrowRight, Download, Layers, Mail } from "@/components/ui/icons";
+import { ArrowRight, Download } from "@/components/ui/icons";
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
 import { ResourceRow } from "@/components/resources/ResourceRow";
 import { ResourceTypeNav } from "@/components/resources/ResourceTypeNav";
 import { Button } from "@/components/ui/Button";
+import { Band, Checklist, Masthead, Placeholder } from "@/components/site/kit";
 import { resourceOfferings, seoTitle } from "@/lib/brand";
 import { resourceTypes } from "@/lib/content";
 import { getResourceLibrary } from "@/lib/resources";
@@ -15,249 +16,175 @@ export const metadata: Metadata = {
   title: seoTitle("Social Media Marketing Resources"),
   description:
     "Practical marketing resources you can actually use. Templates, frameworks, checklists, AI prompts, and guides from Social Marketers Network.",
+  alternates: { canonical: "/resources" },
 };
 
-type Props = {
+const TITLES: Record<string, { title: string; lede: string }> = {
+  Template: {
+    title: "Templates you can use this week.",
+    lede: "Ready-to-use files for planning, content systems, and campaign work.",
+  },
+  Guide: {
+    title: "Guides for clearer marketing work.",
+    lede: "Step-by-step playbooks for positioning, content systems, and AI-assisted workflows.",
+  },
+};
+
+/**
+ * The whole library on one page. Templates and Guides were separate pages that
+ * rendered this same list with one filter applied; they are `?type=` views now,
+ * so the filter nav and the empty state are written once.
+ */
+export default async function ResourcesPage({
+  searchParams,
+}: {
   searchParams: Promise<{ type?: string }>;
-};
-
-export default async function ResourcesPage({ searchParams }: Props) {
+}) {
   const { type } = await searchParams;
   const [site, all] = await Promise.all([getSiteSettings(), getResourceLibrary()]);
   const active =
     type && resourceTypes.includes(type as (typeof resourceTypes)[number]) ? type : "All";
 
-  const filtered =
-    active === "All" ? all : all.filter((r) => r.type === active);
+  const filtered = active === "All" ? all : all.filter((item) => item.type === active);
 
   const counts: Record<string, number> = { All: all.length };
-  for (const r of all) {
-    counts[r.type] = (counts[r.type] || 0) + 1;
-  }
+  for (const item of all) counts[item.type] = (counts[item.type] || 0) + 1;
 
-  // Group by type when showing all
   const groups =
     active === "All"
       ? resourceTypes
-          .filter((t) => t !== "All")
-          .map((t) => ({
-            type: t,
-            items: all.filter((r) => r.type === t),
-          }))
-          .filter((g) => g.items.length > 0)
+          .filter((item) => item !== "All")
+          .map((item) => ({ type: item, items: all.filter((r) => r.type === item) }))
+          .filter((group) => group.items.length > 0)
       : [{ type: active, items: filtered }];
 
-  const freeCount = all.filter((r) => r.free).length;
+  const heading = TITLES[active] ?? {
+    title: "Marketing resources you can actually use.",
+    lede: "Templates, frameworks, checklists, AI prompts, and guides. Free for the community — open one, enter your email, and we send the file.",
+  };
 
   return (
     <>
-      {/* Utility hero — not blog-style editorial */}
-      <section className="border-b border-white/10 bg-ink pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-28">
-        <div className="container-wide py-10 sm:py-12 md:py-14">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-stretch lg:gap-10">
-            <div className="flex-1">
-              <div className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-surface px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-baby-blue">
-                <Layers className="h-3 w-3" />
-                Resource library
-              </div>
-              <h1 className="mt-4 font-display text-2xl leading-tight text-white sm:text-3xl md:text-4xl">
-                Practical marketing resources you can actually use.
-              </h1>
-              <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/55 sm:text-base">
-                Free and practical files to help you plan, create, analyse, and improve your
-                marketing. You do not always need another course. Sometimes you just need the right
-                framework, template, or example to help you get started.
-              </p>
-              <ul className="mt-5 flex flex-wrap gap-2">
-                {resourceOfferings.map((item) => (
-                  <li
-                    key={item}
-                    className="rounded-full border border-white/10 bg-surface px-3 py-1.5 text-xs text-white/60"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-6 flex flex-wrap gap-6 border-t border-white/10 pt-5 text-sm">
-                <div>
-                  <p className="font-display text-2xl text-white">{all.length}</p>
-                  <p className="text-xs text-white/40">tools in library</p>
-                </div>
-                <div className="border-l border-white/10 pl-6">
-                  <p className="font-display text-2xl text-mint">{freeCount}</p>
-                  <p className="text-xs text-white/40">free downloads</p>
-                </div>
-                <div className="border-l border-white/10 pl-6">
-                  <p className="font-display text-2xl text-white">PDF + sheets</p>
-                  <p className="text-xs text-white/40">formats included</p>
-                </div>
-              </div>
-            </div>
+      <Masthead
+        kicker={active === "All" ? "Resources" : `Resources · ${active}`}
+        title={heading.title}
+        lede={heading.lede}
+        meta={
+          <span className="tnum">
+            {all.length} {all.length === 1 ? "resource" : "resources"} in the library
+          </span>
+        }
+      />
 
-            <div className="flex w-full flex-col justify-between rounded-xl border border-white/10 bg-deep-blue p-5 sm:p-6 lg:w-[320px] lg:shrink-0">
-              <div>
-                <Mail className="h-5 w-5 text-baby-blue" />
-                <p className="mt-3 font-display text-lg text-white">New tools by email</p>
-                <p className="mt-2 text-sm text-white/65">
-                  Get notified when we drop templates and prompt packs.
-                </p>
-              </div>
-              <div className="mt-5">
-                <NewsletterForm />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Library body: sidebar filters + download list */}
-      <section className="bg-near-black pb-16 pt-8 sm:pb-24 sm:pt-10 md:pb-28">
-        <div className="container-wide">
-          {/* Mobile type filter */}
-          <div className="mb-6 lg:hidden">
-            <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.18em] text-white/40">
-              Filter by type
-            </p>
-            <Suspense fallback={<div className="h-10 animate-pulse rounded-lg bg-white/5" />}>
-              <ResourceTypeNav counts={counts} orientation="horizontal" />
+      <Band size="lg" bordered={false}>
+        <div className="grid gap-10 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16">
+          <aside className="lg:sticky lg:top-28 lg:self-start">
+            <p className="eyebrow text-text-3">Filter</p>
+            <Suspense fallback={null}>
+              <ResourceTypeNav counts={counts} orientation="vertical" />
             </Suspense>
-          </div>
 
-          <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-10">
-            {/* Desktop sidebar */}
-            <aside className="hidden lg:block">
-              <div className="sticky top-28 rounded-xl border border-white/10 bg-ink p-4">
-                <p className="mb-3 px-3 text-[10px] font-medium uppercase tracking-[0.18em] text-white/40">
-                  Categories
-                </p>
-                <Suspense fallback={null}>
-                  <ResourceTypeNav counts={counts} orientation="vertical" />
-                </Suspense>
-                <div className="mt-6 border-t border-white/10 px-3 pt-5">
-                  <p className="text-xs text-white/45">
-                    Prefer live training?
-                  </p>
-                  <Button href="/apply" className="mt-3 w-full text-xs">
-                    Apply to cohort
-                  </Button>
-                </div>
-              </div>
-            </aside>
+            <p className="mt-10 eyebrow text-text-3">What is in here</p>
+            <Checklist className="mt-3" tone="muted" items={resourceOfferings} />
+          </aside>
 
-            {/* Download list */}
-            <div className="min-w-0">
-              <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-                <div>
-                  <h2 className="font-display text-lg text-white sm:text-xl">
-                    {active === "All" ? "All downloads" : active}
-                  </h2>
-                  <p className="mt-1 text-sm text-white/40">
-                    {filtered.length} file{filtered.length === 1 ? "" : "s"} · click to open &
-                    request by email
-                  </p>
-                </div>
-                <Link
-                  href={site.whatsappInvite}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-sm text-baby-blue transition hover:text-white"
-                >
-                  Ask in WhatsApp →
-                </Link>
-              </div>
+          <div>
+            <Suspense fallback={null}>
+              <ResourceTypeNav counts={counts} />
+            </Suspense>
 
-              {filtered.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-white/15 px-6 py-16 text-center">
-                  <p className="font-display text-lg text-white">
-                    {all.length === 0 ? "No downloads published yet" : "Nothing in this category"}
-                  </p>
-                  <p className="mt-2 text-sm text-white/45">
-                    {all.length === 0
-                      ? "Staff will add files here. Join WhatsApp if you want a ping when the first pack drops."
-                      : "Try another type from the filters."}
-                  </p>
-                  <Button
-                    href={all.length === 0 ? site.whatsappInvite : "/resources"}
-                    variant="secondary"
-                    className="mt-6"
-                    {...(all.length === 0 ? { target: "_blank", rel: "noreferrer" } : {})}
-                  >
-                    {all.length === 0 ? "Join WhatsApp" : "Show all tools"}
-                  </Button>
-                </div>
-              ) : active === "All" ? (
-                <div className="space-y-10">
+            <div className="mt-8">
+              {!filtered.length ? (
+                <Placeholder
+                  title={active === "All" ? "The library is being built" : `No ${active} yet`}
+                  body={
+                    all.length === 0
+                      ? "New tools are shared with the community first. Join the WhatsApp group and we will send them as they land."
+                      : "Nothing under this filter yet. Browse the rest of the library while we add more."
+                  }
+                  actions={
+                    all.length === 0 ? (
+                      <Button href={site.whatsappInvite} target="_blank" rel="noreferrer">
+                        Join WhatsApp
+                      </Button>
+                    ) : (
+                      <Button href="/resources" variant="secondary">
+                        Show everything
+                      </Button>
+                    )
+                  }
+                />
+              ) : (
+                <div className="space-y-12">
                   {groups.map((group) => (
-                    <div key={group.type}>
-                      <div className="mb-3 flex items-center justify-between gap-3">
-                        <h3 className="text-xs font-medium uppercase tracking-[0.16em] text-white/40">
-                          {group.type}
-                        </h3>
-                        <Link
-                          href={
-                            group.type === "Template"
-                              ? "/resources/templates"
-                              : group.type === "Guide"
-                                ? "/resources/guides"
-                                : `/resources?type=${encodeURIComponent(group.type)}`
-                          }
-                          className="text-xs text-baby-blue hover:text-white"
-                        >
-                          View only →
-                        </Link>
-                      </div>
+                    <section key={group.type}>
+                      {active === "All" ? (
+                        <div className="mb-4 flex items-center justify-between gap-3 rule pt-4">
+                          <h2 className="eyebrow text-text-3">{group.type}</h2>
+                          <Link
+                            href={`/resources?type=${encodeURIComponent(group.type)}`}
+                            scroll={false}
+                            className="link-wipe text-xs text-accent"
+                          >
+                            View only
+                          </Link>
+                        </div>
+                      ) : null}
                       <div className="space-y-2.5">
                         {group.items.map((resource) => (
                           <ResourceRow key={resource.slug} resource={resource} />
                         ))}
                       </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-2.5">
-                  {filtered.map((resource) => (
-                    <ResourceRow key={resource.slug} resource={resource} />
+                    </section>
                   ))}
                 </div>
               )}
-
-              <div className="mt-12 grid gap-4 rounded-xl border border-white/10 bg-ink p-5 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-8 sm:p-6">
-                <div className="flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-deep-blue text-white">
-                    <Download className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <p className="font-display text-base text-white sm:text-lg">
-                      How downloads work
-                    </p>
-                    <p className="mt-1 text-sm text-white/50">
-                      Open a tool, enter your email, and we send the file. Free for the community.
-                    </p>
-                  </div>
-                </div>
-                {all[0] ? (
-                  <Button href={`/resources/${all[0].slug}`} variant="secondary" className="sm:shrink-0">
-                    Try a free template
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                ) : null}
-              </div>
-              <p className="mt-8 text-sm text-white/45">
-                Want the thinking behind the files? Read{" "}
-                <Link href="/insights" className="text-baby-blue transition hover:text-white">
-                  Insights
-                </Link>{" "}
-                or{" "}
-                <Link href="/programs/cohort" className="text-baby-blue transition hover:text-white">
-                  apply to live training
-                </Link>
-                .
-              </p>
             </div>
+
+            <div className="mt-14 grid gap-5 border border-edge-subtle bg-raised p-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-8">
+              <div className="flex gap-4">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center bg-accent-bg text-accent">
+                  <Download className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="font-display text-lg text-text-1">How downloads work</p>
+                  <p className="mt-1 text-sm text-text-2">
+                    Open a tool, enter your email, and we send the file. Free for the community.
+                  </p>
+                </div>
+              </div>
+              {all[0] ? (
+                <Button href={`/resources/${all[0].slug}`} variant="secondary" className="sm:shrink-0">
+                  Try a free template
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              ) : null}
+            </div>
+
+            <div className="mt-8 border border-edge-subtle bg-raised p-6">
+              <p className="font-display text-lg text-text-1">Get new tools by email</p>
+              <p className="mt-1 text-sm text-text-2">
+                One note when something useful lands. No drip sequence.
+              </p>
+              <div className="mt-5">
+                <NewsletterForm />
+              </div>
+            </div>
+
+            <p className="mt-10 text-sm text-text-3">
+              Want the thinking behind the files? Read{" "}
+              <Link href="/insights" className="link-wipe text-accent">
+                Insights
+              </Link>{" "}
+              or{" "}
+              <Link href="/programs/cohort" className="link-wipe text-accent">
+                apply to live training
+              </Link>
+              .
+            </p>
           </div>
         </div>
-      </section>
+      </Band>
     </>
   );
 }

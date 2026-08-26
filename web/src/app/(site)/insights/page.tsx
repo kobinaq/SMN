@@ -42,22 +42,22 @@ export default async function InsightsPage({ searchParams }: Props) {
   return (
     <>
       {/* Blog header */}
-      <section className="border-b border-white/10 bg-near-black pt-[calc(5.5rem+env(safe-area-inset-top))] pb-10 sm:pt-32 sm:pb-14 md:pt-36 md:pb-16">
+      <section className="border-b border-edge-subtle bg-canvas pt-[calc(5.5rem+env(safe-area-inset-top))] pb-10 sm:pt-32 sm:pb-14 md:pt-36 md:pb-16">
         <div className="container-wide">
-          <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-baby-blue sm:text-xs">
+          <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-accent sm:text-xs">
             Insights
           </p>
           <div className="mt-3 flex flex-col gap-6 lg:mt-4 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
-              <h1 className="font-display text-[1.85rem] leading-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+              <h1 className="font-display text-[1.85rem] leading-tight text-text-1 sm:text-4xl md:text-5xl lg:text-6xl">
                 Ideas for marketers navigating what is next.
               </h1>
-              <p className="mt-3 text-sm leading-relaxed text-white/60 sm:mt-4 sm:text-base md:text-lg">
+              <p className="mt-3 text-sm leading-relaxed text-text-2 sm:mt-4 sm:text-base md:text-lg">
                 Practical insights, frameworks, and perspectives on social media, marketing
                 strategy, AI, careers, and the changing world of work.
               </p>
             </div>
-            <p className="text-sm text-white/40">
+            <p className="text-sm text-text-3">
               {all.length} article{all.length === 1 ? "" : "s"}
             </p>
           </div>
@@ -65,7 +65,7 @@ export default async function InsightsPage({ searchParams }: Props) {
           <div className="mt-8 sm:mt-10">
             <Suspense
               fallback={
-                <div className="h-10 animate-pulse rounded-full bg-white/5" />
+                <div className="h-10 animate-pulse rounded-full bg-inset" />
               }
             >
               <BlogCategoryNav />
@@ -74,18 +74,18 @@ export default async function InsightsPage({ searchParams }: Props) {
         </div>
       </section>
 
-      <section className="bg-ink pb-16 pt-8 sm:pb-24 sm:pt-12 md:pb-28">
+      <section className="bg-raised pb-16 pt-8 sm:pb-24 sm:pt-12 md:pb-28">
         <div className="container-wide space-y-12 sm:space-y-16">
           {showFeatured ? <FeaturedPost post={featured} /> : null}
 
           {rest.length > 0 ? (
             <div>
               <div className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
-                <h2 className="font-display text-xl text-white sm:text-2xl">
+                <h2 className="font-display text-xl text-text-1 sm:text-2xl">
                   {active === "All" ? "Latest articles" : active}
                 </h2>
                 {active !== "All" ? (
-                  <p className="text-sm text-white/40">
+                  <p className="text-sm text-text-3">
                     {rest.length} post{rest.length === 1 ? "" : "s"}
                   </p>
                 ) : null}
@@ -97,11 +97,11 @@ export default async function InsightsPage({ searchParams }: Props) {
               </div>
             </div>
           ) : (
-            <div className="rounded-2xl border border-white/10 bg-surface px-6 py-16 text-center">
-              <p className="font-display text-xl text-white">
+            <div className=" border border-edge-subtle bg-raised px-6 py-16 text-center">
+              <p className="font-display text-xl text-text-1">
                 {all.length === 0 ? "No articles published yet" : "No articles in this category yet"}
               </p>
-              <p className="mt-2 text-sm text-white/50">
+              <p className="mt-2 text-sm text-text-3">
                 {all.length === 0
                   ? "Insights will appear here when staff publish them."
                   : "Try another filter or check back soon."}
@@ -111,17 +111,17 @@ export default async function InsightsPage({ searchParams }: Props) {
 
           <BlogNewsletter />
 
-          <div className="flex flex-col gap-3 border-t border-white/10 pt-10 sm:flex-row sm:flex-wrap sm:gap-x-6">
-            <Link href="/programs/cohort" className="text-sm text-baby-blue transition hover:text-white">
+          <div className="flex flex-col gap-3 border-t border-edge-subtle pt-10 sm:flex-row sm:flex-wrap sm:gap-x-6">
+            <Link href="/programs/cohort" className="text-sm text-accent transition hover:text-text-1">
               Social media marketing training
             </Link>
-            <Link href="/programs/courses" className="text-sm text-baby-blue transition hover:text-white">
+            <Link href="/programs/courses" className="text-sm text-accent transition hover:text-text-1">
               Self-paced courses
             </Link>
-            <Link href="/community" className="text-sm text-baby-blue transition hover:text-white">
+            <Link href="/community" className="text-sm text-accent transition hover:text-text-1">
               Join the community
             </Link>
-            <Link href="/resources" className="text-sm text-baby-blue transition hover:text-white">
+            <Link href="/resources" className="text-sm text-accent transition hover:text-text-1">
               Free resources
             </Link>
           </div>

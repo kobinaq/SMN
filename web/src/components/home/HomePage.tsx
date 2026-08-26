@@ -1,6 +1,6 @@
 import { HomeStory } from "@/components/motion/HomeStory";
 import { HeroPhotoGallery } from "@/components/home/HeroPhotoGallery";
-import { FounderStory } from "@/components/home/FounderStory";
+import { FounderStory, Values } from "@/components/home/FounderStory";
 import { EcosystemPillars } from "@/components/home/EcosystemPillars";
 import { AudienceStages } from "@/components/home/AudienceStages";
 import { CohortSpotlight } from "@/components/home/CohortSpotlight";
@@ -17,6 +17,7 @@ export async function HomePage() {
     <HomeStory>
       <HeroPhotoGallery />
       <FounderStory />
+      <Values />
       <EcosystemPillars />
       <AudienceStages />
       <CohortSpotlight />
