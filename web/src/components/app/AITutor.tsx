@@ -1,12 +1,20 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Copy, Sparkles } from "@/components/ui/icons";
-import { AiMarkdown } from "@/components/ui/AiMarkdown";
+import { useEffect, useMemo, useState } from "react";
+import { Sparkles, X } from "@/components/ui/icons";
+import { Chip } from "@/components/ui/Chip";
+import { Segmented } from "@/components/ui/Segmented";
 import { useToast } from "@/components/ui/Toast";
+import {
+  AiComposer,
+  AiFeedback,
+  AiHeader,
+  AiSuggestions,
+  AiThread,
+  type AiMessage,
+} from "@/components/ai/AiPanel";
 import { cn } from "@/lib/utils";
 
-type Citation = { id: string; label: string; href: string; excerpt: string };
 type TutorMode =
   | "explain"
   | "simplify"
@@ -18,15 +26,10 @@ type TutorMode =
   | "compare"
   | "next-lesson";
 type Intent = "study" | "practice" | "navigate";
-type ThreadMessage = {
-  role: "member" | "tutor";
-  content: string;
-  citations?: Citation[];
-};
 
-const intents: Array<{ id: Intent; label: string; modes: Array<[TutorMode, string]> }> = [
+const intents: Array<{ value: Intent; label: string; modes: Array<[TutorMode, string]> }> = [
   {
-    id: "study",
+    value: "study",
     label: "Study",
     modes: [
       ["explain", "Explain"],
@@ -35,7 +38,7 @@ const intents: Array<{ id: Intent; label: string; modes: Array<[TutorMode, strin
     ],
   },
   {
-    id: "practice",
+    value: "practice",
     label: "Practice",
     modes: [
       ["example", "Example"],
@@ -45,7 +48,7 @@ const intents: Array<{ id: Intent; label: string; modes: Array<[TutorMode, strin
     ],
   },
   {
-    id: "navigate",
+    value: "navigate",
     label: "Navigate",
     modes: [
       ["next-lesson", "Next lesson"],
@@ -81,29 +84,15 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
     navigate: "next-lesson",
   });
   const [question, setQuestion] = useState("");
-  const [messages, setMessages] = useState<ThreadMessage[]>([]);
+  const [messages, setMessages] = useState<AiMessage[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [feedback, setFeedback] = useState("");
-  const threadRef = useRef<HTMLDivElement>(null);
   const toast = useToast();
 
-  async function copyMessage(content: string) {
-    try {
-      await navigator.clipboard.writeText(content);
-      toast.push("Copied to clipboard.", "success");
-    } catch {
-      toast.push("Couldn’t copy — select the text manually.", "error");
-    }
-  }
-
   const mode = modeByIntent[intent];
-  const intentConfig = intents.find((item) => item.id === intent)!;
-  const suggestions = suggestionsByIntent[intent];
-  const lastTutor = useMemo(
-    () => [...messages].reverse().find((message) => message.role === "tutor"),
-    [messages],
-  );
+  const intentConfig = intents.find((item) => item.value === intent)!;
+  const hasAnswer = useMemo(() => messages.some((message) => message.role === "assistant"), [messages]);
 
   useEffect(() => {
     if (!open) return;
@@ -114,15 +103,18 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  useEffect(() => {
-    const node = threadRef.current;
-    if (!node) return;
-    node.scrollTop = node.scrollHeight;
-  }, [messages, busy, open]);
+  async function copyMessage(content: string) {
+    try {
+      await navigator.clipboard.writeText(content);
+      toast.push("Copied to clipboard.", "success");
+    } catch {
+      toast.push("Couldn’t copy — select the text manually.", "error");
+    }
+  }
 
   async function ask(value = question) {
     if (!value.trim() || busy) return;
-    const previousTutor = [...messages].reverse().find((message) => message.role === "tutor");
+    const previousAnswer = [...messages].reverse().find((message) => message.role === "assistant");
     setBusy(true);
     setError("");
     setFeedback("");
@@ -137,9 +129,7 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
           lessonId,
           mode,
           question: value.trim(),
-          history: previousTutor
-            ? [{ role: "assistant", content: previousTutor.content.slice(0, 4000) }]
-            : [],
+          history: previousAnswer ? [{ role: "assistant", content: previousAnswer.content.slice(0, 4000) }] : [],
         }),
       });
       const result = await response.json();
@@ -147,7 +137,7 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
       setMessages((current) => [
         ...current,
         {
-          role: "tutor",
+          role: "assistant",
           content: result.answer || "No response was returned.",
           citations: result.citations || [],
         },
@@ -163,29 +153,24 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
     await fetch("/api/ai/feedback", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        feature: "tutor",
-        contextKey: `course:${courseId}:lesson:${lessonId}`,
-        rating,
-      }),
+      body: JSON.stringify({ feature: "tutor", contextKey: `course:${courseId}:lesson:${lessonId}`, rating }),
     });
-    setFeedback("Thanks for the feedback.");
-  }
-
-  function reset() {
-    setQuestion("");
-    setMessages([]);
-    setError("");
-    setFeedback("");
+    setFeedback("Thanks.");
   }
 
   if (!open) {
     return (
       <button
-        className="fixed right-5 bottom-5 z-40 rounded-full bg-mint px-5 py-3 font-semibold text-[#07110c] shadow-xl"
-        onClick={() => setOpen(true)}
         type="button"
+        onClick={() => setOpen(true)}
+        className={cn(
+          "fixed right-5 bottom-5 z-40 inline-flex items-center gap-2 rounded-full bg-ai px-5 py-3",
+          "text-sm font-semibold text-[#07160f] shadow-[var(--shadow-2)]",
+          "transition-transform duration-[var(--dur-base)] ease-[var(--ease-spring)]",
+          "hover:scale-105 active:scale-95 motion-reduce:hover:scale-100",
+        )}
       >
+        <Sparkles className="h-4 w-4" aria-hidden />
         Ask SMN Tutor
       </button>
     );
@@ -193,190 +178,62 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
 
   return (
     <aside
-      className="fixed inset-x-3 bottom-3 z-50 flex max-h-[88vh] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0b1110] shadow-2xl sm:left-auto sm:right-5 sm:w-[34rem]"
       aria-label="SMN Course Tutor"
+      className={cn(
+        "fixed inset-x-3 bottom-3 z-50 flex max-h-[88vh] flex-col overflow-hidden",
+        "rounded-[var(--radius-xl)] border border-edge bg-raised shadow-[var(--shadow-3)]",
+        "sm:right-5 sm:left-auto sm:w-[34rem]",
+        "animate-[rise-in_var(--dur-base)_var(--ease-out)_both]",
+      )}
     >
-      <header className="shrink-0 border-b border-white/10 p-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-xs font-semibold tracking-widest text-mint uppercase">Course-aware AI</p>
-            <h2 className="mt-1 font-display text-xl text-white">SMN Tutor</h2>
-          </div>
-          <button className="text-white/60 hover:text-white" onClick={() => setOpen(false)} type="button" aria-label="Close Tutor">
-            Close
+      <AiHeader
+        eyebrow="Course-aware AI"
+        title="SMN Tutor"
+        grounding="Grounded in this lesson · AI can be wrong — review before acting"
+        action={
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            aria-label="Close Tutor"
+            className="rounded-[var(--radius-sm)] p-1.5 text-text-3 transition-colors hover:bg-inset hover:text-text-1"
+          >
+            <X className="h-4 w-4" />
           </button>
-        </div>
-        <p className="mt-3 rounded-lg border border-mint/20 bg-mint/5 px-3 py-2 text-xs text-mint/90">
-          Grounded in this lesson · AI can be wrong — review before acting
-        </p>
-      </header>
+        }
+      />
 
-      <div className="shrink-0 space-y-3 border-b border-white/10 px-4 py-3">
-        <div className="flex gap-1 rounded-full bg-white/5 p-1">
-          {intents.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className={cn(
-                "flex-1 rounded-full px-3 py-1.5 text-xs font-medium transition",
-                intent === item.id ? "bg-mint text-[#07110c]" : "text-white/60 hover:text-white",
-              )}
-              onClick={() => setIntent(item.id)}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
+      <div className="shrink-0 space-y-3 border-b border-edge-subtle px-5 py-3">
+        <Segmented options={intents} value={intent} onChange={setIntent} tone="ai" aria-label="Tutor intent" />
         <div className="flex flex-wrap gap-1.5">
           {intentConfig.modes.map(([value, label]) => (
             <button
               key={value}
               type="button"
-              className={cn(
-                "rounded-full px-2.5 py-1 text-[11px] transition",
-                mode === value ? "bg-white/15 text-white" : "bg-white/5 text-white/50 hover:text-white/80",
-              )}
               onClick={() => setModeByIntent((current) => ({ ...current, [intent]: value }))}
             >
-              {label}
+              <Chip tone={mode === value ? "ai" : "neutral"}>{label}</Chip>
             </button>
           ))}
         </div>
       </div>
 
-      <div ref={threadRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-3">
-        {!messages.length ? (
-          <div className="space-y-2">
-            <p className="text-xs text-white/45">Try one of these:</p>
-            {suggestions.map((item, index) => (
-              <button
-                key={item}
-                className={cn(
-                  "w-full rounded-lg border p-3 text-left text-sm transition",
-                  index === 0
-                    ? "border-mint/40 bg-mint/10 text-white hover:border-mint/60"
-                    : "border-white/10 text-white/70 hover:border-mint/40",
-                )}
-                onClick={() => void ask(item)}
-                type="button"
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        ) : null}
+      <AiThread
+        messages={messages}
+        busy={busy}
+        error={error}
+        onCopy={copyMessage}
+        empty={<AiSuggestions suggestions={suggestionsByIntent[intent]} onPick={(value) => void ask(value)} />}
+      />
 
-        {messages.map((message, index) => (
-          <div
-            key={`${message.role}-${index}`}
-            className={cn(
-              "rounded-xl p-3 text-sm leading-relaxed",
-              message.role === "member"
-                ? "ml-6 bg-deep-blue/40 text-white"
-                : "mr-2 border-l-2 border-mint/40 bg-white/[.04] text-white/75",
-            )}
-          >
-            <p className="mb-1 flex items-center gap-1.5 text-[10px] tracking-wider text-white/35 uppercase">
-              {message.role === "tutor" ? <Sparkles className="h-3 w-3 text-mint" aria-hidden /> : null}
-              {message.role === "member" ? "You" : "Tutor"}
-            </p>
-            {message.role === "tutor" ? <AiMarkdown content={message.content} /> : <p className="whitespace-pre-wrap">{message.content}</p>}
-            {message.role === "tutor" && message.citations?.length ? (
-              <div className="mt-3 space-y-1.5">
-                <p className="text-[10px] tracking-wider text-white/35 uppercase">Sources</p>
-                {message.citations.map((source) => (
-                  <details
-                    key={source.id}
-                    className="rounded-lg border border-mint/20 bg-mint/5 px-2.5 py-1.5 [&_summary::-webkit-details-marker]:hidden"
-                  >
-                    <summary className="cursor-pointer list-none text-[11px] font-medium text-mint">
-                      {source.label}
-                    </summary>
-                    {source.excerpt ? (
-                      <p className="mt-1.5 text-[11px] leading-relaxed text-white/55">{source.excerpt}</p>
-                    ) : null}
-                    <a
-                      href={source.href}
-                      className="mt-1.5 inline-block text-[11px] text-mint hover:underline"
-                    >
-                      Open source →
-                    </a>
-                  </details>
-                ))}
-              </div>
-            ) : null}
-            {message.role === "tutor" ? (
-              <button
-                type="button"
-                className="mt-3 inline-flex items-center gap-1.5 text-[11px] text-white/45 transition hover:text-white"
-                onClick={() => void copyMessage(message.content)}
-              >
-                <Copy className="h-3 w-3" aria-hidden />
-                Copy
-              </button>
-            ) : null}
-          </div>
-        ))}
-
-        {busy ? (
-          <div className="mr-2 rounded-xl bg-white/[.04] p-3" aria-live="polite">
-            <div className="h-3 w-20 animate-pulse rounded bg-white/10" />
-            <div className="mt-3 h-3 w-full animate-pulse rounded bg-white/10" />
-            <div className="mt-2 h-3 w-[70%] animate-pulse rounded bg-white/10" />
-          </div>
-        ) : null}
-
-        {error ? (
-          <p className="text-sm text-red-300" role="alert">
-            {error}
-          </p>
-        ) : null}
-      </div>
-
-      <div className="shrink-0 border-t border-white/10 p-4">
-        <label className="block text-sm text-white/70">
-          Your question
-          <textarea
-            className="mt-2 min-h-20 w-full rounded-xl border border-white/10 bg-black/20 p-3 text-white"
-            maxLength={12000}
-            onChange={(event) => setQuestion(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
-                event.preventDefault();
-                void ask();
-              }
-            }}
-            value={question}
-            placeholder="Ask about this lesson…"
-          />
-        </label>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <button
-            className="rounded-lg bg-mint px-4 py-2 font-semibold text-[#07110c] disabled:opacity-50"
-            disabled={busy || !question.trim()}
-            onClick={() => void ask()}
-            type="button"
-          >
-            {busy ? "Thinking…" : "Ask"}
-          </button>
-          <button className="rounded-lg border border-white/10 px-4 py-2 text-white/70" onClick={reset} type="button">
-            Reset
-          </button>
-          {lastTutor ? (
-            <div className="ml-auto flex items-center gap-2 text-xs text-white/50">
-              <span>Helpful?</span>
-              <button onClick={() => void rate("helpful")} type="button" className="hover:text-mint">
-                Yes
-              </button>
-              <button onClick={() => void rate("not-helpful")} type="button" className="hover:text-red-200">
-                No
-              </button>
-              {feedback ? <span aria-live="polite">{feedback}</span> : null}
-            </div>
-          ) : null}
-        </div>
-        <p className="mt-2 text-[11px] text-white/30">Esc closes · Ctrl/⌘+Enter sends</p>
-      </div>
+      <AiComposer
+        value={question}
+        onChange={setQuestion}
+        onSubmit={() => void ask()}
+        busy={busy}
+        placeholder="Ask about this lesson…"
+        hint="Esc closes · ⌘ + Enter sends"
+        footer={hasAnswer ? <AiFeedback onRate={(rating) => void rate(rating)} message={feedback} /> : null}
+      />
     </aside>
   );
 }

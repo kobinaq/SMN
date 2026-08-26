@@ -113,21 +113,21 @@ export function StaffMediaField({
     <div className="mt-2 space-y-2">
       <input type="hidden" name={name} value={value} required={required} readOnly />
       {value && preview ? (
-        <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[.04] p-2">
-          <div className="flex h-14 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-near-black/50">
+        <div className="flex items-center gap-3 rounded-[var(--radius-lg)] border border-edge-subtle bg-inset p-2">
+          <div className="flex h-14 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-canvas/50">
             {preview.url && preview.mimeType?.startsWith("image/") ? (
               <img src={preview.url} alt={preview.alt || ""} className="h-full w-full object-cover" />
             ) : (
-              <span className="px-1 text-[10px] text-white/40">File</span>
+              <span className="px-1 text-[10px] text-text-3">File</span>
             )}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm text-white">{preview.alt || label || "Selected media"}</p>
-            <p className="text-xs text-white/40">Attached</p>
+            <p className="truncate text-sm text-text-1">{preview.alt || label || "Selected media"}</p>
+            <p className="text-xs text-text-3">Attached</p>
           </div>
           <button
             type="button"
-            className="rounded-full border border-white/15 px-3 py-1.5 text-xs text-white/70 hover:border-baby-blue/40"
+            className="rounded-full border border-edge px-3 py-1.5 text-xs text-text-2 hover:border-accent/40"
             onClick={openPicker}
           >
             Change
@@ -135,7 +135,7 @@ export function StaffMediaField({
           <button
             type="button"
             aria-label="Clear media"
-            className="rounded-md p-1.5 text-white/40 hover:bg-white/5 hover:text-white"
+            className="rounded-md p-1.5 text-text-3 hover:bg-inset hover:text-text-1"
             onClick={() => onChange("")}
           >
             <X className="h-4 w-4" strokeWidth={1.5} />
@@ -145,7 +145,7 @@ export function StaffMediaField({
         <button
           type="button"
           onClick={openPicker}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-white/15 bg-white/[.03] px-4 py-6 text-sm text-white/55 transition hover:border-baby-blue/35 hover:text-white"
+          className="flex w-full items-center justify-center gap-2 rounded-[var(--radius-lg)] border border-dashed border-edge bg-inset px-4 py-6 text-sm text-text-2 transition hover:border-accent/35 hover:text-text-1"
           style={{ transitionTimingFunction: staffEase }}
         >
           <ImagePlus className="h-4 w-4" strokeWidth={1.5} />
@@ -155,25 +155,25 @@ export function StaffMediaField({
 
       {open ? (
         <div className="fixed inset-0 z-[60] flex items-end justify-center p-4 sm:items-center" role="dialog" aria-modal aria-labelledby={dialogId}>
-          <button type="button" className="absolute inset-0 bg-near-black/70 backdrop-blur-sm" aria-label="Close" onClick={() => setOpen(false)} />
+          <button type="button" className="absolute inset-0 bg-canvas/70 backdrop-blur-sm" aria-label="Close" onClick={() => setOpen(false)} />
           <div
-            className="relative z-10 flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-[1.5rem] border border-white/10 bg-surface shadow-[0_32px_80px_rgba(0,0,0,0.5)]"
+            className="relative z-10 flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-[1.5rem] border border-edge-subtle bg-raised shadow-[0_32px_80px_rgba(0,0,0,0.5)]"
             style={{ animation: `staff-fade-in 220ms ${staffEase} both` }}
           >
-            <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
-              <h2 id={dialogId} className="font-display text-lg text-white">
+            <div className="flex items-center justify-between border-b border-edge-subtle px-5 py-4">
+              <h2 id={dialogId} className="font-display text-lg text-text-1">
                 Choose media
               </h2>
-              <button type="button" className="rounded-md p-1.5 text-white/45 hover:bg-white/5 hover:text-white" onClick={() => setOpen(false)}>
+              <button type="button" className="rounded-md p-1.5 text-text-3 hover:bg-inset hover:text-text-1" onClick={() => setOpen(false)}>
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <div className="flex flex-wrap items-center gap-3 border-b border-white/10 px-5 py-3">
+            <div className="flex flex-wrap items-center gap-3 border-b border-edge-subtle px-5 py-3">
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search…"
-                className="min-w-[12rem] flex-1 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none placeholder:text-white/35 focus:border-baby-blue/40"
+                className="min-w-[12rem] flex-1 rounded-[var(--radius-md)] border border-edge-subtle bg-inset px-3 py-2 text-sm text-text-1 outline-none placeholder:text-text-3 focus:border-accent/40"
               />
               <label className="inline-flex cursor-pointer items-center">
                 <span className="sr-only">Upload</span>
@@ -186,15 +186,15 @@ export function StaffMediaField({
                     if (file) void upload(file);
                   }}
                 />
-                <span className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs text-white/80 hover:border-baby-blue/40">
+                <span className="rounded-full border border-edge bg-inset px-3 py-2 text-xs text-text-1 hover:border-accent/40">
                   {uploading ? "Uploading…" : "Upload new"}
                 </span>
               </label>
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto p-5">
-              {error ? <p className="mb-3 text-sm text-red-300">{error}</p> : null}
+              {error ? <p className="mb-3 text-sm text-danger">{error}</p> : null}
               {loading ? (
-                <p className="py-10 text-center text-sm text-white/45">Loading…</p>
+                <p className="py-10 text-center text-sm text-text-3">Loading…</p>
               ) : filtered.length ? (
                 <div className="grid gap-3 sm:grid-cols-3">
                   {filtered.map((item) => {
@@ -211,28 +211,28 @@ export function StaffMediaField({
                         }}
                         className={cn(
                           "overflow-hidden rounded-2xl border text-left transition",
-                          active ? "border-baby-blue/50 ring-1 ring-baby-blue/30" : "border-white/10 hover:border-white/25",
+                          active ? "border-accent/50 ring-1 ring-accent/30" : "border-edge-subtle hover:border-edge-strong",
                         )}
                       >
-                        <div className="flex aspect-video items-center justify-center bg-near-black/40">
+                        <div className="flex aspect-video items-center justify-center bg-inset">
                           {isImage ? (
                             <img src={item.url!} alt={item.alt || ""} className="h-full w-full object-cover" />
                           ) : (
-                            <span className="text-[10px] text-white/40">{item.mimeType || "File"}</span>
+                            <span className="text-[10px] text-text-3">{item.mimeType || "File"}</span>
                           )}
                         </div>
                         <div className="px-3 py-2">
-                          <p className="truncate text-xs text-white">{item.alt || "Untitled"}</p>
+                          <p className="truncate text-xs text-text-1">{item.alt || "Untitled"}</p>
                         </div>
                       </button>
                     );
                   })}
                 </div>
               ) : (
-                <p className="py-10 text-center text-sm text-white/45">No media yet. Upload one above.</p>
+                <p className="py-10 text-center text-sm text-text-3">No media yet. Upload one above.</p>
               )}
             </div>
-            <div className="flex justify-end border-t border-white/10 px-5 py-3">
+            <div className="flex justify-end border-t border-edge-subtle px-5 py-3">
               <Button type="button" variant="secondary" onClick={() => setOpen(false)}>
                 Close
               </Button>

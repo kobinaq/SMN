@@ -101,10 +101,10 @@ export function StaffRecordForm({
       return (
         <label
           key={field.name}
-          className="flex items-start gap-3 text-sm text-white/70 md:col-span-2"
+          className="flex items-start gap-3 text-sm text-text-2 md:col-span-2"
         >
           <input
-            className="mt-1 h-4 w-4 shrink-0 accent-baby-blue"
+            className="mt-1 h-4 w-4 shrink-0 accent-accent"
             type="checkbox"
             checked={Boolean(values[field.name])}
             onChange={(event) =>
@@ -112,16 +112,16 @@ export function StaffRecordForm({
             }
           />
           <span>
-            <span className="block text-white">{field.label}</span>
+            <span className="block text-text-1">{field.label}</span>
             {field.description ? (
-              <span className="mt-1 block text-xs leading-relaxed text-white/45">{field.description}</span>
+              <span className="mt-1 block text-xs leading-relaxed text-text-3">{field.description}</span>
             ) : null}
           </span>
         </label>
       );
     }
     return (
-      <label key={field.name} className={`block text-sm text-white/70 ${wide ? "md:col-span-2" : ""}`}>
+      <label key={field.name} className={`block text-sm text-text-2 ${wide ? "md:col-span-2" : ""}`}>
         {field.label}
         {field.type === "textarea" ? (
           <textarea
@@ -174,7 +174,7 @@ export function StaffRecordForm({
         <div className="md:col-span-2">
           <button
             type="button"
-            className="text-xs text-white/45 hover:text-white/70"
+            className="text-xs text-text-3 hover:text-text-2"
             onClick={() => setAdvancedOpen((value) => !value)}
             aria-expanded={advancedOpen}
           >
@@ -188,7 +188,7 @@ export function StaffRecordForm({
           {busy ? "Saving…" : submitLabel}
         </Button>
         {message ? (
-          <span className="text-sm text-white/50" aria-live="polite">
+          <span className="text-sm text-text-2" aria-live="polite">
             {message}
           </span>
         ) : null}

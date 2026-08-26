@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { ArrowRight, MessageCircle } from "@/components/ui/icons";
 import { OnboardingChecklist } from "@/components/app/OnboardingChecklist";
 import { Button } from "@/components/ui/Button";
-import { StatusBadge } from "@/components/ui/Feedback";
+import { Card, Eyebrow } from "@/components/ui/Surface";
+import { Chip } from "@/components/ui/Chip";
 import { memberDisplayName, requireMember } from "@/lib/auth/member";
 import { getMemberContinuity } from "@/lib/member-continuity";
 import { site } from "@/lib/site";
@@ -38,44 +38,39 @@ export default async function AppHomePage() {
     };
   }
   const cohortLabel =
-    member.cohortStatus && member.cohortStatus !== "none"
-      ? member.cohortStatus
-      : "Not in an active cohort";
+    member.cohortStatus && member.cohortStatus !== "none" ? member.cohortStatus : "Not in an active cohort";
   const hasStartedCourse = continuity.courses.some((course) => course.percentage > 0);
   const roles = Array.isArray(member.roles) && member.roles.length ? member.roles : ["member"];
   const onboardingSteps = [
     { key: "profile", label: "Complete essential profile details", href: "/app/profile", done: continuity.profile.percent >= 60 },
     { key: "skills", label: "Add skills and a career goal", href: "/app/profile", done: continuity.profile.percent >= 80 },
     { key: "course", label: "Start or continue your first course", href: "/app/learning/courses", done: hasStartedCourse },
-    {
-      key: "mentors",
-      label: "Explore mentorship",
-      href: "/app/mentors",
-      done: Boolean(continuity.openMentorshipCount),
-    },
-    {
-      key: "opportunities",
-      label: "Track an opportunity",
-      href: "/app/opportunities",
-      done: continuity.opportunityActivityCount > 0,
-    },
+    { key: "mentors", label: "Explore mentorship", href: "/app/mentors", done: Boolean(continuity.openMentorshipCount) },
+    { key: "opportunities", label: "Track an opportunity", href: "/app/opportunities", done: continuity.opportunityActivityCount > 0 },
+  ];
+
+  const quickLinks = [
+    { href: "/app/learning", label: "Learning hub" },
+    { href: "/app/mentors", label: "Mentors" },
+    { href: "/app/opportunities", label: "Opportunity board" },
   ];
 
   return (
-    <div className="space-y-10">
-      <section>
-        <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Member portal</p>
-        <h1 className="mt-3 font-display text-2xl text-white sm:text-3xl md:text-4xl">Hi, {name}</h1>
-        <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/55 sm:text-base">
-          Pick up where you left off, finish what matters next, and keep mentorship, opportunities, and credentials moving.
+    <div className="space-y-8">
+      <section className="rise">
+        <Eyebrow>Member portal</Eyebrow>
+        <h1 className="mt-3 font-display text-2xl text-text-1 sm:text-3xl md:text-4xl">Hi, {name}</h1>
+        <p className="mt-3 max-w-xl text-sm leading-relaxed text-text-2 sm:text-base">
+          Pick up where you left off, finish what matters next, and keep mentorship, opportunities, and credentials
+          moving.
         </p>
-        <div className="mt-5 flex flex-wrap gap-3 text-xs text-white/40">
-          <span className="rounded-full border border-white/10 bg-surface px-3 py-1.5">Cohort · {cohortLabel}</span>
-          <StatusBadge label={`Profile ${continuity.profile.percent}%`} tone={continuity.profile.percent >= 80 ? "success" : "info"} />
+        <div className="mt-5 flex flex-wrap gap-2">
+          <Chip tone="neutral">Cohort · {cohortLabel}</Chip>
+          <Chip tone={continuity.profile.percent >= 80 ? "ai" : "accent"}>Profile {continuity.profile.percent}%</Chip>
           {roles.map((role) => (
-            <span key={role} className="rounded-full border border-white/10 bg-surface px-3 py-1.5 capitalize">
+            <Chip key={role} tone="neutral" className="capitalize">
               {role}
-            </span>
+            </Chip>
           ))}
         </div>
       </section>
@@ -83,10 +78,10 @@ export default async function AppHomePage() {
       <OnboardingChecklist steps={onboardingSteps} />
 
       {continuity.primary ? (
-        <section className="rounded-2xl border border-baby-blue/30 bg-gradient-to-br from-baby-blue/10 to-surface p-5 sm:p-7">
-          <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">{continuity.primary.eyebrow}</p>
-          <h2 className="mt-2 font-display text-2xl text-white sm:text-3xl">{continuity.primary.title}</h2>
-          <p className="mt-2 max-w-2xl text-sm text-white/60">{continuity.primary.detail}</p>
+        <Card className="rise border-accent/25 bg-gradient-to-br from-accent-bg to-raised">
+          <Eyebrow>{continuity.primary.eyebrow}</Eyebrow>
+          <h2 className="mt-2 font-display text-2xl text-text-1 sm:text-3xl">{continuity.primary.title}</h2>
+          <p className="mt-2 max-w-2xl text-sm text-text-2">{continuity.primary.detail}</p>
           <div className="btn-row-mobile mt-6">
             <Button href={continuity.primary.href}>{continuity.primary.cta}</Button>
             <Button href={site.whatsappInvite} target="_blank" rel="noreferrer" variant="secondary">
@@ -94,39 +89,31 @@ export default async function AppHomePage() {
               WhatsApp
             </Button>
           </div>
-        </section>
+        </Card>
       ) : null}
 
       {continuity.secondary.length ? (
-        <section className="grid gap-4 sm:grid-cols-2">
-          {continuity.secondary.map((item) => (
-            <Link
-              key={item.key}
-              href={item.href}
-              className="group rounded-2xl border border-white/10 bg-surface p-5 transition hover:border-baby-blue/35"
-            >
-              <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/35">{item.eyebrow}</p>
-              <h3 className="mt-2 font-display text-lg text-white group-hover:text-baby-blue">{item.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/50">{item.detail}</p>
-              <span className="mt-4 inline-flex items-center gap-1 text-sm text-baby-blue">
+        <section className="rise-stagger grid gap-3 sm:grid-cols-2">
+          {continuity.secondary.map((item, index) => (
+            <Card key={item.key} href={item.href} style={{ "--i": index } as React.CSSProperties}>
+              <Eyebrow tone="muted">{item.eyebrow}</Eyebrow>
+              <h3 className="mt-2 font-display text-lg text-text-1 transition-colors group-hover:text-accent">{item.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-text-2">{item.detail}</p>
+              <span className="mt-4 inline-flex items-center gap-1 text-sm text-accent">
                 {item.cta}
                 <ArrowRight className="h-3.5 w-3.5" />
               </span>
-            </Link>
+            </Card>
           ))}
         </section>
       ) : null}
 
       <section className="grid gap-3 sm:grid-cols-3">
-        <Link href="/app/learning" className="rounded-2xl border border-white/10 bg-ink px-4 py-4 text-sm text-white/70 transition hover:border-baby-blue/30">
-          Learning hub
-        </Link>
-        <Link href="/app/mentors" className="rounded-2xl border border-white/10 bg-ink px-4 py-4 text-sm text-white/70 transition hover:border-baby-blue/30">
-          Mentors
-        </Link>
-        <Link href="/app/opportunities" className="rounded-2xl border border-white/10 bg-ink px-4 py-4 text-sm text-white/70 transition hover:border-baby-blue/30">
-          Opportunity board
-        </Link>
+        {quickLinks.map((link) => (
+          <Card key={link.href} href={link.href} padded={false} className="px-4 py-4 text-sm font-medium text-text-2 hover:text-text-1">
+            {link.label}
+          </Card>
+        ))}
       </section>
     </div>
   );

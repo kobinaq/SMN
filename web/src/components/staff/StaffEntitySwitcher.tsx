@@ -161,16 +161,16 @@ export function StaffEntitySwitcher({
     <div ref={rootRef} className={cn("relative w-full max-w-md", className)}>
       {selected && !open ? (
         <div className="flex items-center gap-2">
-          <div className="flex min-w-0 flex-1 items-center gap-3 rounded-2xl border border-white/10 bg-white/[.04] px-4 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+          <div className="flex min-w-0 flex-1 items-center gap-3 rounded-[var(--radius-lg)] border border-edge-subtle bg-inset px-4 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium text-white">{selected.label}</p>
-              {selected.detail ? <p className="truncate text-xs text-white/40">{selected.detail}</p> : null}
+              <p className="truncate text-sm font-medium text-text-1">{selected.label}</p>
+              {selected.detail ? <p className="truncate text-xs text-text-3">{selected.detail}</p> : null}
             </div>
           </div>
           <button
             type="button"
             onClick={openPicker}
-            className="shrink-0 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-xs text-white/70 transition hover:border-baby-blue/40 hover:text-white"
+            className="shrink-0 rounded-full border border-edge bg-inset px-3 py-2 text-xs text-text-2 transition hover:border-accent/40 hover:text-text-1"
             style={{ transitionTimingFunction: staffEase }}
           >
             Change
@@ -181,34 +181,34 @@ export function StaffEntitySwitcher({
           type="button"
           onClick={openPicker}
           className={cn(
-            "flex w-full items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[.04] px-4 py-2.5 text-left text-sm transition hover:border-white/20",
-            open && "border-baby-blue/40",
+            "flex w-full items-center justify-between gap-3 rounded-[var(--radius-lg)] border border-edge-subtle bg-inset px-4 py-2.5 text-left text-sm transition hover:border-edge-strong",
+            open && "border-accent/40",
           )}
           style={{ transitionTimingFunction: staffEase }}
           aria-expanded={open}
           aria-controls={listId}
         >
-          <span className="flex min-w-0 items-center gap-2 text-white/55">
-            <Search className="h-4 w-4 shrink-0 text-white/35" strokeWidth={1.5} />
+          <span className="flex min-w-0 items-center gap-2 text-text-2">
+            <Search className="h-4 w-4 shrink-0 text-text-3" strokeWidth={1.5} />
             <span className="truncate">{selected ? selected.label : placeholder}</span>
           </span>
-          <ChevronsUpDown className="h-4 w-4 shrink-0 text-white/35" strokeWidth={1.5} />
+          <ChevronsUpDown className="h-4 w-4 shrink-0 text-text-3" strokeWidth={1.5} />
         </button>
       )}
 
       {open ? (
         <div
-          className="absolute z-50 mt-2 w-full overflow-hidden rounded-2xl border border-white/10 bg-surface shadow-[0_24px_60px_rgba(0,0,0,0.45)]"
+          className="absolute z-50 mt-2 w-full overflow-hidden rounded-[var(--radius-lg)] border border-edge-subtle bg-raised shadow-[0_24px_60px_rgba(0,0,0,0.45)]"
           style={{ animation: `staff-fade-in 180ms ${staffEase} both` }}
         >
-          <div className="flex items-center gap-2 border-b border-white/10 px-3 py-2">
-            <Search className="h-4 w-4 text-white/35" strokeWidth={1.5} />
+          <div className="flex items-center gap-2 border-b border-edge-subtle px-3 py-2">
+            <Search className="h-4 w-4 text-text-3" strokeWidth={1.5} />
             <input
               ref={inputRef}
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder={placeholder}
-              className="min-w-0 flex-1 bg-transparent py-1.5 text-sm text-white outline-none placeholder:text-white/35"
+              className="min-w-0 flex-1 bg-transparent py-1.5 text-sm text-text-1 outline-none placeholder:text-text-3"
               aria-autocomplete="list"
               aria-controls={listId}
               onKeyDown={(event) => {
@@ -226,7 +226,7 @@ export function StaffEntitySwitcher({
             />
             <button
               type="button"
-              className="rounded-md p-1 text-white/40 hover:bg-white/5 hover:text-white"
+              className="rounded-md p-1 text-text-3 hover:bg-inset hover:text-text-1"
               aria-label="Close"
               onClick={() => setOpen(false)}
             >
@@ -240,15 +240,15 @@ export function StaffEntitySwitcher({
                 const href = onSelectHref?.(item);
                 const rowClass = cn(
                   "flex w-full items-center justify-between gap-3 px-3 py-2.5 text-left text-sm transition",
-                  index === highlight ? "bg-white/[.06] text-white" : "text-white/70 hover:bg-white/[.04]",
+                  index === highlight ? "bg-accent-bg text-text-1" : "text-text-2 hover:bg-inset",
                 );
                 const body = (
                   <>
                     <span className="min-w-0">
                       <span className="block truncate font-medium">{item.label}</span>
-                      {item.detail ? <span className="mt-0.5 block truncate text-xs text-white/40">{item.detail}</span> : null}
+                      {item.detail ? <span className="mt-0.5 block truncate text-xs text-text-3">{item.detail}</span> : null}
                     </span>
-                    {active ? <Check className="h-4 w-4 shrink-0 text-baby-blue" strokeWidth={1.75} /> : null}
+                    {active ? <Check className="h-4 w-4 shrink-0 text-accent" strokeWidth={1.75} /> : null}
                   </>
                 );
                 if (href && !onSelect) {
@@ -279,7 +279,7 @@ export function StaffEntitySwitcher({
                 );
               })
             ) : (
-              <li className="px-3 py-6 text-center text-sm text-white/40">{emptyLabel}</li>
+              <li className="px-3 py-6 text-center text-sm text-text-3">{emptyLabel}</li>
             )}
           </ul>
         </div>

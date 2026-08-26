@@ -59,7 +59,7 @@ export function GradeForm({
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Unable to save grade.");
-      router.push(`/staff/learning?course=${courseId}&tab=gradebook`);
+      router.push(`/staff/learning/courses/${courseId}?tab=gradebook`);
       router.refresh();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Unable to save grade.");
@@ -93,14 +93,14 @@ export function GradeForm({
         </select>
       </StaffFormField>
       {error ? (
-        <p className="text-sm text-red-300" role="alert">
+        <p className="text-sm text-danger" role="alert">
           {error}
         </p>
       ) : null}
       <button
         type="submit"
         disabled={busy}
-        className="rounded-full border border-baby-blue/40 bg-baby-blue/15 px-5 py-2.5 text-sm text-baby-blue disabled:opacity-50"
+        className="rounded-full border border-accent/40 bg-accent-bg px-5 py-2.5 text-sm text-accent disabled:opacity-50"
       >
         {busy ? "Saving…" : "Save grade"}
       </button>

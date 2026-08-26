@@ -19,7 +19,7 @@ export function MediaCopyButton({ url, label = "Copy URL" }: { url: string; labe
     <button
       type="button"
       onClick={copy}
-      className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-white/80 transition hover:border-baby-blue/40"
+      className="rounded-full border border-edge bg-inset px-3 py-1.5 text-xs text-text-1 transition hover:border-accent/40"
     >
       {copied ? "Copied" : label}
     </button>

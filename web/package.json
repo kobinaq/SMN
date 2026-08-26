@@ -13,6 +13,7 @@
     "test:cms-path": "esbuild src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=scripts/.payload.config.bundle.mjs && node scripts/with-retry.mjs node scripts/cms-path-smoke.mjs",
     "test:e2e": "npm run build && node scripts/run-e2e.mjs",
     "test:coverage": "vitest run --coverage",
+    "verify:staff": "node scripts/verify-staff.mjs",
     "payload": "payload",
     "generate:importmap": "esbuild src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=scripts/.payload.config.bundle.mjs && node scripts/with-retry.mjs node scripts/gen-importmap.mjs",
     "prebuild": "npm run generate:importmap",

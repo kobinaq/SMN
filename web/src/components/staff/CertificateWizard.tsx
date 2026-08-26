@@ -86,12 +86,12 @@ export function CertificateWizard({
           { n: 3 as const, label: "Confirm" },
         ].map((item, index) => (
           <div key={item.n} className="flex items-center gap-2">
-            {index > 0 ? <span className="text-white/20">→</span> : null}
+            {index > 0 ? <span className="text-text-1/20">→</span> : null}
             <span
               className={
                 step === item.n
-                  ? "rounded-full border border-baby-blue/45 bg-baby-blue/15 px-3 py-1 text-xs text-baby-blue"
-                  : "rounded-full border border-white/10 px-3 py-1 text-xs text-white/40"
+                  ? "rounded-full border border-accent/45 bg-accent-bg px-3 py-1 text-xs text-accent"
+                  : "rounded-full border border-edge-subtle px-3 py-1 text-xs text-text-3"
               }
             >
               {item.n}. {item.label}
@@ -110,7 +110,7 @@ export function CertificateWizard({
                 return (
                   <label
                     key={item.id}
-                    className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/10 px-3 py-3 transition hover:bg-white/[.03]"
+                    className="flex cursor-pointer items-start gap-3 rounded-[var(--radius-md)] border border-edge-subtle px-3 py-3 transition hover:bg-inset"
                   >
                     <input
                       type="checkbox"
@@ -119,9 +119,9 @@ export function CertificateWizard({
                       onChange={() => toggle(item.id)}
                     />
                     <span className="min-w-0">
-                      <b className="block text-sm text-white">{item.name}</b>
-                      <span className="mt-1 block text-xs text-white/45">{item.program}</span>
-                      <span className="mt-2 inline-flex rounded-full border border-mint/30 bg-mint/10 px-2 py-0.5 text-[10px] text-mint">
+                      <b className="block text-sm text-text-1">{item.name}</b>
+                      <span className="mt-1 block text-xs text-text-3">{item.program}</span>
+                      <span className="mt-2 inline-flex rounded-full border border-ai/30 bg-ai-bg px-2 py-0.5 text-[10px] text-ai">
                         Completed program
                       </span>
                     </span>
@@ -151,12 +151,12 @@ export function CertificateWizard({
             {selectedItems.map((item) => (
               <article
                 key={item.id}
-                className="rounded-2xl border border-white/10 bg-gradient-to-br from-near-black via-surface to-near-black p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+                className="rounded-[var(--radius-lg)] border border-edge-subtle bg-gradient-to-br from-near-black via-surface to-near-black p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
               >
-                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-baby-blue">Certificate</p>
-                <h3 className="mt-3 font-display text-2xl text-white">{item.name}</h3>
-                <p className="mt-2 text-sm text-white/55">{item.program}</p>
-                <p className="mt-6 text-xs text-white/35">
+                <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-accent">Certificate</p>
+                <h3 className="mt-3 font-display text-2xl text-text-1">{item.name}</h3>
+                <p className="mt-2 text-sm text-text-2">{item.program}</p>
+                <p className="mt-6 text-xs text-text-3">
                   {item.completedAt
                     ? new Intl.DateTimeFormat("en-GH", { dateStyle: "medium" }).format(new Date(item.completedAt))
                     : "Completion date pending"}
@@ -178,12 +178,12 @@ export function CertificateWizard({
       {step === 3 ? (
         <StaffPanel>
           <StaffSection title="Confirm issuance" />
-          <p className="text-sm text-white/55">
-            Issue <b className="text-white">{selectedItems.length}</b> certificate{selectedItems.length === 1 ? "" : "s"} now.
+          <p className="text-sm text-text-2">
+            Issue <b className="text-text-1">{selectedItems.length}</b> certificate{selectedItems.length === 1 ? "" : "s"} now.
           </p>
           <ul className="mt-4 space-y-2">
             {selectedItems.map((item) => (
-              <li key={item.id} className="text-sm text-white/70">
+              <li key={item.id} className="text-sm text-text-2">
                 {item.name} · {item.program}
               </li>
             ))}
@@ -211,7 +211,7 @@ export function CertificateWizard({
       <div>
         <button
           type="button"
-          className="text-xs text-white/45 hover:text-white/70"
+          className="text-xs text-text-3 hover:text-text-2"
           onClick={() => setShowManage((value) => !value)}
         >
           {showManage ? "Hide issued" : "Manage issued"}
@@ -230,7 +230,7 @@ export function CertificateWizard({
                 </StaffOpsRow>
               ))
             ) : (
-              <p className="text-sm text-white/45">No valid certificates yet.</p>
+              <p className="text-sm text-text-3">No valid certificates yet.</p>
             )}
           </StaffPanel>
         ) : null}

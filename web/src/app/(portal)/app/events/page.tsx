@@ -1,7 +1,12 @@
 import Link from "next/link";
+import { Card, PageHeader } from "@/components/ui/Surface";
+import { Chip } from "@/components/ui/Chip";
+import { EmptyState } from "@/components/ui/Feedback";
+import { Button } from "@/components/ui/Button";
 import { requireMember } from "@/lib/auth/member";
 import { getPayloadClient } from "@/lib/payload";
-import { StaffEmptyState, StaffPageHeader, StaffPanel } from "@/components/staff/ui";
+
+export const metadata = { title: "My events" };
 
 export default async function MemberEventsPage() {
   const member = await requireMember("/app/events");
@@ -26,36 +31,51 @@ export default async function MemberEventsPage() {
 
   return (
     <div className="space-y-6">
-      <StaffPageHeader eyebrow="Member" title="My events" hint="Tickets and join links for sessions you registered for." />
-      <StaffPanel>
-        {regs.docs.length ? (
-          <div className="space-y-2">
-            {regs.docs.map((item) => {
-              const event = item.event && typeof item.event === "object" ? (item.event as Record<string, unknown>) : null;
-              return (
-                <Link
-                  key={String(item.id)}
-                  href={`/app/events/tickets?id=${item.id}`}
-                  className="flex items-center justify-between gap-3 rounded-xl border border-white/10 px-4 py-3 transition hover:bg-white/[.03]"
-                >
-                  <span>
-                    <b className="block text-sm text-white">{String(event?.title || "Event")}</b>
-                    <small className="text-xs text-white/40">
-                      {String(item.status)} · {String(item.ticketCode || "Pending")}
-                    </small>
+      <PageHeader eyebrow="Member" title="My events" description="Tickets and join links for sessions you registered for." />
+      {regs.docs.length ? (
+        <div className="rise-stagger space-y-2">
+          {regs.docs.map((item, index) => {
+            const event = item.event && typeof item.event === "object" ? (item.event as Record<string, unknown>) : null;
+            return (
+              <Card
+                key={String(item.id)}
+                href={`/app/events/tickets?id=${item.id}`}
+                padded={false}
+                style={{ "--i": index } as React.CSSProperties}
+                className="flex items-center justify-between gap-3 px-4 py-3"
+              >
+                <span>
+                  <b className="block text-sm text-text-1">{String(event?.title || "Event")}</b>
+                  <span className="mt-0.5 flex items-center gap-2 text-xs text-text-3">
+                    <Chip tone={item.status === "confirmed" || item.status === "checked_in" ? "ai" : "warn"}>
+                      {String(item.status).replace("_", " ")}
+                    </Chip>
+                    {item.ticketCode ? <span className="tnum">{String(item.ticketCode)}</span> : null}
                   </span>
-                  <span className="text-xs text-baby-blue">Open →</span>
-                </Link>
-              );
-            })}
-          </div>
-        ) : (
-          <StaffEmptyState
-            title="No tickets yet"
-            action={{ href: "/events", label: "Browse events" }}
-          />
-        )}
-      </StaffPanel>
+                </span>
+                <span className="text-xs text-accent">Open →</span>
+              </Card>
+            );
+          })}
+        </div>
+      ) : (
+        <EmptyState
+          title="No tickets yet"
+          description="Register for an SMN event to see your ticket and join link here."
+          action={
+            <Button href="/events" variant="secondary">
+              Browse events
+            </Button>
+          }
+        />
+      )}
+      <p className="text-sm text-text-3">
+        Looking for the public calendar?{" "}
+        <Link href="/events" className="text-accent hover:underline">
+          See all events
+        </Link>
+        .
+      </p>
     </div>
   );
 }

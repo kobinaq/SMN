@@ -147,9 +147,10 @@ export function Select({
       ref={rootRef}
       className={cn(
         "relative min-w-0",
-        !className && "w-full rounded-2xl border border-white/10 bg-white/5",
+        !className && "w-full rounded-[var(--radius-md)] border border-edge bg-inset",
+        "transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)]",
         className,
-        open && "border-baby-blue/50",
+        open && "border-accent",
       )}
     >
       <select
@@ -221,11 +222,14 @@ export function Select({
           }
         }}
       >
-        <span className={cn("truncate", isPlaceholder || current === "" ? "font-normal text-white/40" : "font-medium text-white")}>
+        <span className={cn("truncate", isPlaceholder || current === "" ? "font-normal text-text-3" : "font-medium text-text-1")}>
           {displayLabel}
         </span>
         <ChevronDown
-          className={cn("h-4 w-4 shrink-0 text-white/45 transition", open && "rotate-180 text-baby-blue")}
+          className={cn(
+            "h-4 w-4 shrink-0 text-text-3 transition-transform duration-[var(--dur-fast)] ease-[var(--ease-out)]",
+            open && "rotate-180 text-accent",
+          )}
           aria-hidden
         />
       </button>
@@ -236,7 +240,7 @@ export function Select({
           id={listboxId}
           role="listbox"
           aria-labelledby={triggerId}
-          className="absolute z-50 mt-1.5 max-h-60 w-full overflow-auto rounded-2xl border border-white/12 bg-[#12161f] p-1.5 shadow-[0_18px_50px_rgba(0,0,0,0.55)] ring-1 ring-white/5"
+          className="absolute z-50 mt-1.5 max-h-60 w-full overflow-auto rounded-[var(--radius-md)] border border-edge bg-overlay p-1.5 shadow-[var(--shadow-2)] animate-[rise-in_var(--dur-fast)_var(--ease-out)_both]"
         >
           {options.map((item, index) => {
             const isSelected = item.value === current;
@@ -249,11 +253,11 @@ export function Select({
                 aria-disabled={item.disabled || undefined}
                 data-index={index}
                 className={cn(
-                  "cursor-pointer rounded-xl px-3 py-2.5 text-sm transition",
-                  item.disabled && "cursor-not-allowed text-white/25",
-                  !item.disabled && isActive && "bg-baby-blue/15 text-white",
-                  !item.disabled && !isActive && "text-white/75 hover:bg-white/5 hover:text-white",
-                  isSelected && !item.disabled && "font-medium text-baby-blue",
+                  "cursor-pointer rounded-[var(--radius-sm)] px-3 py-2 text-sm transition-colors duration-[var(--dur-fast)]",
+                  item.disabled && "cursor-not-allowed text-text-3 opacity-60",
+                  !item.disabled && isActive && "bg-accent-bg text-text-1",
+                  !item.disabled && !isActive && "text-text-2 hover:bg-inset hover:text-text-1",
+                  isSelected && !item.disabled && "font-semibold text-accent",
                 )}
                 onMouseEnter={() => {
                   if (!item.disabled) setActiveIndex(index);

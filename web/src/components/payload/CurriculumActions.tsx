@@ -166,7 +166,7 @@ export function LessonActions({
         aria-label="Move lesson to module"
         disabled={busy}
         size="sm"
-        className="min-w-[10rem] rounded-xl border border-white/15 bg-near-black px-2 py-1 text-xs text-white"
+        className="min-w-[10rem] rounded-xl border border-edge bg-canvas px-2 py-1 text-xs text-text-1"
         value={String(moduleId)}
         onChange={(event) =>
           run({ action: "move-lesson", courseId, lessonId, moduleId: event.target.value, order: 0 })

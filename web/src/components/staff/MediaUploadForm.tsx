@@ -35,17 +35,17 @@ export function MediaUploadForm() {
 
   return (
     <form onSubmit={submit} className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
-      <label className="block text-sm text-white/70">
+      <label className="block text-sm text-text-2">
         Alt text
         <input className={staffFieldClass} value={alt} onChange={(event) => setAlt(event.target.value)} required />
       </label>
-      <label className="block text-sm text-white/70">
+      <label className="block text-sm text-text-2">
         File
         <input className={staffFieldClass} name="file" type="file" accept="image/*,application/pdf" required />
       </label>
       <div className="md:col-span-2 flex items-center gap-3">
         <Button type="submit" disabled={busy}>{busy ? "Uploading…" : "Upload media"}</Button>
-        {message ? <span className="text-sm text-white/50">{message}</span> : null}
+        {message ? <span className="text-sm text-text-2">{message}</span> : null}
       </div>
     </form>
   );

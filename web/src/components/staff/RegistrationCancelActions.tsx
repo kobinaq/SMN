@@ -18,7 +18,7 @@ export function RegistrationCancelActions({
   const [busy, setBusy] = useState(false);
 
   if (status === "cancelled") {
-    return <span className="text-xs text-white/35">Cancelled</span>;
+    return <span className="text-xs text-text-3">Cancelled</span>;
   }
 
   async function run(action: "cancel" | "cancel_refund") {
@@ -46,7 +46,7 @@ export function RegistrationCancelActions({
         type="button"
         disabled={busy}
         onClick={() => run("cancel")}
-        className="text-xs text-white/50 hover:text-white disabled:opacity-40"
+        className="text-xs text-text-2 hover:text-text-1 disabled:opacity-40"
       >
         Cancel
       </button>
@@ -55,7 +55,7 @@ export function RegistrationCancelActions({
           type="button"
           disabled={busy}
           onClick={() => run("cancel_refund")}
-          className="text-xs text-amber-200/70 hover:text-amber-100 disabled:opacity-40"
+          className="text-xs text-warn/70 hover:text-warn disabled:opacity-40"
         >
           Cancel + refund
         </button>

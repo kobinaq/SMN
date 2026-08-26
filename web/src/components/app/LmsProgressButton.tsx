@@ -52,17 +52,17 @@ export function LmsProgressButton({
         onClick={toggle}
         disabled={saving}
         aria-busy={saving}
-        className={`inline-flex items-center justify-center gap-2 rounded-full border px-4 py-2 text-sm transition ${
+        className={`inline-flex items-center justify-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-[border-color,background,color] duration-[var(--dur-fast)] ease-[var(--ease-out)] active:scale-[0.97] motion-reduce:active:scale-100 ${
           completed
-            ? "border-mint/35 bg-mint/10 text-mint"
-            : "border-white/15 bg-white/[.03] text-white/70 hover:border-baby-blue/35 hover:text-white"
+            ? "border-ai/35 bg-ai-bg text-ai"
+            : "border-edge bg-inset text-text-2 hover:border-accent/40 hover:text-text-1"
         }`}
       >
         {completed ? <CheckCircle2 className="h-4 w-4" /> : <Circle className="h-4 w-4" />}
         {saving ? "Saving…" : completed ? "Completed" : "Mark complete"}
       </button>
       {message ? (
-        <p className="text-xs text-white/50" role="status" aria-live="polite">
+        <p className="text-xs text-text-3" role="status" aria-live="polite">
           {message}
         </p>
       ) : null}

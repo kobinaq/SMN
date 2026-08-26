@@ -57,11 +57,11 @@ export function AddModuleForm({ courseId, order }: { courseId: string | number; 
       <button
         type="submit"
         disabled={busy}
-        className="shrink-0 rounded-full border border-white/15 bg-white/5 px-4 py-3 text-sm text-white/80 transition hover:border-baby-blue/40 disabled:opacity-50"
+        className="shrink-0 rounded-full border border-edge bg-inset px-4 py-3 text-sm text-text-1 transition hover:border-accent/40 disabled:opacity-50"
       >
         {busy ? "Adding…" : "Add module"}
       </button>
-      {error ? <span className="text-xs text-red-300" role="alert">{error}</span> : null}
+      {error ? <span className="text-xs text-danger" role="alert">{error}</span> : null}
     </form>
   );
 }
@@ -131,11 +131,11 @@ export function AddLessonForm({
       <button
         type="submit"
         disabled={busy}
-        className="shrink-0 rounded-full border border-white/15 bg-white/5 px-4 py-3 text-sm text-white/80 transition hover:border-baby-blue/40 disabled:opacity-50"
+        className="shrink-0 rounded-full border border-edge bg-inset px-4 py-3 text-sm text-text-1 transition hover:border-accent/40 disabled:opacity-50"
       >
         {busy ? "Adding…" : "Add lesson"}
       </button>
-      {error ? <span className="text-xs text-red-300" role="alert">{error}</span> : null}
+      {error ? <span className="text-xs text-danger" role="alert">{error}</span> : null}
     </form>
   );
 }

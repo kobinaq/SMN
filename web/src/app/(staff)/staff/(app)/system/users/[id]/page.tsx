@@ -36,7 +36,7 @@ export default async function EditStaffUserPage({ params }: { params: Promise<{ 
           submitLabel="Save staff user"
           onSuccessHref={`/staff/system/users/${doc.id}`}
         />
-        <div className="mt-6 border-t border-white/10 pt-4">
+        <div className="mt-6 border-t border-edge-subtle pt-4">
           <StaffDeleteButton collection="users" id={doc.id} redirectTo="/staff/system/users" />
         </div>
       </StaffPanel>

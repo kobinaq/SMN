@@ -116,7 +116,7 @@ export default async function StaffOpportunitiesPage() {
             <StaffSection title="Possible duplicates" />
             {duplicates.length ? (
               duplicates.slice(0, 10).map((group, index) => (
-                <div key={index} className="mb-4 border-b border-white/5 pb-3 last:mb-0 last:border-0 last:pb-0">
+                <div key={index} className="mb-4 border-b border-edge-subtle pb-3 last:mb-0 last:border-0 last:pb-0">
                   {group.map((item) => (
                     <StaffOpsRow
                       key={item.id}
@@ -129,7 +129,7 @@ export default async function StaffOpportunitiesPage() {
                 </div>
               ))
             ) : (
-              <p className="text-sm text-white/45">No duplicate groups.</p>
+              <p className="text-sm text-text-3">No duplicate groups.</p>
             )}
           </StaffPanel>
 
@@ -148,7 +148,7 @@ export default async function StaffOpportunitiesPage() {
                 />
               ))
             ) : (
-              <p className="text-sm text-white/45">No sources configured.</p>
+              <p className="text-sm text-text-3">No sources configured.</p>
             )}
           </StaffPanel>
         </div>

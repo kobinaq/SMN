@@ -39,7 +39,7 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
           submitLabel="Save post"
           onSuccessHref={`/staff/content/posts/${doc.id}`}
         />
-        <div className="mt-6 border-t border-white/10 pt-4">
+        <div className="mt-6 border-t border-edge-subtle pt-4">
           <StaffDeleteButton collection="posts" id={doc.id} redirectTo="/staff/content/posts" />
         </div>
       </StaffPanel>

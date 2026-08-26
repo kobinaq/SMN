@@ -11,10 +11,10 @@ const ToastContext = createContext<{
 } | null>(null);
 
 const toneClass: Record<ToastTone, string> = {
-  success: "border-mint/40 bg-mint/10 text-mint",
-  error: "border-red-300/40 bg-red-400/10 text-red-100",
-  warning: "border-amber-300/40 bg-amber-300/10 text-amber-100",
-  info: "border-baby-blue/40 bg-baby-blue/10 text-baby-blue",
+  success: "border-ai/35 bg-ai-bg text-ai",
+  error: "border-danger/35 bg-danger-bg text-danger",
+  warning: "border-warn/35 bg-warn-bg text-warn",
+  info: "border-accent/35 bg-accent-bg text-accent",
 };
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
@@ -36,7 +36,11 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={item.id}
             role="status"
-            className={cn("pointer-events-auto w-full max-w-md rounded-2xl border px-4 py-3 text-sm shadow-lg backdrop-blur", toneClass[item.tone])}
+            className={cn(
+              "pointer-events-auto w-full max-w-md rounded-[var(--radius-md)] border px-4 py-3 text-sm shadow-[var(--shadow-3)] backdrop-blur-md",
+              "animate-[rise-in_var(--dur-base)_var(--ease-out)_both]",
+              toneClass[item.tone],
+            )}
           >
             {item.message}
           </div>

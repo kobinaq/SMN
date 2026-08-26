@@ -234,8 +234,8 @@ export function AssessmentEditor({
         <StaffFormField label="Max attempts">
           <input className={staffFieldClass} name="maxAttempts" type="number" min={1} defaultValue={initial?.maxAttempts ?? 1} />
         </StaffFormField>
-        <label className="flex items-start gap-3 self-end text-sm text-white/70">
-          <input className="mt-1 h-4 w-4 accent-baby-blue" type="checkbox" name="allowLate" defaultChecked={Boolean(initial?.allowLate)} />
+        <label className="flex items-start gap-3 self-end text-sm text-text-2">
+          <input className="mt-1 h-4 w-4 accent-accent" type="checkbox" name="allowLate" defaultChecked={Boolean(initial?.allowLate)} />
           Allow late submissions
         </label>
       </div>
@@ -264,9 +264,9 @@ export function AssessmentEditor({
 
       {kind === "quiz" ? (
         <div className="space-y-3">
-          <p className="text-sm text-white/60">Multiple-choice answers are hidden from learners and scored on submit.</p>
+          <p className="text-sm text-text-2">Multiple-choice answers are hidden from learners and scored on submit.</p>
           {questions.map((question, index) => (
-            <article key={question.id || index} className="rounded-2xl border border-white/10 p-4">
+            <article key={question.id || index} className="rounded-[var(--radius-lg)] border border-edge-subtle p-4">
               <StaffFormField label={`Question ${index + 1}`}>
                 <textarea
                   className={staffFieldClass}
@@ -349,7 +349,7 @@ export function AssessmentEditor({
           ))}
           <button
             type="button"
-            className="text-sm text-baby-blue hover:underline"
+            className="text-sm text-accent hover:underline"
             onClick={() => setQuestions((current) => [...current, emptyQuestion()])}
           >
             Add question
@@ -358,11 +358,11 @@ export function AssessmentEditor({
       ) : null}
 
       <div className="space-y-3">
-        <p className="text-sm text-white/60">
+        <p className="text-sm text-text-2">
           Rubric for assignments and short answers. One level per line as label|marks|descriptor.
         </p>
         {rubric.map((row, index) => (
-          <article key={index} className="rounded-2xl border border-white/10 p-4">
+          <article key={index} className="rounded-[var(--radius-lg)] border border-edge-subtle p-4">
             <StaffFormField label="Criterion">
               <input
                 className={staffFieldClass}
@@ -408,7 +408,7 @@ export function AssessmentEditor({
         ))}
         <button
           type="button"
-          className="text-sm text-baby-blue hover:underline"
+          className="text-sm text-accent hover:underline"
           onClick={() =>
             setRubric((current) => [...current, { criterion: "", description: "", levelsText: "Developing|1|\nSecure|3|" }])
           }
@@ -418,14 +418,14 @@ export function AssessmentEditor({
       </div>
 
       {error ? (
-        <p className="rounded-2xl border border-red-300/30 bg-red-300/10 px-4 py-3 text-sm text-red-100" role="alert">
+        <p className="rounded-2xl border border-danger/30 bg-danger-bg px-4 py-3 text-sm text-danger" role="alert">
           {error}
         </p>
       ) : null}
       <button
         type="submit"
         disabled={busy}
-        className="rounded-full border border-baby-blue/40 bg-baby-blue/15 px-5 py-2.5 text-sm text-baby-blue transition hover:bg-baby-blue/25 disabled:opacity-50"
+        className="rounded-full border border-accent/40 bg-accent-bg px-5 py-2.5 text-sm text-accent transition hover:bg-accent/20 disabled:opacity-50"
       >
         {busy ? "Saving…" : assessmentId ? "Save assessment" : "Create assessment"}
       </button>

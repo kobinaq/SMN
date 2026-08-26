@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { Textarea } from "@/components/ui/Field";
 import { useToast } from "@/components/ui/Toast";
 
 async function send(body: Record<string, unknown>) {
@@ -34,17 +35,17 @@ function ReasonField({
 }) {
   const remaining = Math.max(0, minChars - value.trim().length);
   return (
-    <label className="block text-sm text-white/70">
+    <label className="block text-sm text-text-2">
       {label}
-      <textarea
-        className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
+      <Textarea
+        className="mt-2"
         rows={3}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         minLength={minChars}
         required
       />
-      <span className="mt-1 block text-xs text-white/40">
+      <span className="mt-1 block text-xs text-text-3">
         {remaining
           ? `${remaining} more character${remaining === 1 ? "" : "s"} needed`
           : "Ready to send"}

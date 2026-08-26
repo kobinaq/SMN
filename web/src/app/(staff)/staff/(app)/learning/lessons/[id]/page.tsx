@@ -20,7 +20,7 @@ export default async function EditLessonPage({ params }: { params: Promise<{ id:
   }
 
   const courseId = relationId(doc.course);
-  const backHref = courseId ? `/staff/learning?course=${courseId}&tab=curriculum` : "/staff/learning?tab=curriculum";
+  const backHref = courseId ? `/staff/learning/courses/${courseId}?tab=curriculum` : "/staff/learning";
   const rawAttachments = (doc.attachments || []) as Array<{
     label?: string | null;
     file?: { id?: string | number; url?: string | null } | string | number | null;
@@ -51,30 +51,30 @@ export default async function EditLessonPage({ params }: { params: Promise<{ id:
         title={String(doc.title || "Lesson")}
         description="Add video, reading text, article links, and downloadable documents — YouTube is optional, not required."
       />
-      <p className="text-sm text-white/45">
-        <Link href={backHref} className="text-baby-blue hover:underline">
+      <p className="text-sm text-text-3">
+        <Link href={backHref} className="text-accent hover:underline">
           ← Back to curriculum
         </Link>
       </p>
 
       <StaffPanel>
-        <div className="mb-5 rounded-2xl border border-baby-blue/25 bg-baby-blue/10 px-4 py-3 text-sm text-white/70">
-          <p className="font-medium text-white">Learning materials for this lesson</p>
-          <ul className="mt-2 list-disc space-y-1 pl-5 text-white/60">
+        <div className="mb-5 rounded-2xl border border-accent/25 bg-accent-bg px-4 py-3 text-sm text-text-2">
+          <p className="font-medium text-text-1">Learning materials for this lesson</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-text-2">
             <li>
-              <b className="text-white/80">Lesson type.</b> Video, reading, and downloads are hosted in SMN. Classroom sessions open the Google Classroom invite. Assignments and quizzes live in Assessments, not as lesson types.
+              <b className="text-text-1">Lesson type.</b> Video, reading, and downloads are hosted in SMN. Classroom sessions open the Google Classroom invite. Assignments and quizzes live in Assessments, not as lesson types.
             </li>
             <li>
-              <b className="text-white/80">Lesson text.</b> Paste or write the reading content / instructions.
+              <b className="text-text-1">Lesson text.</b> Paste or write the reading content / instructions.
             </li>
             <li>
-              <b className="text-white/80">External resource URL.</b> Link to an article, Notion page, or Google Doc.
+              <b className="text-text-1">External resource URL.</b> Link to an article, Notion page, or Google Doc.
             </li>
             <li>
-              <b className="text-white/80">YouTube URL.</b> Only if this lesson has a video.
+              <b className="text-text-1">YouTube URL.</b> Only if this lesson has a video.
             </li>
             <li>
-              <b className="text-white/80">Documents.</b> Upload PDFs and files in the section below.
+              <b className="text-text-1">Documents.</b> Upload PDFs and files in the section below.
             </li>
           </ul>
         </div>

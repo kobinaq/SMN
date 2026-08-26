@@ -53,13 +53,13 @@ export default async function StaffEventsOpsPage() {
                 String(doc.pricing || "—"),
                 String(doc.status || "—"),
                 <span key="actions" className="flex flex-wrap gap-2">
-                  <Link href={`/staff/website/events/${doc.id}`} className="text-xs text-baby-blue hover:underline">
+                  <Link href={`/staff/website/events/${doc.id}`} className="text-xs text-accent hover:underline">
                     Edit
                   </Link>
-                  <Link href={`/staff/events/${doc.id}`} className="text-xs text-baby-blue hover:underline">
+                  <Link href={`/staff/events/${doc.id}`} className="text-xs text-accent hover:underline">
                     Attendees
                   </Link>
-                  <Link href={`/staff/events/${doc.id}/check-in`} className="text-xs text-baby-blue hover:underline">
+                  <Link href={`/staff/events/${doc.id}/check-in`} className="text-xs text-accent hover:underline">
                     Check-in
                   </Link>
                 </span>,

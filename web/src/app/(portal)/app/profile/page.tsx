@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ProfileForm } from "@/components/app/ProfileForm";
-import { StatusBadge } from "@/components/ui/Feedback";
+import { Card, Eyebrow, PageHeader, ProgressBar } from "@/components/ui/Surface";
+import { Chip } from "@/components/ui/Chip";
 import { requireMember } from "@/lib/auth/member";
 import { getMemberContinuity } from "@/lib/member-continuity";
 
@@ -15,47 +16,47 @@ export default async function ProfilePage() {
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
-        <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Settings</p>
-        <h1 className="mt-3 font-display text-2xl text-white sm:text-3xl">Your profile</h1>
-        <p className="mt-2 text-sm text-white/50">
-          Complete what helps mentors and opportunities fit better. You can use the platform without finishing every field.
+        <PageHeader eyebrow="Settings" title="Your profile" />
+        <p className="mt-2 text-sm text-text-2">
+          Complete what helps mentors and opportunities fit better. You can use the platform without finishing every
+          field.
         </p>
-        <p className="mt-2 text-xs text-white/35">{member.email}</p>
+        <p className="mt-2 text-xs text-text-3">{member.email}</p>
       </div>
 
-      <section className="rounded-2xl border border-white/10 bg-surface p-5">
+      <Card>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/35">Completion</p>
-            <h2 className="mt-1 font-display text-xl text-white">{continuity.profile.percent}%</h2>
+            <Eyebrow tone="muted">Completion</Eyebrow>
+            <h2 className="tnum mt-1 font-display text-xl text-text-1">{continuity.profile.percent}%</h2>
           </div>
-          <StatusBadge
-            label={continuity.profile.percent >= 80 ? "Looking good" : "Suggested next"}
-            tone={continuity.profile.percent >= 80 ? "success" : "info"}
-          />
+          <Chip tone={continuity.profile.percent >= 80 ? "ai" : "accent"}>
+            {continuity.profile.percent >= 80 ? "Looking good" : "Suggested next"}
+          </Chip>
         </div>
-        <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10" aria-hidden>
-          <div className="h-full rounded-full bg-baby-blue" style={{ width: `${continuity.profile.percent}%` }} />
-        </div>
+        <ProgressBar value={continuity.profile.percent} className="mt-4" label="Profile completion" />
         {continuity.profile.missing.length ? (
-          <ul className="mt-4 space-y-1 text-sm text-white/50">
+          <ul className="mt-4 space-y-1.5 text-sm text-text-2">
             {continuity.profile.missing.map((item) => (
-              <li key={item}>• {item}</li>
+              <li key={item} className="flex gap-2">
+                <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
+                {item}
+              </li>
             ))}
           </ul>
         ) : (
-          <p className="mt-4 text-sm text-mint">Essentials look complete.</p>
+          <p className="mt-4 text-sm text-ai">Essentials look complete.</p>
         )}
         {member.handle ? (
           <p className="mt-4 text-sm">
-            <Link href={`/u/${member.handle}`} className="text-baby-blue hover:underline">
+            <Link href={`/u/${member.handle}`} className="text-accent hover:underline">
               Open public profile preview
             </Link>
           </p>
         ) : null}
-      </section>
+      </Card>
 
-      <div className="rounded-2xl border border-white/10 bg-surface p-5 sm:p-6">
+      <Card>
         <ProfileForm
           initial={{
             id: member.id,
@@ -72,7 +73,7 @@ export default async function ProfilePage() {
             visibility: member.visibility || "private",
           }}
         />
-      </div>
+      </Card>
     </div>
   );
 }

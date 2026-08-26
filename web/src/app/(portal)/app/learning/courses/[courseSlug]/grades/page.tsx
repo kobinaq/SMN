@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Card } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
 import { assessmentHref, getMemberCourseAssessments } from "@/lib/lms-assess";
 
@@ -14,32 +15,28 @@ export default async function CourseGradesPage(props: { params: Promise<{ course
   return (
     <div className="space-y-7">
       <div>
-        <Link href={data.href} className="text-sm text-white/45 transition hover:text-white">
+        <Link href={data.href} className="text-sm text-text-3 transition-colors hover:text-text-1">
           {data.courseTitle}
         </Link>
-        <h1 className="mt-3 font-display text-2xl text-white sm:text-3xl">Grades</h1>
-        <p className="mt-2 text-sm text-white/55">Scores, due dates, and remaining attempts for this course.</p>
+        <h1 className="mt-3 font-display text-2xl text-text-1 sm:text-3xl">Grades</h1>
+        <p className="mt-2 text-sm text-text-2">Scores, due dates, and remaining attempts for this course.</p>
       </div>
-      <div className="space-y-3">
+      <div className="rise-stagger space-y-3">
         {data.assessments.length ? (
-          data.assessments.map((item) => (
-            <Link
-              key={String(item.id)}
-              href={assessmentHref(courseSlug, item.id)}
-              className="block rounded-2xl border border-white/10 bg-surface p-5 transition hover:border-baby-blue/35"
-            >
+          data.assessments.map((item, index) => (
+            <Card key={String(item.id)} href={assessmentHref(courseSlug, item.id)} style={{ "--i": index } as React.CSSProperties}>
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <p className="text-[10px] uppercase tracking-wider text-baby-blue">{item.kind}</p>
-                  <h2 className="mt-1 font-display text-lg text-white">{item.title}</h2>
-                  <p className="mt-2 text-xs text-white/45">
+                  <p className="eyebrow text-accent">{item.kind}</p>
+                  <h2 className="mt-1 font-display text-lg text-text-1">{item.title}</h2>
+                  <p className="tnum mt-2 text-xs text-text-3">
                     {item.dueAt
                       ? `Due ${new Date(item.dueAt).toLocaleString("en-GH", { dateStyle: "medium", timeStyle: "short" })}`
                       : "No due date"}
                     {item.maxAttempts ? ` · ${item.remaining} attempt${item.remaining === 1 ? "" : "s"} left` : ""}
                   </p>
                 </div>
-                <p className="text-sm text-mint">
+                <p className="tnum text-sm text-ai">
                   {item.latest && item.latest.score != null
                     ? `${item.latest.score}/${item.latest.maxScore ?? item.totalMarks}`
                     : item.latest
@@ -47,15 +44,11 @@ export default async function CourseGradesPage(props: { params: Promise<{ course
                       : "Not submitted"}
                 </p>
               </div>
-              {item.latest?.feedback ? (
-                <p className="mt-3 text-sm text-white/55">{item.latest.feedback}</p>
-              ) : null}
-            </Link>
+              {item.latest?.feedback ? <p className="mt-3 text-sm text-text-2">{item.latest.feedback}</p> : null}
+            </Card>
           ))
         ) : (
-          <p className="rounded-2xl border border-dashed border-white/15 px-4 py-8 text-center text-sm text-white/45">
-            No assessments published yet.
-          </p>
+          <Card className="border-dashed text-center text-sm text-text-3">No assessments published yet.</Card>
         )}
       </div>
     </div>

@@ -47,25 +47,21 @@ export function OnboardingChecklist({ steps }: { steps: OnboardingStep[] }) {
 
   return (
     <section
-      className="rounded-2xl border border-white/10 bg-surface p-5 sm:p-6"
+      className="rise rounded-[var(--radius-lg)] border border-edge-subtle bg-raised p-5 shadow-[var(--shadow-1)] sm:p-6"
       aria-labelledby="onboarding-heading"
     >
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">
-            Getting started
-          </p>
-          <h2 id="onboarding-heading" className="mt-2 font-display text-xl text-white">
+          <p className="eyebrow text-accent">Getting started</p>
+          <h2 id="onboarding-heading" className="mt-2 font-display text-xl text-text-1">
             Your first steps
           </h2>
-          <p className="mt-1 text-sm text-white/50">
-            Complete what helps — you can explore the platform anytime.
-          </p>
+          <p className="mt-1 text-sm text-text-3">Complete what helps — you can explore the platform anytime.</p>
         </div>
         <button
           type="button"
           onClick={dismiss}
-          className="rounded-full border border-white/10 p-2 text-white/40 transition hover:text-white"
+          className="rounded-full border border-edge-subtle p-2 text-text-3 transition-colors hover:text-text-1"
           aria-label="Dismiss getting started checklist"
         >
           <X className="h-4 w-4" />
@@ -76,16 +72,14 @@ export function OnboardingChecklist({ steps }: { steps: OnboardingStep[] }) {
           <li key={step.key}>
             <Link
               href={step.href}
-              className="flex items-center gap-3 rounded-xl border border-white/5 px-3 py-3 text-sm transition hover:border-baby-blue/30"
+              className="flex items-center gap-3 rounded-[var(--radius-md)] border border-edge-subtle px-3 py-3 text-sm transition-colors duration-[var(--dur-fast)] hover:border-accent/35"
             >
               {step.done ? (
-                <CheckCircle2 className="h-4 w-4 shrink-0 text-mint" aria-hidden />
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-ai" aria-hidden />
               ) : (
-                <Circle className="h-4 w-4 shrink-0 text-white/35" aria-hidden />
+                <Circle className="h-4 w-4 shrink-0 text-text-3" aria-hidden />
               )}
-              <span className={step.done ? "text-white/45 line-through" : "text-white/80"}>
-                {step.label}
-              </span>
+              <span className={step.done ? "text-text-3 line-through" : "text-text-1"}>{step.label}</span>
             </Link>
           </li>
         ))}

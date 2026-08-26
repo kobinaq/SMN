@@ -39,7 +39,7 @@ export default async function EditStoryPage({ params }: { params: Promise<{ id: 
           submitLabel="Save story"
           onSuccessHref={`/staff/website/stories/${doc.id}`}
         />
-        <div className="mt-6 border-t border-white/10 pt-4">
+        <div className="mt-6 border-t border-edge-subtle pt-4">
           <StaffDeleteButton collection="stories" id={doc.id} redirectTo="/staff/website/stories" />
         </div>
       </StaffPanel>

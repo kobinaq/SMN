@@ -36,7 +36,7 @@ export function CopyLinkButton({
       onClick={copy}
       className={
         className ||
-        "inline-flex min-h-10 items-center justify-center rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs text-white/80 transition hover:border-baby-blue/40"
+        "inline-flex min-h-10 items-center justify-center rounded-full border border-edge bg-inset px-4 py-2 text-xs font-medium text-text-1 transition-colors duration-[var(--dur-fast)] hover:border-accent/40"
       }
     >
       {copied ? "Copied" : label}

@@ -1,4 +1,5 @@
 import { PortfolioManager } from "@/components/app/PortfolioManager";
+import { PageHeader } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
 import { getMemberPortfolios } from "@/lib/portfolios";
 
@@ -7,22 +8,23 @@ export const metadata = { title: "Portfolio" };
 export default async function PortfolioPage() {
   const member = await requireMember("/app/portfolio");
   const portfolios = await getMemberPortfolios(member.id);
-  const publicPreviewHref =
-    member.handle && member.visibility === "public" ? `/u/${member.handle}` : member.handle ? `/u/${member.handle}` : undefined;
+  const publicPreviewHref = member.handle ? `/u/${member.handle}` : undefined;
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="text-[10px] font-medium uppercase tracking-[0.22em] text-baby-blue">Portfolio</p>
-        <h1 className="mt-3 font-display text-2xl text-white sm:text-3xl">Show how you solve problems</h1>
-        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/50">
-          Turn projects into clear case studies. Public work appears at{" "}
-          <span className="text-baby-blue">/u/{member.handle || "your-handle"}</span> when your profile and case study
-          visibility allow it.
-        </p>
-      </div>
+      <PageHeader
+        eyebrow="Portfolio"
+        title="Show how you solve problems"
+        description={
+          <>
+            Turn projects into clear case studies. Public work appears at{" "}
+            <span className="text-accent">/u/{member.handle || "your-handle"}</span> when your profile and case study
+            visibility allow it.
+          </>
+        }
+      />
       {!member.handle ? (
-        <div className="rounded-2xl border border-amber-300/20 bg-amber-300/5 p-4 text-sm text-amber-100">
+        <div className="rounded-[var(--radius-md)] border border-warn/25 bg-warn-bg px-4 py-3 text-sm text-warn">
           Add a profile handle before sharing your public portfolio.
         </div>
       ) : null}

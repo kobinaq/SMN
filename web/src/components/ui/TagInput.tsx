@@ -31,20 +31,22 @@ export function TagInput({
   }
 
   return (
-    <div className={cn("block text-sm text-white/70", className)}>
-      <label htmlFor={id}>{label}</label>
+    <div className={cn("flex flex-col gap-1.5", className)}>
+      <label htmlFor={id} className="text-sm font-medium text-text-2">
+        {label}
+      </label>
       <input type="hidden" name={name} value={tags.join(",")} readOnly />
-      <div className="mt-2 flex min-h-12 flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
+      <div className="flex min-h-12 flex-wrap items-center gap-2 rounded-[var(--radius-md)] border border-edge bg-inset px-3 py-2 transition-colors duration-[var(--dur-fast)] hover:border-edge-strong focus-within:border-accent focus-within:ring-[3px] focus-within:ring-accent-bg">
         {tags.map((tag) => (
           <span
             key={tag}
-            className="inline-flex items-center gap-1 rounded-full border border-baby-blue/30 bg-baby-blue/10 px-2.5 py-1 text-xs text-baby-blue"
+            className="inline-flex items-center gap-1 rounded-full border border-accent/25 bg-accent-bg px-2.5 py-1 text-xs text-accent"
           >
             {tag}
             <button
               type="button"
               aria-label={`Remove ${tag}`}
-              className="rounded-full p-0.5 hover:bg-white/10"
+              className="rounded-full p-0.5 transition-colors hover:bg-white/10"
               onClick={() => setTags((current) => current.filter((item) => item !== tag))}
             >
               <X className="h-3 w-3" />
@@ -65,10 +67,10 @@ export function TagInput({
           }}
           onBlur={() => addTag(draft)}
           placeholder={tags.length ? "" : placeholder}
-          className="min-w-[8rem] flex-1 bg-transparent py-1 text-sm text-white outline-none placeholder:text-white/35"
+          className="min-w-[8rem] flex-1 bg-transparent py-1 text-sm text-text-1 outline-none placeholder:text-text-3"
         />
       </div>
-      {hint ? <p className="mt-1 text-[11px] text-white/30">{hint}</p> : null}
+      {hint ? <p className="text-xs text-text-3">{hint}</p> : null}
     </div>
   );
 }

@@ -19,7 +19,7 @@ export default async function NewAssessmentPage({
     return (
       <div className="space-y-6">
         <StaffPageHeader eyebrow="Learning" title="New assessment" hint="Open a course first." />
-        <Link href="/staff/learning" className="text-sm text-baby-blue hover:underline">
+        <Link href="/staff/learning" className="text-sm text-accent hover:underline">
           ← Learning
         </Link>
       </div>
@@ -34,8 +34,8 @@ export default async function NewAssessmentPage({
   return (
     <div className="space-y-6">
       <StaffPageHeader eyebrow="Gradebook" title="New assessment" hint="Quizzes auto-score multiple choice. Assignments use a rubric." />
-      <p className="text-sm text-white/45">
-        <Link href={`/staff/learning?course=${courseId}&tab=assessments`} className="text-baby-blue hover:underline">
+      <p className="text-sm text-text-3">
+        <Link href={`/staff/learning/courses/${courseId}?tab=assessments`} className="text-accent hover:underline">
           ← Assessments
         </Link>
       </p>

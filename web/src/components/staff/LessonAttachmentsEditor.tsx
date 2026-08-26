@@ -96,8 +96,8 @@ export function LessonAttachmentsEditor({
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="font-display text-lg text-white">Documents & downloads</h3>
-        <p className="mt-1 text-sm text-white/50">
+        <h3 className="font-display text-lg text-text-1">Documents & downloads</h3>
+        <p className="mt-1 text-sm text-text-2">
           Upload PDFs, slides, worksheets, or other files learners can download. This is separate from YouTube video.
         </p>
       </div>
@@ -107,12 +107,12 @@ export function LessonAttachmentsEditor({
           {rows.map((row) => (
             <li
               key={row.key}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/10 px-3 py-3 text-sm"
+              className="flex flex-wrap items-center justify-between gap-3 rounded-[var(--radius-md)] border border-edge-subtle px-3 py-3 text-sm"
             >
               <span>
-                <b className="text-white">{row.label}</b>
+                <b className="text-text-1">{row.label}</b>
                 {row.url ? (
-                  <a href={row.url} target="_blank" rel="noreferrer" className="ml-2 text-baby-blue hover:underline">
+                  <a href={row.url} target="_blank" rel="noreferrer" className="ml-2 text-accent hover:underline">
                     Open
                   </a>
                 ) : null}
@@ -120,7 +120,7 @@ export function LessonAttachmentsEditor({
               <button
                 type="button"
                 disabled={busy}
-                className="text-xs text-red-200 hover:underline disabled:opacity-50"
+                className="text-xs text-danger hover:underline disabled:opacity-50"
                 onClick={() => void persist(rows.filter((item) => item.key !== row.key))}
               >
                 Remove
@@ -129,13 +129,13 @@ export function LessonAttachmentsEditor({
           ))}
         </ul>
       ) : (
-        <p className="rounded-xl border border-dashed border-white/15 px-4 py-5 text-sm text-white/45">
+        <p className="rounded-xl border border-dashed border-edge px-4 py-5 text-sm text-text-3">
           No documents attached yet.
         </p>
       )}
 
       <div className="grid gap-3 md:grid-cols-[1fr_auto] md:items-end">
-        <label className="block text-sm text-white/70">
+        <label className="block text-sm text-text-2">
           Document label
           <input
             className={staffFieldClass}
@@ -145,10 +145,10 @@ export function LessonAttachmentsEditor({
             disabled={busy}
           />
         </label>
-        <label className="block text-sm text-white/70">
+        <label className="block text-sm text-text-2">
           Upload file
           <input
-            className={`${staffFieldClass} file:mr-3 file:rounded-full file:border-0 file:bg-baby-blue/20 file:px-3 file:py-1 file:text-baby-blue`}
+            className={`${staffFieldClass} file:mr-3 file:rounded-full file:border-0 file:bg-accent-bg file:px-3 file:py-1 file:text-accent`}
             type="file"
             disabled={busy}
             onChange={(event) => {
@@ -160,7 +160,7 @@ export function LessonAttachmentsEditor({
         </label>
       </div>
       {message ? (
-        <p className="text-sm text-white/50" role="status" aria-live="polite">
+        <p className="text-sm text-text-2" role="status" aria-live="polite">
           {message}
         </p>
       ) : null}

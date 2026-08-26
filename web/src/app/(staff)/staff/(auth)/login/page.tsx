@@ -22,11 +22,11 @@ export default async function StaffLoginPage() {
           : "Sign in to run SMN operations."
       }
     >
-      <Suspense fallback={<p className="text-sm text-white/50">Loading…</p>}>
+      <Suspense fallback={<p className="text-sm text-text-2">Loading…</p>}>
         <StaffLoginForm bootstrap={bootstrap} />
       </Suspense>
-      <p className="mt-6 text-center text-xs text-white/35">
-        Members sign in at <a className="text-baby-blue hover:underline" href="/login">/login</a>
+      <p className="mt-6 text-center text-xs text-text-3">
+        Members sign in at <a className="text-accent hover:underline" href="/login">/login</a>
       </p>
     </AuthShell>
   );

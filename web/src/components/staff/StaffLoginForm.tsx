@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 
 const field =
-  "field mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/35";
+  "field mt-2 w-full rounded-[var(--radius-lg)] border border-edge-subtle bg-inset px-4 py-3 text-text-1 placeholder:text-text-3";
 
 export function StaffLoginForm({ bootstrap }: { bootstrap: boolean }) {
   const router = useRouter();
@@ -42,12 +42,12 @@ export function StaffLoginForm({ bootstrap }: { bootstrap: boolean }) {
   return (
     <form onSubmit={submit} className="space-y-4">
       {bootstrap ? (
-        <label className="block text-sm text-white/70">
+        <label className="block text-sm text-text-2">
           Full name
           <input className={field} value={name} onChange={(event) => setName(event.target.value)} required minLength={2} />
         </label>
       ) : null}
-      <label className="block text-sm text-white/70">
+      <label className="block text-sm text-text-2">
         Work email
         <input
           className={field}
@@ -59,7 +59,7 @@ export function StaffLoginForm({ bootstrap }: { bootstrap: boolean }) {
           required
         />
       </label>
-      <label className="block text-sm text-white/70">
+      <label className="block text-sm text-text-2">
         Password
         <input
           className={field}
@@ -73,7 +73,7 @@ export function StaffLoginForm({ bootstrap }: { bootstrap: boolean }) {
         />
       </label>
       {error ? (
-        <p className="rounded-xl border border-red-400/30 bg-red-400/10 px-3 py-2 text-sm text-red-200" role="alert">
+        <p className="rounded-xl border border-red-400/30 bg-danger-bg px-3 py-2 text-sm text-danger" role="alert">
           {error}
         </p>
       ) : null}

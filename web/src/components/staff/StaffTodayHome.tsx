@@ -35,11 +35,11 @@ function readableDate(value: string) {
 }
 
 const toneBorder: Record<string, string> = {
-  mint: "border-mint/40",
+  mint: "border-ai/40",
   amber: "border-amber-300/40",
   violet: "border-purple-300/40",
-  red: "border-red-300/40",
-  blue: "border-baby-blue/40",
+  red: "border-danger/40",
+  blue: "border-accent/40",
 };
 
 export function StaffTodayHome({
@@ -82,7 +82,7 @@ export function StaffTodayHome({
       />
 
       {denied ? (
-        <p className="rounded-2xl border border-amber-300/30 bg-amber-300/10 px-4 py-3 text-sm text-amber-100" role="status">
+        <p className="rounded-2xl border border-warn/30 bg-warn-bg px-4 py-3 text-sm text-warn" role="status">
           Your role can’t open that area. Here’s what you can manage.
         </p>
       ) : null}
@@ -122,7 +122,7 @@ export function StaffTodayHome({
 
       {hasWork && (showMentorQueue || showOppQueue) ? (
         <div
-          className={`staff-inline-queues ${staffOpsChrome} [&_.smn-dashboard-section]:rounded-2xl [&_.smn-dashboard-section]:border [&_.smn-dashboard-section]:border-white/10 [&_.smn-dashboard-section]:bg-surface [&_.smn-dashboard-section]:p-5 [&_.smn-ops-row]:rounded-xl [&_.smn-ops-row]:border [&_.smn-ops-row]:border-white/10 [&_.smn-ops-row]:p-3`}
+          className={`staff-inline-queues ${staffOpsChrome} [&_.smn-dashboard-section]:rounded-2xl [&_.smn-dashboard-section]:border [&_.smn-dashboard-section]:border-edge-subtle [&_.smn-dashboard-section]:bg-raised [&_.smn-dashboard-section]:p-5 [&_.smn-ops-row]:rounded-xl [&_.smn-ops-row]:border [&_.smn-ops-row]:border-edge-subtle [&_.smn-ops-row]:p-3`}
         >
           <StaffPanel>
             <StaffSection title="Resolve here" />
@@ -137,7 +137,7 @@ export function StaffTodayHome({
       <div>
         <button
           type="button"
-          className="mb-3 text-xs font-medium tracking-wide text-white/45 transition hover:text-white/70"
+          className="mb-3 text-xs font-medium tracking-wide text-text-3 transition hover:text-text-2"
           onClick={() => setMoreOpen((value) => !value)}
           aria-expanded={moreOpen}
         >
@@ -148,8 +148,8 @@ export function StaffTodayHome({
             <div className="grid gap-3 md:grid-cols-3" aria-label="Platform health">
               {health.map((item) => (
                 <StaffPanel key={item.label} className={toneBorder[item.tone] || ""}>
-                  <b className="text-sm text-white">{item.label}</b>
-                  <p className="mt-2 text-xs text-white/50">{item.detail}</p>
+                  <b className="text-sm text-text-1">{item.label}</b>
+                  <p className="mt-2 text-xs text-text-2">{item.detail}</p>
                 </StaffPanel>
               ))}
             </div>
@@ -167,7 +167,7 @@ export function StaffTodayHome({
                   <Link
                     key={metric.label}
                     href={metric.href}
-                    className="rounded-full border border-white/10 px-3 py-1 text-[11px] text-white/45 transition hover:border-baby-blue/35 hover:text-white"
+                    className="rounded-full border border-edge-subtle px-3 py-1 text-[11px] text-text-3 transition hover:border-accent/35 hover:text-text-1"
                   >
                     {metric.label}
                   </Link>
@@ -183,20 +183,20 @@ export function StaffTodayHome({
                     <Link
                       key={`${item.label}-${item.href}-${item.at}`}
                       href={item.href}
-                      className="flex items-center justify-between gap-4 rounded-xl px-3 py-3 transition hover:bg-white/[.03]"
+                      className="flex items-center justify-between gap-4 rounded-xl px-3 py-3 transition hover:bg-inset"
                     >
                       <span>
-                        <b className="block text-sm text-white">{item.label}</b>
-                        <small className="text-xs text-white/40">{item.detail}</small>
+                        <b className="block text-sm text-text-1">{item.label}</b>
+                        <small className="text-xs text-text-3">{item.detail}</small>
                       </span>
-                      <time className="text-xs text-white/35" dateTime={item.at}>
+                      <time className="text-xs text-text-3" dateTime={item.at}>
                         {readableDate(item.at)}
                       </time>
                     </Link>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-white/45">No audited staff actions yet.</p>
+                <p className="text-sm text-text-3">No audited staff actions yet.</p>
               )}
             </StaffPanel>
           </div>

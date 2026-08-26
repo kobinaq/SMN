@@ -19,7 +19,7 @@ export default async function EditModulePage({ params }: { params: Promise<{ id:
   }
 
   const courseId = relationId(doc.course);
-  const backHref = courseId ? `/staff/learning?course=${courseId}&tab=curriculum` : "/staff/learning?tab=curriculum";
+  const backHref = courseId ? `/staff/learning/courses/${courseId}?tab=curriculum` : "/staff/learning";
 
   return (
     <div className="space-y-6">
@@ -28,8 +28,8 @@ export default async function EditModulePage({ params }: { params: Promise<{ id:
         title={String(doc.title || "Module")}
         description="Edit this module’s title, summary, and publish state."
       />
-      <p className="text-sm text-white/45">
-        <Link href={backHref} className="text-baby-blue hover:underline">
+      <p className="text-sm text-text-3">
+        <Link href={backHref} className="text-accent hover:underline">
           ← Back to curriculum
         </Link>
       </p>
@@ -48,7 +48,7 @@ export default async function EditModulePage({ params }: { params: Promise<{ id:
           submitLabel="Save module"
           onSuccessHref={`/staff/learning/modules/${doc.id}`}
         />
-        <div className="mt-6 border-t border-white/10 pt-4">
+        <div className="mt-6 border-t border-edge-subtle pt-4">
           <StaffDeleteButton collection="lms-modules" id={doc.id} redirectTo={backHref} />
         </div>
       </StaffPanel>

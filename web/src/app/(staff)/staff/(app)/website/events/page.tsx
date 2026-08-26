@@ -23,8 +23,8 @@ export default async function WebsiteEventsPage() {
         description="Edit listing fields. Prefer Work → Events for attendees and check-in."
         action={{ href: "/staff/website/events/new", label: "New event" }}
       />
-      <p className="text-sm text-white/45">
-        <Link href="/staff/events" className="text-baby-blue hover:underline">
+      <p className="text-sm text-text-3">
+        <Link href="/staff/events" className="text-accent hover:underline">
           Open events ops →
         </Link>
       </p>

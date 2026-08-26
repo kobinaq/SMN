@@ -36,7 +36,7 @@ export default async function EditResourcePage({ params }: { params: Promise<{ i
           submitLabel="Save resource"
           onSuccessHref={`/staff/content/resources/${doc.id}`}
         />
-        <div className="mt-6 border-t border-white/10 pt-4">
+        <div className="mt-6 border-t border-edge-subtle pt-4">
           <StaffDeleteButton collection="resources" id={doc.id} redirectTo="/staff/content/resources" />
         </div>
       </StaffPanel>

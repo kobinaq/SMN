@@ -7,13 +7,14 @@ import { ExternalLink, Pencil, Plus, Trash2 } from "@/components/ui/icons";
 import type { PortfolioItem } from "@/lib/portfolios";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import { EmptyState, StatusBadge } from "@/components/ui/Feedback";
+import { EmptyState } from "@/components/ui/Feedback";
+import { Card } from "@/components/ui/Surface";
+import { Chip } from "@/components/ui/Chip";
+import { Field, Input, Textarea } from "@/components/ui/Field";
 import { Select } from "@/components/ui/Select";
 import { TagInput } from "@/components/ui/TagInput";
 import { useToast } from "@/components/ui/Toast";
-
-const field =
-  "field w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/35";
+import { cn } from "@/lib/utils";
 
 const steps = [
   "Title & summary",
@@ -140,203 +141,176 @@ export function PortfolioManager({
       </div>
 
       {formOpen ? (
-        <form onSubmit={submit} className="space-y-4 rounded-2xl border border-white/10 bg-surface p-5 sm:p-7">
-          {editing ? <input type="hidden" name="id" value={String(editing.id)} /> : null}
+        <Card as="section" className="rise">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-baby-blue">
-                Guided case study
-              </p>
-              <h2 className="mt-1 font-display text-xl text-white">
-                {editing ? "Edit case study" : "New case study"}
-              </h2>
+              <p className="eyebrow text-accent">Guided case study</p>
+              <h2 className="mt-1 font-display text-xl text-text-1">{editing ? "Edit case study" : "New case study"}</h2>
             </div>
-            <button type="button" onClick={closeForm} className="text-sm text-white/45 hover:text-white">
+            <button type="button" onClick={closeForm} className="text-sm text-text-3 transition-colors hover:text-text-1">
               Cancel
             </button>
           </div>
 
-          <ol className="flex flex-wrap gap-2" aria-label="Case study steps">
+          <ol className="mt-5 flex flex-wrap gap-2" aria-label="Case study steps">
             {steps.map((label, index) => (
               <li key={label}>
-                <button
-                  type="button"
-                  onClick={() => setStep(index)}
-                  className={`rounded-full border px-3 py-1.5 text-xs ${
-                    step === index
-                      ? "border-baby-blue/40 bg-baby-blue/15 text-baby-blue"
-                      : "border-white/10 text-white/45"
-                  }`}
-                >
-                  {index + 1}. {label}
+                <button type="button" onClick={() => setStep(index)}>
+                  <Chip tone={step === index ? "accent" : "neutral"}>
+                    {index + 1}. {label}
+                  </Chip>
                 </button>
               </li>
             ))}
           </ol>
 
-          <div className={step === 0 ? "space-y-3" : "hidden"}>
-            <label className="block text-sm text-white/70">
-              Project title
-              <input className={`${field} mt-2`} name="title" required minLength={3} defaultValue={defaults.title} />
-            </label>
-            <label className="block text-sm text-white/70">
-              Project summary
-              <textarea
-                className={`${field} mt-2 min-h-24`}
-                name="summary"
-                required
-                minLength={20}
-                defaultValue={defaults.summary}
-                placeholder="One short paragraph describing the project"
-              />
-            </label>
-          </div>
+          <form id="portfolio-form" onSubmit={submit} className="mt-5 space-y-4">
+            {editing ? <input type="hidden" name="id" value={String(editing.id)} /> : null}
 
-          <div className={step === 1 ? "space-y-3" : "hidden"}>
-            <label className="block text-sm text-white/70">
-              Problem or brief
-              <textarea
-                className={`${field} mt-2 min-h-32`}
-                name="challenge"
-                required
-                minLength={20}
-                defaultValue={defaults.challenge}
-                placeholder="What problem, brief, or constraint were you solving?"
-              />
-            </label>
-          </div>
-
-          <div className={step === 2 ? "space-y-3" : "hidden"}>
-            <label className="block text-sm text-white/70">
-              Your role and process
-              <textarea
-                className={`${field} mt-2 min-h-32`}
-                name="approach"
-                required
-                minLength={20}
-                defaultValue={defaults.approach}
-                placeholder="Start with your role, then the decisions and process you used."
-              />
-            </label>
-            <TagInput
-              name="skills"
-              label="Tools or skills used"
-              initial={defaults.skills}
-              placeholder="Add a skill or tool"
-              hint="Press Enter to add tags."
-            />
-          </div>
-
-          <div className={step === 3 ? "space-y-3" : "hidden"}>
-            <label className="block text-sm text-white/70">
-              Outcome and reflection
-              <textarea
-                className={`${field} mt-2 min-h-32`}
-                name="outcome"
-                required
-                minLength={20}
-                defaultValue={defaults.outcome}
-                placeholder="What changed, what you learned, and what you would do next."
-              />
-            </label>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="block text-sm text-white/70">
-                Evidence / project URL
-                <input
-                  className={`${field} mt-2`}
-                  name="projectUrl"
-                  type="url"
-                  defaultValue={defaults.projectUrl}
-                  placeholder="https://"
+            <div className={cn("space-y-4", step !== 0 && "hidden")}>
+              <Field label="Project title" htmlFor="pf-title" required>
+                <Input id="pf-title" name="title" required minLength={3} defaultValue={defaults.title} />
+              </Field>
+              <Field label="Project summary" htmlFor="pf-summary" required>
+                <Textarea
+                  id="pf-summary"
+                  name="summary"
+                  required
+                  minLength={20}
+                  defaultValue={defaults.summary}
+                  placeholder="One short paragraph describing the project"
                 />
-              </label>
-              <label className="block text-sm text-white/70">
-                Cover image URL
-                <input
-                  className={`${field} mt-2`}
-                  name="coverUrl"
-                  type="url"
-                  defaultValue={defaults.coverUrl}
-                  placeholder="Optional external image URL"
-                />
-              </label>
+              </Field>
             </div>
-            <label className="block text-sm text-white/70">
-              Upload cover image
-              <input className={`${field} mt-2`} name="cover" type="file" accept="image/*" />
-              <span className="mt-1 block text-xs text-white/40">Optional image up to 10 MB.</span>
-            </label>
-          </div>
 
-          <div className={step === 4 ? "space-y-3" : "hidden"}>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="block text-sm text-white/70">
-                Status
-                <Select className={`${field} mt-2 bg-surface`} name="status" defaultValue={defaults.status}>
-                  <option value="draft">Draft</option>
-                  <option value="published">Published</option>
-                </Select>
-              </label>
-              <label className="block text-sm text-white/70">
-                Visibility
-                <Select className={`${field} mt-2 bg-surface`} name="visibility" defaultValue={defaults.visibility}>
-                  <option value="private">Private</option>
-                  <option value="members">Members only</option>
-                  <option value="public">Public</option>
-                </Select>
-              </label>
+            <div className={cn("space-y-4", step !== 1 && "hidden")}>
+              <Field label="Problem or brief" htmlFor="pf-challenge" required>
+                <Textarea
+                  id="pf-challenge"
+                  name="challenge"
+                  required
+                  minLength={20}
+                  defaultValue={defaults.challenge}
+                  className="min-h-32"
+                  placeholder="What problem, brief, or constraint were you solving?"
+                />
+              </Field>
             </div>
-            <p className="rounded-2xl border border-white/10 bg-near-black/40 px-4 py-3 text-xs text-white/45">
-              Published + public items appear on your public profile preview. Keep drafts private while you refine the
-              story.
-              {publicPreviewHref ? (
-                <>
-                  {" "}
-                  <a href={publicPreviewHref} className="text-baby-blue hover:underline">
-                    Open public preview
-                  </a>
-                  .
-                </>
+
+            <div className={cn("space-y-4", step !== 2 && "hidden")}>
+              <Field label="Your role and process" htmlFor="pf-approach" required>
+                <Textarea
+                  id="pf-approach"
+                  name="approach"
+                  required
+                  minLength={20}
+                  defaultValue={defaults.approach}
+                  className="min-h-32"
+                  placeholder="Start with your role, then the decisions and process you used."
+                />
+              </Field>
+              <TagInput name="skills" label="Tools or skills used" initial={defaults.skills} placeholder="Add a skill or tool" hint="Press Enter to add tags." />
+            </div>
+
+            <div className={cn("space-y-4", step !== 3 && "hidden")}>
+              <Field label="Outcome and reflection" htmlFor="pf-outcome" required>
+                <Textarea
+                  id="pf-outcome"
+                  name="outcome"
+                  required
+                  minLength={20}
+                  defaultValue={defaults.outcome}
+                  className="min-h-32"
+                  placeholder="What changed, what you learned, and what you would do next."
+                />
+              </Field>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Evidence / project URL" htmlFor="pf-url">
+                  <Input id="pf-url" name="projectUrl" type="url" defaultValue={defaults.projectUrl} placeholder="https://" />
+                </Field>
+                <Field label="Cover image URL" htmlFor="pf-cover-url">
+                  <Input id="pf-cover-url" name="coverUrl" type="url" defaultValue={defaults.coverUrl} placeholder="Optional external image URL" />
+                </Field>
+              </div>
+              <Field label="Upload cover image" htmlFor="pf-cover" hint="Optional image up to 10 MB.">
+                <input
+                  id="pf-cover"
+                  name="cover"
+                  type="file"
+                  accept="image/*"
+                  className="block w-full text-sm text-text-2 file:mr-3 file:rounded-full file:border-0 file:bg-inset file:px-3 file:py-1.5 file:text-xs file:text-text-1"
+                />
+              </Field>
+            </div>
+
+            <div className={cn("space-y-4", step !== 4 && "hidden")}>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Status" htmlFor="pf-status">
+                  <Select id="pf-status" name="status" defaultValue={defaults.status}>
+                    <option value="draft">Draft</option>
+                    <option value="published">Published</option>
+                  </Select>
+                </Field>
+                <Field label="Visibility" htmlFor="pf-visibility">
+                  <Select id="pf-visibility" name="visibility" defaultValue={defaults.visibility}>
+                    <option value="private">Private</option>
+                    <option value="members">Members only</option>
+                    <option value="public">Public</option>
+                  </Select>
+                </Field>
+              </div>
+              <p className="rounded-[var(--radius-md)] border border-edge-subtle bg-inset px-4 py-3 text-xs text-text-3">
+                Published + public items appear on your public profile preview. Keep drafts private while you refine
+                the story.
+                {publicPreviewHref ? (
+                  <>
+                    {" "}
+                    <a href={publicPreviewHref} className="text-accent hover:underline">
+                      Open public preview
+                    </a>
+                    .
+                  </>
+                ) : null}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              {step > 0 ? (
+                <Button type="button" variant="secondary" onClick={() => setStep((value) => value - 1)}>
+                  Back
+                </Button>
               ) : null}
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2">
-            {step > 0 ? (
-              <Button type="button" variant="secondary" onClick={() => setStep((value) => value - 1)}>
-                Back
-              </Button>
+              {step < steps.length - 1 ? (
+                <Button type="button" onClick={() => setStep((value) => value + 1)}>
+                  Continue
+                </Button>
+              ) : (
+                <Button type="submit" disabled={busy} aria-busy={busy}>
+                  {busy ? "Saving…" : editing ? "Update case study" : "Save case study"}
+                </Button>
+              )}
+            </div>
+            {message ? (
+              <p className="text-sm text-danger" role="alert">
+                {message}
+              </p>
             ) : null}
-            {step < steps.length - 1 ? (
-              <Button type="button" onClick={() => setStep((value) => value + 1)}>
-                Continue
-              </Button>
-            ) : (
-              <Button type="submit" disabled={busy} aria-busy={busy}>
-                {busy ? "Saving…" : editing ? "Update case study" : "Save case study"}
-              </Button>
-            )}
-          </div>
-          {message ? (
-            <p className="text-sm text-red-300" role="alert">
-              {message}
-            </p>
-          ) : null}
-        </form>
+          </form>
+        </Card>
       ) : null}
 
       {items.length ? (
-        <div className="grid gap-4 md:grid-cols-2">
-          {items.map((item) => (
-            <article key={item.id} className="overflow-hidden rounded-2xl border border-white/10 bg-surface">
+        <div className="rise-stagger grid gap-4 md:grid-cols-2">
+          {items.map((item, index) => (
+            <Card key={item.id} padded={false} style={{ "--i": index } as React.CSSProperties} className="overflow-hidden">
               {item.coverUrl ? <img src={item.coverUrl} alt="" className="h-44 w-full object-cover" /> : null}
               <div className="p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <h2 className="font-display text-xl text-white">{item.title}</h2>
+                    <h2 className="font-display text-xl text-text-1">{item.title}</h2>
                     <div className="mt-2 flex flex-wrap gap-2">
-                      <StatusBadge label={item.status} tone={item.status === "published" ? "success" : "neutral"} />
-                      <StatusBadge label={item.visibility} tone="info" />
+                      <Chip tone={item.status === "published" ? "ai" : "neutral"}>{item.status}</Chip>
+                      <Chip tone="accent">{item.visibility}</Chip>
                     </div>
                   </div>
                   <div className="flex gap-2">
@@ -347,7 +321,7 @@ export function PortfolioManager({
                         setEditing(item);
                         setStep(0);
                       }}
-                      className="text-white/35 hover:text-baby-blue"
+                      className="text-text-3 transition-colors hover:text-accent"
                       aria-label={`Edit ${item.title}`}
                     >
                       <Pencil className="h-4 w-4" />
@@ -355,27 +329,22 @@ export function PortfolioManager({
                     <button
                       type="button"
                       onClick={() => setDeleteId(item.id)}
-                      className="text-white/35 hover:text-red-300"
+                      className="text-text-3 transition-colors hover:text-danger"
                       aria-label={`Delete ${item.title}`}
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
-                <p className="mt-3 line-clamp-3 text-sm text-white/50">{item.summary}</p>
+                <p className="mt-3 line-clamp-3 text-sm text-text-2">{item.summary}</p>
                 {item.projectUrl ? (
-                  <a
-                    href={item.projectUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-4 inline-flex items-center gap-1 text-sm text-baby-blue"
-                  >
+                  <a href={item.projectUrl} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-1 text-sm text-accent">
                     View evidence
                     <ExternalLink className="h-3.5 w-3.5" />
                   </a>
                 ) : null}
               </div>
-            </article>
+            </Card>
           ))}
         </div>
       ) : (

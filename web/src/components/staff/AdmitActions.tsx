@@ -47,10 +47,10 @@ export function AdmitActions({
   return (
     <div className="space-y-4">
       {!courseId && courses.length ? (
-        <label className="block text-sm text-white/70">
+        <label className="block text-sm text-text-2">
           Course
           <select
-            className="field mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white"
+            className="field mt-2 w-full rounded-[var(--radius-lg)] border border-edge-subtle bg-inset px-4 py-3 text-text-1"
             value={selectedCourse}
             onChange={(event) => setSelectedCourse(event.target.value)}
           >
@@ -68,7 +68,7 @@ export function AdmitActions({
           type="button"
           disabled={Boolean(busy) || (!courseId && !selectedCourse)}
           onClick={() => void run("grant")}
-          className="rounded-full border border-mint/40 bg-mint/15 px-5 py-2.5 text-sm text-mint transition hover:bg-mint/25 disabled:opacity-50"
+          className="rounded-full border border-ai/40 bg-ai/15 px-5 py-2.5 text-sm text-ai transition hover:bg-ai/25 disabled:opacity-50"
         >
           {busy === "grant" ? "Granting…" : "Grant access now"}
         </button>
@@ -76,17 +76,17 @@ export function AdmitActions({
           type="button"
           disabled={Boolean(busy) || (!courseId && !selectedCourse)}
           onClick={() => void run("pay-link")}
-          className="rounded-full border border-baby-blue/40 bg-baby-blue/15 px-5 py-2.5 text-sm text-baby-blue transition hover:bg-baby-blue/25 disabled:opacity-50"
+          className="rounded-full border border-accent/40 bg-accent-bg px-5 py-2.5 text-sm text-accent transition hover:bg-accent/20 disabled:opacity-50"
         >
           {busy === "pay-link" ? "Sending…" : "Send Paystack link"}
         </button>
       </div>
       {error ? (
-        <p className="text-sm text-red-300" role="alert">
+        <p className="text-sm text-danger" role="alert">
           {error}
         </p>
       ) : null}
-      {message ? <p className="text-sm text-mint">{message}</p> : null}
+      {message ? <p className="text-sm text-ai">{message}</p> : null}
     </div>
   );
 }
