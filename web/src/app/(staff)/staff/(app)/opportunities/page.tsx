@@ -168,6 +168,8 @@ export default async function StaffOpportunitiesPage() {
               company: String(item.company),
               status: (item.status as "pending" | "published" | "closed" | "archived") ?? "pending",
               applicationCount: applicationCounts.get(String(item.id)) || 0,
+              sourceLabel: (item.sourceLabel as "manual" | "partner" | "imported") ?? "manual",
+              relevanceScore: typeof item.relevanceScore === "number" ? item.relevanceScore : null,
             }))}
           />
         </StaffPanel>
