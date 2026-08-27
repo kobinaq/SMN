@@ -13,6 +13,8 @@ export type OpportunityRow = {
   company: string;
   status: "pending" | "published" | "closed" | "archived";
   applicationCount: number;
+  sourceLabel: "manual" | "partner" | "imported";
+  relevanceScore: number | null;
 };
 
 const statusTone: Record<OpportunityRow["status"], ChipTone> = {
@@ -150,6 +152,9 @@ export function OpportunityBulkList({ opportunities }: { opportunities: Opportun
                   <span className="block truncate text-sm font-medium text-text-1">{item.title}</span>
                   <span className="block truncate text-xs text-text-3">
                     {item.company} · {item.applicationCount} app{item.applicationCount === 1 ? "" : "s"}
+                    {item.sourceLabel === "imported" && item.relevanceScore != null
+                      ? ` · relevance ${item.relevanceScore}`
+                      : ""}
                   </span>
                 </span>
               </label>

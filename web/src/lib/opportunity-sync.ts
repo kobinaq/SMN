@@ -13,7 +13,7 @@ type SourceDoc = {
   consecutiveFailures?: number | null;
 };
 
-type ImportedJob = {
+export type ImportedJob = {
   externalId: string;
   title: string;
   company: string;
@@ -23,17 +23,50 @@ type ImportedJob = {
   employmentType?: string;
   remote?: boolean;
   salary?: string;
+  /** The board's own department/team label, when the ATS exposes one. */
+  department?: string;
 };
 
-const marketingTerms = ["marketing", "brand", "content", "social media", "communications", "community", "growth", "seo", "paid media", "performance marketing", "crm", "lifecycle", "copywriter", "creative strategist", "demand generation", "product marketing"];
+/**
+ * Relevance is decided in two tiers, in order:
+ *
+ * 1. The board's own department label, when present — an employer who filed
+ *    a job under "Marketing" has already made the call more reliably than any
+ *    keyword guess could.
+ * 2. A text fallback, gated on the TITLE (not the description body). The old
+ *    scorer credited body-only mentions on their own, which is how postings
+ *    like a Software Engineer role that name-drops "our marketing team" once
+ *    made it past the default threshold — a title match is now required
+ *    before body text adds anything, and matching is word-boundary, not
+ *    substring, so "crm" can't fire inside an unrelated word.
+ */
+const marketingDepartmentTerms = ["marketing", "brand", "content", "growth marketing", "communications", "demand generation", "product marketing"];
+
+const marketingTitleTerms = ["marketing", "brand", "content", "social media", "seo", "paid media", "performance marketing", "copywriter", "creative strategist", "demand generation", "product marketing", "growth marketing", "marketing communications", "community manager", "email marketing", "influencer marketing", "advertising"];
+
+/** Title words that mean "not marketing" even if a term above also matches. */
+const excludedTitleTerms = ["engineer", "developer", "software", "accountant", "data scientist", "data analyst", "financial analyst", "recruiter", "warehouse", "driver", "nurse", "legal counsel", "devops", "backend", "frontend", "customer support"];
 
 function clean(value: unknown) {
   return String(value || "").replace(/<[^>]*>/g, " ").replace(/&nbsp;|&#160;/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
 }
-function scoreJob(job: ImportedJob) {
-  const title = job.title.toLowerCase();
-  const body = `${job.title} ${job.description}`.toLowerCase();
-  return marketingTerms.reduce((score, term) => score + (title.includes(term) ? 3 : body.includes(term) ? 1 : 0), 0);
+function wordMatch(text: string, term: string) {
+  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`\\b${escaped}\\b`, "i").test(text);
+}
+function matchesAny(text: string, terms: string[]) {
+  return terms.some((term) => wordMatch(text, term));
+}
+export function scoreJob(job: ImportedJob) {
+  if (job.department) return matchesAny(job.department, marketingDepartmentTerms) ? 10 : 0;
+  if (matchesAny(job.title, excludedTitleTerms)) return 0;
+  if (!matchesAny(job.title, marketingTitleTerms)) return 0;
+  // Title already confirms relevance; extra body mentions only add signal.
+  let score = 5;
+  for (const term of marketingTitleTerms) {
+    if (!wordMatch(job.title, term) && wordMatch(job.description, term)) score += 1;
+  }
+  return score;
 }
 function slugify(value: string) {
   return value.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 70);
@@ -62,19 +95,19 @@ async function fetchJobs(source: SourceDoc): Promise<ImportedJob[]> {
   if (source.type === "greenhouse") {
     const response = await fetch(`https://boards-api.greenhouse.io/v1/boards/${encodeURIComponent(source.boardToken)}/jobs?content=true`, { signal });
     if (!response.ok) throw new Error(`Greenhouse returned ${response.status}`);
-    const data = await response.json() as { jobs?: Array<{ id: number; title: string; content?: string; absolute_url: string; location?: { name?: string } }> };
-    return (data.jobs || []).map((job) => ({ externalId: String(job.id), title: clean(job.title), company: source.name, description: clean(job.content), location: clean(job.location?.name) || source.defaultLocation || "Unspecified", applicationUrl: job.absolute_url }));
+    const data = await response.json() as { jobs?: Array<{ id: number; title: string; content?: string; absolute_url: string; location?: { name?: string }; departments?: Array<{ name?: string }> }> };
+    return (data.jobs || []).map((job) => ({ externalId: String(job.id), title: clean(job.title), company: source.name, description: clean(job.content), location: clean(job.location?.name) || source.defaultLocation || "Unspecified", applicationUrl: job.absolute_url, department: clean(job.departments?.[0]?.name) || undefined }));
   }
   if (source.type === "lever") {
     const response = await fetch(`https://api.lever.co/v0/postings/${encodeURIComponent(source.boardToken)}?mode=json`, { signal });
     if (!response.ok) throw new Error(`Lever returned ${response.status}`);
-    const data = await response.json() as Array<{ id: string; text: string; descriptionPlain?: string; hostedUrl: string; categories?: { location?: string; commitment?: string } }>;
-    return data.map((job) => ({ externalId: job.id, title: clean(job.text), company: source.name, description: clean(job.descriptionPlain), location: clean(job.categories?.location) || source.defaultLocation || "Unspecified", applicationUrl: job.hostedUrl, employmentType: job.categories?.commitment }));
+    const data = await response.json() as Array<{ id: string; text: string; descriptionPlain?: string; hostedUrl: string; categories?: { location?: string; commitment?: string; team?: string; department?: string } }>;
+    return data.map((job) => ({ externalId: job.id, title: clean(job.text), company: source.name, description: clean(job.descriptionPlain), location: clean(job.categories?.location) || source.defaultLocation || "Unspecified", applicationUrl: job.hostedUrl, employmentType: job.categories?.commitment, department: clean(job.categories?.team || job.categories?.department) || undefined }));
   }
   const response = await fetch(`https://api.ashbyhq.com/posting-api/job-board/${encodeURIComponent(source.boardToken)}?includeCompensation=true`, { signal });
   if (!response.ok) throw new Error(`Ashby returned ${response.status}`);
-  const data = await response.json() as { jobs?: Array<{ id?: string; title: string; descriptionPlain?: string; descriptionHtml?: string; location?: string; jobUrl: string; employmentType?: string; isRemote?: boolean; compensationTierSummary?: string }> };
-  return (data.jobs || []).map((job) => ({ externalId: job.id || job.jobUrl, title: clean(job.title), company: source.name, description: clean(job.descriptionPlain || job.descriptionHtml), location: clean(job.location) || source.defaultLocation || "Unspecified", applicationUrl: job.jobUrl, employmentType: job.employmentType, remote: job.isRemote, salary: clean(job.compensationTierSummary) || undefined }));
+  const data = await response.json() as { jobs?: Array<{ id?: string; title: string; descriptionPlain?: string; descriptionHtml?: string; location?: string; jobUrl: string; employmentType?: string; isRemote?: boolean; compensationTierSummary?: string; department?: string; team?: string }> };
+  return (data.jobs || []).map((job) => ({ externalId: job.id || job.jobUrl, title: clean(job.title), company: source.name, description: clean(job.descriptionPlain || job.descriptionHtml), location: clean(job.location) || source.defaultLocation || "Unspecified", applicationUrl: job.jobUrl, employmentType: job.employmentType, remote: job.isRemote, salary: clean(job.compensationTierSummary) || undefined, department: clean(job.department || job.team) || undefined }));
 }
 
 export async function syncOpportunitySource(payload: Payload, source: SourceDoc) {
