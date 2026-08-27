@@ -34,7 +34,7 @@ export function NetworkClose() {
         <div className="relative aspect-[4/5] overflow-hidden" data-parallax-wrap>
           <Image
             src={img.communityHome}
-            alt="SMN gathering with a speaker, audience, and Own your voice tote"
+            alt="SMN members gathered together in the community space"
             fill
             className="object-cover"
             data-parallax

@@ -25,12 +25,12 @@ export const img = {
 
   // Homepage sections (cohort spotlight locked)
   philosophy: "/images/photo_30_2026-07-11_04-15-51.jpg",
-  communityHome: "/images/community-table.jpg",
+  communityHome: "/images/photo_15_2026-07-11_04-15-51.jpg",
   cohortSpotlight: "/images/cohort-group.jpg",
 
   // About
   aboutMission: "/images/presentation.jpg",
-  academyGroup: "/images/photo_15_2026-07-11_04-15-51.jpg",
+  academyGroup: "/images/fes.jpg",
 
   // Community page gallery
   communityPortrait: "/images/photo_24_2026-07-11_04-15-51.jpg",
