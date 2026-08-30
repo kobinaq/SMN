@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ContactForm } from "@/components/forms/ContactForm";
+import { JobPostingForm } from "@/components/site/JobPostingForm";
 import { Segmented } from "@/components/ui/Segmented";
 import { Checklist } from "@/components/site/kit";
 
@@ -42,12 +43,12 @@ const REQUESTS = {
     label: "Post a job",
     type: "Job posting",
     blurb:
-      "Share openings with marketers who train for strategy, campaigns, and proof of work. Staff review listings before they appear on the public careers board.",
+      "Share openings with marketers who train for strategy, campaigns, and proof of work. Staff review every listing before it appears on the public careers board.",
     needs: [
-      "Role title, company, and location or remote preference",
-      "Employment type: full-time, contract, freelance, or project",
+      "What the role actually involves day to day",
       "What success looks like in the first 30 to 90 days",
-      "Application link or how you want candidates to respond",
+      "Who it is a fit for — skills, level, and mindset",
+      "Anything that makes it worth a strong marketer's time",
     ],
   },
   training: {
@@ -95,13 +96,20 @@ export function PartnerRequestForm({ initial = "talent" }: { initial?: RequestKi
       <div className="border border-edge-subtle bg-raised p-6 sm:p-8">
         <h3 className="font-display text-2xl text-text-1">{request.label}</h3>
         <p className="mt-2 text-sm text-text-2">
-          We follow up if we need more detail before going further.
+          {kind === "job"
+            ? "Fill in the role and it goes straight to our team as a listing to review."
+            : "We follow up if we need more detail before going further."}
         </p>
-        {/* Remounting on `kind` resets the form fields with the new default
-            type — carrying a half-typed job posting into an intern request
-            would only produce a confusing enquiry. */}
+        {/* Remounting on `kind` resets the form fields — carrying a half-typed
+            job posting into an intern request would only produce a confusing
+            enquiry. "Post a job" gets a structured intake that becomes a
+            reviewable listing; the rest are open-ended enquiries. */}
         <div className="mt-6">
-          <ContactForm key={kind} defaultType={request.type} />
+          {kind === "job" ? (
+            <JobPostingForm key={kind} />
+          ) : (
+            <ContactForm key={kind} defaultType={request.type} />
+          )}
         </div>
       </div>
     </div>
