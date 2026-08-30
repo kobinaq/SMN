@@ -47,8 +47,35 @@ const marketingTitleTerms = ["marketing", "brand", "content", "social media", "s
 /** Title words that mean "not marketing" even if a term above also matches. */
 const excludedTitleTerms = ["engineer", "developer", "software", "accountant", "data scientist", "data analyst", "financial analyst", "recruiter", "warehouse", "driver", "nurse", "legal counsel", "devops", "backend", "frontend", "customer support"];
 
-function clean(value: unknown) {
-  return String(value || "").replace(/<[^>]*>/g, " ").replace(/&nbsp;|&#160;/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
+/**
+ * Some boards (Ashby in particular) hand back their HTML already
+ * entity-escaped — `&lt;p&gt;&lt;strong&gt;Summary&lt;/strong&gt;&lt;/p&gt;`
+ * as literal text rather than real `<p><strong>` tags. Stripping tags before
+ * decoding entities leaves that markup sitting in the description as visible
+ * junk, since `&lt;p&gt;` doesn't look like a tag to a tag-stripping regex.
+ * Decoding first turns it into real tags so the strip pass below can remove it
+ * either way.
+ */
+function decodeEntities(value: string) {
+  return value
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex: string) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec: string) => String.fromCodePoint(parseInt(dec, 10)))
+    .replace(/&nbsp;/g, " ")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&rsquo;/g, "’")
+    .replace(/&lsquo;/g, "‘")
+    .replace(/&rdquo;/g, "”")
+    .replace(/&ldquo;/g, "“")
+    .replace(/&mdash;/g, "—")
+    .replace(/&ndash;/g, "–")
+    .replace(/&hellip;/g, "…")
+    .replace(/&amp;/g, "&");
+}
+export function clean(value: unknown) {
+  return decodeEntities(String(value || "")).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 function wordMatch(text: string, term: string) {
   const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
