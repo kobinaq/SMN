@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { scoreJob, type ImportedJob } from "./opportunity-sync";
+import { clean, scoreJob, type ImportedJob } from "./opportunity-sync";
 
 function job(overrides: Partial<ImportedJob>): ImportedJob {
   return {
@@ -66,5 +66,23 @@ describe("scoreJob", () => {
       }),
     );
     expect(reinforced).toBeGreaterThan(bare);
+  });
+});
+
+describe("clean", () => {
+  it("strips real HTML tags", () => {
+    expect(clean("<p><strong>Summary</strong></p><p>Body copy.</p>")).toBe("Summary Body copy.");
+  });
+
+  it("decodes entity-escaped HTML before stripping it, instead of leaving the markup visible", () => {
+    // The exact shape some ATS boards (Ashby in particular) return: the HTML
+    // itself is entity-escaped, so it reads as literal "&lt;p&gt;" text
+    // rather than a real <p> tag until it's decoded first.
+    const raw = "&lt;p&gt;&lt;strong&gt;Summary&lt;/strong&gt;&lt;/p&gt; &lt;p&gt;The role reports to the Director.&nbsp;&lt;/p&gt;";
+    expect(clean(raw)).toBe("Summary The role reports to the Director.");
+  });
+
+  it("decodes common named and numeric entities", () => {
+    expect(clean("Marketing &amp; Growth &mdash; 5&#39;s rule &#x2013; ok")).toBe("Marketing & Growth — 5's rule – ok");
   });
 });
