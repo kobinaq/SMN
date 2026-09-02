@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ChangePasswordForm } from "@/components/auth/ChangePasswordForm";
 import { ProfileForm } from "@/components/app/ProfileForm";
 import { Card, Eyebrow, PageHeader, ProgressBar } from "@/components/ui/Surface";
 import { Chip } from "@/components/ui/Chip";
@@ -73,6 +74,21 @@ export default async function ProfilePage() {
             visibility: member.visibility || "private",
           }}
         />
+      </Card>
+
+      <Card>
+        <div className="mb-4">
+          <Eyebrow tone="muted">Security</Eyebrow>
+          <h2 className="mt-1 font-display text-xl text-text-1">Change password</h2>
+          <p className="mt-1 text-sm text-text-2">
+            Enter your current password to set a new one. If you’ve forgotten it,{" "}
+            <Link href="/forgot-password" className="text-accent hover:underline">
+              reset it here
+            </Link>
+            .
+          </p>
+        </div>
+        <ChangePasswordForm endpoint="/api/member-auth/change-password" minLength={8} />
       </Card>
     </div>
   );

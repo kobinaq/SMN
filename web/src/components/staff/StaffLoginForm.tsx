@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -72,6 +73,16 @@ export function StaffLoginForm({ bootstrap }: { bootstrap: boolean }) {
           minLength={bootstrap ? 10 : 1}
         />
       </label>
+      {!bootstrap ? (
+        <div className="flex justify-end">
+          <Link
+            href="/staff/forgot-password"
+            className="text-xs text-accent transition hover:text-text-1"
+          >
+            Forgot password?
+          </Link>
+        </div>
+      ) : null}
       {error ? (
         <p className="rounded-xl border border-red-400/30 bg-danger-bg px-3 py-2 text-sm text-danger" role="alert">
           {error}
