@@ -74,6 +74,8 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
     );
   }
 
+  links.push({ href: "/staff/account", label: "Account" });
+
   return (
     <PortalShell
       variant="staff"
