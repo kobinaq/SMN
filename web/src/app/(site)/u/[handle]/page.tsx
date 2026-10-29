@@ -15,6 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${member.name} · Portfolio`,
     description: member.bio || member.headline,
     alternates: { canonical: `/u/${handle}` },
+    openGraph: { url: `/u/${handle}` },
   };
 }
 

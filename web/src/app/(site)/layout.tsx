@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { NavigationProgress } from "@/components/layout/NavigationProgress";
 import { SiteSettingsProvider } from "@/components/layout/SiteSettingsProvider";
 import {
   SiteDocument,
@@ -38,6 +39,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         <a href="#main" className="skip-link">
           Skip to content
         </a>
+        <NavigationProgress />
         <SmoothScroll>
           <Header />
           <PageTransition>

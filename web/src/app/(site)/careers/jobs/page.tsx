@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   description:
     "Browse marketing jobs, gigs, and internships from Social Marketers Network and partner employers. Open to the public. Sign in to apply.",
   alternates: { canonical: "/careers/jobs" },
+  openGraph: { url: "/careers/jobs" },
 };
 
 /**

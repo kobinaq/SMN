@@ -4,7 +4,10 @@ import {
   siteViewport,
 } from "@/components/layout/SiteDocument";
 
-export const metadata = siteMetadata;
+export const metadata = {
+  ...siteMetadata,
+  robots: { index: false, follow: false },
+};
 export const viewport = siteViewport;
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -15,12 +15,33 @@ import { excerptStoryQuote } from "@/lib/content";
 import { seoTitle } from "@/lib/brand";
 import { img } from "@/lib/images";
 import { getSiteSettings, getStories } from "@/lib/cms";
+import { itemShareImages } from "@/lib/share-metadata";
 
-export const metadata: Metadata = {
-  title: seoTitle("Marketing Community in Ghana"),
-  description:
-    "Join a growing community of aspiring and professional marketers learning, connecting, finding mentors and discovering opportunities.",
-};
+export async function generateMetadata(
+  _props: unknown,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const parentMeta = await parent;
+  // Forward parent hashed OG defaults when setting openGraph.url (T3 canonical),
+  // so job URLs that 308 here still expose a working share image (#49).
+  const share = itemShareImages(null, {
+    openGraphImages: parentMeta.openGraph?.images,
+    twitterImages: parentMeta.twitter?.images,
+  });
+  return {
+    title: seoTitle("Marketing Community in Ghana"),
+    description:
+      "Join a growing community of aspiring and professional marketers learning, connecting, finding mentors and discovering opportunities.",
+    alternates: { canonical: "/community" },
+    openGraph: {
+      url: "/community",
+      ...(share.openGraphImages ? { images: share.openGraphImages } : {}),
+    },
+    ...(share.twitterImages
+      ? { twitter: { card: "summary_large_image", images: share.twitterImages } }
+      : {}),
+  };
+}
 
 export const revalidate = 60;
 
@@ -62,7 +83,7 @@ const channels = [
   {
     icon: Briefcase,
     title: "Discover opportunities",
-    body: "Access relevant jobs, internships, projects, and industry opportunities.",
+    body: "Find events, marketing simulations, projects, and industry connections.",
   },
   {
     icon: Users,
@@ -304,52 +325,50 @@ export default async function CommunityPage() {
         </div>
       </section>
 
-      {communityStories.length ? (
-        <section className="bg-canvas py-16 sm:py-24">
-          <div className="container-wide">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <h2 className="font-display display-3 text-text-1">
-                  What people say about the room
-                </h2>
+      <section id="stories" className="scroll-mt-24 bg-canvas py-16 sm:py-24">
+        <div className="container-wide">
+          {communityStories.length ? (
+            <>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <h2 className="font-display display-3 text-text-1">
+                    What people say about the room
+                  </h2>
+                </div>
               </div>
-              <Link
-                href="/stories"
-                className="inline-flex items-center gap-1.5 text-sm text-accent transition hover:text-text-1"
-              >
-                More stories <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-            <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-2">
-              {communityStories.map((story) => (
-                <figure
-                  key={story.name}
-                  className=" border border-edge-subtle bg-raised p-5 sm:p-7"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="relative h-14 w-14 overflow-hidden rounded-full border border-edge-subtle">
-                      <Image
-                        src={story.image}
-                        alt={story.name}
-                        fill
-                        className="object-cover"
-                        sizes="56px"
-                      />
+              <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-2">
+                {communityStories.map((story) => (
+                  <figure
+                    key={story.name}
+                    className=" border border-edge-subtle bg-raised p-5 sm:p-7"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="relative h-14 w-14 overflow-hidden rounded-full border border-edge-subtle">
+                        <Image
+                          src={story.image}
+                          alt={story.name}
+                          fill
+                          className="object-cover"
+                          sizes="56px"
+                        />
+                      </div>
+                      <div>
+                        <figcaption className="font-display text-lg text-text-1">{story.name}</figcaption>
+                        <p className="text-sm text-text-3">{story.role}</p>
+                      </div>
                     </div>
-                    <div>
-                      <figcaption className="font-display text-lg text-text-1">{story.name}</figcaption>
-                      <p className="text-sm text-text-3">{story.role}</p>
-                    </div>
-                  </div>
-                  <blockquote className="mt-5 text-sm leading-relaxed text-text-2 sm:text-base">
-                    “{excerptStoryQuote(story.quote)}”
-                  </blockquote>
-                </figure>
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : null}
+                    <blockquote className="mt-5 text-sm leading-relaxed text-text-2 sm:text-base">
+                      “{excerptStoryQuote(story.quote)}”
+                    </blockquote>
+                  </figure>
+                ))}
+              </div>
+            </>
+          ) : (
+            <h2 className="font-display display-3 text-text-1">Member stories</h2>
+          )}
+        </div>
+      </section>
 
       {/* Pathways */}
       <section className="border-t border-edge-subtle bg-raised py-16 sm:py-24">
@@ -362,7 +381,7 @@ export default async function CommunityPage() {
               {
                 title: "Flagship training",
                 body: "Live Social Media Marketing and AI with practice, portfolio work, and community.",
-                href: "/programs/cohort",
+                href: "/academy/cohort",
                 cta: "View training",
               },
               {
@@ -374,7 +393,7 @@ export default async function CommunityPage() {
               {
                 title: "Mentorship",
                 body: "Guidance from people already doing the work. Bring one clear question.",
-                href: "/mentorship",
+                href: "/community/mentors",
                 cta: "How mentorship works",
               },
               {

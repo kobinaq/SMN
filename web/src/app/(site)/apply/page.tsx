@@ -12,6 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Apply for the next cohort",
     description: `Apply to the ${site.cohort.name}. Applications are reviewed before payment.`,
     alternates: { canonical: "/apply" },
+    openGraph: { url: "/apply" },
   };
 }
 
@@ -66,7 +67,7 @@ export default async function ApplyPage() {
         actions={
           <>
             <Button href="#application">Start application</Button>
-            <Button href="/programs/cohort" variant="secondary">
+            <Button href="/academy/cohort" variant="secondary">
               Review cohort details
             </Button>
           </>

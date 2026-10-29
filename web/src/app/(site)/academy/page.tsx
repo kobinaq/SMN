@@ -13,7 +13,8 @@ export const metadata: Metadata = {
   title: seoTitle("Marketing Academy Ghana"),
   description:
     "Training programmes, self-paced courses, marketing simulations, and the experience programme from Think Social Academy.",
-  alternates: { canonical: "/programs" },
+  alternates: { canonical: "/academy" },
+  openGraph: { url: "/academy" },
 };
 
 export default async function ProgramsPage() {
@@ -37,7 +38,11 @@ export default async function ProgramsPage() {
         }
       />
 
-      <section data-section-fade className="border-b border-edge-subtle bg-raised py-16 sm:py-24 md:py-28">
+      <section
+        id="practical-work"
+        data-section-fade
+        className="scroll-mt-24 border-b border-edge-subtle bg-raised py-16 sm:py-24 md:py-28"
+      >
         <div className="container-wide">
           <div className="max-w-2xl">
             <h2 className="font-display display-2 text-text-1">
@@ -47,7 +52,7 @@ export default async function ProgramsPage() {
 
           <div className="mt-12 grid gap-6 lg:grid-cols-[1.35fr_0.85fr] lg:gap-5">
             <Link
-              href="/programs/cohort"
+              href="/academy/cohort"
               className="group relative min-h-[28rem] overflow-hidden border border-edge-subtle sm:min-h-[32rem]"
             >
               <Image
@@ -82,7 +87,7 @@ export default async function ProgramsPage() {
 
             <div className="grid gap-5">
               <Link
-                href="/programs/courses"
+                href="/academy/courses"
                 className="group relative flex min-h-[12rem] flex-col justify-between overflow-hidden border border-edge-subtle bg-raised p-6 sm:p-7"
               >
                 <div className="pointer-events-none absolute -right-8 top-0 h-40 w-40 rounded-full bg-accent/10 blur-3xl transition duration-500 group-hover:bg-accent/20" />
@@ -105,7 +110,7 @@ export default async function ProgramsPage() {
               </Link>
 
               <Link
-                href="/experience#simulations"
+                href="/academy#practical-work"
                 className="group relative flex min-h-[11rem] flex-col justify-between overflow-hidden border border-edge-subtle bg-canvas p-6 sm:p-7"
               >
                 <div className="relative">
@@ -127,7 +132,7 @@ export default async function ProgramsPage() {
               </Link>
 
               <Link
-                href="/experience"
+                href="/academy#practical-work"
                 className="group relative flex min-h-[11rem] flex-col justify-between overflow-hidden border border-edge-subtle bg-raised p-6 sm:p-7"
               >
                 <div className="relative">

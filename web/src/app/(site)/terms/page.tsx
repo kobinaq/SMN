@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Terms and conditions",
   description: "Terms of use for the Think Social Academy website and programmes.",
   alternates: { canonical: "/terms" },
+  openGraph: { url: "/terms" },
 };
 
 const sections = [

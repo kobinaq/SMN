@@ -34,19 +34,32 @@ describe("marketing defaults", () => {
     expect(cta.applyCohort.href).toBe("/apply");
     expect(cta.buyCourse.label).toMatch(/Enroll/i);
     expect(cta.memberSignIn.href).toBe("/login");
-    expect(cta.hireTalent.href).toBe("/employers");
-    expect(cta.hireTalent.label).toMatch(/Hire TSA talent/i);
+    expect(cta.joinTsa.href).toBe("/signup");
+    expect(cta.joinTsa.label).toBe("Join TSA");
+    expect(cta.hireTalent.href).toBe("/community");
+    expect(cta.postJob.href).toBe("/community");
+    expect(cta.requestIntern.href).toBe("/community");
+    expect(cta.viewMentors.href).toBe("/community/mentors");
     expect(cta.exploreServices.label).toBe("Explore our Services");
-    expect(cta.exploreServices.href).toBe("/programs");
+    expect(cta.exploreServices.href).toBe("/academy");
   });
 
-  it("exposes Experience and Partners in public navigation", () => {
-    const academy = nav.find((item) => item.label === "Academy");
-    const partners = nav.find((item) => item.label === "Partners");
-    expect(academy && "children" in academy && academy.children.some((child) => child.href === "/experience")).toBe(
-      true,
-    );
-    expect(partners?.href).toBe("/employers");
+  it("exposes the T3 public navigation labels and hrefs", () => {
+    expect(nav.map((item) => item.label)).toEqual([
+      "Home",
+      "Academy",
+      "Community",
+      "Partner With Us",
+      "Resources",
+      "About",
+    ]);
+    expect(nav.find((item) => item.label === "Academy")?.href).toBe("/academy");
+    expect(nav.find((item) => item.label === "Partner With Us")?.href).toBe("/partner");
+    expect(nav.find((item) => item.label === "Resources")?.href).toBe("/resources");
+    const community = nav.find((item) => item.label === "Community");
+    expect(
+      community && "children" in community && community.children.some((child) => child.href === "/community/mentors"),
+    ).toBe(true);
   });
 
   it("keeps homepage hero promise and values in code", () => {

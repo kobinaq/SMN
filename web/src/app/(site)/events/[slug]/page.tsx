@@ -38,12 +38,9 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { slug } = await params;
   const event = await getEventBySlug(slug);
-  if (!event) {
-    return {
-      title: "Marketing event",
-      description: "This event listing could not be found.",
-    };
-  }
+  // Call notFound before any streamed shell so the response status is 404.
+  // Soft "Marketing event" metadata previously masked missing slugs as 200.
+  if (!event) notFound();
   const canonical = `/events/${slug}`;
   const parentMeta = await parent;
   // CMS image when present; otherwise forward parent hashed defaults.
@@ -73,9 +70,21 @@ export async function generateMetadata(
 
 export default async function EventDetailPage({ params }: Props) {
   const { slug } = await params;
+  // Existence check runs before any Suspense/streamed child work so unknown
+  // slugs keep a real HTTP 404 (parent (site)/loading.tsx was removed for this).
   const event = await getEventBySlug(slug);
   if (!event) notFound();
 
+  return <EventDetailBody slug={slug} event={event} />;
+}
+
+async function EventDetailBody({
+  slug,
+  event,
+}: {
+  slug: string;
+  event: NonNullable<Awaited<ReturnType<typeof getEventBySlug>>>;
+}) {
   const [member, calendar] = await Promise.all([getMember(), getEventCalendar()]);
   const eventId = event.id ?? (await resolvePublishedEventId(slug));
 

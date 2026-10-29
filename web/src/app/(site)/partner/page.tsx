@@ -16,8 +16,9 @@ import { img } from "@/lib/images";
 export const metadata: Metadata = {
   title: seoTitle("Partner With Us"),
   description:
-    "Build with the next generation of marketers. Train teams, hire SMN talent, request an intern, post a role, collaborate on events, or sponsor access to training.",
-  alternates: { canonical: "/employers" },
+    "Build with the next generation of marketers. Train teams, collaborate on events, or sponsor access to training and practical work.",
+  alternates: { canonical: "/partner" },
+  openGraph: { url: "/partner" },
 };
 
 const proof = [
@@ -26,12 +27,12 @@ const proof = [
     body: "Review public member profiles and case studies before you talk to anyone.",
   },
   {
-    title: "SMN Experience",
-    body: "Match emerging marketers to internships, volunteer roles, and project briefs.",
+    title: "Practical work",
+    body: "Match emerging marketers to volunteer roles, project briefs, and marketing simulations.",
   },
   {
     title: "Staff-reviewed listings",
-    body: "Roles and intern requests are read by SMN before they reach members.",
+    body: "Roles and requests are read by Think Social Academy before they reach members.",
   },
 ];
 
@@ -48,9 +49,13 @@ export default async function EmployersPage({
   searchParams: Promise<{ request?: string }>;
 }) {
   const { request } = await searchParams;
-  // The retired /employers/post-a-job and /employers/request-intern URLs
-  // redirect here with ?request=, so the form opens on the right kind.
-  const initialRequest = (request && REQUEST_ALIASES[request]) || "talent";
+  // Public hire / job / intern entry points redirect to /community (T3).
+  // Only partnership request kinds stay on this form.
+  const aliased = request ? REQUEST_ALIASES[request] : undefined;
+  const initialRequest =
+    aliased && aliased !== "job" && aliased !== "intern" && aliased !== "talent"
+      ? aliased
+      : "training";
 
   return (
     <>
@@ -59,12 +64,12 @@ export default async function EmployersPage({
         alt="Two marketers in conversation"
         kicker="Partner with us"
         title="Build with the next generation of marketers."
-        lede="Social Marketers Network works with brands, organisations, agencies, and industry professionals to create opportunities for learning, talent, collaboration, and career development."
+        lede="Think Social Academy works with brands, organisations, agencies, and industry professionals to create opportunities for learning, talent, collaboration, and career development."
         actions={
           <>
-            <Button href="#request">{cta.hireTalent.label}</Button>
-            <Button href="#request" variant="secondary">
-              {cta.postJob.label}
+            <Button href="#request">{cta.partner.label}</Button>
+            <Button href={cta.contact.href} variant="secondary">
+              {cta.contact.label}
             </Button>
           </>
         }
@@ -72,13 +77,13 @@ export default async function EmployersPage({
 
       <Band size="lg">
         <SectionHead
-          kicker="Four ways in"
+          kicker="Ways in"
           title="How organisations work with the Network."
           lede="Most partnerships start with one of these and grow into another. Every one of them runs through the same request form below."
         />
 
         <div className="mt-14 grid gap-px overflow-hidden border border-edge-subtle bg-edge-subtle lg:grid-cols-2">
-          {partnerTracks.map((track) => (
+          {partnerTracks.filter((track) => track.id !== "hire").map((track) => (
             <article key={track.id} className="flex flex-col bg-canvas p-7 sm:p-9">
               <p className="ordinal text-accent/40">{track.n}</p>
               <p className="mt-5 eyebrow text-accent">{track.kicker}</p>
@@ -102,13 +107,13 @@ export default async function EmployersPage({
         />
         <DefinitionGrid className="mt-12" columns={3} items={proof} />
         <p className="mt-10 max-w-2xl text-sm text-text-3">
-          Learn more about the{" "}
-          <Link href="/experience" className="link-wipe text-accent">
-            SMN Experience Programme
+          Learn more about{" "}
+          <Link href="/academy#practical-work" className="link-wipe text-accent">
+            practical work and marketing simulations
           </Link>{" "}
           or the{" "}
           <Link href="/community" className="link-wipe text-accent">
-            Network
+            community
           </Link>
           .
         </p>

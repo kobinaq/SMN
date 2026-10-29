@@ -2,26 +2,21 @@ import type { MetadataRoute } from "next";
 import { site } from "@/lib/site";
 import { getBlogPosts } from "@/lib/blog";
 import { getEventCalendar } from "@/lib/events";
-import { getPublishedOpportunities } from "@/lib/opportunities";
 import { getResourceLibrary } from "@/lib/resources";
 
 const staticRoutes = [
   "/",
   "/about",
-  "/programs",
-  "/programs/cohort",
-  "/programs/courses",
-  "/experience",
+  "/academy",
+  "/academy/cohort",
+  "/academy/courses",
   "/apply",
-  "/careers",
-  "/careers/jobs",
   "/community",
+  "/community/mentors",
   "/events",
   "/insights",
   "/resources",
-  "/stories",
-  "/mentorship",
-  "/employers",
+  "/partner",
   "/contact",
   "/privacy",
   "/terms",
@@ -39,10 +34,9 @@ function toLastModified(value?: string | null): Date | undefined {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = site.url.replace(/\/$/, "");
 
-  const [posts, resources, jobs, events] = await Promise.all([
+  const [posts, resources, events] = await Promise.all([
     getBlogPosts().catch(() => []),
     getResourceLibrary().catch(() => []),
-    getPublishedOpportunities().catch(() => []),
     getEventCalendar().catch(() => []),
   ]);
 
@@ -53,7 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:
       path === "/"
         ? 1
-        : path === "/apply" || path === "/programs/cohort" || path === "/experience"
+        : path === "/apply" || path === "/academy/cohort" || path === "/academy"
           ? 0.9
           : 0.6,
   }));
@@ -76,16 +70,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.5,
     }));
 
-  const jobEntries: MetadataRoute.Sitemap = jobs
-    .filter((job) => Boolean(job.slug))
-    .map((job) => ({
-      url: `${base}/careers/jobs/${job.slug}`,
-      lastModified:
-        toLastModified(job.updatedAt) ?? toLastModified(job.publishedAt) ?? STATIC_LAST_MODIFIED,
-      changeFrequency: "monthly",
-      priority: 0.5,
-    }));
-
   const eventEntries: MetadataRoute.Sitemap = events
     .filter((event) => Boolean(event.slug))
     .map((event) => ({
@@ -96,5 +80,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.5,
     }));
 
-  return [...staticEntries, ...postEntries, ...resourceEntries, ...jobEntries, ...eventEntries];
+  return [...staticEntries, ...postEntries, ...resourceEntries, ...eventEntries];
 }

@@ -17,7 +17,8 @@ export const metadata: Metadata = {
   title: seoTitle("Social Media Marketing Courses"),
   description:
     "Explore practical social media marketing, AI and digital marketing courses designed for modern marketers.",
-  alternates: { canonical: "/programs/courses" },
+  alternates: { canonical: "/academy/courses" },
+  openGraph: { url: "/academy/courses" },
 };
 
 type CourseRecord = Awaited<ReturnType<typeof getCourses>>[number] & {
@@ -49,7 +50,7 @@ export default async function CoursesPage() {
         actions={
           <>
             <Button href="#catalogue">Explore courses</Button>
-            <Button href="/programs/cohort" variant="secondary">
+            <Button href="/academy/cohort" variant="secondary">
               Prefer live training?
             </Button>
           </>
@@ -70,7 +71,7 @@ export default async function CoursesPage() {
             </p>
           </div>
           <Link
-            href="/programs"
+            href="/academy"
             className="inline-flex shrink-0 items-center gap-1.5 text-sm text-text-3 transition hover:text-accent"
           >
             All programmes

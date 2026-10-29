@@ -6,6 +6,8 @@ import { Select } from "@/components/ui/Select";
 import { cn } from "@/lib/utils";
 import { trackEvent } from "@/lib/analytics";
 
+/** Public enquiry types. Hire / job / intern options are retired from the UI
+ *  (T3); the contact API still accepts those strings if posted directly. */
 const types = [
   "General enquiry",
   "Partnership",
@@ -13,28 +15,24 @@ const types = [
   "Collaboration",
   "Sponsorship",
   "Speaking request",
-  "Talent request",
-  "Intern request",
-  "Job posting",
   "Simulation waitlist",
   "Other",
 ] as const;
 
-const employerTypes = new Set([
-  "Talent request",
+const partnerTypes = new Set([
   "Partnership",
   "Training request",
   "Collaboration",
   "Sponsorship",
-  "Intern request",
-  "Job posting",
 ]);
 
 export function ContactForm({ defaultType }: { defaultType?: string }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  // Unknown or retired ?type= values (Talent request, Intern request, Job posting)
+  // fall back to the blank default option.
   const selectedType = types.includes(defaultType as (typeof types)[number]) ? defaultType : undefined;
-  const isEmployer = Boolean(selectedType && employerTypes.has(selectedType));
+  const isEmployer = Boolean(selectedType && partnerTypes.has(selectedType));
 
   useEffect(() => {
     if (isEmployer) trackEvent("employer_enquiry_start", { location: "contact_form" });

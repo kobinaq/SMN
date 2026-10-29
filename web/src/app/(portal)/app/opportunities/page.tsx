@@ -35,7 +35,7 @@ export default async function OpportunitiesAppPage() {
           <p className="mt-2 text-sm text-text-2">
             Staff can publish manual opportunities or approve roles collected from configured company sources.
           </p>
-          <Button href="/employers" variant="secondary" className="mt-6">
+          <Button href="/partner" variant="secondary" className="mt-6">
             For employers
           </Button>
         </Card>
