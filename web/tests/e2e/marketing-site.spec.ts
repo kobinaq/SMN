@@ -178,18 +178,37 @@ test.describe("marketing navigation and CTAs", () => {
 
   test("navigation progress does not start on a same-URL click", async ({ page }) => {
     await page.goto("/resources?type=Template");
-    const appeared = await page.evaluate(async () => {
-      let seen = false;
-      const observer = new MutationObserver(() => {
-        if (document.querySelector("[data-navigation-progress]")) seen = true;
+    const current = page
+      .getByRole("navigation", { name: "Resource types" })
+      .getByRole("link", { name: "Template", exact: true });
+    await expect(current).toHaveAttribute("aria-current", "page");
+
+    await page.evaluate(() => {
+      const w = window as Window & {
+        __sameUrlProgressSeen?: boolean;
+        __sameUrlObserver?: MutationObserver;
+      };
+      w.__sameUrlProgressSeen = false;
+      w.__sameUrlObserver?.disconnect();
+      w.__sameUrlObserver = new MutationObserver(() => {
+        if (document.querySelector("[data-navigation-progress]")) {
+          w.__sameUrlProgressSeen = true;
+        }
       });
-      observer.observe(document.body, { childList: true, subtree: true });
-      const nav = document.querySelector('nav[aria-label="Resource types"]');
-      const link = nav?.querySelector('a[aria-current="page"]') as HTMLAnchorElement | null;
-      link?.click();
-      await new Promise((resolve) => setTimeout(resolve, 250));
-      observer.disconnect();
-      return seen;
+      w.__sameUrlObserver.observe(document.body, { childList: true, subtree: true });
+    });
+
+    await current.click();
+    await expect(page).toHaveURL(/[?&]type=Template/);
+    await page.evaluate(() => new Promise<void>((resolve) => window.setTimeout(resolve, 300)));
+
+    const appeared = await page.evaluate(() => {
+      const w = window as Window & {
+        __sameUrlProgressSeen?: boolean;
+        __sameUrlObserver?: MutationObserver;
+      };
+      w.__sameUrlObserver?.disconnect();
+      return Boolean(w.__sameUrlProgressSeen);
     });
     expect(appeared).toBe(false);
     await expect(page.locator("[data-navigation-progress]")).toHaveCount(0);
