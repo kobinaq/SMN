@@ -121,7 +121,7 @@ export default async function MemberTicketPage({ searchParams }: Props) {
       </div>
       <Card className="text-center">
         {code && confirmed ? <TicketQr code={code} /> : null}
-        <p className="tnum mt-4 font-display text-2xl tracking-wide text-text-1">{code || "—"}</p>
+        <p className="tnum mt-4 font-display text-2xl tracking-wide text-text-1">{code || "-"}</p>
         <p className="mt-2 text-sm text-text-3">Status · {status.replace("_", " ")}</p>
         {confirmed && onlineUrl && (format === "online" || format === "hybrid") ? (
           <div className="mt-6">

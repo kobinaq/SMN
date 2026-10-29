@@ -80,7 +80,7 @@ export function GradeForm({
           />
         </StaffFormField>
       ))}
-      <StaffFormField label={`Score (max ${maxScore || "—"})`}>
+      <StaffFormField label={`Score (max ${maxScore || "-"})`}>
         <input className={staffFieldClass} name="score" type="number" min={0} defaultValue={initialScore ?? ""} />
       </StaffFormField>
       <StaffFormField label="Feedback">

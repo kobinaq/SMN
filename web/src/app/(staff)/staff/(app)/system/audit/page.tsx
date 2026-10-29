@@ -64,8 +64,8 @@ export default async function StaffAuditPage({
                     <small className="text-xs text-text-3">{doc.reason}</small>
                   </span>,
                   `${doc.entityType} · ${doc.entityId}`,
-                  actor && "email" in actor ? String(actor.email) : relationId(doc.actor) || "—",
-                  doc.createdAt ? new Date(doc.createdAt).toLocaleString("en-GH") : "—",
+                  actor && "email" in actor ? String(actor.email) : relationId(doc.actor) || "-",
+                  doc.createdAt ? new Date(doc.createdAt).toLocaleString("en-GH") : "-",
                 ],
               };
             })}

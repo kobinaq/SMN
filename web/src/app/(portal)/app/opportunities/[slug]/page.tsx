@@ -63,8 +63,8 @@ export default async function OpportunityDetailPage({ params }: { params: Promis
             <OpportunityApplyButton opportunityId={opportunity.id} />
           )}
           <p className="mt-3 text-xs text-text-3">
-            Applications happen on the employer&rsquo;s website. SMN records that you opened the application so you can
-            find it again — it does not auto-apply for you.
+            Applications happen on the employer&rsquo;s website. TSA records that you opened the application so you can
+            find it again. It does not auto-apply for you.
           </p>
         </div>
       </Card>

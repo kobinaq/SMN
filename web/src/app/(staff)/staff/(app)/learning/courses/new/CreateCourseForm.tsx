@@ -105,7 +105,7 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
                 : "border-edge text-text-2 hover:border-edge-strong hover:text-text-1"
             }`}
           >
-            Use SMN AI assistant
+            Use TSA AI assistant
           </button>
         ) : null}
         <button
@@ -155,13 +155,13 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
                 className={staffFieldClass}
                 name="audience"
                 maxLength={200}
-                placeholder="SMN learners"
-                defaultValue="SMN learners"
+                placeholder="TSA learners"
+                defaultValue="TSA learners"
               />
             </StaffFormField>
           </div>
           <p className="text-xs leading-relaxed text-text-3">
-            SMN AI creates a draft course with modules and lessons. You can then edit curriculum, add an instructor,
+            TSA AI creates a draft course with modules and lessons. You can then edit curriculum, add an instructor,
             polish outcomes, and publish when ready. Nothing is published automatically.
           </p>
           {error ? (

@@ -52,7 +52,7 @@ export default async function EditLessonPage({ params }: { params: Promise<{ id:
       <StaffPageHeader
         eyebrow="Course Builder"
         title={String(doc.title || "Lesson")}
-        description="Add video, reading text, article links, and downloadable documents — YouTube is optional, not required."
+        description="Add video, reading text, article links, and downloadable documents. YouTube is optional, not required."
       />
       <p className="text-sm text-text-3">
         <Link href={backHref} className="text-accent hover:underline">
@@ -65,7 +65,7 @@ export default async function EditLessonPage({ params }: { params: Promise<{ id:
           <p className="font-medium text-text-1">Learning materials for this lesson</p>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-text-2">
             <li>
-              <b className="text-text-1">Lesson type.</b> Video, reading, and downloads are hosted in SMN. Classroom sessions open the Google Classroom invite. Assignments and quizzes live in Assessments, not as lesson types.
+              <b className="text-text-1">Lesson type.</b> Video, reading, and downloads are hosted in TSA. Classroom sessions open the Google Classroom invite. Assignments and quizzes live in Assessments, not as lesson types.
             </li>
             <li>
               <b className="text-text-1">Lesson text.</b> Paste or write the reading content / instructions.

@@ -31,7 +31,7 @@ export default async function CertificatesPage() {
       <div className="print:hidden">
         <PageHeader
           eyebrow="Certificates"
-          title="Your SMN credentials"
+          title="Your TSA credentials"
           description="Issued certificates from cohorts, workshops, and approved learning tracks."
         />
       </div>

@@ -31,11 +31,14 @@ export function AiHeader({
   title,
   grounding,
   action,
+  titleClassName,
 }: {
   eyebrow: string;
   title: string;
   grounding: string;
   action?: ReactNode;
+  /** Extra classes for the title heading (e.g. outline-none when focused programmatically). */
+  titleClassName?: string;
 }) {
   return (
     <header className="shrink-0 border-b border-edge-subtle px-5 py-4">
@@ -45,7 +48,7 @@ export function AiHeader({
             <Sparkles className="h-3 w-3" aria-hidden />
             {eyebrow}
           </p>
-          <h2 className="mt-1.5 font-display text-lg text-text-1">{title}</h2>
+          <h2 className={cn("mt-1.5 font-display text-lg text-text-1", titleClassName)}>{title}</h2>
         </div>
         {action}
       </div>
@@ -104,7 +107,7 @@ function Bubble({ message, onCopy }: { message: AiMessage; onCopy: (content: str
     >
       <p className="eyebrow mb-1.5 flex items-center gap-1.5 text-text-3">
         {!isMember ? <Sparkles className="h-3 w-3 text-ai" aria-hidden /> : null}
-        {isMember ? "You" : "SMN AI"}
+        {isMember ? "You" : "TSA AI"}
       </p>
       {isMember ? (
         <p className="whitespace-pre-wrap">{message.content}</p>

@@ -240,6 +240,7 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
       <AiHeader
         eyebrow="Course-aware AI"
         title="TSA Tutor"
+        titleClassName="outline-none focus:outline-none"
         grounding="Grounded in this lesson · AI can be wrong. Review before acting"
         action={
           <button

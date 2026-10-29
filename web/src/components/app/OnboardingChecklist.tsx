@@ -56,7 +56,7 @@ export function OnboardingChecklist({ steps }: { steps: OnboardingStep[] }) {
           <h2 id="onboarding-heading" className="mt-2 font-display text-xl text-text-1">
             Your first steps
           </h2>
-          <p className="mt-1 text-sm text-text-3">Complete what helps — you can explore the platform anytime.</p>
+          <p className="mt-1 text-sm text-text-3">Complete what helps. You can explore the platform anytime.</p>
         </div>
         <button
           type="button"

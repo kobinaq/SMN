@@ -131,9 +131,9 @@ export function ProfileForm({ initial }: { initial: ProfileValues }) {
         </Field>
         <Field label="Profile visibility" htmlFor="profile-visibility">
           <Select id="profile-visibility" name="visibility" defaultValue={initial.visibility || "private"}>
-            <option value="private">Private — only you and staff</option>
-            <option value="members">Members only — visible inside the network</option>
-            <option value="public">Public — shareable portfolio profile</option>
+            <option value="private">Private: only you and staff</option>
+            <option value="members">Members only: visible inside the network</option>
+            <option value="public">Public: shareable portfolio profile</option>
           </Select>
         </Field>
       </div>

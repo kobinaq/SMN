@@ -30,7 +30,7 @@ export default async function CohortApplicationsPage() {
 
   function courseTitle(value: (typeof docs)[number]["course"]) {
     if (value && typeof value === "object" && value.title) return value.title;
-    return "—";
+    return "-";
   }
 
   return (
@@ -48,11 +48,11 @@ export default async function CohortApplicationsPage() {
               key: String(doc.id),
               href: `/staff/applications/${doc.id}`,
               cells: [
-                doc.name || "—",
-                doc.email || "—",
+                doc.name || "-",
+                doc.email || "-",
                 courseTitle(doc.course),
-                doc.role || "—",
-                doc.createdAt ? new Date(doc.createdAt).toLocaleDateString("en-GH") : "—",
+                doc.role || "-",
+                doc.createdAt ? new Date(doc.createdAt).toLocaleDateString("en-GH") : "-",
                 doc.status || "received",
               ],
             }))}

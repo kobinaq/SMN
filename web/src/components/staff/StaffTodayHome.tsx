@@ -77,7 +77,7 @@ export function StaffTodayHome({
       <StaffPageHeader
         eyebrow={roleLabel}
         title={`Today, ${name}`}
-        hint={hasWork ? "Start with what needs a decision." : "Nothing waiting — you're clear."}
+        hint={hasWork ? "Start with what needs a decision." : "Nothing waiting. You're clear."}
         action={{ href: "/", label: "View live site" }}
       />
 

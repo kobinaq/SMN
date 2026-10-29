@@ -30,7 +30,7 @@ export default async function StaffPostsPage() {
                 doc.title,
                 doc.category,
                 doc.publishedAt ? "Published" : "Draft",
-                doc.updatedAt ? new Date(doc.updatedAt).toLocaleDateString("en-GH") : "—",
+                doc.updatedAt ? new Date(doc.updatedAt).toLocaleDateString("en-GH") : "-",
               ],
             }))}
           />

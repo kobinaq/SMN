@@ -50,7 +50,7 @@ export function CourseIndex({
   newHref = "/staff/learning/courses/new",
   newLabel = "New course",
   emptyTitle = "No courses yet",
-  emptyDescription = "Create your first programme — a self-paced course members work through on their own, or a live cohort with a scheduled session plan.",
+  emptyDescription = "Create your first programme: a self-paced course members work through on their own, or a live cohort with a scheduled session plan.",
   warnOnOpen,
 }: {
   courses: CourseSummary[];
@@ -190,7 +190,7 @@ export function CourseIndex({
                 </div>
 
                 {course.status === "draft" && !course.ready ? (
-                  <p className="mt-3 text-xs text-warn">Not ready to publish — open the course to see what&rsquo;s missing.</p>
+                  <p className="mt-3 text-xs text-warn">Not ready to publish. Open the course to see what&rsquo;s missing.</p>
                 ) : null}
 
                 <div className="mt-auto flex flex-wrap items-center gap-2 pt-5">
