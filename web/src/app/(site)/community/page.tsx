@@ -393,7 +393,7 @@ export default async function CommunityPage() {
               {
                 title: "Mentorship",
                 body: "Guidance from people already doing the work. Bring one clear question.",
-                href: "/community",
+                href: "/community/mentors",
                 cta: "How mentorship works",
               },
               {

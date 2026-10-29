@@ -5,16 +5,16 @@ const permanentRedirects: Array<[string, string]> = [
   ["/programs/cohort", "/academy/cohort"],
   ["/programs/courses", "/academy/courses"],
   ["/employers", "/partner"],
-  ["/employers/post-a-job", "/partner?request=job"],
-  ["/employers/request-intern", "/partner?request=intern"],
+  ["/employers/post-a-job", "/community"],
+  ["/employers/request-intern", "/community"],
   ["/experience", "/academy#practical-work"],
   ["/simulations", "/academy#practical-work"],
   ["/careers", "/community"],
   ["/careers/jobs", "/community"],
   ["/careers/jobs/example-role", "/community"],
   ["/careers/internships", "/community"],
-  ["/mentorship", "/community"],
-  ["/mentorship/become-a-mentor", "/community"],
+  ["/mentorship", "/community/mentors"],
+  ["/mentorship/become-a-mentor", "/community/mentors#become-a-mentor"],
   ["/stories", "/community#stories"],
 ];
 
@@ -34,17 +34,20 @@ test.describe("marketing navigation and CTAs", () => {
     await page.goto("/");
     const primary = page.getByRole("navigation", { name: "Primary" });
     for (const label of ["Home", "Academy", "Community", "Partner With Us", "Resources", "About"]) {
-      await expect(primary.getByRole("link", { name: label, exact: true })).toBeVisible();
+      await expect(primary.getByRole("link", { name: label, exact: true }).or(primary.getByRole("button", { name: label, exact: true }))).toBeVisible();
     }
   });
 
-  test("footer includes legal and section links", async ({ page }) => {
+  test("footer includes legal, mentors, and section links", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("contentinfo").getByRole("link", { name: "Privacy" })).toBeVisible();
     await expect(page.getByRole("contentinfo").getByRole("link", { name: "Terms" })).toBeVisible();
     await expect(
       page.getByRole("contentinfo").getByRole("link", { name: "Academy", exact: true }),
     ).toBeVisible();
+    await expect(
+      page.getByRole("contentinfo").getByRole("link", { name: "Mentors", exact: true }),
+    ).toHaveAttribute("href", "/community/mentors");
     await expect(
       page.getByRole("contentinfo").getByRole("link", { name: "Events", exact: true }),
     ).toBeVisible();
@@ -71,11 +74,19 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(page.getByRole("button", { name: /submit application/i })).toBeVisible();
   });
 
-  test("partner page keeps hire CTAs separate from apply", async ({ page }) => {
+  test("partner page has no public hire or job CTAs", async ({ page }) => {
     await page.goto("/partner");
-    await expect(page.getByRole("heading", { name: /hire tsa talent/i }).first()).toBeVisible();
-    await expect(page.getByRole("link", { name: /hire tsa talent/i }).first()).toBeVisible();
-    await expect(page.getByText(/not a member application/i)).toBeVisible();
+    await expect(page.getByRole("link", { name: /hire tsa talent/i })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: /^post a job$/i })).toHaveCount(0);
+    await expect(page.getByRole("tab", { name: /request an intern/i })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: /partner with us/i }).first()).toBeVisible();
+  });
+
+  test("community mentors page keeps become-a-mentor", async ({ page }) => {
+    await page.goto("/community/mentors");
+    await expect(page.getByRole("heading", { name: /learn from people already doing the work/i })).toBeVisible();
+    await expect(page.locator("#become-a-mentor")).toBeVisible();
+    await expect(page.getByRole("heading", { name: /become a mentor/i }).first()).toBeVisible();
   });
 
   test("community stories do not render fictional seed names", async ({ page }) => {
@@ -109,9 +120,11 @@ test.describe("marketing navigation and CTAs", () => {
     const sitemapBody = await sitemap.text();
     expect(sitemapBody).toContain("/academy");
     expect(sitemapBody).toContain("/partner");
+    expect(sitemapBody).toContain("/community/mentors");
     expect(sitemapBody).not.toContain("/programs");
     expect(sitemapBody).not.toContain("/employers");
     expect(sitemapBody).not.toContain("/careers");
+    expect(sitemapBody).not.toContain("/mentorship");
     const robots = await request.get("/robots.txt");
     expect(robots.ok()).toBeTruthy();
     const body = await robots.text();

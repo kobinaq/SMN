@@ -90,11 +90,20 @@ export type SiteConfig = {
 /**
  * Primary navigation for the public marketing site.
  * Labels match Tab 4 / Tab 5 IA. Join TSA is the header CTA, not a nav item.
+ * Mentors sit under Community (not a top-level item).
  */
 export const nav = [
   { label: "Home", href: "/" },
   { label: "Academy", href: "/academy" },
-  { label: "Community", href: "/community" },
+  {
+    label: "Community",
+    href: "/community",
+    children: [
+      { label: "The community", href: "/community" },
+      { label: "Mentors", href: "/community/mentors" },
+      { label: "Events", href: "/events" },
+    ],
+  },
   { label: "Partner With Us", href: "/partner" },
   { label: "Resources", href: "/resources" },
   { label: "About", href: "/about" },

@@ -49,9 +49,13 @@ export default async function EmployersPage({
   searchParams: Promise<{ request?: string }>;
 }) {
   const { request } = await searchParams;
-  // Retired /employers?request=job and /employers?request=intern URLs
-  // redirect here with ?request=, so the form opens on the right kind.
-  const initialRequest = (request && REQUEST_ALIASES[request]) || "talent";
+  // Public hire / job / intern entry points redirect to /community (T3).
+  // Only partnership request kinds stay on this form.
+  const aliased = request ? REQUEST_ALIASES[request] : undefined;
+  const initialRequest =
+    aliased && aliased !== "job" && aliased !== "intern" && aliased !== "talent"
+      ? aliased
+      : "training";
 
   return (
     <>
@@ -63,9 +67,9 @@ export default async function EmployersPage({
         lede="Social Marketers Network works with brands, organisations, agencies, and industry professionals to create opportunities for learning, talent, collaboration, and career development."
         actions={
           <>
-            <Button href="#request">{cta.hireTalent.label}</Button>
-            <Button href="#request" variant="secondary">
-              {cta.postJob.label}
+            <Button href="#request">{cta.partner.label}</Button>
+            <Button href={cta.contact.href} variant="secondary">
+              {cta.contact.label}
             </Button>
           </>
         }
@@ -73,13 +77,13 @@ export default async function EmployersPage({
 
       <Band size="lg">
         <SectionHead
-          kicker="Four ways in"
+          kicker="Ways in"
           title="How organisations work with the Network."
           lede="Most partnerships start with one of these and grow into another. Every one of them runs through the same request form below."
         />
 
         <div className="mt-14 grid gap-px overflow-hidden border border-edge-subtle bg-edge-subtle lg:grid-cols-2">
-          {partnerTracks.map((track) => (
+          {partnerTracks.filter((track) => track.id !== "hire").map((track) => (
             <article key={track.id} className="flex flex-col bg-canvas p-7 sm:p-9">
               <p className="ordinal text-accent/40">{track.n}</p>
               <p className="mt-5 eyebrow text-accent">{track.kicker}</p>

@@ -259,7 +259,7 @@ export default async function CohortPage() {
                 simulation waitlist
               </Link>
               . Guidance lives in{" "}
-              <Link href="/community" className="text-accent transition hover:text-text-1">
+              <Link href="/community/mentors" className="text-accent transition hover:text-text-1">
                 mentorship
               </Link>
               .

@@ -52,7 +52,7 @@ export default function CareersHubPage() {
         actions={
           <>
             <Button href={cta.browseJobs.href}>{cta.browseJobs.label}</Button>
-            <Button href="/community" variant="secondary">
+            <Button href="/community/mentors" variant="secondary">
               How mentorship works
             </Button>
           </>

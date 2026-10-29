@@ -21,7 +21,7 @@ export default async function MentorsAppPage() {
         title="Find the right guide"
         description="Browse staff-approved mentors by specialty, then send a focused request. The SMN team reviews introductions to protect everyone's time."
         action={
-          <Button href="/community" variant="secondary">
+          <Button href="/community/mentors#become-a-mentor" variant="secondary">
             Become a mentor
           </Button>
         }
@@ -36,7 +36,7 @@ export default async function MentorsAppPage() {
             Staff can review mentor applications in Payload and approve them when ready. Approved profiles appear
             here automatically.
           </p>
-          <Button href="/community" variant="secondary" className="mt-6">
+          <Button href="/community/mentors" variant="secondary" className="mt-6">
             How mentorship works
           </Button>
         </Card>

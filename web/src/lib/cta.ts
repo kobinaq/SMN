@@ -1,6 +1,10 @@
 /**
  * Standard CTA terminology for the marketing site.
  * Use these labels so Apply / purchase / sign-in / partner / WhatsApp stay distinct.
+ *
+ * Hire / jobs / intern public entry points are retired (T3). Those CTA objects
+ * still exist for dormant page code and portal reuse, but their hrefs point at
+ * /community so nothing on the public site deep-links into the old boards.
  */
 export const cta = {
   /** Primary member conversion — cohort application */
@@ -43,6 +47,10 @@ export const cta = {
     label: "Join the community",
     href: "/community",
   },
+  viewMentors: {
+    label: "Mentors",
+    href: "/community/mentors",
+  },
   /** On-platform Paystack purchase */
   buyCourse: {
     label: "Enroll now",
@@ -55,21 +63,22 @@ export const cta = {
     label: "Create member account",
     href: "/signup",
   },
+  /** Retired public hire entry — kept for dormant careers/partner code */
   hireTalent: {
     label: "Hire TSA talent",
-    href: "/partner",
+    href: "/community",
   },
   requestIntern: {
     label: "Request a TSA intern",
-    href: "/partner?request=intern",
+    href: "/community",
   },
   postJob: {
     label: "Post a job",
-    href: "/partner?request=job",
+    href: "/community",
   },
   shareOpportunity: {
     label: "Share an opportunity",
-    href: "/partner?request=job",
+    href: "/community",
   },
   partner: {
     label: "Partner with us",

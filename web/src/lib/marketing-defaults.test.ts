@@ -36,8 +36,10 @@ describe("marketing defaults", () => {
     expect(cta.memberSignIn.href).toBe("/login");
     expect(cta.joinTsa.href).toBe("/signup");
     expect(cta.joinTsa.label).toBe("Join TSA");
-    expect(cta.hireTalent.href).toBe("/partner");
-    expect(cta.hireTalent.label).toMatch(/Hire TSA talent/i);
+    expect(cta.hireTalent.href).toBe("/community");
+    expect(cta.postJob.href).toBe("/community");
+    expect(cta.requestIntern.href).toBe("/community");
+    expect(cta.viewMentors.href).toBe("/community/mentors");
     expect(cta.exploreServices.label).toBe("Explore our Services");
     expect(cta.exploreServices.href).toBe("/academy");
   });
@@ -54,6 +56,10 @@ describe("marketing defaults", () => {
     expect(nav.find((item) => item.label === "Academy")?.href).toBe("/academy");
     expect(nav.find((item) => item.label === "Partner With Us")?.href).toBe("/partner");
     expect(nav.find((item) => item.label === "Resources")?.href).toBe("/resources");
+    const community = nav.find((item) => item.label === "Community");
+    expect(
+      community && "children" in community && community.children.some((child) => child.href === "/community/mentors"),
+    ).toBe(true);
   });
 
   it("keeps homepage hero promise and values in code", () => {

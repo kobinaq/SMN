@@ -6,7 +6,6 @@ import { homepagePartners } from "@/lib/content";
 /** What partners can do with the network, on the brand's blue as ground. */
 const OFFERS = [
   "Train your team",
-  "Hire an intern",
   "Co-host an event",
   "Sponsor a seat",
   "Set a live brief",
@@ -28,8 +27,8 @@ export function PartnersBand() {
           <Button href={cta.partner.href} variant="light">
             {cta.partner.label}
           </Button>
-          <Button href={cta.hireTalent.href} variant="secondary">
-            {cta.hireTalent.label}
+          <Button href={cta.contact.href} variant="secondary">
+            {cta.contact.label}
           </Button>
         </div>
       </div>

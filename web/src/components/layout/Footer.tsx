@@ -14,6 +14,7 @@ const footerLinks = [
     title: "Community",
     links: [
       { label: "Community", href: "/community" },
+      { label: "Mentors", href: "/community/mentors" },
       { label: "Events", href: "/events" },
     ],
   },

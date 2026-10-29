@@ -8,31 +8,31 @@
  * Walks every public page at desktop and mobile widths (status, a single
  * <html>, no horizontal overflow, a real <h1>), checks that every retired URL
  * from the consolidation still resolves, and drives the interactive pieces:
- * the partner request switcher, the resource type filter, and both navigation
+ * the partner request form, the resource type filter, and both navigation
  * menus. Collects console errors throughout.
  */
 import { chromium } from "playwright";
 const base = process.env.BASE_URL || "http://localhost:3000";
 const paths = [
   "/", "/about", "/academy", "/academy/cohort", "/academy/courses",
-  "/apply", "/community", "/events", "/insights", "/resources",
+  "/apply", "/community", "/community/mentors", "/events", "/insights", "/resources",
   "/resources?type=Template", "/resources?type=Guide", "/partner",
-  "/partner?request=intern", "/partner?request=job", "/contact", "/privacy", "/terms",
+  "/contact", "/privacy", "/terms",
   "/login", "/signup", "/this-page-does-not-exist",
 ];
 const redirects = [
   ["/programs", "/academy"],
   ["/programs/cohort", "/academy/cohort"],
   ["/employers", "/partner"],
-  ["/employers/post-a-job", "/partner?request=job"],
-  ["/employers/request-intern", "/partner?request=intern"],
+  ["/employers/post-a-job", "/community"],
+  ["/employers/request-intern", "/community"],
   ["/experience", "/academy"],
   ["/simulations", "/academy"],
   ["/careers", "/community"],
   ["/careers/jobs", "/community"],
   ["/careers/internships", "/community"],
-  ["/mentorship", "/community"],
-  ["/mentorship/become-a-mentor", "/community"],
+  ["/mentorship", "/community/mentors"],
+  ["/mentorship/become-a-mentor", "/community/mentors"],
   ["/stories", "/community"],
   ["/resources/templates", "/resources?type=Template"],
   ["/resources/guides", "/resources?type=Guide"],
@@ -79,14 +79,10 @@ for (const [from, expected] of redirects) {
 
 console.log("\n== INTERACTIONS ==");
 await page.setViewportSize({ width: 1440, height: 900 });
-// partner request switcher
-await page.goto(`${base}/partner?request=job`, { waitUntil: "networkidle" });
-check("partner opens on the requested form", (await page.locator('h3:has-text("Post a job")').count()) > 0);
-await page.getByRole("tab", { name: "Request an intern" }).click();
-await page.waitForTimeout(400);
-check("switching request type swaps the form", (await page.locator('h3:has-text("Request an intern")').count()) > 0);
-const selected = await page.locator("select").first().inputValue().catch(() => "");
-check("form default type follows the switch", selected === "Intern request", selected);
+// partner form defaults to training (hire/job/intern public entry points are retired)
+await page.goto(`${base}/partner`, { waitUntil: "networkidle" });
+check("partner form shows training", (await page.locator('h3:has-text("Train a team")').count()) > 0);
+check("partner has no hire talent CTA", (await page.getByRole("link", { name: /hire tsa talent/i }).count()) === 0);
 
 // resources filter
 await page.goto(`${base}/resources`, { waitUntil: "networkidle" });
@@ -97,6 +93,9 @@ check("resource type filter renders", navLinks > 0, `${navLinks} types`);
 await page.goto(`${base}/`, { waitUntil: "networkidle" });
 check("header shows Academy", await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Academy" }).isVisible());
 check("header shows Partner With Us", await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Partner With Us" }).isVisible());
+await page.getByRole("button", { name: "Community" }).first().click();
+await page.waitForTimeout(300);
+check("community dropdown lists Mentors", await page.getByRole("menuitem", { name: "Mentors" }).isVisible());
 
 // mobile menu
 await page.setViewportSize({ width: 390, height: 844 });
@@ -104,6 +103,7 @@ await page.goto(`${base}/`, { waitUntil: "networkidle" });
 await page.getByRole("button", { name: "Open menu" }).click();
 await page.waitForTimeout(400);
 check("mobile menu opens", await page.getByRole("link", { name: "Partner With Us" }).first().isVisible());
+check("mobile menu lists Mentors", await page.getByRole("link", { name: "Mentors" }).first().isVisible());
 
 console.log(`\n${results.filter(Boolean).length}/${results.length} checks passed`);
 console.log(`console errors: ${errors.length}`);

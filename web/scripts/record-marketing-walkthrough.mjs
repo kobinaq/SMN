@@ -35,11 +35,12 @@ const TOUR = [
   { name: "05-resources", path: "/resources", dwellMs: 1000, scrollPasses: 1 },
   { name: "06-insights", path: "/insights", dwellMs: 1000, scrollPasses: 1 },
   { name: "07-community", path: "/community", dwellMs: 1000, scrollPasses: 2 },
-  { name: "08-events", path: "/events", dwellMs: 1000, scrollPasses: 1 },
-  { name: "09-partner", path: "/partner", dwellMs: 1000, scrollPasses: 2 },
-  { name: "10-about", path: "/about", dwellMs: 1000, scrollPasses: 2 },
-  { name: "11-apply", path: "/apply", dwellMs: 1200, scrollPasses: 1 },
-  { name: "12-contact", path: "/contact", dwellMs: 1000, scrollPasses: 1 },
+  { name: "08-mentors", path: "/community/mentors", dwellMs: 1000, scrollPasses: 2 },
+  { name: "09-events", path: "/events", dwellMs: 1000, scrollPasses: 1 },
+  { name: "10-partner", path: "/partner", dwellMs: 1000, scrollPasses: 2 },
+  { name: "11-about", path: "/about", dwellMs: 1000, scrollPasses: 2 },
+  { name: "12-apply", path: "/apply", dwellMs: 1200, scrollPasses: 1 },
+  { name: "13-contact", path: "/contact", dwellMs: 1000, scrollPasses: 1 },
 ];
 
 async function sleep(ms) {

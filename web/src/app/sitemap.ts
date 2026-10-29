@@ -12,6 +12,7 @@ const staticRoutes = [
   "/academy/courses",
   "/apply",
   "/community",
+  "/community/mentors",
   "/events",
   "/insights",
   "/resources",
