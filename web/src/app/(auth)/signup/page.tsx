@@ -6,13 +6,8 @@ import { getMember } from "@/lib/auth/member";
 import { seoTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
-<<<<<<< HEAD
   title: seoTitle("Create account"),
-  description: "Join the Social Marketers Network member portal.",
-=======
-  title: "Create account",
   description: "Join the Think Social Academy member portal.",
->>>>>>> a77cd47 (fix(site): QA follow-ups for footer, WhatsApp, titles, em dashes, nav progress)
 };
 
 export default async function SignupPage() {

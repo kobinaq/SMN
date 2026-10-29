@@ -10,6 +10,9 @@ describe("pageTitle and seoTitle", () => {
     expect(pageTitle("Contact", { area: "public" })).toEqual({
       absolute: `Contact | ${site.name}`,
     });
+    expect(seoTitle("Sign in").absolute).toBe(`Sign in | ${site.name}`);
+    expect(seoTitle("Create account").absolute).toBe(`Create account | ${site.name}`);
+    expect(site.name).toBe("Think Social Academy");
   });
 
   it("builds portal titles from the short brand name", () => {

@@ -93,6 +93,74 @@ test.describe("marketing navigation and CTAs", () => {
     await progressAppeared;
   });
 
+  test("navigation progress completes and disappears on a query-only link", async ({ page }) => {
+    await page.goto("/resources");
+    const progress = page.locator("[data-navigation-progress]");
+    await expect(progress).toHaveCount(0);
+    const appeared = page.waitForSelector("[data-navigation-progress]", {
+      state: "attached",
+      timeout: 5000,
+    });
+    await page.getByRole("link", { name: "Template", exact: true }).first().click();
+    await appeared;
+    await page.waitForURL(/[?&]type=Template/);
+    await expect(progress).toHaveCount(0, { timeout: 5000 });
+  });
+
+  test("navigation progress does not start on a same-URL click", async ({ page }) => {
+    await page.goto("/resources?type=Template");
+    const appeared = await page.evaluate(async () => {
+      let seen = false;
+      const observer = new MutationObserver(() => {
+        if (document.querySelector("[data-navigation-progress]")) seen = true;
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+      const nav = document.querySelector('nav[aria-label="Resource types"]');
+      const link = nav?.querySelector('a[aria-current="page"]') as HTMLAnchorElement | null;
+      link?.click();
+      await new Promise((resolve) => setTimeout(resolve, 250));
+      observer.disconnect();
+      return seen;
+    });
+    expect(appeared).toBe(false);
+    await expect(page.locator("[data-navigation-progress]")).toHaveCount(0);
+  });
+
+  test("footer Create a free account links to signup", async ({ page }) => {
+    await page.goto("/");
+    await expect(
+      page.getByRole("contentinfo").getByRole("link", { name: /create a free account/i }),
+    ).toHaveAttribute("href", "/signup");
+  });
+
+  test("community and contact WhatsApp CTAs are text links", async ({ page }) => {
+    await page.goto("/community");
+    const communityWa = page.getByRole("link", { name: /also join our whatsapp group/i });
+    await expect(communityWa.first()).toBeVisible();
+    await expect(communityWa.first()).toHaveAttribute("href", /whatsapp/i);
+    await page.goto("/contact");
+    const contactWa = page.getByRole("link", { name: /also join our whatsapp group/i });
+    await expect(contactWa.first()).toBeVisible();
+    await expect(contactWa.first()).toHaveAttribute("href", /whatsapp/i);
+  });
+
+  test("main public pages do not render em dashes", async ({ page }) => {
+    for (const path of ["/", "/about", "/academy", "/community", "/contact", "/partner", "/resources"]) {
+      await page.goto(path);
+      const text = await page.locator("main").innerText();
+      expect(text, path).not.toMatch(/\u2014|&mdash;/);
+    }
+  });
+
+  test("public and auth titles use the Think Social Academy suffix", async ({ page }) => {
+    await page.goto("/contact");
+    await expect(page).toHaveTitle(/Contact \| Think Social Academy/);
+    await page.goto("/login");
+    await expect(page).toHaveTitle(/Sign in \| Think Social Academy/);
+    await page.goto("/signup");
+    await expect(page).toHaveTitle(/Create account \| Think Social Academy/);
+  });
+
   test("desktop nav marks only Mentors with aria-current on /community/mentors", async ({
     page,
   }) => {
