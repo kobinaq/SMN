@@ -168,7 +168,7 @@ export default async function CommunityPage() {
                   href={site.whatsappInvite}
                   target="_blank"
                   rel="noreferrer"
-                  className="underline-offset-2 hover:underline"
+                  className="inline-flex min-h-11 items-center underline-offset-2 hover:underline"
                 >
                   {cta.whatsapp.communityLabel}
                 </a>
@@ -457,7 +457,7 @@ export default async function CommunityPage() {
                 href={site.whatsappInvite}
                 target="_blank"
                 rel="noreferrer"
-                className="text-xs text-text-3 underline-offset-2 hover:underline"
+                className="inline-flex min-h-11 items-center text-sm font-medium text-[#08111f] underline-offset-2 hover:underline"
               >
                 {cta.whatsapp.communityLabel}
               </a>

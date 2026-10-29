@@ -41,7 +41,7 @@ export function ApplicationForm({
     const dedupeKey = `${String(data.email || "").toLowerCase()}::${String(data.name || "")}`;
     if (submittedKey && submittedKey === dedupeKey) {
       setStatus("error");
-      setMessage("This application was already submitted in this session. Check your email or contact SMN if you need to update it.");
+      setMessage("This application was already submitted in this session. Check your email or contact TSA if you need to update it.");
       return;
     }
 
@@ -79,7 +79,7 @@ export function ApplicationForm({
         </p>
         <ul className="mt-4 list-disc space-y-2 pl-5 text-text-2">
           <li>No payment is due until after acceptance.</li>
-          <li>Check your inbox (and spam folder) for confirmation from SMN.</li>
+          <li>Check your inbox (and spam folder) for confirmation from TSA.</li>
           <li>If you do not hear back after five business days, contact us.</li>
         </ul>
         <div className="btn-row-mobile mt-6">
@@ -256,13 +256,13 @@ export function ApplicationForm({
       </div>
       <div>
         <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-source">
-          How did you hear about SMN? (optional)
+          How did you hear about Think Social Academy? (optional)
         </label>
         <input
           id="apply-source"
           className={field}
           name="source"
-          placeholder="How did you hear about SMN?"
+          placeholder="How did you hear about Think Social Academy?"
         />
       </div>
       <Button type="submit" disabled={status === "loading"} className="w-full md:w-auto">

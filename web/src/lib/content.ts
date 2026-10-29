@@ -7,9 +7,9 @@ export const instructor = {
   image: img.instructor,
   headline: "Arielle Adodo",
   linkedin: "https://www.linkedin.com/in/arielle-adodo/",
-  bio: "I didn’t start in marketing. I had to figure my way into it — no traditional marketing degree, no clear roadmap. I started with social media and content, learning through experience, experimenting, and working with brands until I realised there was much more to marketing than making good-looking content.",
+  bio: "I didn’t start in marketing. I had to figure my way into it: no traditional marketing degree, no clear roadmap. I started with social media and content, learning through experience, experimenting, and working with brands until I realised there was much more to marketing than making good-looking content.",
   philosophy:
-    "The more I worked across social, content, and digital — from FMCG and lifestyle to consumer and tech brands — the more I noticed a problem: social media marketing was evolving, but the way we teach it wasn’t. People were learning how to post before they learned how to think. I founded Social Marketers Network to close that gap, and to build the marketing community I wish I had when I started.",
+    "The more I worked across social, content, and digital, from FMCG and lifestyle to consumer and tech brands, the more I noticed a problem: social media marketing was evolving, but the way we teach it wasn’t. People were learning how to post before they learned how to think. I founded Social Marketers Network to close that gap, and to build the marketing community I wish I had when I started.",
   highlights: [
     "Social and digital marketing across FMCG, lifestyle, consumer, and technology brands",
     "Content strategy, brand storytelling, and marketing education",
@@ -22,11 +22,11 @@ export const instructor = {
 /** Founder story for the About page — first-person, per the SMN brand voice. */
 export const founderStory = [
   "I didn’t start in marketing. I had to figure my way into it.",
-  "I didn’t have a traditional marketing degree or a clear roadmap telling me what to learn next. I started with social media and content — learning through experience, experimenting, working with brands, and gradually figuring out that there was much more to marketing than making good-looking content.",
+  "I didn’t have a traditional marketing degree or a clear roadmap telling me what to learn next. I started with social media and content, learning through experience, experimenting, working with brands, and gradually figuring out that there was much more to marketing than making good-looking content.",
   "Over the years, I worked across social media, content, and digital marketing, with experience spanning FMCG, lifestyle, consumer, and technology brands. But the more I worked in the industry, the more I noticed a problem: social media marketing was evolving, and the way we were teaching it wasn’t.",
   "Social media managers were no longer just being asked to keep a page active or create aesthetically pleasing content. Businesses wanted marketers who could understand the audience, develop strategy, contribute to campaigns, and ultimately help drive results. Yet many people entering the field were learning how to post before they learned how to think.",
   "There was also very little guidance around the things that actually help someone build a career: how to build a portfolio, how to price your work, how to communicate with clients, how to understand the business behind a brief, and what you actually need to learn to stay relevant as AI changes the industry.",
-  "I know, because I spent years figuring it out myself. That’s why I founded Social Marketers Network — combining marketing strategy, social media, AI, practical application, career development, and professional experience. We’re building something bigger than a course: the marketing community I wish I had when I started, where learning can lead to experience, relationships, and opportunity.",
+  "I know, because I spent years figuring it out myself. That’s why I founded Social Marketers Network, combining marketing strategy, social media, AI, practical application, career development, and professional experience. We’re building something bigger than a course: the marketing community I wish I had when I started, where learning can lead to experience, relationships, and opportunity.",
 ];
 
 /** Founder philosophy — "What I believe". */

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 
 function prefersReducedMotion() {
   return (
@@ -10,7 +10,7 @@ function prefersReducedMotion() {
   );
 }
 
-/** Same-origin internal navigations only: not new-tab, modifiers, or hash-only. */
+/** Same-origin internal navigations only: not new-tab, modifiers, hash-only, or same URL. */
 function isInternalNavClick(event: MouseEvent) {
   if (event.defaultPrevented || event.button !== 0) return false;
   if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
@@ -29,6 +29,7 @@ function isInternalNavClick(event: MouseEvent) {
     return false;
   }
   if (url.origin !== window.location.origin) return false;
+  // Same URL (path + query): do not start the bar.
   if (url.pathname === window.location.pathname && url.search === window.location.search) {
     return false;
   }
@@ -37,12 +38,13 @@ function isInternalNavClick(event: MouseEvent) {
 
 /**
  * Thin top bar during App Router client navigations. Starts on internal link
- * click and finishes when the pathname changes. Avoids the layout shift that a
- * full-page loading.tsx caused. With prefers-reduced-motion, shows a static
- * indicator instead of nothing.
+ * click and finishes when the pathname or searchParams change. With
+ * prefers-reduced-motion, shows a static indicator instead of nothing.
  */
-export function NavigationProgress() {
+function NavigationProgressInner() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const search = searchParams?.toString() ?? "";
   const [visible, setVisible] = useState(false);
   const [width, setWidth] = useState(0);
   const [staticBar, setStaticBar] = useState(false);
@@ -106,7 +108,7 @@ export function NavigationProgress() {
       return;
     }
     finishProgress();
-  }, [pathname]);
+  }, [pathname, search]);
 
   if (!visible) return null;
 
@@ -127,5 +129,14 @@ export function NavigationProgress() {
         style={staticBar ? undefined : { width: `${width}%` }}
       />
     </div>
+  );
+}
+
+/** Suspense boundary so useSearchParams does not opt the site layout out of static rendering. */
+export function NavigationProgress() {
+  return (
+    <Suspense fallback={null}>
+      <NavigationProgressInner />
+    </Suspense>
   );
 }

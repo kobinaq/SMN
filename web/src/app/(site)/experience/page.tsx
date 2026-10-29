@@ -258,7 +258,7 @@ export default function ExperiencePage() {
       <CtaBand
         kicker="The shared outcome"
         title="Applied learning, professional feedback, evidence of what you can do."
-        lede="Not just another marketing course — a marketing problem you actually worked through, with something to show for it."
+        lede="Not just another marketing course: a marketing problem you actually worked through, with something to show for it."
         actions={
           <>
             <Button href={cta.applyCohort.href} variant="light">

@@ -30,7 +30,7 @@ export const site = {
   },
   announcementBanner: "",
   footerBlurb:
-    "Learn, practise, connect, and grow in one ecosystem. Member portal for courses, mentorship, opportunities, portfolios, and credentials. Create a free account to stay connected.",
+    "Learn, practise, connect, and grow in one ecosystem. Member portal for courses, mentorship, opportunities, portfolios, and credentials.",
   impactStats: [] as { label: string; value: string }[],
   cohort: {
     name: "Social Media Marketing & AI Cohort",

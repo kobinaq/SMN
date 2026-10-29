@@ -36,7 +36,7 @@ const REQUESTS = {
       "Role focus, duration, and location or remote preference",
       "Must-have skills and the work they will actually do",
       "A named point of contact and a habit of giving feedback",
-      "A defined scope — internships fail when the brief is “help with social”",
+      "A defined scope: internships fail when the brief is “help with social”",
     ],
   },
   job: {
@@ -47,7 +47,7 @@ const REQUESTS = {
     needs: [
       "What the role actually involves day to day",
       "What success looks like in the first 30 to 90 days",
-      "Who it is a fit for — skills, level, and mindset",
+      "Who it is a fit for: skills, level, and mindset",
       "Anything that makes it worth a strong marketer's time",
     ],
   },
@@ -55,7 +55,7 @@ const REQUESTS = {
     label: "Train a team",
     type: "Training request",
     blurb:
-      "We design specialised training around your team, industry, and needs — from social and AI foundations to analytics and strategy workshops.",
+      "We design specialised training around your team, industry, and needs: from social and AI foundations to analytics and strategy workshops.",
     needs: [
       "Team size, roles, and current level",
       "The capability gap you are trying to close",

@@ -60,7 +60,7 @@ export default async function ResourcesPage({
 
   const heading = TITLES[active] ?? {
     title: "Marketing resources you can actually use.",
-    lede: "Templates, frameworks, checklists, AI prompts, and guides. Free for the community — open one, enter your email, and we send the file.",
+    lede: "Templates, frameworks, checklists, AI prompts, and guides. Free for the community: open one, enter your email, and we send the file.",
   };
 
   return (

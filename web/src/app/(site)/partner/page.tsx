@@ -103,7 +103,7 @@ export default async function EmployersPage({
         <SectionHead
           kicker="Why it works"
           title="You meet marketers with evidence."
-          lede="Not CVs and enthusiasm — briefs they have worked, decisions they can defend, and feedback from people already in the industry."
+          lede="Not CVs and enthusiasm: briefs they have worked, decisions they can defend, and feedback from people already in the industry."
         />
         <DefinitionGrid className="mt-12" columns={3} items={proof} />
         <p className="mt-10 max-w-2xl text-sm text-text-3">

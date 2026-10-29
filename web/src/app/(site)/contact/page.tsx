@@ -68,9 +68,14 @@ export default async function ContactPage({
         actions={
           <>
             <Button href="#message">Send a message</Button>
-            <Button href={site.whatsappInvite} target="_blank" rel="noreferrer" variant="secondary">
+            <a
+              href={site.whatsappInvite}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-11 items-center text-sm text-text-3 underline-offset-2 hover:underline"
+            >
               {cta.whatsapp.communityLabel}
-            </Button>
+            </a>
           </>
         }
       />
