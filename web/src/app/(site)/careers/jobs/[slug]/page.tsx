@@ -1,19 +1,29 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { MapPin } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
 import { getMember } from "@/lib/auth/member";
 import { getPublishedOpportunity } from "@/lib/opportunities";
+import { itemShareImages } from "@/lib/share-metadata";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const { slug } = await params;
   try {
     const opportunity = await getPublishedOpportunity(slug);
     const canonical = `/careers/jobs/${slug}`;
     const title = `${opportunity.title} · ${opportunity.company}`;
-    const shareImage = "/opengraph-image";
+    const parentMeta = await parent;
+    // Jobs have no image field: forward parent hashed opengraph-image /
+    // twitter-image (child openGraph without images does not inherit them).
+    const share = itemShareImages(null, {
+      openGraphImages: parentMeta.openGraph?.images,
+      twitterImages: parentMeta.twitter?.images,
+    });
     return {
       title,
       description: opportunity.summary,
@@ -23,13 +33,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         description: opportunity.summary,
         type: "website",
         url: canonical,
-        images: [{ url: shareImage }],
+        ...(share.openGraphImages ? { images: share.openGraphImages } : {}),
       },
       twitter: {
         card: "summary_large_image",
         title,
         description: opportunity.summary,
-        images: [shareImage],
+        ...(share.twitterImages ? { images: share.twitterImages } : {}),
       },
     };
   } catch {

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { getMember } from "@/lib/auth/member";
 import { formatEventDate, formatEventDay, getEventBySlug, getEventCalendar, getNextEvent } from "@/lib/events";
 import { getPayloadClient } from "@/lib/payload";
+import { itemShareImages } from "@/lib/share-metadata";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -31,7 +32,10 @@ async function resolvePublishedEventId(slug: string) {
   }
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const { slug } = await params;
   const event = await getEventBySlug(slug);
   if (!event) {
@@ -41,7 +45,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
   const canonical = `/events/${slug}`;
-  const shareImage = event.hasCustomImage ? event.image : "/opengraph-image";
+  const parentMeta = await parent;
+  // CMS image when present; otherwise forward parent hashed defaults.
+  const share = itemShareImages(event.hasCustomImage ? event.image : null, {
+    openGraphImages: parentMeta.openGraph?.images,
+    twitterImages: parentMeta.twitter?.images,
+  });
   return {
     title: event.title,
     description: event.summary,
@@ -51,13 +60,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: event.summary,
       type: "website",
       url: canonical,
-      images: [{ url: shareImage }],
+      ...(share.openGraphImages ? { images: share.openGraphImages } : {}),
     },
     twitter: {
       card: "summary_large_image",
       title: event.title,
       description: event.summary,
-      images: [shareImage],
+      ...(share.twitterImages ? { images: share.twitterImages } : {}),
     },
   };
 }
