@@ -37,19 +37,29 @@ const nextConfig: NextConfig = {
     root: path.resolve(dirname),
   },
   /**
-   * Retired URLs from the site consolidation. Each of these pages was a
-   * filtered view or a form variant of the page it now points at, so the
-   * destination carries the same content — permanent, not temporary.
+   * T3 IA renames and retired public routes. permanent: true issues 308.
+   * Destinations point at final URLs (no redirect chains). Page files for
+   * careers / mentorship / experience / stories stay for later tickets and
+   * portal reuse; only the public paths redirect.
    */
   async redirects() {
     return [
+      { source: "/programs", destination: "/academy", permanent: true },
+      { source: "/programs/:path*", destination: "/academy/:path*", permanent: true },
+      { source: "/employers", destination: "/partner", permanent: true },
+      { source: "/employers/post-a-job", destination: "/partner?request=job", permanent: true },
+      { source: "/employers/request-intern", destination: "/partner?request=intern", permanent: true },
+      { source: "/experience", destination: "/academy#practical-work", permanent: true },
+      { source: "/simulations", destination: "/academy#practical-work", permanent: true },
+      { source: "/careers", destination: "/community", permanent: true },
+      { source: "/careers/jobs", destination: "/community", permanent: true },
+      { source: "/careers/jobs/:slug", destination: "/community", permanent: true },
+      { source: "/careers/internships", destination: "/community", permanent: true },
+      { source: "/mentorship", destination: "/community", permanent: true },
+      { source: "/mentorship/become-a-mentor", destination: "/community", permanent: true },
+      { source: "/stories", destination: "/community#stories", permanent: true },
       { source: "/resources/templates", destination: "/resources?type=Template", permanent: true },
       { source: "/resources/guides", destination: "/resources?type=Guide", permanent: true },
-      { source: "/careers/internships", destination: "/careers/jobs?type=Internship", permanent: true },
-      { source: "/employers/post-a-job", destination: "/employers?request=job", permanent: true },
-      { source: "/employers/request-intern", destination: "/employers?request=intern", permanent: true },
-      { source: "/mentorship/become-a-mentor", destination: "/mentorship#become-a-mentor", permanent: true },
-      { source: "/simulations", destination: "/experience#simulations", permanent: true },
       // Events had two staff surfaces over the same records — an ops list and a
       // "website" editor list. One workspace per event now.
       { source: "/staff/website/events", destination: "/staff/events", permanent: true },

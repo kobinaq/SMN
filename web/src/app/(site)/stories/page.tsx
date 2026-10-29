@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   title: seoTitle("Member Stories"),
   description:
     "See what happens when learning becomes practice. Published member stories from Social Marketers Network.",
-  alternates: { canonical: "/stories" },
+  alternates: { canonical: "/community" },
+  openGraph: { url: "/community" },
 };
 
 export const revalidate = 60;

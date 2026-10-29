@@ -74,7 +74,7 @@ export function ApplicationForm({
           <li>If you do not hear back after five business days, contact us.</li>
         </ul>
         <div className="btn-row-mobile mt-6">
-          <Button href="/programs/cohort" variant="secondary">
+          <Button href="/academy/cohort" variant="secondary">
             Review cohort details
           </Button>
           <Button href="/contact" variant="ghost">

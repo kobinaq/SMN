@@ -9,7 +9,8 @@ export const metadata: Metadata = {
   title: seoTitle("Marketing Mentorship"),
   description:
     "Learn from people already doing the work. SMN connects mentees with experienced marketing professionals, and reviews every mentor before they appear in the directory.",
-  alternates: { canonical: "/mentorship" },
+  alternates: { canonical: "/community" },
+  openGraph: { url: "/community" },
 };
 
 const sessions = [

@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "Contact",
   description: "Get in touch with Think Social Academy for partnerships, speaking, talent, or general questions.",
   alternates: { canonical: "/contact" },
+  openGraph: { url: "/contact" },
 };
 
 export default async function ContactPage({
@@ -41,7 +42,7 @@ export default async function ContactPage({
       icon: Briefcase,
       label: "Partners",
       title: "Partner with us",
-      href: "/employers",
+      href: "/partner",
       external: false,
       body: "Share a role or ask about marketers from the Network.",
     },

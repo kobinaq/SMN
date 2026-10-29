@@ -24,6 +24,7 @@ export const metadata: Metadata = {
   description:
     "Come learn with us. Free webinars, workshops, community events, and industry conversations from Think Social Academy.",
   alternates: { canonical: "/events" },
+  openGraph: { url: "/events" },
 };
 
 type Props = {

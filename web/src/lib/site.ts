@@ -88,55 +88,16 @@ export type SiteConfig = {
 };
 
 /**
- * Primary navigation. Each dropdown lists destinations, not variants of one
- * destination — the consolidation folded the filtered pages into their parents,
- * so "Templates" and "Guides" are views of /resources rather than pages of
- * their own, and internships are a filter on the jobs board.
+ * Primary navigation for the public marketing site.
+ * Labels match Tab 4 / Tab 5 IA. Join TSA is the header CTA, not a nav item.
  */
 export const nav = [
-  {
-    label: "Academy",
-    href: "/programs",
-    children: [
-      { label: "Training cohort", href: "/programs/cohort" },
-      { label: "Self-paced courses", href: "/programs/courses" },
-      { label: "Experience & simulations", href: "/experience" },
-    ],
-  },
-  {
-    label: "Careers",
-    href: "/careers",
-    children: [
-      { label: "Jobs & internships", href: "/careers/jobs" },
-      { label: "Mentorship", href: "/mentorship" },
-    ],
-  },
-  {
-    label: "Partners",
-    href: "/employers",
-  },
-  {
-    label: "Community",
-    href: "/community",
-    children: [
-      { label: "The network", href: "/community" },
-      { label: "Events", href: "/events" },
-      { label: "Member stories", href: "/stories" },
-    ],
-  },
-  {
-    label: "Resources",
-    href: "/resources",
-    children: [
-      { label: "Insights", href: "/insights" },
-      { label: "Templates", href: "/resources?type=Template" },
-      { label: "Guides", href: "/resources?type=Guide" },
-    ],
-  },
-  {
-    label: "About",
-    href: "/about",
-  },
+  { label: "Home", href: "/" },
+  { label: "Academy", href: "/academy" },
+  { label: "Community", href: "/community" },
+  { label: "Partner With Us", href: "/partner" },
+  { label: "Resources", href: "/resources" },
+  { label: "About", href: "/about" },
 ] as const;
 
 /** Re-export pending labels for seed content */

@@ -155,21 +155,21 @@ export function Header() {
             {cta.memberSignIn.label}
           </Button>
           <Button
-            href={cta.applyCohort.href}
+            href={cta.joinTsa.href}
             className="px-5 py-2.5"
             onClick={() => trackEvent("primary_cta_click", { location: "header" })}
           >
-            {cta.applyCohort.shortLabel}
+            {cta.joinTsa.label}
           </Button>
         </div>
 
         <div className="relative z-10 flex items-center gap-2 lg:hidden">
           <Button
-            href={cta.applyCohort.href}
+            href={cta.joinTsa.href}
             className="min-h-11 px-3 py-2 text-xs sm:px-4 sm:text-sm"
             onClick={() => trackEvent("primary_cta_click", { location: "header_mobile" })}
           >
-            Apply
+            {cta.joinTsa.shortLabel}
           </Button>
           <button
             type="button"
@@ -219,11 +219,11 @@ export function Header() {
           ))}
           <div className="mt-auto flex flex-col gap-3 pt-8" onClick={() => setOpen(false)}>
             <Button
-              href={cta.applyCohort.href}
+              href={cta.joinTsa.href}
               className="w-full"
               onClick={() => trackEvent("primary_cta_click", { location: "mobile_nav" })}
             >
-              {cta.applyCohort.label}
+              {cta.joinTsa.label}
             </Button>
             <Button href={cta.memberSignIn.href} variant="ghost" className="w-full">
               {cta.memberSignIn.label}

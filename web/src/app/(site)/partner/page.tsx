@@ -17,7 +17,8 @@ export const metadata: Metadata = {
   title: seoTitle("Partner With Us"),
   description:
     "Build with the next generation of marketers. Train teams, hire SMN talent, request an intern, post a role, collaborate on events, or sponsor access to training.",
-  alternates: { canonical: "/employers" },
+  alternates: { canonical: "/partner" },
+  openGraph: { url: "/partner" },
 };
 
 const proof = [
@@ -48,7 +49,7 @@ export default async function EmployersPage({
   searchParams: Promise<{ request?: string }>;
 }) {
   const { request } = await searchParams;
-  // The retired /employers/post-a-job and /employers/request-intern URLs
+  // Retired /employers?request=job and /employers?request=intern URLs
   // redirect here with ?request=, so the form opens on the right kind.
   const initialRequest = (request && REQUEST_ALIASES[request]) || "talent";
 
@@ -103,7 +104,7 @@ export default async function EmployersPage({
         <DefinitionGrid className="mt-12" columns={3} items={proof} />
         <p className="mt-10 max-w-2xl text-sm text-text-3">
           Learn more about the{" "}
-          <Link href="/experience" className="link-wipe text-accent">
+          <Link href="/academy#practical-work" className="link-wipe text-accent">
             SMN Experience Programme
           </Link>{" "}
           or the{" "}

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { cta } from "@/lib/cta";
 
 const quickLinks = [
-  { href: "/programs", label: "Academy" },
+  { href: "/academy", label: "Academy" },
   { href: "/events", label: "Events" },
   { href: "/contact", label: "Contact" },
 ];

@@ -754,7 +754,7 @@ export default async function StaffCourseWorkspacePage({
                       name: "featured",
                       label: "Next intake on the marketing site",
                       type: "checkbox",
-                      description: "Homepage, /programs/cohort, and /apply use this published cohort.",
+                      description: "Homepage, /academy/cohort, and /apply use this published cohort.",
                     },
                     { name: "startDate", label: "Start (public)", type: "text", placeholder: "September 2026" },
                     {

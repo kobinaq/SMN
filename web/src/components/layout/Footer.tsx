@@ -6,22 +6,30 @@ const footerLinks = [
   {
     title: "Academy",
     links: [
-      { label: "Flagship cohort", href: "/programs/cohort" },
-      { label: "Courses", href: "/programs/courses" },
-      { label: "Simulations", href: "/experience#simulations" },
-      { label: "Experience", href: "/experience" },
+      { label: "Academy", href: "/academy" },
       { label: "Apply", href: "/apply" },
     ],
   },
   {
-    title: "Network",
+    title: "Community",
     links: [
-      { label: "Jobs", href: "/careers/jobs" },
       { label: "Community", href: "/community" },
       { label: "Events", href: "/events" },
-      { label: "About", href: "/about" },
-      { label: "Partner with us", href: "/employers" },
+    ],
+  },
+  {
+    title: "Partner With Us",
+    links: [
+      { label: "Partner With Us", href: "/partner" },
       { label: "Contact", href: "/contact" },
+    ],
+  },
+  {
+    title: "More",
+    links: [
+      { label: "Resources", href: "/resources" },
+      { label: "About", href: "/about" },
+      { label: "Home", href: "/" },
     ],
   },
 ];
@@ -30,7 +38,7 @@ export function Footer({ site }: { site: SiteConfig }) {
   return (
     <footer className="border-t border-edge-subtle bg-raised pb-[env(safe-area-inset-bottom)]">
       <div className="container-wide py-12 sm:py-16 md:py-20">
-        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-[1.6fr_1fr_1fr] md:gap-12">
+        <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr] md:gap-8">
           <div className="sm:col-span-2 md:col-span-1">
             <BrandLogo className="h-8 sm:h-9" />
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-text-2 sm:mt-5">

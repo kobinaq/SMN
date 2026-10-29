@@ -5,7 +5,10 @@ import {
 } from "@/components/layout/SiteDocument";
 import { AppProviders } from "@/components/providers/AppProviders";
 
-export const metadata = siteMetadata;
+export const metadata = {
+  ...siteMetadata,
+  robots: { index: false, follow: false },
+};
 export const viewport = siteViewport;
 
 /** Document shell for /app/* — chrome is in app/layout.tsx */

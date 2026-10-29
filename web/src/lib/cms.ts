@@ -54,8 +54,8 @@ export async function getCourses(): Promise<CourseItem[]> {
       const courseKey = String(courseRef && typeof courseRef === "object" && "id" in courseRef ? (courseRef as { id: unknown }).id : courseRef);
       lessonCounts.set(courseKey, (lessonCounts.get(courseKey) || 0) + 1);
     }
-    // The catalog at /programs/courses is the self-paced catalogue; live cohorts
-    // are sold through /programs/cohort, so exclude them here.
+    // The catalog at /academy/courses is the self-paced catalogue; live cohorts
+    // are sold through /academy/cohort, so exclude them here.
     return result.docs
       .filter((doc) => (doc as { delivery?: string | null }).delivery !== "cohort")
       .map((doc): CourseItem => {

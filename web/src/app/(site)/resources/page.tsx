@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   description:
     "Practical marketing resources you can actually use. Templates, frameworks, checklists, AI prompts, and guides from Think Social Academy.",
   alternates: { canonical: "/resources" },
+  openGraph: { url: "/resources" },
 };
 
 const TITLES: Record<string, { title: string; lede: string }> = {
@@ -177,7 +178,7 @@ export default async function ResourcesPage({
                 Insights
               </Link>{" "}
               or{" "}
-              <Link href="/programs/cohort" className="link-wipe text-accent">
+              <Link href="/academy/cohort" className="link-wipe text-accent">
                 apply to live training
               </Link>
               .

@@ -11,6 +11,7 @@ export const metadata = {
     default: "SMN Staff",
     template: "%s · SMN Staff",
   },
+  robots: { index: false, follow: false },
 };
 export const viewport = siteViewport;
 

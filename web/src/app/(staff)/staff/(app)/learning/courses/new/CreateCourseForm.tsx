@@ -209,7 +209,7 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
             </Select>
           </StaffFormField>
           <p className="text-xs text-text-3">
-            Saved as a draft. Self-paced courses appear on /programs/courses once published.{" "}
+            Saved as a draft. Self-paced courses appear on /academy/courses once published.{" "}
             {commerce === "apply"
               ? "Apply-first courses use /apply. Staff then grant access or send a Paystack link."
               : "Buy-now courses checkout on Paystack after the fee is confirmed."}{" "}

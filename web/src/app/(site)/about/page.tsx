@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   description:
     "Think Social Academy is a practical, strategy-led social media marketing academy and community. Learn strategy, social media and AI, gain experience, and grow with a community in Ghana and across Africa.",
   alternates: { canonical: "/about" },
+  openGraph: { url: "/about" },
 };
 
 export default function AboutPage() {

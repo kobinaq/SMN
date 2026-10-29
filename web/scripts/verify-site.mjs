@@ -8,27 +8,34 @@
  * Walks every public page at desktop and mobile widths (status, a single
  * <html>, no horizontal overflow, a real <h1>), checks that every retired URL
  * from the consolidation still resolves, and drives the interactive pieces:
- * the partner request switcher, the resource type filter, the jobs-board type
- * preselect, and both navigation menus. Collects console errors throughout.
+ * the partner request switcher, the resource type filter, and both navigation
+ * menus. Collects console errors throughout.
  */
 import { chromium } from "playwright";
 const base = process.env.BASE_URL || "http://localhost:3000";
 const paths = [
-  "/", "/about", "/programs", "/programs/cohort", "/programs/courses", "/experience",
-  "/apply", "/careers", "/careers/jobs", "/careers/jobs?type=Internship",
-  "/community", "/events", "/insights", "/resources", "/resources?type=Template",
-  "/resources?type=Guide", "/stories", "/mentorship", "/employers",
-  "/employers?request=intern", "/employers?request=job", "/contact", "/privacy", "/terms",
+  "/", "/about", "/academy", "/academy/cohort", "/academy/courses",
+  "/apply", "/community", "/events", "/insights", "/resources",
+  "/resources?type=Template", "/resources?type=Guide", "/partner",
+  "/partner?request=intern", "/partner?request=job", "/contact", "/privacy", "/terms",
   "/login", "/signup", "/this-page-does-not-exist",
 ];
 const redirects = [
-  ["/simulations", "/experience"],
+  ["/programs", "/academy"],
+  ["/programs/cohort", "/academy/cohort"],
+  ["/employers", "/partner"],
+  ["/employers/post-a-job", "/partner?request=job"],
+  ["/employers/request-intern", "/partner?request=intern"],
+  ["/experience", "/academy"],
+  ["/simulations", "/academy"],
+  ["/careers", "/community"],
+  ["/careers/jobs", "/community"],
+  ["/careers/internships", "/community"],
+  ["/mentorship", "/community"],
+  ["/mentorship/become-a-mentor", "/community"],
+  ["/stories", "/community"],
   ["/resources/templates", "/resources?type=Template"],
   ["/resources/guides", "/resources?type=Guide"],
-  ["/careers/internships", "/careers/jobs?type=Internship"],
-  ["/employers/post-a-job", "/employers?request=job"],
-  ["/employers/request-intern", "/employers?request=intern"],
-  ["/mentorship/become-a-mentor", "/mentorship"],
 ];
 const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium" });
 const results = [];
@@ -67,14 +74,14 @@ const page = await browser.newPage();
 for (const [from, expected] of redirects) {
   const res = await page.goto(`${base}${from}`, { waitUntil: "domcontentloaded", timeout: 30000 }).catch(() => null);
   const url = page.url().replace(base, "");
-  check(`${from} -> ${expected}`, res?.status() === 200 && url.startsWith(expected.split("?")[0]), url);
+  check(`${from} -> ${expected}`, res?.status() === 200 && url.startsWith(expected.split("?")[0].split("#")[0]), url);
 }
 
 console.log("\n== INTERACTIONS ==");
 await page.setViewportSize({ width: 1440, height: 900 });
-// employers request switcher
-await page.goto(`${base}/employers?request=job`, { waitUntil: "networkidle" });
-check("employers opens on the requested form", (await page.locator('h3:has-text("Post a job")').count()) > 0);
+// partner request switcher
+await page.goto(`${base}/partner?request=job`, { waitUntil: "networkidle" });
+check("partner opens on the requested form", (await page.locator('h3:has-text("Post a job")').count()) > 0);
 await page.getByRole("tab", { name: "Request an intern" }).click();
 await page.waitForTimeout(400);
 check("switching request type swaps the form", (await page.locator('h3:has-text("Request an intern")').count()) > 0);
@@ -86,23 +93,17 @@ await page.goto(`${base}/resources`, { waitUntil: "networkidle" });
 const navLinks = await page.locator('nav[aria-label="Resource types"] a').count();
 check("resource type filter renders", navLinks > 0, `${navLinks} types`);
 
-// jobs board type preselect
-await page.goto(`${base}/careers/jobs?type=Internship`, { waitUntil: "networkidle" });
-check("jobs masthead reflects the internship filter",
-  ((await page.locator("h1").first().textContent()) || "").includes("Internships"));
-
-// header dropdown
+// header nav labels
 await page.goto(`${base}/`, { waitUntil: "networkidle" });
-await page.getByRole("button", { name: "Academy" }).first().click();
-await page.waitForTimeout(300);
-check("header dropdown opens", await page.getByRole("menuitem", { name: "Training cohort" }).isVisible());
+check("header shows Academy", await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Academy" }).isVisible());
+check("header shows Partner With Us", await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Partner With Us" }).isVisible());
 
 // mobile menu
 await page.setViewportSize({ width: 390, height: 844 });
 await page.goto(`${base}/`, { waitUntil: "networkidle" });
 await page.getByRole("button", { name: "Open menu" }).click();
 await page.waitForTimeout(400);
-check("mobile menu opens", await page.getByRole("link", { name: "Partners" }).first().isVisible());
+check("mobile menu opens", await page.getByRole("link", { name: "Partner With Us" }).first().isVisible());
 
 console.log(`\n${results.filter(Boolean).length}/${results.length} checks passed`);
 console.log(`console errors: ${errors.length}`);

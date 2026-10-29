@@ -118,7 +118,7 @@ export default async function LmsCoursesPage() {
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-2">
             <Button href="/app/learning">Back to learning</Button>
-            <Button href="/programs/courses" variant="secondary">
+            <Button href="/academy/courses" variant="secondary">
               Browse public courses
             </Button>
           </div>

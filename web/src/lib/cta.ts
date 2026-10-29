@@ -1,6 +1,6 @@
 /**
  * Standard CTA terminology for the marketing site.
- * Use these labels so Apply / purchase / sign-in / employer / WhatsApp stay distinct.
+ * Use these labels so Apply / purchase / sign-in / partner / WhatsApp stay distinct.
  */
 export const cta = {
   /** Primary member conversion — cohort application */
@@ -9,29 +9,35 @@ export const cta = {
     shortLabel: "Apply now",
     href: "/apply",
   },
+  /** Header primary CTA — account creation */
+  joinTsa: {
+    label: "Join TSA",
+    shortLabel: "Join TSA",
+    href: "/signup",
+  },
   explorePrograms: {
     label: "Explore the Academy",
-    href: "/programs",
+    href: "/academy",
   },
   exploreServices: {
     label: "Explore our Services",
-    href: "/programs",
+    href: "/academy",
   },
   viewCohort: {
     label: "View the curriculum",
-    href: "/programs/cohort",
+    href: "/academy/cohort",
   },
   viewCurriculum: {
     label: "View the curriculum",
-    href: "/programs/cohort#curriculum",
+    href: "/academy/cohort#curriculum",
   },
   viewCourses: {
     label: "Explore courses",
-    href: "/programs/courses",
+    href: "/academy/courses",
   },
   viewExperience: {
     label: "Learn about the Experience Programme",
-    href: "/experience",
+    href: "/academy#practical-work",
   },
   joinCommunity: {
     label: "Join the community",
@@ -51,31 +57,31 @@ export const cta = {
   },
   hireTalent: {
     label: "Hire TSA talent",
-    href: "/employers",
+    href: "/partner",
   },
   requestIntern: {
     label: "Request a TSA intern",
-    href: "/employers?request=intern",
+    href: "/partner?request=intern",
   },
   postJob: {
     label: "Post a job",
-    href: "/employers?request=job",
+    href: "/partner?request=job",
   },
   shareOpportunity: {
     label: "Share an opportunity",
-    href: "/employers?request=job",
+    href: "/partner?request=job",
   },
   partner: {
     label: "Partner with us",
-    href: "/employers",
+    href: "/partner",
   },
   browseJobs: {
     label: "Browse job opportunities",
-    href: "/careers/jobs",
+    href: "/community",
   },
   browseInternships: {
     label: "Browse internships",
-    href: "/careers/jobs?type=Internship",
+    href: "/community",
   },
   contact: {
     label: "Contact TSA",

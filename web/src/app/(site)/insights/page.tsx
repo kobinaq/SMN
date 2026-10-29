@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   description:
     "Practical insights, frameworks and perspectives on social media, marketing strategy, AI, careers and the changing world of work.",
   alternates: { canonical: "/insights" },
+  openGraph: { url: "/insights" },
 };
 
 type Props = {
@@ -113,10 +114,10 @@ export default async function InsightsPage({ searchParams }: Props) {
           <BlogNewsletter />
 
           <div className="flex flex-col gap-3 border-t border-edge-subtle pt-10 sm:flex-row sm:flex-wrap sm:gap-x-6">
-            <Link href="/programs/cohort" className="text-sm text-accent transition hover:text-text-1">
+            <Link href="/academy/cohort" className="text-sm text-accent transition hover:text-text-1">
               Social media marketing training
             </Link>
-            <Link href="/programs/courses" className="text-sm text-accent transition hover:text-text-1">
+            <Link href="/academy/courses" className="text-sm text-accent transition hover:text-text-1">
               Self-paced courses
             </Link>
             <Link href="/community" className="text-sm text-accent transition hover:text-text-1">

@@ -1,28 +1,63 @@
 import { expect, test } from "@playwright/test";
 
+const permanentRedirects: Array<[string, string]> = [
+  ["/programs", "/academy"],
+  ["/programs/cohort", "/academy/cohort"],
+  ["/programs/courses", "/academy/courses"],
+  ["/employers", "/partner"],
+  ["/employers/post-a-job", "/partner?request=job"],
+  ["/employers/request-intern", "/partner?request=intern"],
+  ["/experience", "/academy#practical-work"],
+  ["/simulations", "/academy#practical-work"],
+  ["/careers", "/community"],
+  ["/careers/jobs", "/community"],
+  ["/careers/jobs/example-role", "/community"],
+  ["/careers/internships", "/community"],
+  ["/mentorship", "/community"],
+  ["/mentorship/become-a-mentor", "/community"],
+  ["/stories", "/community#stories"],
+];
+
 test.describe("marketing navigation and CTAs", () => {
-  test("header primary CTA goes to apply", async ({ page }) => {
+  test("header primary CTA goes to Join TSA signup", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("navigation", { name: "Primary" })).toBeVisible();
-    const apply = page.getByRole("link", { name: /^Apply now$/i }).first();
-    await expect(apply).toHaveAttribute("href", "/apply");
+    const join = page.getByRole("link", { name: /^Join TSA$/i }).first();
+    await expect(join).toHaveAttribute("href", "/signup");
     await expect(page.getByRole("link", { name: /member sign in/i }).first()).toHaveAttribute(
       "href",
       "/login",
     );
   });
 
-  test("footer includes legal and programme links", async ({ page }) => {
+  test("nav shows the T3 labels", async ({ page }) => {
+    await page.goto("/");
+    const primary = page.getByRole("navigation", { name: "Primary" });
+    for (const label of ["Home", "Academy", "Community", "Partner With Us", "Resources", "About"]) {
+      await expect(primary.getByRole("link", { name: label, exact: true })).toBeVisible();
+    }
+  });
+
+  test("footer includes legal and section links", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("contentinfo").getByRole("link", { name: "Privacy" })).toBeVisible();
     await expect(page.getByRole("contentinfo").getByRole("link", { name: "Terms" })).toBeVisible();
     await expect(
-      page.getByRole("contentinfo").getByRole("link", { name: /Flagship cohort/i }),
+      page.getByRole("contentinfo").getByRole("link", { name: "Academy", exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("contentinfo").getByRole("link", { name: "Events", exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("contentinfo").getByRole("link", { name: "Contact", exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("contentinfo").getByRole("link", { name: "Apply", exact: true }),
     ).toBeVisible();
   });
 
   test("does not display withheld placeholder prices", async ({ page }) => {
-    await page.goto("/programs/cohort");
+    await page.goto("/academy/cohort");
     await expect(page.getByText(/250,?000/)).toHaveCount(0);
     await expect(page.getByText(/Contact TSA for current fees/i).first()).toBeVisible();
   });
@@ -36,23 +71,47 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(page.getByRole("button", { name: /submit application/i })).toBeVisible();
   });
 
-  test("employer page keeps hire CTAs separate from apply", async ({ page }) => {
-    await page.goto("/employers");
+  test("partner page keeps hire CTAs separate from apply", async ({ page }) => {
+    await page.goto("/partner");
     await expect(page.getByRole("heading", { name: /hire tsa talent/i }).first()).toBeVisible();
     await expect(page.getByRole("link", { name: /hire tsa talent/i }).first()).toBeVisible();
     await expect(page.getByText(/not a member application/i)).toBeVisible();
   });
 
-  test("stories page does not render fictional seed names", async ({ page }) => {
-    await page.goto("/stories");
+  test("community stories do not render fictional seed names", async ({ page }) => {
+    await page.goto("/community");
     await expect(page.getByText("Ada Okonkwo")).toHaveCount(0);
     await expect(page.getByText("Kwame Mensah")).toHaveCount(0);
     await expect(page.getByText("Efua Demo")).toHaveCount(0);
   });
 
+  test("old public URLs return 308 to final targets in one hop", async ({ request }) => {
+    for (const [from, to] of permanentRedirects) {
+      const res = await request.get(from, { maxRedirects: 0 });
+      expect(res.status(), from).toBe(308);
+      const location = res.headers().location ?? "";
+      const expectedPath = to.split("#")[0];
+      expect(location.startsWith(expectedPath) || location.endsWith(expectedPath), `${from} -> ${location}`).toBe(
+        true,
+      );
+      if (to.includes("#")) {
+        const hash = to.slice(to.indexOf("#"));
+        expect(location.includes(hash) || location.includes(encodeURIComponent(hash)), `${from} hash`).toBe(
+          true,
+        );
+      }
+    }
+  });
+
   test("seo routes respond", async ({ page, request }) => {
     const sitemap = await request.get("/sitemap.xml");
     expect(sitemap.ok()).toBeTruthy();
+    const sitemapBody = await sitemap.text();
+    expect(sitemapBody).toContain("/academy");
+    expect(sitemapBody).toContain("/partner");
+    expect(sitemapBody).not.toContain("/programs");
+    expect(sitemapBody).not.toContain("/employers");
+    expect(sitemapBody).not.toContain("/careers");
     const robots = await request.get("/robots.txt");
     expect(robots.ok()).toBeTruthy();
     const body = await robots.text();
@@ -110,6 +169,9 @@ test.describe("marketing navigation and CTAs", () => {
       expect(buf.readUInt32BE(20)).toBe(630);
     }
 
+    // Job detail URLs 308 to /community (T3). Community forwards parent hashed
+    // OG images so the redirect destination still satisfies this check. The job
+    // page itself keeps itemShareImages for when that route is served.
     await assertShareImage("/careers/jobs/demo-social-media-associate");
     await assertShareImage("/events/demo-marketing-meetup");
   });

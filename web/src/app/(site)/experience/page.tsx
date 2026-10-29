@@ -24,7 +24,8 @@ export const metadata: Metadata = {
   title: seoTitle("SMN Experience Programme"),
   description:
     "After Social Media Marketing and AI training, selected SMN participants are matched with brands, agencies, and marketers for internships, projects, and portfolio-building experience. Practice simulations open on a waitlist.",
-  alternates: { canonical: "/experience" },
+  alternates: { canonical: "/academy" },
+  openGraph: { url: "/academy" },
 };
 
 const partnerProvides = [
@@ -228,11 +229,11 @@ export default function ExperiencePage() {
             <p className="mt-8 rule pt-6 text-sm leading-relaxed text-text-3">
               Real marketers rarely receive a perfect brief with every answer provided. Until
               simulations open, the{" "}
-              <Link href="/programs/cohort" className="link-wipe text-accent">
+              <Link href="/academy/cohort" className="link-wipe text-accent">
                 live training programme
               </Link>{" "}
               and{" "}
-              <Link href="/programs/courses" className="link-wipe text-accent">
+              <Link href="/academy/courses" className="link-wipe text-accent">
                 self-paced courses
               </Link>{" "}
               are the live learning paths.

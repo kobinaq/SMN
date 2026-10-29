@@ -22,7 +22,7 @@ export function Testimonials({ stories }: { stories: HomeStoryItem[] }) {
         kicker="In their words"
         title="What members say"
         actions={
-          <Button href="/stories" variant="secondary">
+          <Button href="/community#stories" variant="secondary">
             Member stories
           </Button>
         }

@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Privacy policy",
   description: "How Think Social Academy handles personal information.",
   alternates: { canonical: "/privacy" },
+  openGraph: { url: "/privacy" },
 };
 
 const sections = [
