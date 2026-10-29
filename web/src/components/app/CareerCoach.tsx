@@ -431,7 +431,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
                   />
                   <button
                     type="button"
-                    className="mt-1 text-xs text-text-3 transition-colors hover:text-danger"
+                    className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-[var(--radius-sm)] text-xs text-text-3 transition-colors hover:bg-inset hover:text-danger"
                     onClick={() => setPlanItems((current) => current.filter((_, lineIndex) => lineIndex !== index))}
                     aria-label="Remove plan item"
                   >

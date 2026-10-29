@@ -147,7 +147,11 @@ export function PortfolioManager({
               <p className="eyebrow text-accent">Guided case study</p>
               <h2 className="mt-1 font-display text-xl text-text-1">{editing ? "Edit case study" : "New case study"}</h2>
             </div>
-            <button type="button" onClick={closeForm} className="text-sm text-text-3 transition-colors hover:text-text-1">
+            <button
+              type="button"
+              onClick={closeForm}
+              className="inline-flex min-h-11 items-center rounded-[var(--radius-sm)] px-2 text-sm text-text-3 transition-colors hover:text-text-1"
+            >
               Cancel
             </button>
           </div>

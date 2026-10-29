@@ -84,13 +84,13 @@ export default async function CertificatesPage() {
                 </div>
               ) : null}
               <div className="btn-row-mobile mt-6 print:hidden">
-                <Button href={certificate.verifyUrl} variant="secondary" className="px-4 py-2 text-xs">
+                <Button href={certificate.verifyUrl} variant="secondary" className="min-h-11 px-4 text-xs">
                   Verify
                   <ShieldCheck className="h-3.5 w-3.5" />
                 </Button>
                 <CopyLinkButton url={certificate.verifyUrl} label="Copy verification link" />
                 {certificate.pdfUrl ? (
-                  <Button href={certificate.pdfUrl} target="_blank" rel="noreferrer" className="px-4 py-2 text-xs">
+                  <Button href={certificate.pdfUrl} target="_blank" rel="noreferrer" className="min-h-11 px-4 text-xs">
                     PDF
                     <Download className="h-3.5 w-3.5" />
                   </Button>

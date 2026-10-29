@@ -127,7 +127,7 @@ export function StaffMediaField({
           </div>
           <button
             type="button"
-            className="rounded-full border border-edge px-3 py-1.5 text-xs text-text-2 hover:border-accent/40"
+            className="inline-flex min-h-11 items-center rounded-full border border-edge px-4 py-2.5 text-xs text-text-2 hover:border-accent/40"
             onClick={openPicker}
           >
             Change
@@ -135,7 +135,7 @@ export function StaffMediaField({
           <button
             type="button"
             aria-label="Clear media"
-            className="rounded-md p-1.5 text-text-3 hover:bg-inset hover:text-text-1"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-text-3 hover:bg-inset hover:text-text-1"
             onClick={() => onChange("")}
           >
             <X className="h-4 w-4" strokeWidth={1.5} />
@@ -164,7 +164,12 @@ export function StaffMediaField({
               <h2 id={dialogId} className="font-display text-lg text-text-1">
                 Choose media
               </h2>
-              <button type="button" className="rounded-md p-1.5 text-text-3 hover:bg-inset hover:text-text-1" onClick={() => setOpen(false)}>
+              <button
+                type="button"
+                aria-label="Close media picker"
+                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md text-text-3 hover:bg-inset hover:text-text-1"
+                onClick={() => setOpen(false)}
+              >
                 <X className="h-4 w-4" />
               </button>
             </div>

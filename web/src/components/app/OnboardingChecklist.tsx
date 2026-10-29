@@ -61,7 +61,7 @@ export function OnboardingChecklist({ steps }: { steps: OnboardingStep[] }) {
         <button
           type="button"
           onClick={dismiss}
-          className="rounded-full border border-edge-subtle p-2 text-text-3 transition-colors hover:text-text-1"
+          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-edge-subtle text-text-3 transition-colors hover:text-text-1"
           aria-label="Dismiss getting started checklist"
         >
           <X className="h-4 w-4" />
