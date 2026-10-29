@@ -1,9 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { cta } from "@/lib/cta";
 import { getVerifiedCertificate } from "@/lib/certificates";
+import { site } from "@/lib/site";
 
-export const metadata = { title: "Verify certificate" };
+export const metadata: Metadata = {
+  title: "Verify certificate",
+  description: `Confirm a ${site.name} certificate with its credential code.`,
+  robots: { index: false, follow: false },
+};
 
 function formatDate(value: string) {
   if (!value) return "";

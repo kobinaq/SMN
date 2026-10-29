@@ -18,6 +18,7 @@ type OpportunityDoc = {
   publishedAt?: string | null;
   expiresAt?: string | null;
   createdAt: string;
+  updatedAt?: string | null;
 };
 
 export type OpportunityItem = {
@@ -37,6 +38,7 @@ export type OpportunityItem = {
   expiresAt: string;
   expired: boolean;
   applicationUrl: string;
+  updatedAt: string;
 };
 
 function isExpired(expiresAt?: string | null) {
@@ -62,6 +64,7 @@ function mapOpportunity(doc: OpportunityDoc): OpportunityItem {
     expiresAt: doc.expiresAt || "",
     expired: isExpired(doc.expiresAt),
     applicationUrl: doc.applicationUrl || "",
+    updatedAt: doc.updatedAt || doc.publishedAt || doc.createdAt,
   };
 }
 
