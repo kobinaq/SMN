@@ -11,7 +11,7 @@ import { img } from "@/lib/images";
 export const metadata: Metadata = {
   title: seoTitle("Social Media Marketing Academy"),
   description:
-    "Think Social Academy is a professional home for marketers. Learn strategy, social media and AI, gain experience, and grow with a community in Ghana and across Africa.",
+    "Think Social Academy is a practical, strategy-led social media marketing academy and community. Learn strategy, social media and AI, gain experience, and grow with a community in Ghana and across Africa.",
   alternates: { canonical: "/about" },
 };
 
