@@ -3,6 +3,9 @@ import { StaffMetricGrid, StaffPageHeader, staffOpsChrome } from "@/components/s
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { staffAccess } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Certificates", { staff: true }) };
 
 const rel = (value: unknown) =>
   value && typeof value === "object" && "id" in value

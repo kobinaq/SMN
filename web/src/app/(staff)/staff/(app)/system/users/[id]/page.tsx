@@ -6,6 +6,9 @@ import { getPayloadClient } from "@/lib/payload";
 import { staffUserFields } from "@/lib/staff/field-defs";
 import { getCollectionDoc } from "@/lib/staff/records";
 import { canStaff } from "@/lib/staff-permissions";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Staff user", { staff: true }) };
 
 export default async function EditStaffUserPage({ params }: { params: Promise<{ id: string }> }) {
   const staff = await requireStaff([], "/staff/system/users");

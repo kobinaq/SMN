@@ -5,6 +5,7 @@ import { EmptyProof } from "@/components/layout/EmptyProof";
 import { Reveal } from "@/components/motion/Reveal";
 import { cta } from "@/lib/cta";
 import { getPublicProfile } from "@/lib/portfolios";
+import { seoTitle } from "@/lib/brand";
 
 type Props = { params: Promise<{ handle: string }> };
 
@@ -12,7 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { handle } = await params;
   const { member } = await getPublicProfile(handle);
   return {
-    title: `${member.name} · Portfolio`,
+    title: seoTitle(`${member.name} portfolio`),
     description: member.bio || member.headline,
     alternates: { canonical: `/u/${handle}` },
     openGraph: { url: `/u/${handle}` },

@@ -7,8 +7,9 @@ import { Chip } from "@/components/ui/Chip";
 import { PageHeader } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
 import { getMemberCertificates } from "@/lib/certificates";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Certificates" };
+export const metadata = { title: pageTitle("Certificates") };
 
 function formatDate(value: string) {
   if (!value) return "";

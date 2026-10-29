@@ -3,6 +3,9 @@ import { StaffEmptyState, StaffPageHeader } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { staffAccess } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("People", { staff: true }) };
 
 const related = (value: unknown): Record<string, unknown> | null =>
   value && typeof value === "object" && "id" in value ? (value as Record<string, unknown>) : null;

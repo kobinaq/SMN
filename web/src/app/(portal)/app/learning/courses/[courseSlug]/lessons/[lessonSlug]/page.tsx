@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
 import { getLmsLesson } from "@/lib/lms";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Lesson" };
+export const metadata = { title: pageTitle("Lesson") };
 
 export default async function LmsLessonPage(
   props: { params: Promise<{ courseSlug: string; lessonSlug: string }> },

@@ -2,6 +2,9 @@ import { StaffEmpty, StaffPageHeader, StaffPanel, StaffTable } from "@/component
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { listCollection } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("AI activity", { staff: true }) };
 
 export default async function StaffAiActivityPage() {
   const staff = await requireStaff(["learning", "support", "analyst"], "/staff/system/ai");

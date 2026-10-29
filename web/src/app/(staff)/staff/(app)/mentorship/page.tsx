@@ -11,8 +11,11 @@ import {
   staffOpsChrome,
 } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
+import { pageTitle } from "@/lib/brand";
 import { getPayloadClient } from "@/lib/payload";
 import { staffAccess } from "@/lib/staff/records";
+
+export const metadata = { title: pageTitle("Mentorship", { staff: true }) };
 
 const rel = (value: unknown): Record<string, unknown> | null =>
   value && typeof value === "object" && "id" in value ? (value as Record<string, unknown>) : null;

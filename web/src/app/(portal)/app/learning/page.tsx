@@ -10,8 +10,9 @@ import { getPayloadClient } from "@/lib/payload";
 import { fulfillSuccessfulPayment } from "@/lib/payments/fulfill";
 import { paystackConfigured, paystackVerify } from "@/lib/payments/paystack";
 import { getSiteSettings } from "@/lib/cms";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Learning" };
+export const metadata = { title: pageTitle("Learning") };
 
 type Props = { searchParams: Promise<{ reference?: string }> };
 

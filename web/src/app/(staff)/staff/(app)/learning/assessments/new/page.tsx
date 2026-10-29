@@ -4,6 +4,9 @@ import { StaffPageHeader, StaffPanel } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { staffAccess } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("New assessment", { staff: true }) };
 
 export default async function NewAssessmentPage({
   searchParams,

@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/Button";
 import { Card, PageHeader } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
 import { getMemberOpportunityActivity, getPublishedOpportunities } from "@/lib/opportunities";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Opportunities" };
+export const metadata = { title: pageTitle("Opportunities") };
 
 export default async function OpportunitiesAppPage() {
   const member = await requireMember("/app/opportunities");

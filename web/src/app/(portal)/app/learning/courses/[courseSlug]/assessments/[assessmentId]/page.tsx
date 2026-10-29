@@ -4,8 +4,9 @@ import { LearnerAssessmentForm } from "@/components/app/LearnerAssessmentForm";
 import { Card } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
 import { getMemberCourseAssessments } from "@/lib/lms-assess";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Assessment" };
+export const metadata = { title: pageTitle("Assessment") };
 
 export default async function CourseAssessmentPage(props: {
   params: Promise<{ courseSlug: string; assessmentId: string }>;

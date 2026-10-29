@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getApplyCourses, getSiteSettings } from "@/lib/cms";
 import { img } from "@/lib/images";
+import { seoTitle } from "@/lib/brand";
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSiteSettings();
   return {
-    title: "Apply for the next cohort",
+    title: seoTitle("Apply for the next cohort"),
     description: `Apply to the ${site.cohort.name}. Applications are reviewed before payment.`,
     alternates: { canonical: "/apply" },
     openGraph: { url: "/apply" },

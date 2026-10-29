@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { ResetPasswordForm } from "@/components/auth/ResetPasswordForm";
+import { seoTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Set a new password",
+  title: seoTitle("Set a new password"),
 };
 
 export default function ResetPasswordPage() {

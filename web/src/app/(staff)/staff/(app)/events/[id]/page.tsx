@@ -10,6 +10,9 @@ import { getPayloadClient } from "@/lib/payload";
 import { countConfirmedRegistrations } from "@/lib/payments/fulfill";
 import { eventFields } from "@/lib/staff/field-defs";
 import { relationId, toDateTimeLocal } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Event", { staff: true }) };
 
 type Props = { params: Promise<{ id: string }> };
 

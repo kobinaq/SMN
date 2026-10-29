@@ -2,6 +2,9 @@ import Link from "next/link";
 import { StaffEmptyState, StaffMetricGrid, StaffPageHeader, StaffPanel, StaffSection, StaffTable } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Events", { staff: true }) };
 
 export default async function StaffEventsOpsPage() {
   const staff = await requireStaff(["content", "support", "analyst"], "/staff/events");
