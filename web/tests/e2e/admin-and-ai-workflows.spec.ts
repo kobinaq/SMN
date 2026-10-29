@@ -63,29 +63,30 @@ async function confirmDialog(page: Page, confirmName: string | RegExp, reason?: 
 
 /**
  * Drive a field labelled Select. The accessible name now lands on the visible
- * trigger button, so Playwright's selectOption cannot target getByLabel
- * directly. The native backing <select> still lives inside the wrapping label
- * (or beside an htmlFor label) for form posts and automation.
+ * trigger (often "Label, current value"), so getByLabel(...).selectOption no
+ * longer works. Prefer the hidden native <select> that still backs the control.
  */
 async function selectLabeledOption(
   page: Page,
   label: string,
   option: string | { index: number },
 ) {
-  const wrapping = page
-    .locator("label")
-    .filter({ has: page.getByText(label, { exact: true }) })
-    .locator("select");
-  if ((await wrapping.count()) > 0) {
-    await wrapping.first().selectOption(option, { force: true });
+  const fieldLabel = page.locator("label").filter({ hasText: label }).first();
+  await expect(fieldLabel).toBeVisible();
+
+  const nested = fieldLabel.locator("select");
+  if ((await nested.count()) > 0) {
+    await nested.selectOption(option, { force: true });
     return;
   }
-  const trigger = page.getByLabel(label, { exact: true });
-  const id = await trigger.getAttribute("id");
-  if (!id) {
-    throw new Error(`No native select found for labelled field “${label}”.`);
+
+  const forId = await fieldLabel.getAttribute("for");
+  if (forId) {
+    await page.locator(`select#${CSS.escape(`${forId}-native`)}`).selectOption(option, { force: true });
+    return;
   }
-  await page.locator(`select#${CSS.escape(`${id}-native`)}`).selectOption(option, { force: true });
+
+  throw new Error(`No native select found for labelled field “${label}”.`);
 }
 
 test("staff completes the audited admin operations workflows", async ({ page }) => {
