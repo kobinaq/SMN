@@ -61,4 +61,46 @@ test.describe("marketing navigation and CTAs", () => {
     await page.goto("/");
     await expect(page.locator('script[type="application/ld+json"]').first()).toHaveCount(1);
   });
+
+  test("job and event pages inherit a working default share image", async ({ request }) => {
+    async function assertShareImage(path: string) {
+      const res = await request.get(path);
+      // Detail pages may 404 when the demo slug is unpublished; metadata and
+      // inherited opengraph-image still render on the response HTML.
+      expect(res.status(), `${path} should not 5xx`).toBeLessThan(500);
+      const html = await res.text();
+      expect(html, `${path} must not hardcode unhashed /opengraph-image`).not.toMatch(
+        /(?:property=["']og:image["']|name=["']twitter:image["'])[^>]*content=["'][^"']*\/opengraph-image(?:\?|["'])/i,
+      );
+
+      const ogMatch =
+        html.match(/property=["']og:image["'][^>]*content=["']([^"']+)["']/i) ||
+        html.match(/content=["']([^"']+)["'][^>]*property=["']og:image["']/i);
+      expect(ogMatch?.[1], `${path} should expose og:image`).toBeTruthy();
+      const ogUrl = ogMatch![1];
+      // Default share art is the hashed opengraph-image route, not a CMS upload.
+      expect(ogUrl).toMatch(/opengraph-image-/);
+
+      const widthMatch =
+        html.match(/property=["']og:image:width["'][^>]*content=["'](\d+)["']/i) ||
+        html.match(/content=["'](\d+)["'][^>]*property=["']og:image:width["']/i);
+      const heightMatch =
+        html.match(/property=["']og:image:height["'][^>]*content=["'](\d+)["']/i) ||
+        html.match(/content=["'](\d+)["'][^>]*property=["']og:image:height["']/i);
+      expect(widthMatch?.[1]).toBe("1200");
+      expect(heightMatch?.[1]).toBe("630");
+
+      const imageRes = await request.get(ogUrl);
+      expect(imageRes.ok(), `og:image for ${path} should be 200 (${ogUrl})`).toBeTruthy();
+      expect(imageRes.headers()["content-type"] || "").toMatch(/image\/png/i);
+      const buf = Buffer.from(await imageRes.body());
+      expect(buf.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))).toBeTruthy();
+      // IHDR width/height are big-endian at bytes 16-23 of a PNG.
+      expect(buf.readUInt32BE(16)).toBe(1200);
+      expect(buf.readUInt32BE(20)).toBe(630);
+    }
+
+    await assertShareImage("/careers/jobs/demo-social-media-associate");
+    await assertShareImage("/events/demo-marketing-meetup");
+  });
 });
