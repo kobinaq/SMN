@@ -34,8 +34,8 @@ export function AcademyPreview() {
         title="Learn skills you can actually use."
         lede="Our programmes connect strategy, content, platforms, AI and practical application so you can move from knowing the theory to knowing how to use it."
         actions={
-          <Button href={cta.explorePrograms.href} variant="secondary">
-            Explore the Academy
+          <Button href={cta.viewCohort.href} variant="secondary">
+            See the 4-week cohort
           </Button>
         }
       />

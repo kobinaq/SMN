@@ -114,7 +114,7 @@ export function Footer({ site }: { site: SiteConfig }) {
               target="_blank"
               rel="noreferrer"
             >
-              {cta.whatsapp.communityLabel}
+              {cta.whatsapp.updatesLabel}
             </a>
           </div>
         </div>

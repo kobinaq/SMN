@@ -137,8 +137,8 @@ export const homepageExplore = [
   {
     title: "Academy",
     body: "Build practical social media marketing and AI skills through structured learning.",
-    ctaLabel: "Explore the Academy",
-    href: "/academy",
+    ctaLabel: "See the 4-week cohort",
+    href: "/academy/cohort",
   },
   {
     title: "Community",
@@ -189,7 +189,7 @@ export const homepageProgrammes = [
     meta: "Learn on your schedule",
     body: "Individual courses you can work through in the member portal, with checkout when a course is published.",
     href: "/academy/courses",
-    ctaLabel: "Explore courses",
+    ctaLabel: "Browse self-paced courses",
   },
 ] as const;
 
