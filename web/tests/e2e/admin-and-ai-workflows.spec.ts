@@ -25,12 +25,13 @@ async function loginMember(page: Page) {
 }
 
 /**
- * Open one course's workspace from the course index and return its section
- * tabs. The workspace has its own URL per course now, so every tab click in
- * these tests goes through this nav rather than a query param on /staff/learning.
+ * Open one course's workspace from the self-paced lane and return its section
+ * tabs. /staff/learning is a hub (Self-paced / Cohorts); course lists live on
+ * the lane pages. The workspace has its own URL per course, so every tab click
+ * goes through this nav rather than a query param on /staff/learning.
  */
 async function openCourseWorkspace(page: Page, title = "Demo Content Strategy Sprint") {
-  await page.goto("/staff/learning");
+  await page.goto("/staff/learning/self-paced");
   await page.getByRole("link", { name: title }).first().click();
   await expect(page).toHaveURL(/\/staff\/learning\/courses\/\d+/);
   const sections = page.getByRole("navigation", { name: "Course sections" });

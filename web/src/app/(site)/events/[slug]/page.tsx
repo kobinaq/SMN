@@ -34,11 +34,31 @@ async function resolvePublishedEventId(slug: string) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const event = await getEventBySlug(slug);
-  if (!event) return { title: "Event" };
+  if (!event) {
+    return {
+      title: "Marketing event",
+      description: "This event listing could not be found.",
+    };
+  }
+  const canonical = `/events/${slug}`;
+  const shareImage = event.hasCustomImage ? event.image : "/opengraph-image";
   return {
     title: event.title,
     description: event.summary,
-    alternates: { canonical: `/events/${slug}` },
+    alternates: { canonical },
+    openGraph: {
+      title: event.title,
+      description: event.summary,
+      type: "website",
+      url: canonical,
+      images: [{ url: shareImage }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: event.title,
+      description: event.summary,
+      images: [shareImage],
+    },
   };
 }
 

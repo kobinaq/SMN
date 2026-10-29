@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   title: seoTitle("Social Media Marketing Tips"),
   description:
     "Practical insights, frameworks and perspectives on social media, marketing strategy, AI, careers and the changing world of work.",
+  alternates: { canonical: "/insights" },
 };
 
 type Props = {
