@@ -60,7 +60,7 @@ export async function POST(req: Request) {
         `${resource.title}`,
         downloadUrl,
         ``,
-        `You are also on the SMN list for occasional strategy notes. Unsubscribe anytime.`,
+        `You are also on the TSA list for occasional strategy notes. Unsubscribe anytime.`,
         ``,
         settings.name,
       ].join("\n"),

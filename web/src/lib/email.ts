@@ -20,7 +20,7 @@ export async function sendEmail(message: EmailMessage): Promise<EmailResult> {
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
     const result = await resend.emails.send({
-      from: process.env.RESEND_FROM ?? "SMN <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM ?? "Think Social Academy <onboarding@resend.dev>",
       to: message.to,
       subject: message.subject,
       text: message.text,

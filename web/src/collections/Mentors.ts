@@ -40,10 +40,10 @@ const completeApproval: CollectionAfterChangeHook = async ({ doc, previousDoc, r
   if (process.env.RESEND_API_KEY) {
     try {
       const result = await new Resend(process.env.RESEND_API_KEY).emails.send({
-        from: process.env.RESEND_FROM ?? "SMN <onboarding@resend.dev>",
+        from: process.env.RESEND_FROM ?? "Think Social Academy <onboarding@resend.dev>",
         to: member.email,
-        subject: "Your SMN mentor profile is approved",
-        text: `Hi ${member.name || "there"},\n\nYour mentor profile has been approved and is now visible in the SMN member directory. We will contact you when a relevant mentorship request is ready for review.\n\nSocial Marketers Network`,
+        subject: "Your TSA mentor profile is approved",
+        text: `Hi ${member.name || "there"},\n\nYour mentor profile has been approved and is now visible in the TSA member directory. We will contact you when a relevant mentorship request is ready for review.\n\nThink Social Academy`,
       });
       if (result.error) req.payload.logger.error({ err: result.error }, "Mentor approval email failed");
     } catch (error) {
