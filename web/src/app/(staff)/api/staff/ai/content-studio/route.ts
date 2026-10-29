@@ -18,7 +18,7 @@ import { AIError } from "@/lib/ai/types";
 
 const id = z.union([z.string().min(1), z.number()]);
 const controls = z.object({
-  audience: z.string().trim().max(200).default("SMN learners"),
+  audience: z.string().trim().max(200).default("TSA learners"),
   level: z.enum(["foundation", "intermediate", "advanced"]).default("foundation"),
   context: z.string().trim().max(5000).default(""),
   tone: z.enum(["clear", "encouraging", "professional", "conversational"]).default("clear"),
@@ -162,7 +162,7 @@ export async function POST(request: Request) {
         {
           role: "system" as const,
           content:
-            "You are SMN Content Studio. Produce accurate, inclusive instructional drafts grounded in supplied course context. Never publish, grade learners, or invent unavailable course facts. Format text drafts in clean Markdown.",
+            "You are TSA Content Studio. Produce accurate, inclusive instructional drafts grounded in supplied course context. Never publish, grade learners, or invent unavailable course facts. Format text drafts in clean Markdown.",
         },
         { role: "user" as const, content: prompt },
       ],
@@ -210,7 +210,7 @@ export async function POST(request: Request) {
     return Response.json({
       candidate: result.value,
       provenance: { provider: result.provider, model: result.model, generatedAt: new Date().toISOString() },
-      notice: "Draft only — review and save explicitly. It has not been published.",
+      notice: "Draft only: review and save explicitly. It has not been published.",
     });
   } catch (error) {
     const safe = error instanceof AIError ? error : new AIError("Generation failed.", "provider", true);
