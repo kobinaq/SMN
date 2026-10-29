@@ -9,6 +9,6 @@
     "lint": "npm run lint --prefix web"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.23.4"
   }
 }

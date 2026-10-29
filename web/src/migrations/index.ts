@@ -7,6 +7,7 @@ import * as migration_20260814_lms_cohort_delivery from './20260814_lms_cohort_d
 import * as migration_20260814_course_domain_rebuild from './20260814_course_domain_rebuild';
 import * as migration_20260825_locked_documents_missing_rels from './20260825_locked_documents_missing_rels';
 import * as migration_20260825_lms_cohort_workspace from './20260825_lms_cohort_workspace';
+import * as migration_20261029_payload_3_90_security_schema from './20261029_payload_3_90_security_schema';
 
 export const migrations = [
   {
@@ -53,5 +54,10 @@ export const migrations = [
     up: migration_20260825_lms_cohort_workspace.up,
     down: migration_20260825_lms_cohort_workspace.down,
     name: '20260825_lms_cohort_workspace'
+  },
+  {
+    up: migration_20261029_payload_3_90_security_schema.up,
+    down: migration_20261029_payload_3_90_security_schema.down,
+    name: '20261029_payload_3_90_security_schema'
   },
 ];
