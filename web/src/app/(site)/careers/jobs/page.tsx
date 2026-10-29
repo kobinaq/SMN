@@ -10,7 +10,7 @@ import { getPublishedOpportunities } from "@/lib/opportunities";
 export const metadata: Metadata = {
   title: seoTitle("Social Media Marketing Jobs & Internships Ghana"),
   description:
-    "Browse marketing jobs, gigs, and internships from Think Social Academy and partner employers. Open to the public. Sign in to apply.",
+    "Browse marketing jobs, gigs, and internships from Social Marketers Network and partner employers. Open to the public. Sign in to apply.",
   alternates: { canonical: "/careers/jobs" },
 };
 

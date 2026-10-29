@@ -16,7 +16,7 @@ import { img } from "@/lib/images";
 export const metadata: Metadata = {
   title: seoTitle("Partner With Us"),
   description:
-    "Build with the next generation of marketers. Train teams, hire TSA talent, request a TSA intern, post a role, collaborate on events, or sponsor access to training.",
+    "Build with the next generation of marketers. Train teams, hire SMN talent, request an intern, post a role, collaborate on events, or sponsor access to training.",
   alternates: { canonical: "/employers" },
 };
 

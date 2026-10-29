@@ -8,9 +8,9 @@ import { COURSE_FEE_PENDING_LABEL, FEE_PENDING_LABEL } from "@/lib/currency";
 export const site = {
   name: "Think Social Academy",
   shortName: "TSA",
-  tagline: "Learn Social Media Marketing. Lead with AI. Gain Real-World Experience. Grow with Community.",
+  tagline: "Learn. Apply. Grow. Connect.",
   description:
-    "A professional learning network where beginners, early-career, and marketing professionals build the skills, experience, and network they need to thrive in a rapidly changing digital industry.",
+    "Think Social Academy is a social media marketing academy and community focused on thoughtful learning, practical application, and work designed to support brand and business results.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://socialmarketers.network",
   email: process.env.OPS_EMAIL ?? "hello@socialmarketers.network",
   whatsappInvite:
@@ -23,7 +23,7 @@ export const site = {
   homepage: {
     headline: "Learn Social Media Marketing. Lead with AI. Gain Real-World Experience. Grow with Community.",
     supportingCopy:
-      "Think Social Academy is a professional learning network where beginners, early-career and marketing professionals build the skills, experience and network they need to thrive in a rapidly changing digital industry.",
+      "Think Social Academy is a social media marketing academy and community focused on thoughtful learning, practical application, and work designed to support brand and business results.",
     primaryCtaLabel: "Explore our Services",
     secondaryCtaLabel: "Join the Community",
     secondaryCtaHref: "/community",
