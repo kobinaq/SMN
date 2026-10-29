@@ -96,6 +96,11 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(page.getByText("Efua Demo")).toHaveCount(0);
   });
 
+  test("unknown event slug returns HTTP 404", async ({ request }) => {
+    const res = await request.get("/events/no-such-event");
+    expect(res.status()).toBe(404);
+  });
+
   test("old public URLs return 308 to final targets in one hop", async ({ request }) => {
     for (const [from, to] of permanentRedirects) {
       const res = await request.get(from, { maxRedirects: 0 });

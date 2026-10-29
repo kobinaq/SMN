@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { EventItem } from "@/lib/content";
 import { eventTypes } from "@/lib/content";
 import { getEvents as getCmsEvents } from "@/lib/cms";
@@ -44,7 +45,8 @@ export function getNextEvent(events: EventItem[]) {
   return upcoming[0] ?? events[0];
 }
 
-export async function getEventBySlug(slug: string): Promise<EventItem | null> {
+/** Cached so generateMetadata and the page share one lookup before notFound(). */
+export const getEventBySlug = cache(async (slug: string): Promise<EventItem | null> => {
   const all = await getEventCalendar();
   return all.find((item) => item.slug === slug) || null;
-}
+});
