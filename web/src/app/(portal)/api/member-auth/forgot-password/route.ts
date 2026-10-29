@@ -42,7 +42,7 @@ export async function POST(request: Request) {
         const resetUrl = `${getServerURL()}/reset-password?token=${encodeURIComponent(token)}`;
         const mailed = await sendEmail({
           to: parsed.data.email.toLowerCase().trim(),
-          subject: "Reset your SMN password",
+          subject: "Reset your TSA password",
           text: `Use this link to set a new password. It expires after a short time.\n\n${resetUrl}\n\nIf you did not request this, ignore the email.`,
         });
         if (!emailWasSent(mailed)) {

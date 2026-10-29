@@ -30,7 +30,7 @@ You're registered for ${args.eventTitle}.
 Ticket code: ${args.ticketCode}${paidLine}
 View your ticket (QR): ${ticketUrl}${joinLine}
 
-Social Marketers Network`,
+Think Social Academy`,
   });
 }
 
@@ -53,7 +53,7 @@ We received your payment for ${args.description}.
 Amount: ${formatMinorAmount(args.amount, args.currency || "GHS")}
 Reference: ${args.reference}
 ${args.nextStepUrl ? `\nContinue here: ${args.nextStepUrl}\n` : ""}
-Social Marketers Network`,
+Think Social Academy`,
   });
 }
 
@@ -78,6 +78,6 @@ ${classroomLine}
 
 Learning home: ${args.learningUrl}
 
-Social Marketers Network`,
+Think Social Academy`,
   });
 }

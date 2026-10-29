@@ -42,8 +42,8 @@ export async function POST(request: Request) {
         const resetUrl = `${getServerURL()}/staff/reset-password?token=${encodeURIComponent(token)}`;
         const mailed = await sendEmail({
           to: parsed.data.email.toLowerCase().trim(),
-          subject: "Reset your SMN staff password",
-          text: `Use this link to set a new password for your SMN staff account. It expires after a short time.\n\n${resetUrl}\n\nIf you did not request this, ignore the email.`,
+          subject: "Reset your TSA staff password",
+          text: `Use this link to set a new password for your TSA staff account. It expires after a short time.\n\n${resetUrl}\n\nIf you did not request this, ignore the email.`,
         });
         if (!emailWasSent(mailed)) {
           console.warn("[staff-forgot-password] token created but email did not send");

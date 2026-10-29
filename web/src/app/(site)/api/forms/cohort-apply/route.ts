@@ -99,7 +99,7 @@ export async function POST(req: Request) {
     if (emailWasSent(opsMail)) {
       await sendEmail({
         to: data.email,
-        subject: "We received your SMN application",
+        subject: "We received your TSA application",
         text: `Hi ${data.name},\n\nThanks for applying. Our team will review your application and follow up within 3 to 5 business days.\n\n${settings.name}`,
       });
     }

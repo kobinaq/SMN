@@ -108,7 +108,7 @@ export async function POST(req: Request) {
       await sendEmail({
         to: data.posterEmail,
         subject: "We received your job posting",
-        text: `Hi ${data.posterName},\n\nThanks for sharing "${data.title}" at ${data.company}. Our team reviews every listing before it goes live on the SMN careers board, and we'll be in touch if we need anything.\n\n${settings.name}`,
+        text: `Hi ${data.posterName},\n\nThanks for sharing "${data.title}" at ${data.company}. Our team reviews every listing before it goes live on the TSA careers board, and we'll be in touch if we need anything.\n\n${settings.name}`,
       });
     }
 
