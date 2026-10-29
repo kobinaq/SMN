@@ -13,8 +13,11 @@ import {
   staffOpsChrome,
 } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
+import { pageTitle } from "@/lib/brand";
 import { getPayloadClient } from "@/lib/payload";
 import { staffAccess } from "@/lib/staff/records";
+
+export const metadata = { title: pageTitle("Jobs", { staff: true }) };
 
 function formatExpiry(value: string | null | undefined) {
   if (!value) return "";

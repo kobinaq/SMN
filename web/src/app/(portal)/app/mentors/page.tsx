@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/Button";
 import { Card, Eyebrow, PageHeader } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
 import { getApprovedMentors, getMentorApplicationStatus } from "@/lib/mentors";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Mentors" };
+export const metadata = { title: pageTitle("Mentors") };
 
 export default async function MentorsAppPage() {
   const member = await requireMember("/app/mentors");

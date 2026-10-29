@@ -26,19 +26,19 @@ export const site = {
       "Think Social Academy is a social media marketing academy and community focused on thoughtful learning, practical application, and work designed to support brand and business results.",
     primaryCtaLabel: "Explore our Services",
     secondaryCtaLabel: "Join the Community",
-    secondaryCtaHref: "/community",
+    secondaryCtaHref: "/signup",
   },
   announcementBanner: "",
   footerBlurb:
-    "Learn, practise, connect, and grow in one ecosystem. Member portal for courses, mentorship, opportunities, portfolios, and credentials. Community on WhatsApp.",
+    "Learn, practise, connect, and grow in one ecosystem. Member portal for courses, mentorship, opportunities, portfolios, and credentials.",
   impactStats: [] as { label: string; value: string }[],
   cohort: {
     name: "Social Media Marketing & AI Cohort",
     startDate: "September 2026",
     applicationDeadline: "Rolling. Apply early",
-    duration: "8 weeks",
+    duration: "4 weeks",
     seats: 30,
-    format: "Live classes, member platform, WhatsApp community, and portfolio projects",
+    format: "Live classes, member platform, community, and portfolio projects",
     sessions: "2 live sessions per week (Classroom) plus member-platform learning",
     /** Safe public wording until the client confirms a final fee */
     priceLabel: FEE_PENDING_LABEL,

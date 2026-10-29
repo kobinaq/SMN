@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getApplyCourses, getSiteSettings } from "@/lib/cms";
 import { img } from "@/lib/images";
+import { seoTitle } from "@/lib/brand";
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSiteSettings();
   return {
-    title: "Apply for the next cohort",
+    title: seoTitle("Apply for the next cohort"),
     description: `Apply to the ${site.cohort.name}. Applications are reviewed before payment.`,
     alternates: { canonical: "/apply" },
     openGraph: { url: "/apply" },
@@ -24,7 +25,7 @@ const steps = [
   },
   {
     n: "02",
-    title: "SMN reviews",
+    title: "TSA reviews",
     body: "Expect a response within 3 to 5 business days.",
   },
   {
@@ -61,9 +62,9 @@ export default async function ApplyPage() {
       <Masthead
         image={img.instructorTeaching}
         alt="Lead instructor teaching a marketing session"
-        kicker="Social Marketers Network"
+        kicker="Think Social Academy"
         title={`Apply to the ${site.cohort.name}`}
-        lede={`Next intake ${site.cohort.startDate}. Submit first. SMN reviews before any payment.`}
+        lede={`Next intake ${site.cohort.startDate}. Submit first. TSA reviews before any payment.`}
         actions={
           <>
             <Button href="#application">Start application</Button>
@@ -132,7 +133,7 @@ export default async function ApplyPage() {
                   <a className="text-accent hover:text-text-1" href={`mailto:${site.email}`}>
                     {site.email}
                   </a>{" "}
-                  or reach WhatsApp support from the contact page.
+                  or use the contact page.
                 </p>
               </div>
             </div>

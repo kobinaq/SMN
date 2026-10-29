@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { getMember } from "@/lib/auth/member";
 import { getPublishedOpportunity } from "@/lib/opportunities";
 import { itemShareImages } from "@/lib/share-metadata";
+import { seoTitle } from "@/lib/brand";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -16,7 +17,7 @@ export async function generateMetadata(
   try {
     const opportunity = await getPublishedOpportunity(slug);
     const canonical = `/careers/jobs/${slug}`;
-    const title = `${opportunity.title} · ${opportunity.company}`;
+    const title = seoTitle(`${opportunity.title} at ${opportunity.company}`);
     const parentMeta = await parent;
     // Jobs have no image field: forward parent hashed opengraph-image /
     // twitter-image (child openGraph without images does not inherit them).
@@ -29,7 +30,7 @@ export async function generateMetadata(
       description: opportunity.summary,
       alternates: { canonical },
       openGraph: {
-        title,
+        title: title.absolute,
         description: opportunity.summary,
         type: "website",
         url: canonical,
@@ -37,14 +38,14 @@ export async function generateMetadata(
       },
       twitter: {
         card: "summary_large_image",
-        title,
+        title: title.absolute,
         description: opportunity.summary,
         ...(share.twitterImages ? { images: share.twitterImages } : {}),
       },
     };
   } catch {
     return {
-      title: "Career opportunity",
+      title: seoTitle("Career opportunity"),
       description: "This job listing could not be found.",
     };
   }

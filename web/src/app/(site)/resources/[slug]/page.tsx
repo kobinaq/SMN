@@ -6,6 +6,7 @@ import { ArrowLeft, Download } from "@/components/ui/icons";
 import { ResourceDownloadForm } from "@/components/resources/ResourceDownloadForm";
 import { ResourceRow } from "@/components/resources/ResourceRow";
 import { Button } from "@/components/ui/Button";
+import { seoTitle } from "@/lib/brand";
 import { getRelatedResources, getResource, getResourceLibrary } from "@/lib/resources";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -20,12 +21,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resource = await getResource(slug);
   if (!resource) return {};
   const canonical = `/resources/${slug}`;
+  const title = seoTitle(resource.title);
   return {
-    title: resource.title,
+    title,
     description: resource.description,
     alternates: { canonical },
     openGraph: {
-      title: resource.title,
+      title: title.absolute,
       description: resource.description,
       url: canonical,
       images: [{ url: resource.cover }],

@@ -54,7 +54,7 @@ export default async function CohortPage() {
       />
       <Masthead
         image={img.cohortPage}
-        alt="Social Marketers Network cohort members"
+        alt="Think Social Academy cohort members"
         kicker="Social Media Marketing & AI Training"
         title="Become the marketer businesses need."
         lede="A practical social media marketing and AI training programme designed to help aspiring and early-career marketers move from content creation to strategic marketing. Not just the person who manages the page."
@@ -227,9 +227,9 @@ export default async function CohortPage() {
               Your learning should not end when the programme does.
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-text-2 sm:text-base">
-              Completing the programme is only the beginning. Eligible participants can progress
-              into the SMN Experience Programme, where they can be considered for practical
-              opportunities with brands, agencies, and marketing professionals.
+              Completing the programme is only the beginning. Learners can keep practising through
+              practical briefs and clearly labelled marketing simulations, and stay connected to the
+              TSA community.
             </p>
             <ul className="mt-6 space-y-3">
               {experienceOpportunities.map((item) => (
@@ -240,12 +240,11 @@ export default async function CohortPage() {
               ))}
             </ul>
             <p className="mt-4 text-sm leading-relaxed text-text-3">
-              Employment is not guaranteed. Experience placements depend on fit, readiness, and
-              partner availability.
+              TSA does not guarantee employment, internships, or placements.
             </p>
             <div className="btn-row-mobile mt-8">
               <Button href={cta.viewExperience.href}>{cta.viewExperience.label}</Button>
-              <Button href="/community" variant="secondary">
+              <Button href={cta.joinCommunity.href} variant="secondary">
                 {cta.joinCommunity.label}
               </Button>
             </div>

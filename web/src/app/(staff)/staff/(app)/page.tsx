@@ -1,7 +1,10 @@
-import { requireStaff, staffDisplayName, staffRoleLabel } from "@/lib/auth/staff";
-import { getPayloadClient } from "@/lib/payload";
-import { getAdminOpsSnapshot } from "@/lib/admin-dashboard";
 import { StaffTodayHome } from "@/components/staff/StaffTodayHome";
+import { getAdminOpsSnapshot } from "@/lib/admin-dashboard";
+import { requireStaff, staffDisplayName, staffRoleLabel } from "@/lib/auth/staff";
+import { pageTitle } from "@/lib/brand";
+import { getPayloadClient } from "@/lib/payload";
+
+export const metadata = { title: pageTitle("Today", { staff: true }) };
 
 export default async function StaffHomePage({
   searchParams,

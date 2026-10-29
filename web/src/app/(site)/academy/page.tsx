@@ -24,10 +24,10 @@ export default async function ProgramsPage() {
     <>
       <Masthead
         image={img.academyGroup}
-        alt="Social Marketers Network members gathered together"
-        kicker="SMN Academy"
-        title="Choose how you learn with SMN."
-        lede="Live training, self-paced courses, a simulation waitlist, and the Experience Programme. Practical paths into the Network."
+        alt="Think Social Academy members gathered together"
+        kicker="TSA Academy"
+        title="Choose how you learn with TSA."
+        lede="Live training, self-paced courses, and clearly labelled marketing simulations. Practical paths into the academy and community."
         actions={
           <>
             <Button href={cta.applyCohort.href}>{cta.applyCohort.shortLabel}</Button>
@@ -57,7 +57,7 @@ export default async function ProgramsPage() {
             >
               <Image
                 src={img.cohortPage}
-                alt="Social Marketers Network cohort in session"
+                alt="Think Social Academy cohort in session"
                 fill
                 className="object-cover transition duration-700 ease-out group-hover:scale-[1.03]"
                 sizes="(max-width: 1024px) 100vw, 60vw"
@@ -138,14 +138,13 @@ export default async function ProgramsPage() {
                 <div className="relative">
                   <span className="inline-flex items-center gap-2 eyebrow text-accent">
                     <Handshake className="h-3.5 w-3.5" strokeWidth={1.75} />
-                    Experience Programme
+                    Practical work
                   </span>
                   <h3 className="mt-4 font-display display-3 text-text-1">
-                    From training into professional experience
+                    From training into practical application
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-text-2">
-                    Selected participants are matched with brands, agencies, and marketers for
-                    applied work.
+                    Practise through practical briefs and clearly labelled marketing simulations.
                   </p>
                 </div>
                 <span className="relative mt-6 inline-flex items-center gap-2 text-sm font-medium text-text-1/85 transition group-hover:text-accent">
@@ -175,8 +174,8 @@ export default async function ProgramsPage() {
                 body: "Upcoming practice scenarios. Join the waitlist for the next window.",
               },
               {
-                label: "Experience",
-                body: "Applied placements after training. Intern, volunteer, or project-based work.",
+                label: "Practical work",
+                body: "Practical briefs and clearly labelled marketing simulations after training.",
               },
             ].map((item) => (
               <div key={item.label}>
@@ -190,7 +189,7 @@ export default async function ProgramsPage() {
             <div className="max-w-xl">
               <h2 className="font-display display-3 text-text-1">Not sure which path fits?</h2>
               <p className="mt-3 text-sm leading-relaxed text-text-2">
-                Ask about the live cohort, self-paced courses, the simulation waitlist, or Experience.
+                Ask about the live cohort, self-paced courses, or the marketing simulation waitlist.
               </p>
             </div>
             <div className="btn-row-mobile">

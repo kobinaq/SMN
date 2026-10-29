@@ -6,9 +6,10 @@ import { Chip } from "@/components/ui/Chip";
 import { memberDisplayName, requireMember } from "@/lib/auth/member";
 import { getMemberContinuity } from "@/lib/member-continuity";
 import { site } from "@/lib/site";
+import { pageTitle } from "@/lib/brand";
 
 export const metadata = {
-  title: "Member home",
+  title: pageTitle("Member home"),
 };
 
 export default async function AppHomePage() {

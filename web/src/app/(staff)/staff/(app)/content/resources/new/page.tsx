@@ -2,6 +2,9 @@ import { StaffRecordForm } from "@/components/staff/StaffRecordForm";
 import { StaffPageHeader, StaffPanel } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { resourceFields } from "@/lib/staff/field-defs";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("New resource", { staff: true }) };
 
 export default async function NewResourcePage() {
   await requireStaff(["content", "learning"], "/staff/content/resources/new");

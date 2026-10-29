@@ -16,6 +16,7 @@ import {
 } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { isAIFeatureEnabled } from "@/lib/ai/config";
+import { pageTitle } from "@/lib/brand";
 import { calculateCourseAnalytics, type AnalyticsEnrollment, type AnalyticsLesson, type AnalyticsModule, type AnalyticsProgress } from "@/lib/lms-analytics";
 import { evaluateCourseReadiness, type CourseReadinessInput, type CurriculumLesson } from "@/lib/lms-readiness";
 import { getPayloadClient } from "@/lib/payload";
@@ -25,7 +26,7 @@ import { StaffRecordForm, StaffDeleteButton } from "@/components/staff/StaffReco
 import { AddLessonForm, AddModuleForm } from "../../CurriculumCreateForms";
 import { AddSessionForm, AnnouncementComposer, AttendanceRegister } from "../../CohortOpsForms";
 
-export const metadata = { title: "Course" };
+export const metadata = { title: pageTitle("Course", { staff: true }) };
 
 function relationID(value: unknown) {
   return String(value && typeof value === "object" && "id" in value ? value.id : (value ?? ""));

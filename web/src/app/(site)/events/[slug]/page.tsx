@@ -8,6 +8,7 @@ import { EventRegisterButton } from "@/components/events/EventRegisterButton";
 import { Reveal } from "@/components/motion/Reveal";
 import { Button } from "@/components/ui/Button";
 import { getMember } from "@/lib/auth/member";
+import { seoTitle } from "@/lib/brand";
 import { formatEventDate, formatEventDay, getEventBySlug, getEventCalendar, getNextEvent } from "@/lib/events";
 import { getPayloadClient } from "@/lib/payload";
 import { itemShareImages } from "@/lib/share-metadata";
@@ -48,12 +49,13 @@ export async function generateMetadata(
     openGraphImages: parentMeta.openGraph?.images,
     twitterImages: parentMeta.twitter?.images,
   });
+  const title = seoTitle(event.title);
   return {
-    title: event.title,
+    title,
     description: event.summary,
     alternates: { canonical },
     openGraph: {
-      title: event.title,
+      title: title.absolute,
       description: event.summary,
       type: "website",
       url: canonical,
@@ -61,7 +63,7 @@ export async function generateMetadata(
     },
     twitter: {
       card: "summary_large_image",
-      title: event.title,
+      title: title.absolute,
       description: event.summary,
       ...(share.twitterImages ? { images: share.twitterImages } : {}),
     },

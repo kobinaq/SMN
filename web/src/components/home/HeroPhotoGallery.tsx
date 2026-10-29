@@ -33,7 +33,7 @@ const photos: PhotoItem[] = [
     zIndex: 50,
     direction: "left",
     src: img.hero1,
-    alt: "Member of the Social Marketers Network community",
+    alt: "Member of the Think Social Academy community",
   },
   {
     id: 2,
@@ -43,7 +43,7 @@ const photos: PhotoItem[] = [
     zIndex: 40,
     direction: "left",
     src: img.hero2,
-    alt: "Marketer in the SMN community",
+    alt: "Marketer in the TSA community",
   },
   {
     id: 3,
@@ -53,7 +53,7 @@ const photos: PhotoItem[] = [
     zIndex: 30,
     direction: "right",
     src: img.hero3,
-    alt: "Social Marketers Network member",
+    alt: "Think Social Academy member",
   },
   {
     id: 4,
@@ -63,7 +63,7 @@ const photos: PhotoItem[] = [
     zIndex: 20,
     direction: "right",
     src: img.hero4,
-    alt: "Professional in the SMN network",
+    alt: "Professional in the TSA community",
   },
   {
     id: 5,
@@ -73,7 +73,7 @@ const photos: PhotoItem[] = [
     zIndex: 10,
     direction: "left",
     src: img.hero5,
-    alt: "Community member of Social Marketers Network",
+    alt: "Community member of Think Social Academy",
   },
 ];
 

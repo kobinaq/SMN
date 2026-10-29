@@ -6,6 +6,9 @@ import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { lmsModuleFields } from "@/lib/staff/field-defs";
 import { getCollectionDoc, relationId } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Module", { staff: true }) };
 
 export default async function EditModulePage({ params }: { params: Promise<{ id: string }> }) {
   const staff = await requireStaff(["learning", "content", "support"], "/staff/learning");

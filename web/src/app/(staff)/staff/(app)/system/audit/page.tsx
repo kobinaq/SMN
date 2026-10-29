@@ -2,6 +2,9 @@ import { StaffEmpty, StaffPageHeader, StaffPanel, StaffTable } from "@/component
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { listCollection, relationId } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Audit log", { staff: true }) };
 
 export default async function StaffAuditPage({
   searchParams,

@@ -2,8 +2,9 @@ import { PortfolioManager } from "@/components/app/PortfolioManager";
 import { PageHeader } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
 import { getMemberPortfolios } from "@/lib/portfolios";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Portfolio" };
+export const metadata = { title: pageTitle("Portfolio") };
 
 export default async function PortfolioPage() {
   const member = await requireMember("/app/portfolio");

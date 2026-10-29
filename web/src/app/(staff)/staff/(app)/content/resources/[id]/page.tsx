@@ -5,6 +5,9 @@ import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { resourceFields } from "@/lib/staff/field-defs";
 import { getCollectionDoc, relationId } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Edit resource", { staff: true }) };
 
 export default async function EditResourcePage({ params }: { params: Promise<{ id: string }> }) {
   const staff = await requireStaff(["content", "learning", "analyst"], "/staff/content/resources");

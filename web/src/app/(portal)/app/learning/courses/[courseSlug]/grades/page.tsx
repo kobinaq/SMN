@@ -3,8 +3,9 @@ import { notFound } from "next/navigation";
 import { Card } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
 import { assessmentHref, getMemberCourseAssessments } from "@/lib/lms-assess";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Grades" };
+export const metadata = { title: pageTitle("Grades") };
 
 export default async function CourseGradesPage(props: { params: Promise<{ courseSlug: string }> }) {
   const { courseSlug } = await props.params;

@@ -1,7 +1,10 @@
 import { StaffPageHeader, StaffPanel } from "@/components/staff/ui";
 import { isAIFeatureEnabled } from "@/lib/ai/config";
 import { requireStaff } from "@/lib/auth/staff";
+import { pageTitle } from "@/lib/brand";
 import { CreateCourseForm } from "./CreateCourseForm";
+
+export const metadata = { title: pageTitle("New course", { staff: true }) };
 
 export default async function StaffNewCoursePage() {
   await requireStaff(["learning", "content"], "/staff/learning/courses/new");
