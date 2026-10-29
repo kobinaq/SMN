@@ -134,7 +134,7 @@ export async function getEvents(): Promise<EventItem[]> {
         hasCustomImage: Boolean(customImage),
         format: (record.venue as string) || formatLabel,
         price: priceLabel,
-        host: (record.host as string) || "SMN",
+        host: (record.host as string) || "TSA",
         highlights: bodyHighlights,
         pricing: pricing as "free" | "paid",
         amount,
