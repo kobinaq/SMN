@@ -47,7 +47,7 @@ export default async function ResourceDetailPage({ params }: Props) {
         <div className="container-wide pb-8 sm:pb-10">
           <Link
             href="/resources"
-            className="inline-flex min-h-10 items-center gap-2 text-sm text-text-3 transition hover:text-text-1"
+            className="inline-flex min-h-11 items-center gap-2 text-sm text-text-3 transition hover:text-text-1"
           >
             <ArrowLeft className="h-4 w-4" />
             All resources

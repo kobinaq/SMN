@@ -145,7 +145,9 @@ export function PortalShell({
           <main
             className={cn(
               "mx-auto w-full px-4 py-8 sm:px-6 sm:py-10",
-              "animate-[staff-fade-in_280ms_cubic-bezier(0.32,0.72,0,1)_both]",
+              // No fill-mode "both": retaining the keyframe transform on <main>
+              // creates a containing block, so fixed tutor UI scrolls with content.
+              "animate-[staff-fade-in_280ms_cubic-bezier(0.32,0.72,0,1)]",
               maxWidth === "7xl" ? "max-w-7xl" : "max-w-6xl",
             )}
           >

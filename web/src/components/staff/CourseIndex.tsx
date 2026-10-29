@@ -218,7 +218,7 @@ export function CourseIndex({
                     type="button"
                     onClick={() => setPendingDelete(course)}
                     aria-label={`Delete ${course.title}`}
-                    className="ml-auto rounded-full p-2 text-text-3 transition-colors hover:bg-danger-bg hover:text-danger"
+                    className="ml-auto inline-flex min-h-11 min-w-11 items-center justify-center rounded-full text-text-3 transition-colors hover:bg-danger-bg hover:text-danger"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>

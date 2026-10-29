@@ -172,7 +172,7 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
           <button
             type="submit"
             disabled={busy}
-            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-accent-strong px-5 py-2.5 text-sm font-semibold text-[#08111f] transition-colors duration-[var(--dur-fast)] hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-accent-strong px-5 py-2.5 text-sm font-semibold text-[#08111f] transition-colors duration-[var(--dur-fast)] hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
           >
             {busy ? "Generating draft course…" : "Generate draft course"}
           </button>
@@ -223,7 +223,7 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
           <button
             type="submit"
             disabled={busy}
-            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-accent-strong px-5 py-2.5 text-sm font-semibold text-[#08111f] transition-colors duration-[var(--dur-fast)] hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-accent-strong px-5 py-2.5 text-sm font-semibold text-[#08111f] transition-colors duration-[var(--dur-fast)] hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
           >
             {busy ? "Creating…" : "Create draft course"}
           </button>
