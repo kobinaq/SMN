@@ -1,8 +1,8 @@
 import { cta } from "@/lib/cta";
 
-/** SEO title: Primary Keyword | Social Marketers Network */
+/** SEO title: Primary Keyword | Think Social Academy */
 export function seoTitle(keyword: string) {
-  return { absolute: `${keyword} | Social Marketers Network` } as const;
+  return { absolute: `${keyword} | Think Social Academy` } as const;
 }
 
 export const audienceStages = [
@@ -223,8 +223,8 @@ export const partnerTracks = [
     id: "hire",
     n: "02",
     kicker: "Hire interns and experience",
-    title: "Hire SMN talent",
-    body: "Find emerging talent. Create real-world opportunities. Partner with SMN to connect with marketers who are building practical skills and looking to apply them. We can help match opportunities with participants based on their skills, interests, and career direction.",
+    title: "Hire TSA talent",
+    body: "Find emerging talent. Create real-world opportunities. Partner with TSA to connect with marketers who are building practical skills and looking to apply them. We can help match opportunities with participants based on their skills, interests, and career direction.",
     items: [
       "Hire interns",
       "Recruit junior talent",

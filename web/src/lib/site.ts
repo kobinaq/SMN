@@ -6,8 +6,8 @@ import { COURSE_FEE_PENDING_LABEL, FEE_PENDING_LABEL } from "@/lib/currency";
  * Pricing defaults intentionally withhold unconfirmed figures.
  */
 export const site = {
-  name: "Social Marketers Network",
-  shortName: "SMN",
+  name: "Think Social Academy",
+  shortName: "TSA",
   tagline: "Learn Social Media Marketing. Lead with AI. Gain Real-World Experience. Grow with Community.",
   description:
     "A professional learning network where beginners, early-career, and marketing professionals build the skills, experience, and network they need to thrive in a rapidly changing digital industry.",
@@ -23,7 +23,7 @@ export const site = {
   homepage: {
     headline: "Learn Social Media Marketing. Lead with AI. Gain Real-World Experience. Grow with Community.",
     supportingCopy:
-      "Social Marketers Network is a professional learning network where beginners, early-career and marketing professionals build the skills, experience and network they need to thrive in a rapidly changing digital industry.",
+      "Think Social Academy is a professional learning network where beginners, early-career and marketing professionals build the skills, experience and network they need to thrive in a rapidly changing digital industry.",
     primaryCtaLabel: "Explore our Services",
     secondaryCtaLabel: "Join the Community",
     secondaryCtaHref: "/community",

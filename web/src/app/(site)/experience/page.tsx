@@ -23,7 +23,7 @@ import { img } from "@/lib/images";
 export const metadata: Metadata = {
   title: seoTitle("SMN Experience Programme"),
   description:
-    "After Social Media Marketing and AI training, selected SMN participants are matched with brands, agencies, and marketers for internships, projects, and portfolio-building experience. Practice simulations open on a waitlist.",
+    "After Social Media Marketing and AI training, selected TSA participants are matched with brands, agencies, and marketers for internships, projects, and portfolio-building experience. Practice simulations open on a waitlist.",
   alternates: { canonical: "/experience" },
 };
 

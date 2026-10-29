@@ -15,7 +15,7 @@ import { getSiteSettings } from "@/lib/cms";
 export const metadata: Metadata = {
   title: seoTitle("Social Media Marketing Resources"),
   description:
-    "Practical marketing resources you can actually use. Templates, frameworks, checklists, AI prompts, and guides from Social Marketers Network.",
+    "Practical marketing resources you can actually use. Templates, frameworks, checklists, AI prompts, and guides from Think Social Academy.",
   alternates: { canonical: "/resources" },
 };
 

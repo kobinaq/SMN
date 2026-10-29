@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: seoTitle("Social Media Marketing Training"),
     description:
-      "Learn social media marketing, strategy and AI through practical training, mentorship and real-world experience at Social Marketers Network.",
+      "Learn social media marketing, strategy and AI through practical training, mentorship and real-world experience at Think Social Academy.",
     alternates: { canonical: "/programs/cohort" },
   };
 }

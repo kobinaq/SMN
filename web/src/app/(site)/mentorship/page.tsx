@@ -8,7 +8,7 @@ import { img } from "@/lib/images";
 export const metadata: Metadata = {
   title: seoTitle("Marketing Mentorship"),
   description:
-    "Learn from people already doing the work. SMN connects mentees with experienced marketing professionals, and reviews every mentor before they appear in the directory.",
+    "Learn from people already doing the work. TSA connects mentees with experienced marketing professionals, and reviews every mentor before they appear in the directory.",
   alternates: { canonical: "/mentorship" },
 };
 

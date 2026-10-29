@@ -12,7 +12,7 @@ import { img } from "@/lib/images";
 export const metadata: Metadata = {
   title: seoTitle("Marketing Academy Ghana"),
   description:
-    "Training programmes, self-paced courses, marketing simulations, and the SMN Experience Programme from Social Marketers Network.",
+    "Training programmes, self-paced courses, marketing simulations, and the SMN Experience Programme from Think Social Academy.",
   alternates: { canonical: "/programs" },
 };
 

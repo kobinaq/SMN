@@ -22,7 +22,7 @@ import { getSiteSettings } from "@/lib/cms";
 export const metadata: Metadata = {
   title: seoTitle("Marketing Events Ghana"),
   description:
-    "Come learn with us. Free webinars, workshops, community events, and industry conversations from Social Marketers Network.",
+    "Come learn with us. Free webinars, workshops, community events, and industry conversations from Think Social Academy.",
   alternates: { canonical: "/events" },
 };
 

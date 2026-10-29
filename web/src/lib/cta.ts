@@ -50,11 +50,11 @@ export const cta = {
     href: "/signup",
   },
   hireTalent: {
-    label: "Hire SMN talent",
+    label: "Hire TSA talent",
     href: "/employers",
   },
   requestIntern: {
-    label: "Request an intern",
+    label: "Request a TSA intern",
     href: "/employers?request=intern",
   },
   postJob: {
@@ -78,7 +78,7 @@ export const cta = {
     href: "/careers/jobs?type=Internship",
   },
   contact: {
-    label: "Contact SMN",
+    label: "Contact TSA",
     href: "/contact",
   },
   whatsapp: {

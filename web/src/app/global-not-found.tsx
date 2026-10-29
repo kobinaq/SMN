@@ -10,7 +10,7 @@ const quickLinks = [
 ];
 
 export const metadata = {
-  title: "Page not found · Social Marketers Network",
+  title: "Page not found · Think Social Academy",
   description: "The page you are looking for does not exist.",
 };
 

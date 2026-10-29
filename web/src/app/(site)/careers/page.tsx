@@ -11,7 +11,7 @@ import { img } from "@/lib/images";
 export const metadata: Metadata = {
   title: seoTitle("Marketing Career Training"),
   description:
-    "Marketing jobs, internships, and mentorship through Social Marketers Network. Browse openings publicly. Apply from a member account.",
+    "Marketing jobs, internships, and mentorship through Think Social Academy. Browse openings publicly. Apply from a member account.",
   alternates: { canonical: "/careers" },
 };
 

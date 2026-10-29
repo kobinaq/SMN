@@ -4,7 +4,7 @@ import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy policy",
-  description: "How Social Marketers Network handles personal information.",
+  description: "How Think Social Academy handles personal information.",
   alternates: { canonical: "/privacy" },
 };
 
