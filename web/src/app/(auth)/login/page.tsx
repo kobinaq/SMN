@@ -8,7 +8,7 @@ import { seoTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
   title: seoTitle("Sign in"),
-  description: "Sign in to your Social Marketers Network member account.",
+  description: "Sign in to your Think Social Academy member account.",
 };
 
 function safeCallbackUrl(value: string | undefined) {

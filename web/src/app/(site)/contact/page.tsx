@@ -10,7 +10,8 @@ import { seoTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
   title: seoTitle("Contact"),
-  description: "Get in touch with Think Social Academy for partnerships, speaking, talent, or general questions.",
+  description:
+    "Get in touch with Think Social Academy for partnerships, training, speaking, or general questions.",
   alternates: { canonical: "/contact" },
   openGraph: { url: "/contact" },
 };
@@ -34,10 +35,10 @@ export default async function ContactPage({
     {
       icon: MessageCircle,
       label: "Community",
-      title: "WhatsApp",
-      href: site.whatsappInvite,
-      external: true,
-      body: "Join the Network chat for daily conversation and feedback.",
+      title: "Create your free account",
+      href: cta.joinCommunity.href,
+      external: false,
+      body: "Join TSA for updates, learning experiences, and community access.",
     },
     {
       icon: Briefcase,
@@ -45,7 +46,7 @@ export default async function ContactPage({
       title: "Partner with us",
       href: "/partner",
       external: false,
-      body: "Share a role or ask about marketers from the Network.",
+      body: "Sponsorship, training, events, and marketing simulations.",
     },
     {
       icon: Mic2,
@@ -53,23 +54,28 @@ export default async function ContactPage({
       title: "Book a conversation",
       href: `mailto:${site.email}?subject=Speaking%20request`,
       external: false,
-      body: "Workshops, panels, and guest sessions with SMN.",
+      body: "Workshops, panels, and guest sessions with TSA.",
     },
   ];
   return (
     <>
       <Masthead
         image={img.contactTalk}
-        alt="Two people talking in the SMN space"
-        kicker="Social Marketers Network"
+        alt="Two people talking in the TSA space"
+        kicker="Think Social Academy"
         title="Let’s talk."
-        lede="Partnerships, speaking, talent requests, or a quick question. Send a message and we will get back to you."
+        lede="Partnerships, training, speaking, or a quick question. Send a message and we will get back to you."
         actions={
           <>
             <Button href="#message">Send a message</Button>
-            <Button href={site.whatsappInvite} target="_blank" rel="noreferrer" variant="secondary">
+            <a
+              href={site.whatsappInvite}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-11 items-center text-sm text-text-3 underline-offset-2 hover:underline"
+            >
               {cta.whatsapp.communityLabel}
-            </Button>
+            </a>
           </>
         }
       />
@@ -86,7 +92,8 @@ export default async function ContactPage({
               Pick a channel that fits.
             </h2>
             <p className="mt-3 max-w-md text-sm leading-relaxed text-text-2">
-              Prefer email for formal requests. WhatsApp for community. The form for anything else.
+              Prefer email for formal requests. Create a free account for community access. The form
+              for anything else.
             </p>
 
             <ul className="mt-10 space-y-0 border-t border-edge-subtle">
@@ -119,8 +126,8 @@ export default async function ContactPage({
           <div>
             <h2 className="font-display display-3 text-text-1">Send a message</h2>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-text-2">
-              Tell us what you need. We route partnership, speaking, and talent requests to the right
-              inbox.
+              Tell us what you need. We route partnership, training, and speaking requests to the
+              right inbox.
             </p>
             <div className="mt-8 border border-edge-subtle bg-raised p-5 sm:p-8 md:p-10">
               <ContactForm defaultType={type} />

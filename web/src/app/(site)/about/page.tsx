@@ -22,9 +22,9 @@ export default function AboutPage() {
       <Masthead
         image={img.aboutMission}
         alt="Instructor presenting to marketers in the room"
-        kicker="About Social Marketers Network"
+        kicker="About Think Social Academy"
         title="Building the community modern marketers need."
-        lede="Social Marketers Network is a professional learning network helping aspiring, early-career, and marketing professionals build the skills, experience, and relationships they need to thrive in a rapidly changing industry."
+        lede="Think Social Academy is a social media marketing academy and community helping aspiring and early-career marketers build the skills, practical experience, and relationships they need to grow in a rapidly changing industry."
         actions={
           <>
             <Button href={cta.explorePrograms.href}>{cta.explorePrograms.label}</Button>
@@ -41,9 +41,7 @@ export default function AboutPage() {
             <h2 className="font-display display-3 text-text-1">Our mission</h2>
             <p className="mt-4 text-sm leading-relaxed text-text-2 sm:text-base">
               Empower aspiring marketers, professionals, and entrepreneurs with the skills,
-              practical experience, community, and industry connections they need to build
-              successful careers, grow businesses, and make meaningful impact through modern
-              marketing.
+              practical experience, and community they need to grow through modern marketing.
             </p>
           </div>
           <div>
@@ -113,9 +111,9 @@ export default function AboutPage() {
             More than an academy.
           </h2>
           <p className="mt-5 text-sm leading-relaxed text-text-2 sm:text-base">
-            Courses can teach you a skill. A network can change the trajectory of your career. SMN
-            brings together learning, community, mentorship, practical experience, and industry
-            connections in one ecosystem.
+            Courses can teach you a skill. A community can change how you grow. Think Social Academy
+            brings together learning, community, mentorship, and practical experience in one
+            ecosystem.
           </p>
           <p className="mt-4 text-sm leading-relaxed text-text-2 sm:text-base">
             You can join us to learn something new, find a mentor, meet other marketers, work on a

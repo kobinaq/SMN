@@ -46,7 +46,7 @@ export default async function CoursesPage() {
         alt="Marketer learning on a phone in the lounge"
         kicker="Academy · Courses"
         title="Learn marketing at your own pace."
-        lede="Practical, focused courses designed to help you build specific marketing skills without committing to a full training programme. Enroll on SMN to unlock portal access."
+        lede="Practical, focused courses designed to help you build specific marketing skills without committing to a full training programme. Enroll on TSA to unlock portal access."
         actions={
           <>
             <Button href="#catalogue">Explore courses</Button>

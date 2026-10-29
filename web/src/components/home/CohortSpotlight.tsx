@@ -31,7 +31,7 @@ export function CohortSpotlight() {
       <div className="absolute inset-0" data-parallax-wrap>
         <Image
           src={img.cohortSpotlight}
-          alt="Social Marketers Network cohort members"
+          alt="Think Social Academy cohort members"
           fill
           className="object-cover"
           data-parallax

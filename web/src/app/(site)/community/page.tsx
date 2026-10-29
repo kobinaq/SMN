@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/Button";
 import { excerptStoryQuote } from "@/lib/content";
 import { seoTitle } from "@/lib/brand";
+import { cta } from "@/lib/cta";
 import { img } from "@/lib/images";
 import { getSiteSettings, getStories } from "@/lib/cms";
 import { itemShareImages } from "@/lib/share-metadata";
@@ -119,8 +120,8 @@ const principles = [
 const steps = [
   {
     step: "01",
-    title: "Join WhatsApp",
-    body: "Tap the invite, introduce yourself, and say what you are working on right now.",
+    title: "Create your free account",
+    body: "Sign up for TSA, introduce yourself, and say what you are working on right now.",
   },
   {
     step: "02",
@@ -151,21 +152,29 @@ export default async function CommunityPage() {
                 You should not have to figure out your marketing career alone
               </h1>
               <p className="mt-4 max-w-xl text-sm leading-relaxed text-text-2 sm:mt-5 sm:text-base md:text-lg">
-                The Social Marketers Network is a community for people learning, working, and
-                growing in marketing. A place to ask questions, exchange ideas, find mentors,
-                discover opportunities, and build relationships with people who understand the
+                Think Social Academy is a community for people learning, working, and growing in
+                marketing. A place to ask questions, exchange ideas, find mentors, discover selected
+                opportunities when available, and build relationships with people who understand the
                 industry you are navigating.
               </p>
               <div className="btn-row-mobile mt-8 sm:mt-10">
-                <Button href={site.whatsappInvite} target="_blank" rel="noreferrer">
-                  Join the Network
-                </Button>
+                <Button href={cta.joinCommunity.href}>{cta.joinCommunity.label}</Button>
                 <Button href="/events" variant="secondary">
                   See upcoming events
                 </Button>
               </div>
-              <p className="mt-5 text-xs text-text-3 sm:text-sm">
-                Free to join · Cohort members get private groups after acceptance
+              <p className="mt-4 text-xs text-text-3 sm:text-sm">
+                <a
+                  href={site.whatsappInvite}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex min-h-11 items-center underline-offset-2 hover:underline"
+                >
+                  {cta.whatsapp.communityLabel}
+                </a>
+              </p>
+              <p className="mt-3 text-xs text-text-3 sm:text-sm">
+                Free account · Cohort members get private groups after acceptance
               </p>
             </div>
 
@@ -173,7 +182,7 @@ export default async function CommunityPage() {
               <div className="relative aspect-[3/4] overflow-hidden">
                 <Image
                   src={img.communityPortrait}
-                  alt="Two SMN members sitting together"
+                  alt="Two TSA members sitting together"
                   fill
                   className="object-cover"
                   sizes="40vw"
@@ -193,7 +202,7 @@ export default async function CommunityPage() {
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
                     src={img.communityEvent}
-                    alt="Two members at an SMN gathering"
+                    alt="Two members at a TSA gathering"
                     fill
                     className="object-cover"
                     sizes="40vw"
@@ -209,7 +218,7 @@ export default async function CommunityPage() {
       <section className="border-b border-edge-subtle bg-raised">
         <div className="container-wide grid grid-cols-2 gap-6 py-8 sm:grid-cols-4 sm:gap-4 sm:py-10">
           {[
-            { label: "Home base", value: "WhatsApp" },
+            { label: "Home base", value: "TSA account" },
             { label: "Focus", value: "Strategy + AI" },
             { label: "For", value: "Marketers at every stage" },
             { label: "Vibe", value: "Helpful, not hype" },
@@ -278,7 +287,7 @@ export default async function CommunityPage() {
           <div className="relative aspect-[4/3] overflow-hidden lg:aspect-[5/4]">
             <Image
               src={img.communityCulture}
-              alt="Networking during an SMN session"
+              alt="Networking during a TSA session"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -431,17 +440,27 @@ export default async function CommunityPage() {
                 You should not have to figure marketing out alone
               </h2>
               <p className="mt-4 max-w-xl text-sm text-text-2 sm:text-base">
-                Come introduce yourself, ask a question, or share what you are building. The Network
-                is ready when you are.
+                Come introduce yourself, ask a question, or share what you are building. The
+                community is ready when you are.
               </p>
             </div>
-            <div className="btn-row-mobile lg:justify-end">
-              <Button href={site.whatsappInvite} target="_blank" rel="noreferrer" variant="light">
-                Join SMN
-              </Button>
-              <Button href="/contact" variant="secondary">
-                Contact us
-              </Button>
+            <div className="flex flex-col gap-3 lg:items-end">
+              <div className="btn-row-mobile lg:justify-end">
+                <Button href={cta.joinCommunity.href} variant="light">
+                  {cta.joinCommunity.label}
+                </Button>
+                <Button href="/contact" variant="secondary">
+                  Contact us
+                </Button>
+              </div>
+              <a
+                href={site.whatsappInvite}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-11 items-center text-sm font-medium text-[#08111f] underline-offset-2 hover:underline"
+              >
+                {cta.whatsapp.communityLabel}
+              </a>
             </div>
           </div>
         </div>

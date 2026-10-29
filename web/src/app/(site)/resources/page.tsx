@@ -10,7 +10,6 @@ import { Band, Checklist, Masthead, Placeholder } from "@/components/site/kit";
 import { resourceOfferings, seoTitle } from "@/lib/brand";
 import { resourceTypes } from "@/lib/content";
 import { getResourceLibrary } from "@/lib/resources";
-import { getSiteSettings } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: seoTitle("Social Media Marketing Resources"),
@@ -42,7 +41,7 @@ export default async function ResourcesPage({
   searchParams: Promise<{ type?: string }>;
 }) {
   const { type } = await searchParams;
-  const [site, all] = await Promise.all([getSiteSettings(), getResourceLibrary()]);
+  const [all] = await Promise.all([getResourceLibrary()]);
   const active =
     type && resourceTypes.includes(type as (typeof resourceTypes)[number]) ? type : "All";
 
@@ -61,7 +60,7 @@ export default async function ResourcesPage({
 
   const heading = TITLES[active] ?? {
     title: "Marketing resources you can actually use.",
-    lede: "Templates, frameworks, checklists, AI prompts, and guides. Free for the community — open one, enter your email, and we send the file.",
+    lede: "Templates, frameworks, checklists, AI prompts, and guides. Free for the community: open one, enter your email, and we send the file.",
   };
 
   return (
@@ -100,14 +99,12 @@ export default async function ResourcesPage({
                   title={active === "All" ? "The library is being built" : `No ${active} yet`}
                   body={
                     all.length === 0
-                      ? "New tools are shared with the community first. Join the WhatsApp group and we will send them as they land."
+                      ? "New tools are shared with the community first. Create your free account and we will share them as they land."
                       : "Nothing under this filter yet. Browse the rest of the library while we add more."
                   }
                   actions={
                     all.length === 0 ? (
-                      <Button href={site.whatsappInvite} target="_blank" rel="noreferrer">
-                        Join WhatsApp
-                      </Button>
+                      <Button href="/signup">Create your free account</Button>
                     ) : (
                       <Button href="/resources" variant="secondary">
                         Show everything

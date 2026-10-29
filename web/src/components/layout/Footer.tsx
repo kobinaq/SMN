@@ -51,7 +51,14 @@ export function Footer({ site }: { site: SiteConfig }) {
               {site.tagline}
             </p>
             <p className="mt-4 text-xs leading-relaxed text-text-3 sm:mt-6 sm:text-sm">
-              {site.footerBlurb}
+              {site.footerBlurb}{" "}
+              <Link
+                href="/signup"
+                className="inline-flex min-h-11 items-center text-text-2 underline underline-offset-2 transition hover:text-text-1"
+              >
+                Create a free account
+              </Link>{" "}
+              to stay connected.
             </p>
           </div>
 

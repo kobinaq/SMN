@@ -49,7 +49,7 @@ export function JobPostingForm() {
       const json = (await res.json()) as { ok?: boolean; error?: string };
       if (!res.ok) throw new Error(json.error || "Something went wrong");
       setStatus("success");
-      setMessage("Thanks — your listing is with our team for review. We'll be in touch if we need anything.");
+      setMessage("Thanks. Your listing is with our team for review. We'll be in touch if we need anything.");
       trackEvent("employer_enquiry_complete", { location: "job_posting_form" });
       form.reset();
     } catch (err) {

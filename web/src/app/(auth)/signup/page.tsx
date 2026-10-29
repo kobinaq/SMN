@@ -7,7 +7,7 @@ import { seoTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
   title: seoTitle("Create account"),
-  description: "Join the Social Marketers Network member portal.",
+  description: "Join the Think Social Academy member portal.",
 };
 
 export default async function SignupPage() {
