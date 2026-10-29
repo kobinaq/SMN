@@ -215,7 +215,8 @@ test.describe("marketing navigation and CTAs", () => {
       const options = await native.locator("option").allTextContents();
       expect(options.join("\n")).not.toMatch(/Talent request|Intern request|Job posting/i);
       expect(options).toContain("General enquiry");
-      await expect(page.getByRole("button", { name: /enquiry type/i })).toBeVisible();
+      // Trigger shows the blank placeholder, not a retired type.
+      await expect(page.locator("#contact-type")).toHaveText(/enquiry type/i);
     });
   });
 
