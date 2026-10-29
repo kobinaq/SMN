@@ -36,12 +36,20 @@ describe("marketing defaults", () => {
     expect(cta.memberSignIn.href).toBe("/login");
     expect(cta.joinTsa.href).toBe("/signup");
     expect(cta.joinTsa.label).toBe("Join TSA");
+    expect(cta.joinCommunity.href).toBe("/signup");
+    expect(cta.joinCommunity.label).toBe("Join the Community");
+    expect(cta.whatsapp.communityLabel).toMatch(/whatsapp/i);
     expect(cta.hireTalent.href).toBe("/community");
     expect(cta.postJob.href).toBe("/community");
     expect(cta.requestIntern.href).toBe("/community");
     expect(cta.viewMentors.href).toBe("/community/mentors");
     expect(cta.exploreServices.label).toBe("Explore our Services");
     expect(cta.exploreServices.href).toBe("/academy");
+  });
+
+  it("uses a 4-week cohort duration in public defaults", () => {
+    expect(site.cohort.duration).toBe("4 weeks");
+    expect(site.homepage.secondaryCtaHref).toBe("/signup");
   });
 
   it("exposes the T3 public navigation labels and hrefs", () => {

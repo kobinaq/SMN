@@ -42,7 +42,7 @@ export default async function PublicProfilePage({ params }: Props) {
                 </div>
               )}
               <div>
-                <p className="font-display text-sm tracking-[0.08em] text-accent">SMN member</p>
+                <p className="font-display text-sm tracking-[0.08em] text-accent">TSA member</p>
                 <h1 className="mt-2 font-display text-4xl text-text-1 sm:text-5xl md:text-6xl">
                   {member.name}
                 </h1>
@@ -171,7 +171,7 @@ export default async function PublicProfilePage({ params }: Props) {
             <div className="mt-8">
               <EmptyProof
                 title="No public case studies yet"
-                body="This member has not published selected work. The Academy is where SMN members build proof they can show."
+                body="This member has not published selected work. The Academy is where TSA members build proof they can show."
                 href={cta.explorePrograms.href}
                 label={cta.explorePrograms.label}
               />

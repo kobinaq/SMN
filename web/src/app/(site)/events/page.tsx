@@ -94,20 +94,15 @@ export default async function EventsPage({ searchParams }: Props) {
     <>
       <Masthead
         image={img.eventsGathering}
-        alt="Circle discussion during an SMN workshop"
+        alt="Circle discussion during a TSA workshop"
         kicker="Events"
         title="Come learn with us."
-        lede="From free webinars and workshops to community events and industry conversations, SMN creates spaces where marketers can learn, connect, and exchange ideas."
+        lede="From free webinars and workshops to community events and industry conversations, TSA creates spaces where marketers can learn, connect, and exchange ideas."
         actions={
           <>
             {next ? <Button href={`/events/${next.slug}`}>Register for next event</Button> : null}
-            <Button
-              href={site.whatsappInvite}
-              target="_blank"
-              rel="noreferrer"
-              variant="secondary"
-            >
-              Join WhatsApp
+            <Button href="/signup" variant="secondary">
+              Join the Community
             </Button>
           </>
         }
@@ -178,11 +173,11 @@ export default async function EventsPage({ searchParams }: Props) {
               }
               body={
                 all.length === 0
-                  ? "Join WhatsApp so you hear about the next webinar or workshop first."
+                  ? "Create your free account so you hear about the next webinar or workshop first."
                   : "Check back soon, or browse all upcoming sessions."
               }
-              href={all.length === 0 ? site.whatsappInvite : "/events"}
-              label={all.length === 0 ? "Join WhatsApp" : "Show all events"}
+              href={all.length === 0 ? "/signup" : "/events"}
+              label={all.length === 0 ? "Create your free account" : "Show all events"}
             />
           ) : null}
         </div>

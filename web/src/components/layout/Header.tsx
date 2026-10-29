@@ -15,19 +15,9 @@ import { trackEvent } from "@/lib/analytics";
 import { getFocusableElements, trapTabKey } from "@/lib/focus-trap";
 
 function pathMatches(pathname: string, href: string) {
-  if (href === "/") return pathname === "/";
+  // Exact for `/` and `/community` so /community/mentors marks Mentors only.
+  if (href === "/" || href === "/community") return pathname === href;
   return pathname === href || pathname.startsWith(`${href}/`);
-}
-
-function sectionIsActive(
-  pathname: string,
-  item: (typeof nav)[number],
-): boolean {
-  if (pathMatches(pathname, item.href)) return true;
-  if ("children" in item && item.children) {
-    return item.children.some((child) => pathMatches(pathname, child.href));
-  }
-  return false;
 }
 
 /** Same pattern as ConfirmDialog: settle on the first client render without setState-in-effect. */
@@ -139,15 +129,29 @@ export function Header() {
         inert={!open ? true : undefined}
       >
         <div className="flex h-full flex-col overflow-y-auto overscroll-contain px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-4 sm:px-6">
+          <div className="mb-2 flex justify-end">
+            <button
+              type="button"
+              className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full border border-edge px-4 text-sm text-text-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              aria-label="Close menu"
+              onClick={() => setOpen(false)}
+            >
+              <X className="h-5 w-5" aria-hidden />
+              Close menu
+            </button>
+          </div>
           <nav aria-label="Mobile">
             {nav.map((item) => {
-              const active = sectionIsActive(pathname, item);
+              const pageCurrent =
+                "children" in item && item.children
+                  ? pathname === item.href
+                  : pathMatches(pathname, item.href);
               return (
                 <div key={item.label} className="border-b border-edge-subtle py-1">
                   <Link
                     href={item.href}
                     className="flex min-h-11 items-center font-display text-xl text-text-1 sm:text-2xl"
-                    aria-current={active ? "page" : undefined}
+                    aria-current={pageCurrent ? "page" : undefined}
                     onClick={() => setOpen(false)}
                   >
                     {item.label}
@@ -182,16 +186,15 @@ export function Header() {
             <Button href={cta.memberSignIn.href} variant="ghost" className="w-full">
               {cta.memberSignIn.label}
             </Button>
-            <Button
+            <a
               href={site.whatsappInvite}
               target="_blank"
               rel="noreferrer"
-              variant="secondary"
-              className="w-full"
+              className="inline-flex min-h-11 items-center justify-center px-3 text-center text-xs text-text-3 underline-offset-2 hover:underline"
               onClick={() => trackEvent("whatsapp_click", { location: "mobile_nav" })}
             >
               {cta.whatsapp.communityLabel}
-            </Button>
+            </a>
           </div>
         </div>
       </div>,
@@ -238,7 +241,7 @@ export function Header() {
                     aria-expanded={openMenu === item.label}
                     aria-haspopup="true"
                     aria-controls={`${menuId}-${item.label}`}
-                    aria-current={sectionIsActive(pathname, item) ? "page" : undefined}
+                    aria-current={pathname === item.href ? "page" : undefined}
                     onClick={() =>
                       setOpenMenu((current) => (current === item.label ? null : item.label))
                     }

@@ -21,9 +21,9 @@ import { cta } from "@/lib/cta";
 import { img } from "@/lib/images";
 
 export const metadata: Metadata = {
-  title: seoTitle("SMN Experience Programme"),
+  title: seoTitle("Practical work and marketing simulations"),
   description:
-    "After Social Media Marketing and AI training, selected SMN participants are matched with brands, agencies, and marketers for internships, projects, and portfolio-building experience. Practice simulations open on a waitlist.",
+    "After Social Media Marketing and AI training, TSA learners practise through practical briefs and clearly labelled marketing simulations. Simulation waitlist open.",
   alternates: { canonical: "/academy" },
   openGraph: { url: "/academy" },
 };
@@ -70,7 +70,7 @@ const leavesWith = [
   },
   {
     title: "Portfolio projects",
-    body: "Tangible work they can present to potential employers or clients.",
+    body: "Tangible work they can present as examples of their current approach.",
   },
   {
     title: "Professional feedback",
@@ -81,18 +81,18 @@ const leavesWith = [
     body: "A better understanding of how marketing teams, agencies, or brands operate.",
   },
   {
-    title: "Professional connections",
-    body: "Relationships with experienced marketers and potential employers.",
+    title: "Community connections",
+    body: "Relationships with experienced marketers and other learners.",
   },
 ];
 
 const partnerGains = [
-  "Develop emerging marketing talent",
+  "Support practical marketing learning",
   "Give back to the marketing community",
-  "Access potential interns or future employees",
-  "Receive additional support on defined projects",
+  "Contribute briefs for marketing simulations",
+  "Receive additional support on defined practice projects",
   "Build relationships with emerging marketers",
-  "Contribute to closing the gap between marketing education and employment",
+  "Help close the gap between marketing education and practice",
 ];
 
 export default function ExperiencePage() {
@@ -101,9 +101,9 @@ export default function ExperiencePage() {
       <Masthead
         image={img.internPath}
         alt="Two emerging marketers talking in the lounge"
-        kicker="SMN Experience Programme"
-        title="From training into real marketing work."
-        lede="After completing SMN's Social Media Marketing and AI Training Programme, selected participants are matched with marketing professionals, agencies, brands, and organisations based on skills, interests, and career direction."
+        kicker="Practical work"
+        title="From training into practical marketing work."
+        lede="After completing TSA's Social Media Marketing and AI Training Programme, learners can keep practising through practical briefs and clearly labelled marketing simulations."
         actions={
           <>
             <Button href={cta.applyCohort.href}>{cta.applyCohort.shortLabel}</Button>
@@ -112,14 +112,14 @@ export default function ExperiencePage() {
             </Button>
           </>
         }
-        meta="Placements are not guaranteed. Eligible participants are considered on fit, readiness, and partner availability."
+        meta="TSA does not guarantee employment, internships, or placements. Simulations are labelled as simulations."
       />
 
       <Band size="lg">
         <SectionHead
           kicker="The shape of it"
           title="Learn. Apply. Build experience."
-          lede="The engagement may take the form of an internship, volunteering, mentorship, project-based experience, or job shadowing. SMN remains involved throughout."
+          lede="Practical work may take the form of guided briefs, project-based practice, mentorship, or clearly labelled marketing simulations. TSA stays involved throughout."
         />
       </Band>
 
@@ -166,7 +166,7 @@ export default function ExperiencePage() {
         <SectionHead
           kicker="Output"
           title="Leave with evidence, not only notes."
-          lede="The key objective is tangible experience for a portfolio. Depending on the placement, participants should aim to complete three to five of the following."
+          lede="The key objective is tangible portfolio evidence. Across practical briefs and marketing simulations, participants should aim to complete three to five of the following."
         />
         <DefinitionGrid className="mt-12" items={[...experienceDeliverables]} />
       </Band>
@@ -198,20 +198,20 @@ export default function ExperiencePage() {
           <div>
             <h2 className="font-display display-3 text-text-1">At the end</h2>
             <p className="mt-4 text-sm leading-relaxed text-text-2">
-              SMN conducts a simple Experience Review with both the participant and the partner.
+              TSA conducts a simple review with both the participant and the partner.
             </p>
             <Checklist className="mt-7" tone="ai" items={[...experienceReview]} />
           </div>
         </div>
       </Band>
 
-      {/* Simulations used to be a page of its own. It is the same idea one step
-          earlier — practice before placement — so it lives here now. */}
+      {/* Simulations used to be a page of its own. Practice before applied work
+          lives here now. */}
       <Band id="simulations" size="lg" className="scroll-mt-24">
         <SectionHead
           kicker="Simulations · Waitlist"
-          title="Practise before the placement."
-          lede="Marketing becomes easier to understand when you have a problem to solve. Simulations let you step into the role of a marketer and work through realistic challenges. The live practice product is not open yet."
+          title="Practise through marketing simulations."
+          lede="Marketing becomes easier to understand when you have a problem to solve. Clearly labelled simulations let you step into the role of a marketer and work through realistic challenges. The live practice product is not open yet."
         />
         <div className="mt-12 grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="relative aspect-[4/3] overflow-hidden">

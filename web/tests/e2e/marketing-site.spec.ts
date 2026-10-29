@@ -65,6 +65,52 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(page.getByText(/Contact TSA for current fees/i).first()).toBeVisible();
   });
 
+  test("cohort duration is 4 weeks on public pages", async ({ page }) => {
+    await page.goto("/academy/cohort");
+    await expect(page.getByText(/4 weeks/i).first()).toBeVisible();
+    await expect(page.getByText(/8 weeks/i)).toHaveCount(0);
+  });
+
+  test("community CTA links to signup, not WhatsApp as primary", async ({ page }) => {
+    await page.goto("/");
+    const join = page.getByRole("link", { name: /join the community/i }).first();
+    await expect(join).toHaveAttribute("href", "/signup");
+    await page.goto("/community");
+    const communityJoin = page.getByRole("link", { name: /join the community/i }).first();
+    await expect(communityJoin).toHaveAttribute("href", "/signup");
+  });
+
+  test("navigation progress bar appears on internal link click", async ({ page }) => {
+    await page.goto("/");
+    const progressAppeared = page.waitForSelector("[data-navigation-progress]", {
+      state: "attached",
+      timeout: 5000,
+    });
+    await page
+      .getByRole("navigation", { name: "Primary" })
+      .getByRole("link", { name: "Academy", exact: true })
+      .click();
+    await progressAppeared;
+  });
+
+  test("desktop nav marks only Mentors with aria-current on /community/mentors", async ({
+    page,
+  }) => {
+    await page.goto("/community/mentors");
+    const primary = page.getByRole("navigation", { name: "Primary" });
+    await primary.getByRole("button", { name: "Community" }).hover();
+    await expect(primary.getByRole("menuitem", { name: "Mentors" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    await expect(primary.getByRole("menuitem", { name: "The community" })).not.toHaveAttribute(
+      "aria-current",
+    );
+    await expect(primary.getByRole("button", { name: "Community" })).not.toHaveAttribute(
+      "aria-current",
+    );
+  });
+
   test("application page explains next steps before payment", async ({ page }) => {
     await page.goto("/apply");
     await expect(page.getByRole("heading", { name: /apply to the/i })).toBeVisible();
@@ -191,18 +237,39 @@ test.describe("marketing navigation and CTAs", () => {
       }
     });
 
-    test("marks the active nav item with aria-current", async ({ page }) => {
+    test("marks only Mentors with aria-current on /community/mentors", async ({ page }) => {
       await page.goto("/community/mentors");
       await page.getByRole("button", { name: /open menu/i }).click();
       const panel = page.locator('[role="dialog"][aria-label="Mobile menu"]');
-      await expect(panel.getByRole("link", { name: "Community", exact: true })).toHaveAttribute(
-        "aria-current",
-        "page",
-      );
       await expect(panel.getByRole("link", { name: "Mentors", exact: true })).toHaveAttribute(
         "aria-current",
         "page",
       );
+      await expect(panel.getByRole("link", { name: "The community", exact: true })).not.toHaveAttribute(
+        "aria-current",
+      );
+      await expect(panel.getByRole("link", { name: "Community", exact: true })).not.toHaveAttribute(
+        "aria-current",
+      );
+    });
+
+    test("Close menu button closes the panel and returns focus to the toggle", async ({
+      page,
+    }) => {
+      await page.goto("/");
+      const toggle = page.getByRole("button", { name: /open menu/i });
+      await toggle.click();
+      const panel = page.locator('[role="dialog"][aria-label="Mobile menu"]');
+      await expect(panel).not.toHaveAttribute("aria-hidden", "true");
+      const close = panel.getByRole("button", { name: "Close menu" });
+      await expect(close).toBeVisible();
+      const box = await close.boundingBox();
+      expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
+      expect(box?.width ?? 0).toBeGreaterThanOrEqual(44);
+      await close.click();
+      await expect(panel).toHaveAttribute("aria-hidden", "true");
+      await expect(panel).toHaveAttribute("inert", "");
+      await expect(toggle).toBeFocused();
     });
 
     test("contact falls back when ?type=Job%20posting and hides retired options", async ({

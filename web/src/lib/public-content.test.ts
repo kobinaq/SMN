@@ -47,7 +47,7 @@ describe("cohortFromLmsDoc", () => {
     name: "Fallback cohort",
     startDate: "September 2026",
     applicationDeadline: "Rolling",
-    duration: "8 weeks",
+    duration: "4 weeks",
     seats: 30,
     format: "Live classes",
     sessions: "2 live sessions",

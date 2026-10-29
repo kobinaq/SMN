@@ -2,7 +2,7 @@ import { img } from "@/lib/images";
 
 export const instructor = {
   name: "Arielle Adodo",
-  role: "Founder & Lead Instructor, Social Marketers Network",
+  role: "Founder & Lead Instructor, Think Social Academy",
   title: "Marketing Strategist · Educator · Founder",
   image: img.instructor,
   headline: "Arielle Adodo",
@@ -13,7 +13,7 @@ export const instructor = {
   highlights: [
     "Social and digital marketing across FMCG, lifestyle, consumer, and technology brands",
     "Content strategy, brand storytelling, and marketing education",
-    "Leads the Social Media Marketing & AI training path at SMN",
+    "Leads the Social Media Marketing & AI training path at TSA",
     "Building a marketing community across Africa and beyond",
   ],
   note: null as string | null,
@@ -79,14 +79,14 @@ export const beliefs = [
 ];
 
 export const homepageHero = {
-  eyebrow: "About Social Marketers Network",
+  eyebrow: "About Think Social Academy",
   lines: [
     "Learn Social Media Marketing.",
     "Lead with AI.",
     "Gain Real-World Experience.",
     "Grow with Community",
   ],
-  body: "Social Marketers Network is a professional learning network where beginners, early-career and marketing professionals build the skills, experience and network they need to thrive in a rapidly changing digital industry.",
+  body: "Think Social Academy is a social media marketing academy and community where beginners and early-career marketers build the skills, practical experience and relationships they need to grow in a rapidly changing digital industry.",
 } as const;
 
 /** Homepage founder essay. About keeps founderStory. */
@@ -97,8 +97,8 @@ export const homepageFounderStory = [
   "Social media has evolved from simply posting content into an important part of how businesses build brands, communities and revenue. At the same time, AI is changing how marketers research, create, analyse and work but learning marketing is still often fragmented. People learn a tool here, a platform there, and a collection of content tricks without understanding how it all connects.",
   "Now social media managers are no longer just being asked to keep a page active or create aesthetically pleasing content. Businesses want marketers who could understand the audience, develop strategy, contribute to campaigns and ultimately help drive results.",
   "However, many people entering the field are learning how to post before they learned how to think. There is also very little guidance around the things that actually help someone build a portfolio, experience and eventually, a career.",
-  "We want to change that. At the Social Marketers Network, we combine social media strategy, AI and practical application to generate results for brands and businesses.",
-  "We're building something bigger than a course, we offer career development and professional experience and a community that shares resources to help you stay ahead. At SMN, learning leads to experience, experience leads to relationships, and relationships lead to opportunity.",
+  "We want to change that. At Think Social Academy, we combine social media strategy, AI and practical application to generate results for brands and businesses.",
+  "We're building something bigger than a course: practical learning, simulations, and a community that shares resources to help you stay ahead. At TSA, learning leads to practice, practice leads to relationships, and relationships help you keep growing.",
 ];
 
 export const smnValues = [
@@ -128,10 +128,10 @@ export const homepageClose = {
   lead: "Access a network",
   title: "More than an academy.",
   paragraphs: [
-    "Courses can teach you a skill. A network can change the trajectory of your career.",
-    "SMN brings together learning, community, mentorship, practical experience and industry connections in one ecosystem.",
+    "Courses can teach you a skill. A community can change how you grow.",
+    "Think Social Academy brings together learning, community, mentorship and practical experience in one ecosystem.",
     "You can join us to learn something new, find a mentor, meet other marketers, work on a simulation, attend an event, access an opportunity, or simply stay connected to an industry that never stops changing.",
-    "We are building toward a future where marketers can learn, gain experience, find mentors, discover opportunities and build meaningful careers within one connected ecosystem.",
+    "We are building toward a future where marketers can learn, gain experience, find mentors, discover opportunities and keep growing within one connected ecosystem.",
   ],
 } as const;
 
@@ -148,16 +148,16 @@ export const ecosystem: { title: string; body: string; kicker?: string }[] = [
   },
   {
     title: "Practice",
-    kicker: "SMN Experience Program",
-    body: "We work with brands, agencies and marketing professionals to create internships, volunteer placements, projects and mentorship opportunities.",
+    kicker: "Practical work",
+    body: "Apply what you learn through practical briefs and clearly labelled marketing simulations, plus projects and mentorship.",
   },
   {
     title: "Connect",
-    body: "Community, events, mentorship and professional relationships.",
+    body: "Community, events, mentorship and relationships with other learners.",
   },
   {
     title: "Grow",
-    body: "Career development, opportunities and continuous learning.",
+    body: "Continuous learning, feedback, and selected opportunities as they become available.",
   },
 ];
 
@@ -186,12 +186,12 @@ export const memberJourney = [
   {
     step: "05",
     title: "Earn verifiable credentials",
-    body: "Certificates that employers and partners can verify on SMN.",
+    body: "Certificates that partners and learners can verify on TSA.",
   },
   {
     step: "06",
     title: "Discover opportunities",
-    body: "Find and track marketing roles and gigs inside the member platform.",
+    body: "Stay informed about selected opportunities and events inside the member platform.",
   },
 ];
 
@@ -384,7 +384,7 @@ export const cohortFaqs = [
   },
   {
     q: "How are live sessions delivered?",
-    a: "Live sessions run on Google Classroom. Members also use the SMN member portal for learning progress, resources, mentorship, and opportunities, plus the WhatsApp community for day-to-day support.",
+    a: "Live sessions run on Google Classroom. Members also use the TSA member portal for learning progress, resources, mentorship, and opportunities. An optional WhatsApp group is available for day-to-day chat.",
   },
   {
     q: "Do I need prior experience?",
@@ -392,18 +392,18 @@ export const cohortFaqs = [
   },
   {
     q: "When do I pay?",
-    a: "Submit an application first. SMN reviews applications within a few business days. Payment or an approved payment plan is arranged after acceptance, not before you apply.",
+    a: "Submit an application first. TSA reviews applications within a few business days. Payment or an approved payment plan is arranged after acceptance, not before you apply.",
   },
   {
     q: "Is employment guaranteed?",
-    a: "No. We help you get ready for the market and open doors to employers and opportunities. We do not promise a job.",
+    a: "No. We help you practise marketing work and stay connected to selected opportunities when available. We do not promise a job.",
   },
   {
     q: "How do self-paced courses work?",
-    a: "Purchase courses checkout on SMN via Paystack, then unlock in the member portal. Apply-first programmes use /apply. Staff grant access or send a payment link after review.",
+    a: "Purchase courses checkout on TSA via Paystack, then unlock in the member portal. Apply-first programmes use /apply. Staff grant access or send a payment link after review.",
   },
   {
     q: "What is the fee?",
-    a: "Contact SMN for current fees. Payment plans may be available after acceptance.",
+    a: "Contact TSA for current fees. Payment plans may be available after acceptance.",
   },
 ];

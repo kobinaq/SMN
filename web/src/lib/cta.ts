@@ -40,12 +40,12 @@ export const cta = {
     href: "/academy/courses",
   },
   viewExperience: {
-    label: "Learn about the Experience Programme",
+    label: "Learn about practical work",
     href: "/academy#practical-work",
   },
   joinCommunity: {
-    label: "Join the community",
-    href: "/community",
+    label: "Join the Community",
+    href: "/signup",
   },
   viewMentors: {
     label: "Mentors",
@@ -98,7 +98,8 @@ export const cta = {
   },
   whatsapp: {
     label: "Chat on WhatsApp",
-    communityLabel: "Join the community",
+    /** Secondary only. Never use as the main community CTA. */
+    communityLabel: "Also join our WhatsApp group",
   },
   submitApplication: {
     label: "Submit application",

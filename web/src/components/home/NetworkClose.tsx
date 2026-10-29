@@ -24,7 +24,7 @@ export function NetworkClose() {
             ))}
           </div>
           <div className="mt-10 flex flex-wrap gap-3">
-            <Button href={cta.joinCommunity.href}>Join the community</Button>
+            <Button href={cta.joinCommunity.href}>{cta.joinCommunity.label}</Button>
             <Button href={cta.applyCohort.href} variant="secondary">
               {cta.applyCohort.shortLabel}
             </Button>
@@ -34,7 +34,7 @@ export function NetworkClose() {
         <div className="relative aspect-[4/5] overflow-hidden" data-parallax-wrap>
           <Image
             src={img.communityHome}
-            alt="SMN members gathered together in the community space"
+            alt="TSA members gathered together in the community space"
             fill
             className="object-cover"
             data-parallax

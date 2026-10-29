@@ -8,7 +8,7 @@ import { img } from "@/lib/images";
 export const metadata: Metadata = {
   title: seoTitle("Marketing Mentorship"),
   description:
-    "Learn from people already doing the work. SMN connects mentees with experienced marketing professionals, and reviews every mentor before they appear in the directory.",
+    "Learn from people already doing the work. TSA connects mentees with experienced marketing professionals, and reviews every mentor before they appear in the directory.",
   alternates: { canonical: "/community/mentors" },
   openGraph: { url: "/community/mentors" },
 };
@@ -54,7 +54,7 @@ const steps = [
     body: "From your member account, say the topic, the goal, and the format you need.",
   },
   {
-    title: "SMN coordinates",
+    title: "TSA coordinates",
     body: "We review the request and make the introduction so the time stays useful for both sides.",
   },
 ];
@@ -80,12 +80,12 @@ const mentorReview = [
     body: "Complete your member profile, then submit a mentor application with specialties and how you like to work.",
   },
   {
-    title: "SMN reviews",
+    title: "TSA reviews",
     body: "Staff read for experience, clarity, and fit before a profile becomes visible in the directory.",
   },
   {
     title: "You take requests",
-    body: "Members send focused requests. SMN coordinates introductions so your time stays protected.",
+    body: "Members send focused requests. TSA coordinates introductions so your time stays protected.",
   },
 ];
 
@@ -112,7 +112,7 @@ export default function MentorshipPage() {
         <SectionHead
           kicker="For mentees"
           title="Bring one real question."
-          lede="SMN connects mentees with experienced professionals who can offer perspective and practical advice on the things that actually stall a marketing career."
+          lede="TSA connects mentees with experienced professionals who can offer perspective and practical advice on the things that actually stall a marketing career."
         />
         <div className="mt-12 grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <ul className="space-y-3">
@@ -189,14 +189,14 @@ export default function MentorshipPage() {
       <CtaBand
         kicker="Both sides"
         title="Find a mentor, or become one."
-        lede="The directory lives in the member portal so requests stay relevant and easy to coordinate. Mentors apply separately and are reviewed by SMN before they appear."
+        lede="The directory lives in the member portal so requests stay relevant and easy to coordinate. Mentors apply separately and are reviewed by TSA before they appear."
         actions={
           <>
             <Button href="/app/mentors" variant="light">
               Find a mentor
             </Button>
             <Button href="/signup" variant="secondary">
-              Create member account
+              Create your free account
             </Button>
           </>
         }
