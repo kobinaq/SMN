@@ -205,11 +205,13 @@ test.describe("marketing navigation and CTAs", () => {
       page,
     }) => {
       await page.goto("/contact?type=Job%20posting");
-      const select = page.getByLabel(/enquiry type/i);
-      await expect(select).toHaveValue("");
-      const options = await select.locator("option").allTextContents();
+      // Custom Select keeps a hidden native <select> for form/value checks.
+      const native = page.locator("#contact-type-native");
+      await expect(native).toHaveValue("");
+      const options = await native.locator("option").allTextContents();
       expect(options.join("\n")).not.toMatch(/Talent request|Intern request|Job posting/i);
       expect(options).toContain("General enquiry");
+      await expect(page.getByRole("button", { name: /enquiry type/i })).toBeVisible();
     });
   });
 
