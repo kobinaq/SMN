@@ -80,6 +80,16 @@ test.describe("marketing navigation and CTAs", () => {
       const ogUrl = ogMatch![1];
       // Default share art is the hashed opengraph-image route, not a CMS upload.
       expect(ogUrl).toMatch(/opengraph-image-/);
+      // Absolute og:image uses the site metadataBase (e.g. 127.0.0.1:3000), which
+      // is not the Playwright test server. Request pathname+search on baseURL.
+      const ogPath = (() => {
+        try {
+          const parsed = new URL(ogUrl);
+          return `${parsed.pathname}${parsed.search}`;
+        } catch {
+          return ogUrl.startsWith("/") ? ogUrl : `/${ogUrl}`;
+        }
+      })();
 
       const widthMatch =
         html.match(/property=["']og:image:width["'][^>]*content=["'](\d+)["']/i) ||
@@ -90,8 +100,8 @@ test.describe("marketing navigation and CTAs", () => {
       expect(widthMatch?.[1]).toBe("1200");
       expect(heightMatch?.[1]).toBe("630");
 
-      const imageRes = await request.get(ogUrl);
-      expect(imageRes.ok(), `og:image for ${path} should be 200 (${ogUrl})`).toBeTruthy();
+      const imageRes = await request.get(ogPath);
+      expect(imageRes.ok(), `og:image for ${path} should be 200 (${ogPath})`).toBeTruthy();
       expect(imageRes.headers()["content-type"] || "").toMatch(/image\/png/i);
       const buf = Buffer.from(await imageRes.body());
       expect(buf.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))).toBeTruthy();
