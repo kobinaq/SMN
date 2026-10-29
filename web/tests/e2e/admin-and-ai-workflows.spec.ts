@@ -61,6 +61,33 @@ async function confirmDialog(page: Page, confirmName: string | RegExp, reason?: 
   await expect(dialog).toBeHidden({ timeout: 15_000 });
 }
 
+/**
+ * Drive a field labelled Select. The accessible name now lands on the visible
+ * trigger button, so Playwright's selectOption cannot target getByLabel
+ * directly. The native backing <select> still lives inside the wrapping label
+ * (or beside an htmlFor label) for form posts and automation.
+ */
+async function selectLabeledOption(
+  page: Page,
+  label: string,
+  option: string | { index: number },
+) {
+  const wrapping = page
+    .locator("label")
+    .filter({ has: page.getByText(label, { exact: true }) })
+    .locator("select");
+  if ((await wrapping.count()) > 0) {
+    await wrapping.first().selectOption(option, { force: true });
+    return;
+  }
+  const trigger = page.getByLabel(label, { exact: true });
+  const id = await trigger.getAttribute("id");
+  if (!id) {
+    throw new Error(`No native select found for labelled field “${label}”.`);
+  }
+  await page.locator(`select#${CSS.escape(`${id}-native`)}`).selectOption(option, { force: true });
+}
+
 test("staff completes the audited admin operations workflows", async ({ page }) => {
   test.setTimeout(120_000);
   // Remaining native dialogs (e.g. Career Coach) still use window.confirm/prompt.
@@ -82,9 +109,8 @@ test("staff completes the audited admin operations workflows", async ({ page }) 
 
   await sections.getByRole("link", { name: "Learners" }).click();
   await page.getByText("Progress override", { exact: true }).click();
-  // Custom Select keeps a visually hidden native <select> for form posts; force bypasses actionability.
-  await page.getByLabel("Learner").selectOption({ index: 1 }, { force: true });
-  await page.getByLabel("Lesson").selectOption({ index: 1 }, { force: true });
+  await selectLabeledOption(page, "Learner", { index: 1 });
+  await selectLabeledOption(page, "Lesson", { index: 1 });
   await page.getByPlaceholder("Explain why this correction is required.").fill(
     "Verified completion correction for the isolated E2E workflow.",
   );
@@ -131,7 +157,7 @@ test("staff can create and publish a CMS post", async ({ page }) => {
   const stamp = Date.now();
   await page.goto("/staff/content/posts/new");
   await page.getByLabel("Title").fill(`E2E Post ${stamp}`);
-  await page.getByLabel("Category").selectOption("AI");
+  await selectLabeledOption(page, "Category", "AI");
   await page.getByLabel("Summary").fill("Disposable E2E article summary for staff CMS cutover.");
   await page.getByLabel("Body").fill("First paragraph.\n\nSecond paragraph for the staff CMS publish path.");
   await page.getByLabel("Publish at").fill("2030-01-15T10:00");
