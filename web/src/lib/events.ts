@@ -18,7 +18,7 @@ export function formatEventDate(dateStr: string) {
 
 export function formatEventDay(dateStr: string) {
   const d = new Date(dateStr);
-  if (Number.isNaN(d.getTime())) return { day: "—", month: "—" };
+  if (Number.isNaN(d.getTime())) return { day: "-", month: "-" };
   return {
     day: d.toLocaleDateString("en-GB", { day: "2-digit" }),
     month: d.toLocaleDateString("en-GB", { month: "short" }).toUpperCase(),

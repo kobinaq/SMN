@@ -31,14 +31,11 @@ export function AiHeader({
   title,
   grounding,
   action,
-  titleClassName,
 }: {
   eyebrow: string;
   title: string;
   grounding: string;
   action?: ReactNode;
-  /** Extra classes for the title heading (e.g. outline-none when focused programmatically). */
-  titleClassName?: string;
 }) {
   return (
     <header className="shrink-0 border-b border-edge-subtle px-5 py-4">
@@ -48,7 +45,7 @@ export function AiHeader({
             <Sparkles className="h-3 w-3" aria-hidden />
             {eyebrow}
           </p>
-          <h2 className={cn("mt-1.5 font-display text-lg text-text-1", titleClassName)}>{title}</h2>
+          <h2 className="mt-1.5 font-display text-lg text-text-1">{title}</h2>
         </div>
         {action}
       </div>

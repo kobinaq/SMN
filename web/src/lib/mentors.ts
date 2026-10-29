@@ -28,7 +28,7 @@ export async function getApprovedMentors(): Promise<MentorDirectoryItem[]> {
       const avatar = member && typeof member.avatar === "object" && member.avatar ? member.avatar : null;
       return {
         id: doc.id,
-        name: member?.name || "SMN mentor",
+        name: member?.name || "TSA mentor",
         title: doc.title,
         bio: doc.bio,
         topics: doc.topics || [],
