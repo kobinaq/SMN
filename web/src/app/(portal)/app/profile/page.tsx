@@ -5,9 +5,10 @@ import { Card, Eyebrow, PageHeader, ProgressBar } from "@/components/ui/Surface"
 import { Chip } from "@/components/ui/Chip";
 import { requireMember } from "@/lib/auth/member";
 import { getMemberContinuity } from "@/lib/member-continuity";
+import { pageTitle } from "@/lib/brand";
 
 export const metadata = {
-  title: "Profile",
+  title: pageTitle("Profile"),
 };
 
 export default async function ProfilePage() {

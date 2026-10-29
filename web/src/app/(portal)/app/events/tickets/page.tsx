@@ -75,12 +75,13 @@ export default async function MemberTicketPage({ searchParams }: Props) {
       ? `/app/events/tickets?reference=${encodeURIComponent(params.reference)}`
       : params.id
         ? `/app/events/tickets?id=${encodeURIComponent(params.id)}`
-        : "/app/events";
+        : null;
     const afterPayment = Boolean(params.reference);
 
     return (
       <div className="space-y-6">
         <EmptyState
+          headingLevel="h1"
           title={afterPayment ? "Your ticket is not ready yet" : "We could not find that ticket"}
           description={
             afterPayment
@@ -89,8 +90,8 @@ export default async function MemberTicketPage({ searchParams }: Props) {
           }
           action={
             <>
-              <Button href={retryHref}>Try again</Button>
-              <Button href="/app/events" variant="secondary">
+              {retryHref ? <Button href={retryHref}>Try again</Button> : null}
+              <Button href="/app/events" variant={retryHref ? "secondary" : undefined}>
                 Back to my events
               </Button>
               <Button href={`mailto:${site.email}`} variant="ghost">

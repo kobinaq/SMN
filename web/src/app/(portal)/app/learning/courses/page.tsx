@@ -5,8 +5,9 @@ import { Card, PageHeader, ProgressBar } from "@/components/ui/Surface";
 import { Chip } from "@/components/ui/Chip";
 import { requireMember } from "@/lib/auth/member";
 import { getLmsCourses } from "@/lib/lms";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Courses" };
+export const metadata = { title: pageTitle("Courses") };
 
 export default async function LmsCoursesPage() {
   const member = await requireMember("/app/learning/courses");

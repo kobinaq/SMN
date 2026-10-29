@@ -1,23 +1,37 @@
 import { cta } from "@/lib/cta";
 import { site } from "@/lib/site";
 
-/** SEO title: Primary Keyword | Think Social Academy */
-export function seoTitle(keyword: string) {
-  return { absolute: `${keyword} | Think Social Academy` } as const;
-}
+export type PageTitleArea = "public" | "portal" | "staff";
 
 type PageTitleOptions = {
-  /** Staff console titles append "Staff" after the short brand name. */
+  /**
+   * Which product surface owns the tab title.
+   * public → full site name, portal → short name, staff → short name + Staff.
+   */
+  area?: PageTitleArea;
+  /** Shorthand for `area: "staff"`. */
   staff?: boolean;
 };
 
+function titleBrand(area: PageTitleArea) {
+  if (area === "public") return site.name;
+  if (area === "staff") return `${site.shortName} Staff`;
+  return site.shortName;
+}
+
 /**
- * Browser tab title that tracks the central brand short name from site.ts.
- * Staff: `People | ${site.shortName} Staff`. Portal: `Event ticket | ${site.shortName}`.
+ * Browser tab title with a per-area brand suffix from site.ts.
+ * Public: `Contact | Think Social Academy`. Portal: `Event ticket | TSA`.
+ * Staff: `People | TSA Staff`.
  */
 export function pageTitle(page: string, options: PageTitleOptions = {}) {
-  const brand = options.staff ? `${site.shortName} Staff` : site.shortName;
-  return { absolute: `${page} | ${brand}` } as const;
+  const area: PageTitleArea = options.area ?? (options.staff ? "staff" : "portal");
+  return { absolute: `${page} | ${titleBrand(area)}` } as const;
+}
+
+/** Public/marketing SEO title: Primary Keyword | full site name. */
+export function seoTitle(keyword: string) {
+  return pageTitle(keyword, { area: "public" });
 }
 
 export const audienceStages = [

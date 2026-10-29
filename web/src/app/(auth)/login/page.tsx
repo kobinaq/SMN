@@ -4,9 +4,10 @@ import { redirect } from "next/navigation";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { getMember } from "@/lib/auth/member";
+import { seoTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Sign in",
+  title: seoTitle("Sign in"),
   description: "Sign in to your Social Marketers Network member account.",
 };
 

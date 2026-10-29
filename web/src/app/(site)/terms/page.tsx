@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { site } from "@/lib/site";
+import { seoTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Terms and conditions",
+  title: seoTitle("Terms and conditions"),
   description: "Terms of use for the Think Social Academy website and programmes.",
   alternates: { canonical: "/terms" },
   openGraph: { url: "/terms" },

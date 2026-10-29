@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/Button";
 import { cta } from "@/lib/cta";
 import { getVerifiedCertificate } from "@/lib/certificates";
 import { site } from "@/lib/site";
+import { seoTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Verify certificate",
+  title: seoTitle("Verify certificate"),
   description: `Confirm a ${site.name} certificate with its credential code.`,
   robots: { index: false, follow: false },
 };

@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/Button";
 import { cta } from "@/lib/cta";
 import { getSiteSettings } from "@/lib/cms";
 import { img } from "@/lib/images";
+import { seoTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: seoTitle("Contact"),
   description: "Get in touch with Think Social Academy for partnerships, speaking, talent, or general questions.",
   alternates: { canonical: "/contact" },
   openGraph: { url: "/contact" },

@@ -2,8 +2,9 @@ import { CareerCoach } from "@/components/app/CareerCoach";
 import { requireMember } from "@/lib/auth/member";
 import { getCareerSnapshot } from "@/lib/ai/career-tools";
 import { getPayloadClient } from "@/lib/payload";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Career Coach" };
+export const metadata = { title: pageTitle("Career Coach") };
 
 export default async function CareerCoachPage() {
   const member = await requireMember("/app/career-coach");
