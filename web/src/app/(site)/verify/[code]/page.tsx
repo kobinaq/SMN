@@ -19,9 +19,19 @@ function formatDate(value: string) {
   );
 }
 
+function decodeCredentialCode(code: string) {
+  try {
+    return decodeURIComponent(code);
+  } catch {
+    return null;
+  }
+}
+
 export default async function VerifyCertificatePage(props: { params: Promise<{ code: string }> }) {
   const { code } = await props.params;
-  const certificate = await getVerifiedCertificate(decodeURIComponent(code));
+  const decoded = decodeCredentialCode(code);
+  if (decoded == null) notFound();
+  const certificate = await getVerifiedCertificate(decoded);
   if (!certificate) notFound();
 
   return (

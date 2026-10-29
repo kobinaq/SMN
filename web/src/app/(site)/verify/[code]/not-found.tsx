@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { cta } from "@/lib/cta";
 import { site } from "@/lib/site";
@@ -14,6 +15,10 @@ export default function VerifyCertificateNotFound() {
   return (
     <div className="bg-canvas pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-28">
       <div className="container-wide py-12 sm:py-16 md:py-20">
+        <Link href="/" className="text-sm text-text-3 transition hover:text-text-1">
+          Think Social Academy
+        </Link>
+
         <section className="mx-auto mt-8 max-w-2xl border border-dashed border-edge bg-raised p-8 sm:p-12">
           <p className="font-display text-sm tracking-[0.08em] text-accent">
             TSA credential

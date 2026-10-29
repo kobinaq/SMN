@@ -84,7 +84,7 @@ export async function getMemberCertificates(member: MemberUser) {
 }
 
 export async function getVerifiedCertificate(code: string): Promise<VerifiedCertificate | null> {
-  const cleaned = code.trim();
+  const cleaned = code.trim().toUpperCase();
   if (!cleaned) return null;
 
   const payload = await getPayloadClient();
