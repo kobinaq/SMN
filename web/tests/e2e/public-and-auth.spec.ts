@@ -39,16 +39,21 @@ test("staff lands on the workflow-first staff dashboard", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Network health" })).toBeVisible();
   await expect(page.getByLabel("Platform health")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Recent activity" })).toBeVisible();
-  await expect(page.getByRole("complementary").getByRole("link", { name: /^Learning/i })).toBeVisible();
+  // Learning is a sidebar group (button) with Self-paced / Cohorts children.
+  await expect(page.getByRole("complementary").getByRole("button", { name: /^Learning/i })).toBeVisible();
   await expect(page.getByRole("link", { name: "Total members" })).toBeVisible();
 
   await page.goto("/admin/login");
   await expect(page).toHaveURL(/\/staff\/?$/);
 
-  // /staff/learning is a course index now; the per-course workspace lives at
-  // its own URL behind the "Course sections" tabs.
+  // Hub at /staff/learning; course list + New course live on the self-paced lane.
   await page.goto("/staff/learning");
   await expect(page.getByRole("heading", { name: "Learning" })).toBeVisible();
+  await expect(page.getByRole("main").getByRole("link", { name: /Self-paced courses/i })).toBeVisible();
+  await expect(page.getByRole("main").getByRole("link", { name: /Cohorts/i })).toBeVisible();
+
+  await page.goto("/staff/learning/self-paced");
+  await expect(page.getByRole("heading", { name: "Self-paced courses" })).toBeVisible();
   await expect(page.getByRole("link", { name: "New course" }).first()).toBeVisible();
   await page.getByRole("link", { name: "Demo Content Strategy Sprint" }).first().click();
   await expect(page).toHaveURL(/\/staff\/learning\/courses\/\d+/);
