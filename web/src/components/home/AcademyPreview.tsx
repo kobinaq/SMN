@@ -35,7 +35,7 @@ export function AcademyPreview() {
         lede="Our programmes connect strategy, content, platforms, AI and practical application so you can move from knowing the theory to knowing how to use it."
         actions={
           <Button href={cta.explorePrograms.href} variant="secondary">
-            Explore All Programmes
+            Explore the Academy
           </Button>
         }
       />
