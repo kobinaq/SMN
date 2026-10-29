@@ -171,11 +171,11 @@ test.describe("marketing navigation and CTAs", () => {
 
   test("community and contact WhatsApp CTAs are text links", async ({ page }) => {
     await page.goto("/community");
-    const communityWa = page.getByRole("link", { name: /also join our whatsapp group/i });
+    const communityWa = page.getByRole("link", { name: /also get tsa updates on whatsapp/i });
     await expect(communityWa.first()).toBeVisible();
     await expect(communityWa.first()).toHaveAttribute("href", /whatsapp/i);
     await page.goto("/contact");
-    const contactWa = page.getByRole("link", { name: /also join our whatsapp group/i });
+    const contactWa = page.getByRole("link", { name: /also get tsa updates on whatsapp/i });
     await expect(contactWa.first()).toBeVisible();
     await expect(contactWa.first()).toHaveAttribute("href", /whatsapp/i);
   });

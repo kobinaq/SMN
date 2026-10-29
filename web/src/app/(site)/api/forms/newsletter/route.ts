@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     const result = await subscribeToNewsletter(email);
     if (result.ok && result.skipped) {
       return NextResponse.json(
-        { error: "Email signup is not available yet. Join the WhatsApp community instead." },
+        { error: "Email signup is not available yet. Get TSA updates on WhatsApp instead." },
         { status: 503 },
       );
     }

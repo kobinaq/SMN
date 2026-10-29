@@ -17,14 +17,13 @@ export function CommunityPreview() {
           </p>
           <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             <Button href={cta.joinCommunity.href}>{cta.joinCommunity.label}</Button>
-            {/* Home-only label. Shared cta.whatsapp.communityLabel waits for #54 rebase. */}
             <a
               href={site.whatsappInvite}
               target="_blank"
               rel="noreferrer"
               className="inline-flex min-h-11 min-w-11 items-center text-sm text-text-3 underline-offset-4 hover:text-text-1 hover:underline"
             >
-              Also get TSA updates on WhatsApp
+              {cta.whatsapp.communityLabel}
             </a>
           </div>
         </div>

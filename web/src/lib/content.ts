@@ -517,7 +517,7 @@ export const cohortFaqs = [
   },
   {
     q: "How are live sessions delivered?",
-    a: "Live sessions run on Google Classroom. Members also use the TSA member portal for learning progress, resources, mentorship, and opportunities. An optional WhatsApp group is available for day-to-day chat.",
+    a: "Live sessions run on Google Classroom. Members also use the TSA member portal for learning progress, resources, mentorship, and opportunities. Get TSA updates on WhatsApp for day-to-day chat.",
   },
   {
     q: "Do I need prior experience?",

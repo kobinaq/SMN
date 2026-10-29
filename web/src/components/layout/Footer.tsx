@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/layout/BrandLogo";
+import { cta } from "@/lib/cta";
 import type { SiteConfig } from "@/lib/site";
 
 const footerLinks = [
@@ -106,6 +107,14 @@ export function Footer({ site }: { site: SiteConfig }) {
               rel="noreferrer"
             >
               LinkedIn
+            </a>
+            <a
+              href={site.whatsappInvite}
+              className={`${tapLink} hover:text-text-2`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {cta.whatsapp.communityLabel}
             </a>
           </div>
         </div>

@@ -99,7 +99,7 @@ export const cta = {
   whatsapp: {
     label: "Chat on WhatsApp",
     /** Secondary only. Never use as the main community CTA. */
-    communityLabel: "Also join our WhatsApp group",
+    communityLabel: "Also get TSA updates on WhatsApp",
   },
   submitApplication: {
     label: "Submit application",

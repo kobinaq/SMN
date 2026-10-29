@@ -115,7 +115,7 @@ export default async function ResourceDetailPage({ params }: Props) {
                 <li>Download and open the file on desktop if possible.</li>
                 <li>Duplicate it for each client or brand.</li>
                 <li>Fill the first section fully before you skip ahead.</li>
-                <li>Bring questions into the WhatsApp community.</li>
+                <li>Bring questions where you get TSA updates on WhatsApp.</li>
               </ol>
             </div>
           </div>

@@ -46,7 +46,7 @@ describe("marketing defaults", () => {
     expect(cta.joinTsa.label).toBe("Join TSA");
     expect(cta.joinCommunity.href).toBe("/signup");
     expect(cta.joinCommunity.label).toBe("Join the Community");
-    expect(cta.whatsapp.communityLabel).toMatch(/whatsapp/i);
+    expect(cta.whatsapp.communityLabel).toBe("Also get TSA updates on WhatsApp");
     expect(cta.hireTalent.href).toBe("/community");
     expect(cta.postJob.href).toBe("/community");
     expect(cta.requestIntern.href).toBe("/community");
