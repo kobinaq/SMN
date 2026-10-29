@@ -334,7 +334,11 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
             ) : null}
             {goalOpen ? (
               <div className="mt-3 space-y-3">
+                <label htmlFor="career-coach-goal" className="sr-only">
+                  Career goal
+                </label>
                 <Textarea
+                  id="career-coach-goal"
                   maxLength={5000}
                   value={goal}
                   onChange={(event) => setGoal(event.target.value)}
@@ -423,6 +427,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
                   <input
                     className="min-w-0 flex-1 rounded-[var(--radius-sm)] border border-transparent bg-transparent px-1.5 py-1 text-sm text-text-2 outline-none transition-colors hover:border-edge-subtle focus:border-accent focus:text-text-1"
                     value={item}
+                    aria-label={`Plan step ${index + 1}`}
                     onChange={(event) =>
                       setPlanItems((current) =>
                         current.map((line, lineIndex) => (lineIndex === index ? event.target.value : line)),
@@ -433,14 +438,18 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
                     type="button"
                     className="inline-flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-[var(--radius-sm)] text-xs text-text-3 transition-colors hover:bg-inset hover:text-danger"
                     onClick={() => setPlanItems((current) => current.filter((_, lineIndex) => lineIndex !== index))}
-                    aria-label="Remove plan item"
+                    aria-label={`Remove plan step ${index + 1}`}
                   >
                     ✕
                   </button>
                 </li>
               ))}
             </ul>
+            <label htmlFor="career-coach-add-step" className="sr-only">
+              Add a next step
+            </label>
             <Input
+              id="career-coach-add-step"
               className="mt-3"
               value={newPlanItem}
               onChange={(event) => setNewPlanItem(event.target.value)}

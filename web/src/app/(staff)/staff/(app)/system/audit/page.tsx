@@ -41,6 +41,7 @@ export default async function StaffAuditPage({
             name="q"
             defaultValue={q || ""}
             placeholder="Search action, entity, or reason"
+            aria-label="Search audit log"
             className="field w-full rounded-[var(--radius-lg)] border border-edge-subtle bg-inset px-4 py-3 text-text-1 placeholder:text-text-3"
           />
           <button type="submit" className="rounded-full border border-accent/40 bg-accent-bg px-4 py-3 text-sm text-accent">

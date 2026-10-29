@@ -27,7 +27,7 @@ type SelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, "children" | "s
   size?: "md" | "sm";
 };
 
-function optionsFromChildren(children: ReactNode): SelectOption[] {
+export function optionsFromChildren(children: ReactNode): SelectOption[] {
   const items: SelectOption[] = [];
   Children.forEach(children, (child) => {
     if (!isValidElement(child)) return;
@@ -47,6 +47,18 @@ function optionsFromChildren(children: ReactNode): SelectOption[] {
   return items;
 }
 
+/**
+ * Build aria-labelledby so assistive tech hears both the external field label
+ * and the currently selected value. htmlFor alone names only the label text.
+ */
+export function selectTriggerLabelledBy(
+  externalLabelledBy: string | undefined,
+  valueId: string,
+): string | undefined {
+  if (!externalLabelledBy) return undefined;
+  return `${externalLabelledBy} ${valueId}`;
+}
+
 export function Select({
   children,
   options: optionsProp,
@@ -58,17 +70,21 @@ export function Select({
   id,
   required,
   disabled,
+  autoFocus,
   "aria-label": ariaLabel,
   "aria-labelledby": ariaLabelledBy,
+  "aria-describedby": ariaDescribedBy,
   size = "md",
   ...rest
 }: SelectProps) {
   const generatedId = useId();
   const listboxId = `${generatedId}-listbox`;
+  const valueId = `${generatedId}-value`;
   const triggerId = id || `${generatedId}-trigger`;
   const rootRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const hiddenRef = useRef<HTMLSelectElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   const options = useMemo(
     () => (optionsProp?.length ? optionsProp : optionsFromChildren(children)),
@@ -91,6 +107,44 @@ export function Select({
   const selected = options.find((item) => item.value === current);
   const displayLabel = selected?.label || "Select…";
   const isPlaceholder = !selected || (selected.value === "" && !selected.label);
+  const triggerLabelledBy = selectTriggerLabelledBy(ariaLabelledBy, valueId);
+  // When only aria-label is provided, append the current value so AT hears both.
+  const triggerAriaLabel = ariaLabel
+    ? isPlaceholder || !displayLabel
+      ? ariaLabel
+      : `${ariaLabel}, ${displayLabel}`
+    : undefined;
+
+  // When callers only use <label htmlFor> or a wrapping <label>, wire
+  // aria-labelledby on the visible trigger (label + current value) without
+  // React state, so the hidden native select is not the labelled control.
+  useEffect(() => {
+    const trigger = triggerRef.current;
+    if (!trigger || ariaLabelledBy || ariaLabel) return;
+
+    let label: HTMLLabelElement | null = null;
+    if (id) {
+      try {
+        label = document.querySelector(`label[for="${CSS.escape(id)}"]`);
+      } catch {
+        label = document.querySelector(`label[for="${id}"]`);
+      }
+    }
+    if (!label) {
+      const wrapping = trigger.closest("label");
+      if (wrapping instanceof HTMLLabelElement) label = wrapping;
+    }
+    if (!label) return;
+
+    if (!label.id) label.id = `${triggerId}-label`;
+    const next = `${label.id} ${valueId}`;
+    trigger.setAttribute("aria-labelledby", next);
+    return () => {
+      if (trigger.getAttribute("aria-labelledby") === next) {
+        trigger.removeAttribute("aria-labelledby");
+      }
+    };
+  }, [ariaLabel, ariaLabelledBy, id, triggerId, valueId, displayLabel]);
 
   function openList() {
     const selectedIndex = options.findIndex((item) => item.value === current && !item.disabled);
@@ -108,6 +162,7 @@ export function Select({
       if (event.key === "Escape") {
         event.preventDefault();
         setOpen(false);
+        triggerRef.current?.focus();
       }
     }
     document.addEventListener("mousedown", onPointer);
@@ -126,7 +181,10 @@ export function Select({
 
   function commit(next: string) {
     if (!isControlled) setUncontrolled(next);
-    if (hiddenRef.current) hiddenRef.current.value = next;
+    if (hiddenRef.current) {
+      hiddenRef.current.value = next;
+      hiddenRef.current.setCustomValidity("");
+    }
     onChange?.({
       target: { value: next, name: name || "" },
       currentTarget: { value: next, name: name || "" },
@@ -153,42 +211,22 @@ export function Select({
         open && "border-accent",
       )}
     >
-      <select
-        ref={hiddenRef}
-        id={id ? `${id}-native` : undefined}
-        name={name}
-        required={required}
-        disabled={disabled}
-        value={current}
-        tabIndex={-1}
-        aria-hidden="true"
-        className="pointer-events-none absolute h-px w-px opacity-0"
-        onChange={(event) => {
-          // The visible trigger drives selection via commit() (which sets this
-          // element's value imperatively, without firing change). A change event
-          // here therefore only comes from programmatic drivers (e.g. Playwright
-          // selectOption / assistive form tooling) — route it through commit so
-          // React state and consumers stay in sync.
-          commit(event.currentTarget.value);
-        }}
-        {...rest}
-      >
-        {options.map((item) => (
-          <option key={`${item.value}-${item.label}`} value={item.value} disabled={item.disabled}>
-            {item.label}
-          </option>
-        ))}
-      </select>
-
+      {/*
+        Visible trigger comes first so a wrapping <label> associates with the
+        custom control, not the aria-hidden native select that backs the form value.
+      */}
       <button
+        ref={triggerRef}
         id={triggerId}
         type="button"
         disabled={disabled}
+        autoFocus={autoFocus}
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={listboxId}
-        aria-label={ariaLabel}
-        aria-labelledby={ariaLabelledBy}
+        aria-label={triggerAriaLabel}
+        aria-labelledby={triggerLabelledBy}
+        aria-describedby={ariaDescribedBy}
         className={cn(
           "flex w-full items-center justify-between gap-3 bg-transparent text-left text-text-1 outline-none transition active:scale-[0.99]",
           "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
@@ -222,7 +260,10 @@ export function Select({
           }
         }}
       >
-        <span className={cn("truncate", isPlaceholder || current === "" ? "font-normal text-text-3" : "font-medium text-text-1")}>
+        <span
+          id={valueId}
+          className={cn("truncate", isPlaceholder || current === "" ? "font-normal text-text-3" : "font-medium text-text-1")}
+        >
           {displayLabel}
         </span>
         <ChevronDown
@@ -233,6 +274,41 @@ export function Select({
           aria-hidden
         />
       </button>
+
+      <select
+        ref={hiddenRef}
+        id={id ? `${id}-native` : undefined}
+        name={name}
+        required={required}
+        disabled={disabled}
+        value={current}
+        tabIndex={-1}
+        aria-hidden="true"
+        className="pointer-events-none absolute h-px w-px opacity-0"
+        onChange={(event) => {
+          // The visible trigger drives selection via commit() (which sets this
+          // element's value imperatively, without firing change). A change event
+          // here therefore only comes from programmatic drivers (e.g. Playwright
+          // selectOption / assistive form tooling) — route it through commit so
+          // React state and consumers stay in sync.
+          commit(event.currentTarget.value);
+        }}
+        onInvalid={(event) => {
+          // Native required bubbles would focus this invisible control. Send
+          // focus (and open the list) to the visible trigger instead.
+          event.preventDefault();
+          hiddenRef.current?.setCustomValidity("Please select an option.");
+          triggerRef.current?.focus();
+          openList();
+        }}
+        {...rest}
+      >
+        {options.map((item) => (
+          <option key={`${item.value}-${item.label}`} value={item.value} disabled={item.disabled}>
+            {item.label}
+          </option>
+        ))}
+      </select>
 
       {open ? (
         <ul

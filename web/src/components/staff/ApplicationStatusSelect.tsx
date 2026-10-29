@@ -49,6 +49,7 @@ export function ApplicationStatusSelect({
       className={`${staffFieldClass} mt-0 min-w-36`}
       value={value}
       disabled={busy}
+      aria-label="Application status"
       onChange={(event) => onChange(event.target.value)}
     >
       {statuses.map((item) => (
