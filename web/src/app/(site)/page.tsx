@@ -8,7 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const site = await getSiteSettings();
   return {
     title: {
-      absolute: `${site.name} | Learn. Practice. Connect. Grow.`,
+      absolute: `${site.name} | ${site.tagline}`,
     },
     description: site.description,
     alternates: { canonical: "/" },

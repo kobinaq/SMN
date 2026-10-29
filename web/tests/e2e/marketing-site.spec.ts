@@ -24,7 +24,7 @@ test.describe("marketing navigation and CTAs", () => {
   test("does not display withheld placeholder prices", async ({ page }) => {
     await page.goto("/programs/cohort");
     await expect(page.getByText(/250,?000/)).toHaveCount(0);
-    await expect(page.getByText(/Contact SMN for current fees/i).first()).toBeVisible();
+    await expect(page.getByText(/Contact TSA for current fees/i).first()).toBeVisible();
   });
 
   test("application page explains next steps before payment", async ({ page }) => {
@@ -38,8 +38,8 @@ test.describe("marketing navigation and CTAs", () => {
 
   test("employer page keeps hire CTAs separate from apply", async ({ page }) => {
     await page.goto("/employers");
-    await expect(page.getByRole("heading", { name: /hire smn talent/i }).first()).toBeVisible();
-    await expect(page.getByRole("link", { name: /hire smn talent/i }).first()).toBeVisible();
+    await expect(page.getByRole("heading", { name: /hire tsa talent/i }).first()).toBeVisible();
+    await expect(page.getByRole("link", { name: /hire tsa talent/i }).first()).toBeVisible();
     await expect(page.getByText(/not a member application/i)).toBeVisible();
   });
 

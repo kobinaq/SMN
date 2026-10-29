@@ -6,7 +6,7 @@ import { courses, excerptStoryQuote, homepageHero, smnValues, stories } from "@/
 describe("marketing defaults", () => {
   it("withholds unconfirmed cohort pricing", () => {
     expect(site.cohort.priceConfirmed).toBe(false);
-    expect(site.cohort.priceLabel.toLowerCase()).toContain("contact smn");
+    expect(site.cohort.priceLabel.toLowerCase()).toContain("contact tsa");
     expect(site.cohort.priceLabel).not.toMatch(/250,?000/);
   });
 
@@ -35,7 +35,7 @@ describe("marketing defaults", () => {
     expect(cta.buyCourse.label).toMatch(/Enroll/i);
     expect(cta.memberSignIn.href).toBe("/login");
     expect(cta.hireTalent.href).toBe("/employers");
-    expect(cta.hireTalent.label).toMatch(/Hire SMN talent/i);
+    expect(cta.hireTalent.label).toMatch(/Hire TSA talent/i);
     expect(cta.exploreServices.label).toBe("Explore our Services");
     expect(cta.exploreServices.href).toBe("/programs");
   });

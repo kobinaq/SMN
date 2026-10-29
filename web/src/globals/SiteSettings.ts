@@ -21,7 +21,7 @@ export const SiteSettings: GlobalConfig = {
         {
           label: "Brand",
           fields: [
-            { name: "siteName", type: "text", required: true, defaultValue: "Social Marketers Network" },
+            { name: "siteName", type: "text", required: true, defaultValue: "Think Social Academy" },
             { name: "tagline", type: "textarea" },
             { name: "description", type: "textarea", admin: { description: "Default meta description" } },
             { name: "opsEmail", type: "email" },

@@ -11,7 +11,7 @@ export function formatGhs(amount: number): string {
 export function formatGhsLabel(raw: string | null | undefined): string {
   const value = (raw || "").trim();
   if (!value) return "";
-  if (/contact smn|see selar|pending|confirm/i.test(value)) return value;
+  if (/contact tsa|see selar|pending|confirm/i.test(value)) return value;
 
   const numeric = value.replace(/[^\d.]/g, "");
   if (!numeric) return value;
@@ -20,5 +20,5 @@ export function formatGhsLabel(raw: string | null | undefined): string {
   return formatGhs(amount);
 }
 
-export const FEE_PENDING_LABEL = "Contact SMN for current fees";
+export const FEE_PENDING_LABEL = "Contact TSA for current fees";
 export const COURSE_FEE_PENDING_LABEL = "Price on checkout";

@@ -9,7 +9,7 @@ import { img } from "@/lib/images";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Get in touch with Social Marketers Network for partnerships, speaking, talent, or general questions.",
+  description: "Get in touch with Think Social Academy for partnerships, speaking, talent, or general questions.",
   alternates: { canonical: "/contact" },
 };
 

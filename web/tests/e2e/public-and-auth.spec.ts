@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("public home page loads", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("banner").getByRole("link", { name: /member sign in/i })).toBeVisible();
-  await expect(page.getByText(/Social Marketers Network/i).first()).toBeVisible();
+  await expect(page.getByText(/Think Social Academy/i).first()).toBeVisible();
 });
 
 test("member login page renders", async ({ page }) => {

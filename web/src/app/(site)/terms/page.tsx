@@ -4,7 +4,7 @@ import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Terms and conditions",
-  description: "Terms of use for the Social Marketers Network website and programmes.",
+  description: "Terms of use for the Think Social Academy website and programmes.",
   alternates: { canonical: "/terms" },
 };
 
