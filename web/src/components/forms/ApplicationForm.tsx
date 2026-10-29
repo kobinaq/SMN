@@ -16,7 +16,9 @@ export function ApplicationForm({
 }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const [levelError, setLevelError] = useState("");
   const [submittedKey, setSubmittedKey] = useState("");
+  const levelErrorId = "apply-level-error";
 
   useEffect(() => {
     trackEvent("application_start", { location: "apply_page" });
@@ -26,9 +28,16 @@ export function ApplicationForm({
     e.preventDefault();
     setStatus("loading");
     setMessage("");
+    setLevelError("");
 
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
+    // noValidate skips native required bubbles; required Selects need a manual check.
+    if (!String(data.level || "").trim()) {
+      setStatus("error");
+      setLevelError("Select an experience level.");
+      return;
+    }
     const dedupeKey = `${String(data.email || "").toLowerCase()}::${String(data.name || "")}`;
     if (submittedKey && submittedKey === dedupeKey) {
       setStatus("error");
@@ -187,6 +196,9 @@ export function ApplicationForm({
             name="level"
             required
             defaultValue=""
+            aria-invalid={levelError ? true : undefined}
+            aria-describedby={levelError ? levelErrorId : undefined}
+            onChange={() => setLevelError("")}
           >
             <option value="" disabled>
               Experience level
@@ -197,6 +209,11 @@ export function ApplicationForm({
               </option>
             ))}
           </Select>
+          {levelError ? (
+            <p id={levelErrorId} className="mt-1.5 text-sm text-red-300" role="alert">
+              {levelError}
+            </p>
+          ) : null}
         </div>
         <div>
           <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-linkedin">

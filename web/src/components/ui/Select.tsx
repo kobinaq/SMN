@@ -47,16 +47,40 @@ export function optionsFromChildren(children: ReactNode): SelectOption[] {
   return items;
 }
 
+function normalizeNamePart(value: string) {
+  return value.replace(/\s+/g, " ").trim().toLocaleLowerCase();
+}
+
+/** Own text of a <label>, ignoring nested control contents. */
+export function labelOwnText(label: HTMLLabelElement): string {
+  let text = "";
+  for (const node of label.childNodes) {
+    if (node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
+  }
+  const own = text.replace(/\s+/g, " ").trim();
+  if (own) return own;
+  return (label.textContent || "").replace(/\s+/g, " ").trim();
+}
+
 /**
- * Build aria-labelledby so assistive tech hears both the external field label
- * and the currently selected value. htmlFor alone names only the label text.
+ * Build aria-labelledby so assistive tech hears the field label and, when it
+ * differs, the current value. Skip the value id when it matches the label so
+ * placeholders like "Experience level" are not announced twice.
  */
 export function selectTriggerLabelledBy(
   externalLabelledBy: string | undefined,
   valueId: string,
+  options?: { includeValue?: boolean },
 ): string | undefined {
   if (!externalLabelledBy) return undefined;
+  if (options?.includeValue === false) return externalLabelledBy;
   return `${externalLabelledBy} ${valueId}`;
+}
+
+/** Whether the visible value text duplicates the field label / aria-label. */
+export function valueMatchesFieldName(displayLabel: string, fieldName: string | undefined): boolean {
+  if (!fieldName) return false;
+  return normalizeNamePart(displayLabel) === normalizeNamePart(fieldName);
 }
 
 export function Select({
@@ -74,6 +98,7 @@ export function Select({
   "aria-label": ariaLabel,
   "aria-labelledby": ariaLabelledBy,
   "aria-describedby": ariaDescribedBy,
+  "aria-invalid": ariaInvalid,
   size = "md",
   ...rest
 }: SelectProps) {
@@ -107,17 +132,22 @@ export function Select({
   const selected = options.find((item) => item.value === current);
   const displayLabel = selected?.label || "Select…";
   const isPlaceholder = !selected || (selected.value === "" && !selected.label);
-  const triggerLabelledBy = selectTriggerLabelledBy(ariaLabelledBy, valueId);
-  // When only aria-label is provided, append the current value so AT hears both.
+  const includeValueInName =
+    !isPlaceholder && Boolean(displayLabel) && !valueMatchesFieldName(displayLabel, ariaLabel);
+  const triggerLabelledBy = selectTriggerLabelledBy(ariaLabelledBy, valueId, {
+    includeValue: includeValueInName,
+  });
+  // When only aria-label is provided, append the current value so AT hears both,
+  // unless the value text repeats the label (placeholder that matches the name).
   const triggerAriaLabel = ariaLabel
-    ? isPlaceholder || !displayLabel
+    ? !includeValueInName
       ? ariaLabel
       : `${ariaLabel}, ${displayLabel}`
     : undefined;
 
   // When callers only use <label htmlFor> or a wrapping <label>, wire
-  // aria-labelledby on the visible trigger (label + current value) without
-  // React state, so the hidden native select is not the labelled control.
+  // aria-labelledby on the visible trigger so the hidden native select is not
+  // the labelled control. Skip the value id when it matches the label text.
   useEffect(() => {
     const trigger = triggerRef.current;
     if (!trigger || ariaLabelledBy || ariaLabel) return;
@@ -137,14 +167,16 @@ export function Select({
     if (!label) return;
 
     if (!label.id) label.id = `${triggerId}-label`;
-    const next = `${label.id} ${valueId}`;
+    const includeValue =
+      !isPlaceholder && Boolean(displayLabel) && !valueMatchesFieldName(displayLabel, labelOwnText(label));
+    const next = selectTriggerLabelledBy(label.id, valueId, { includeValue })!;
     trigger.setAttribute("aria-labelledby", next);
     return () => {
       if (trigger.getAttribute("aria-labelledby") === next) {
         trigger.removeAttribute("aria-labelledby");
       }
     };
-  }, [ariaLabel, ariaLabelledBy, id, triggerId, valueId, displayLabel]);
+  }, [ariaLabel, ariaLabelledBy, displayLabel, id, isPlaceholder, triggerId, valueId]);
 
   function openList() {
     const selectedIndex = options.findIndex((item) => item.value === current && !item.disabled);
@@ -219,11 +251,14 @@ export function Select({
         ref={triggerRef}
         id={triggerId}
         type="button"
+        role="combobox"
         disabled={disabled}
         autoFocus={autoFocus}
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={listboxId}
+        aria-required={required || undefined}
+        aria-invalid={ariaInvalid}
         aria-label={triggerAriaLabel}
         aria-labelledby={triggerLabelledBy}
         aria-describedby={ariaDescribedBy}

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { MapPin, Search, UserRound } from "@/components/ui/icons";
 import type { MentorDirectoryItem } from "@/lib/mentors";
-import { getFocusableElements, trapTabKey } from "@/lib/a11y-focus";
+import { getFocusableElements, trapTabKey } from "@/lib/focus-trap";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Surface";
 import { Input, Textarea } from "@/components/ui/Field";
@@ -124,7 +124,7 @@ function RequestDialog({ mentor, onClose }: { mentor: MentorDirectoryItem; onClo
         return;
       }
       if (panelRef.current) {
-        trapTabKey(panelRef.current, event, document.activeElement);
+        trapTabKey(event, panelRef.current);
       }
     }
 
