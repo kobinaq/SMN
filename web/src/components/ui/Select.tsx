@@ -65,7 +65,7 @@ export function labelOwnText(label: HTMLLabelElement): string {
 /**
  * Build aria-labelledby so assistive tech hears the field label and, when it
  * differs, the current value. Skip the value id when it matches the label so
- * placeholders like "Experience level" are not announced twice.
+ * placeholders like "Seniority" are not announced twice.
  */
 export function selectTriggerLabelledBy(
   externalLabelledBy: string | undefined,
@@ -81,6 +81,12 @@ export function selectTriggerLabelledBy(
 export function valueMatchesFieldName(displayLabel: string, fieldName: string | undefined): boolean {
   if (!fieldName) return false;
   return normalizeNamePart(displayLabel) === normalizeNamePart(fieldName);
+}
+
+/** Stable DOM id for a listbox option, safe for use as aria-activedescendant. */
+export function selectOptionDomId(listId: string, value: string): string {
+  const safe = value.replace(/[^a-zA-Z0-9_-]/g, "_") || "empty";
+  return `${listId}-opt-${safe}`;
 }
 
 export function Select({
@@ -105,6 +111,7 @@ export function Select({
   const generatedId = useId();
   const listboxId = `${generatedId}-listbox`;
   const valueId = `${generatedId}-value`;
+  const internalErrorId = `${generatedId}-error`;
   const triggerId = id || `${generatedId}-trigger`;
   const rootRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -127,23 +134,30 @@ export function Select({
   );
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [internalError, setInternalError] = useState("");
 
   const current = isControlled ? String(value) : uncontrolled;
   const selected = options.find((item) => item.value === current);
   const displayLabel = selected?.label || "Select…";
-  const isPlaceholder = !selected || (selected.value === "" && !selected.label);
+  // Empty string value is always a placeholder, even when the empty option
+  // repeats the field label (e.g. Seniority / Experience level).
+  const isPlaceholder = !selected || selected.value === "";
   const includeValueInName =
     !isPlaceholder && Boolean(displayLabel) && !valueMatchesFieldName(displayLabel, ariaLabel);
   const triggerLabelledBy = selectTriggerLabelledBy(ariaLabelledBy, valueId, {
     includeValue: includeValueInName,
   });
-  // When only aria-label is provided, append the current value so AT hears both,
-  // unless the value text repeats the label (placeholder that matches the name).
   const triggerAriaLabel = ariaLabel
     ? !includeValueInName
       ? ariaLabel
       : `${ariaLabel}, ${displayLabel}`
     : undefined;
+  const describedBy =
+    [ariaDescribedBy, internalError ? internalErrorId : undefined].filter(Boolean).join(" ") || undefined;
+  const showInvalid = Boolean(ariaInvalid) || Boolean(internalError);
+  const activeOption = options[activeIndex];
+  const activeDescendant =
+    open && activeOption ? selectOptionDomId(listboxId, activeOption.value) : undefined;
 
   // When callers only use <label htmlFor> or a wrapping <label>, wire
   // aria-labelledby on the visible trigger so the hidden native select is not
@@ -217,6 +231,7 @@ export function Select({
       hiddenRef.current.value = next;
       hiddenRef.current.setCustomValidity("");
     }
+    setInternalError("");
     onChange?.({
       target: { value: next, name: name || "" },
       currentTarget: { value: next, name: name || "" },
@@ -233,157 +248,176 @@ export function Select({
   }
 
   return (
-    <div
-      ref={rootRef}
-      className={cn(
-        "relative min-w-0",
-        !className && "w-full rounded-[var(--radius-md)] border border-edge bg-inset",
-        "transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)]",
-        className,
-        open && "border-accent",
-      )}
-    >
-      {/*
-        Visible trigger comes first so a wrapping <label> associates with the
-        custom control, not the aria-hidden native select that backs the form value.
-      */}
-      <button
-        ref={triggerRef}
-        id={triggerId}
-        type="button"
-        role="combobox"
-        disabled={disabled}
-        autoFocus={autoFocus}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        aria-controls={listboxId}
-        aria-required={required || undefined}
-        aria-invalid={ariaInvalid}
-        aria-label={triggerAriaLabel}
-        aria-labelledby={triggerLabelledBy}
-        aria-describedby={ariaDescribedBy}
+    <>
+      <div
+        ref={rootRef}
         className={cn(
-          "flex w-full items-center justify-between gap-3 bg-transparent text-left text-text-1 outline-none transition active:scale-[0.99]",
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
-          "disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100",
-          size === "sm" ? "min-h-0 px-3 py-1.5 text-xs" : "px-4 py-3 text-sm",
+          "relative min-w-0",
+          !className && "w-full rounded-[var(--radius-md)] border border-edge bg-inset",
+          "transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)]",
+          className,
+          open && "border-accent",
         )}
-        onClick={() => {
-          if (disabled) return;
-          if (open) setOpen(false);
-          else openList();
-        }}
-        onKeyDown={(event) => {
-          if (disabled) return;
-          if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-            event.preventDefault();
-            if (!open) openList();
-            else moveActive(event.key === "ArrowDown" ? 1 : -1);
-          } else if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            if (!open) openList();
-            else {
-              const item = options[activeIndex];
-              if (item && !item.disabled) commit(item.value);
-            }
-          } else if (event.key === "Home" && open) {
-            event.preventDefault();
-            setActiveIndex(enabledIndexes[0] ?? 0);
-          } else if (event.key === "End" && open) {
-            event.preventDefault();
-            setActiveIndex(enabledIndexes[enabledIndexes.length - 1] ?? 0);
-          }
-        }}
       >
-        <span
-          id={valueId}
-          className={cn("truncate", isPlaceholder || current === "" ? "font-normal text-text-3" : "font-medium text-text-1")}
-        >
-          {displayLabel}
-        </span>
-        <ChevronDown
+        {/*
+          Visible trigger comes first so a wrapping <label> associates with the
+          custom control, not the aria-hidden native select that backs the form value.
+        */}
+        <button
+          ref={triggerRef}
+          id={triggerId}
+          type="button"
+          role="combobox"
+          disabled={disabled}
+          autoFocus={autoFocus}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          aria-controls={listboxId}
+          aria-activedescendant={activeDescendant}
+          aria-required={required || undefined}
+          aria-invalid={showInvalid || undefined}
+          aria-label={triggerAriaLabel}
+          aria-labelledby={triggerLabelledBy}
+          aria-describedby={describedBy}
           className={cn(
-            "h-4 w-4 shrink-0 text-text-3 transition-transform duration-[var(--dur-fast)] ease-[var(--ease-out)]",
-            open && "rotate-180 text-accent",
+            "flex w-full items-center justify-between gap-3 bg-transparent text-left text-text-1 outline-none transition active:scale-[0.99]",
+            "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
+            "disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100",
+            size === "sm" ? "min-h-0 px-3 py-1.5 text-xs" : "px-4 py-3 text-sm",
           )}
-          aria-hidden
-        />
-      </button>
-
-      <select
-        ref={hiddenRef}
-        id={id ? `${id}-native` : undefined}
-        name={name}
-        required={required}
-        disabled={disabled}
-        value={current}
-        tabIndex={-1}
-        aria-hidden="true"
-        className="pointer-events-none absolute h-px w-px opacity-0"
-        onChange={(event) => {
-          // The visible trigger drives selection via commit() (which sets this
-          // element's value imperatively, without firing change). A change event
-          // here therefore only comes from programmatic drivers (e.g. Playwright
-          // selectOption / assistive form tooling) — route it through commit so
-          // React state and consumers stay in sync.
-          commit(event.currentTarget.value);
-        }}
-        onInvalid={(event) => {
-          // Native required bubbles would focus this invisible control. Send
-          // focus (and open the list) to the visible trigger instead.
-          event.preventDefault();
-          hiddenRef.current?.setCustomValidity("Please select an option.");
-          triggerRef.current?.focus();
-          openList();
-        }}
-        {...rest}
-      >
-        {options.map((item) => (
-          <option key={`${item.value}-${item.label}`} value={item.value} disabled={item.disabled}>
-            {item.label}
-          </option>
-        ))}
-      </select>
-
-      {open ? (
-        <ul
-          ref={listRef}
-          id={listboxId}
-          role="listbox"
-          aria-labelledby={triggerId}
-          className="absolute z-50 mt-1.5 max-h-60 w-full overflow-auto rounded-[var(--radius-md)] border border-edge bg-overlay p-1.5 shadow-[var(--shadow-2)] animate-[rise-in_var(--dur-fast)_var(--ease-out)_both]"
+          onClick={() => {
+            if (disabled) return;
+            if (open) setOpen(false);
+            else openList();
+          }}
+          onKeyDown={(event) => {
+            if (disabled) return;
+            if (event.key === "Tab") {
+              // Close without trapping so focus moves to the next/previous field.
+              if (open) setOpen(false);
+              return;
+            }
+            if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+              event.preventDefault();
+              if (!open) openList();
+              else moveActive(event.key === "ArrowDown" ? 1 : -1);
+            } else if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              if (!open) openList();
+              else {
+                const item = options[activeIndex];
+                if (item && !item.disabled) commit(item.value);
+              }
+            } else if (event.key === "Home" && open) {
+              event.preventDefault();
+              setActiveIndex(enabledIndexes[0] ?? 0);
+            } else if (event.key === "End" && open) {
+              event.preventDefault();
+              setActiveIndex(enabledIndexes[enabledIndexes.length - 1] ?? 0);
+            }
+          }}
         >
-          {options.map((item, index) => {
-            const isSelected = item.value === current;
-            const isActive = index === activeIndex;
-            return (
-              <li
-                key={`${item.value}-${item.label}`}
-                role="option"
-                aria-selected={isSelected}
-                aria-disabled={item.disabled || undefined}
-                data-index={index}
-                className={cn(
-                  "cursor-pointer rounded-[var(--radius-sm)] px-3 py-2 text-sm transition-colors duration-[var(--dur-fast)]",
-                  item.disabled && "cursor-not-allowed text-text-3 opacity-60",
-                  !item.disabled && isActive && "bg-accent-bg text-text-1",
-                  !item.disabled && !isActive && "text-text-2 hover:bg-inset hover:text-text-1",
-                  isSelected && !item.disabled && "font-semibold text-accent",
-                )}
-                onMouseEnter={() => {
-                  if (!item.disabled) setActiveIndex(index);
-                }}
-                onMouseDown={(event) => event.preventDefault()}
-                onClick={() => {
-                  if (!item.disabled) commit(item.value);
-                }}
-              >
-                {item.label}
-              </li>
-            );
-          })}
-        </ul>
+          <span
+            id={valueId}
+            className={cn(
+              "truncate",
+              isPlaceholder || current === "" ? "font-normal text-text-3" : "font-medium text-text-1",
+            )}
+          >
+            {displayLabel}
+          </span>
+          <ChevronDown
+            className={cn(
+              "h-4 w-4 shrink-0 text-text-3 transition-transform duration-[var(--dur-fast)] ease-[var(--ease-out)]",
+              open && "rotate-180 text-accent",
+            )}
+            aria-hidden
+          />
+        </button>
+
+        <select
+          ref={hiddenRef}
+          id={id ? `${id}-native` : undefined}
+          name={name}
+          required={required}
+          disabled={disabled}
+          value={current}
+          tabIndex={-1}
+          aria-hidden="true"
+          className="pointer-events-none absolute h-px w-px opacity-0"
+          onChange={(event) => {
+            // The visible trigger drives selection via commit() (which sets this
+            // element's value imperatively, without firing change). A change event
+            // here therefore only comes from programmatic drivers (e.g. Playwright
+            // selectOption / assistive form tooling) — route it through commit so
+            // React state and consumers stay in sync.
+            commit(event.currentTarget.value);
+          }}
+          onInvalid={(event) => {
+            // Native required bubbles would focus this invisible control. Surface
+            // the error on the visible combobox and move focus there instead.
+            event.preventDefault();
+            const message = "Select an option.";
+            hiddenRef.current?.setCustomValidity(message);
+            setInternalError(message);
+            triggerRef.current?.focus();
+            openList();
+          }}
+          {...rest}
+        >
+          {options.map((item) => (
+            <option key={`${item.value}-${item.label}`} value={item.value} disabled={item.disabled}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+
+        {open ? (
+          <ul
+            ref={listRef}
+            id={listboxId}
+            role="listbox"
+            aria-labelledby={triggerId}
+            className="absolute z-50 mt-1.5 max-h-60 w-full overflow-auto rounded-[var(--radius-md)] border border-edge bg-overlay p-1.5 shadow-[var(--shadow-2)] animate-[rise-in_var(--dur-fast)_var(--ease-out)_both]"
+          >
+            {options.map((item, index) => {
+              const isSelected = item.value === current;
+              const isActive = index === activeIndex;
+              return (
+                <li
+                  key={`${item.value}-${item.label}`}
+                  id={selectOptionDomId(listboxId, item.value)}
+                  role="option"
+                  aria-selected={isSelected}
+                  aria-disabled={item.disabled || undefined}
+                  data-index={index}
+                  className={cn(
+                    "cursor-pointer rounded-[var(--radius-sm)] px-3 py-2 text-sm transition-colors duration-[var(--dur-fast)]",
+                    item.disabled && "cursor-not-allowed text-text-3 opacity-60",
+                    !item.disabled && isActive && "bg-accent-bg text-text-1",
+                    !item.disabled && !isActive && "text-text-2 hover:bg-inset hover:text-text-1",
+                    isSelected && !item.disabled && "font-semibold text-accent",
+                  )}
+                  onMouseEnter={() => {
+                    if (!item.disabled) setActiveIndex(index);
+                  }}
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={() => {
+                    if (!item.disabled) commit(item.value);
+                  }}
+                >
+                  {item.label}
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
+      </div>
+      {internalError ? (
+        <p id={internalErrorId} className="mt-1.5 text-sm text-danger" role="alert">
+          {internalError}
+        </p>
       ) : null}
-    </div>
+    </>
   );
 }

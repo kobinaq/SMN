@@ -12,10 +12,37 @@ export const FOCUSABLE_SELECTOR = [
   "[tabindex]:not([tabindex='-1'])",
 ].join(", ");
 
+function isRendered(el: HTMLElement): boolean {
+  if (typeof window === "undefined") return true;
+  const style = window.getComputedStyle(el);
+  if (style.display === "none" || style.visibility === "hidden") return false;
+  // Explicitly collapsed controls (not "layout not measured yet").
+  const width = parseFloat(style.width);
+  const height = parseFloat(style.height);
+  if (
+    Number.isFinite(width) &&
+    Number.isFinite(height) &&
+    width === 0 &&
+    height === 0 &&
+    (style.overflow === "hidden" || style.overflowX === "hidden" || style.overflowY === "hidden")
+  ) {
+    return false;
+  }
+  return true;
+}
+
 export function getFocusableElements(container: ParentNode): HTMLElement[] {
-  return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
-    (el) => !el.closest("[inert]") && el.getAttribute("aria-hidden") !== "true",
-  );
+  return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter((el) => {
+    // Inputs can match the input: selector even with tabindex="-1" (honeypots).
+    if (el.tabIndex < 0) return false;
+    if (el.hasAttribute("hidden") || el.closest("[hidden]")) return false;
+    if (el.closest("[inert]")) return false;
+    if (el.getAttribute("aria-hidden") === "true" || el.closest('[aria-hidden="true"]')) return false;
+    if (el.closest("fieldset[disabled]")) return false;
+    if ("disabled" in el && Boolean((el as HTMLButtonElement).disabled)) return false;
+    if (!isRendered(el)) return false;
+    return true;
+  });
 }
 
 /** Cycle Tab / Shift+Tab inside `container`. Returns true when it handled the key. */

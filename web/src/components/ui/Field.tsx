@@ -85,7 +85,11 @@ export function Field({
     <div className={cn("flex flex-col gap-1.5", className)}>
       <label id={labelId} htmlFor={id} className="text-sm font-medium text-text-2">
         {label}
-        {required ? <span className="ml-1 text-danger">*</span> : null}
+        {required ? (
+          <span className="ml-1 text-danger" aria-hidden="true">
+            *
+          </span>
+        ) : null}
       </label>
       {typeof children === "function"
         ? children({ id, labelId, describedBy, invalid: Boolean(error) })

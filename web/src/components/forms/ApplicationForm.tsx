@@ -187,7 +187,7 @@ export function ApplicationForm({
           <input id="apply-role" className={field} name="role" required placeholder="Current role" />
         </div>
         <div>
-          <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-level">
+          <label id="apply-level-label" className="mb-1.5 block text-xs text-text-3" htmlFor="apply-level">
             Experience level
           </label>
           <Select
@@ -196,6 +196,7 @@ export function ApplicationForm({
             name="level"
             required
             defaultValue=""
+            aria-labelledby="apply-level-label"
             aria-invalid={levelError ? true : undefined}
             aria-describedby={levelError ? levelErrorId : undefined}
             onChange={() => setLevelError("")}
