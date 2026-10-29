@@ -14,7 +14,7 @@ export function AuthShell({
     <div className="flex min-h-svh flex-col bg-canvas">
       <header className="border-b border-edge-subtle px-4 py-4 sm:px-6">
         <div className="mx-auto flex max-w-md items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="inline-flex min-h-11 items-center gap-2" aria-label="Think Social Academy home">
             <BrandLogo width={120} height={32} className="h-7" />
           </Link>
           <Link

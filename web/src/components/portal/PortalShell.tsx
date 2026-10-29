@@ -254,7 +254,7 @@ export function PortalShell({
             id="main"
             tabIndex={-1}
             className={cn(
-              "mx-auto w-full px-4 py-8 sm:px-6 sm:py-10",
+              "mx-auto w-full px-4 pt-8 pb-[calc(2rem+var(--tutor-fab-clearance,0px))] sm:px-6 sm:pt-10 sm:pb-[calc(2.5rem+var(--tutor-fab-clearance,0px))]",
               // No fill-mode "both": retaining the keyframe transform on <main>
               // creates a containing block, so fixed tutor UI scrolls with content.
               "animate-[staff-fade-in_280ms_cubic-bezier(0.32,0.72,0,1)]",

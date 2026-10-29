@@ -66,9 +66,9 @@ export function MentorApplication({ status }: { status: string | null }) {
               aria-describedby={describedBy}
               aria-invalid={invalid || undefined}
             >
-              <option value="" disabled>
-                Seniority
-              </option>
+            <option value="" disabled>
+              Choose seniority
+            </option>
               <option>Mid-level</option>
               <option>Senior</option>
               <option>Lead / Head</option>

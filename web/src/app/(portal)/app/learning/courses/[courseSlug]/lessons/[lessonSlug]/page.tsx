@@ -30,7 +30,7 @@ export default async function LmsLessonPage(
   const tutorEnabled = process.env.AI_TUTOR_ENABLED === "true" && lesson.course.tutorEnabled;
 
   return (
-    <div className={tutorEnabled ? "space-y-7 pb-4 sm:pb-0" : "space-y-7"}>
+    <div className="space-y-7">
       <div>
         <Link href={lesson.course.href} className="text-sm text-text-3 transition-colors hover:text-text-1">
           {lesson.course.title}
@@ -159,7 +159,7 @@ export default async function LmsLessonPage(
         </Card>
       ) : null}
 
-      <div className="flex flex-col justify-between gap-3 border-t border-edge-subtle pt-6 sm:flex-row">
+      <div className="tutor-fab-action-safe flex flex-col justify-between gap-3 border-t border-edge-subtle pt-6 sm:flex-row">
         {lesson.previousHref ? (
           <Button href={lesson.previousHref} variant="secondary">
             <ArrowLeft className="h-4 w-4" />

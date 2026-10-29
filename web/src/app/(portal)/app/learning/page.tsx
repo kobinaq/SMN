@@ -106,7 +106,10 @@ export default async function LearningPage({ searchParams }: Props) {
             <section className="space-y-3">
               <div className="flex items-end justify-between gap-3">
                 <h2 className="font-display text-xl text-text-1">Your programmes</h2>
-                <Link href="/app/learning/courses" className="text-sm text-accent hover:underline">
+                <Link
+                  href="/app/learning/courses"
+                  className="inline-flex min-h-11 items-center text-sm text-accent hover:underline"
+                >
                   View all
                 </Link>
               </div>

@@ -15,6 +15,8 @@
   --header-h: 4rem;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-top: env(safe-area-inset-top, 0px);
+  /* Extra portal <main> bottom space when the fixed AI tutor FAB is mounted. */
+  --tutor-fab-clearance: 0px;
 
   /* Elevation ladder. Each step is a deliberate layer: page ground, resting
      card, inset/hover, then anything that floats above the page. Using these
@@ -341,9 +343,32 @@ h4,
   .btn-row-mobile > a,
   .btn-row-mobile > button {
     width: auto;
-    min-height: 0;
+    /* Keep the 44px tap target at every width; only drop full-width stretch. */
+    min-height: 2.75rem;
     font-size: inherit;
   }
+}
+
+/* Portal pages that mount AITutor toggle this on <html> so lesson (and any
+   future) actions clear the fixed FAB at every scroll position and width.
+   Icon-only circle below lg; labeled pill from lg up. */
+html.has-tutor-fab {
+  /* 48px FAB + bottom offset + breathing room below the last action. */
+  --tutor-fab-clearance: 5.5rem;
+  /* Icon-only circle at right-5: 48px + 1.25rem offset + gap. */
+  --tutor-fab-end-clearance: 4.75rem;
+}
+
+@media (min-width: 1024px) {
+  html.has-tutor-fab {
+    /* Labeled pill is wider; reserve trailing room for the full label. */
+    --tutor-fab-clearance: 5rem;
+    --tutor-fab-end-clearance: 12.5rem;
+  }
+}
+
+.tutor-fab-action-safe {
+  padding-inline-end: var(--tutor-fab-end-clearance, 0px);
 }
 
 /* Forms: 16px prevents iOS zoom on focus */

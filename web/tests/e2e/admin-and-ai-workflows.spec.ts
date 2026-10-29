@@ -175,7 +175,7 @@ test("member uses grounded Tutor and confirmed Career Coach controls with mock A
   await loginMember(page);
 
   await page.goto("/app/learning/courses/demo-content-strategy/lessons/demo-strategy-before-calendar");
-  await page.getByRole("button", { name: "Ask SMN Tutor" }).click();
+  await page.getByRole("button", { name: "Ask TSA Tutor" }).click();
   await page.getByLabel("Your question").fill("Explain why strategy comes before a content calendar.");
   await page.getByRole("button", { name: "Ask", exact: true }).click();
   await expect(page.getByText(/Mock AI response grounded/i)).toBeVisible();
