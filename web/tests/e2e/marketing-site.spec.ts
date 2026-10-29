@@ -160,9 +160,13 @@ test.describe("marketing navigation and CTAs", () => {
       await toggle.click();
       const panel = page.locator('[role="dialog"][aria-label="Mobile menu"]');
       await expect(panel).toBeVisible();
+      await expect(panel).not.toHaveAttribute("aria-hidden", "true");
       await page.keyboard.press("Escape");
+      // Closed panel stays mounted (portal) with opacity-0; Playwright still
+      // counts a layout box as "visible", so assert inert/aria-hidden instead.
       await expect(panel).toHaveAttribute("aria-hidden", "true");
-      await expect(panel).toBeHidden();
+      await expect(panel).toHaveAttribute("inert", "");
+      await expect(panel).toHaveClass(/opacity-0/);
       await expect(toggle).toBeFocused();
     });
 
