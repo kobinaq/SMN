@@ -23,8 +23,12 @@ export function NavigationProgress() {
       return;
     }
 
-    setVisible(true);
-    setWidth(15);
+    // Defer the first paint so setState is not synchronous inside the effect
+    // (react-hooks/set-state-in-effect).
+    const start = window.setTimeout(() => {
+      setVisible(true);
+      setWidth(15);
+    }, 0);
     const grow = window.setTimeout(() => setWidth(72), 90);
     const finish = window.setTimeout(() => setWidth(100), 320);
     const hide = window.setTimeout(() => {
@@ -33,6 +37,7 @@ export function NavigationProgress() {
     }, 520);
 
     return () => {
+      window.clearTimeout(start);
       window.clearTimeout(grow);
       window.clearTimeout(finish);
       window.clearTimeout(hide);

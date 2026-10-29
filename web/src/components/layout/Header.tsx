@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { Menu, X, ChevronDown } from "@/components/ui/icons";
 import { BrandLogo } from "@/components/layout/BrandLogo";
@@ -30,22 +30,24 @@ function sectionIsActive(
   return false;
 }
 
+/** Same pattern as ConfirmDialog: settle on the first client render without setState-in-effect. */
+const noopSubscribe = () => () => {};
+function useMounted() {
+  return useSyncExternalStore(noopSubscribe, () => true, () => false);
+}
+
 export function Header() {
   const site = useSiteSettings();
   const pathname = usePathname() || "/";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useMounted();
   const menuId = useId();
   const panelId = useId();
   const navRef = useRef<HTMLElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -91,6 +93,7 @@ export function Header() {
     if (!open) return;
 
     const previous = document.activeElement as HTMLElement | null;
+    const toggle = toggleRef.current;
     const panel = panelRef.current;
     const first = panel ? getFocusableElements(panel)[0] : null;
     first?.focus();
@@ -107,7 +110,7 @@ export function Header() {
     document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("keydown", onKey);
-      (toggleRef.current ?? previous)?.focus();
+      (toggle ?? previous)?.focus();
     };
   }, [open]);
 
