@@ -109,21 +109,19 @@ test.describe("marketing navigation and CTAs", () => {
 
   test("navigation progress does not start on a same-URL click", async ({ page }) => {
     await page.goto("/resources?type=Template");
-    const appeared = await page.evaluate(async () => {
-      let seen = false;
-      const observer = new MutationObserver(() => {
-        if (document.querySelector("[data-navigation-progress]")) seen = true;
-      });
-      observer.observe(document.body, { childList: true, subtree: true });
-      const nav = document.querySelector('nav[aria-label="Resource types"]');
-      const link = nav?.querySelector('a[aria-current="page"]') as HTMLAnchorElement | null;
-      link?.click();
-      await new Promise((resolve) => setTimeout(resolve, 250));
-      observer.disconnect();
-      return seen;
-    });
-    expect(appeared).toBe(false);
-    await expect(page.locator("[data-navigation-progress]")).toHaveCount(0);
+    const progress = page.locator("[data-navigation-progress]");
+    await expect(progress).toHaveCount(0);
+    const current = page
+      .locator('nav[aria-label="Resource types"]')
+      .locator('a[aria-current="page"]');
+    await expect(current).toBeVisible();
+    // Prefer Playwright click over page.evaluate: a same-URL App Router soft
+    // navigation destroys the evaluate world even when no progress bar starts.
+    await current.click();
+    await expect(page).toHaveURL(/[?&]type=Template/);
+    await expect
+      .poll(async () => progress.count(), { timeout: 500 })
+      .toBe(0);
   });
 
   test("footer Create a free account links to signup", async ({ page }) => {
