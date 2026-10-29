@@ -103,12 +103,20 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.add("has-tutor-fab");
+    return () => {
+      root.classList.remove("has-tutor-fab");
+    };
+  }, []);
+
   async function copyMessage(content: string) {
     try {
       await navigator.clipboard.writeText(content);
       toast.push("Copied to clipboard.", "success");
     } catch {
-      toast.push("Couldn’t copy — select the text manually.", "error");
+      toast.push("Couldn’t copy. Select the text manually.", "error");
     }
   }
 
@@ -160,23 +168,24 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
 
   if (!open) {
     return (
-      <>
-        {/* Keeps lesson actions/scroll end clear of the fixed FAB on phones. */}
-        <div className="h-20 w-full shrink-0 sm:h-6" aria-hidden="true" />
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className={cn(
-            "fixed right-5 bottom-[max(1.25rem,env(safe-area-inset-bottom))] z-40 inline-flex min-h-11 items-center gap-2 rounded-full bg-ai px-5 py-3",
-            "text-sm font-semibold text-[#07160f] shadow-[var(--shadow-2)]",
-            "transition-transform duration-[var(--dur-base)] ease-[var(--ease-spring)]",
-            "hover:scale-105 active:scale-95 motion-reduce:hover:scale-100",
-          )}
-        >
-          <Sparkles className="h-4 w-4" aria-hidden />
-          Ask SMN Tutor
-        </button>
-      </>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-label="Ask the AI tutor"
+        data-tutor-fab
+        className={cn(
+          "fixed right-5 bottom-[max(1.25rem,env(safe-area-inset-bottom))] z-40",
+          "inline-flex h-12 w-12 items-center justify-center rounded-full bg-ai",
+          "text-sm font-semibold text-[#07160f] shadow-[var(--shadow-2)]",
+          "sm:h-auto sm:w-auto sm:min-h-11 sm:gap-2 sm:px-5 sm:py-3",
+          "transition-transform duration-[var(--dur-base)] ease-[var(--ease-spring)]",
+          "hover:scale-105 active:scale-95 motion-reduce:hover:scale-100",
+          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
+        )}
+      >
+        <Sparkles className="h-4 w-4" aria-hidden />
+        <span className="hidden sm:inline">Ask SMN Tutor</span>
+      </button>
     );
   }
 
