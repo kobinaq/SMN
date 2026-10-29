@@ -242,6 +242,8 @@ export type EventItem = {
   /** @deprecated Prefer first-party /events/[slug] registration */
   registrationUrl: string;
   image: string;
+  /** True when the CMS media upload is set (not the stock fallback). */
+  hasCustomImage?: boolean;
   format: string;
   price: string;
   host: string;
@@ -254,6 +256,7 @@ export type EventItem = {
   address?: string | null;
   onlineUrl?: string | null;
   status?: string;
+  updatedAt?: string;
 };
 
 export const eventTypes = ["All", "Webinar", "Workshop", "Networking"] as const;
@@ -275,6 +278,7 @@ export type ResourceItem = {
   body: string[];
   /** Uploaded file URL when staff attached one in the CMS. */
   fileUrl?: string;
+  updatedAt?: string;
 };
 
 /** Real resources are managed in the CMS (`resources` collection). No seed placeholders. */
@@ -324,6 +328,7 @@ export type BlogPost = {
   authorRole: string;
   authorImage: string;
   body: string[];
+  updatedAt?: string;
 };
 
 /** Real insights are managed in the CMS (`posts` collection). No seed placeholders. */

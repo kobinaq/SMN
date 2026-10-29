@@ -11,13 +11,32 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   try {
     const opportunity = await getPublishedOpportunity(slug);
+    const canonical = `/careers/jobs/${slug}`;
+    const title = `${opportunity.title} · ${opportunity.company}`;
+    const shareImage = "/opengraph-image";
     return {
-      title: `${opportunity.title} · ${opportunity.company}`,
+      title,
       description: opportunity.summary,
-      alternates: { canonical: `/careers/jobs/${slug}` },
+      alternates: { canonical },
+      openGraph: {
+        title,
+        description: opportunity.summary,
+        type: "website",
+        url: canonical,
+        images: [{ url: shareImage }],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description: opportunity.summary,
+        images: [shareImage],
+      },
     };
   } catch {
-    return { title: "Opportunity" };
+    return {
+      title: "Career opportunity",
+      description: "This job listing could not be found.",
+    };
   }
 }
 
