@@ -191,6 +191,7 @@ export function PortalSidebar({
           <BrandLogo width={96} height={24} className="h-5 shrink-0 sm:h-6" />
           <div className="flex min-w-0 flex-col overflow-hidden">
             <span className="truncate text-[13px] font-medium leading-none text-text-1">{portalLabel}</span>
+            {" "}
             <span className="mt-1 truncate text-[11px] leading-none text-text-3">portal</span>
           </div>
         </Link>
