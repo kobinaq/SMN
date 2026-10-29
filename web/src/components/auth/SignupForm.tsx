@@ -2,31 +2,38 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Button } from "@/components/ui/Button";
 
 const field =
   "field w-full border border-edge-subtle bg-inset px-4 py-3.5 text-text-1 placeholder:text-text-3 sm:py-3";
 
+type FieldKey = "password" | "confirm" | "form";
+
 export function SignupForm() {
   const router = useRouter();
+  const errorId = useId();
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [message, setMessage] = useState("");
+  const [errorField, setErrorField] = useState<FieldKey | null>(null);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("loading");
     setMessage("");
+    setErrorField(null);
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
 
     if (String(data.password) !== String(data.confirm)) {
       setStatus("error");
+      setErrorField("confirm");
       setMessage("Passwords do not match.");
       return;
     }
     if (String(data.password).length < 8) {
       setStatus("error");
+      setErrorField("password");
       setMessage("Password must be at least 8 characters.");
       return;
     }
@@ -59,9 +66,14 @@ export function SignupForm() {
       router.refresh();
     } catch (err) {
       setStatus("error");
+      setErrorField("form");
       setMessage(err instanceof Error ? err.message : "Unable to sign up.");
     }
   }
+
+  const passwordInvalid = errorField === "password";
+  const confirmInvalid = errorField === "confirm";
+  const formInvalid = errorField === "form";
 
   return (
     <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
@@ -75,6 +87,8 @@ export function SignupForm() {
         required
         autoComplete="name"
         placeholder="Full name"
+        aria-invalid={formInvalid || undefined}
+        aria-describedby={formInvalid ? errorId : undefined}
       />
       <label htmlFor="signup-email" className="sr-only">
         Email
@@ -88,6 +102,8 @@ export function SignupForm() {
         autoComplete="email"
         placeholder="Email"
         inputMode="email"
+        aria-invalid={formInvalid || undefined}
+        aria-describedby={formInvalid ? errorId : undefined}
       />
       <label htmlFor="signup-password" className="sr-only">
         Password (minimum 8 characters)
@@ -100,6 +116,8 @@ export function SignupForm() {
         required
         autoComplete="new-password"
         placeholder="Password (min 8 characters)"
+        aria-invalid={passwordInvalid || formInvalid || undefined}
+        aria-describedby={passwordInvalid || formInvalid ? errorId : undefined}
       />
       <label htmlFor="signup-confirm" className="sr-only">
         Confirm password
@@ -112,11 +130,17 @@ export function SignupForm() {
         required
         autoComplete="new-password"
         placeholder="Confirm password"
+        aria-invalid={confirmInvalid || formInvalid || undefined}
+        aria-describedby={confirmInvalid || formInvalid ? errorId : undefined}
       />
       <Button type="submit" className="w-full" disabled={status === "loading"}>
         {status === "loading" ? "Creating account…" : "Create account"}
       </Button>
-      {message ? <p className="text-sm text-red-300">{message}</p> : null}
+      {message ? (
+        <p id={errorId} className="text-sm text-red-300" role="alert" aria-live="assertive">
+          {message}
+        </p>
+      ) : null}
       <p className="pt-2 text-center text-sm text-text-3">
         Already have an account?{" "}
         <Link href="/login" className="text-accent hover:text-text-1">

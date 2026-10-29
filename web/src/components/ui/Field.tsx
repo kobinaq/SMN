@@ -73,20 +73,27 @@ export function Field({
   required?: boolean;
   htmlFor?: string;
   className?: string;
-  children: ReactNode | ((props: { id: string; describedBy?: string; invalid: boolean }) => ReactNode);
+  children: ReactNode | ((props: { id: string; labelId: string; describedBy?: string; invalid: boolean }) => ReactNode);
 }) {
   const generated = useId();
   const id = htmlFor || generated;
+  const labelId = `${id}-label`;
   const messageId = `${id}-message`;
   const describedBy = hint || error ? messageId : undefined;
 
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
-      <label htmlFor={id} className="text-sm font-medium text-text-2">
+      <label id={labelId} htmlFor={id} className="text-sm font-medium text-text-2">
         {label}
-        {required ? <span className="ml-1 text-danger">*</span> : null}
+        {required ? (
+          <span className="ml-1 text-danger" aria-hidden="true">
+            *
+          </span>
+        ) : null}
       </label>
-      {typeof children === "function" ? children({ id, describedBy, invalid: Boolean(error) }) : children}
+      {typeof children === "function"
+        ? children({ id, labelId, describedBy, invalid: Boolean(error) })
+        : children}
       {error ? (
         <p id={messageId} role="alert" className="text-xs text-danger">
           {error}
