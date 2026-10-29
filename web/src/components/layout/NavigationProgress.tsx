@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState, type MutableRefObject } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 function prefersReducedMotion() {
@@ -37,47 +37,20 @@ function isInternalNavClick(event: MouseEvent) {
 }
 
 /**
- * Watches App Router location inside Suspense (required for useSearchParams).
- * Kept separate so a Suspense remount cannot wipe the progress bar state.
- */
-function RouteChangeWatcher({
-  onChange,
-  skipInitial,
-}: {
-  onChange: () => void;
-  skipInitial: MutableRefObject<boolean>;
-}) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const search = searchParams?.toString() ?? "";
-
-  useEffect(() => {
-    if (skipInitial.current) {
-      skipInitial.current = false;
-      return;
-    }
-    onChange();
-  }, [pathname, search, onChange, skipInitial]);
-
-  return null;
-}
-
-/**
  * Thin top bar during App Router client navigations. Starts on internal link
  * click and finishes when the pathname or searchParams change. With
  * prefers-reduced-motion, shows a static indicator instead of nothing.
- *
- * Progress state lives outside the useSearchParams Suspense child so a query
- * change remount cannot drop a bar that already started.
  */
-export function NavigationProgress() {
+function NavigationProgressInner() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const search = searchParams?.toString() ?? "";
   const [visible, setVisible] = useState(false);
   const [width, setWidth] = useState(0);
   const [staticBar, setStaticBar] = useState(false);
+  const first = useRef(true);
   const navigating = useRef(false);
   const timers = useRef<number[]>([]);
-  const skipInitialRouteEffect = useRef(true);
-  const finishRef = useRef<() => void>(() => {});
 
   const clearTimers = () => {
     for (const id of timers.current) window.clearTimeout(id);
@@ -98,7 +71,7 @@ export function NavigationProgress() {
     timers.current.push(window.setTimeout(() => setWidth(72), 90));
   };
 
-  finishRef.current = () => {
+  const finishProgress = () => {
     if (!navigating.current) return;
     navigating.current = false;
     clearTimers();
@@ -129,32 +102,41 @@ export function NavigationProgress() {
     };
   }, []);
 
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    finishProgress();
+  }, [pathname, search]);
+
+  if (!visible) return null;
+
   return (
-    <>
-      <Suspense fallback={null}>
-        <RouteChangeWatcher
-          skipInitial={skipInitialRouteEffect}
-          onChange={() => finishRef.current()}
-        />
-      </Suspense>
-      {visible ? (
-        <div
-          className="pointer-events-none fixed inset-x-0 top-0 z-[100] h-0.5 bg-transparent"
-          role="progressbar"
-          aria-hidden
-          data-navigation-progress=""
-          data-reduced-motion={staticBar ? "true" : undefined}
-        >
-          <div
-            className={
-              staticBar
-                ? "h-full w-full bg-accent"
-                : "h-full bg-accent transition-[width] duration-300 ease-out"
-            }
-            style={staticBar ? undefined : { width: `${width}%` }}
-          />
-        </div>
-      ) : null}
-    </>
+    <div
+      className="pointer-events-none fixed inset-x-0 top-0 z-[100] h-0.5 bg-transparent"
+      role="progressbar"
+      aria-hidden
+      data-navigation-progress=""
+      data-reduced-motion={staticBar ? "true" : undefined}
+    >
+      <div
+        className={
+          staticBar
+            ? "h-full w-full bg-accent"
+            : "h-full bg-accent transition-[width] duration-300 ease-out"
+        }
+        style={staticBar ? undefined : { width: `${width}%` }}
+      />
+    </div>
+  );
+}
+
+/** Suspense boundary so useSearchParams does not opt the site layout out of static rendering. */
+export function NavigationProgress() {
+  return (
+    <Suspense fallback={null}>
+      <NavigationProgressInner />
+    </Suspense>
   );
 }
