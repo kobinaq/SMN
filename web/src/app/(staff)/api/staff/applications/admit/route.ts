@@ -122,12 +122,10 @@ export async function POST(request: Request) {
           created
             ? `We created a member account for ${member.email}. Set your password at ${resetUrl}, then sign in at ${loginUrl}.`
             : `Sign in at ${loginUrl} and open Learning.`,
-          classroomUrl ? `Google Classroom invite: ${classroomUrl}` : "",
+          ...(classroomUrl ? [`Google Classroom invite: ${classroomUrl}`] : []),
           "",
           "Think Social Academy",
-        ]
-          .filter(Boolean)
-          .join("\n"),
+        ].join("\n"),
       });
 
       return Response.json({ ok: true, action: "grant", enrollmentId: enrollment.id, memberId: member.id });

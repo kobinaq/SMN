@@ -100,7 +100,7 @@ export async function POST(req: Request) {
 
     const opsMail = await sendEmail({
       to: ops,
-      subject: `Job posting for review: ${data.title} — ${data.company}`,
+      subject: `Job posting for review: ${data.title} at ${data.company}`,
       text: summaryText,
     });
 
