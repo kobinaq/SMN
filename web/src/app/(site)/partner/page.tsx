@@ -16,7 +16,7 @@ import { img } from "@/lib/images";
 export const metadata: Metadata = {
   title: seoTitle("Partner With Us"),
   description:
-    "Build with the next generation of marketers. Train teams, hire SMN talent, request an intern, post a role, collaborate on events, or sponsor access to training.",
+    "Build with the next generation of marketers. Train teams, collaborate on events, or sponsor access to training and practical work.",
   alternates: { canonical: "/partner" },
   openGraph: { url: "/partner" },
 };
@@ -27,12 +27,12 @@ const proof = [
     body: "Review public member profiles and case studies before you talk to anyone.",
   },
   {
-    title: "SMN Experience",
-    body: "Match emerging marketers to internships, volunteer roles, and project briefs.",
+    title: "Practical work",
+    body: "Match emerging marketers to volunteer roles, project briefs, and marketing simulations.",
   },
   {
     title: "Staff-reviewed listings",
-    body: "Roles and intern requests are read by SMN before they reach members.",
+    body: "Roles and requests are read by Think Social Academy before they reach members.",
   },
 ];
 
@@ -64,7 +64,7 @@ export default async function EmployersPage({
         alt="Two marketers in conversation"
         kicker="Partner with us"
         title="Build with the next generation of marketers."
-        lede="Social Marketers Network works with brands, organisations, agencies, and industry professionals to create opportunities for learning, talent, collaboration, and career development."
+        lede="Think Social Academy works with brands, organisations, agencies, and industry professionals to create opportunities for learning, talent, collaboration, and career development."
         actions={
           <>
             <Button href="#request">{cta.partner.label}</Button>
@@ -107,13 +107,13 @@ export default async function EmployersPage({
         />
         <DefinitionGrid className="mt-12" columns={3} items={proof} />
         <p className="mt-10 max-w-2xl text-sm text-text-3">
-          Learn more about the{" "}
+          Learn more about{" "}
           <Link href="/academy#practical-work" className="link-wipe text-accent">
-            SMN Experience Programme
+            practical work and marketing simulations
           </Link>{" "}
           or the{" "}
           <Link href="/community" className="link-wipe text-accent">
-            Network
+            community
           </Link>
           .
         </p>

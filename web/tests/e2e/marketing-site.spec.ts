@@ -139,6 +139,80 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(page.locator('script[type="application/ld+json"]').first()).toHaveCount(1);
   });
 
+  test.describe("mobile menu at 390px", () => {
+    test.use({ viewport: { width: 390, height: 844 } });
+
+    test("opens a full-height panel with visible links", async ({ page }) => {
+      await page.goto("/");
+      await page.getByRole("button", { name: /open menu/i }).click();
+      const panel = page.locator('[role="dialog"][aria-label="Mobile menu"]');
+      await expect(panel).toBeVisible();
+      await expect(panel).not.toHaveAttribute("aria-hidden", "true");
+      const box = await panel.boundingBox();
+      expect(box?.height ?? 0).toBeGreaterThan(200);
+      await expect(panel.getByRole("navigation", { name: "Mobile" }).getByRole("link").first()).toBeVisible();
+      await expect(panel.getByRole("link", { name: "Academy", exact: true })).toBeVisible();
+    });
+
+    test("Esc closes the menu and returns focus to the toggle", async ({ page }) => {
+      await page.goto("/");
+      const toggle = page.getByRole("button", { name: /open menu/i });
+      await toggle.click();
+      const panel = page.locator('[role="dialog"][aria-label="Mobile menu"]');
+      await expect(panel).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(panel).toHaveAttribute("aria-hidden", "true");
+      await expect(panel).toBeHidden();
+      await expect(toggle).toBeFocused();
+    });
+
+    test("keeps Tab focus inside the open menu", async ({ page }) => {
+      await page.goto("/");
+      await page.getByRole("button", { name: /open menu/i }).click();
+      const panel = page.locator('[role="dialog"][aria-label="Mobile menu"]');
+      await expect(panel).toBeVisible();
+      const focusable = panel.locator(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      const count = await focusable.count();
+      expect(count).toBeGreaterThan(1);
+      for (let i = 0; i < count + 2; i += 1) {
+        await page.keyboard.press("Tab");
+        expect(
+          await page.evaluate(() => {
+            const dialog = document.querySelector('[role="dialog"][aria-label="Mobile menu"]');
+            return Boolean(dialog && dialog.contains(document.activeElement));
+          }),
+        ).toBe(true);
+      }
+    });
+
+    test("marks the active nav item with aria-current", async ({ page }) => {
+      await page.goto("/community/mentors");
+      await page.getByRole("button", { name: /open menu/i }).click();
+      const panel = page.locator('[role="dialog"][aria-label="Mobile menu"]');
+      await expect(panel.getByRole("link", { name: "Community", exact: true })).toHaveAttribute(
+        "aria-current",
+        "page",
+      );
+      await expect(panel.getByRole("link", { name: "Mentors", exact: true })).toHaveAttribute(
+        "aria-current",
+        "page",
+      );
+    });
+
+    test("contact falls back when ?type=Job%20posting and hides retired options", async ({
+      page,
+    }) => {
+      await page.goto("/contact?type=Job%20posting");
+      const select = page.getByLabel(/enquiry type/i);
+      await expect(select).toHaveValue("");
+      const options = await select.locator("option").allTextContents();
+      expect(options.join("\n")).not.toMatch(/Talent request|Intern request|Job posting/i);
+      expect(options).toContain("General enquiry");
+    });
+  });
+
   test("job and event pages inherit a working default share image", async ({ request }) => {
     async function assertShareImage(path: string) {
       const res = await request.get(path);

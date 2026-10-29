@@ -83,7 +83,7 @@ const channels = [
   {
     icon: Briefcase,
     title: "Discover opportunities",
-    body: "Access relevant jobs, internships, projects, and industry opportunities.",
+    body: "Find events, marketing simulations, projects, and industry connections.",
   },
   {
     icon: Users,

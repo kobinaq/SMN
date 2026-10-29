@@ -137,7 +137,7 @@ export const homepageClose = {
 
 export const homepagePartners = {
   title: "Build with the next generations of marketers.",
-  body: "Train teams, hire interns, collaborate on events or sponsor access to training and experience programs.",
+  body: "Train teams, collaborate on events or sponsor access to training and experience programs.",
   close: "Marketing is changing. How we learn it should too.",
 } as const;
 
