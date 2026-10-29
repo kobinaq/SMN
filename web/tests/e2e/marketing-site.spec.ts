@@ -101,7 +101,10 @@ test.describe("marketing navigation and CTAs", () => {
       state: "attached",
       timeout: 5000,
     });
-    await page.getByRole("link", { name: "Template", exact: true }).first().click();
+    await page
+      .getByRole("group", { name: "Resource types" })
+      .getByRole("link", { name: "Template", exact: true })
+      .click();
     await appeared;
     await page.waitForURL(/[?&]type=Template/);
     await expect(progress).toHaveCount(0, { timeout: 5000 });
@@ -117,11 +120,14 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(current).toBeVisible();
     // Prefer Playwright click over page.evaluate: a same-URL App Router soft
     // navigation destroys the evaluate world even when no progress bar starts.
+    const appeared = progress
+      .waitFor({ state: "attached", timeout: 400 })
+      .then(() => true)
+      .catch(() => false);
     await current.click();
+    expect(await appeared).toBe(false);
     await expect(page).toHaveURL(/[?&]type=Template/);
-    await expect
-      .poll(async () => progress.count(), { timeout: 500 })
-      .toBe(0);
+    await expect(progress).toHaveCount(0);
   });
 
   test("footer Create a free account links to signup", async ({ page }) => {
