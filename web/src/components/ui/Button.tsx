@@ -40,7 +40,7 @@ export function Button({
   ...props
 }: ButtonAsButton | ButtonAsLink) {
   const classes = cn(
-    "inline-flex min-h-10 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold tracking-wide",
+    "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold tracking-wide",
     "transition-[background,border-color,transform,box-shadow] duration-[var(--dur-fast)] ease-[var(--ease-out)]",
     "touch-manipulation select-none active:scale-[0.97] motion-reduce:active:scale-100",
     "disabled:pointer-events-none disabled:opacity-40",

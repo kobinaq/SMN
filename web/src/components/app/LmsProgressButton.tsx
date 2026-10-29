@@ -52,7 +52,7 @@ export function LmsProgressButton({
         onClick={toggle}
         disabled={saving}
         aria-busy={saving}
-        className={`inline-flex items-center justify-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-[border-color,background,color] duration-[var(--dur-fast)] ease-[var(--ease-out)] active:scale-[0.97] motion-reduce:active:scale-100 ${
+        className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-[border-color,background,color] duration-[var(--dur-fast)] ease-[var(--ease-out)] active:scale-[0.97] motion-reduce:active:scale-100 ${
           completed
             ? "border-ai/35 bg-ai-bg text-ai"
             : "border-edge bg-inset text-text-2 hover:border-accent/40 hover:text-text-1"

@@ -194,8 +194,15 @@ export function StaffFilterChips({
       {options.map((option) => {
         const active = option.id === value;
         return (
-          <button key={option.id} type="button" role="tab" aria-selected={active} onClick={() => onChange(option.id)}>
-            <Chip tone={active ? "accent" : "neutral"}>
+          <button
+            key={option.id}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            onClick={() => onChange(option.id)}
+            className="inline-flex min-h-11 items-center"
+          >
+            <Chip tone={active ? "accent" : "neutral"} className="min-h-11 px-3">
               {option.label}
               {typeof option.count === "number" ? <span className="tnum opacity-70">{option.count}</span> : null}
             </Chip>
@@ -314,9 +321,10 @@ export const staffFieldClass =
  */
 export const staffOpsChrome = [
   // Action button rows
-  "[&_.smn-ops-actions]:flex [&_.smn-ops-actions]:max-w-full [&_.smn-ops-actions]:flex-wrap [&_.smn-ops-actions]:justify-end [&_.smn-ops-actions]:gap-1.5",
+  "[&_.smn-ops-actions]:flex [&_.smn-ops-actions]:max-w-full [&_.smn-ops-actions]:flex-wrap [&_.smn-ops-actions]:justify-end [&_.smn-ops-actions]:gap-2",
+  "[&_.smn-ops-actions_button]:inline-flex [&_.smn-ops-actions_button]:min-h-11 [&_.smn-ops-actions_button]:items-center [&_.smn-ops-actions_button]:justify-center",
   "[&_.smn-ops-actions_button]:rounded-full [&_.smn-ops-actions_button]:border [&_.smn-ops-actions_button]:border-edge",
-  "[&_.smn-ops-actions_button]:bg-inset [&_.smn-ops-actions_button]:px-3 [&_.smn-ops-actions_button]:py-1.5",
+  "[&_.smn-ops-actions_button]:bg-inset [&_.smn-ops-actions_button]:px-3.5 [&_.smn-ops-actions_button]:py-2",
   "[&_.smn-ops-actions_button]:text-xs [&_.smn-ops-actions_button]:text-text-1",
   "[&_.smn-ops-actions_button:hover:not(:disabled)]:border-accent/40 [&_.smn-ops-actions_button:disabled]:opacity-40",
   // Error text drops to its own full-width line so it never squeezes the buttons

@@ -557,7 +557,7 @@ export function ContentStudio({
             </details>
 
             <button
-              className="mt-4 inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-accent-strong px-5 py-2 text-sm font-medium text-text-1 transition hover:bg-[#0c3ab0] active:scale-[0.97] disabled:opacity-50"
+              className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-accent-strong px-5 py-2 text-sm font-medium text-text-1 transition hover:bg-[#0c3ab0] active:scale-[0.97] disabled:opacity-50"
               disabled={busy}
               type="submit"
             >
@@ -658,7 +658,7 @@ export function ContentStudio({
                   </div>
                 )}
                 <button
-                  className="mt-4 inline-flex min-h-10 items-center justify-center rounded-full bg-ai px-5 py-2 text-sm font-semibold text-[#07110c] transition hover:bg-[#63c3a4] active:scale-[0.97] disabled:opacity-50"
+                  className="mt-4 inline-flex min-h-11 items-center justify-center rounded-full bg-ai px-5 py-2 text-sm font-semibold text-[#07110c] transition hover:bg-[#63c3a4] active:scale-[0.97] disabled:opacity-50"
                   disabled={busy}
                   onClick={(event) => {
                     event.preventDefault();
@@ -671,7 +671,7 @@ export function ContentStudio({
                 </button>
                 {kind === "quiz" || kind === "rubric" ? (
                   <button
-                    className="mt-3 ml-3 inline-flex min-h-10 items-center justify-center rounded-full border border-accent/40 px-5 py-2 text-sm text-accent transition hover:bg-accent-bg disabled:opacity-50"
+                    className="mt-3 ml-3 inline-flex min-h-11 items-center justify-center rounded-full border border-accent/40 px-5 py-2 text-sm text-accent transition hover:bg-accent-bg disabled:opacity-50"
                     disabled={busy}
                     onClick={(event) => {
                       event.preventDefault();
