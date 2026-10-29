@@ -2,15 +2,15 @@ import { Band, Kicker } from "@/components/site/kit";
 import { GooeyText } from "@/components/motion/GooeyText";
 import { ecosystem } from "@/lib/content";
 
-const WORDS = ["Learn", "Practice", "Connect", "Grow"];
+const WORDS = ["Learn", "Apply", "Grow", "Connect"];
 
-/** The four-part promise, morphing word into word above a two-up list. */
+/** Tab 5 Learn. Apply. Grow. Connect. */
 export function EcosystemPillars() {
   return (
     <Band tone="light" size="lg" fade>
       <div className="text-center">
-        <Kicker className="justify-center">The ecosystem</Kicker>
-        <h2 className="sr-only">Learn. Practice. Connect. Grow.</h2>
+        <Kicker className="justify-center">How learning works</Kicker>
+        <h2 className="sr-only">Learn. Apply. Grow. Connect.</h2>
         <div className="relative mx-auto mt-8 h-20 max-w-4xl sm:h-28 md:h-36" aria-hidden>
           <GooeyText
             texts={WORDS}
@@ -34,7 +34,9 @@ export function EcosystemPillars() {
             </span>
             <div>
               <h3 className="font-display display-3 text-text-1">{item.title}</h3>
-              <p className="mt-3 max-w-[42ch] text-sm leading-relaxed text-text-2 sm:text-base">{item.body}</p>
+              <p className="mt-3 max-w-[42ch] text-sm leading-relaxed text-text-2 sm:text-base">
+                {item.body}
+              </p>
               {item.kicker ? <p className="mt-4 eyebrow text-accent">{item.kicker}</p> : null}
             </div>
           </div>

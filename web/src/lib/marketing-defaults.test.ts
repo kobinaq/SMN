@@ -1,7 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { cta } from "@/lib/cta";
 import { site, nav } from "@/lib/site";
-import { courses, excerptStoryQuote, homepageHero, smnValues, stories } from "@/lib/content";
+import {
+  courses,
+  excerptStoryQuote,
+  homepageHero,
+  homepageOutcomes,
+  homepageProgrammes,
+  smnValues,
+  stories,
+} from "@/lib/content";
 
 describe("marketing defaults", () => {
   it("withholds unconfirmed cohort pricing", () => {
@@ -43,13 +51,17 @@ describe("marketing defaults", () => {
     expect(cta.postJob.href).toBe("/community");
     expect(cta.requestIntern.href).toBe("/community");
     expect(cta.viewMentors.href).toBe("/community/mentors");
-    expect(cta.exploreServices.label).toBe("Explore our Services");
+    expect(cta.explorePrograms.label).toBe("Explore the Academy");
+    expect(cta.explorePrograms.href).toBe("/academy");
     expect(cta.exploreServices.href).toBe("/academy");
   });
 
-  it("uses a 4-week cohort duration in public defaults", () => {
+  it("uses a 4-week cohort duration and Tab 5 home CTAs in public defaults", () => {
     expect(site.cohort.duration).toBe("4 weeks");
-    expect(site.homepage.secondaryCtaHref).toBe("/signup");
+    expect(site.cohort.startDate.toLowerCase()).toContain("coming soon");
+    expect(site.homepage.primaryCtaLabel).toBe("Join the Community");
+    expect(site.homepage.secondaryCtaLabel).toBe("Explore the Academy");
+    expect(site.homepage.secondaryCtaHref).toBe("/academy");
   });
 
   it("exposes the T3 public navigation labels and hrefs", () => {
@@ -70,13 +82,13 @@ describe("marketing defaults", () => {
     ).toBe(true);
   });
 
-  it("keeps homepage hero promise and values in code", () => {
+  it("keeps Tab 5 homepage hero promise and values in code", () => {
     expect(homepageHero.lines).toEqual([
-      "Learn Social Media Marketing.",
-      "Lead with AI.",
-      "Gain Real-World Experience.",
-      "Grow with Community",
+      "Learn social media marketing.",
+      "Put it into practice.",
+      "Work towards results.",
     ]);
+    expect(homepageHero.body.toLowerCase()).toContain("simulated briefs");
     expect(smnValues.map((value) => value.title)).toEqual([
       "Practicality",
       "Strategy over aesthetics",
@@ -84,5 +96,11 @@ describe("marketing defaults", () => {
       "Relevance",
       "Opportunity",
     ]);
+    expect(homepageProgrammes.some((p) => /4 weeks/i.test(p.meta))).toBe(true);
+    expect(homepageProgrammes.some((p) => p.href === "/academy/courses")).toBe(true);
+    expect(homepageOutcomes.every((o) => !/\u2014/.test(`${o.title}${o.body}`))).toBe(true);
+    expect(homepageOutcomes.every((o) => !/intern|hire|recognised certificate/i.test(`${o.title}${o.body}`))).toBe(
+      true,
+    );
   });
 });

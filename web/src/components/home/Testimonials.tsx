@@ -20,7 +20,7 @@ export function Testimonials({ stories }: { stories: HomeStoryItem[] }) {
     <Band tone="raised" size="lg" fade>
       <SectionHead
         kicker="In their words"
-        title="What members say"
+        title="What Our Learners Say"
         actions={
           <Button href="/community#stories" variant="secondary">
             Member stories

@@ -30,6 +30,42 @@ test.describe("marketing navigation and CTAs", () => {
     );
   });
 
+  test("home hero headline and primary Join the Community CTA", async ({ page }) => {
+    await page.goto("/");
+    const hero = page.locator("[data-hero]");
+    await expect(hero.getByRole("heading", { level: 1 })).toContainText(
+      /Learn social media marketing[\s\S]*Put it into practice[\s\S]*Work towards results/i,
+    );
+    const primary = hero.getByRole("link", { name: /join the community/i }).first();
+    await expect(primary).toHaveAttribute("href", "/signup");
+    await expect(hero.getByRole("link", { name: /explore the academy/i }).first()).toHaveAttribute(
+      "href",
+      "/academy",
+    );
+  });
+
+  test("home main has no em dash and no SMN, internship or hire copy", async ({ page }) => {
+    await page.goto("/");
+    const text = await page.locator("main").innerText();
+    expect(text).not.toMatch(/\u2014|&mdash;/);
+    expect(text).not.toMatch(/\bSMN\b/);
+    expect(text).not.toMatch(/internship/i);
+    expect(text).not.toMatch(/\bhire\b/i);
+  });
+
+  test.describe("home at 390px", () => {
+    test.use({ viewport: { width: 390, height: 844 } });
+
+    test("does not overflow horizontally", async ({ page }) => {
+      await page.goto("/");
+      const overflowed = await page.evaluate(() => {
+        const doc = document.documentElement;
+        return doc.scrollWidth > doc.clientWidth + 1;
+      });
+      expect(overflowed).toBe(false);
+    });
+  });
+
   test("nav shows the T3 labels", async ({ page }) => {
     await page.goto("/");
     const primary = page.getByRole("navigation", { name: "Primary" });

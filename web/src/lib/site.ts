@@ -21,12 +21,14 @@ export const site = {
     twitter: "https://x.com/smn_africa",
   },
   homepage: {
-    headline: "Learn Social Media Marketing. Lead with AI. Gain Real-World Experience. Grow with Community.",
+    // Tab 5 hero; ticket T5 makes Join the Community the primary CTA.
+    headline: "Learn social media marketing. Put it into practice. Work towards results.",
     supportingCopy:
-      "Think Social Academy is a social media marketing academy and community focused on thoughtful learning, practical application, and work designed to support brand and business results.",
-    primaryCtaLabel: "Explore our Services",
-    secondaryCtaLabel: "Join the Community",
-    secondaryCtaHref: "/signup",
+      "Build your understanding through practical lessons, guided exercises, and simulated briefs that connect social media marketing concepts to different business contexts.",
+    primaryCtaLabel: "Join the Community",
+    secondaryCtaLabel: "Explore the Academy",
+    // Secondary CTA target (Explore the Academy). Join the Community uses cta.joinCommunity → /signup.
+    secondaryCtaHref: "/academy",
   },
   announcementBanner: "",
   footerBlurb:
@@ -34,13 +36,15 @@ export const site = {
   impactStats: [] as { label: string; value: string }[],
   cohort: {
     name: "Social Media Marketing & AI Cohort",
-    startDate: "September 2026",
+    // TODO(T5-placeholder): next cohort start date unconfirmed (September 2026 is past).
+    startDate: "Next cohort dates coming soon",
     applicationDeadline: "Rolling. Apply early",
     duration: "4 weeks",
     seats: 30,
     format: "Live classes, member platform, community, and portfolio projects",
     sessions: "2 live sessions per week (Classroom) plus member-platform learning",
     /** Safe public wording until the client confirms a final fee */
+    // TODO(T5-placeholder): fees unconfirmed.
     priceLabel: FEE_PENDING_LABEL,
     priceNote: "Payment is requested after acceptance. Payment plans may be available.",
     priceConfirmed: false,
