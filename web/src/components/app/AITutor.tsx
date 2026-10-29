@@ -160,19 +160,23 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
 
   if (!open) {
     return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className={cn(
-          "fixed right-5 bottom-5 z-40 inline-flex items-center gap-2 rounded-full bg-ai px-5 py-3",
-          "text-sm font-semibold text-[#07160f] shadow-[var(--shadow-2)]",
-          "transition-transform duration-[var(--dur-base)] ease-[var(--ease-spring)]",
-          "hover:scale-105 active:scale-95 motion-reduce:hover:scale-100",
-        )}
-      >
-        <Sparkles className="h-4 w-4" aria-hidden />
-        Ask SMN Tutor
-      </button>
+      <>
+        {/* Keeps lesson actions/scroll end clear of the fixed FAB on phones. */}
+        <div className="h-20 w-full shrink-0 sm:h-6" aria-hidden="true" />
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className={cn(
+            "fixed right-5 bottom-[max(1.25rem,env(safe-area-inset-bottom))] z-40 inline-flex min-h-11 items-center gap-2 rounded-full bg-ai px-5 py-3",
+            "text-sm font-semibold text-[#07160f] shadow-[var(--shadow-2)]",
+            "transition-transform duration-[var(--dur-base)] ease-[var(--ease-spring)]",
+            "hover:scale-105 active:scale-95 motion-reduce:hover:scale-100",
+          )}
+        >
+          <Sparkles className="h-4 w-4" aria-hidden />
+          Ask SMN Tutor
+        </button>
+      </>
     );
   }
 
@@ -195,7 +199,7 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
             type="button"
             onClick={() => setOpen(false)}
             aria-label="Close Tutor"
-            className="rounded-[var(--radius-sm)] p-1.5 text-text-3 transition-colors hover:bg-inset hover:text-text-1"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[var(--radius-sm)] text-text-3 transition-colors hover:bg-inset hover:text-text-1"
           >
             <X className="h-4 w-4" />
           </button>

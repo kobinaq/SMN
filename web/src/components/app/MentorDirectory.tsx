@@ -135,7 +135,11 @@ function RequestDialog({ mentor, onClose }: { mentor: MentorDirectoryItem; onClo
               Ask {mentor.name}
             </h2>
           </div>
-          <button type="button" onClick={onClose} className="rounded-full px-3 py-1 text-sm text-text-3 transition-colors hover:bg-inset hover:text-text-1">
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex min-h-11 items-center rounded-full px-3 text-sm text-text-3 transition-colors hover:bg-inset hover:text-text-1"
+          >
             Close
           </button>
         </div>

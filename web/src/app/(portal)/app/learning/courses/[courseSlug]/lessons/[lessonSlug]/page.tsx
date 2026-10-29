@@ -27,9 +27,10 @@ export default async function LmsLessonPage(
       lesson.attachments.length ||
       lesson.lessonType === "classroom",
   );
+  const tutorEnabled = process.env.AI_TUTOR_ENABLED === "true" && lesson.course.tutorEnabled;
 
   return (
-    <div className="space-y-7">
+    <div className={tutorEnabled ? "space-y-7 pb-4 sm:pb-0" : "space-y-7"}>
       <div>
         <Link href={lesson.course.href} className="text-sm text-text-3 transition-colors hover:text-text-1">
           {lesson.course.title}
@@ -178,9 +179,7 @@ export default async function LmsLessonPage(
           </Button>
         )}
       </div>
-      {process.env.AI_TUTOR_ENABLED === "true" && lesson.course.tutorEnabled ? (
-        <AITutor courseId={lesson.course.id} lessonId={lesson.id} />
-      ) : null}
+      {tutorEnabled ? <AITutor courseId={lesson.course.id} lessonId={lesson.id} /> : null}
     </div>
   );
 }

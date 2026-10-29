@@ -30,10 +30,11 @@
   --edge: rgba(255, 255, 255, 0.13);
   --edge-strong: rgba(255, 255, 255, 0.24);
 
-  /* Text ramp — three weights of attention, not arbitrary opacities. */
+  /* Text ramp — three weights of attention, not arbitrary opacities.
+     text-3 must clear WCAG AA 4.5:1 on canvas/raised/inset (alpha 0.40 was ~3.6:1). */
   --text-1: #f4f6fb;
   --text-2: rgba(244, 246, 251, 0.66);
-  --text-3: rgba(244, 246, 251, 0.4);
+  --text-3: rgba(244, 246, 251, 0.52);
 
   /* One job per color. Accent = interactive. AI = assistant surfaces and
      success. Warn = needs attention. Danger = destructive/error. Keeping
@@ -509,7 +510,7 @@ button {
   --overlay: #ffffff;
   --text-1: #0b0d12;
   --text-2: rgba(11, 13, 18, 0.68);
-  --text-3: rgba(11, 13, 18, 0.45);
+  --text-3: rgba(11, 13, 18, 0.6);
   --edge-subtle: rgba(11, 13, 18, 0.09);
   --edge: rgba(11, 13, 18, 0.16);
   --edge-strong: rgba(11, 13, 18, 0.32);
@@ -529,7 +530,7 @@ button {
   --overlay: #0d379f;
   --text-1: #ffffff;
   --text-2: rgba(255, 255, 255, 0.74);
-  --text-3: rgba(255, 255, 255, 0.5);
+  --text-3: rgba(255, 255, 255, 0.6);
   --edge-subtle: rgba(255, 255, 255, 0.14);
   --edge: rgba(255, 255, 255, 0.24);
   --edge-strong: rgba(255, 255, 255, 0.45);
