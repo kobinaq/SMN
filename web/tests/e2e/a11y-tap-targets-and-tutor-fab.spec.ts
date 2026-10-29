@@ -1,12 +1,25 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
 
-const LESSON_PATH =
+const LESSON_L1 =
   "/app/learning/courses/demo-content-strategy/lessons/demo-strategy-before-calendar";
+const LESSON_L2 =
+  "/app/learning/courses/demo-content-strategy/lessons/demo-build-the-calendar";
 
 const LESSON_VIEWPORTS = [
   { width: 320, height: 568 },
   { width: 375, height: 812 },
   { width: 390, height: 844 },
+  { width: 640, height: 900 },
+  { width: 1024, height: 768 },
+  { width: 1280, height: 800 },
+  { width: 1440, height: 900 },
+  { width: 844, height: 390 },
+  { width: 667, height: 375 },
+] as const;
+
+const LESSON_PATHS = [
+  { label: "L1", path: LESSON_L1 },
+  { label: "L2", path: LESSON_L2 },
 ] as const;
 
 async function loginMember(page: Page) {
@@ -14,9 +27,16 @@ async function loginMember(page: Page) {
   await page.getByPlaceholder("Email").fill("ama.demo@smn.example");
   await page.getByPlaceholder("Password").fill("DemoMember123!");
   await Promise.all([
-    page.waitForURL(/\/app/),
+    page.waitForResponse(
+      (response) =>
+        response.url().includes("/api/member-auth/login") &&
+        response.request().method() === "POST" &&
+        response.ok(),
+      { timeout: 30_000 },
+    ),
     page.getByRole("button", { name: /sign in/i }).click(),
   ]);
+  await expect(page).toHaveURL(/\/app/, { timeout: 20_000 });
 }
 
 async function loginStaff(page: Page) {
@@ -51,21 +71,31 @@ async function expectMinTapHeight(locator: Locator, label: string) {
   await expect(locator).toBeVisible();
   const box = await locator.boundingBox();
   expect(box, `${label} should have a bounding box`).not.toBeNull();
-  expect(box!.height, `${label} height`).toBeGreaterThanOrEqual(44);
+  // Round for subpixel layout (e.g. 43.9999 from min-h-11 / 2.75rem).
+  expect(Math.round(box!.height), `${label} height`).toBeGreaterThanOrEqual(44);
 }
 
-async function scrollPortalMain(page: Page, to: "top" | "bottom") {
+async function scrollPortalMain(page: Page, to: "top" | "middle" | "bottom") {
   await page.evaluate((position) => {
     const main = document.getElementById("main");
     const scroller = main?.parentElement;
     if (!scroller) return;
-    scroller.scrollTop = position === "top" ? 0 : scroller.scrollHeight;
+    if (position === "top") {
+      scroller.scrollTop = 0;
+      return;
+    }
+    if (position === "bottom") {
+      scroller.scrollTop = scroller.scrollHeight;
+      return;
+    }
+    const max = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+    scroller.scrollTop = max / 2;
   }, to);
 }
 
-async function assertTutorDoesNotCoverLessonActions(page: Page) {
+async function assertTutorDoesNotCoverLessonActions(page: Page, label: string) {
   const tutor = page.locator("[data-tutor-fab]");
-  await expect(tutor).toBeVisible();
+  await expect(tutor, `${label}: tutor FAB`).toBeVisible();
 
   const actions = [
     page.getByRole("link", { name: /^Previous$/i }),
@@ -73,18 +103,17 @@ async function assertTutorDoesNotCoverLessonActions(page: Page) {
     page.getByRole("link", { name: /^Next$/i }),
   ];
 
-  for (const position of ["top", "bottom"] as const) {
+  for (const position of ["top", "middle", "bottom"] as const) {
     await scrollPortalMain(page, position);
-    await page.waitForTimeout(200);
+    await page.waitForTimeout(100);
 
     const tutorBox = await tutor.boundingBox();
-    expect(tutorBox, `tutor FAB box at ${position}`).not.toBeNull();
+    expect(tutorBox, `${label}: tutor FAB box at ${position}`).not.toBeNull();
 
     for (const action of actions) {
       if ((await action.count()) === 0) continue;
       const actionBox = await action.boundingBox();
       if (!actionBox) continue;
-      // Only assert for actions that intersect the viewport vertically.
       const viewport = page.viewportSize();
       if (!viewport) continue;
       const inView =
@@ -92,24 +121,30 @@ async function assertTutorDoesNotCoverLessonActions(page: Page) {
       if (!inView) continue;
       expect(
         boxesOverlap(tutorBox!, actionBox),
-        `tutor FAB must not overlap ${await action.innerText()} at ${position}`,
+        `${label}: tutor FAB must not overlap ${await action.innerText()} at ${position}`,
       ).toBe(false);
     }
   }
 }
 
-for (const viewport of LESSON_VIEWPORTS) {
-  test(`tutor FAB clears lesson actions at ${viewport.width}x${viewport.height}`, async ({
-    page,
-  }) => {
-    test.setTimeout(90_000);
+test("tutor FAB clears lesson actions across phone, tablet, desktop and landscape", async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await loginMember(page);
+
+  for (const viewport of LESSON_VIEWPORTS) {
     await page.setViewportSize(viewport);
-    await loginMember(page);
-    await page.goto(LESSON_PATH);
-    await expect(page.locator("[data-tutor-fab]")).toBeVisible({ timeout: 20_000 });
-    await assertTutorDoesNotCoverLessonActions(page);
-  });
-}
+    for (const lesson of LESSON_PATHS) {
+      await page.goto(lesson.path);
+      await expect(page.locator("[data-tutor-fab]")).toBeVisible({ timeout: 20_000 });
+      await assertTutorDoesNotCoverLessonActions(
+        page,
+        `${lesson.label} ${viewport.width}x${viewport.height}`,
+      );
+    }
+  }
+});
 
 test("listed controls keep at least 44px tap height", async ({ page }) => {
   test.setTimeout(120_000);
@@ -122,7 +157,13 @@ test("listed controls keep at least 44px tap height", async ({ page }) => {
   );
   await expectMinTapHeight(
     page.getByRole("link", { name: /Forgot password/i }),
-    "Forgot password link",
+    "member Forgot password link",
+  );
+
+  await page.goto("/staff/login");
+  await expectMinTapHeight(
+    page.getByRole("link", { name: /Forgot password/i }),
+    "staff Forgot password link",
   );
 
   await loginMember(page);
@@ -142,4 +183,28 @@ test("listed controls keep at least 44px tap height", async ({ page }) => {
     page.getByRole("button", { name: /Show more today/i }),
     "Show more today",
   );
+});
+
+test("tutor panel moves focus in on open and back to the FAB on close", async ({ page }) => {
+  test.setTimeout(90_000);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await loginMember(page);
+  await page.goto(LESSON_L1);
+
+  const fab = page.getByRole("button", { name: "Ask TSA Tutor" });
+  await expect(fab).toBeVisible({ timeout: 20_000 });
+  await fab.focus();
+  await fab.click();
+
+  const heading = page.getByRole("heading", { name: "TSA Tutor" });
+  await expect(heading).toBeVisible();
+  await expect(heading).toBeFocused();
+
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("button", { name: "Ask TSA Tutor" })).toBeFocused();
+
+  await page.getByRole("button", { name: "Ask TSA Tutor" }).click();
+  await expect(page.getByRole("heading", { name: "TSA Tutor" })).toBeFocused();
+  await page.getByRole("button", { name: "Close Tutor" }).click();
+  await expect(page.getByRole("button", { name: "Ask TSA Tutor" })).toBeFocused();
 });

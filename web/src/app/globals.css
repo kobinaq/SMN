@@ -350,26 +350,20 @@ h4,
 }
 
 /* Portal pages that mount AITutor toggle this on <html> so lesson (and any
-   future) actions clear the fixed FAB at every scroll position. */
+   future) actions clear the fixed FAB at every scroll position and width.
+   Icon-only circle below lg; labeled pill from lg up. */
 html.has-tutor-fab {
   /* 48px FAB + bottom offset + breathing room below the last action. */
   --tutor-fab-clearance: 5.5rem;
-  --tutor-fab-end-clearance: 0px;
+  /* Icon-only circle at right-5: 48px + 1.25rem offset + gap. */
+  --tutor-fab-end-clearance: 4.75rem;
 }
 
-/* Below sm the FAB is a 48px circle at right-5; inset trailing actions so
-   full-width rows do not sit under it at load or mid-scroll. */
-@media (max-width: 639.98px) {
+@media (min-width: 1024px) {
   html.has-tutor-fab {
-    /* 48px button + 1.25rem right offset + 0.5rem gap */
-    --tutor-fab-end-clearance: 4.75rem;
-  }
-}
-
-@media (min-width: 640px) {
-  html.has-tutor-fab {
-    /* Labeled pill is taller/wider; keep a similar vertical reserve. */
+    /* Labeled pill is wider; reserve trailing room for the full label. */
     --tutor-fab-clearance: 5rem;
+    --tutor-fab-end-clearance: 12.5rem;
   }
 }
 

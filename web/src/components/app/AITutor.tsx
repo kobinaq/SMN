@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Sparkles, X } from "@/components/ui/icons";
 import { Chip } from "@/components/ui/Chip";
 import { Segmented } from "@/components/ui/Segmented";
@@ -75,6 +75,8 @@ const suggestionsByIntent: Record<Intent, string[]> = {
   ],
 };
 
+const TUTOR_FAB_LABEL = "Ask TSA Tutor";
+
 export function AITutor({ courseId, lessonId }: { courseId: string | number; lessonId: string | number }) {
   const [open, setOpen] = useState(false);
   const [intent, setIntent] = useState<Intent>("study");
@@ -89,15 +91,27 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
   const [error, setError] = useState("");
   const [feedback, setFeedback] = useState("");
   const toast = useToast();
+  const fabRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
+  const restoreFocusRef = useRef(false);
 
   const mode = modeByIntent[intent];
   const intentConfig = intents.find((item) => item.value === intent)!;
   const hasAnswer = useMemo(() => messages.some((message) => message.role === "assistant"), [messages]);
 
+  function closeTutor() {
+    restoreFocusRef.current = true;
+    setOpen(false);
+  }
+
   useEffect(() => {
     if (!open) return;
     function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") {
+        event.preventDefault();
+        restoreFocusRef.current = true;
+        setOpen(false);
+      }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -110,6 +124,27 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
       root.classList.remove("has-tutor-fab");
     };
   }, []);
+
+  useEffect(() => {
+    if (!open) {
+      if (restoreFocusRef.current) {
+        fabRef.current?.focus();
+        restoreFocusRef.current = false;
+      }
+      return;
+    }
+    const frame = window.requestAnimationFrame(() => {
+      const heading = panelRef.current?.querySelector("h2");
+      if (heading instanceof HTMLElement) {
+        heading.tabIndex = -1;
+        heading.focus();
+        return;
+      }
+      const input = panelRef.current?.querySelector<HTMLElement>("textarea, input");
+      input?.focus();
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [open]);
 
   async function copyMessage(content: string) {
     try {
@@ -169,29 +204,32 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
   if (!open) {
     return (
       <button
+        ref={fabRef}
         type="button"
         onClick={() => setOpen(true)}
-        aria-label="Ask the AI tutor"
+        aria-label={TUTOR_FAB_LABEL}
         data-tutor-fab
         className={cn(
           "fixed right-5 bottom-[max(1.25rem,env(safe-area-inset-bottom))] z-40",
           "inline-flex h-12 w-12 items-center justify-center rounded-full bg-ai",
           "text-sm font-semibold text-[#07160f] shadow-[var(--shadow-2)]",
-          "sm:h-auto sm:w-auto sm:min-h-11 sm:gap-2 sm:px-5 sm:py-3",
+          // Icon-only below lg so tablet/landscape lesson actions stay clear.
+          "lg:h-auto lg:w-auto lg:min-h-11 lg:gap-2 lg:px-5 lg:py-3",
           "transition-transform duration-[var(--dur-base)] ease-[var(--ease-spring)]",
           "hover:scale-105 active:scale-95 motion-reduce:hover:scale-100",
           "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
         )}
       >
         <Sparkles className="h-4 w-4" aria-hidden />
-        <span className="hidden sm:inline">Ask SMN Tutor</span>
+        <span className="hidden lg:inline">{TUTOR_FAB_LABEL}</span>
       </button>
     );
   }
 
   return (
     <aside
-      aria-label="SMN Course Tutor"
+      ref={panelRef}
+      aria-label="TSA Course Tutor"
       className={cn(
         "fixed inset-x-3 bottom-3 z-50 flex max-h-[88vh] flex-col overflow-hidden",
         "rounded-[var(--radius-xl)] border border-edge bg-raised shadow-[var(--shadow-3)]",
@@ -201,12 +239,12 @@ export function AITutor({ courseId, lessonId }: { courseId: string | number; les
     >
       <AiHeader
         eyebrow="Course-aware AI"
-        title="SMN Tutor"
-        grounding="Grounded in this lesson · AI can be wrong — review before acting"
+        title="TSA Tutor"
+        grounding="Grounded in this lesson · AI can be wrong. Review before acting"
         action={
           <button
             type="button"
-            onClick={() => setOpen(false)}
+            onClick={closeTutor}
             aria-label="Close Tutor"
             className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-[var(--radius-sm)] text-text-3 transition-colors hover:bg-inset hover:text-text-1"
           >
