@@ -107,7 +107,11 @@ function NavigationProgressInner() {
       first.current = false;
       return;
     }
-    finishProgress();
+    // Defer finish so a same-tick start (query-only soft nav) can paint first.
+    const frame = window.requestAnimationFrame(() => {
+      finishProgress();
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, [pathname, search]);
 
   if (!visible) return null;

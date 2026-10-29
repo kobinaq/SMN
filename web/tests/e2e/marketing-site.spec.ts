@@ -133,12 +133,45 @@ test.describe("marketing navigation and CTAs", () => {
     await page.goto("/resources");
     const progress = page.locator("[data-navigation-progress]");
     await expect(progress).toHaveCount(0);
-    const appeared = page.waitForSelector("[data-navigation-progress]", {
-      state: "attached",
-      timeout: 5000,
+
+    // Install the watcher and wait until it is armed before clicking, so a
+    // fast query-only soft nav cannot finish before observation starts.
+    await page.evaluate(() => {
+      const w = window as Window & {
+        __navProgressSeen?: Promise<boolean>;
+        __navProgressArmed?: boolean;
+      };
+      w.__navProgressArmed = false;
+      w.__navProgressSeen = new Promise<boolean>((resolve) => {
+        const done = (value: boolean) => {
+          observer.disconnect();
+          window.clearTimeout(timeout);
+          resolve(value);
+        };
+        if (document.querySelector("[data-navigation-progress]")) {
+          w.__navProgressArmed = true;
+          resolve(true);
+          return;
+        }
+        const observer = new MutationObserver(() => {
+          if (document.querySelector("[data-navigation-progress]")) done(true);
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+        const timeout = window.setTimeout(() => done(false), 8000);
+        w.__navProgressArmed = true;
+      });
     });
-    await page.getByRole("link", { name: "Template", exact: true }).first().click();
-    await appeared;
+    await page.waitForFunction(() => {
+      return Boolean((window as Window & { __navProgressArmed?: boolean }).__navProgressArmed);
+    });
+
+    await page
+      .getByRole("navigation", { name: "Resource types" })
+      .getByRole("link", { name: "Template", exact: true })
+      .click();
+    expect(
+      await page.evaluate(() => (window as Window & { __navProgressSeen?: Promise<boolean> }).__navProgressSeen),
+    ).toBe(true);
     await page.waitForURL(/[?&]type=Template/);
     await expect(progress).toHaveCount(0, { timeout: 5000 });
   });
