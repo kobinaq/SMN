@@ -4,6 +4,9 @@ import { StaffPageHeader, StaffPanel } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { staffUserFields } from "@/lib/staff/field-defs";
 import { canStaff } from "@/lib/staff-permissions";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Invite staff", { staff: true }) };
 
 export default async function NewStaffUserPage() {
   const staff = await requireStaff([], "/staff/system/users/new");

@@ -6,6 +6,9 @@ import { StaffPageHeader, StaffPanel } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { getCollectionDoc, relationId, staffAccess } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Application", { staff: true }) };
 
 export default async function ApplicationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const staff = await requireStaff(["content", "support", "analyst", "learning"], "/staff/applications");

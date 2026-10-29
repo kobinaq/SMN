@@ -2,6 +2,9 @@ import { StaffEmpty, StaffPageHeader, StaffPanel, StaffTable } from "@/component
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { staffAccess } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Applications", { staff: true }) };
 
 export default async function CohortApplicationsPage() {
   const staff = await requireStaff(["content", "support", "analyst", "learning"], "/staff/applications");

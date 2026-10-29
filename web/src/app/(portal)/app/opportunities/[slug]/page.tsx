@@ -5,6 +5,9 @@ import { Card } from "@/components/ui/Surface";
 import { Chip } from "@/components/ui/Chip";
 import { requireMember } from "@/lib/auth/member";
 import { getMemberOpportunityActivity, getPublishedOpportunity } from "@/lib/opportunities";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Opportunity") };
 
 export default async function OpportunityDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const member = await requireMember("/app/opportunities");

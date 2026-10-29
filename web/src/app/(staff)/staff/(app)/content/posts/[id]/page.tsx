@@ -5,6 +5,9 @@ import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { postFields } from "@/lib/staff/field-defs";
 import { getCollectionDoc, lexicalToPlainText, relationId, toDateTimeLocal } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Edit post", { staff: true }) };
 
 export default async function EditPostPage({ params }: { params: Promise<{ id: string }> }) {
   const staff = await requireStaff(["content", "analyst"], "/staff/content/posts");

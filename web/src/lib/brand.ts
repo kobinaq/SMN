@@ -1,8 +1,23 @@
 import { cta } from "@/lib/cta";
+import { site } from "@/lib/site";
 
 /** SEO title: Primary Keyword | Think Social Academy */
 export function seoTitle(keyword: string) {
   return { absolute: `${keyword} | Think Social Academy` } as const;
+}
+
+type PageTitleOptions = {
+  /** Staff console titles append "Staff" after the short brand name. */
+  staff?: boolean;
+};
+
+/**
+ * Browser tab title that tracks the central brand short name from site.ts.
+ * Staff: `People | ${site.shortName} Staff`. Portal: `Event ticket | ${site.shortName}`.
+ */
+export function pageTitle(page: string, options: PageTitleOptions = {}) {
+  const brand = options.staff ? `${site.shortName} Staff` : site.shortName;
+  return { absolute: `${page} | ${brand}` } as const;
 }
 
 export const audienceStages = [

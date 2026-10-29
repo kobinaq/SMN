@@ -5,6 +5,9 @@ import { StaffPageHeader, StaffPanel } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { getCollectionDoc, relationId } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Submission", { staff: true }) };
 
 export default async function SubmissionGradePage({ params }: { params: Promise<{ id: string }> }) {
   const staff = await requireStaff(["learning", "support"], "/staff/learning");

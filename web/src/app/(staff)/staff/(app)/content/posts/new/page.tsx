@@ -2,6 +2,9 @@ import { StaffRecordForm } from "@/components/staff/StaffRecordForm";
 import { StaffPageHeader, StaffPanel } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { postFields } from "@/lib/staff/field-defs";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("New post", { staff: true }) };
 
 export default async function NewPostPage() {
   await requireStaff(["content"], "/staff/content/posts/new");

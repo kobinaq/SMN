@@ -6,8 +6,9 @@ import { StaffMetricGrid, StaffPageHeader } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { loadCourseSummaries } from "@/lib/staff/learning-index";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Learning" };
+export const metadata = { title: pageTitle("Learning", { staff: true }) };
 
 export default async function StaffLearningHubPage() {
   const staff = await requireStaff(["learning", "content", "support"], "/staff/learning");

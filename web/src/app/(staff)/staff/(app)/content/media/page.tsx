@@ -5,6 +5,9 @@ import { StaffEmptyState, StaffPageHeader, StaffPanel } from "@/components/staff
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { listCollection } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Media", { staff: true }) };
 
 export default async function StaffMediaPage() {
   const staff = await requireStaff(["content", "learning", "analyst"], "/staff/content/media");

@@ -19,7 +19,7 @@ export function EmptyState({
         className,
       )}
     >
-      <p className="font-display text-lg text-text-1">{title}</p>
+      <h1 className="font-display text-lg text-text-1">{title}</h1>
       {description ? <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-text-2">{description}</p> : null}
       {action ? <div className="mt-6 flex flex-wrap justify-center gap-2">{action}</div> : null}
     </div>

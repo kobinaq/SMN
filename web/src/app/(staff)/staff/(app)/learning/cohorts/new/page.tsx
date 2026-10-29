@@ -1,8 +1,9 @@
 import { StaffPageHeader, StaffPanel } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
+import { pageTitle } from "@/lib/brand";
 import { CreateCohortForm } from "./CreateCohortForm";
 
-export const metadata = { title: "New cohort" };
+export const metadata = { title: pageTitle("New cohort", { staff: true }) };
 
 export default async function StaffNewCohortPage() {
   await requireStaff(["learning", "content"], "/staff/learning/cohorts/new");
