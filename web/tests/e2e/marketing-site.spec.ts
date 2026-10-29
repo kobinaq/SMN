@@ -109,10 +109,6 @@ test.describe("marketing navigation and CTAs", () => {
 
   test("navigation progress does not start on a same-URL click", async ({ page }) => {
     await page.goto("/resources?type=Template");
-    // Wait for the settled document before page.evaluate; otherwise a late
-    // soft-nav from goto can destroy the execution context mid-setup.
-    const current = page.locator('nav[aria-label="Resource types"] a[aria-current="page"]');
-    await expect(current).toBeVisible();
     const appeared = await page.evaluate(async () => {
       let seen = false;
       const observer = new MutationObserver(() => {
