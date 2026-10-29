@@ -185,7 +185,7 @@ export function PortalSidebar({
         <Link
           href={homeHref}
           onClick={onNavigate}
-          aria-label={`SMN ${portalLabel.toLowerCase()} home`}
+          aria-label={`${portalLabel} portal home`}
           className="flex min-w-0 items-center gap-3 rounded-[var(--radius-sm)] p-1 transition-colors hover:bg-inset"
         >
           <BrandLogo width={96} height={24} className="h-5 shrink-0 sm:h-6" />

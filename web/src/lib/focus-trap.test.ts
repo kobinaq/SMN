@@ -1,6 +1,11 @@
 /** @vitest-environment happy-dom */
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { FOCUSABLE_SELECTOR, getFocusableElements, trapTabKey } from "./focus-trap";
+import {
+  FOCUSABLE_SELECTOR,
+  focusMainContent,
+  getFocusableElements,
+  trapTabKey,
+} from "./focus-trap";
 
 function mount(html: string) {
   const root = document.createElement("div");
@@ -69,5 +74,30 @@ describe("trapTabKey", () => {
     const preventDefault = vi.fn();
     expect(trapTabKey({ key: "Escape", shiftKey: false, preventDefault }, root)).toBe(false);
     expect(preventDefault).not.toHaveBeenCalled();
+  });
+});
+
+describe("focusMainContent", () => {
+  it("focuses the h1 inside #main when present", () => {
+    mount(`
+      <main id="main" tabindex="-1">
+        <h1>Dashboard</h1>
+        <p>Body</p>
+      </main>
+    `);
+
+    const focused = focusMainContent();
+    const heading = document.querySelector("h1");
+    expect(focused).toBe(heading);
+    expect(document.activeElement).toBe(heading);
+    expect(heading?.getAttribute("tabindex")).toBe("-1");
+  });
+
+  it("falls back to #main when there is no h1", () => {
+    mount(`<main id="main" tabindex="-1"><p>Body</p></main>`);
+
+    const main = document.getElementById("main");
+    expect(focusMainContent()).toBe(main);
+    expect(document.activeElement).toBe(main);
   });
 });

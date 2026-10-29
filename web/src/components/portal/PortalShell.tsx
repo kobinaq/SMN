@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Menu, PanelLeftClose, PanelLeftOpen, X } from "@/components/ui/icons";
-import { getFocusableElements, trapTabKey } from "@/lib/focus-trap";
+import { focusMainContent, getFocusableElements, trapTabKey } from "@/lib/focus-trap";
 import { cn } from "@/lib/utils";
 import {
   PortalSidebar,
@@ -35,6 +35,10 @@ export function PortalShell({
   const [loggingOut, setLoggingOut] = useState(false);
   const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
   const mobileDrawerRef = useRef<HTMLDivElement>(null);
+  // Pathname when a drawer link was chosen. Non-null means restore focus to
+  // main/h1 after close (once the route settles, or immediately for same-href).
+  // Escape / backdrop / menu toggle leave this null so focus returns to the button.
+  const pendingNavFocusFromPathRef = useRef<string | null>(null);
   const mobileDrawerTitleId = useId();
   const mobileNavId = useId();
 
@@ -74,6 +78,7 @@ export function PortalShell({
     function onKey(event: KeyboardEvent) {
       if (event.key === "Escape") {
         event.preventDefault();
+        pendingNavFocusFromPathRef.current = null;
         setMobileOpen(false);
         return;
       }
@@ -83,11 +88,47 @@ export function PortalShell({
     document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("keydown", onKey);
+      if (pendingNavFocusFromPathRef.current !== null) {
+        // Navigating: the effect below moves focus to main/h1 after close.
+        return;
+      }
       // Prefer the menu button when it is still mounted; fall back to whatever
-      // held focus before the drawer opened (e.g. after a route change).
+      // held focus before the drawer opened.
       (menuButton ?? previous)?.focus();
     };
   }, [mobileOpen]);
+
+  // After a drawer link navigation, move focus once the route has changed so
+  // the new page's main/h1 is in the DOM.
+  useEffect(() => {
+    const fromPath = pendingNavFocusFromPathRef.current;
+    if (fromPath === null || pathname === fromPath) return;
+    pendingNavFocusFromPathRef.current = null;
+    focusMainContent();
+  }, [pathname]);
+
+  // Same-href drawer links never update pathname; focus main after close.
+  useEffect(() => {
+    if (mobileOpen) return;
+    const fromPath = pendingNavFocusFromPathRef.current;
+    if (fromPath === null || pathname !== fromPath) return;
+    const timer = window.setTimeout(() => {
+      if (pendingNavFocusFromPathRef.current !== fromPath) return;
+      pendingNavFocusFromPathRef.current = null;
+      focusMainContent();
+    }, 50);
+    return () => window.clearTimeout(timer);
+  }, [mobileOpen, pathname]);
+
+  function closeMobileDrawer() {
+    pendingNavFocusFromPathRef.current = null;
+    setMobileOpen(false);
+  }
+
+  function handleDrawerNavigate() {
+    pendingNavFocusFromPathRef.current = pathname;
+    setMobileOpen(false);
+  }
 
   async function logout() {
     setLoggingOut(true);
@@ -101,7 +142,7 @@ export function PortalShell({
 
   return (
     <div className="flex h-svh overflow-hidden bg-canvas">
-      <a href="#main" className="skip-link">
+      <a href="#main" className="skip-link" inert={mobileOpen}>
         Skip to content
       </a>
 
@@ -111,8 +152,8 @@ export function PortalShell({
           "transition-[width,opacity] duration-[320ms] ease-[cubic-bezier(0.32,0.72,0,1)]",
           sidebarOpen ? "w-[260px] opacity-100" : "pointer-events-none w-0 border-none opacity-0",
         )}
-        aria-hidden={!sidebarOpen}
-        inert={!sidebarOpen}
+        aria-hidden={!sidebarOpen || mobileOpen}
+        inert={!sidebarOpen || mobileOpen}
       >
         <PortalSidebar
           variant={variant}
@@ -132,7 +173,7 @@ export function PortalShell({
             className="absolute inset-0 bg-canvas/70 backdrop-blur-md animate-[staff-fade-in_200ms_var(--ease-out)_both]"
             aria-label="Close navigation"
             tabIndex={-1}
-            onClick={() => setMobileOpen(false)}
+            onClick={closeMobileDrawer}
           />
           <div
             ref={mobileDrawerRef}
@@ -152,7 +193,7 @@ export function PortalShell({
               homeHref={homeHref}
               loggingOut={loggingOut}
               onLogout={logout}
-              onNavigate={() => setMobileOpen(false)}
+              onNavigate={handleDrawerNavigate}
             />
           </div>
         </div>
@@ -167,6 +208,7 @@ export function PortalShell({
               aria-label={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
               aria-expanded={sidebarOpen}
               onClick={() => setSidebarOpen((value) => !value)}
+              inert={mobileOpen}
             >
               {sidebarOpen ? (
                 <PanelLeftClose className="h-[18px] w-[18px]" strokeWidth={1.5} />
@@ -181,11 +223,21 @@ export function PortalShell({
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileOpen}
               aria-controls={mobileNavId}
-              onClick={() => setMobileOpen((value) => !value)}
+              onClick={() => {
+                if (mobileOpen) {
+                  closeMobileDrawer();
+                  return;
+                }
+                setMobileOpen(true);
+              }}
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
-            <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-2 text-sm text-text-3">
+            <nav
+              aria-label="Breadcrumb"
+              className="flex min-w-0 items-center gap-2 text-sm text-text-3"
+              inert={mobileOpen}
+            >
               <span className="truncate">{portalLabel}</span>
               <span className="text-text-3/50" aria-hidden>
                 /
@@ -197,7 +249,7 @@ export function PortalShell({
           </div>
         </header>
 
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain" inert={mobileOpen}>
           <main
             id="main"
             tabIndex={-1}

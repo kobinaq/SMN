@@ -46,3 +46,23 @@ export function trapTabKey(event: Pick<KeyboardEvent, "key" | "shiftKey" | "prev
 
   return false;
 }
+
+/**
+ * After a mobile drawer navigation, move focus to the new page's h1 when
+ * present, otherwise the main landmark. Ensures the heading is programmatically
+ * focusable without changing its Tab order.
+ */
+export function focusMainContent(root: ParentNode = document): HTMLElement | null {
+  const main =
+    (root instanceof Document ? root.getElementById("main") : root.querySelector("#main")) ??
+    root.querySelector("main");
+  if (!(main instanceof HTMLElement)) return null;
+
+  const heading = main.querySelector("h1");
+  const target = heading instanceof HTMLElement ? heading : main;
+  if (target.tabIndex < 0 && !target.hasAttribute("tabindex")) {
+    target.tabIndex = -1;
+  }
+  target.focus();
+  return target;
+}
