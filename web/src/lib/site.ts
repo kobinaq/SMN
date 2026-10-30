@@ -11,7 +11,7 @@ export const site = {
   tagline: "Learn. Apply. Grow. Connect.",
   description:
     "Think Social Academy is a social media marketing academy and community focused on thoughtful learning, practical application, and work designed to support brand and business results.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://socialmarketers.network",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://thinksocialacademy.com",
   email: process.env.OPS_EMAIL ?? "hello@socialmarketers.network",
   whatsappInvite:
     process.env.NEXT_PUBLIC_WHATSAPP_INVITE ?? "https://chat.whatsapp.com/socialmarketers",
