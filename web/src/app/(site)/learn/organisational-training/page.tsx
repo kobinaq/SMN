@@ -20,6 +20,7 @@ export default function OrganisationalTrainingPage() {
       <Masthead
         image={img.eventWorkshop}
         alt="Team social media marketing workshop"
+        imageClassName="object-cover object-[center_15%]"
         kicker="Learn"
         title={offering.title}
         lede={offering.body}
@@ -32,8 +33,9 @@ export default function OrganisationalTrainingPage() {
               src={img.eventsGathering}
               alt="Organisation team in a practical marketing workshop"
               fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 48vw"
+              className="object-cover object-[center_25%]"
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              quality={85}
             />
           </div>
           <div className="order-1 lg:order-2">

@@ -28,9 +28,10 @@ export function PartnersBand() {
             src={img.hireConversation}
             alt="Partnership conversation between marketers"
             fill
-            className="object-cover"
+            className="object-cover object-top"
             data-parallax
-            sizes="(max-width: 1024px) 100vw, 48vw"
+            sizes="(max-width: 1024px) 100vw, 55vw"
+            quality={85}
           />
         </div>
       </div>

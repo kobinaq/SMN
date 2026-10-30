@@ -16,9 +16,10 @@ export function FounderStory() {
               src={instructor.image}
               alt={homepageFounder.name}
               fill
-              className="object-cover"
+              className="object-cover object-[center_15%]"
               data-parallax
-              sizes="(max-width: 1024px) 100vw, 40vw"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              quality={85}
               priority
             />
           </div>

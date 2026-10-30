@@ -87,6 +87,7 @@ export default async function CommunityPage() {
       <Masthead
         image={img.communityPortrait}
         alt="Two TSA members sitting together"
+        imageClassName="object-cover object-[center_22%]"
         kicker={communityHero.kicker}
         title={communityHero.title}
         lede={communityHero.lede}
@@ -124,8 +125,9 @@ export default async function CommunityPage() {
               src={img.communityCollab}
               alt="Members in a focused table conversation"
               fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover object-[center_25%]"
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              quality={85}
             />
           </div>
         </div>
@@ -153,8 +155,9 @@ export default async function CommunityPage() {
               src={img.mentorshipPair}
               alt="Mentor and learner in conversation"
               fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 48vw"
+              className="object-cover object-top"
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              quality={85}
             />
           </div>
         </div>

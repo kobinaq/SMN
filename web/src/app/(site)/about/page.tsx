@@ -35,6 +35,7 @@ export default function AboutPage() {
       <Masthead
         image={img.aboutMission}
         alt="Instructor presenting to a room of learners"
+        imageClassName="object-cover object-[center_30%]"
         kicker={aboutHero.kicker}
         title={aboutHero.title}
         lede={aboutHero.lede}
@@ -65,8 +66,9 @@ export default function AboutPage() {
                 src={img.instructorTeaching}
                 alt="Arielle Adodo teaching a marketing session"
                 fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover object-[center_20%]"
+                sizes="(max-width: 1024px) 100vw, 55vw"
+                quality={85}
               />
             </div>
           </div>
@@ -110,8 +112,9 @@ export default function AboutPage() {
               src={img.courseGrowth}
               alt="Learners applying social media marketing concepts"
               fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 40vw"
+              className="object-cover object-top"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              quality={85}
             />
           </div>
         </div>
@@ -125,8 +128,9 @@ export default function AboutPage() {
               src={instructor.image}
               alt={`${aboutFounder.name}, ${aboutFounder.role}`}
               fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 45vw"
+              className="object-cover object-[center_15%]"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              quality={85}
             />
           </div>
           <div>
@@ -170,8 +174,9 @@ export default function AboutPage() {
                     src={photo.src}
                     alt={photo.alt}
                     fill
-                    className="object-cover transition duration-700 ease-out group-hover:scale-[1.03]"
-                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover object-[center_25%] transition duration-700 ease-out group-hover:scale-[1.03]"
+                    sizes="(max-width: 768px) 100vw, 55vw"
+                    quality={85}
                   />
                 </div>
                 <div className="flex flex-1 flex-col p-7 sm:p-8">

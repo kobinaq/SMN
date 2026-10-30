@@ -19,13 +19,17 @@ import {
 } from "@/lib/pages/resources";
 import { getResourceLibrary } from "@/lib/resources";
 
-const categoryImages: Record<string, { src: string; alt: string }> = {
+const categoryImages: Record<string, { src: string; alt: string; position?: string }> = {
   Articles: { src: img.postSocial, alt: "Marketing articles and strategy notes" },
   Guides: { src: img.resBrief, alt: "Practical marketing guide materials" },
   Templates: { src: img.resCalendar, alt: "Marketing planning templates" },
   Tools: { src: img.resAiPrompts, alt: "Marketing tools and AI prompts" },
   "Case Studies": { src: img.resAudit, alt: "Case study and audit materials" },
-  "Webinars & Insights": { src: img.communityEvent, alt: "TSA webinar and community session" },
+  "Webinars & Insights": {
+    src: img.communityEvent,
+    alt: "TSA webinar and community session",
+    position: "object-top",
+  },
 };
 
 export const metadata: Metadata = {
@@ -85,6 +89,7 @@ export default async function ResourcesPage({
       <Masthead
         image={img.resPortfolio}
         alt="Marketing resources and learning materials"
+        imageClassName="object-cover object-center"
         kicker={active === "All" ? resourcesHero.kicker : `${resourcesHero.kicker} · ${active}`}
         title={heading.title}
         lede={heading.lede}
@@ -118,8 +123,9 @@ export default async function ResourcesPage({
                           src={photo.src}
                           alt={photo.alt}
                           fill
-                          className="object-cover transition duration-700 ease-out group-hover:scale-[1.03]"
-                          sizes="(max-width: 1024px) 50vw, 33vw"
+                          className={`object-cover ${photo.position ?? "object-center"} transition duration-700 ease-out group-hover:scale-[1.03]`}
+                          sizes="(max-width: 1024px) 100vw, 40vw"
+                          quality={85}
                         />
                       </div>
                     ) : null}

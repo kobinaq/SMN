@@ -9,14 +9,17 @@ const offeringImages = [
   {
     src: img.cohortSpotlight,
     alt: "TSA cohort learning together",
+    position: "object-[center_30%]",
   },
   {
     src: img.mentorshipTalk,
     alt: "One-on-one marketing training conversation",
+    position: "object-top",
   },
   {
     src: img.eventWorkshop,
     alt: "Team marketing workshop in session",
+    position: "object-top",
   },
 ] as const;
 
@@ -40,8 +43,9 @@ export function LearningOfferings() {
                   src={photo.src}
                   alt={photo.alt}
                   fill
-                  className="object-cover transition duration-700 ease-out group-hover:scale-[1.03]"
-                  sizes="(max-width: 1024px) 100vw, 33vw"
+                  className={`object-cover ${photo.position} transition duration-700 ease-out group-hover:scale-[1.03]`}
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  quality={85}
                 />
               </div>
               <div className="flex flex-1 flex-col p-7 sm:p-8">

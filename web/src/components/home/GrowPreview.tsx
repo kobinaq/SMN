@@ -14,9 +14,10 @@ export function GrowPreview() {
             src={img.postStrategy}
             alt="Strategy notes and marketing planning materials"
             fill
-            className="object-cover"
+            className="object-cover object-center"
             data-parallax
-            sizes="(max-width: 1024px) 100vw, 48vw"
+            sizes="(max-width: 1024px) 100vw, 55vw"
+            quality={85}
           />
         </div>
         <div>

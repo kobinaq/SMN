@@ -16,6 +16,8 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
+    // Next 16 defaults qualities to [75] only; allow sharper marketing renders.
+    qualities: [75, 85, 90],
     // Next 16: if localPatterns is set, ONLY these paths work.
     // Must include site assets (/images, /brand), not just Payload media.
     localPatterns: [

@@ -8,10 +8,22 @@ import { seoTitle } from "@/lib/brand";
 import { img } from "@/lib/images";
 import { agency, partnerAreas, partnerClose, partnerHero, partnerTeamTraining } from "@/lib/pages/partner";
 
-const partnerAreaImages: Record<string, { src: string; alt: string }> = {
-  sponsorship: { src: img.careersWork, alt: "Sponsored learning and community event" },
-  events: { src: img.communityEvent, alt: "Partnered industry event and conversation" },
-  simulations: { src: img.practicePair, alt: "Learners working through a marketing brief" },
+const partnerAreaImages: Record<string, { src: string; alt: string; position: string }> = {
+  sponsorship: {
+    src: img.careersWork,
+    alt: "Sponsored learning and community event",
+    position: "object-top",
+  },
+  events: {
+    src: img.communityEvent,
+    alt: "Partnered industry event and conversation",
+    position: "object-top",
+  },
+  simulations: {
+    src: img.practicePair,
+    alt: "Learners working through a marketing brief",
+    position: "object-top",
+  },
 };
 
 export const metadata: Metadata = {
@@ -33,6 +45,7 @@ export default function PartnerPage() {
       <Masthead
         image={img.hireConversation}
         alt="Two marketers in conversation"
+        imageClassName="object-cover object-[center_18%]"
         kicker={partnerHero.kicker}
         title={partnerHero.title}
         lede={partnerHero.lede}
@@ -81,8 +94,9 @@ export default function PartnerPage() {
                     src={photo.src}
                     alt={photo.alt}
                     fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 22rem"
+                    className={`object-cover ${photo.position}`}
+                    sizes="(max-width: 1024px) 100vw, 28rem"
+                    quality={85}
                   />
                 </div>
               ) : null}
@@ -111,8 +125,9 @@ export default function PartnerPage() {
               src={img.contactTalk}
               alt="Agency collaboration and brand storytelling work"
               fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 48vw"
+              className="object-cover object-[center_25%]"
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              quality={85}
             />
           </div>
         </div>
@@ -144,8 +159,9 @@ export default function PartnerPage() {
               src={img.eventWorkshop}
               alt="Team training workshop with TSA"
               fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 40vw"
+              className="object-cover object-top"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              quality={85}
             />
           </div>
         </div>

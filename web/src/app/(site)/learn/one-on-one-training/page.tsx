@@ -20,6 +20,7 @@ export default function OneOnOneTrainingPage() {
       <Masthead
         image={img.mentorshipTalk}
         alt="One-on-one social media marketing training"
+        imageClassName="object-cover object-[center_18%]"
         kicker="Learn"
         title={offering.title}
         lede={offering.body}
@@ -40,8 +41,9 @@ export default function OneOnOneTrainingPage() {
               src={img.mentorshipPair}
               alt="Learner and tutor in a focused training session"
               fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 48vw"
+              className="object-cover object-top"
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              quality={85}
             />
           </div>
         </div>
