@@ -4,7 +4,8 @@ import { findCopyViolations } from "@/lib/pages/copy-rules";
 
 describe("Partner page copy (T8)", () => {
   it("uses the Tab 4 hero", () => {
-    expect(partner.partnerHero.title).toBe("Build with the next generation of marketing talent.");
+    expect(partner.partnerHero.title).toBe("Build with the next generation of marketers.");
+    expect(partner.partnerHero.title).not.toMatch(/talent/i);
   });
 
   it("follows Tab 5 copy rules", () => {

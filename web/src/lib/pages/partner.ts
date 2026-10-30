@@ -10,7 +10,7 @@
 
 export const partnerHero = {
   kicker: "Partner With Us",
-  title: "Build with the next generation of marketing talent.",
+  title: "Build with the next generation of marketers.",
   lede: "Partner with Think Social Academy to support practical learning, create meaningful experiences and contribute to the growth of emerging marketing professionals.",
 } as const;
 
@@ -74,7 +74,8 @@ export const agency = {
     },
   ],
   // TODO(placeholder): no Agency contact address, enquiry type or work samples exist yet.
-  // Agency enquiries use the TSA contact form as a Partnership enquiry until Levi decides.
+  // Agency enquiries use the shared TSA contact form (type=Partnership) for now.
+  // Levi may want a separate Agency address later.
   href: "/contact?type=Partnership",
   ctaLabel: "Work With Think Social Agency",
 } as const;

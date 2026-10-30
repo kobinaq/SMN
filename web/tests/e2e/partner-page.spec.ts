@@ -4,7 +4,7 @@ test.describe("Partner page (T8)", () => {
   test("renders the Tab 4 sections and the Agency", async ({ page }) => {
     await page.goto("/partner");
     await expect(
-      page.getByRole("heading", { level: 1, name: "Build with the next generation of marketing talent." }),
+      page.getByRole("heading", { level: 1, name: "Build with the next generation of marketers." }),
     ).toBeVisible();
     for (const name of ["Sponsorship", "Events", "Simulations", "Social Media, Storytelling & Content"]) {
       await expect(page.getByRole("heading", { level: 2, name, exact: true })).toBeVisible();
@@ -42,7 +42,7 @@ test.describe("Partner page (T8)", () => {
     for (const request of ["job", "intern", "talent", "training"]) {
       const response = await page.goto(`/partner?request=${request}`);
       expect(response?.status(), request).toBe(200);
-      await expect(page.getByRole("heading", { level: 1 })).toHaveText(/marketing talent/);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(/next generation of marketers/);
     }
     await expect(page.getByRole("tab", { name: /request an intern|hire talent|post a job/i })).toHaveCount(0);
   });
