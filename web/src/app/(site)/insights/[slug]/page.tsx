@@ -71,7 +71,7 @@ export default async function InsightArticlePage({ params }: Props) {
           publisher: {
             "@type": "Organization",
             name: site.name,
-            logo: { "@type": "ImageObject", url: `${base}/brand/logo-blue.png` },
+            logo: { "@type": "ImageObject", url: `${base}/brand/tsa-logo-full-blue.png` },
           },
           mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
           url: pageUrl,

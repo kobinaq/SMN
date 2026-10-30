@@ -11,15 +11,24 @@ export default function manifest(): MetadataRoute.Manifest {
     background_color: "#0b0d12",
     theme_color: "#0b0d12",
     icons: [
+      // White THINK mark on brand blue #2b4c7f (scripts/generate-favicon.mjs).
       {
-        src: "/icon.png",
+        src: "/icons/icon-192.png",
         type: "image/png",
-        sizes: "any",
+        sizes: "192x192",
+        purpose: "any",
       },
       {
-        src: "/apple-icon.png",
+        src: "/icons/icon-512.png",
         type: "image/png",
-        sizes: "any",
+        sizes: "512x512",
+        purpose: "any",
+      },
+      {
+        src: "/icons/icon-512.png",
+        type: "image/png",
+        sizes: "512x512",
+        purpose: "maskable",
       },
     ],
   };

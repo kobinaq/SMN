@@ -219,7 +219,7 @@ export function Header() {
         ) : null}
         <div className="container-wide flex h-14 items-center justify-between gap-3 sm:h-16 md:h-20">
           <Link href="/" className="relative z-10 flex min-h-11 min-w-0 shrink items-center gap-3">
-            <BrandLogo className="h-7 sm:h-8 md:h-9" priority />
+            <BrandLogo className="h-10 sm:h-11 md:h-14" priority />
           </Link>
 
           <nav

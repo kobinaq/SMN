@@ -45,7 +45,7 @@ export function Footer({ site }: { site: SiteConfig }) {
         <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr] md:gap-8">
           <div className="sm:col-span-2 md:col-span-1">
             <Link href="/" className="inline-flex min-h-11 items-center">
-              <BrandLogo className="h-8 sm:h-9" />
+              <BrandLogo className="h-16 sm:h-20" />
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-text-2 sm:mt-5">
               {site.tagline}

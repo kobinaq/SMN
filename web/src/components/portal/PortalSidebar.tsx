@@ -188,7 +188,7 @@ export function PortalSidebar({
           aria-label={`${portalLabel} portal home`}
           className="flex min-w-0 items-center gap-3 rounded-[var(--radius-sm)] p-1 transition-colors hover:bg-inset"
         >
-          <BrandLogo width={96} height={24} className="h-5 shrink-0 sm:h-6" />
+          <BrandLogo variant="mark" className="h-5 shrink-0 sm:h-6" />
           <div className="flex min-w-0 flex-col overflow-hidden">
             <span className="truncate text-[13px] font-medium leading-none text-text-1">{portalLabel}</span>
             {" "}
