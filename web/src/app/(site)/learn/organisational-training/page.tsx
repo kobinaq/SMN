@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Button } from "@/components/ui/Button";
-import { Band, Masthead, SectionHead } from "@/components/site/kit";
+import { Band, Kicker, Masthead } from "@/components/site/kit";
 import { homepageOfferings } from "@/lib/pages/home";
 import { seoTitle } from "@/lib/brand";
 import { img } from "@/lib/images";
@@ -17,7 +18,7 @@ export default function OrganisationalTrainingPage() {
   return (
     <>
       <Masthead
-        image={img.cohortSpotlight}
+        image={img.eventWorkshop}
         alt="Team social media marketing workshop"
         kicker="Learn"
         title={offering.title}
@@ -25,9 +26,24 @@ export default function OrganisationalTrainingPage() {
         meta={offering.meta}
       />
       <Band tone="raised" size="lg">
-        <SectionHead title="Who it’s for" lede={offering.audience} />
-        <div className="mt-10">
-          <Button href="/contact?type=Training%20request">Start a conversation</Button>
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div className="relative aspect-[5/4] overflow-hidden order-2 lg:order-1">
+            <Image
+              src={img.eventsGathering}
+              alt="Organisation team in a practical marketing workshop"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 48vw"
+            />
+          </div>
+          <div className="order-1 lg:order-2">
+            <Kicker>Who it is for</Kicker>
+            <h2 className="mt-5 font-display display-2 text-text-1">Scoped to your team.</h2>
+            <p className="mt-5 max-w-[58ch] text-base leading-relaxed text-text-2">{offering.audience}</p>
+            <div className="mt-10">
+              <Button href="/contact?type=Training%20request">Start a conversation</Button>
+            </div>
+          </div>
         </div>
       </Band>
     </>
