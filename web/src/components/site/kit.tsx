@@ -139,6 +139,9 @@ export function Masthead({
   meta,
   image,
   alt,
+  /** Extra Image classes — prefer object-top / object-[center_N%] for people photos. */
+  // Bias high so faces stay visible in wide heroes, but not under the fixed nav.
+  imageClassName = "object-cover object-[center_18%]",
   tone = "canvas",
 }: {
   kicker: string;
@@ -148,6 +151,7 @@ export function Masthead({
   meta?: ReactNode;
   image?: string;
   alt?: string;
+  imageClassName?: string;
   tone?: Tone;
 }) {
   return (
@@ -160,7 +164,15 @@ export function Masthead({
     >
       {image ? (
         <div className="absolute inset-0">
-          <Image src={image} alt={alt ?? ""} fill priority className="object-cover object-center" sizes="100vw" />
+          <Image
+            src={image}
+            alt={alt ?? ""}
+            fill
+            priority
+            className={imageClassName}
+            sizes="100vw"
+            quality={85}
+          />
           <div className="absolute inset-0 bg-gradient-to-r from-canvas via-canvas/92 to-canvas/45" />
           <div className="absolute inset-0 bg-gradient-to-t from-canvas via-transparent to-canvas/60" />
         </div>
@@ -243,8 +255,9 @@ export function EditorialCard({
             src={image}
             alt={alt ?? ""}
             fill
-            className="object-cover transition-transform duration-[var(--dur-slow)] ease-[var(--ease-out)] group-hover:scale-[1.04]"
-            sizes="(min-width: 1024px) 33vw, 100vw"
+            className="object-cover object-[center_20%] transition-transform duration-[var(--dur-slow)] ease-[var(--ease-out)] group-hover:scale-[1.04]"
+            sizes="(max-width: 1024px) 100vw, 40vw"
+            quality={85}
           />
         </div>
       ) : null}

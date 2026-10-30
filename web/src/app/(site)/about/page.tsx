@@ -35,6 +35,7 @@ export default function AboutPage() {
       <Masthead
         image={img.aboutMission}
         alt="Instructor presenting to a room of learners"
+        imageClassName="object-cover object-[center_30%]"
         kicker={aboutHero.kicker}
         title={aboutHero.title}
         lede={aboutHero.lede}
@@ -65,8 +66,9 @@ export default function AboutPage() {
                 src={img.instructorTeaching}
                 alt="Arielle Adodo teaching a marketing session"
                 fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover object-[center_20%]"
+                sizes="(max-width: 1024px) 100vw, 55vw"
+                quality={85}
               />
             </div>
           </div>
@@ -96,11 +98,26 @@ export default function AboutPage() {
       </Band>
 
       <Band tone="raised" id="philosophy" size="lg">
-        <SectionHead
-          kicker="Our learning philosophy"
-          title="Learn. Apply. Grow. Connect."
-          lede="Every TSA programme follows the same four stages, so learning turns into practice and practice keeps going after the programme ends."
-        />
+        <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16">
+          <div>
+            <SectionHead
+              align="stacked"
+              kicker="Our learning philosophy"
+              title="Learn. Apply. Grow. Connect."
+              lede="Every TSA programme follows the same four stages, so learning turns into practice and practice keeps going after the programme ends."
+            />
+          </div>
+          <div className="relative aspect-[5/4] overflow-hidden">
+            <Image
+              src={img.courseGrowth}
+              alt="Learners applying social media marketing concepts"
+              fill
+              className="object-cover object-top"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              quality={85}
+            />
+          </div>
+        </div>
         <Sequence className="mt-12" items={aboutPhilosophy} />
       </Band>
 
@@ -111,8 +128,9 @@ export default function AboutPage() {
               src={instructor.image}
               alt={`${aboutFounder.name}, ${aboutFounder.role}`}
               fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 45vw"
+              className="object-cover object-[center_15%]"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              quality={85}
             />
           </div>
           <div>
@@ -140,21 +158,39 @@ export default function AboutPage() {
       <Band tone="raised" id="ecosystem">
         <SectionHead kicker="The Think Social ecosystem" title="Two arms, one way of thinking." align="stacked" />
         <div className="mt-10 grid gap-px overflow-hidden border border-edge-subtle bg-edge-subtle md:grid-cols-2">
-          {aboutEcosystem.map((item) => (
-            <Link
-              key={item.title}
-              href={item.href}
-              className="group flex min-h-11 flex-col bg-canvas p-7 transition-colors hover:bg-raised sm:p-8"
-            >
-              <p className="eyebrow text-accent">{item.tagline}</p>
-              <h3 className="mt-3 font-display text-2xl text-text-1">{item.title}</h3>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-text-2 sm:text-base">{item.body}</p>
-              <span className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent">
-                {item.ctaLabel}
-                <ArrowUpRight className="h-4 w-4" />
-              </span>
-            </Link>
-          ))}
+          {aboutEcosystem.map((item) => {
+            const photo =
+              item.title === "Think Social Academy"
+                ? { src: img.cohortSpotlight, alt: "Think Social Academy learning community" }
+                : { src: img.storiesLounge, alt: "Think Social Agency storytelling and content work" };
+            return (
+              <Link
+                key={item.title}
+                href={item.href}
+                className="group flex min-h-11 flex-col bg-canvas transition-colors hover:bg-raised"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    fill
+                    className="object-cover object-[center_25%] transition duration-700 ease-out group-hover:scale-[1.03]"
+                    sizes="(max-width: 768px) 100vw, 55vw"
+                    quality={85}
+                  />
+                </div>
+                <div className="flex flex-1 flex-col p-7 sm:p-8">
+                  <p className="eyebrow text-accent">{item.tagline}</p>
+                  <h3 className="mt-3 font-display text-2xl text-text-1">{item.title}</h3>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-text-2 sm:text-base">{item.body}</p>
+                  <span className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent">
+                    {item.ctaLabel}
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </Band>
 

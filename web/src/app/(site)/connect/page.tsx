@@ -87,6 +87,7 @@ export default async function CommunityPage() {
       <Masthead
         image={img.communityPortrait}
         alt="Two TSA members sitting together"
+        imageClassName="object-cover object-[center_22%]"
         kicker={communityHero.kicker}
         title={communityHero.title}
         lede={communityHero.lede}
@@ -124,8 +125,9 @@ export default async function CommunityPage() {
               src={img.communityCollab}
               alt="Members in a focused table conversation"
               fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover object-[center_25%]"
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              quality={85}
             />
           </div>
         </div>
@@ -134,16 +136,31 @@ export default async function CommunityPage() {
       <UpcomingEvents events={upcoming} />
 
       <Band size="lg">
-        <SectionHead
-          kicker={communityMentors.kicker}
-          title={communityMentors.title}
-          lede={communityMentors.lede}
-          actions={
-            <Button href={communityMentors.href} variant="secondary">
-              {communityMentors.ctaLabel}
-            </Button>
-          }
-        />
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <SectionHead
+              align="stacked"
+              kicker={communityMentors.kicker}
+              title={communityMentors.title}
+              lede={communityMentors.lede}
+              actions={
+                <Button href={communityMentors.href} variant="secondary">
+                  {communityMentors.ctaLabel}
+                </Button>
+              }
+            />
+          </div>
+          <div className="relative aspect-[5/4] overflow-hidden">
+            <Image
+              src={img.mentorshipPair}
+              alt="Mentor and learner in conversation"
+              fill
+              className="object-cover object-top"
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              quality={85}
+            />
+          </div>
+        </div>
       </Band>
 
       {memberStories.length ? (

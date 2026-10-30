@@ -294,11 +294,12 @@ function Photo({
     >
       <div className="relative h-full w-full overflow-hidden rounded-2xl border border-white/10 bg-surface sm:rounded-3xl">
         <MotionImage
-          className="rounded-2xl object-cover sm:rounded-3xl"
+          className="rounded-2xl object-cover object-top sm:rounded-3xl"
           fill
           src={src}
           alt={alt}
-          sizes="(max-width: 640px) 110px, (max-width: 1024px) 200px, 220px"
+          sizes="(max-width: 640px) 220px, (max-width: 1024px) 400px, 440px"
+          quality={90}
           priority={priority}
           draggable={false}
         />

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Band, Checklist, CtaBand, DefinitionGrid, Kicker, Masthead, SectionHead } from "@/components/site/kit";
@@ -6,6 +7,24 @@ import { ArrowUpRight } from "@/components/ui/icons";
 import { seoTitle } from "@/lib/brand";
 import { img } from "@/lib/images";
 import { agency, partnerAreas, partnerClose, partnerHero, partnerTeamTraining } from "@/lib/pages/partner";
+
+const partnerAreaImages: Record<string, { src: string; alt: string; position: string }> = {
+  sponsorship: {
+    src: img.careersWork,
+    alt: "Sponsored learning and community event",
+    position: "object-top",
+  },
+  events: {
+    src: img.communityEvent,
+    alt: "Partnered industry event and conversation",
+    position: "object-top",
+  },
+  simulations: {
+    src: img.practicePair,
+    alt: "Learners working through a marketing brief",
+    position: "object-top",
+  },
+};
 
 export const metadata: Metadata = {
   title: seoTitle("Partner With Us"),
@@ -26,6 +45,7 @@ export default function PartnerPage() {
       <Masthead
         image={img.hireConversation}
         alt="Two marketers in conversation"
+        imageClassName="object-cover object-[center_18%]"
         kicker={partnerHero.kicker}
         title={partnerHero.title}
         lede={partnerHero.lede}
@@ -39,53 +59,83 @@ export default function PartnerPage() {
         }
       />
 
-      {partnerAreas.map((area, index) => (
-        <Band
-          key={area.id}
-          id={area.id}
-          tone={index % 2 === 0 ? "canvas" : "raised"}
-          className="scroll-mt-24"
-        >
-          <div className="grid gap-10 lg:grid-cols-[6rem_minmax(0,1fr)_minmax(0,24rem)] lg:gap-12">
-            <span aria-hidden className="ordinal text-accent/50">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <div>
-              <h2 className="font-display display-2 text-text-1">{area.title}</h2>
-              <p className="mt-5 max-w-2xl text-base leading-relaxed text-text-2 sm:text-lg">{area.body}</p>
-              {area.note ? (
-                <p className="mt-5 max-w-2xl border-l-2 border-accent/60 pl-4 text-sm leading-relaxed text-text-3">
-                  {area.note}
-                </p>
-              ) : null}
-              <div className="mt-8">
-                <Button href={area.href}>{area.ctaLabel}</Button>
+      {partnerAreas.map((area, index) => {
+        const photo = partnerAreaImages[area.id];
+        return (
+          <Band
+            key={area.id}
+            id={area.id}
+            tone={index % 2 === 0 ? "canvas" : "raised"}
+            className="scroll-mt-24"
+          >
+            <div className="grid gap-10 lg:grid-cols-[6rem_minmax(0,1fr)_minmax(0,22rem)] lg:gap-12">
+              <span aria-hidden className="ordinal text-accent/50">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <h2 className="font-display display-2 text-text-1">{area.title}</h2>
+                <p className="mt-5 max-w-2xl text-base leading-relaxed text-text-2 sm:text-lg">{area.body}</p>
+                {area.note ? (
+                  <p className="mt-5 max-w-2xl border-l-2 border-accent/60 pl-4 text-sm leading-relaxed text-text-3">
+                    {area.note}
+                  </p>
+                ) : null}
+                <div className="mt-8">
+                  <Button href={area.href}>{area.ctaLabel}</Button>
+                </div>
+                <div className="mt-10 lg:border-t lg:border-edge-subtle lg:pt-8">
+                  <p className="eyebrow text-text-3">For example</p>
+                  <Checklist className="mt-4" items={area.examples} />
+                </div>
               </div>
+              {photo ? (
+                <div className="relative aspect-[4/5] overflow-hidden">
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    fill
+                    className={`object-cover ${photo.position}`}
+                    sizes="(max-width: 1024px) 100vw, 28rem"
+                    quality={85}
+                  />
+                </div>
+              ) : null}
             </div>
-            <div className="lg:border-l lg:border-edge-subtle lg:pl-8">
-              <p className="eyebrow text-text-3">For example</p>
-              <Checklist className="mt-4" items={area.examples} />
-            </div>
-          </div>
-        </Band>
-      ))}
+          </Band>
+        );
+      })}
 
       <Band tone="blue" id="agency" size="lg" className="scroll-mt-24">
-        <SectionHead
-          kicker={agency.kicker}
-          title={agency.title}
-          lede={agency.body}
-          actions={
-            <Button href={agency.href} variant="light">
-              {agency.ctaLabel}
-            </Button>
-          }
-        />
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <SectionHead
+              align="stacked"
+              kicker={agency.kicker}
+              title={agency.title}
+              lede={agency.body}
+              actions={
+                <Button href={agency.href} variant="light">
+                  {agency.ctaLabel}
+                </Button>
+              }
+            />
+          </div>
+          <div className="relative aspect-[5/4] overflow-hidden">
+            <Image
+              src={img.contactTalk}
+              alt="Agency collaboration and brand storytelling work"
+              fill
+              className="object-cover object-[center_25%]"
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              quality={85}
+            />
+          </div>
+        </div>
         <DefinitionGrid className="mt-12" columns={3} items={[...agency.focusAreas]} />
       </Band>
 
       <Band tone="raised" size="sm">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center">
           <div>
             <Kicker>Team & Organization Programs</Kicker>
             <h2 className="mt-4 font-display display-3 text-text-1">{partnerTeamTraining.title}</h2>
@@ -96,14 +146,24 @@ export default function PartnerPage() {
               </Link>
               .
             </p>
+            <Link
+              href={partnerTeamTraining.href}
+              className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent"
+            >
+              {partnerTeamTraining.ctaLabel}
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
           </div>
-          <Link
-            href={partnerTeamTraining.href}
-            className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent"
-          >
-            {partnerTeamTraining.ctaLabel}
-            <ArrowUpRight className="h-4 w-4" />
-          </Link>
+          <div className="relative aspect-[16/10] overflow-hidden">
+            <Image
+              src={img.eventWorkshop}
+              alt="Team training workshop with TSA"
+              fill
+              className="object-cover object-top"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              quality={85}
+            />
+          </div>
         </div>
       </Band>
 

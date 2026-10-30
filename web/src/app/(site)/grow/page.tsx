@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowRight, Download } from "@/components/ui/icons";
@@ -9,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { Band, Checklist, Masthead, Placeholder, SectionHead } from "@/components/site/kit";
 import { seoTitle } from "@/lib/brand";
 import { resourceTypes } from "@/lib/content";
+import { img } from "@/lib/images";
 import {
   resourceAccess,
   resourceCategories,
@@ -16,6 +18,19 @@ import {
   resourcesHero,
 } from "@/lib/pages/resources";
 import { getResourceLibrary } from "@/lib/resources";
+
+const categoryImages: Record<string, { src: string; alt: string; position?: string }> = {
+  Articles: { src: img.postSocial, alt: "Marketing articles and strategy notes" },
+  Guides: { src: img.resBrief, alt: "Practical marketing guide materials" },
+  Templates: { src: img.resCalendar, alt: "Marketing planning templates" },
+  Tools: { src: img.resAiPrompts, alt: "Marketing tools and AI prompts" },
+  "Case Studies": { src: img.resAudit, alt: "Case study and audit materials" },
+  "Webinars & Insights": {
+    src: img.communityEvent,
+    alt: "TSA webinar and community session",
+    position: "object-top",
+  },
+};
 
 export const metadata: Metadata = {
   title: seoTitle("Social Media Marketing Resources"),
@@ -72,6 +87,9 @@ export default async function ResourcesPage({
   return (
     <>
       <Masthead
+        image={img.resPortfolio}
+        alt="Marketing resources and learning materials"
+        imageClassName="object-cover object-center"
         kicker={active === "All" ? resourcesHero.kicker : `${resourcesHero.kicker} · ${active}`}
         title={heading.title}
         lede={heading.lede}
@@ -91,20 +109,37 @@ export default async function ResourcesPage({
               lede="Articles, guides, templates, tools, case studies and webinars. New material is added as it is published."
             />
             <div className="mt-12 grid gap-px overflow-hidden border border-edge-subtle bg-edge-subtle sm:grid-cols-2 lg:grid-cols-3">
-              {resourceCategories.map((category) => (
-                <Link
-                  key={category.title}
-                  href={category.href}
-                  className="group flex min-h-11 flex-col bg-canvas p-7 transition-colors hover:bg-raised"
-                >
-                  <h3 className="font-display text-xl text-text-1">{category.title}</h3>
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-text-2">{category.body}</p>
-                  <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-accent">
-                    Browse {category.title.toLowerCase()}
-                    <ArrowRight className="h-4 w-4 transition-transform duration-[var(--dur-fast)] group-hover:translate-x-1" />
-                  </span>
-                </Link>
-              ))}
+              {resourceCategories.map((category) => {
+                const photo = categoryImages[category.title];
+                return (
+                  <Link
+                    key={category.title}
+                    href={category.href}
+                    className="group flex min-h-11 flex-col bg-canvas transition-colors hover:bg-raised"
+                  >
+                    {photo ? (
+                      <div className="relative aspect-[16/10] overflow-hidden">
+                        <Image
+                          src={photo.src}
+                          alt={photo.alt}
+                          fill
+                          className={`object-cover ${photo.position ?? "object-center"} transition duration-700 ease-out group-hover:scale-[1.03]`}
+                          sizes="(max-width: 1024px) 100vw, 40vw"
+                          quality={85}
+                        />
+                      </div>
+                    ) : null}
+                    <div className="flex flex-1 flex-col p-7">
+                      <h3 className="font-display text-xl text-text-1">{category.title}</h3>
+                      <p className="mt-3 flex-1 text-sm leading-relaxed text-text-2">{category.body}</p>
+                      <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-accent">
+                        Browse {category.title.toLowerCase()}
+                        <ArrowRight className="h-4 w-4 transition-transform duration-[var(--dur-fast)] group-hover:translate-x-1" />
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </Band>
 

@@ -33,9 +33,10 @@ export function NetworkClose() {
             src={img.communityHome}
             alt="TSA members gathered together in the community space"
             fill
-            className="object-cover"
+            className="object-cover object-[center_25%]"
             data-parallax
-            sizes="(max-width: 1024px) 100vw, 42vw"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            quality={85}
           />
         </div>
       </div>

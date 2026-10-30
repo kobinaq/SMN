@@ -66,13 +66,14 @@ export function HomeStory({ children }: { children: React.ReactNode }) {
       }
 
       if (!mobile) {
+        // Keep parallax subtle so object-cover faces stay in frame.
         el.querySelectorAll<HTMLElement>("[data-parallax]").forEach((img) => {
           gsap.fromTo(
             img,
-            { scale: 1.14, yPercent: -6 },
+            { scale: 1.05, yPercent: -2 },
             {
               scale: 1,
-              yPercent: 6,
+              yPercent: 2,
               ease: "none",
               scrollTrigger: {
                 trigger: img.closest("[data-parallax-wrap]") || img.parentElement,

@@ -13,9 +13,10 @@ export function WhoItsFor() {
             src={img.academyGroup}
             alt="Think Social Academy learners together"
             fill
-            className="object-cover"
+            className="object-cover object-[center_20%]"
             data-parallax
-            sizes="(max-width: 1024px) 100vw, 42vw"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            quality={85}
           />
         </div>
         <div>

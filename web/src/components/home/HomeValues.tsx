@@ -25,9 +25,10 @@ export function HomeValues() {
             src={img.philosophy}
             alt="Practical social media marketing work in progress"
             fill
-            className="object-cover"
+              className="object-cover object-[center_12%]"
             data-parallax
-            sizes="(max-width: 1024px) 100vw, 42vw"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            quality={85}
           />
         </div>
       </div>
