@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowRight, MessageCircle } from "@/components/ui/icons";
 import { OnboardingChecklist } from "@/components/app/OnboardingChecklist";
 import { Button } from "@/components/ui/Button";
@@ -7,6 +8,7 @@ import { memberDisplayName, requireMember } from "@/lib/auth/member";
 import { getMemberContinuity } from "@/lib/member-continuity";
 import { site } from "@/lib/site";
 import { pageTitle } from "@/lib/brand";
+import { memberHomeCopy, memberHomeTitle } from "@/lib/pages/join";
 
 export const metadata = {
   title: pageTitle("Member home"),
@@ -43,30 +45,36 @@ export default async function AppHomePage() {
   const hasStartedCourse = continuity.courses.some((course) => course.percentage > 0);
   const roles = Array.isArray(member.roles) && member.roles.length ? member.roles : ["member"];
   const onboardingSteps = [
-    { key: "profile", label: "Complete essential profile details", href: "/app/profile", done: continuity.profile.percent >= 60 },
+    { key: "profile", label: "Complete your profile essentials", href: "/app/profile", done: continuity.profile.percent >= 60 },
     { key: "skills", label: "Add skills and a career goal", href: "/app/profile", done: continuity.profile.percent >= 80 },
     { key: "course", label: "Start or continue your first course", href: "/app/learning/courses", done: hasStartedCourse },
-    { key: "mentors", label: "Explore mentorship", href: "/app/mentors", done: Boolean(continuity.openMentorshipCount) },
-    { key: "opportunities", label: "Track an opportunity", href: "/app/opportunities", done: continuity.opportunityActivityCount > 0 },
+    { key: "mentors", label: "Explore tutor and mentor support", href: "/app/mentors", done: Boolean(continuity.openMentorshipCount) },
+    { key: "opportunities", label: "Explore selected opportunities", href: "/app/opportunities", done: continuity.opportunityActivityCount > 0 },
   ];
 
   const quickLinks = [
     { href: "/app/learning", label: "Learning hub" },
     { href: "/app/mentors", label: "Mentors" },
-    { href: "/app/opportunities", label: "Opportunity board" },
+    { href: "/app/opportunities", label: "Opportunities" },
   ];
 
   return (
     <div className="space-y-8">
       <section className="rise">
         <Eyebrow>Member portal</Eyebrow>
-        <h1 className="mt-3 font-display text-2xl text-text-1 sm:text-3xl md:text-4xl">Hi, {name}</h1>
+        <h1 className="mt-3 font-display text-2xl text-text-1 sm:text-3xl md:text-4xl">{memberHomeTitle(name)}</h1>
         <p className="mt-3 max-w-xl text-sm leading-relaxed text-text-2 sm:text-base">
-          Pick up where you left off, finish what matters next, and keep mentorship, opportunities, and credentials
-          moving.
+          {memberHomeCopy.intro}
         </p>
+        <Link
+          href="/app/welcome"
+          className="mt-2 inline-flex min-h-11 items-center gap-1 text-sm text-accent hover:text-text-1"
+        >
+          {memberHomeCopy.firstStepsLink}
+          <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+        </Link>
         <div className="mt-5 flex flex-wrap gap-2">
-          <Chip tone="neutral">Cohort · {cohortLabel}</Chip>
+          <Chip tone="neutral">Cohort: {cohortLabel}</Chip>
           <Chip tone={continuity.profile.percent >= 80 ? "ai" : "accent"}>Profile {continuity.profile.percent}%</Chip>
           {roles.map((role) => (
             <Chip key={role} tone="neutral" className="capitalize">
@@ -86,8 +94,8 @@ export default async function AppHomePage() {
           <div className="btn-row-mobile mt-6">
             <Button href={continuity.primary.href}>{continuity.primary.cta}</Button>
             <Button href={site.whatsappInvite} target="_blank" rel="noreferrer" variant="secondary">
-              <MessageCircle className="h-4 w-4" />
-              WhatsApp
+              <MessageCircle className="h-4 w-4" aria-hidden />
+              TSA updates on WhatsApp
             </Button>
           </div>
         </Card>
