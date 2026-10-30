@@ -29,7 +29,7 @@ export function EcosystemPillars() {
             data-stagger-item
             className="grid gap-4 rule py-8 sm:grid-cols-[4rem_minmax(0,1fr)] sm:gap-6 sm:py-10"
           >
-            <span aria-hidden className="ordinal text-accent/50">
+            <span aria-hidden className="ordinal text-accent">
               {String(index + 1).padStart(2, "0")}
             </span>
             <div>
