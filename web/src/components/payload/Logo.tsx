@@ -5,13 +5,13 @@ export default function Logo() {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src="/images/Logos/Logo%20on%20white.png"
-      alt="Social Marketers Network"
+      src="/brand/tsa-logo-full-white.png"
+      alt="Think Social Academy"
       style={{
         width: "auto",
         height: "auto",
         maxWidth: "220px",
-        maxHeight: "56px",
+        maxHeight: "72px",
         objectFit: "contain",
       }}
     />

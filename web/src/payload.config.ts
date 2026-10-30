@@ -91,7 +91,7 @@ export default buildConfig({
         {
           rel: "icon",
           type: "image/png",
-          url: "/brand/logo-blue.png",
+          url: "/icon.png",
         },
       ],
       openGraph: {
