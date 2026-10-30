@@ -9,7 +9,7 @@ import sharp from "sharp";
  * brand blue #2b4c7f with the white mark centred and inset by `pad` of the
  * side on the left and right. White on blue was chosen over blue on white:
  * the solid square stays visible on both light and dark browser tab bars,
- * and the white letters keep more contrast at 16px (7.9:1).
+ * and the white letters keep the same 8.6:1 contrast.
  *
  * Run: node scripts/generate-favicon.mjs
  */
