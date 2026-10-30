@@ -78,7 +78,7 @@ export const beliefs = [
   },
 ];
 
-/** Tab 5 hero. Primary CTA is Join the Community → /signup (ticket T5). */
+/** Tab 5 hero. Primary CTA is Explore the Academy (/academy); secondary is Join the Community (/signup). */
 export const homepageHero = {
   eyebrow: "Think Social Academy",
   lines: [

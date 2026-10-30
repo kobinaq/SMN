@@ -21,14 +21,14 @@ export const site = {
     twitter: "https://x.com/smn_africa",
   },
   homepage: {
-    // Tab 5 hero; ticket T5 makes Join the Community the primary CTA.
+    // Tab 5 hero: Explore the Academy is the primary CTA, Join the Community the secondary.
     headline: "Learn social media marketing. Put it into practice. Work towards results.",
     supportingCopy:
       "Build your understanding through practical lessons, guided exercises, and simulated briefs that connect social media marketing concepts to different business contexts.",
-    primaryCtaLabel: "Join the Community",
-    secondaryCtaLabel: "Explore the Academy",
-    // Secondary CTA target (Explore the Academy). Join the Community uses cta.joinCommunity → /signup.
-    secondaryCtaHref: "/academy",
+    primaryCtaLabel: "Explore the Academy",
+    secondaryCtaLabel: "Join the Community",
+    // Secondary CTA target (Join the Community, a free TSA account). Explore the Academy uses cta.explorePrograms (/academy).
+    secondaryCtaHref: "/signup",
   },
   announcementBanner: "",
   footerBlurb:

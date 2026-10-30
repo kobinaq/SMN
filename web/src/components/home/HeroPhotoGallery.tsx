@@ -197,19 +197,19 @@ export function HeroPhotoGallery() {
       >
         <div className="btn-row-mobile">
           <Button
-            href={cta.joinCommunity.href}
+            href={cta.explorePrograms.href}
             className="sm:min-w-[160px]"
             onClick={() => trackEvent("primary_cta_click", { location: "hero" })}
           >
-            {cta.joinCommunity.label}
+            {cta.explorePrograms.label}
           </Button>
           <Button
-            href={cta.explorePrograms.href}
+            href={cta.joinCommunity.href}
             variant="secondary"
             className="sm:min-w-[140px]"
             onClick={() => trackEvent("secondary_cta_click", { location: "hero" })}
           >
-            {cta.explorePrograms.label}
+            {cta.joinCommunity.label}
           </Button>
         </div>
       </div>

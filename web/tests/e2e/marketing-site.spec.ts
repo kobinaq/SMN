@@ -30,18 +30,19 @@ test.describe("marketing navigation and CTAs", () => {
     );
   });
 
-  test("home hero headline and primary Join the Community CTA", async ({ page }) => {
+  test("home hero headline, primary Explore the Academy and secondary Join the Community CTAs", async ({ page }) => {
     await page.goto("/");
     const hero = page.locator("[data-hero]");
     await expect(hero.getByRole("heading", { level: 1 })).toContainText(
       /Learn social media marketing[\s\S]*Put it into practice[\s\S]*Work towards results/i,
     );
-    const primary = hero.getByRole("link", { name: /join the community/i }).first();
-    await expect(primary).toHaveAttribute("href", "/signup");
-    await expect(hero.getByRole("link", { name: /explore the academy/i }).first()).toHaveAttribute(
-      "href",
-      "/academy",
-    );
+    // Order matters: the first hero CTA is the primary (filled) button.
+    const ctas = hero.locator(".btn-row-mobile a");
+    await expect(ctas).toHaveCount(2);
+    await expect(ctas.nth(0)).toHaveText(/explore the academy/i);
+    await expect(ctas.nth(0)).toHaveAttribute("href", "/academy");
+    await expect(ctas.nth(1)).toHaveText(/join the community/i);
+    await expect(ctas.nth(1)).toHaveAttribute("href", "/signup");
   });
 
   test("home main has no em dash and no SMN, internship or hire copy", async ({ page }) => {

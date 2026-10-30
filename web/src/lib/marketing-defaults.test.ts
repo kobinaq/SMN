@@ -60,9 +60,9 @@ describe("marketing defaults", () => {
   it("uses a 4-week cohort duration and Tab 5 home CTAs in public defaults", () => {
     expect(site.cohort.duration).toBe("4 weeks");
     expect(site.cohort.startDate.toLowerCase()).toContain("coming soon");
-    expect(site.homepage.primaryCtaLabel).toBe("Join the Community");
-    expect(site.homepage.secondaryCtaLabel).toBe("Explore the Academy");
-    expect(site.homepage.secondaryCtaHref).toBe("/academy");
+    expect(site.homepage.primaryCtaLabel).toBe("Explore the Academy");
+    expect(site.homepage.secondaryCtaLabel).toBe("Join the Community");
+    expect(site.homepage.secondaryCtaHref).toBe("/signup");
   });
 
   it("exposes the T3 public navigation labels and hrefs", () => {
