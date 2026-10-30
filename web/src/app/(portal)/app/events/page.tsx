@@ -62,7 +62,7 @@ export default async function MemberEventsPage() {
       ) : (
         <EmptyState
           title="No tickets yet"
-          description="Register for an SMN event to see your ticket and join link here."
+          description="Register for a TSA event to see your ticket and join link here."
           action={
             <Button href="/events" variant="secondary">
               Browse events

@@ -110,7 +110,7 @@ export function DeleteCourseDialog({
           Delete this course?
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-text-2">
-          This permanently deletes <strong className="text-text-1">{courseTitle}</strong> and everything inside it —
+          This permanently deletes <strong className="text-text-1">{courseTitle}</strong> and everything inside it:
           modules, lessons, live sessions, attendance, announcements, discussion, assessments, and submitted work.
           Enrollments are kept but detached, so learner history and issued certificates survive.
         </p>

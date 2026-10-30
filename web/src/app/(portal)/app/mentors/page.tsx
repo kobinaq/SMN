@@ -20,7 +20,7 @@ export default async function MentorsAppPage() {
       <PageHeader
         eyebrow="Mentors"
         title="Find the right guide"
-        description="Browse staff-approved mentors by specialty, then send a focused request. The SMN team reviews introductions to protect everyone's time."
+        description="Browse staff-approved mentors by specialty, then send a focused request. The TSA team reviews introductions to protect everyone's time."
         action={
           <Button href="/community/mentors#become-a-mentor" variant="secondary">
             Become a mentor

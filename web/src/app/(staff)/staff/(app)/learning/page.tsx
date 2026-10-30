@@ -44,7 +44,7 @@ export default async function StaffLearningHubPage() {
       icon: BookOpen,
       tone: "accent" as const,
       title: "Self-paced courses",
-      body: "Courses members work through on their own — modules, lessons and assessments inside SMN.",
+      body: "Courses members work through on their own: modules, lessons and assessments inside TSA.",
       count: selfPaced.length,
       unit: selfPaced.length === 1 ? "course" : "courses",
     },
