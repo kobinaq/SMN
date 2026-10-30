@@ -12,6 +12,7 @@ test.describe("Resources and Insights (T9)", () => {
     }
     await expect(page.getByRole("heading", { level: 2, name: "Public resources" })).toBeVisible();
     await expect(page.getByRole("heading", { level: 2, name: "Member resources" })).toBeVisible();
+    await expect(page.locator("#access")).toContainText("programme materials and resources inside their TSA account");
   });
 
   test("Resources category and access links go to the right routes", async ({ page }) => {

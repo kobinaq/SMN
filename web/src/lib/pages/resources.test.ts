@@ -38,6 +38,8 @@ describe("Resources and Insights copy (T9)", () => {
     expect(resources.resourceAccess.public.title).toBe("Public resources");
     expect(resources.resourceAccess.member.title).toBe("Member resources");
     expect(resources.resourceAccess.member.href).toBe("/signup");
+    expect(resources.resourceAccess.member.body).toMatch(/programme materials/);
+    expect(resources.resourceAccess.member.body).not.toMatch(/as they are published|member portal|members-only/i);
     expect(resources.resourceAccess.member.secondaryHref).toBe("/login");
   });
 

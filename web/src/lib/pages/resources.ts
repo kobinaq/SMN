@@ -60,9 +60,9 @@ export const resourceAccess = {
   },
   member: {
     title: "Member resources",
-    // TODO(placeholder): the member portal has no member-only resource library yet.
-    // Copy says "as they are published" until one exists.
-    body: "Available through the TSA member portal as they are published, alongside your programme materials.",
+    // TODO(placeholder): a members-only resource library does not exist yet. When one is
+    // built, extend this card. Today it only describes programme materials in the account.
+    body: "Enrolled learners find their programme materials and resources inside their TSA account.",
     href: "/signup",
     ctaLabel: "Join TSA",
     secondaryHref: "/login",
