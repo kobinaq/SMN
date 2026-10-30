@@ -119,6 +119,8 @@ test.describe("marketing navigation and CTAs", () => {
 
   test("navigation progress bar appears on internal link click", async ({ page }) => {
     await page.goto("/");
+    // The click listener sets this once attached; clicking earlier can race hydration.
+    await page.waitForSelector("html[data-navigation-ready]", { state: "attached" });
     const progressAppeared = page.waitForSelector("[data-navigation-progress]", {
       state: "attached",
       timeout: 5000,
@@ -132,6 +134,7 @@ test.describe("marketing navigation and CTAs", () => {
 
   test("navigation progress completes and disappears on a query-only link", async ({ page }) => {
     await page.goto("/resources");
+    await page.waitForSelector("html[data-navigation-ready]", { state: "attached" });
     const progress = page.locator("[data-navigation-progress]");
     await expect(progress).toHaveCount(0);
 
@@ -183,12 +186,22 @@ test.describe("marketing navigation and CTAs", () => {
       .getByRole("navigation", { name: "Resource types" })
       .getByRole("link", { name: "Template", exact: true });
     await expect(current).toHaveAttribute("aria-current", "page");
+    await page.waitForSelector("html[data-navigation-ready]", { state: "attached" });
+
+    // Count full document loads so a reload cannot hide the bar check below
+    // (a reload would also wipe the window flags and make the test pass falsely).
+    let documentLoads = 0;
+    page.on("load", () => {
+      documentLoads += 1;
+    });
 
     await page.evaluate(() => {
       const w = window as Window & {
         __sameUrlProgressSeen?: boolean;
         __sameUrlObserver?: MutationObserver;
+        __sameUrlNoReload?: boolean;
       };
+      w.__sameUrlNoReload = true;
       w.__sameUrlProgressSeen = false;
       w.__sameUrlObserver?.disconnect();
       w.__sameUrlObserver = new MutationObserver(() => {
@@ -203,14 +216,20 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(page).toHaveURL(/[?&]type=Template/);
     await page.evaluate(() => new Promise<void>((resolve) => window.setTimeout(resolve, 300)));
 
-    const appeared = await page.evaluate(() => {
+    const { appeared, sameDocument } = await page.evaluate(() => {
       const w = window as Window & {
         __sameUrlProgressSeen?: boolean;
         __sameUrlObserver?: MutationObserver;
+        __sameUrlNoReload?: boolean;
       };
       w.__sameUrlObserver?.disconnect();
-      return Boolean(w.__sameUrlProgressSeen);
+      return {
+        appeared: Boolean(w.__sameUrlProgressSeen),
+        sameDocument: w.__sameUrlNoReload === true,
+      };
     });
+    expect(sameDocument, "same-URL click must not trigger a full reload").toBe(true);
+    expect(documentLoads).toBe(0);
     expect(appeared).toBe(false);
     await expect(page.locator("[data-navigation-progress]")).toHaveCount(0);
   });
