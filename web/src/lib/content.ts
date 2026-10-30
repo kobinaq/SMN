@@ -2,18 +2,18 @@ import { img } from "@/lib/images";
 
 export const instructor = {
   name: "Arielle Adodo",
-  role: "Founder & Lead Instructor, Social Marketers Network",
+  role: "Founder & Lead Instructor, Think Social Academy",
   title: "Marketing Strategist · Educator · Founder",
   image: img.instructor,
   headline: "Arielle Adodo",
   linkedin: "https://www.linkedin.com/in/arielle-adodo/",
-  bio: "I didn’t start in marketing. I had to figure my way into it — no traditional marketing degree, no clear roadmap. I started with social media and content, learning through experience, experimenting, and working with brands until I realised there was much more to marketing than making good-looking content.",
+  bio: "I didn’t start in marketing. I had to figure my way into it: no traditional marketing degree, no clear roadmap. I started with social media and content, learning through experience, experimenting, and working with brands until I realised there was much more to marketing than making good-looking content.",
   philosophy:
-    "The more I worked across social, content, and digital — from FMCG and lifestyle to consumer and tech brands — the more I noticed a problem: social media marketing was evolving, but the way we teach it wasn’t. People were learning how to post before they learned how to think. I founded Social Marketers Network to close that gap, and to build the marketing community I wish I had when I started.",
+    "The more I worked across social, content, and digital, from FMCG and lifestyle to consumer and tech brands, the more I noticed a problem: social media marketing was evolving, but the way we teach it wasn’t. People were learning how to post before they learned how to think. I founded Social Marketers Network to close that gap, and to build the marketing community I wish I had when I started.",
   highlights: [
     "Social and digital marketing across FMCG, lifestyle, consumer, and technology brands",
     "Content strategy, brand storytelling, and marketing education",
-    "Leads the Social Media Marketing & AI training path at SMN",
+    "Leads the Social Media Marketing & AI training path at TSA",
     "Building a marketing community across Africa and beyond",
   ],
   note: null as string | null,
@@ -22,11 +22,11 @@ export const instructor = {
 /** Founder story for the About page — first-person, per the SMN brand voice. */
 export const founderStory = [
   "I didn’t start in marketing. I had to figure my way into it.",
-  "I didn’t have a traditional marketing degree or a clear roadmap telling me what to learn next. I started with social media and content — learning through experience, experimenting, working with brands, and gradually figuring out that there was much more to marketing than making good-looking content.",
+  "I didn’t have a traditional marketing degree or a clear roadmap telling me what to learn next. I started with social media and content, learning through experience, experimenting, working with brands, and gradually figuring out that there was much more to marketing than making good-looking content.",
   "Over the years, I worked across social media, content, and digital marketing, with experience spanning FMCG, lifestyle, consumer, and technology brands. But the more I worked in the industry, the more I noticed a problem: social media marketing was evolving, and the way we were teaching it wasn’t.",
   "Social media managers were no longer just being asked to keep a page active or create aesthetically pleasing content. Businesses wanted marketers who could understand the audience, develop strategy, contribute to campaigns, and ultimately help drive results. Yet many people entering the field were learning how to post before they learned how to think.",
   "There was also very little guidance around the things that actually help someone build a career: how to build a portfolio, how to price your work, how to communicate with clients, how to understand the business behind a brief, and what you actually need to learn to stay relevant as AI changes the industry.",
-  "I know, because I spent years figuring it out myself. That’s why I founded Social Marketers Network — combining marketing strategy, social media, AI, practical application, career development, and professional experience. We’re building something bigger than a course: the marketing community I wish I had when I started, where learning can lead to experience, relationships, and opportunity.",
+  "I know, because I spent years figuring it out myself. That’s why I founded Social Marketers Network, combining marketing strategy, social media, AI, practical application, career development, and professional experience. We’re building something bigger than a course: the marketing community I wish I had when I started, where learning can lead to experience, relationships, and opportunity.",
 ];
 
 /** Founder philosophy — "What I believe". */
@@ -78,27 +78,35 @@ export const beliefs = [
   },
 ];
 
+/** Tab 5 hero. Primary CTA is Explore the Academy (/academy); secondary is Join the Community (/signup). */
 export const homepageHero = {
-  eyebrow: "About Social Marketers Network",
+  eyebrow: "Think Social Academy",
   lines: [
-    "Learn Social Media Marketing.",
-    "Lead with AI.",
-    "Gain Real-World Experience.",
-    "Grow with Community",
+    "Learn social media marketing.",
+    "Put it into practice.",
+    "Work towards results.",
   ],
-  body: "Social Marketers Network is a professional learning network where beginners, early-career and marketing professionals build the skills, experience and network they need to thrive in a rapidly changing digital industry.",
+  body: "Build your understanding through practical lessons, guided exercises, and simulated briefs that connect social media marketing concepts to different business contexts.",
 } as const;
 
-/** Homepage founder essay. About keeps founderStory. */
+/** Tab 4 What is TSA, adjusted for Tab 5 (community, not professional network). */
+export const homepageWhatIs = {
+  title: "More than learning how to create content.",
+  body: "Think Social Academy is a social media marketing academy and community that helps you build the knowledge, strategic skills and practical experience to use social media effectively and work towards results for brands and organisations.",
+  ctaLabel: "Discover TSA",
+  ctaHref: "/about",
+} as const;
+
+/**
+ * Homepage founder essay (Tab 4 Why I Built TSA). About keeps founderStory.
+ * Tab 5: no professional-network framing; no job or placement promises.
+ */
 export const homepageFounderStory = [
-  "I didn't start in marketing. I had to figure my way into it.",
-  "I didn't have a traditional marketing degree or a clear roadmap telling me what to learn next. I started with social media and content, learning through experience, experimenting, working with brands and gradually figuring out that there was much more to marketing than making good-looking content.",
-  "Over the years, I worked across social media, content and digital marketing, with experience spanning FMCG, consumer and lifestyle brands.",
-  "Social media has evolved from simply posting content into an important part of how businesses build brands, communities and revenue. At the same time, AI is changing how marketers research, create, analyse and work but learning marketing is still often fragmented. People learn a tool here, a platform there, and a collection of content tricks without understanding how it all connects.",
-  "Now social media managers are no longer just being asked to keep a page active or create aesthetically pleasing content. Businesses want marketers who could understand the audience, develop strategy, contribute to campaigns and ultimately help drive results.",
-  "However, many people entering the field are learning how to post before they learned how to think. There is also very little guidance around the things that actually help someone build a portfolio, experience and eventually, a career.",
-  "We want to change that. At the Social Marketers Network, we combine social media strategy, AI and practical application to generate results for brands and businesses.",
-  "We're building something bigger than a course, we offer career development and professional experience and a community that shares resources to help you stay ahead. At SMN, learning leads to experience, experience leads to relationships, and relationships lead to opportunity.",
+  "I've seen how fragmented learning marketing can be. You learn a tool here, a platform there, and a few content tricks, but you don't always learn how it all connects.",
+  "Too often, people learn how to post before they learn how to think. They finish courses but do not know how to apply what they've learned, or how to take their next step.",
+  "We want to change that.",
+  "We want to build thinkers and doers, not just information absorbers. We don't want learning to end when a programme ends.",
+  "Our vision is a community that keeps learning and helps the next person find their next step.",
 ];
 
 export const smnValues = [
@@ -120,44 +128,169 @@ export const smnValues = [
   },
   {
     title: "Opportunity",
-    body: "Education should create pathways to experience and careers.",
+    body: "Education should create pathways to practical experience and continued learning.",
   },
 ];
 
+/** Tab 4 Explore TSA cards. */
+export const homepageExplore = [
+  {
+    title: "Academy",
+    body: "Build practical social media marketing and AI skills through structured learning.",
+    ctaLabel: "See the 4-week cohort",
+    href: "/academy/cohort",
+  },
+  {
+    title: "Community",
+    body: "Keep learning, stay connected to TSA updates, and continue growing beyond the classroom.",
+    ctaLabel: "Join the Community",
+    href: "/signup",
+  },
+  {
+    title: "Partner With Us",
+    body: "Collaborate with TSA through sponsorships, events, simulations or our agency arm.",
+    ctaLabel: "Partner With Us",
+    href: "/partner",
+  },
+  {
+    title: "Resources",
+    body: "Access useful marketing knowledge, tools, templates and insights as they are published.",
+    ctaLabel: "Explore Resources",
+    href: "/resources",
+  },
+] as const;
+
+/** Tab 4 Academy preview programmes + self-paced courses that already exist. */
+export const homepageProgrammes = [
+  {
+    title: "Social Media Marketing & AI",
+    meta: "4 weeks · Cohort-based",
+    body: "Our core cohort programme for people who want to build practical social media marketing skills and learn how to integrate AI into their workflow.",
+    href: "/academy/cohort",
+    ctaLabel: "View the curriculum",
+  },
+  {
+    title: "1-on-1 Specialized Learning",
+    meta: "For individuals",
+    // TODO(T5-placeholder): 1-on-1 booking flow does not exist yet; contact is the route.
+    body: "Personalized learning designed around your specific goals, challenges or skill gaps.",
+    href: "/contact?type=Training%20request",
+    ctaLabel: "Enquire about 1-on-1",
+  },
+  {
+    title: "Team & Organization Programs",
+    meta: "For teams, organisations and groups",
+    body: "Tailored learning experiences designed around the needs of teams, organisations and groups.",
+    href: "/contact?type=Training%20request",
+    ctaLabel: "Enquire about team training",
+  },
+  {
+    title: "Self-paced courses",
+    meta: "Learn on your schedule",
+    body: "Individual courses you can work through in the member portal, with checkout when a course is published.",
+    href: "/academy/courses",
+    ctaLabel: "Browse self-paced courses",
+  },
+] as const;
+
+/**
+ * Tab 4 outcomes, adjusted for Tab 5.
+ * End-of-cohort guidance day omitted: format and date are unconfirmed (inventory B5).
+ */
+export const homepageOutcomes: { title: string; body: string }[] = [
+  {
+    title: "A strategic mindset",
+    body: "Think beyond posting and approach social media with purpose.",
+  },
+  {
+    title: "Practical application",
+    body: "Practise through guided briefs and clearly labelled simulations.",
+  },
+  {
+    title: "An AI-powered workflow",
+    body: "Use AI to research, think, plan and execute more effectively.",
+  },
+  {
+    title: "A portfolio of work",
+    body: "Show what you can do and how you think, subject to programme requirements.",
+  },
+  {
+    title: "A TSA certificate",
+    body: "Receive a TSA certificate upon successful completion.",
+  },
+];
+
+/** Tab 4 Community preview, rewritten to Tab 5 community rules. */
+export const homepageCommunity = {
+  title: "Learning shouldn't end when the programme ends.",
+  body: "The TSA community is an opt-in space for people who want to stay connected to Think Social Academy. Members can receive updates and early notices about selected learning experiences, partnerships, opportunities and events as they become available.",
+  items: [
+    "TSA updates",
+    "Selected learning experiences",
+    "Industry conversations when available",
+    "Webinars and events when available",
+    "Shared resources as they are published",
+    "Early notice of selected activities",
+  ],
+} as const;
+
 export const homepageClose = {
-  lead: "Access a network",
-  title: "More than an academy.",
+  lead: "Next step",
+  title: "Ready to think beyond content?",
   paragraphs: [
-    "Courses can teach you a skill. A network can change the trajectory of your career.",
-    "SMN brings together learning, community, mentorship, practical experience and industry connections in one ecosystem.",
-    "You can join us to learn something new, find a mentor, meet other marketers, work on a simulation, attend an event, access an opportunity, or simply stay connected to an industry that never stops changing.",
-    "We are building toward a future where marketers can learn, gain experience, find mentors, discover opportunities and build meaningful careers within one connected ecosystem.",
+    "Build the skills. Apply what you learn. Grow your experience. Stay connected.",
   ],
 } as const;
 
 export const homepagePartners = {
-  title: "Build with the next generations of marketers.",
-  body: "Train teams, hire interns, collaborate on events or sponsor access to training and experience programs.",
+  title: "Build with Think Social Academy.",
+  body: "There are different ways to support learners, create practical experiences and collaborate with TSA.",
+  areas: [
+    {
+      title: "Sponsorship",
+      body: "Support TSA programmes, learners, scholarships, events and initiatives.",
+      href: "/contact?type=Sponsorship",
+      ctaLabel: "Discuss sponsorship",
+    },
+    {
+      title: "Events",
+      body: "Collaborate on webinars, panels, workshops and industry conversations.",
+      href: "/contact?type=Collaboration",
+      ctaLabel: "Partner on an event",
+    },
+    {
+      title: "Simulations",
+      body: "Provide clearly labelled marketing briefs, challenges or scenarios for learners to solve.",
+      href: "/contact?type=Simulation%20waitlist",
+      ctaLabel: "Create a simulation",
+    },
+  ],
+  agency: {
+    title: "Think Social Agency",
+    body: "Our agency arm works with brands and organisations on social media, storytelling and content. Enquiries go through Partner With Us.",
+    href: "/partner",
+    ctaLabel: "Partner With Us",
+  },
   close: "Marketing is changing. How we learn it should too.",
 } as const;
 
+/** Tab 5 Learn. Apply. Grow. Connect. */
 export const ecosystem: { title: string; body: string; kicker?: string }[] = [
   {
     title: "Learn",
-    body: "Training programmes, self-paced courses, webinars and practical resources.",
+    body: "Understand the principles and purpose behind social media marketing through clear instruction and practical lessons.",
   },
   {
-    title: "Practice",
-    kicker: "SMN Experience Program",
-    body: "We work with brands, agencies and marketing professionals to create internships, volunteer placements, projects and mentorship opportunities.",
-  },
-  {
-    title: "Connect",
-    body: "Community, events, mentorship and professional relationships.",
+    title: "Apply",
+    body: "Practise through exercises, guided briefs, clearly labelled simulations, and portfolio work.",
   },
   {
     title: "Grow",
-    body: "Career development, opportunities and continuous learning.",
+    body: "Develop through feedback, reflection, repeated practice, and exploration of different business contexts.",
+  },
+  {
+    title: "Connect",
+    body: "Stay connected to TSA updates, learning experiences, selected partnerships, opportunities and events as they become available.",
   },
 ];
 
@@ -186,12 +319,12 @@ export const memberJourney = [
   {
     step: "05",
     title: "Earn verifiable credentials",
-    body: "Certificates that employers and partners can verify on SMN.",
+    body: "Certificates that partners and learners can verify on TSA.",
   },
   {
     step: "06",
     title: "Discover opportunities",
-    body: "Find and track marketing roles and gigs inside the member platform.",
+    body: "Stay informed about selected opportunities and events inside the member platform.",
   },
 ];
 
@@ -242,6 +375,8 @@ export type EventItem = {
   /** @deprecated Prefer first-party /events/[slug] registration */
   registrationUrl: string;
   image: string;
+  /** True when the CMS media upload is set (not the stock fallback). */
+  hasCustomImage?: boolean;
   format: string;
   price: string;
   host: string;
@@ -254,6 +389,7 @@ export type EventItem = {
   address?: string | null;
   onlineUrl?: string | null;
   status?: string;
+  updatedAt?: string;
 };
 
 export const eventTypes = ["All", "Webinar", "Workshop", "Networking"] as const;
@@ -275,6 +411,7 @@ export type ResourceItem = {
   body: string[];
   /** Uploaded file URL when staff attached one in the CMS. */
   fileUrl?: string;
+  updatedAt?: string;
 };
 
 /** Real resources are managed in the CMS (`resources` collection). No seed placeholders. */
@@ -324,6 +461,7 @@ export type BlogPost = {
   authorRole: string;
   authorImage: string;
   body: string[];
+  updatedAt?: string;
 };
 
 /** Real insights are managed in the CMS (`posts` collection). No seed placeholders. */
@@ -379,7 +517,7 @@ export const cohortFaqs = [
   },
   {
     q: "How are live sessions delivered?",
-    a: "Live sessions run on Google Classroom. Members also use the SMN member portal for learning progress, resources, mentorship, and opportunities, plus the WhatsApp community for day-to-day support.",
+    a: "Live sessions run on Google Classroom. Members also use the TSA member portal for learning progress, resources, mentorship, and opportunities. Get TSA updates on WhatsApp for day-to-day chat.",
   },
   {
     q: "Do I need prior experience?",
@@ -387,18 +525,19 @@ export const cohortFaqs = [
   },
   {
     q: "When do I pay?",
-    a: "Submit an application first. SMN reviews applications within a few business days. Payment or an approved payment plan is arranged after acceptance, not before you apply.",
+    a: "Submit an application first. TSA reviews applications within a few business days. Payment or an approved payment plan is arranged after acceptance, not before you apply.",
   },
   {
     q: "Is employment guaranteed?",
-    a: "No. We help you get ready for the market and open doors to employers and opportunities. We do not promise a job.",
+    a: "No. We help you practise marketing work and stay connected to selected opportunities when available. We do not promise a job.",
   },
   {
     q: "How do self-paced courses work?",
-    a: "Purchase courses checkout on SMN via Paystack, then unlock in the member portal. Apply-first programmes use /apply. Staff grant access or send a payment link after review.",
+    a: "Purchase courses checkout on TSA via Paystack, then unlock in the member portal. Apply-first programmes use /apply. Staff grant access or send a payment link after review.",
   },
   {
     q: "What is the fee?",
-    a: "Contact SMN for current fees. Payment plans may be available after acceptance.",
+    // TODO(T5-placeholder): fees unconfirmed.
+    a: "Contact TSA for current fees. Payment plans may be available after acceptance.",
   },
 ];

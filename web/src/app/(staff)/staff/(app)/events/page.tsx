@@ -2,6 +2,9 @@ import Link from "next/link";
 import { StaffEmptyState, StaffMetricGrid, StaffPageHeader, StaffPanel, StaffSection, StaffTable } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Events", { staff: true }) };
 
 export default async function StaffEventsOpsPage() {
   const staff = await requireStaff(["content", "support", "analyst"], "/staff/events");
@@ -47,10 +50,10 @@ export default async function StaffEventsOpsPage() {
               key: String(doc.id),
               cells: [
                 String(doc.title),
-                doc.startsAt ? new Date(String(doc.startsAt)).toLocaleString("en-GH") : String(doc.date || "—"),
-                String(doc.format || "—"),
-                String(doc.pricing || "—"),
-                String(doc.status || "—"),
+                doc.startsAt ? new Date(String(doc.startsAt)).toLocaleString("en-GH") : String(doc.date || "-"),
+                String(doc.format || "-"),
+                String(doc.pricing || "-"),
+                String(doc.status || "-"),
                 <span key="actions" className="flex flex-wrap gap-2">
                   <Link href={`/staff/events/${doc.id}`} className="text-xs text-accent hover:underline">
                     Open

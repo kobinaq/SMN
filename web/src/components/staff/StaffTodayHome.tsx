@@ -77,7 +77,7 @@ export function StaffTodayHome({
       <StaffPageHeader
         eyebrow={roleLabel}
         title={`Today, ${name}`}
-        hint={hasWork ? "Start with what needs a decision." : "Nothing waiting — you're clear."}
+        hint={hasWork ? "Start with what needs a decision." : "Nothing waiting. You're clear."}
         action={{ href: "/", label: "View live site" }}
       />
 
@@ -137,7 +137,7 @@ export function StaffTodayHome({
       <div>
         <button
           type="button"
-          className="mb-3 text-xs font-medium tracking-wide text-text-3 transition hover:text-text-2"
+          className="mb-3 inline-flex min-h-11 items-center text-xs font-medium tracking-wide text-text-3 transition hover:text-text-2"
           onClick={() => setMoreOpen((value) => !value)}
           aria-expanded={moreOpen}
         >

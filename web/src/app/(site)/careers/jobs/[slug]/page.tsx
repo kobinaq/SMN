@@ -1,23 +1,53 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { MapPin } from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
 import { getMember } from "@/lib/auth/member";
 import { getPublishedOpportunity } from "@/lib/opportunities";
+import { itemShareImages } from "@/lib/share-metadata";
+import { seoTitle } from "@/lib/brand";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const { slug } = await params;
   try {
     const opportunity = await getPublishedOpportunity(slug);
+    const canonical = `/careers/jobs/${slug}`;
+    const title = seoTitle(`${opportunity.title} at ${opportunity.company}`);
+    const parentMeta = await parent;
+    // Jobs have no image field: forward parent hashed opengraph-image /
+    // twitter-image (child openGraph without images does not inherit them).
+    const share = itemShareImages(null, {
+      openGraphImages: parentMeta.openGraph?.images,
+      twitterImages: parentMeta.twitter?.images,
+    });
     return {
-      title: `${opportunity.title} · ${opportunity.company}`,
+      title,
       description: opportunity.summary,
-      alternates: { canonical: `/careers/jobs/${slug}` },
+      alternates: { canonical },
+      openGraph: {
+        title: title.absolute,
+        description: opportunity.summary,
+        type: "website",
+        url: canonical,
+        ...(share.openGraphImages ? { images: share.openGraphImages } : {}),
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: title.absolute,
+        description: opportunity.summary,
+        ...(share.twitterImages ? { images: share.twitterImages } : {}),
+      },
     };
   } catch {
-    return { title: "Opportunity" };
+    return {
+      title: seoTitle("Career opportunity"),
+      description: "This job listing could not be found.",
+    };
   }
 }
 

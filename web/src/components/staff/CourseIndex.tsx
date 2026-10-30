@@ -50,7 +50,7 @@ export function CourseIndex({
   newHref = "/staff/learning/courses/new",
   newLabel = "New course",
   emptyTitle = "No courses yet",
-  emptyDescription = "Create your first programme — a self-paced course members work through on their own, or a live cohort with a scheduled session plan.",
+  emptyDescription = "Create your first programme: a self-paced course members work through on their own, or a live cohort with a scheduled session plan.",
   warnOnOpen,
 }: {
   courses: CourseSummary[];
@@ -190,7 +190,7 @@ export function CourseIndex({
                 </div>
 
                 {course.status === "draft" && !course.ready ? (
-                  <p className="mt-3 text-xs text-warn">Not ready to publish — open the course to see what&rsquo;s missing.</p>
+                  <p className="mt-3 text-xs text-warn">Not ready to publish. Open the course to see what&rsquo;s missing.</p>
                 ) : null}
 
                 <div className="mt-auto flex flex-wrap items-center gap-2 pt-5">
@@ -218,7 +218,7 @@ export function CourseIndex({
                     type="button"
                     onClick={() => setPendingDelete(course)}
                     aria-label={`Delete ${course.title}`}
-                    className="ml-auto rounded-full p-2 text-text-3 transition-colors hover:bg-danger-bg hover:text-danger"
+                    className="ml-auto inline-flex min-h-11 min-w-11 items-center justify-center rounded-full text-text-3 transition-colors hover:bg-danger-bg hover:text-danger"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>

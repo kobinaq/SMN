@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { MapPin, Search, UserRound } from "@/components/ui/icons";
 import type { MentorDirectoryItem } from "@/lib/mentors";
+import { getFocusableElements, trapTabKey } from "@/lib/focus-trap";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Surface";
 import { Input, Textarea } from "@/components/ui/Field";
@@ -100,6 +101,45 @@ export function MentorDirectory({ mentors }: { mentors: MentorDirectoryItem[] })
 function RequestDialog({ mentor, onClose }: { mentor: MentorDirectoryItem; onClose: () => void }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [feedback, setFeedback] = useState("");
+  const titleId = useId();
+  const errorId = useId();
+  const topicId = useId();
+  const goalId = useId();
+  const messageId = useId();
+  const formatId = useId();
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null;
+    const node = panelRef.current;
+    // Prefer the first field in the form so Close is not the landing target.
+    const form = node?.querySelector("form");
+    const focusRoot = form || node;
+    if (focusRoot) getFocusableElements(focusRoot)[0]?.focus();
+
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+        return;
+      }
+      if (panelRef.current) {
+        trapTabKey(event, panelRef.current);
+      }
+    }
+
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      previous?.focus();
+    };
+  }, [onClose]);
+
+  useEffect(() => {
+    if (status !== "error") return;
+    const form = panelRef.current?.querySelector("form");
+    if (form) getFocusableElements(form)[0]?.focus();
+  }, [status, feedback]);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -117,53 +157,116 @@ function RequestDialog({ mentor, onClose }: { mentor: MentorDirectoryItem; onClo
       return;
     }
     setStatus("success");
-    setFeedback("Request sent. The SMN team will review it and follow up.");
+    setFeedback("Request sent. The TSA team will review it and follow up.");
   }
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-3 backdrop-blur-sm sm:items-center animate-[staff-fade-in_var(--dur-fast)_var(--ease-out)_both]"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="mentor-request-title"
+      role="presentation"
+      onClick={onClose}
     >
-      <div className="max-h-[90svh] w-full max-w-xl overflow-y-auto rounded-[var(--radius-lg)] border border-edge bg-overlay p-5 shadow-[var(--shadow-3)] sm:p-7 animate-[rise-in_var(--dur-base)_var(--ease-out)_both]">
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={status === "error" ? errorId : undefined}
+        className="max-h-[90svh] w-full max-w-xl overflow-y-auto rounded-[var(--radius-lg)] border border-edge bg-overlay p-5 shadow-[var(--shadow-3)] sm:p-7 animate-[rise-in_var(--dur-base)_var(--ease-out)_both]"
+        onClick={(event) => event.stopPropagation()}
+      >
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="eyebrow text-accent">Mentorship request</p>
-            <h2 id="mentor-request-title" className="mt-2 font-display text-xl text-text-1">
+            <h2 id={titleId} className="mt-2 font-display text-xl text-text-1">
               Ask {mentor.name}
             </h2>
           </div>
-          <button type="button" onClick={onClose} className="rounded-full px-3 py-1 text-sm text-text-3 transition-colors hover:bg-inset hover:text-text-1">
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex min-h-11 items-center rounded-full px-3 text-sm text-text-3 transition-colors hover:bg-inset hover:text-text-1"
+          >
             Close
           </button>
         </div>
         {status === "success" ? (
-          <div className="mt-6 rounded-[var(--radius-md)] border border-ai/25 bg-ai-bg p-5 text-sm text-ai">{feedback}</div>
+          <div className="mt-6 rounded-[var(--radius-md)] border border-ai/25 bg-ai-bg p-5 text-sm text-ai" role="status" aria-live="polite">
+            {feedback}
+          </div>
         ) : (
           <form className="mt-6 space-y-3" onSubmit={submit}>
             <input name="website" className="hidden" tabIndex={-1} autoComplete="off" />
-            <Select name="topic" required defaultValue="">
-              <option value="" disabled>
-                Choose a topic
-              </option>
-              {mentor.topics.map((item) => (
-                <option key={item}>{item}</option>
-              ))}
-            </Select>
-            <Input name="goal" required minLength={10} maxLength={200} placeholder="What would a useful outcome look like?" />
-            <Textarea name="message" required minLength={20} maxLength={2000} placeholder="Share context, what you have tried, and where you are stuck." />
-            <Select name="preferredFormat" required defaultValue="Video call">
-              <option>Video call</option>
-              <option>Portfolio review</option>
-              <option>Async feedback</option>
-              <option>Group office hours</option>
-            </Select>
+            <div>
+              <label id={`${topicId}-label`} htmlFor={topicId} className="mb-1.5 block text-sm font-medium text-text-2">
+                Topic
+              </label>
+              <Select
+                id={topicId}
+                name="topic"
+                required
+                defaultValue=""
+                aria-labelledby={`${topicId}-label`}
+              >
+                <option value="" disabled>
+                  Choose a topic
+                </option>
+                {mentor.topics.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </Select>
+            </div>
+            <div>
+              <label htmlFor={goalId} className="mb-1.5 block text-sm font-medium text-text-2">
+                Desired outcome
+              </label>
+              <Input
+                id={goalId}
+                name="goal"
+                required
+                minLength={10}
+                maxLength={200}
+                placeholder="What would a useful outcome look like?"
+              />
+            </div>
+            <div>
+              <label htmlFor={messageId} className="mb-1.5 block text-sm font-medium text-text-2">
+                Context
+              </label>
+              <Textarea
+                id={messageId}
+                name="message"
+                required
+                minLength={20}
+                maxLength={2000}
+                placeholder="Share context, what you have tried, and where you are stuck."
+              />
+            </div>
+            <div>
+              <label id={`${formatId}-label`} htmlFor={formatId} className="mb-1.5 block text-sm font-medium text-text-2">
+                Preferred format
+              </label>
+              <Select
+                id={formatId}
+                name="preferredFormat"
+                required
+                defaultValue="Video call"
+                aria-labelledby={`${formatId}-label`}
+              >
+                <option>Video call</option>
+                <option>Portfolio review</option>
+                <option>Async feedback</option>
+                <option>Group office hours</option>
+              </Select>
+            </div>
             <Button type="submit" disabled={status === "loading"}>
               {status === "loading" ? "Sending…" : "Send request"}
             </Button>
-            {feedback ? <p className="text-sm text-danger">{feedback}</p> : null}
+            {feedback ? (
+              <p id={errorId} className="text-sm text-danger" role="alert" aria-live="assertive">
+                {feedback}
+              </p>
+            ) : null}
           </form>
         )}
       </div>

@@ -8,8 +8,9 @@ import { CohortWorkspace } from "@/components/app/CohortWorkspace";
 import { requireMember } from "@/lib/auth/member";
 import { assessmentHref, getMemberCourseAssessments } from "@/lib/lms-assess";
 import { getCohortWorkspace, getLmsCourse } from "@/lib/lms";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Course" };
+export const metadata = { title: pageTitle("Course") };
 
 export default async function LmsCoursePage(props: { params: Promise<{ courseSlug: string }> }) {
   const { courseSlug } = await props.params;

@@ -54,8 +54,8 @@ export async function getCourses(): Promise<CourseItem[]> {
       const courseKey = String(courseRef && typeof courseRef === "object" && "id" in courseRef ? (courseRef as { id: unknown }).id : courseRef);
       lessonCounts.set(courseKey, (lessonCounts.get(courseKey) || 0) + 1);
     }
-    // The catalog at /programs/courses is the self-paced catalogue; live cohorts
-    // are sold through /programs/cohort, so exclude them here.
+    // The catalog at /academy/courses is the self-paced catalogue; live cohorts
+    // are sold through /academy/cohort, so exclude them here.
     return result.docs
       .filter((doc) => (doc as { delivery?: string | null }).delivery !== "cohort")
       .map((doc): CourseItem => {
@@ -117,6 +117,10 @@ export async function getEvents(): Promise<EventItem[]> {
         .split(/\n+/)
         .map((line) => line.trim())
         .filter(Boolean);
+      const customImage =
+        typeof doc.image === "object" && doc.image && "url" in doc.image && doc.image.url
+          ? (doc.image.url as string)
+          : null;
       return {
         id: doc.id,
         slug: doc.slug as string,
@@ -126,13 +130,11 @@ export async function getEvents(): Promise<EventItem[]> {
         time: (doc.time as string) || "",
         summary: doc.summary as string,
         registrationUrl: `/events/${doc.slug}`,
-        image:
-          typeof doc.image === "object" && doc.image && "url" in doc.image && doc.image.url
-            ? (doc.image.url as string)
-            : img.defaultEvent,
+        image: customImage || img.defaultEvent,
+        hasCustomImage: Boolean(customImage),
         format: (record.venue as string) || formatLabel,
         price: priceLabel,
-        host: (record.host as string) || "SMN",
+        host: (record.host as string) || "TSA",
         highlights: bodyHighlights,
         pricing: pricing as "free" | "paid",
         amount,
@@ -142,6 +144,7 @@ export async function getEvents(): Promise<EventItem[]> {
         address: (record.address as string) || null,
         onlineUrl: (record.onlineUrl as string) || null,
         status: String(record.status || "published"),
+        updatedAt: typeof doc.updatedAt === "string" ? doc.updatedAt : undefined,
       };
     });
   }, fallbackEvents);
@@ -178,6 +181,7 @@ export async function getPosts(): Promise<BlogPost[]> {
         cover,
         featured: false,
         body: blogBodyFromCms(doc.content, excerpt),
+        updatedAt: typeof doc.updatedAt === "string" ? doc.updatedAt : undefined,
         ...author,
       };
     });
@@ -228,6 +232,7 @@ export async function getResources(): Promise<ResourceItem[]> {
       highlights: [],
       body: [doc.description as string],
       fileUrl: uploadUrl(doc.file),
+      updatedAt: typeof doc.updatedAt === "string" ? doc.updatedAt : undefined,
     }));
   }, fallbackResources);
 }

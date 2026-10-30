@@ -56,15 +56,25 @@ export function MentorApplication({ status }: { status: string | null }) {
           <Input id="ma-title" name="title" required minLength={3} maxLength={120} />
         </Field>
         <Field label="Seniority" htmlFor="ma-seniority" required>
-          <Select id="ma-seniority" name="seniority" required defaultValue="">
-            <option value="" disabled>
-              Seniority
-            </option>
-            <option>Mid-level</option>
-            <option>Senior</option>
-            <option>Lead / Head</option>
-            <option>Founder / Executive</option>
-          </Select>
+          {({ id, labelId, describedBy, invalid }) => (
+            <Select
+              id={id}
+              name="seniority"
+              required
+              defaultValue=""
+              aria-labelledby={labelId}
+              aria-describedby={describedBy}
+              aria-invalid={invalid || undefined}
+            >
+              <option value="" disabled>
+                Choose seniority
+              </option>
+              <option>Mid-level</option>
+              <option>Senior</option>
+              <option>Lead / Head</option>
+              <option>Founder / Executive</option>
+            </Select>
+          )}
         </Field>
       </div>
       <Field label="Bio" htmlFor="ma-bio" required>
@@ -92,7 +102,11 @@ export function MentorApplication({ status }: { status: string | null }) {
       <Button type="submit" disabled={state === "loading"}>
         {state === "loading" ? "Submitting…" : "Submit for review"}
       </Button>
-      {feedback ? <p className="text-sm text-danger">{feedback}</p> : null}
+      {feedback ? (
+        <p className="text-sm text-danger" role="alert">
+          {feedback}
+        </p>
+      ) : null}
     </form>
   );
 }

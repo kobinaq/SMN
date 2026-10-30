@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { cohortStartSentence } from "@/lib/cohort-copy";
 import { ArrowRight, BookOpen, CalendarDays, Users } from "@/components/ui/icons";
 import { LearningDashboard } from "@/components/app/LearningDashboard";
 import { PaymentSuccessBeacon } from "@/components/payments/PaymentSuccessBeacon";
@@ -10,8 +11,9 @@ import { getPayloadClient } from "@/lib/payload";
 import { fulfillSuccessfulPayment } from "@/lib/payments/fulfill";
 import { paystackConfigured, paystackVerify } from "@/lib/payments/paystack";
 import { getSiteSettings } from "@/lib/cms";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Learning" };
+export const metadata = { title: pageTitle("Learning") };
 
 type Props = { searchParams: Promise<{ reference?: string }> };
 
@@ -106,7 +108,10 @@ export default async function LearningPage({ searchParams }: Props) {
             <section className="space-y-3">
               <div className="flex items-end justify-between gap-3">
                 <h2 className="font-display text-xl text-text-1">Your programmes</h2>
-                <Link href="/app/learning/courses" className="text-sm text-accent hover:underline">
+                <Link
+                  href="/app/learning/courses"
+                  className="inline-flex min-h-11 items-center text-sm text-accent hover:underline"
+                >
                   View all
                 </Link>
               </div>
@@ -166,8 +171,8 @@ export default async function LearningPage({ searchParams }: Props) {
             workspaces will appear here.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-2">
-            <Button href="/programs/cohort">Flagship cohort</Button>
-            <Button href="/programs/courses" variant="secondary">
+            <Button href="/academy/cohort">Flagship cohort</Button>
+            <Button href="/academy/courses" variant="secondary">
               Self-paced courses
             </Button>
           </div>
@@ -175,7 +180,7 @@ export default async function LearningPage({ searchParams }: Props) {
       )}
 
       <p className="text-sm text-text-3">
-        Next intake: {settings.cohort.startDate}.{" "}
+        {cohortStartSentence(settings.cohort.startDate)}{" "}
         <Link href="/apply" className="text-accent hover:underline">
           Apply
         </Link>

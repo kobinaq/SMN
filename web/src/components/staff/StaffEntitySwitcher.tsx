@@ -209,6 +209,7 @@ export function StaffEntitySwitcher({
               onChange={(event) => setQuery(event.target.value)}
               placeholder={placeholder}
               className="min-w-0 flex-1 bg-transparent py-1.5 text-sm text-text-1 outline-none placeholder:text-text-3"
+              aria-label={placeholder}
               aria-autocomplete="list"
               aria-controls={listId}
               onKeyDown={(event) => {

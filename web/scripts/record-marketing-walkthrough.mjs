@@ -29,19 +29,18 @@ const VIEWPORT = { width: 1440, height: 900 };
 /** @type {{ name: string; path: string; dwellMs?: number; scrollPasses?: number }[]} */
 const TOUR = [
   { name: "01-home", path: "/", dwellMs: 1800, scrollPasses: 3 },
-  { name: "02-programs", path: "/programs", dwellMs: 1200, scrollPasses: 2 },
-  { name: "03-cohort", path: "/programs/cohort", dwellMs: 1200, scrollPasses: 2 },
-  { name: "04-courses", path: "/programs/courses", dwellMs: 1000, scrollPasses: 2 },
+  { name: "02-academy", path: "/academy", dwellMs: 1200, scrollPasses: 2 },
+  { name: "03-cohort", path: "/academy/cohort", dwellMs: 1200, scrollPasses: 2 },
+  { name: "04-courses", path: "/academy/courses", dwellMs: 1000, scrollPasses: 2 },
   { name: "05-resources", path: "/resources", dwellMs: 1000, scrollPasses: 1 },
   { name: "06-insights", path: "/insights", dwellMs: 1000, scrollPasses: 1 },
-  { name: "07-mentorship", path: "/mentorship", dwellMs: 1000, scrollPasses: 2 },
-  { name: "08-community", path: "/community", dwellMs: 1000, scrollPasses: 1 },
+  { name: "07-community", path: "/community", dwellMs: 1000, scrollPasses: 2 },
+  { name: "08-mentors", path: "/community/mentors", dwellMs: 1000, scrollPasses: 2 },
   { name: "09-events", path: "/events", dwellMs: 1000, scrollPasses: 1 },
-  { name: "10-stories", path: "/stories", dwellMs: 1000, scrollPasses: 1 },
-  { name: "11-employers", path: "/employers", dwellMs: 1000, scrollPasses: 2 },
-  { name: "12-about", path: "/about", dwellMs: 1000, scrollPasses: 2 },
-  { name: "13-apply", path: "/apply", dwellMs: 1200, scrollPasses: 1 },
-  { name: "14-contact", path: "/contact", dwellMs: 1000, scrollPasses: 1 },
+  { name: "10-partner", path: "/partner", dwellMs: 1000, scrollPasses: 2 },
+  { name: "11-about", path: "/about", dwellMs: 1000, scrollPasses: 2 },
+  { name: "12-apply", path: "/apply", dwellMs: 1200, scrollPasses: 1 },
+  { name: "13-contact", path: "/contact", dwellMs: 1000, scrollPasses: 1 },
 ];
 
 async function sleep(ms) {

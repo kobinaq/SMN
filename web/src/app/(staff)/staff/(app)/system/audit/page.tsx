@@ -2,6 +2,9 @@ import { StaffEmpty, StaffPageHeader, StaffPanel, StaffTable } from "@/component
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { listCollection, relationId } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Audit log", { staff: true }) };
 
 export default async function StaffAuditPage({
   searchParams,
@@ -41,6 +44,7 @@ export default async function StaffAuditPage({
             name="q"
             defaultValue={q || ""}
             placeholder="Search action, entity, or reason"
+            aria-label="Search audit log"
             className="field w-full rounded-[var(--radius-lg)] border border-edge-subtle bg-inset px-4 py-3 text-text-1 placeholder:text-text-3"
           />
           <button type="submit" className="rounded-full border border-accent/40 bg-accent-bg px-4 py-3 text-sm text-accent">
@@ -60,8 +64,8 @@ export default async function StaffAuditPage({
                     <small className="text-xs text-text-3">{doc.reason}</small>
                   </span>,
                   `${doc.entityType} · ${doc.entityId}`,
-                  actor && "email" in actor ? String(actor.email) : relationId(doc.actor) || "—",
-                  doc.createdAt ? new Date(doc.createdAt).toLocaleString("en-GH") : "—",
+                  actor && "email" in actor ? String(actor.email) : relationId(doc.actor) || "-",
+                  doc.createdAt ? new Date(doc.createdAt).toLocaleString("en-GH") : "-",
                 ],
               };
             })}

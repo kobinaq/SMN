@@ -2,6 +2,9 @@ import { StaffEmptyState, StaffPageHeader, StaffPanel, StaffTable } from "@/comp
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { listCollection } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Posts", { staff: true }) };
 
 export default async function StaffPostsPage() {
   const staff = await requireStaff(["content", "analyst"], "/staff/content/posts");
@@ -27,7 +30,7 @@ export default async function StaffPostsPage() {
                 doc.title,
                 doc.category,
                 doc.publishedAt ? "Published" : "Draft",
-                doc.updatedAt ? new Date(doc.updatedAt).toLocaleDateString("en-GH") : "—",
+                doc.updatedAt ? new Date(doc.updatedAt).toLocaleDateString("en-GH") : "-",
               ],
             }))}
           />

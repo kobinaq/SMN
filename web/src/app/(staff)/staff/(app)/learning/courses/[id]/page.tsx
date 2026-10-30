@@ -16,6 +16,7 @@ import {
 } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { isAIFeatureEnabled } from "@/lib/ai/config";
+import { pageTitle } from "@/lib/brand";
 import { calculateCourseAnalytics, type AnalyticsEnrollment, type AnalyticsLesson, type AnalyticsModule, type AnalyticsProgress } from "@/lib/lms-analytics";
 import { evaluateCourseReadiness, type CourseReadinessInput, type CurriculumLesson } from "@/lib/lms-readiness";
 import { getPayloadClient } from "@/lib/payload";
@@ -25,7 +26,7 @@ import { StaffRecordForm, StaffDeleteButton } from "@/components/staff/StaffReco
 import { AddLessonForm, AddModuleForm } from "../../CurriculumCreateForms";
 import { AddSessionForm, AnnouncementComposer, AttendanceRegister } from "../../CohortOpsForms";
 
-export const metadata = { title: "Course" };
+export const metadata = { title: pageTitle("Course", { staff: true }) };
 
 function relationID(value: unknown) {
   return String(value && typeof value === "object" && "id" in value ? value.id : (value ?? ""));
@@ -247,7 +248,7 @@ export default async function StaffCourseWorkspacePage({
             <ul className="mt-4 space-y-2">
               {readiness.checks.map(({ label, ready }) => (
                 <li key={label} className={cn("flex items-center gap-2 text-sm", ready ? "text-ai" : "text-text-3")}>
-                  <span aria-hidden="true">{ready ? "✓" : "—"}</span>
+                  <span aria-hidden="true">{ready ? "✓" : "-"}</span>
                   {label}
                 </li>
               ))}
@@ -275,18 +276,18 @@ export default async function StaffCourseWorkspacePage({
             <dl className="mt-4 space-y-3 text-sm">
               <div className="flex justify-between gap-4 border-b border-edge-subtle pb-2">
                 <dt className="text-text-3">Instructor</dt>
-                <dd className="text-right text-text-1">{selected.instructor || "Not set — open Settings"}</dd>
+                <dd className="text-right text-text-1">{selected.instructor || "Not set. Open Settings"}</dd>
               </div>
               <div className="flex justify-between gap-4 border-b border-edge-subtle pb-2">
                 <dt className="text-text-3">Category</dt>
-                <dd className="text-right text-text-1">{selected.category || "Not set — open Settings"}</dd>
+                <dd className="text-right text-text-1">{selected.category || "Not set. Open Settings"}</dd>
               </div>
               <div className="flex justify-between gap-4 border-b border-edge-subtle pb-2">
                 <dt className="text-text-3">Learning outcomes</dt>
                 <dd className="text-right text-text-1">
                   {(selected.learningOutcomes || []).length
                     ? `${(selected.learningOutcomes || []).length} set`
-                    : "Not set — open Settings"}
+                    : "Not set. Open Settings"}
                 </dd>
               </div>
               <div className="flex justify-between gap-4 border-b border-edge-subtle pb-2">
@@ -496,7 +497,7 @@ export default async function StaffCourseWorkspacePage({
             {announcements.docs.length ? (
               announcements.docs.map((announcement) => {
                 const author = announcement.author;
-                const authorName = author && typeof author === "object" ? (author as { name?: string }).name || "SMN team" : "SMN team";
+                const authorName = author && typeof author === "object" ? (author as { name?: string }).name || "TSA team" : "TSA team";
                 return (
                   <article key={announcement.id} className="rounded-[var(--radius-lg)] border border-edge-subtle bg-inset p-4">
                     <div className="flex flex-wrap items-center gap-2">
@@ -651,7 +652,7 @@ export default async function StaffCourseWorkspacePage({
               { label: "Enrolled", value: analytics.enrolled },
               { label: "Active (30d)", value: analytics.activeLearners },
               { label: "Completion rate", value: `${analytics.completionRate}%` },
-              { label: "Avg. completion days", value: analytics.averageCompletionDays ?? "—" },
+              { label: "Avg. completion days", value: analytics.averageCompletionDays ?? "-" },
               { label: "Inactive learners", value: analytics.inactiveLearners },
               { label: "Abandonment rate", value: `${analytics.abandonmentRate}%` },
             ]}
@@ -754,7 +755,7 @@ export default async function StaffCourseWorkspacePage({
                       name: "featured",
                       label: "Next intake on the marketing site",
                       type: "checkbox",
-                      description: "Homepage, /programs/cohort, and /apply use this published cohort.",
+                      description: "Homepage, /academy/cohort, and /apply use this published cohort.",
                     },
                     { name: "startDate", label: "Start (public)", type: "text", placeholder: "September 2026" },
                     {
@@ -763,7 +764,7 @@ export default async function StaffCourseWorkspacePage({
                       type: "text",
                       placeholder: "Rolling. Apply early",
                     },
-                    { name: "duration", label: "Duration", type: "text", placeholder: "8 weeks" },
+                    { name: "duration", label: "Duration", type: "text", placeholder: "4 weeks" },
                     { name: "seats", label: "Seats", type: "number" },
                     { name: "sessions", label: "Sessions", type: "text", placeholder: "2 live sessions per week" },
                     { name: "format", label: "Format", type: "text" },

@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/Field";
 import { Select } from "@/components/ui/Select";
 
 const sourceLabel: Record<string, string> = {
-  manual: "SMN verified",
+  manual: "TSA verified",
   partner: "Partner listing",
   imported: "External opportunity",
 };

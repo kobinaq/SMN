@@ -34,8 +34,8 @@ export async function POST(request: Request) {
     if (login.token) await setMemberTokenCookie(login.token);
     await sendEmail({
       to: parsed.data.email,
-      subject: "Welcome to Social Marketers Network",
-      text: `Hi ${parsed.data.name},\n\nYour SMN member account is ready. You can now complete your profile, browse mentors, explore opportunities, and access learning when staff grants your enrollment.\n\nSocial Marketers Network`,
+      subject: "Welcome to Think Social Academy",
+      text: `Hi ${parsed.data.name},\n\nYour TSA member account is ready. You can now complete your profile, browse mentors, explore opportunities, and access learning when staff grants your enrollment.\n\nThink Social Academy`,
     });
     return Response.json({ user: login.user }, { status: 201 });
   } catch (error) {

@@ -7,6 +7,7 @@ import { BlogCard } from "@/components/blog/BlogCard";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { formatBlogDate, getBlogPost, getBlogPosts, getRelatedPosts } from "@/lib/blog";
+import { seoTitle } from "@/lib/brand";
 import { getSiteSettings } from "@/lib/cms";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -21,12 +22,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getBlogPost(slug);
   if (!post) return {};
   const canonical = `/insights/${slug}`;
+  const title = seoTitle(post.title);
   return {
-    title: post.title,
+    title,
     description: post.excerpt,
     alternates: { canonical },
     openGraph: {
-      title: post.title,
+      title: title.absolute,
       description: post.excerpt,
       type: "article",
       url: canonical,
@@ -35,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
+      title: title.absolute,
       description: post.excerpt,
       images: [post.cover],
     },
@@ -69,7 +71,7 @@ export default async function InsightArticlePage({ params }: Props) {
           publisher: {
             "@type": "Organization",
             name: site.name,
-            logo: { "@type": "ImageObject", url: `${base}/brand/logo-blue.png` },
+            logo: { "@type": "ImageObject", url: `${base}/brand/tsa-logo-full-blue.png` },
           },
           mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
           url: pageUrl,
@@ -80,7 +82,7 @@ export default async function InsightArticlePage({ params }: Props) {
         <div className="container-wide pb-8 sm:pb-10 md:pb-12">
           <Link
             href="/insights"
-            className="inline-flex min-h-10 items-center gap-2 text-sm text-text-3 transition hover:text-text-1"
+            className="inline-flex min-h-11 items-center gap-2 text-sm text-text-3 transition hover:text-text-1"
           >
             <ArrowLeft className="h-4 w-4" />
             All insights

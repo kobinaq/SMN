@@ -14,10 +14,13 @@ export function AuthShell({
     <div className="flex min-h-svh flex-col bg-canvas">
       <header className="border-b border-edge-subtle px-4 py-4 sm:px-6">
         <div className="mx-auto flex max-w-md items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <BrandLogo width={120} height={32} className="h-7" />
+          <Link href="/" className="inline-flex min-h-11 items-center gap-2" aria-label="Think Social Academy home">
+            <BrandLogo className="h-10" />
           </Link>
-          <Link href="/" className="text-xs text-text-3 transition hover:text-text-1">
+          <Link
+            href="/"
+            className="inline-flex min-h-11 items-center rounded-[var(--radius-sm)] px-2 text-xs text-text-3 transition hover:text-text-1"
+          >
             Back to site
           </Link>
         </div>

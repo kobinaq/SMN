@@ -400,7 +400,7 @@ export function ContentStudio({
       await navigator.clipboard.writeText(text);
       toast.push("Copied to clipboard.", "success");
     } catch {
-      toast.push("Couldn’t copy — use the JSON view to select manually.", "error");
+      toast.push("Couldn’t copy. Use the JSON view to select manually.", "error");
     }
   }
 
@@ -425,7 +425,7 @@ export function ContentStudio({
 
       <p className="flex items-center gap-2 border border-ai/25 bg-ai-bg px-3 py-2 text-xs text-ai">
         <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden />
-        AI-generated drafts — review before publishing. Saving stores a versioned draft and never publishes it.
+        AI-generated drafts. Review before publishing. Saving stores a versioned draft and never publishes it.
       </p>
 
       <form
@@ -495,7 +495,7 @@ export function ContentStudio({
             <div className="mt-3 grid grid-cols-2 gap-3">
               <label className={labelCls}>
                 Audience
-                <input className={field} name="audience" defaultValue="SMN learners" maxLength={200} />
+                <input className={field} name="audience" defaultValue="TSA learners" maxLength={200} />
               </label>
               <label className={labelCls}>
                 Level
@@ -557,7 +557,7 @@ export function ContentStudio({
             </details>
 
             <button
-              className="mt-4 inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-accent-strong px-5 py-2 text-sm font-medium text-text-1 transition hover:bg-[#0c3ab0] active:scale-[0.97] disabled:opacity-50"
+              className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-accent-strong px-5 py-2 text-sm font-medium text-text-1 transition hover:bg-[#0c3ab0] active:scale-[0.97] disabled:opacity-50"
               disabled={busy}
               type="submit"
             >
@@ -658,7 +658,7 @@ export function ContentStudio({
                   </div>
                 )}
                 <button
-                  className="mt-4 inline-flex min-h-10 items-center justify-center rounded-full bg-ai px-5 py-2 text-sm font-semibold text-[#07110c] transition hover:bg-[#63c3a4] active:scale-[0.97] disabled:opacity-50"
+                  className="mt-4 inline-flex min-h-11 items-center justify-center rounded-full bg-ai px-5 py-2 text-sm font-semibold text-[#07110c] transition hover:bg-[#63c3a4] active:scale-[0.97] disabled:opacity-50"
                   disabled={busy}
                   onClick={(event) => {
                     event.preventDefault();
@@ -671,7 +671,7 @@ export function ContentStudio({
                 </button>
                 {kind === "quiz" || kind === "rubric" ? (
                   <button
-                    className="mt-3 ml-3 inline-flex min-h-10 items-center justify-center rounded-full border border-accent/40 px-5 py-2 text-sm text-accent transition hover:bg-accent-bg disabled:opacity-50"
+                    className="mt-3 ml-3 inline-flex min-h-11 items-center justify-center rounded-full border border-accent/40 px-5 py-2 text-sm text-accent transition hover:bg-accent-bg disabled:opacity-50"
                     disabled={busy}
                     onClick={(event) => {
                       event.preventDefault();
@@ -690,7 +690,7 @@ export function ContentStudio({
       </form>
 
       <p className="text-xs leading-relaxed text-text-3">
-        Generated material is a versioned draft. Saving never publishes it — use the ordinary Course Builder readiness
+        Generated material is a versioned draft. Saving never publishes it. Use the ordinary Course Builder readiness
         and publication flow after human review.
       </p>
     </div>

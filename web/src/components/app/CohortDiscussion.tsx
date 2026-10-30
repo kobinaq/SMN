@@ -55,7 +55,11 @@ export function CohortDiscussion({ courseId, posts }: { courseId: string | numbe
       <p className="mt-1 text-sm text-text-3">Ask questions and share with your cohort and facilitators.</p>
 
       <form onSubmit={onSubmit} className="mt-4">
+        <label htmlFor="cohort-discussion-message" className="sr-only">
+          Message to your cohort
+        </label>
         <Textarea
+          id="cohort-discussion-message"
           value={body}
           maxLength={4000}
           placeholder="Write a message to your cohort…"

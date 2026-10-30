@@ -91,7 +91,7 @@ export function ResourceDownloadForm({
           {downloadUrl ? (
             <a
               href={downloadUrl}
-              className="inline-flex min-h-10 items-center text-sm font-medium text-accent underline underline-offset-4 transition hover:text-text-1"
+              className="inline-flex min-h-11 items-center text-sm font-medium text-accent underline underline-offset-4 transition hover:text-text-1"
             >
               Open {resourceTitle}
             </a>

@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/Button";
 import { Card, PageHeader } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
 import { getMemberOpportunityActivity, getPublishedOpportunities } from "@/lib/opportunities";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Opportunities" };
+export const metadata = { title: pageTitle("Opportunities") };
 
 export default async function OpportunitiesAppPage() {
   const member = await requireMember("/app/opportunities");
@@ -19,7 +20,7 @@ export default async function OpportunitiesAppPage() {
       <PageHeader
         eyebrow="Opportunities"
         title="Marketing jobs & gigs"
-        description="A moderated mix of SMN listings and relevant roles imported from employers' public career feeds."
+        description="A moderated mix of TSA listings and relevant roles imported from employers' public career feeds."
         action={
           <Button href="/app/profile" variant="secondary">
             Strengthen profile
@@ -35,7 +36,7 @@ export default async function OpportunitiesAppPage() {
           <p className="mt-2 text-sm text-text-2">
             Staff can publish manual opportunities or approve roles collected from configured company sources.
           </p>
-          <Button href="/employers" variant="secondary" className="mt-6">
+          <Button href="/partner" variant="secondary" className="mt-6">
             For employers
           </Button>
         </Card>

@@ -21,7 +21,7 @@ export const SiteSettings: GlobalConfig = {
         {
           label: "Brand",
           fields: [
-            { name: "siteName", type: "text", required: true, defaultValue: "Social Marketers Network" },
+            { name: "siteName", type: "text", required: true, defaultValue: "Think Social Academy" },
             { name: "tagline", type: "textarea" },
             { name: "description", type: "textarea", admin: { description: "Default meta description" } },
             { name: "opsEmail", type: "email" },
@@ -48,8 +48,8 @@ export const SiteSettings: GlobalConfig = {
                 { name: "headline", type: "text" },
                 { name: "supportingCopy", type: "textarea" },
                 { name: "primaryCtaLabel", type: "text", defaultValue: "Apply for the next cohort" },
-                { name: "secondaryCtaLabel", type: "text", defaultValue: "Join the community" },
-                { name: "secondaryCtaHref", type: "text", defaultValue: "/community" },
+                { name: "secondaryCtaLabel", type: "text", defaultValue: "Explore the Academy" },
+                { name: "secondaryCtaHref", type: "text", defaultValue: "/academy" },
               ],
             },
           ],

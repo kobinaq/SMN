@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
 import { getLmsLesson } from "@/lib/lms";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Lesson" };
+export const metadata = { title: pageTitle("Lesson") };
 
 export default async function LmsLessonPage(
   props: { params: Promise<{ courseSlug: string; lessonSlug: string }> },
@@ -27,6 +28,7 @@ export default async function LmsLessonPage(
       lesson.attachments.length ||
       lesson.lessonType === "classroom",
   );
+  const tutorEnabled = process.env.AI_TUTOR_ENABLED === "true" && lesson.course.tutorEnabled;
 
   return (
     <div className="space-y-7">
@@ -158,7 +160,7 @@ export default async function LmsLessonPage(
         </Card>
       ) : null}
 
-      <div className="flex flex-col justify-between gap-3 border-t border-edge-subtle pt-6 sm:flex-row">
+      <div className="tutor-fab-action-safe flex flex-col justify-between gap-3 border-t border-edge-subtle pt-6 sm:flex-row">
         {lesson.previousHref ? (
           <Button href={lesson.previousHref} variant="secondary">
             <ArrowLeft className="h-4 w-4" />
@@ -178,9 +180,7 @@ export default async function LmsLessonPage(
           </Button>
         )}
       </div>
-      {process.env.AI_TUTOR_ENABLED === "true" && lesson.course.tutorEnabled ? (
-        <AITutor courseId={lesson.course.id} lessonId={lesson.id} />
-      ) : null}
+      {tutorEnabled ? <AITutor courseId={lesson.course.id} lessonId={lesson.id} /> : null}
     </div>
   );
 }

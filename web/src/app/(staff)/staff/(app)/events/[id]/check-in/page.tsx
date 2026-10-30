@@ -4,6 +4,9 @@ import { StaffPageHeader, StaffPanel, StaffSection } from "@/components/staff/ui
 import { Button } from "@/components/ui/Button";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Check-in", { staff: true }) };
 
 type Props = { params: Promise<{ id: string }> };
 

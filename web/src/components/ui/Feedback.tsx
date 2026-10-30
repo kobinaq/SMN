@@ -6,12 +6,16 @@ export function EmptyState({
   description,
   action,
   className,
+  headingLevel = "h2",
 }: {
   title: string;
   description?: string;
   action?: React.ReactNode;
   className?: string;
+  /** Ticket not-found is a page-level empty state and needs h1; elsewhere default to h2. */
+  headingLevel?: "h1" | "h2";
 }) {
+  const TitleTag = headingLevel;
   return (
     <div
       className={cn(
@@ -19,7 +23,7 @@ export function EmptyState({
         className,
       )}
     >
-      <p className="font-display text-lg text-text-1">{title}</p>
+      <TitleTag className="font-display text-lg text-text-1">{title}</TitleTag>
       {description ? <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-text-2">{description}</p> : null}
       {action ? <div className="mt-6 flex flex-wrap justify-center gap-2">{action}</div> : null}
     </div>

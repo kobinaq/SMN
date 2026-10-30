@@ -16,7 +16,9 @@ export function ApplicationForm({
 }) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const [levelError, setLevelError] = useState("");
   const [submittedKey, setSubmittedKey] = useState("");
+  const levelErrorId = "apply-level-error";
 
   useEffect(() => {
     trackEvent("application_start", { location: "apply_page" });
@@ -26,13 +28,20 @@ export function ApplicationForm({
     e.preventDefault();
     setStatus("loading");
     setMessage("");
+    setLevelError("");
 
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
+    // noValidate skips native required bubbles; required Selects need a manual check.
+    if (!String(data.level || "").trim()) {
+      setStatus("error");
+      setLevelError("Select an experience level.");
+      return;
+    }
     const dedupeKey = `${String(data.email || "").toLowerCase()}::${String(data.name || "")}`;
     if (submittedKey && submittedKey === dedupeKey) {
       setStatus("error");
-      setMessage("This application was already submitted in this session. Check your email or contact SMN if you need to update it.");
+      setMessage("This application was already submitted in this session. Check your email or contact TSA if you need to update it.");
       return;
     }
 
@@ -70,11 +79,11 @@ export function ApplicationForm({
         </p>
         <ul className="mt-4 list-disc space-y-2 pl-5 text-text-2">
           <li>No payment is due until after acceptance.</li>
-          <li>Check your inbox (and spam folder) for confirmation from SMN.</li>
+          <li>Check your inbox (and spam folder) for confirmation from TSA.</li>
           <li>If you do not hear back after five business days, contact us.</li>
         </ul>
         <div className="btn-row-mobile mt-6">
-          <Button href="/programs/cohort" variant="secondary">
+          <Button href="/academy/cohort" variant="secondary">
             Review cohort details
           </Button>
           <Button href="/contact" variant="ghost">
@@ -178,7 +187,7 @@ export function ApplicationForm({
           <input id="apply-role" className={field} name="role" required placeholder="Current role" />
         </div>
         <div>
-          <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-level">
+          <label id="apply-level-label" className="mb-1.5 block text-xs text-text-3" htmlFor="apply-level">
             Experience level
           </label>
           <Select
@@ -187,6 +196,10 @@ export function ApplicationForm({
             name="level"
             required
             defaultValue=""
+            aria-labelledby="apply-level-label"
+            aria-invalid={levelError ? true : undefined}
+            aria-describedby={levelError ? levelErrorId : undefined}
+            onChange={() => setLevelError("")}
           >
             <option value="" disabled>
               Experience level
@@ -197,6 +210,11 @@ export function ApplicationForm({
               </option>
             ))}
           </Select>
+          {levelError ? (
+            <p id={levelErrorId} className="mt-1.5 text-sm text-red-300" role="alert">
+              {levelError}
+            </p>
+          ) : null}
         </div>
         <div>
           <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-linkedin">
@@ -238,13 +256,13 @@ export function ApplicationForm({
       </div>
       <div>
         <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-source">
-          How did you hear about SMN? (optional)
+          How did you hear about Think Social Academy? (optional)
         </label>
         <input
           id="apply-source"
           className={field}
           name="source"
-          placeholder="How did you hear about SMN?"
+          placeholder="How did you hear about Think Social Academy?"
         />
       </div>
       <Button type="submit" disabled={status === "loading"} className="w-full md:w-auto">

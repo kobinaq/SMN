@@ -121,8 +121,13 @@ export function StaffRecordForm({
         </label>
       );
     }
+    const fieldId = `staff-field-${field.name}`;
     return (
-      <label key={field.name} className={`block text-sm text-text-2 ${wide ? "md:col-span-2" : ""}`}>
+      <label
+        key={field.name}
+        htmlFor={field.type === "select" ? fieldId : undefined}
+        className={`block text-sm text-text-2 ${wide ? "md:col-span-2" : ""}`}
+      >
         {field.label}
         {field.type === "textarea" ? (
           <textarea
@@ -135,6 +140,7 @@ export function StaffRecordForm({
           />
         ) : field.type === "select" ? (
           <Select
+            id={fieldId}
             className={staffFieldClass}
             name={field.name}
             required={field.required}

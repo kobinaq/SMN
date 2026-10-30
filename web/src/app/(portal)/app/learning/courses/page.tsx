@@ -5,8 +5,9 @@ import { Card, PageHeader, ProgressBar } from "@/components/ui/Surface";
 import { Chip } from "@/components/ui/Chip";
 import { requireMember } from "@/lib/auth/member";
 import { getLmsCourses } from "@/lib/lms";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Courses" };
+export const metadata = { title: pageTitle("Courses") };
 
 export default async function LmsCoursesPage() {
   const member = await requireMember("/app/learning/courses");
@@ -118,7 +119,7 @@ export default async function LmsCoursesPage() {
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-2">
             <Button href="/app/learning">Back to learning</Button>
-            <Button href="/programs/courses" variant="secondary">
+            <Button href="/academy/courses" variant="secondary">
               Browse public courses
             </Button>
           </div>

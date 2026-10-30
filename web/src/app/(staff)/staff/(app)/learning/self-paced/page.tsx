@@ -6,8 +6,9 @@ import { StaffMetricGrid, StaffPageHeader } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { loadCourseSummaries } from "@/lib/staff/learning-index";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Self-paced courses" };
+export const metadata = { title: pageTitle("Self-paced courses", { staff: true }) };
 
 export default async function StaffSelfPacedPage() {
   const staff = await requireStaff(["learning", "content", "support"], "/staff/learning/self-paced");
@@ -18,7 +19,7 @@ export default async function StaffSelfPacedPage() {
     <StaffPageHeader
       eyebrow="Learning"
       title="Self-paced courses"
-      hint="Courses members work through on their own — modules, lessons and assessments inside SMN."
+      hint="Courses members work through on their own: modules, lessons and assessments inside TSA."
     >
       <Button href="/staff/learning/courses/new">
         <Plus className="h-4 w-4" />
@@ -60,7 +61,7 @@ export default async function StaffSelfPacedPage() {
         newHref="/staff/learning/courses/new"
         newLabel="New course"
         emptyTitle="No self-paced courses yet"
-        emptyDescription="Create a course members work through on their own — modules, lessons and assessments inside SMN."
+        emptyDescription="Create a course members work through on their own: modules, lessons and assessments inside TSA."
       />
     </div>
   );

@@ -2,15 +2,16 @@ import Link from "next/link";
 import { SiteDocument } from "@/components/layout/SiteDocument";
 import { Button } from "@/components/ui/Button";
 import { cta } from "@/lib/cta";
+import { seoTitle } from "@/lib/brand";
 
 const quickLinks = [
-  { href: "/programs", label: "Academy" },
+  { href: "/academy", label: "Academy" },
   { href: "/events", label: "Events" },
   { href: "/contact", label: "Contact" },
 ];
 
 export const metadata = {
-  title: "Page not found · Social Marketers Network",
+  title: seoTitle("Page not found"),
   description: "The page you are looking for does not exist.",
 };
 

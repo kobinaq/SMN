@@ -6,12 +6,12 @@ import { COURSE_FEE_PENDING_LABEL, FEE_PENDING_LABEL } from "@/lib/currency";
  * Pricing defaults intentionally withhold unconfirmed figures.
  */
 export const site = {
-  name: "Social Marketers Network",
-  shortName: "SMN",
-  tagline: "Learn Social Media Marketing. Lead with AI. Gain Real-World Experience. Grow with Community.",
+  name: "Think Social Academy",
+  shortName: "TSA",
+  tagline: "Learn. Apply. Grow. Connect.",
   description:
-    "A professional learning network where beginners, early-career, and marketing professionals build the skills, experience, and network they need to thrive in a rapidly changing digital industry.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://socialmarketers.network",
+    "Think Social Academy is a social media marketing academy and community focused on thoughtful learning, practical application, and work designed to support brand and business results.",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://thinksocialacademy.com",
   email: process.env.OPS_EMAIL ?? "hello@socialmarketers.network",
   whatsappInvite:
     process.env.NEXT_PUBLIC_WHATSAPP_INVITE ?? "https://chat.whatsapp.com/socialmarketers",
@@ -21,26 +21,32 @@ export const site = {
     twitter: "https://x.com/smn_africa",
   },
   homepage: {
-    headline: "Learn Social Media Marketing. Lead with AI. Gain Real-World Experience. Grow with Community.",
+    // Tab 5 hero: Explore the Academy is the primary CTA, Join the Community the secondary.
+    headline: "Learn social media marketing. Put it into practice. Work towards results.",
     supportingCopy:
-      "Social Marketers Network is a professional learning network where beginners, early-career and marketing professionals build the skills, experience and network they need to thrive in a rapidly changing digital industry.",
-    primaryCtaLabel: "Explore our Services",
+      "Build your understanding through practical lessons, guided exercises, and simulated briefs that connect social media marketing concepts to different business contexts.",
+    primaryCtaLabel: "Explore the Academy",
     secondaryCtaLabel: "Join the Community",
-    secondaryCtaHref: "/community",
+    // Secondary CTA target (Join the Community, a free TSA account). Explore the Academy uses cta.explorePrograms (/academy).
+    secondaryCtaHref: "/signup",
   },
   announcementBanner: "",
   footerBlurb:
-    "Learn, practise, connect, and grow in one ecosystem. Member portal for courses, mentorship, opportunities, portfolios, and credentials. Community on WhatsApp.",
+    "Learn, practise, connect, and grow in one ecosystem. Member portal for courses, mentorship, opportunities, portfolios, and credentials.",
   impactStats: [] as { label: string; value: string }[],
   cohort: {
     name: "Social Media Marketing & AI Cohort",
-    startDate: "September 2026",
+    // TODO(T5-placeholder): next cohort start date unconfirmed (September 2026 is past).
+    // Empty means unknown. Display it through cohortStartLabel / cohortStartSentence
+    // in lib/cohort-copy.ts so unknown dates read "Next cohort dates coming soon".
+    startDate: "",
     applicationDeadline: "Rolling. Apply early",
-    duration: "8 weeks",
+    duration: "4 weeks",
     seats: 30,
-    format: "Live classes, member platform, WhatsApp community, and portfolio projects",
+    format: "Live classes, member platform, community, and portfolio projects",
     sessions: "2 live sessions per week (Classroom) plus member-platform learning",
     /** Safe public wording until the client confirms a final fee */
+    // TODO(T5-placeholder): fees unconfirmed.
     priceLabel: FEE_PENDING_LABEL,
     priceNote: "Payment is requested after acceptance. Payment plans may be available.",
     priceConfirmed: false,
@@ -88,55 +94,25 @@ export type SiteConfig = {
 };
 
 /**
- * Primary navigation. Each dropdown lists destinations, not variants of one
- * destination — the consolidation folded the filtered pages into their parents,
- * so "Templates" and "Guides" are views of /resources rather than pages of
- * their own, and internships are a filter on the jobs board.
+ * Primary navigation for the public marketing site.
+ * Labels match Tab 4 / Tab 5 IA. Join TSA is the header CTA, not a nav item.
+ * Mentors sit under Community (not a top-level item).
  */
 export const nav = [
-  {
-    label: "Academy",
-    href: "/programs",
-    children: [
-      { label: "Training cohort", href: "/programs/cohort" },
-      { label: "Self-paced courses", href: "/programs/courses" },
-      { label: "Experience & simulations", href: "/experience" },
-    ],
-  },
-  {
-    label: "Careers",
-    href: "/careers",
-    children: [
-      { label: "Jobs & internships", href: "/careers/jobs" },
-      { label: "Mentorship", href: "/mentorship" },
-    ],
-  },
-  {
-    label: "Partners",
-    href: "/employers",
-  },
+  { label: "Home", href: "/" },
+  { label: "Academy", href: "/academy" },
   {
     label: "Community",
     href: "/community",
     children: [
-      { label: "The network", href: "/community" },
+      { label: "The community", href: "/community" },
+      { label: "Mentors", href: "/community/mentors" },
       { label: "Events", href: "/events" },
-      { label: "Member stories", href: "/stories" },
     ],
   },
-  {
-    label: "Resources",
-    href: "/resources",
-    children: [
-      { label: "Insights", href: "/insights" },
-      { label: "Templates", href: "/resources?type=Template" },
-      { label: "Guides", href: "/resources?type=Guide" },
-    ],
-  },
-  {
-    label: "About",
-    href: "/about",
-  },
+  { label: "Partner With Us", href: "/partner" },
+  { label: "Resources", href: "/resources" },
+  { label: "About", href: "/about" },
 ] as const;
 
 /** Re-export pending labels for seed content */

@@ -2,11 +2,16 @@ import Link from "next/link";
 import { TicketQr } from "@/components/events/TicketQr";
 import { PaymentSuccessBeacon } from "@/components/payments/PaymentSuccessBeacon";
 import { Button } from "@/components/ui/Button";
-import { Card, Eyebrow, PageHeader } from "@/components/ui/Surface";
+import { EmptyState } from "@/components/ui/Feedback";
+import { Card, Eyebrow } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
+import { pageTitle } from "@/lib/brand";
 import { getPayloadClient } from "@/lib/payload";
 import { fulfillSuccessfulPayment } from "@/lib/payments/fulfill";
 import { paystackConfigured, paystackVerify } from "@/lib/payments/paystack";
+import { site } from "@/lib/site";
+
+export const metadata = { title: pageTitle("Event ticket") };
 
 type Props = { searchParams: Promise<{ id?: string; reference?: string }> };
 
@@ -66,12 +71,35 @@ export default async function MemberTicketPage({ searchParams }: Props) {
   }
 
   if (!registration || String((registration.member as { id?: string })?.id || registration.member) !== String(member.id)) {
+    const retryHref = params.reference
+      ? `/app/events/tickets?reference=${encodeURIComponent(params.reference)}`
+      : params.id
+        ? `/app/events/tickets?id=${encodeURIComponent(params.id)}`
+        : null;
+    const afterPayment = Boolean(params.reference);
+
     return (
       <div className="space-y-6">
-        <PageHeader title="Ticket" description="Ticket not found." />
-        <Button href="/app/events" variant="secondary">
-          Back to my events
-        </Button>
+        <EmptyState
+          headingLevel="h1"
+          title={afterPayment ? "Your ticket is not ready yet" : "We could not find that ticket"}
+          description={
+            afterPayment
+              ? "Payment may still be processing. Check back in a few minutes, or tap Try again to refresh."
+              : "If you just paid, the ticket can take a few minutes to appear. Try again shortly, or get help from the team."
+          }
+          action={
+            <>
+              {retryHref ? <Button href={retryHref}>Try again</Button> : null}
+              <Button href="/app/events" variant={retryHref ? "secondary" : undefined}>
+                Back to my events
+              </Button>
+              <Button href={`mailto:${site.email}`} variant="ghost">
+                Get help
+              </Button>
+            </>
+          }
+        />
       </div>
     );
   }
@@ -93,7 +121,7 @@ export default async function MemberTicketPage({ searchParams }: Props) {
       </div>
       <Card className="text-center">
         {code && confirmed ? <TicketQr code={code} /> : null}
-        <p className="tnum mt-4 font-display text-2xl tracking-wide text-text-1">{code || "—"}</p>
+        <p className="tnum mt-4 font-display text-2xl tracking-wide text-text-1">{code || "-"}</p>
         <p className="mt-2 text-sm text-text-3">Status · {status.replace("_", " ")}</p>
         {confirmed && onlineUrl && (format === "online" || format === "hybrid") ? (
           <div className="mt-6">

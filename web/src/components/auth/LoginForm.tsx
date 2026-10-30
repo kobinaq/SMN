@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Button } from "@/components/ui/Button";
 
 const field =
@@ -19,6 +19,7 @@ export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = safeCallbackUrl(searchParams.get("callbackUrl"));
+  const errorId = useId();
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [message, setMessage] = useState("");
 
@@ -56,6 +57,8 @@ export function LoginForm() {
     }
   }
 
+  const invalid = status === "error";
+
   return (
     <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
       <label htmlFor="login-email" className="sr-only">
@@ -70,6 +73,8 @@ export function LoginForm() {
         autoComplete="email"
         placeholder="Email"
         inputMode="email"
+        aria-invalid={invalid || undefined}
+        aria-describedby={invalid ? errorId : undefined}
       />
       <label htmlFor="login-password" className="sr-only">
         Password
@@ -82,11 +87,13 @@ export function LoginForm() {
         required
         autoComplete="current-password"
         placeholder="Password"
+        aria-invalid={invalid || undefined}
+        aria-describedby={invalid ? errorId : undefined}
       />
       <div className="flex justify-end">
         <Link
           href="/forgot-password"
-          className="text-xs text-accent transition hover:text-text-1"
+          className="inline-flex min-h-11 items-center px-1 text-xs text-accent transition hover:text-text-1"
         >
           Forgot password?
         </Link>
@@ -94,7 +101,11 @@ export function LoginForm() {
       <Button type="submit" className="w-full" disabled={status === "loading"}>
         {status === "loading" ? "Signing in…" : "Sign in"}
       </Button>
-      {message ? <p className="text-sm text-red-300">{message}</p> : null}
+      {message ? (
+        <p id={errorId} className="text-sm text-red-300" role="alert" aria-live="assertive">
+          {message}
+        </p>
+      ) : null}
       <p className="pt-2 text-center text-sm text-text-3">
         New here?{" "}
         <Link href="/signup" className="text-accent hover:text-text-1">

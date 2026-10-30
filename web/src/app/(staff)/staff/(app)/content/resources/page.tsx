@@ -2,6 +2,9 @@ import { StaffEmptyState, StaffPageHeader, StaffPanel, StaffTable } from "@/comp
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { listCollection } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Resources", { staff: true }) };
 
 export default async function StaffResourcesPage() {
   const staff = await requireStaff(["content", "learning", "analyst"], "/staff/content/resources");
@@ -23,7 +26,7 @@ export default async function StaffResourcesPage() {
             rows={resources.docs.map((doc) => ({
               key: String(doc.id),
               href: `/staff/content/resources/${doc.id}`,
-              cells: [doc.title, doc.type, doc.updatedAt ? new Date(doc.updatedAt).toLocaleDateString("en-GH") : "—"],
+              cells: [doc.title, doc.type, doc.updatedAt ? new Date(doc.updatedAt).toLocaleDateString("en-GH") : "-"],
             }))}
           />
         ) : (

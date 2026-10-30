@@ -5,6 +5,9 @@ import { Card } from "@/components/ui/Surface";
 import { Chip } from "@/components/ui/Chip";
 import { requireMember } from "@/lib/auth/member";
 import { getMemberOpportunityActivity, getPublishedOpportunity } from "@/lib/opportunities";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Opportunity") };
 
 export default async function OpportunityDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const member = await requireMember("/app/opportunities");
@@ -60,8 +63,8 @@ export default async function OpportunityDetailPage({ params }: { params: Promis
             <OpportunityApplyButton opportunityId={opportunity.id} />
           )}
           <p className="mt-3 text-xs text-text-3">
-            Applications happen on the employer&rsquo;s website. SMN records that you opened the application so you can
-            find it again — it does not auto-apply for you.
+            Applications happen on the employer&rsquo;s website. TSA records that you opened the application so you can
+            find it again. It does not auto-apply for you.
           </p>
         </div>
       </Card>

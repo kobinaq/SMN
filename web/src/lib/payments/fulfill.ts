@@ -88,7 +88,7 @@ async function notifyEventConfirmed(
   await sendEmail({
     to: member.email,
     subject: `You're registered: ${eventTitle}`,
-    text: `Hi ${member.name},\n\nYou're confirmed for ${eventTitle}.\n\nTicket code: ${ticketCode}${joinLine}\nView your ticket: ${ticketUrl}\n\nSocial Marketers Network`,
+    text: `Hi ${member.name},\n\nYou're confirmed for ${eventTitle}.\n\nTicket code: ${ticketCode}${joinLine}\nView your ticket: ${ticketUrl}\n\nThink Social Academy`,
   });
 }
 
@@ -107,7 +107,7 @@ async function notifyCourseReceipt(
   await sendEmail({
     to: member.email,
     subject: `Payment received: ${programName}`,
-    text: `Hi ${member.name},\n\nWe received your payment of ${formatMinorAmount(amount, currency)} for ${programName}.${classLine}\nOpen learning: ${site}/app/learning\n\nSocial Marketers Network`,
+    text: `Hi ${member.name},\n\nWe received your payment of ${formatMinorAmount(amount, currency)} for ${programName}.${classLine}\nOpen learning: ${site}/app/learning\n\nThink Social Academy`,
   });
 }
 
@@ -222,7 +222,7 @@ export async function fulfillSuccessfulPayment(payload: Payload, reference: stri
     await notifyEventConfirmed(
       payload,
       memberId,
-      String(event.title || "SMN event"),
+      String(event.title || "TSA event"),
       ticketCode,
       registration.id as string | number,
       typeof event.onlineUrl === "string" ? event.onlineUrl : undefined,
@@ -360,7 +360,7 @@ export async function registerForFreeEvent(payload: Payload, eventId: string | n
   await notifyEventConfirmed(
     payload,
     String(memberId),
-    String(event.title || "SMN event"),
+    String(event.title || "TSA event"),
     String(registration.ticketCode || ""),
     registration.id as string | number,
     typeof event.onlineUrl === "string" ? event.onlineUrl : undefined,

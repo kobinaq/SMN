@@ -10,6 +10,9 @@ import { getPayloadClient } from "@/lib/payload";
 import { countConfirmedRegistrations } from "@/lib/payments/fulfill";
 import { eventFields } from "@/lib/staff/field-defs";
 import { relationId, toDateTimeLocal } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Event", { staff: true }) };
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -82,7 +85,7 @@ export default async function StaffEventPage({ params }: Props) {
               <StaffOpsRow
                 key={String(item.id)}
                 title={String(member?.name || member?.email || "Member")}
-                detail={`${status} · ${String(item.ticketCode || "—")}`}
+                detail={`${status} · ${String(item.ticketCode || "-")}`}
               >
                 <RegistrationCancelActions
                   registrationId={item.id as string | number}

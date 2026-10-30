@@ -62,7 +62,7 @@ export async function POST(request: Request) {
 
   const brief = validateAIInput(parsed.data.brief);
   const level = parsed.data.level || "foundation";
-  const audience = parsed.data.audience?.trim() || "SMN learners";
+  const audience = parsed.data.audience?.trim() || "TSA learners";
 
   try {
     const result = await runAIStructured({
@@ -79,7 +79,7 @@ export async function POST(request: Request) {
         {
           role: "system",
           content:
-            "You are the SMN Course Builder assistant. Produce a practical marketing course outline with clear modules and lessons. Keep scope realistic for a cohort programme. Never claim the course is published. Prefer reading lessons with useful starter body text.",
+            "You are the TSA Course Builder assistant. Produce a practical marketing course outline with clear modules and lessons. Keep scope realistic for a cohort programme. Never claim the course is published. Prefer reading lessons with useful starter body text.",
         },
         {
           role: "user",

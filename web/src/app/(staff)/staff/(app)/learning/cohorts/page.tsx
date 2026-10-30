@@ -6,8 +6,9 @@ import { StaffMetricGrid, StaffPageHeader } from "@/components/staff/ui";
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { loadCourseSummaries } from "@/lib/staff/learning-index";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Cohorts" };
+export const metadata = { title: pageTitle("Cohorts", { staff: true }) };
 
 export default async function StaffCohortsPage() {
   const staff = await requireStaff(["learning", "content", "support"], "/staff/learning/cohorts");
@@ -60,7 +61,7 @@ export default async function StaffCohortsPage() {
         newHref="/staff/learning/cohorts/new"
         newLabel="New cohort"
         emptyTitle="No cohorts yet"
-        emptyDescription="Create a live intake — a start date, seats and a session plan. You can market it before adding any learning materials."
+        emptyDescription="Create a live intake: a start date, seats and a session plan. You can market it before adding any learning materials."
         warnOnOpen={{
           title: "Edit this cohort?",
           description:

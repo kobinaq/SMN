@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { ForgotPasswordForm } from "@/components/auth/ForgotPasswordForm";
+import { seoTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Forgot password",
+  title: seoTitle("Forgot password"),
 };
 
 export default function ForgotPasswordPage() {

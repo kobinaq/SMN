@@ -2,8 +2,9 @@ import Link from "next/link";
 import { ChangePasswordForm } from "@/components/auth/ChangePasswordForm";
 import { StaffPageHeader, StaffPanel } from "@/components/staff/ui";
 import { requireStaff, staffDisplayName, staffRoleLabel } from "@/lib/auth/staff";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Account" };
+export const metadata = { title: pageTitle("Account", { staff: true }) };
 
 export default async function StaffAccountPage() {
   const staff = await requireStaff([], "/staff/account");

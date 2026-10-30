@@ -5,8 +5,9 @@ import { EmptyState } from "@/components/ui/Feedback";
 import { Button } from "@/components/ui/Button";
 import { requireMember } from "@/lib/auth/member";
 import { getPayloadClient } from "@/lib/payload";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "My events" };
+export const metadata = { title: pageTitle("My events") };
 
 export default async function MemberEventsPage() {
   const member = await requireMember("/app/events");
@@ -61,7 +62,7 @@ export default async function MemberEventsPage() {
       ) : (
         <EmptyState
           title="No tickets yet"
-          description="Register for an SMN event to see your ticket and join link here."
+          description="Register for a TSA event to see your ticket and join link here."
           action={
             <Button href="/events" variant="secondary">
               Browse events

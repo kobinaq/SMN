@@ -25,12 +25,13 @@ async function loginMember(page: Page) {
 }
 
 /**
- * Open one course's workspace from the course index and return its section
- * tabs. The workspace has its own URL per course now, so every tab click in
- * these tests goes through this nav rather than a query param on /staff/learning.
+ * Open one course's workspace from the self-paced lane and return its section
+ * tabs. /staff/learning is a hub (Self-paced / Cohorts); course lists live on
+ * the lane pages. The workspace has its own URL per course, so every tab click
+ * goes through this nav rather than a query param on /staff/learning.
  */
 async function openCourseWorkspace(page: Page, title = "Demo Content Strategy Sprint") {
-  await page.goto("/staff/learning");
+  await page.goto("/staff/learning/self-paced");
   await page.getByRole("link", { name: title }).first().click();
   await expect(page).toHaveURL(/\/staff\/learning\/courses\/\d+/);
   const sections = page.getByRole("navigation", { name: "Course sections" });
@@ -60,6 +61,34 @@ async function confirmDialog(page: Page, confirmName: string | RegExp, reason?: 
   await expect(dialog).toBeHidden({ timeout: 15_000 });
 }
 
+/**
+ * Drive a field labelled Select. The accessible name now lands on the visible
+ * trigger (often "Label, current value"), so getByLabel(...).selectOption no
+ * longer works. Prefer the hidden native <select> that still backs the control.
+ */
+async function selectLabeledOption(
+  page: Page,
+  label: string,
+  option: string | { index: number },
+) {
+  const fieldLabel = page.locator("label").filter({ hasText: label }).first();
+  await expect(fieldLabel).toBeVisible();
+
+  const nested = fieldLabel.locator("select");
+  if ((await nested.count()) > 0) {
+    await nested.selectOption(option, { force: true });
+    return;
+  }
+
+  const forId = await fieldLabel.getAttribute("for");
+  if (forId) {
+    await page.locator(`select#${CSS.escape(`${forId}-native`)}`).selectOption(option, { force: true });
+    return;
+  }
+
+  throw new Error(`No native select found for labelled field “${label}”.`);
+}
+
 test("staff completes the audited admin operations workflows", async ({ page }) => {
   test.setTimeout(120_000);
   // Remaining native dialogs (e.g. Career Coach) still use window.confirm/prompt.
@@ -81,9 +110,8 @@ test("staff completes the audited admin operations workflows", async ({ page }) 
 
   await sections.getByRole("link", { name: "Learners" }).click();
   await page.getByText("Progress override", { exact: true }).click();
-  // Custom Select keeps a visually hidden native <select> for form posts; force bypasses actionability.
-  await page.getByLabel("Learner").selectOption({ index: 1 }, { force: true });
-  await page.getByLabel("Lesson").selectOption({ index: 1 }, { force: true });
+  await selectLabeledOption(page, "Learner", { index: 1 });
+  await selectLabeledOption(page, "Lesson", { index: 1 });
   await page.getByPlaceholder("Explain why this correction is required.").fill(
     "Verified completion correction for the isolated E2E workflow.",
   );
@@ -130,7 +158,7 @@ test("staff can create and publish a CMS post", async ({ page }) => {
   const stamp = Date.now();
   await page.goto("/staff/content/posts/new");
   await page.getByLabel("Title").fill(`E2E Post ${stamp}`);
-  await page.getByLabel("Category").selectOption("AI");
+  await selectLabeledOption(page, "Category", "AI");
   await page.getByLabel("Summary").fill("Disposable E2E article summary for staff CMS cutover.");
   await page.getByLabel("Body").fill("First paragraph.\n\nSecond paragraph for the staff CMS publish path.");
   await page.getByLabel("Publish at").fill("2030-01-15T10:00");
@@ -147,7 +175,7 @@ test("member uses grounded Tutor and confirmed Career Coach controls with mock A
   await loginMember(page);
 
   await page.goto("/app/learning/courses/demo-content-strategy/lessons/demo-strategy-before-calendar");
-  await page.getByRole("button", { name: "Ask SMN Tutor" }).click();
+  await page.getByRole("button", { name: "Ask TSA Tutor" }).click();
   await page.getByLabel("Your question").fill("Explain why strategy comes before a content calendar.");
   await page.getByRole("button", { name: "Ask", exact: true }).click();
   await expect(page.getByText(/Mock AI response grounded/i)).toBeVisible();

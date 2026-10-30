@@ -4,13 +4,12 @@ import {
   siteViewport,
 } from "@/components/layout/SiteDocument";
 import { AppProviders } from "@/components/providers/AppProviders";
+import { pageTitle } from "@/lib/brand";
 
 export const metadata = {
   ...siteMetadata,
-  title: {
-    default: "SMN Staff",
-    template: "%s · SMN Staff",
-  },
+  title: pageTitle("Staff", { staff: true }),
+  robots: { index: false, follow: false },
 };
 export const viewport = siteViewport;
 

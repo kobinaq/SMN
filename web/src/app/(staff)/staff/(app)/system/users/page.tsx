@@ -3,6 +3,9 @@ import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { listCollection } from "@/lib/staff/records";
 import { canStaff } from "@/lib/staff-permissions";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Staff users", { staff: true }) };
 
 export default async function StaffUsersPage() {
   const staff = await requireStaff(["support", "analyst"], "/staff/system/users");
@@ -25,7 +28,7 @@ export default async function StaffUsersPage() {
             rows={users.docs.map((doc) => ({
               key: String(doc.id),
               href: canWrite ? `/staff/system/users/${doc.id}` : undefined,
-              cells: [doc.name || "—", doc.email, String(doc.role || "super-admin").replace("-", " ")],
+              cells: [doc.name || "-", doc.email, String(doc.role || "super-admin").replace("-", " ")],
             }))}
           />
         ) : (

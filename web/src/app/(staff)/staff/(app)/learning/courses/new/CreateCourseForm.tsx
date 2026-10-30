@@ -105,7 +105,7 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
                 : "border-edge text-text-2 hover:border-edge-strong hover:text-text-1"
             }`}
           >
-            Use SMN AI assistant
+            Use TSA AI assistant
           </button>
         ) : null}
         <button
@@ -155,13 +155,13 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
                 className={staffFieldClass}
                 name="audience"
                 maxLength={200}
-                placeholder="SMN learners"
-                defaultValue="SMN learners"
+                placeholder="TSA learners"
+                defaultValue="TSA learners"
               />
             </StaffFormField>
           </div>
           <p className="text-xs leading-relaxed text-text-3">
-            SMN AI creates a draft course with modules and lessons. You can then edit curriculum, add an instructor,
+            TSA AI creates a draft course with modules and lessons. You can then edit curriculum, add an instructor,
             polish outcomes, and publish when ready. Nothing is published automatically.
           </p>
           {error ? (
@@ -172,7 +172,7 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
           <button
             type="submit"
             disabled={busy}
-            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-accent-strong px-5 py-2.5 text-sm font-semibold text-[#08111f] transition-colors duration-[var(--dur-fast)] hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-accent-strong px-5 py-2.5 text-sm font-semibold text-[#08111f] transition-colors duration-[var(--dur-fast)] hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
           >
             {busy ? "Generating draft course…" : "Generate draft course"}
           </button>
@@ -209,7 +209,7 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
             </Select>
           </StaffFormField>
           <p className="text-xs text-text-3">
-            Saved as a draft. Self-paced courses appear on /programs/courses once published.{" "}
+            Saved as a draft. Self-paced courses appear on /academy/courses once published.{" "}
             {commerce === "apply"
               ? "Apply-first courses use /apply. Staff then grant access or send a Paystack link."
               : "Buy-now courses checkout on Paystack after the fee is confirmed."}{" "}
@@ -223,7 +223,7 @@ export function CreateCourseForm({ aiEnabled }: { aiEnabled: boolean }) {
           <button
             type="submit"
             disabled={busy}
-            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-accent-strong px-5 py-2.5 text-sm font-semibold text-[#08111f] transition-colors duration-[var(--dur-fast)] hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-accent-strong px-5 py-2.5 text-sm font-semibold text-[#08111f] transition-colors duration-[var(--dur-fast)] hover:bg-accent disabled:pointer-events-none disabled:opacity-40"
           >
             {busy ? "Creating…" : "Create draft course"}
           </button>

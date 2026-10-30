@@ -2,6 +2,9 @@ import { StaffEmpty, StaffPageHeader, StaffPanel, StaffTable } from "@/component
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { staffAccess } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("Applications", { staff: true }) };
 
 export default async function CohortApplicationsPage() {
   const staff = await requireStaff(["content", "support", "analyst", "learning"], "/staff/applications");
@@ -27,7 +30,7 @@ export default async function CohortApplicationsPage() {
 
   function courseTitle(value: (typeof docs)[number]["course"]) {
     if (value && typeof value === "object" && value.title) return value.title;
-    return "—";
+    return "-";
   }
 
   return (
@@ -45,11 +48,11 @@ export default async function CohortApplicationsPage() {
               key: String(doc.id),
               href: `/staff/applications/${doc.id}`,
               cells: [
-                doc.name || "—",
-                doc.email || "—",
+                doc.name || "-",
+                doc.email || "-",
                 courseTitle(doc.course),
-                doc.role || "—",
-                doc.createdAt ? new Date(doc.createdAt).toLocaleDateString("en-GH") : "—",
+                doc.role || "-",
+                doc.createdAt ? new Date(doc.createdAt).toLocaleDateString("en-GH") : "-",
                 doc.status || "received",
               ],
             }))}

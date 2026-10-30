@@ -1,8 +1,37 @@
 import { cta } from "@/lib/cta";
+import { site } from "@/lib/site";
 
-/** SEO title: Primary Keyword | Social Marketers Network */
+export type PageTitleArea = "public" | "portal" | "staff";
+
+type PageTitleOptions = {
+  /**
+   * Which product surface owns the tab title.
+   * public → full site name, portal → short name, staff → short name + Staff.
+   */
+  area?: PageTitleArea;
+  /** Shorthand for `area: "staff"`. */
+  staff?: boolean;
+};
+
+function titleBrand(area: PageTitleArea) {
+  if (area === "public") return site.name;
+  if (area === "staff") return `${site.shortName} Staff`;
+  return site.shortName;
+}
+
+/**
+ * Browser tab title with a per-area brand suffix from site.ts.
+ * Public: `Contact | Think Social Academy`. Portal: `Event ticket | TSA`.
+ * Staff: `People | TSA Staff`.
+ */
+export function pageTitle(page: string, options: PageTitleOptions = {}) {
+  const area: PageTitleArea = options.area ?? (options.staff ? "staff" : "portal");
+  return { absolute: `${page} | ${titleBrand(area)}` } as const;
+}
+
+/** Public/marketing SEO title: Primary Keyword | full site name. */
 export function seoTitle(keyword: string) {
-  return { absolute: `${keyword} | Social Marketers Network` } as const;
+  return pageTitle(keyword, { area: "public" });
 }
 
 export const audienceStages = [
@@ -83,7 +112,7 @@ export const trainingModules = [
   {
     module: "06",
     title: "Practical Experience",
-    body: "Apply what you have learned through practical challenges, simulations, and opportunities for real-world experience.",
+    body: "Apply what you have learned through practical challenges and clearly labelled marketing simulations.",
     topics: ["Challenges", "Simulations", "Applied work"],
   },
 ];
@@ -222,22 +251,21 @@ export const partnerTracks = [
   {
     id: "hire",
     n: "02",
-    kicker: "Hire interns and experience",
-    title: "Hire SMN talent",
-    body: "Find emerging talent. Create real-world opportunities. Partner with SMN to connect with marketers who are building practical skills and looking to apply them. We can help match opportunities with participants based on their skills, interests, and career direction.",
+    kicker: "Practical work and simulations",
+    title: "Partner on practical marketing work",
+    body: "Partner with TSA on clearly labelled marketing simulations, practical briefs, and project-based learning. Help learners apply skills in realistic business contexts.",
     items: [
-      "Hire interns",
-      "Recruit junior talent",
-      "Offer volunteer opportunities",
-      "Provide freelance or project-based work",
-      "Create SMN Experience projects",
-      "Give participants real marketing briefs",
-      "Collaborate on portfolio-building projects",
+      "Host a marketing simulation",
+      "Contribute a practical brief",
+      "Support project-based learning",
+      "Share industry expertise",
+      "Collaborate on portfolio-building simulations",
+      "Give participants realistic marketing briefs",
     ],
-    bestFor: "Brands, agencies, and organisations looking for emerging marketing talent or additional project support.",
+    bestFor: "Brands, agencies, and organisations that want to support practical marketing learning.",
     href: "#employer-form",
-    cta: cta.hireTalent.label,
-    formType: "Talent request",
+    cta: cta.partner.label,
+    formType: "Collaboration",
   },
   {
     id: "collaborate",
@@ -293,12 +321,12 @@ export const trainingAudience = [
 ];
 
 export const experienceOpportunities = [
-  "Volunteer",
-  "Intern",
-  "Support real projects",
+  "Practical briefs",
+  "Clearly labelled marketing simulations",
+  "Support realistic project work",
   "Build their portfolios",
-  "Gain professional experience",
-  "Develop industry relationships",
+  "Gain practical marketing experience",
+  "Develop relationships with other marketers",
 ];
 
 export const experienceReview = [

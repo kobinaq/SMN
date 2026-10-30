@@ -46,7 +46,7 @@ export function PeopleWorkspace({
 }) {
   const [section, setSection] = useState<SectionId>("timeline");
   const readableDate = (value: string) =>
-    value ? new Intl.DateTimeFormat("en-GH", { dateStyle: "medium" }).format(new Date(value)) : "—";
+    value ? new Intl.DateTimeFormat("en-GH", { dateStyle: "medium" }).format(new Date(value)) : "-";
 
   const filters = useMemo(
     () => [

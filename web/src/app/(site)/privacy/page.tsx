@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { site } from "@/lib/site";
+import { seoTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Privacy policy",
-  description: "How Social Marketers Network handles personal information.",
+  title: seoTitle("Privacy policy"),
+  description: "How Think Social Academy handles personal information.",
   alternates: { canonical: "/privacy" },
+  openGraph: { url: "/privacy" },
 };
 
 const sections = [

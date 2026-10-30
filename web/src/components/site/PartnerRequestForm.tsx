@@ -36,7 +36,7 @@ const REQUESTS = {
       "Role focus, duration, and location or remote preference",
       "Must-have skills and the work they will actually do",
       "A named point of contact and a habit of giving feedback",
-      "A defined scope — internships fail when the brief is “help with social”",
+      "A defined scope: internships fail when the brief is “help with social”",
     ],
   },
   job: {
@@ -47,7 +47,7 @@ const REQUESTS = {
     needs: [
       "What the role actually involves day to day",
       "What success looks like in the first 30 to 90 days",
-      "Who it is a fit for — skills, level, and mindset",
+      "Who it is a fit for: skills, level, and mindset",
       "Anything that makes it worth a strong marketer's time",
     ],
   },
@@ -55,7 +55,7 @@ const REQUESTS = {
     label: "Train a team",
     type: "Training request",
     blurb:
-      "We design specialised training around your team, industry, and needs — from social and AI foundations to analytics and strategy workshops.",
+      "We design specialised training around your team, industry, and needs: from social and AI foundations to analytics and strategy workshops.",
     needs: [
       "Team size, roles, and current level",
       "The capability gap you are trying to close",
@@ -67,8 +67,15 @@ const REQUESTS = {
 
 export type RequestKind = keyof typeof REQUESTS;
 
-export function PartnerRequestForm({ initial = "talent" }: { initial?: RequestKind }) {
-  const [kind, setKind] = useState<RequestKind>(initial);
+/** Public partner form: hire / job / intern entry points are retired (T3). */
+const PUBLIC_REQUEST_KINDS = ["training"] as const satisfies readonly RequestKind[];
+
+function publicInitial(initial: RequestKind): RequestKind {
+  return (PUBLIC_REQUEST_KINDS as readonly string[]).includes(initial) ? initial : "training";
+}
+
+export function PartnerRequestForm({ initial = "training" }: { initial?: RequestKind }) {
+  const [kind, setKind] = useState<RequestKind>(() => publicInitial(initial));
   const request = REQUESTS[kind];
 
   return (
@@ -80,7 +87,7 @@ export function PartnerRequestForm({ initial = "talent" }: { initial?: RequestKi
           aria-label="Request type"
           value={kind}
           onChange={setKind}
-          options={(Object.keys(REQUESTS) as RequestKind[]).map((value) => ({
+          options={PUBLIC_REQUEST_KINDS.map((value) => ({
             value,
             label: REQUESTS[value].label,
           }))}
@@ -89,21 +96,17 @@ export function PartnerRequestForm({ initial = "talent" }: { initial?: RequestKi
         <p className="mt-6 eyebrow text-text-3">Helpful to include</p>
         <Checklist className="mt-3" items={request.needs} />
         <p className="mt-8 rule pt-6 text-sm text-text-3">
-          We do not guarantee employment outcomes. We help members prepare for work and make it
-          easier for brands to meet strong marketing talent.
+          Tell us about training, sponsorship, or collaboration. We follow up if we need more detail.
         </p>
       </div>
       <div className="border border-edge-subtle bg-raised p-6 sm:p-8">
         <h3 className="font-display text-2xl text-text-1">{request.label}</h3>
         <p className="mt-2 text-sm text-text-2">
-          {kind === "job"
-            ? "Fill in the role and it goes straight to our team as a listing to review."
-            : "We follow up if we need more detail before going further."}
+          We follow up if we need more detail before going further.
         </p>
-        {/* Remounting on `kind` resets the form fields — carrying a half-typed
-            job posting into an intern request would only produce a confusing
-            enquiry. "Post a job" gets a structured intake that becomes a
-            reviewable listing; the rest are open-ended enquiries. */}
+        {/* Remounting on `kind` resets the form fields. Job posting intake stays
+            in the codebase for later tickets; it is not offered on the public
+            partner form. */}
         <div className="mt-6">
           {kind === "job" ? (
             <JobPostingForm key={kind} />

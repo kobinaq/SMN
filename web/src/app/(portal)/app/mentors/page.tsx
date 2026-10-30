@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/Button";
 import { Card, Eyebrow, PageHeader } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
 import { getApprovedMentors, getMentorApplicationStatus } from "@/lib/mentors";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Mentors" };
+export const metadata = { title: pageTitle("Mentors") };
 
 export default async function MentorsAppPage() {
   const member = await requireMember("/app/mentors");
@@ -19,9 +20,9 @@ export default async function MentorsAppPage() {
       <PageHeader
         eyebrow="Mentors"
         title="Find the right guide"
-        description="Browse staff-approved mentors by specialty, then send a focused request. The SMN team reviews introductions to protect everyone's time."
+        description="Browse staff-approved mentors by specialty, then send a focused request. The TSA team reviews introductions to protect everyone's time."
         action={
-          <Button href="/mentorship#become-a-mentor" variant="secondary">
+          <Button href="/community/mentors#become-a-mentor" variant="secondary">
             Become a mentor
           </Button>
         }
@@ -36,7 +37,7 @@ export default async function MentorsAppPage() {
             Staff can review mentor applications in Payload and approve them when ready. Approved profiles appear
             here automatically.
           </p>
-          <Button href="/mentorship" variant="secondary" className="mt-6">
+          <Button href="/community/mentors" variant="secondary" className="mt-6">
             How mentorship works
           </Button>
         </Card>

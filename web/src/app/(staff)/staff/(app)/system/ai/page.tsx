@@ -2,6 +2,9 @@ import { StaffEmpty, StaffPageHeader, StaffPanel, StaffTable } from "@/component
 import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { listCollection } from "@/lib/staff/records";
+import { pageTitle } from "@/lib/brand";
+
+export const metadata = { title: pageTitle("AI activity", { staff: true }) };
 
 export default async function StaffAiActivityPage() {
   const staff = await requireStaff(["learning", "support", "analyst"], "/staff/system/ai");
@@ -28,9 +31,9 @@ export default async function StaffAiActivityPage() {
               cells: [
                 `${doc.feature} · ${doc.operation}`,
                 doc.status,
-                doc.model || doc.provider || "—",
-                doc.latencyMs != null ? `${doc.latencyMs} ms` : "—",
-                doc.createdAt ? new Date(doc.createdAt).toLocaleString("en-GH") : "—",
+                doc.model || doc.provider || "-",
+                doc.latencyMs != null ? `${doc.latencyMs} ms` : "-",
+                doc.createdAt ? new Date(doc.createdAt).toLocaleString("en-GH") : "-",
               ],
             }))}
           />
@@ -48,8 +51,8 @@ export default async function StaffAiActivityPage() {
               cells: [
                 doc.feature,
                 doc.rating,
-                doc.reason || "—",
-                doc.createdAt ? new Date(doc.createdAt).toLocaleString("en-GH") : "—",
+                doc.reason || "-",
+                doc.createdAt ? new Date(doc.createdAt).toLocaleString("en-GH") : "-",
               ],
             }))}
           />

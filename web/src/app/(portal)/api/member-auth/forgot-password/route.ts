@@ -42,7 +42,7 @@ export async function POST(request: Request) {
         const resetUrl = `${getServerURL()}/reset-password?token=${encodeURIComponent(token)}`;
         const mailed = await sendEmail({
           to: parsed.data.email.toLowerCase().trim(),
-          subject: "Reset your SMN password",
+          subject: "Reset your TSA password",
           text: `Use this link to set a new password. It expires after a short time.\n\n${resetUrl}\n\nIf you did not request this, ignore the email.`,
         });
         if (!emailWasSent(mailed)) {
@@ -61,6 +61,6 @@ export async function POST(request: Request) {
     emailDeliveryConfigured: configured,
     message: configured
       ? "If an account exists for that email, reset instructions will be sent."
-      : "Password reset email is not configured on this environment yet. Contact the SMN team for help signing in.",
+      : "Password reset email is not configured on this environment yet. Contact the TSA team for help signing in.",
   });
 }

@@ -44,8 +44,8 @@ function getMediaUrl(media: CertificateDoc["pdf"]) {
 }
 
 function getMemberName(member: CertificateDoc["member"]) {
-  if (typeof member !== "object" || !member) return "SMN member";
-  return member.name?.trim() || member.email?.split("@")[0] || "SMN member";
+  if (typeof member !== "object" || !member) return "TSA member";
+  return member.name?.trim() || member.email?.split("@")[0] || "TSA member";
 }
 
 function getMemberHandle(member: CertificateDoc["member"]) {
@@ -84,7 +84,7 @@ export async function getMemberCertificates(member: MemberUser) {
 }
 
 export async function getVerifiedCertificate(code: string): Promise<VerifiedCertificate | null> {
-  const cleaned = code.trim();
+  const cleaned = code.trim().toUpperCase();
   if (!cleaned) return null;
 
   const payload = await getPayloadClient();

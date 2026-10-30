@@ -47,7 +47,7 @@ function NavItem({
         <button
           type="button"
           className={cn(
-            "group flex w-full cursor-pointer items-center justify-between rounded-[var(--radius-sm)] px-2.5 py-2 select-none",
+            "group flex min-h-11 w-full cursor-pointer items-center justify-between rounded-[var(--radius-sm)] px-2.5 py-2 select-none md:min-h-0",
             "transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)]",
             childActive
               ? "bg-inset font-medium text-text-1"
@@ -87,6 +87,10 @@ function NavItem({
             "grid transition-[grid-template-rows,opacity] duration-300 ease-in-out",
             isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
           )}
+          // Closed groups stay in the DOM for the height animation, but must
+          // not remain keyboard-reachable or exposed to assistive tech.
+          inert={!isOpen}
+          aria-hidden={!isOpen}
         >
           <div className="relative mt-0.5 flex min-h-0 flex-col gap-0.5 overflow-hidden">
             <div
@@ -112,6 +116,7 @@ function NavItem({
     <Link
       href={item.href}
       onClick={onNavigate}
+      aria-current={active ? "page" : undefined}
       className={cn(
         "group relative flex min-h-11 items-center justify-between rounded-[var(--radius-sm)] px-2.5 py-2 select-none md:min-h-0",
         "transition-colors duration-[var(--dur-fast)] ease-[var(--ease-out)]",
@@ -167,6 +172,7 @@ export function PortalSidebar({
   const exactRoots = variant === "member" ? ["/app"] : ["/staff"];
   const initial = identity.name.trim().slice(0, 1).toUpperCase();
   const portalLabel = variant === "member" ? "Member" : "Staff";
+  const navLabel = variant === "member" ? "Member" : "Staff";
 
   return (
     <aside
@@ -179,12 +185,13 @@ export function PortalSidebar({
         <Link
           href={homeHref}
           onClick={onNavigate}
-          aria-label={`SMN ${portalLabel.toLowerCase()} home`}
+          aria-label={`${portalLabel} portal home`}
           className="flex min-w-0 items-center gap-3 rounded-[var(--radius-sm)] p-1 transition-colors hover:bg-inset"
         >
-          <BrandLogo width={96} height={24} className="h-5 shrink-0 sm:h-6" />
+          <BrandLogo variant="mark" className="h-5 shrink-0 sm:h-6" />
           <div className="flex min-w-0 flex-col overflow-hidden">
             <span className="truncate text-[13px] font-medium leading-none text-text-1">{portalLabel}</span>
+            {" "}
             <span className="mt-1 truncate text-[11px] leading-none text-text-3">portal</span>
           </div>
         </Link>
@@ -206,7 +213,10 @@ export function PortalSidebar({
         </div>
       </div>
 
-      <div className="mt-1 flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <nav
+        aria-label={`${navLabel} navigation`}
+        className="mt-1 flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
         {groups.map((group, idx) => (
           <div key={group.heading ?? idx} className="flex flex-col gap-0.5">
             {group.heading ? (
@@ -224,14 +234,14 @@ export function PortalSidebar({
             ))}
           </div>
         ))}
-      </div>
+      </nav>
 
       <div className="mt-auto flex shrink-0 flex-col gap-0.5 border-t border-edge-subtle pt-4">
         {variant === "staff" ? (
           <Link
             href="/"
             onClick={onNavigate}
-            className="group flex items-center gap-2.5 rounded-[var(--radius-sm)] px-2.5 py-2 text-text-2 transition-colors hover:bg-inset hover:text-text-1"
+            className="group flex min-h-11 items-center gap-2.5 rounded-[var(--radius-sm)] px-2.5 py-2 text-text-2 transition-colors hover:bg-inset hover:text-text-1 md:min-h-0"
           >
             <Globe className="h-4 w-4 text-text-3 group-hover:text-text-2" strokeWidth={1.5} />
             <span className="text-[13px] tracking-wide">Public website</span>
@@ -241,7 +251,7 @@ export function PortalSidebar({
           type="button"
           onClick={onLogout}
           disabled={loggingOut}
-          className="group flex items-center gap-2.5 rounded-[var(--radius-sm)] px-2.5 py-2 text-left text-text-2 transition-colors hover:bg-inset hover:text-text-1 disabled:opacity-60"
+          className="group flex min-h-11 items-center gap-2.5 rounded-[var(--radius-sm)] px-2.5 py-2 text-left text-text-2 transition-colors hover:bg-inset hover:text-text-1 disabled:opacity-60 md:min-h-0"
         >
           <LogOut className="h-4 w-4 text-text-3 group-hover:text-text-2" strokeWidth={1.5} />
           <span className="text-[13px] tracking-wide">{loggingOut ? "…" : logoutLabel}</span>

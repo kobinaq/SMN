@@ -7,8 +7,9 @@ import { Chip } from "@/components/ui/Chip";
 import { PageHeader } from "@/components/ui/Surface";
 import { requireMember } from "@/lib/auth/member";
 import { getMemberCertificates } from "@/lib/certificates";
+import { pageTitle } from "@/lib/brand";
 
-export const metadata = { title: "Certificates" };
+export const metadata = { title: pageTitle("Certificates") };
 
 function formatDate(value: string) {
   if (!value) return "";
@@ -30,7 +31,7 @@ export default async function CertificatesPage() {
       <div className="print:hidden">
         <PageHeader
           eyebrow="Certificates"
-          title="Your SMN credentials"
+          title="Your TSA credentials"
           description="Issued certificates from cohorts, workshops, and approved learning tracks."
         />
       </div>
@@ -84,13 +85,13 @@ export default async function CertificatesPage() {
                 </div>
               ) : null}
               <div className="btn-row-mobile mt-6 print:hidden">
-                <Button href={certificate.verifyUrl} variant="secondary" className="px-4 py-2 text-xs">
+                <Button href={certificate.verifyUrl} variant="secondary" className="min-h-11 px-4 text-xs">
                   Verify
                   <ShieldCheck className="h-3.5 w-3.5" />
                 </Button>
                 <CopyLinkButton url={certificate.verifyUrl} label="Copy verification link" />
                 {certificate.pdfUrl ? (
-                  <Button href={certificate.pdfUrl} target="_blank" rel="noreferrer" className="px-4 py-2 text-xs">
+                  <Button href={certificate.pdfUrl} target="_blank" rel="noreferrer" className="min-h-11 px-4 text-xs">
                     PDF
                     <Download className="h-3.5 w-3.5" />
                   </Button>
@@ -106,7 +107,7 @@ export default async function CertificatesPage() {
           action={
             <>
               <Button href="/app/learning">Open learning</Button>
-              <Button href="/programs/cohort" variant="secondary">
+              <Button href="/academy/cohort" variant="secondary">
                 View cohort
                 <ExternalLink className="h-3.5 w-3.5" />
               </Button>

@@ -6,6 +6,7 @@ import { ArrowLeft, Download } from "@/components/ui/icons";
 import { ResourceDownloadForm } from "@/components/resources/ResourceDownloadForm";
 import { ResourceRow } from "@/components/resources/ResourceRow";
 import { Button } from "@/components/ui/Button";
+import { seoTitle } from "@/lib/brand";
 import { getRelatedResources, getResource, getResourceLibrary } from "@/lib/resources";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -20,12 +21,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resource = await getResource(slug);
   if (!resource) return {};
   const canonical = `/resources/${slug}`;
+  const title = seoTitle(resource.title);
   return {
-    title: resource.title,
+    title,
     description: resource.description,
     alternates: { canonical },
     openGraph: {
-      title: resource.title,
+      title: title.absolute,
       description: resource.description,
       url: canonical,
       images: [{ url: resource.cover }],
@@ -47,7 +49,7 @@ export default async function ResourceDetailPage({ params }: Props) {
         <div className="container-wide pb-8 sm:pb-10">
           <Link
             href="/resources"
-            className="inline-flex min-h-10 items-center gap-2 text-sm text-text-3 transition hover:text-text-1"
+            className="inline-flex min-h-11 items-center gap-2 text-sm text-text-3 transition hover:text-text-1"
           >
             <ArrowLeft className="h-4 w-4" />
             All resources
@@ -113,7 +115,7 @@ export default async function ResourceDetailPage({ params }: Props) {
                 <li>Download and open the file on desktop if possible.</li>
                 <li>Duplicate it for each client or brand.</li>
                 <li>Fill the first section fully before you skip ahead.</li>
-                <li>Bring questions into the WhatsApp community.</li>
+                <li>Bring questions where you get TSA updates on WhatsApp.</li>
               </ol>
             </div>
           </div>

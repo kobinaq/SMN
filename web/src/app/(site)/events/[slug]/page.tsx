@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -8,8 +8,10 @@ import { EventRegisterButton } from "@/components/events/EventRegisterButton";
 import { Reveal } from "@/components/motion/Reveal";
 import { Button } from "@/components/ui/Button";
 import { getMember } from "@/lib/auth/member";
+import { seoTitle } from "@/lib/brand";
 import { formatEventDate, formatEventDay, getEventBySlug, getEventCalendar, getNextEvent } from "@/lib/events";
 import { getPayloadClient } from "@/lib/payload";
+import { itemShareImages } from "@/lib/share-metadata";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -31,22 +33,60 @@ async function resolvePublishedEventId(slug: string) {
   }
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const { slug } = await params;
   const event = await getEventBySlug(slug);
-  if (!event) return { title: "Event" };
+  // Call notFound before any streamed shell so the response status is 404.
+  // Soft "Marketing event" metadata previously masked missing slugs as 200.
+  if (!event) notFound();
+  const canonical = `/events/${slug}`;
+  const parentMeta = await parent;
+  // CMS image when present; otherwise forward parent hashed defaults.
+  const share = itemShareImages(event.hasCustomImage ? event.image : null, {
+    openGraphImages: parentMeta.openGraph?.images,
+    twitterImages: parentMeta.twitter?.images,
+  });
+  const title = seoTitle(event.title);
   return {
-    title: event.title,
+    title,
     description: event.summary,
-    alternates: { canonical: `/events/${slug}` },
+    alternates: { canonical },
+    openGraph: {
+      title: title.absolute,
+      description: event.summary,
+      type: "website",
+      url: canonical,
+      ...(share.openGraphImages ? { images: share.openGraphImages } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: title.absolute,
+      description: event.summary,
+      ...(share.twitterImages ? { images: share.twitterImages } : {}),
+    },
   };
 }
 
 export default async function EventDetailPage({ params }: Props) {
   const { slug } = await params;
+  // Existence check runs before any Suspense/streamed child work so unknown
+  // slugs keep a real HTTP 404 (parent (site)/loading.tsx was removed for this).
   const event = await getEventBySlug(slug);
   if (!event) notFound();
 
+  return <EventDetailBody slug={slug} event={event} />;
+}
+
+async function EventDetailBody({
+  slug,
+  event,
+}: {
+  slug: string;
+  event: NonNullable<Awaited<ReturnType<typeof getEventBySlug>>>;
+}) {
   const [member, calendar] = await Promise.all([getMember(), getEventCalendar()]);
   const eventId = event.id ?? (await resolvePublishedEventId(slug));
 

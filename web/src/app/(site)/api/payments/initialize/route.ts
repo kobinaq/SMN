@@ -60,7 +60,7 @@ export async function POST(request: Request) {
         return Response.json({ error: "Event is not open for registration." }, { status: 400 });
       }
       if (event.pricing !== "paid") {
-        return Response.json({ error: "This event is free — use register instead." }, { status: 400 });
+        return Response.json({ error: "This event is free. Use register instead." }, { status: 400 });
       }
       amount = Number(event.amount || 0);
       currency = String(event.currency || "GHS");
