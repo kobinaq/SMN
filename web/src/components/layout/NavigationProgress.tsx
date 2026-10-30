@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 function prefersReducedMotion() {
@@ -37,27 +37,59 @@ function isInternalNavClick(event: MouseEvent) {
 }
 
 /**
- * Thin top bar during App Router client navigations. Starts on internal link
- * click and finishes when the pathname or searchParams change. With
- * prefers-reduced-motion, shows a static indicator instead of nothing.
+ * Watches the route. Lives inside Suspense because useSearchParams would
+ * otherwise opt the site layout out of static rendering. That boundary can
+ * mount later than the rest of the page, so it only reports route changes;
+ * the click listener lives in the outer component.
  */
-function NavigationProgressInner() {
+function RouteChangeWatcher({ onRouteChange }: { onRouteChange: () => void }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const search = searchParams?.toString() ?? "";
+  const first = useRef(true);
+  const callback = useRef(onRouteChange);
+
+  useEffect(() => {
+    callback.current = onRouteChange;
+  }, [onRouteChange]);
+
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    // Defer finish so a same-tick start (query-only soft nav) can paint first.
+    const frame = window.requestAnimationFrame(() => {
+      callback.current();
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [pathname, search]);
+
+  return null;
+}
+
+/**
+ * Thin top bar during App Router client navigations. Starts on internal link
+ * click and finishes when the pathname or searchParams change. With
+ * prefers-reduced-motion, shows a static indicator instead of nothing.
+ *
+ * The click listener is attached here, outside the Suspense boundary, so it
+ * is live as soon as the layout hydrates. Once attached it sets
+ * data-navigation-ready on <html>, which e2e tests wait for before clicking.
+ */
+export function NavigationProgress() {
   const [visible, setVisible] = useState(false);
   const [width, setWidth] = useState(0);
   const [staticBar, setStaticBar] = useState(false);
-  const first = useRef(true);
   const navigating = useRef(false);
   const timers = useRef<number[]>([]);
 
-  const clearTimers = () => {
+  const clearTimers = useCallback(() => {
     for (const id of timers.current) window.clearTimeout(id);
     timers.current = [];
-  };
+  }, []);
 
-  const startProgress = () => {
+  const startProgress = useCallback(() => {
     clearTimers();
     navigating.current = true;
     const reduced = prefersReducedMotion();
@@ -69,9 +101,9 @@ function NavigationProgressInner() {
     }
     setWidth(15);
     timers.current.push(window.setTimeout(() => setWidth(72), 90));
-  };
+  }, [clearTimers]);
 
-  const finishProgress = () => {
+  const finishProgress = useCallback(() => {
     if (!navigating.current) return;
     navigating.current = false;
     clearTimers();
@@ -89,54 +121,45 @@ function NavigationProgressInner() {
         reduced ? 180 : 220,
       ),
     );
-  };
+  }, [clearTimers]);
 
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
       if (isInternalNavClick(event)) startProgress();
     };
+    const root = document.documentElement;
     document.addEventListener("click", onClick, true);
+    root.setAttribute("data-navigation-ready", "");
     return () => {
       document.removeEventListener("click", onClick, true);
+      root.removeAttribute("data-navigation-ready");
       clearTimers();
     };
-  }, []);
-
-  useEffect(() => {
-    if (first.current) {
-      first.current = false;
-      return;
-    }
-    finishProgress();
-  }, [pathname, search]);
-
-  if (!visible) return null;
+  }, [clearTimers, startProgress]);
 
   return (
-    <div
-      className="pointer-events-none fixed inset-x-0 top-0 z-[100] h-0.5 bg-transparent"
-      role="progressbar"
-      aria-hidden
-      data-navigation-progress=""
-      data-reduced-motion={staticBar ? "true" : undefined}
-    >
-      <div
-        className={
-          staticBar
-            ? "h-full w-full bg-accent"
-            : "h-full bg-accent transition-[width] duration-300 ease-out"
-        }
-        style={staticBar ? undefined : { width: `${width}%` }}
-      />
-    </div>
-  );
-}
-
-/** Suspense boundary so useSearchParams does not opt the site layout out of static rendering. */
-export function NavigationProgress() {
-  return (
-    <Suspense fallback={null}>
-      <NavigationProgressInner />
-    </Suspense>
+    <>
+      <Suspense fallback={null}>
+        <RouteChangeWatcher onRouteChange={finishProgress} />
+      </Suspense>
+      {visible ? (
+        <div
+          className="pointer-events-none fixed inset-x-0 top-0 z-[100] h-0.5 bg-transparent"
+          role="progressbar"
+          aria-hidden
+          data-navigation-progress=""
+          data-reduced-motion={staticBar ? "true" : undefined}
+        >
+          <div
+            className={
+              staticBar
+                ? "h-full w-full bg-accent"
+                : "h-full bg-accent transition-[width] duration-300 ease-out"
+            }
+            style={staticBar ? undefined : { width: `${width}%` }}
+          />
+        </div>
+      ) : null}
+    </>
   );
 }

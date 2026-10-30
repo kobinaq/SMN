@@ -30,6 +30,43 @@ test.describe("marketing navigation and CTAs", () => {
     );
   });
 
+  test("home hero headline, primary Explore the Academy and secondary Join the Community CTAs", async ({ page }) => {
+    await page.goto("/");
+    const hero = page.locator("[data-hero]");
+    await expect(hero.getByRole("heading", { level: 1 })).toContainText(
+      /Learn social media marketing[\s\S]*Put it into practice[\s\S]*Work towards results/i,
+    );
+    // Order matters: the first hero CTA is the primary (filled) button.
+    const ctas = hero.locator(".btn-row-mobile a");
+    await expect(ctas).toHaveCount(2);
+    await expect(ctas.nth(0)).toHaveText(/explore the academy/i);
+    await expect(ctas.nth(0)).toHaveAttribute("href", "/academy");
+    await expect(ctas.nth(1)).toHaveText(/join the community/i);
+    await expect(ctas.nth(1)).toHaveAttribute("href", "/signup");
+  });
+
+  test("home main has no em dash and no SMN, internship or hire copy", async ({ page }) => {
+    await page.goto("/");
+    const text = await page.locator("main").innerText();
+    expect(text).not.toMatch(/\u2014|&mdash;/);
+    expect(text).not.toMatch(/\bSMN\b/);
+    expect(text).not.toMatch(/internship/i);
+    expect(text).not.toMatch(/\bhire\b/i);
+  });
+
+  test.describe("home at 390px", () => {
+    test.use({ viewport: { width: 390, height: 844 } });
+
+    test("does not overflow horizontally", async ({ page }) => {
+      await page.goto("/");
+      const overflowed = await page.evaluate(() => {
+        const doc = document.documentElement;
+        return doc.scrollWidth > doc.clientWidth + 1;
+      });
+      expect(overflowed).toBe(false);
+    });
+  });
+
   test("nav shows the T3 labels", async ({ page }) => {
     await page.goto("/");
     const primary = page.getByRole("navigation", { name: "Primary" });
@@ -82,6 +119,8 @@ test.describe("marketing navigation and CTAs", () => {
 
   test("navigation progress bar appears on internal link click", async ({ page }) => {
     await page.goto("/");
+    // The click listener sets this once attached; clicking earlier can race hydration.
+    await page.waitForSelector("html[data-navigation-ready]", { state: "attached" });
     const progressAppeared = page.waitForSelector("[data-navigation-progress]", {
       state: "attached",
       timeout: 5000,
@@ -95,33 +134,102 @@ test.describe("marketing navigation and CTAs", () => {
 
   test("navigation progress completes and disappears on a query-only link", async ({ page }) => {
     await page.goto("/resources");
+    await page.waitForSelector("html[data-navigation-ready]", { state: "attached" });
     const progress = page.locator("[data-navigation-progress]");
     await expect(progress).toHaveCount(0);
-    const appeared = page.waitForSelector("[data-navigation-progress]", {
-      state: "attached",
-      timeout: 5000,
+
+    // Install the watcher and wait until it is armed before clicking, so a
+    // fast query-only soft nav cannot finish before observation starts.
+    await page.evaluate(() => {
+      const w = window as Window & {
+        __navProgressSeen?: Promise<boolean>;
+        __navProgressArmed?: boolean;
+      };
+      w.__navProgressArmed = false;
+      w.__navProgressSeen = new Promise<boolean>((resolve) => {
+        const done = (value: boolean) => {
+          observer.disconnect();
+          window.clearTimeout(timeout);
+          resolve(value);
+        };
+        if (document.querySelector("[data-navigation-progress]")) {
+          w.__navProgressArmed = true;
+          resolve(true);
+          return;
+        }
+        const observer = new MutationObserver(() => {
+          if (document.querySelector("[data-navigation-progress]")) done(true);
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+        const timeout = window.setTimeout(() => done(false), 8000);
+        w.__navProgressArmed = true;
+      });
     });
-    await page.getByRole("link", { name: "Template", exact: true }).first().click();
-    await appeared;
+    await page.waitForFunction(() => {
+      return Boolean((window as Window & { __navProgressArmed?: boolean }).__navProgressArmed);
+    });
+
+    await page
+      .getByRole("navigation", { name: "Resource types" })
+      .getByRole("link", { name: "Template", exact: true })
+      .click();
+    expect(
+      await page.evaluate(() => (window as Window & { __navProgressSeen?: Promise<boolean> }).__navProgressSeen),
+    ).toBe(true);
     await page.waitForURL(/[?&]type=Template/);
     await expect(progress).toHaveCount(0, { timeout: 5000 });
   });
 
   test("navigation progress does not start on a same-URL click", async ({ page }) => {
     await page.goto("/resources?type=Template");
-    const appeared = await page.evaluate(async () => {
-      let seen = false;
-      const observer = new MutationObserver(() => {
-        if (document.querySelector("[data-navigation-progress]")) seen = true;
-      });
-      observer.observe(document.body, { childList: true, subtree: true });
-      const nav = document.querySelector('nav[aria-label="Resource types"]');
-      const link = nav?.querySelector('a[aria-current="page"]') as HTMLAnchorElement | null;
-      link?.click();
-      await new Promise((resolve) => setTimeout(resolve, 250));
-      observer.disconnect();
-      return seen;
+    const current = page
+      .getByRole("navigation", { name: "Resource types" })
+      .getByRole("link", { name: "Template", exact: true });
+    await expect(current).toHaveAttribute("aria-current", "page");
+    await page.waitForSelector("html[data-navigation-ready]", { state: "attached" });
+
+    // Count full document loads so a reload cannot hide the bar check below
+    // (a reload would also wipe the window flags and make the test pass falsely).
+    let documentLoads = 0;
+    page.on("load", () => {
+      documentLoads += 1;
     });
+
+    await page.evaluate(() => {
+      const w = window as Window & {
+        __sameUrlProgressSeen?: boolean;
+        __sameUrlObserver?: MutationObserver;
+        __sameUrlNoReload?: boolean;
+      };
+      w.__sameUrlNoReload = true;
+      w.__sameUrlProgressSeen = false;
+      w.__sameUrlObserver?.disconnect();
+      w.__sameUrlObserver = new MutationObserver(() => {
+        if (document.querySelector("[data-navigation-progress]")) {
+          w.__sameUrlProgressSeen = true;
+        }
+      });
+      w.__sameUrlObserver.observe(document.body, { childList: true, subtree: true });
+    });
+
+    await current.click();
+    await expect(page).toHaveURL(/[?&]type=Template/);
+    await page.evaluate(() => new Promise<void>((resolve) => window.setTimeout(resolve, 300)));
+
+    const { appeared, sameDocument } = await page.evaluate(() => {
+      const w = window as Window & {
+        __sameUrlProgressSeen?: boolean;
+        __sameUrlObserver?: MutationObserver;
+        __sameUrlNoReload?: boolean;
+      };
+      w.__sameUrlObserver?.disconnect();
+      return {
+        appeared: Boolean(w.__sameUrlProgressSeen),
+        sameDocument: w.__sameUrlNoReload === true,
+      };
+    });
+    expect(sameDocument, "same-URL click must not trigger a full reload").toBe(true);
+    expect(documentLoads).toBe(0);
     expect(appeared).toBe(false);
     await expect(page.locator("[data-navigation-progress]")).toHaveCount(0);
   });
@@ -135,11 +243,11 @@ test.describe("marketing navigation and CTAs", () => {
 
   test("community and contact WhatsApp CTAs are text links", async ({ page }) => {
     await page.goto("/community");
-    const communityWa = page.getByRole("link", { name: /also join our whatsapp group/i });
+    const communityWa = page.getByRole("link", { name: /also get tsa updates on whatsapp/i });
     await expect(communityWa.first()).toBeVisible();
     await expect(communityWa.first()).toHaveAttribute("href", /whatsapp/i);
     await page.goto("/contact");
-    const contactWa = page.getByRole("link", { name: /also join our whatsapp group/i });
+    const contactWa = page.getByRole("link", { name: /also get tsa updates on whatsapp/i });
     await expect(contactWa.first()).toBeVisible();
     await expect(contactWa.first()).toHaveAttribute("href", /whatsapp/i);
   });
@@ -186,6 +294,10 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(page.getByText(/after acceptance/i).first()).toBeVisible();
     await expect(page.getByLabel(/full name/i)).toBeVisible();
     await expect(page.getByRole("button", { name: /submit application/i })).toBeVisible();
+    // Start date copy reads as a sentence whether or not a date is confirmed.
+    const mainText = await page.locator("main").innerText();
+    expect(mainText).not.toMatch(/Next intake Next/i);
+    expect(mainText).toMatch(/Next intake [^.\n]+\.|Next cohort dates coming soon\./);
   });
 
   test("partner page has no public hire or job CTAs", async ({ page }) => {

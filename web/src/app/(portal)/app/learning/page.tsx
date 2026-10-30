@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { cohortStartSentence } from "@/lib/cohort-copy";
 import { ArrowRight, BookOpen, CalendarDays, Users } from "@/components/ui/icons";
 import { LearningDashboard } from "@/components/app/LearningDashboard";
 import { PaymentSuccessBeacon } from "@/components/payments/PaymentSuccessBeacon";
@@ -179,7 +180,7 @@ export default async function LearningPage({ searchParams }: Props) {
       )}
 
       <p className="text-sm text-text-3">
-        Next intake: {settings.cohort.startDate}.{" "}
+        {cohortStartSentence(settings.cohort.startDate)}{" "}
         <Link href="/apply" className="text-accent hover:underline">
           Apply
         </Link>

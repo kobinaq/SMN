@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cohortStartLabel } from "@/lib/cohort-copy";
 import Link from "next/link";
 import { Masthead } from "@/components/site/kit";
 import { Button } from "@/components/ui/Button";
@@ -68,7 +69,7 @@ export default async function CohortPage() {
         }
         meta={
           <>
-            {site.cohort.duration} · {site.cohort.startDate} · {site.cohort.seats} seats ·{" "}
+            {site.cohort.duration} · {cohortStartLabel(site.cohort.startDate)} · {site.cohort.seats} seats ·{" "}
             {site.cohort.priceLabel}
           </>
         }
@@ -133,7 +134,9 @@ export default async function CohortPage() {
               <p className="eyebrow text-text-3">
                 Next intake
               </p>
-              <p className="mt-3 font-display text-3xl text-text-1">{site.cohort.startDate}</p>
+              <p className="mt-3 font-display text-3xl text-text-1">
+                {cohortStartLabel(site.cohort.startDate)}
+              </p>
               <dl className="mt-6 space-y-3 text-sm text-text-2">
                 <div className="flex justify-between gap-4">
                   <dt className="text-text-3">Duration</dt>
@@ -282,7 +285,7 @@ export default async function CohortPage() {
                   className=" border border-edge-subtle bg-raised p-6 sm:p-8"
                 >
                   <p className="eyebrow text-ai">
-                    {cohort.startDate}
+                    {cohortStartLabel(cohort.startDate)}
                   </p>
                   <h3 className="mt-3 font-display text-2xl text-text-1">{cohort.name}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-text-2">{cohort.format}</p>

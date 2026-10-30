@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cohortStartLabel } from "@/lib/cohort-copy";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Handshake, Target, Users } from "@/components/ui/icons";
@@ -76,7 +77,8 @@ export default async function ProgramsPage() {
                   mentorship, portfolio work, and community.
                 </p>
                 <p className="mt-4 eyebrow text-text-3">
-                  {site.cohort.duration} · {site.cohort.startDate} · {site.cohort.seats} seats
+                  {site.cohort.duration} · {cohortStartLabel(site.cohort.startDate)} ·{" "}
+                  {site.cohort.seats} seats
                 </p>
                 <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-text-1 transition group-hover:text-accent">
                   {cta.applyCohort.shortLabel}

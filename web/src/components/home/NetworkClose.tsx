@@ -5,28 +5,25 @@ import { cta } from "@/lib/cta";
 import { homepageClose } from "@/lib/content";
 import { img } from "@/lib/images";
 
-const [pullQuote, ...body] = homepageClose.paragraphs;
-
-/** The closing argument, and the last chance to join. */
+/** Tab 4 final CTA. Primary Join the Community → /signup; secondary Explore the Academy. */
 export function NetworkClose() {
   return (
     <Band size="lg" bordered={false} fade>
       <div className="grid items-end gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-16">
         <div>
           <Kicker>{homepageClose.lead}</Kicker>
-          <h2 className="mt-6 max-w-[12ch] font-display display-1 text-text-1">
+          <h2 className="mt-6 max-w-[14ch] font-display display-1 text-text-1">
             {homepageClose.title}
           </h2>
-          <p className="mt-10 max-w-[26ch] font-display display-3 text-accent">{pullQuote}</p>
-          <div className="mt-8 max-w-[58ch] space-y-4 rule pt-8 text-base leading-relaxed text-text-2">
-            {body.map((paragraph) => (
+          <div className="mt-8 max-w-[58ch] space-y-4 text-base leading-relaxed text-text-2">
+            {homepageClose.paragraphs.map((paragraph) => (
               <p key={paragraph.slice(0, 40)}>{paragraph}</p>
             ))}
           </div>
           <div className="mt-10 flex flex-wrap gap-3">
             <Button href={cta.joinCommunity.href}>{cta.joinCommunity.label}</Button>
-            <Button href={cta.applyCohort.href} variant="secondary">
-              {cta.applyCohort.shortLabel}
+            <Button href={cta.explorePrograms.href} variant="secondary">
+              {cta.explorePrograms.label}
             </Button>
           </div>
         </div>
