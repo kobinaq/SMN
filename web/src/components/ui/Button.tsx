@@ -6,8 +6,9 @@ type Variant = "primary" | "secondary" | "ghost" | "light" | "ai" | "danger";
 
 const variants: Record<Variant, string> = {
   // Accent-strong rather than deep-blue: the old primary sat too close to the
-  // dark ground to read as the obvious action on a page.
-  primary: "bg-accent-strong text-[#08111f] hover:bg-accent shadow-[var(--shadow-1)]",
+  // dark ground to read as the obvious action on a page. Text uses on-accent,
+  // which each band overrides so light bands get white on deep blue (AA).
+  primary: "bg-accent-strong text-on-accent hover:bg-accent shadow-[var(--shadow-1)]",
   secondary: "bg-inset text-text-1 border border-edge hover:border-edge-strong",
   ghost: "bg-transparent text-text-2 border border-transparent hover:bg-inset hover:text-text-1",
   light: "bg-white text-near-black hover:bg-off-white",

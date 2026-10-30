@@ -44,6 +44,9 @@
   --accent: #7eb6ff;
   --accent-strong: #4f8ff0;
   --accent-bg: rgba(126, 182, 255, 0.12);
+  /* Text on a filled accent-strong/accent surface (primary buttons). Each
+     band sets its own so the pair always clears WCAG AA 4.5:1. */
+  --on-accent: #08111f;
   --ai: #6fcfb0;
   --ai-strong: #49b592;
   --ai-bg: rgba(111, 207, 176, 0.12);
@@ -96,6 +99,7 @@
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
   --color-accent-bg: var(--accent-bg);
+  --color-on-accent: var(--on-accent);
   --color-ai: var(--ai);
   --color-ai-strong: var(--ai-strong);
   --color-ai-bg: var(--ai-bg);
@@ -553,6 +557,8 @@ button {
   --accent: #1e5fd0;
   --accent-strong: #0a2f8f;
   --accent-bg: rgba(30, 95, 208, 0.1);
+  /* White on #0a2f8f is 11.6:1 and on hover #1e5fd0 is 5.8:1. */
+  --on-accent: #ffffff;
   --ai: #17795c;
   --ai-bg: rgba(23, 121, 92, 0.1);
   color: var(--text-1);
@@ -573,6 +579,7 @@ button {
   --accent: #ffffff;
   --accent-strong: #ffffff;
   --accent-bg: rgba(255, 255, 255, 0.14);
+  --on-accent: #08111f;
   color: var(--text-1);
 }
 
