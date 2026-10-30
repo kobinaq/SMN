@@ -8,11 +8,12 @@ import { FeaturedPost } from "@/components/blog/FeaturedPost";
 import { getBlogPosts } from "@/lib/blog";
 import { seoTitle } from "@/lib/brand";
 import { blogCategories } from "@/lib/content";
+import { insightsHero, insightsLinks } from "@/lib/pages/resources";
 
 export const metadata: Metadata = {
-  title: seoTitle("Social Media Marketing Tips"),
+  title: seoTitle("Insights"),
   description:
-    "Practical insights, frameworks and perspectives on social media, marketing strategy, AI, careers and the changing world of work.",
+    "Articles, case studies and perspectives on social media marketing, strategy and AI from Think Social Academy.",
   alternates: { canonical: "/insights" },
   openGraph: { url: "/insights" },
 };
@@ -47,16 +48,15 @@ export default async function InsightsPage({ searchParams }: Props) {
       <section className="border-b border-edge-subtle bg-canvas pt-[calc(5.5rem+env(safe-area-inset-top))] pb-10 sm:pt-32 sm:pb-14 md:pt-36 md:pb-16">
         <div className="container-wide">
           <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-accent sm:text-xs">
-            Insights
+            {insightsHero.kicker}
           </p>
           <div className="mt-3 flex flex-col gap-6 lg:mt-4 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
               <h1 className="font-display text-[1.85rem] leading-tight text-text-1 sm:text-4xl md:text-5xl lg:text-6xl">
-                Ideas for marketers navigating what is next.
+                {insightsHero.title}
               </h1>
               <p className="mt-3 text-sm leading-relaxed text-text-2 sm:mt-4 sm:text-base md:text-lg">
-                Practical insights, frameworks, and perspectives on social media, marketing
-                strategy, AI, careers, and the changing world of work.
+                {insightsHero.lede}
               </p>
             </div>
             <p className="text-sm text-text-3">
@@ -114,18 +114,11 @@ export default async function InsightsPage({ searchParams }: Props) {
           <BlogNewsletter />
 
           <div className="flex flex-col gap-3 border-t border-edge-subtle pt-10 sm:flex-row sm:flex-wrap sm:gap-x-6">
-            <Link href="/academy/cohort" className="text-sm text-accent transition hover:text-text-1">
-              Social media marketing training
-            </Link>
-            <Link href="/academy/courses" className="text-sm text-accent transition hover:text-text-1">
-              Self-paced courses
-            </Link>
-            <Link href="/community" className="text-sm text-accent transition hover:text-text-1">
-              Join the community
-            </Link>
-            <Link href="/resources" className="text-sm text-accent transition hover:text-text-1">
-              Free resources
-            </Link>
+            {insightsLinks.map((link) => (
+              <Link key={link.href} href={link.href} className="text-sm text-accent transition hover:text-text-1">
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       </section>

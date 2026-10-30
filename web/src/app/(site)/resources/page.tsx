@@ -6,15 +6,21 @@ import { NewsletterForm } from "@/components/forms/NewsletterForm";
 import { ResourceRow } from "@/components/resources/ResourceRow";
 import { ResourceTypeNav } from "@/components/resources/ResourceTypeNav";
 import { Button } from "@/components/ui/Button";
-import { Band, Checklist, Masthead, Placeholder } from "@/components/site/kit";
-import { resourceOfferings, seoTitle } from "@/lib/brand";
+import { Band, Checklist, Masthead, Placeholder, SectionHead } from "@/components/site/kit";
+import { seoTitle } from "@/lib/brand";
 import { resourceTypes } from "@/lib/content";
+import {
+  resourceAccess,
+  resourceCategories,
+  resourceLibraryContents,
+  resourcesHero,
+} from "@/lib/pages/resources";
 import { getResourceLibrary } from "@/lib/resources";
 
 export const metadata: Metadata = {
   title: seoTitle("Social Media Marketing Resources"),
   description:
-    "Practical marketing resources you can actually use. Templates, frameworks, checklists, AI prompts, and guides from Think Social Academy.",
+    "Keep learning with practical social media marketing resources from Think Social Academy: articles, guides, templates, tools, case studies and webinars.",
   alternates: { canonical: "/resources" },
   openGraph: { url: "/resources" },
 };
@@ -31,6 +37,9 @@ const TITLES: Record<string, { title: string; lede: string }> = {
 };
 
 /**
+ * Tab 4 "05 Resources" (ticket T9). The unfiltered view adds the Tab 4
+ * categories and the public / member split above the library.
+ *
  * The whole library on one page. Templates and Guides were separate pages that
  * rendered this same list with one filter applied; they are `?type=` views now,
  * so the filter nav and the empty state are written once.
@@ -58,15 +67,12 @@ export default async function ResourcesPage({
           .filter((group) => group.items.length > 0)
       : [{ type: active, items: filtered }];
 
-  const heading = TITLES[active] ?? {
-    title: "Marketing resources you can actually use.",
-    lede: "Templates, frameworks, checklists, AI prompts, and guides. Free for the community: open one, enter your email, and we send the file.",
-  };
+  const heading = TITLES[active] ?? { title: resourcesHero.title, lede: resourcesHero.lede };
 
   return (
     <>
       <Masthead
-        kicker={active === "All" ? "Resources" : `Resources · ${active}`}
+        kicker={active === "All" ? resourcesHero.kicker : `${resourcesHero.kicker} · ${active}`}
         title={heading.title}
         lede={heading.lede}
         meta={
@@ -76,7 +82,56 @@ export default async function ResourcesPage({
         }
       />
 
-      <Band size="lg" bordered={false}>
+      {active === "All" ? (
+        <>
+          <Band id="categories">
+            <SectionHead
+              kicker="Categories"
+              title="Find what you need."
+              lede="Articles, guides, templates, tools, case studies and webinars. New material is added as it is published."
+            />
+            <div className="mt-12 grid gap-px overflow-hidden border border-edge-subtle bg-edge-subtle sm:grid-cols-2 lg:grid-cols-3">
+              {resourceCategories.map((category) => (
+                <Link
+                  key={category.title}
+                  href={category.href}
+                  className="group flex min-h-11 flex-col bg-canvas p-7 transition-colors hover:bg-raised"
+                >
+                  <h3 className="font-display text-xl text-text-1">{category.title}</h3>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-text-2">{category.body}</p>
+                  <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-accent">
+                    Browse {category.title.toLowerCase()}
+                    <ArrowRight className="h-4 w-4 transition-transform duration-[var(--dur-fast)] group-hover:translate-x-1" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </Band>
+
+          <Band tone="raised" id="access">
+            <div className="grid gap-px overflow-hidden border border-edge-subtle bg-edge-subtle md:grid-cols-2">
+              {[resourceAccess.public, resourceAccess.member].map((tier) => (
+                <div key={tier.title} className="flex flex-col bg-canvas p-7 sm:p-9">
+                  <h2 className="font-display display-3 text-text-1">{tier.title}</h2>
+                  <p className="mt-4 flex-1 text-sm leading-relaxed text-text-2 sm:text-base">{tier.body}</p>
+                  <div className="mt-7 flex flex-wrap gap-3">
+                    <Button href={tier.href} variant="secondary">
+                      {tier.ctaLabel}
+                    </Button>
+                    {"secondaryHref" in tier ? (
+                      <Button href={tier.secondaryHref} variant="ghost">
+                        {tier.secondaryLabel}
+                      </Button>
+                    ) : null}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Band>
+        </>
+      ) : null}
+
+      <Band id="library" size="lg" bordered={false} className="scroll-mt-24">
         <div className="grid gap-10 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-16">
           <aside className="lg:sticky lg:top-28 lg:self-start">
             <p className="eyebrow text-text-3">Filter</p>
@@ -85,7 +140,7 @@ export default async function ResourcesPage({
             </Suspense>
 
             <p className="mt-10 eyebrow text-text-3">What is in here</p>
-            <Checklist className="mt-3" tone="muted" items={resourceOfferings} />
+            <Checklist className="mt-3" tone="muted" items={resourceLibraryContents} />
           </aside>
 
           <div>
@@ -175,8 +230,8 @@ export default async function ResourcesPage({
                 Insights
               </Link>{" "}
               or{" "}
-              <Link href="/academy/cohort" className="link-wipe text-accent">
-                apply to live training
+              <Link href="/academy" className="link-wipe text-accent">
+                explore the Academy
               </Link>
               .
             </p>
