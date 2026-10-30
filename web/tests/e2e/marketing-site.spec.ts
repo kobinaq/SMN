@@ -294,6 +294,10 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(page.getByText(/after acceptance/i).first()).toBeVisible();
     await expect(page.getByLabel(/full name/i)).toBeVisible();
     await expect(page.getByRole("button", { name: /submit application/i })).toBeVisible();
+    // Start date copy reads as a sentence whether or not a date is confirmed.
+    const mainText = await page.locator("main").innerText();
+    expect(mainText).not.toMatch(/Next intake Next/i);
+    expect(mainText).toMatch(/Next intake [^.\n]+\.|Next cohort dates coming soon\./);
   });
 
   test("partner page has no public hire or job CTAs", async ({ page }) => {

@@ -37,7 +37,9 @@ export const site = {
   cohort: {
     name: "Social Media Marketing & AI Cohort",
     // TODO(T5-placeholder): next cohort start date unconfirmed (September 2026 is past).
-    startDate: "Next cohort dates coming soon",
+    // Empty means unknown. Display it through cohortStartLabel / cohortStartSentence
+    // in lib/cohort-copy.ts so unknown dates read "Next cohort dates coming soon".
+    startDate: "",
     applicationDeadline: "Rolling. Apply early",
     duration: "4 weeks",
     seats: 30,

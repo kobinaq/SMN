@@ -22,3 +22,18 @@ export function cohortDeadlineSentence(deadline: string | null | undefined): str
   if (!text || /^rolling\b/i.test(text)) return "Applications are rolling. Apply early.";
   return `Apply by ${text}.`;
 }
+
+/** Shown wherever a start date would go while the next cohort has no confirmed date. */
+export const COHORT_DATES_PENDING = "Next cohort dates coming soon";
+
+/** The start date for labels, tiles and meta lines, or neutral copy when unknown. */
+export function cohortStartLabel(startDate: string | null | undefined): string {
+  const text = (startDate ?? "").trim();
+  return text || COHORT_DATES_PENDING;
+}
+
+/** "Next intake <date>." for a known date, otherwise "Next cohort dates coming soon." */
+export function cohortStartSentence(startDate: string | null | undefined): string {
+  const text = (startDate ?? "").trim().replace(/[.\s]+$/, "");
+  return text ? `Next intake ${text}.` : `${COHORT_DATES_PENDING}.`;
+}

@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { cohortAudienceSentence, cohortDeadlineSentence } from "@/lib/cohort-copy";
+import {
+  cohortAudienceSentence,
+  cohortDeadlineSentence,
+  cohortStartLabel,
+  cohortStartSentence,
+} from "@/lib/cohort-copy";
 import { site } from "@/lib/site";
 
 describe("cohortAudienceSentence", () => {
@@ -26,5 +31,19 @@ describe("cohortDeadlineSentence", () => {
 
   it("keeps 'Apply by' for a real date", () => {
     expect(cohortDeadlineSentence("15 January 2027")).toBe("Apply by 15 January 2027.");
+  });
+});
+
+describe("cohort start date copy", () => {
+  it("reads as a proper sentence when the date is unknown", () => {
+    expect(cohortStartSentence(site.cohort.startDate)).toBe("Next cohort dates coming soon.");
+    expect(cohortStartSentence(null)).toBe("Next cohort dates coming soon.");
+    expect(cohortStartLabel("  ")).toBe("Next cohort dates coming soon");
+  });
+
+  it("uses 'Next intake <date>.' for a known date", () => {
+    expect(cohortStartSentence("January 2027")).toBe("Next intake January 2027.");
+    expect(cohortStartSentence("January 2027.")).toBe("Next intake January 2027.");
+    expect(cohortStartLabel("January 2027")).toBe("January 2027");
   });
 });

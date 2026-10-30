@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { cohortStartLabel } from "@/lib/cohort-copy";
 import { cta } from "@/lib/cta";
 import { site, nav } from "@/lib/site";
 import {
@@ -59,7 +60,9 @@ describe("marketing defaults", () => {
 
   it("uses a 4-week cohort duration and Tab 5 home CTAs in public defaults", () => {
     expect(site.cohort.duration).toBe("4 weeks");
-    expect(site.cohort.startDate.toLowerCase()).toContain("coming soon");
+    // Unknown start date is empty; display goes through cohort-copy helpers.
+    expect(site.cohort.startDate).toBe("");
+    expect(cohortStartLabel(site.cohort.startDate).toLowerCase()).toContain("coming soon");
     expect(site.homepage.primaryCtaLabel).toBe("Explore the Academy");
     expect(site.homepage.secondaryCtaLabel).toBe("Join the Community");
     expect(site.homepage.secondaryCtaHref).toBe("/signup");

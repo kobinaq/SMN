@@ -7,7 +7,11 @@ import { Band, Kicker, SectionHead } from "@/components/site/kit";
 import { useSiteSettings } from "@/components/layout/SiteSettingsProvider";
 import { ArrowUpRight } from "@/components/ui/icons";
 import { img } from "@/lib/images";
-import { cohortAudienceSentence, cohortDeadlineSentence } from "@/lib/cohort-copy";
+import {
+  cohortAudienceSentence,
+  cohortDeadlineSentence,
+  cohortStartLabel,
+} from "@/lib/cohort-copy";
 import { cta } from "@/lib/cta";
 import { homepageProgrammes } from "@/lib/content";
 import { trackEvent } from "@/lib/analytics";
@@ -20,8 +24,8 @@ export function AcademyPreview() {
   const site = useSiteSettings();
 
   const facts = [
-    // TODO(T5-placeholder): start date unconfirmed; site.cohort.startDate holds neutral copy.
-    ["Starts", site.cohort.startDate],
+    // TODO(T5-placeholder): start date unconfirmed; empty startDate shows neutral copy.
+    ["Starts", cohortStartLabel(site.cohort.startDate)],
     ["Duration", site.cohort.duration],
     ["Seats", `${site.cohort.seats}`],
     // TODO(T5-placeholder): fees unconfirmed.

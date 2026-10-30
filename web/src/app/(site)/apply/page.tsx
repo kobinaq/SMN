@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cohortStartSentence } from "@/lib/cohort-copy";
 import { ApplicationForm } from "@/components/forms/ApplicationForm";
 import { Masthead } from "@/components/site/kit";
 import { Button } from "@/components/ui/Button";
@@ -64,7 +65,7 @@ export default async function ApplyPage() {
         alt="Lead instructor teaching a marketing session"
         kicker="Think Social Academy"
         title={`Apply to the ${site.cohort.name}`}
-        lede={`Next intake ${site.cohort.startDate}. Submit first. TSA reviews before any payment.`}
+        lede={`${cohortStartSentence(site.cohort.startDate)} Submit first. TSA reviews before any payment.`}
         actions={
           <>
             <Button href="#application">Start application</Button>
