@@ -1,6 +1,6 @@
 import { HomeStory } from "@/components/motion/HomeStory";
-import { FounderStory } from "@/components/home/FounderStory";
 import { HeroPhotoGallery } from "@/components/home/HeroPhotoGallery";
+import { FounderStory } from "@/components/home/FounderStory";
 import { LearningOfferings } from "@/components/home/LearningOfferings";
 import { WhoItsFor } from "@/components/home/WhoItsFor";
 import { HomeValues } from "@/components/home/HomeValues";
@@ -12,15 +12,15 @@ import { getStories } from "@/lib/cms";
 
 /**
  * Website Structure doc homepage order:
- * founder → hero → offerings → audience → values → connect → grow → testimonials → partner.
+ * hero → founder → offerings → audience → values → connect → grow → testimonials → partner.
  */
 export async function HomePage() {
   const stories = await getStories();
 
   return (
     <HomeStory>
-      <FounderStory />
       <HeroPhotoGallery />
+      <FounderStory />
       <LearningOfferings />
       <WhoItsFor />
       <HomeValues />

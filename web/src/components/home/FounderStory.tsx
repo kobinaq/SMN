@@ -5,7 +5,7 @@ import { Band, Kicker } from "@/components/site/kit";
 import { instructor } from "@/lib/content";
 import { homepageFounder } from "@/lib/pages/home";
 
-/** Doc Section 2 — founder profile sits above the hero on the homepage. */
+/** Doc Section 2 - founder profile follows the hero on the homepage. */
 export function FounderStory() {
   return (
     <Band tone="raised" size="lg" fade bordered={false}>
