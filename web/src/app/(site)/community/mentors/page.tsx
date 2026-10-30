@@ -24,7 +24,7 @@ const sessions = [
   },
   {
     title: "Portfolio development",
-    body: "Walk through a case study with someone who hires or briefs marketers.",
+    body: "Walk through a case study with someone who briefs and reviews marketing work.",
   },
   {
     title: "Personal branding",
@@ -156,7 +156,7 @@ export default function MentorshipPage() {
         <SectionHead
           kicker="Give back"
           title="Become a mentor."
-          lede="If you have real experience, help marketers in the Network grow with clear, honest guidance. This is a reviewed directory, not an open listing."
+          lede="If you have real experience, help marketers in the TSA community grow with clear, honest guidance. This is a reviewed directory, not an open listing."
           actions={<Button href="/app/mentors">Apply to mentor</Button>}
         />
 
