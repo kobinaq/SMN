@@ -1,22 +1,23 @@
 import type { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
-import {
-  ArrowRight,
-  CalendarDays,
-  Handshake,
-  MessageCircle,
-  Sparkles,
-  Users,
-  Briefcase,
-} from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button";
+import { Band, Checklist, CtaBand, DefinitionGrid, Masthead, SectionHead } from "@/components/site/kit";
+import { UpcomingEvents } from "@/components/home/UpcomingEvents";
 import { excerptStoryQuote } from "@/lib/content";
 import { seoTitle } from "@/lib/brand";
 import { cta } from "@/lib/cta";
 import { img } from "@/lib/images";
-import { getSiteSettings, getStories } from "@/lib/cms";
+import { getEvents, getSiteSettings, getStories } from "@/lib/cms";
 import { itemShareImages } from "@/lib/share-metadata";
+import {
+  communityAccess,
+  communityEarlyAccess,
+  communityHero,
+  communityIdea,
+  communityMentors,
+  communityMetadata,
+  communityStories,
+} from "@/lib/community-copy";
 
 export async function generateMetadata(
   _props: unknown,
@@ -30,9 +31,8 @@ export async function generateMetadata(
     twitterImages: parentMeta.twitter?.images,
   });
   return {
-    title: seoTitle("Marketing Community in Ghana"),
-    description:
-      "Join a growing community of aspiring and professional marketers learning, connecting, finding mentors and discovering opportunities.",
+    title: seoTitle(communityMetadata.title),
+    description: communityMetadata.description,
     alternates: { canonical: "/community" },
     openGraph: {
       url: "/community",
@@ -46,425 +46,141 @@ export async function generateMetadata(
 
 export const revalidate = 60;
 
-const whoFor = [
-  {
-    title: "Starting out",
-    body: "Build your foundation, discover your strengths, and stop learning marketing in isolation.",
-  },
-  {
-    title: "Building your career",
-    body: "Develop strategic skills, get feedback, and strengthen your professional profile.",
-  },
-  {
-    title: "Already in marketing",
-    body: "Stay current, sharpen your thinking, and connect with people across the industry.",
-  },
-  {
-    title: "Building a business",
-    body: "Understand marketing better and meet people who can help you grow.",
-  },
-];
+/** Secondary WhatsApp text link. Only ever rendered after a signup CTA. */
+function WhatsAppUpdatesLink({ href }: { href?: string | null }) {
+  if (!href) return null;
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex min-h-11 min-w-11 items-center text-sm text-text-2 underline underline-offset-4 hover:text-text-1"
+    >
+      {cta.whatsapp.communityLabel}
+    </a>
+  );
+}
 
-const channels = [
-  {
-    icon: Sparkles,
-    title: "Learn together",
-    body: "Discuss marketing ideas, industry changes, tools, and trends.",
-  },
-  {
-    icon: MessageCircle,
-    title: "Ask questions",
-    body: "Get perspectives from other members and experienced professionals.",
-  },
-  {
-    icon: Handshake,
-    title: "Find mentors",
-    body: "Connect with people who can help you navigate your career.",
-  },
-  {
-    icon: Briefcase,
-    title: "Discover opportunities",
-    body: "Find events, marketing simulations, projects, and industry connections.",
-  },
-  {
-    icon: Users,
-    title: "Build relationships",
-    body: "Meet people who could become collaborators, colleagues, clients, or friends.",
-  },
-  {
-    icon: CalendarDays,
-    title: "Keep growing",
-    body: "Stay connected to learning long after you have completed a course.",
-  },
-];
-
-const principles = [
-  {
-    title: "Be useful",
-    body: "Share what worked, what failed, and what you learned. Help others move faster.",
-  },
-  {
-    title: "Be kind, stay sharp",
-    body: "Honest feedback is welcome. Personal attacks and spam are not.",
-  },
-  {
-    title: "No spam pitches",
-    body: "Build relationships first. Cold promo dumps get removed.",
-  },
-  {
-    title: "Show your work",
-    body: "Drafts and works-in-progress are encouraged. That is how people improve.",
-  },
-];
-
-const steps = [
-  {
-    step: "01",
-    title: "Create your free account",
-    body: "Sign up for TSA, introduce yourself, and say what you are working on right now.",
-  },
-  {
-    step: "02",
-    title: "Show up weekly",
-    body: "Ask one question, share one piece of work, or help someone else. Consistency compounds.",
-  },
-  {
-    step: "03",
-    title: "Go deeper",
-    body: "Come to events, grab free resources, or apply to the cohort when you are ready for live training.",
-  },
-];
+/** Events from today onwards, soonest first. The band hides itself when empty. */
+function selectUpcoming<T extends { date: string }>(events: T[], limit = 3) {
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+  return events
+    .filter((event) => {
+      const time = Date.parse(event.date);
+      return !Number.isNaN(time) && time >= startOfToday.getTime();
+    })
+    .slice(0, limit);
+}
 
 export default async function CommunityPage() {
-  const [site, stories] = await Promise.all([getSiteSettings(), getStories()]);
-  const communityStories = stories.slice(0, 4);
+  const [site, stories, events] = await Promise.all([
+    getSiteSettings(),
+    getStories(),
+    getEvents(),
+  ]);
+  const memberStories = stories.slice(0, 4);
+  const upcoming = selectUpcoming(events);
+
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-edge-subtle bg-canvas pt-[calc(5.5rem+env(safe-area-inset-top))] pb-14 sm:pt-32 sm:pb-20 md:pt-36 md:pb-24">
-        <div className="container-wide">
-          <div className="grid items-end gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
-            <div>
-              <p className="text-[10px] font-medium uppercase tracking-[0.24em] text-accent sm:text-xs">
-                Community
-              </p>
-              <h1 className="mt-3 max-w-2xl font-display text-[1.85rem] leading-tight text-text-1 sm:mt-4 sm:text-4xl md:text-5xl lg:text-6xl">
-                You should not have to figure out your marketing career alone
-              </h1>
-              <p className="mt-4 max-w-xl text-sm leading-relaxed text-text-2 sm:mt-5 sm:text-base md:text-lg">
-                Think Social Academy is a community for people learning, working, and growing in
-                marketing. A place to ask questions, exchange ideas, find mentors, discover selected
-                opportunities when available, and build relationships with people who understand the
-                industry you are navigating.
-              </p>
-              <div className="btn-row-mobile mt-8 sm:mt-10">
-                <Button href={cta.joinCommunity.href}>{cta.joinCommunity.label}</Button>
-                <Button href="/events" variant="secondary">
-                  See upcoming events
-                </Button>
-              </div>
-              <p className="mt-4 text-xs text-text-3 sm:text-sm">
-                <a
-                  href={site.whatsappInvite}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex min-h-11 items-center underline-offset-2 hover:underline"
-                >
-                  {cta.whatsapp.communityLabel}
-                </a>
-              </p>
-              <p className="mt-3 text-xs text-text-3 sm:text-sm">
-                Free account · Cohort members get private groups after acceptance
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              <div className="relative aspect-[3/4] overflow-hidden">
-                <Image
-                  src={img.communityPortrait}
-                  alt="Two TSA members sitting together"
-                  fill
-                  className="object-cover"
-                  sizes="40vw"
-                  priority
-                />
-              </div>
-              <div className="mt-6 grid gap-3 sm:mt-10 sm:gap-4">
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image
-                    src={img.communityCollab}
-                    alt="Members in a focused table conversation"
-                    fill
-                    className="object-cover"
-                    sizes="40vw"
-                  />
-                </div>
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image
-                    src={img.communityEvent}
-                    alt="Two members at a TSA gathering"
-                    fill
-                    className="object-cover"
-                    sizes="40vw"
-                  />
-                </div>
-              </div>
-            </div>
+      <Masthead
+        image={img.communityPortrait}
+        alt="Two TSA members sitting together"
+        kicker={communityHero.kicker}
+        title={communityHero.title}
+        lede={communityHero.lede}
+        actions={
+          <div className="flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+            <Button href={cta.joinCommunity.href}>{cta.joinCommunity.label}</Button>
+            <WhatsAppUpdatesLink href={site.whatsappInvite} />
           </div>
-        </div>
-      </section>
+        }
+        meta={communityHero.note}
+      />
 
-      {/* Stats strip */}
-      <section className="border-b border-edge-subtle bg-raised">
-        <div className="container-wide grid grid-cols-2 gap-6 py-8 sm:grid-cols-4 sm:gap-4 sm:py-10">
-          {[
-            { label: "Home base", value: "TSA account" },
-            { label: "Focus", value: "Strategy + AI" },
-            { label: "For", value: "Marketers at every stage" },
-            { label: "Vibe", value: "Helpful, not hype" },
-          ].map((item) => (
-            <div key={item.label} className="text-center sm:text-left">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-text-3 sm:text-xs">
-                {item.label}
-              </p>
-              <p className="mt-2 font-display text-lg text-text-1 sm:text-xl">{item.value}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <Band size="lg">
+        <SectionHead
+          kicker={communityAccess.kicker}
+          title={communityAccess.title}
+          lede={communityAccess.lede}
+        />
+        <DefinitionGrid className="mt-12" items={[...communityAccess.items]} />
+      </Band>
 
-      {/* Who it's for */}
-      <section className="bg-canvas py-16 sm:py-24">
-        <div className="container-wide">
-          <h2 className="max-w-2xl font-display display-3 text-text-1">
-            Built for people learning, working, and growing in marketing
-          </h2>
-          <div className="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
-            {whoFor.map((item) => (
-              <div
-                key={item.title}
-                className=" border border-edge-subtle bg-raised p-5 sm:p-6"
-              >
-                <h3 className="font-display text-lg text-text-1 sm:text-xl">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-text-2">{item.body}</p>
-              </div>
-            ))}
+      <Band tone="raised" size="lg">
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <SectionHead
+              align="stacked"
+              kicker={communityEarlyAccess.kicker}
+              title={communityEarlyAccess.title}
+              lede={communityEarlyAccess.lede}
+            />
+            <Checklist className="mt-8" items={communityEarlyAccess.items} />
           </div>
-        </div>
-      </section>
-
-      {/* What you get */}
-      <section className="border-y border-edge-subtle bg-raised py-16 sm:py-24">
-        <div className="container-wide">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div className="max-w-xl">
-              <h2 className="font-display display-3 text-text-1">
-                What happens inside the Network?
-              </h2>
-            </div>
-            <p className="max-w-sm text-sm text-text-3">
-              Not a silent group. A working room for questions, drafts, and real marketing work.
-            </p>
-          </div>
-          <div className="mt-10 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-            {channels.map((item) => (
-              <div
-                key={item.title}
-                className=" border border-edge-subtle bg-raised p-5 transition hover:border-accent/30 sm:p-6"
-              >
-                <item.icon className="h-5 w-5 text-accent" strokeWidth={1.75} />
-                <h3 className="mt-4 font-display text-lg text-text-1">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-text-2">{item.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Culture + image */}
-      <section className="bg-canvas py-16 sm:py-24">
-        <div className="container-wide grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="relative aspect-[4/3] overflow-hidden lg:aspect-[5/4]">
             <Image
-              src={img.communityCulture}
-              alt="Networking during a TSA session"
+              src={img.communityCollab}
+              alt="Members in a focused table conversation"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
-          <div>
-            <h2 className="font-display display-3 text-text-1">
-              The marketing community you wish you had started with.
-            </h2>
-            <p className="mt-4 text-sm leading-relaxed text-text-2 sm:mt-5 sm:text-base">
-              Whether you are taking your first steps into marketing or have years of experience,
-              there is room for you here. Helpful, honest, and serious about growth.
-            </p>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              {principles.map((p) => (
-                <div key={p.title} className=" border border-edge-subtle bg-raised p-4 sm:p-5">
-                  <h3 className="font-display text-base text-text-1">{p.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-text-2">{p.body}</p>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
-      </section>
+      </Band>
 
-      {/* How to join */}
-      <section className="border-y border-edge-subtle bg-raised py-16 sm:py-24">
-        <div className="container-wide">
-          <h2 className="max-w-xl font-display display-3 text-text-1">
-            Three simple steps
-          </h2>
-          <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-3">
-            {steps.map((item) => (
-              <div
-                key={item.step}
-                className="relative border border-edge-subtle bg-raised p-6 sm:p-8"
-              >
-                <p className="font-display text-sm text-accent">{item.step}</p>
-                <h3 className="mt-3 font-display text-xl text-text-1">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-text-2">{item.body}</p>
-              </div>
+      <UpcomingEvents events={upcoming} />
+
+      <Band size="lg">
+        <SectionHead
+          kicker={communityMentors.kicker}
+          title={communityMentors.title}
+          lede={communityMentors.lede}
+          actions={
+            <Button href={communityMentors.href} variant="secondary">
+              {communityMentors.ctaLabel}
+            </Button>
+          }
+        />
+      </Band>
+
+      {memberStories.length ? (
+        <Band id="stories" tone="raised" size="lg" className="scroll-mt-24">
+          <SectionHead align="stacked" kicker={communityStories.kicker} title={communityStories.title} />
+          <div className="mt-12 grid gap-px overflow-hidden border border-edge-subtle bg-edge-subtle md:grid-cols-2">
+            {memberStories.map((story) => (
+              <figure key={story.name} className="flex flex-col bg-canvas p-7 sm:p-9">
+                <blockquote className="font-display text-xl leading-snug text-text-1 sm:text-2xl">
+                  &ldquo;{excerptStoryQuote(story.quote)}&rdquo;
+                </blockquote>
+                <figcaption className="mt-8 flex items-center gap-4 rule pt-6">
+                  <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full">
+                    <Image src={story.image} alt="" fill className="object-cover" sizes="44px" />
+                  </span>
+                  <span>
+                    <span className="block text-sm font-semibold text-text-1">{story.name}</span>
+                    <span className="block text-sm text-text-3">{story.role}</span>
+                  </span>
+                </figcaption>
+              </figure>
             ))}
           </div>
-        </div>
-      </section>
+        </Band>
+      ) : null}
 
-      <section id="stories" className="scroll-mt-24 bg-canvas py-16 sm:py-24">
-        <div className="container-wide">
-          {communityStories.length ? (
-            <>
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <h2 className="font-display display-3 text-text-1">
-                    What people say about the room
-                  </h2>
-                </div>
-              </div>
-              <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-2">
-                {communityStories.map((story) => (
-                  <figure
-                    key={story.name}
-                    className=" border border-edge-subtle bg-raised p-5 sm:p-7"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="relative h-14 w-14 overflow-hidden rounded-full border border-edge-subtle">
-                        <Image
-                          src={story.image}
-                          alt={story.name}
-                          fill
-                          className="object-cover"
-                          sizes="56px"
-                        />
-                      </div>
-                      <div>
-                        <figcaption className="font-display text-lg text-text-1">{story.name}</figcaption>
-                        <p className="text-sm text-text-3">{story.role}</p>
-                      </div>
-                    </div>
-                    <blockquote className="mt-5 text-sm leading-relaxed text-text-2 sm:text-base">
-                      “{excerptStoryQuote(story.quote)}”
-                    </blockquote>
-                  </figure>
-                ))}
-              </div>
-            </>
-          ) : (
-            <h2 className="font-display display-3 text-text-1">Member stories</h2>
-          )}
-        </div>
-      </section>
-
-      {/* Pathways */}
-      <section className="border-t border-edge-subtle bg-raised py-16 sm:py-24">
-        <div className="container-wide">
-          <h2 className="max-w-xl font-display display-3 text-text-1">
-            Community is the base. Learning goes further.
-          </h2>
-          <div className="mt-10 grid gap-4 sm:mt-12 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5">
-            {[
-              {
-                title: "Flagship training",
-                body: "Live Social Media Marketing and AI with practice, portfolio work, and community.",
-                href: "/academy/cohort",
-                cta: "View training",
-              },
-              {
-                title: "Events",
-                body: "Webinars, workshops, and community gatherings announced first in the Network.",
-                href: "/events",
-                cta: "See upcoming events",
-              },
-              {
-                title: "Mentorship",
-                body: "Guidance from people already doing the work. Bring one clear question.",
-                href: "/community/mentors",
-                cta: "How mentorship works",
-              },
-              {
-                title: "Free resources",
-                body: "Templates, frameworks, and prompts you can use this week.",
-                href: "/resources",
-                cta: "Explore free resources",
-              },
-            ].map((card) => (
-              <Link
-                key={card.href}
-                href={card.href}
-                className="group flex flex-col border border-edge-subtle bg-raised p-6 transition hover:border-accent/35 sm:p-7"
-              >
-                <h3 className="font-display text-xl text-text-1 group-hover:text-accent">
-                  {card.title}
-                </h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-text-2">{card.body}</p>
-                <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-accent">
-                  {card.cta}
-                  <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            ))}
+      <CtaBand
+        kicker={communityIdea.kicker}
+        title={communityIdea.title}
+        lede={communityIdea.lede}
+        actions={
+          <div className="flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+            <Button href={cta.joinCommunity.href}>{communityIdea.ctaLabel}</Button>
+            <WhatsAppUpdatesLink href={site.whatsappInvite} />
           </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="bg-canvas py-16 sm:py-20">
-        <div className="container-wide overflow-hidden border border-edge-subtle bg-accent-strong p-6 sm:p-10 md:p-14">
-          <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-            <div>
-              <h2 className="font-display display-3 text-text-1">
-                You should not have to figure marketing out alone
-              </h2>
-              <p className="mt-4 max-w-xl text-sm text-text-2 sm:text-base">
-                Come introduce yourself, ask a question, or share what you are building. The
-                community is ready when you are.
-              </p>
-            </div>
-            <div className="flex flex-col gap-3 lg:items-end">
-              <div className="btn-row-mobile lg:justify-end">
-                <Button href={cta.joinCommunity.href} variant="light">
-                  {cta.joinCommunity.label}
-                </Button>
-                <Button href="/contact" variant="secondary">
-                  Contact us
-                </Button>
-              </div>
-              <a
-                href={site.whatsappInvite}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex min-h-11 items-center text-sm font-medium text-[#08111f] underline-offset-2 hover:underline"
-              >
-                {cta.whatsapp.communityLabel}
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+        }
+      />
     </>
   );
 }
