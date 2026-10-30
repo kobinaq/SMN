@@ -1,7 +1,15 @@
-import type { CollectionConfig, Where } from "payload";
+import type { CollectionConfig, FieldHook, Where } from "payload";
 
 const staffOnly = ({ req }: { req: { user?: { collection?: string } | null } }) =>
   req.user?.collection === "users";
+
+/**
+ * Public verification looks codes up in uppercase, so a code saved in mixed
+ * case or with stray spaces (typed in /admin or sent to the REST API) would
+ * never verify. Store every code trimmed and uppercased.
+ */
+export const normalizeCredentialCode: FieldHook = ({ value }) =>
+  typeof value === "string" ? value.trim().toUpperCase() : value;
 
 export const Certificates: CollectionConfig = {
   slug: "certificates",
@@ -37,7 +45,14 @@ export const Certificates: CollectionConfig = {
     { name: "enrollment", type: "relationship", relationTo: "enrollments", maxDepth: 1, index: true },
     { name: "issuedBy", type: "relationship", relationTo: "users", required: true, maxDepth: 1, index: true },
     { name: "activeIssuanceKey", type: "text", unique: true, index: true, admin: { hidden: true } },
-    { name: "credentialCode", type: "text", required: true, unique: true, index: true },
+    {
+      name: "credentialCode",
+      type: "text",
+      required: true,
+      unique: true,
+      index: true,
+      hooks: { beforeChange: [normalizeCredentialCode] },
+    },
     { name: "summary", type: "textarea" },
     { name: "skills", type: "array", maxRows: 16, fields: [{ name: "skill", type: "text", required: true }] },
     { name: "pdf", type: "upload", relationTo: "media", admin: { description: "Upload the issued PDF certificate." } },

@@ -64,6 +64,15 @@ describe("VerifyCertificatePage", () => {
     expect(notFound).toHaveBeenCalledTimes(1);
   });
 
+  it("calls notFound when the path segment is a malformed URI encoding", async () => {
+    await expect(
+      VerifyCertificatePage({ params: Promise.resolve({ code: "%E0%A4%A" }) }),
+    ).rejects.toThrow("NEXT_NOT_FOUND");
+
+    expect(getVerifiedCertificate).not.toHaveBeenCalled();
+    expect(notFound).toHaveBeenCalledTimes(1);
+  });
+
   it("renders the verified certificate for a valid code", async () => {
     getVerifiedCertificate.mockResolvedValueOnce(validCertificate);
 
