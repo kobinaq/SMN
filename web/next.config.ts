@@ -37,32 +37,36 @@ const nextConfig: NextConfig = {
     root: path.resolve(dirname),
   },
   /**
-   * T3 IA renames and retired public routes. permanent: true issues 308.
-   * Destinations point at final URLs (no redirect chains). Page files for
-   * careers / mentorship / experience / stories stay for later tickets and
-   * portal reuse; only the public paths redirect.
+   * Website Structure doc IA + retired routes. permanent: true issues 308.
+   * Destinations point at final URLs (no redirect chains).
    */
   async redirects() {
     return [
-      { source: "/programs", destination: "/academy", permanent: true },
-      { source: "/programs/:path*", destination: "/academy/:path*", permanent: true },
+      // Former SMN / TSA interim paths → current Learn / Grow / Connect IA
+      { source: "/academy", destination: "/learn", permanent: true },
+      { source: "/academy/:path*", destination: "/learn/:path*", permanent: true },
+      { source: "/programs", destination: "/learn", permanent: true },
+      { source: "/programs/:path*", destination: "/learn/:path*", permanent: true },
+      { source: "/resources", destination: "/grow", permanent: true },
+      { source: "/resources/:path*", destination: "/grow/:path*", permanent: true },
+      { source: "/community", destination: "/connect", permanent: true },
+      { source: "/community/:path*", destination: "/connect/:path*", permanent: true },
+      { source: "/learn/cohort", destination: "/learn/social-media-marketing-ai-programme", permanent: true },
       { source: "/employers", destination: "/partner", permanent: true },
-      { source: "/employers/post-a-job", destination: "/community", permanent: true },
-      { source: "/employers/request-intern", destination: "/community", permanent: true },
-      { source: "/experience", destination: "/academy#practical-work", permanent: true },
-      { source: "/simulations", destination: "/academy#practical-work", permanent: true },
-      { source: "/careers", destination: "/community", permanent: true },
-      { source: "/careers/jobs", destination: "/community", permanent: true },
-      { source: "/careers/jobs/:slug", destination: "/community", permanent: true },
-      { source: "/careers/internships", destination: "/community", permanent: true },
-      { source: "/mentorship", destination: "/community/mentors", permanent: true },
-      { source: "/mentorship/become-a-mentor", destination: "/community/mentors#become-a-mentor", permanent: true },
-      { source: "/mentorship/:path*", destination: "/community/mentors", permanent: true },
-      { source: "/stories", destination: "/community#stories", permanent: true },
-      { source: "/resources/templates", destination: "/resources?type=Template", permanent: true },
-      { source: "/resources/guides", destination: "/resources?type=Guide", permanent: true },
-      // Events had two staff surfaces over the same records — an ops list and a
-      // "website" editor list. One workspace per event now.
+      { source: "/employers/post-a-job", destination: "/connect", permanent: true },
+      { source: "/employers/request-intern", destination: "/connect", permanent: true },
+      { source: "/experience", destination: "/learn#practical-work", permanent: true },
+      { source: "/simulations", destination: "/learn#practical-work", permanent: true },
+      { source: "/careers", destination: "/connect", permanent: true },
+      { source: "/careers/jobs", destination: "/connect", permanent: true },
+      { source: "/careers/jobs/:slug", destination: "/connect", permanent: true },
+      { source: "/careers/internships", destination: "/connect", permanent: true },
+      { source: "/mentorship", destination: "/connect/mentors", permanent: true },
+      { source: "/mentorship/become-a-mentor", destination: "/connect/mentors#become-a-mentor", permanent: true },
+      { source: "/mentorship/:path*", destination: "/connect/mentors", permanent: true },
+      { source: "/stories", destination: "/connect#stories", permanent: true },
+      { source: "/grow/templates", destination: "/grow?type=Template", permanent: true },
+      { source: "/grow/guides", destination: "/grow?type=Guide", permanent: true },
       { source: "/staff/website/events", destination: "/staff/events", permanent: true },
       { source: "/staff/website/events/new", destination: "/staff/events/new", permanent: true },
       { source: "/staff/website/events/:id", destination: "/staff/events/:id", permanent: true },

@@ -7,12 +7,12 @@ import { cn } from "@/lib/utils";
 
 /**
  * Type filter for the library. Templates and Guides used to be pages of their
- * own; they are query-param views of /resources now, so the active state comes
- * from the query alone — the old pathname comparison could never match, because
+ * own; they are query-param views of /grow now, so the active state comes
+ * from the query alone - the old pathname comparison could never match, because
  * a pathname never carries a query string.
  */
 function hrefForType(type: string) {
-  return type === "All" ? "/resources" : `/resources?type=${encodeURIComponent(type)}`;
+  return type === "All" ? "/grow" : `/grow?type=${encodeURIComponent(type)}`;
 }
 
 export function ResourceTypeNav({

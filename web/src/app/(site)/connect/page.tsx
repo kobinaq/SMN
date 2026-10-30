@@ -33,9 +33,9 @@ export async function generateMetadata(
   return {
     title: seoTitle(communityMetadata.title),
     description: communityMetadata.description,
-    alternates: { canonical: "/community" },
+    alternates: { canonical: "/connect" },
     openGraph: {
-      url: "/community",
+      url: "/connect",
       ...(share.openGraphImages ? { images: share.openGraphImages } : {}),
     },
     ...(share.twitterImages
@@ -92,7 +92,7 @@ export default async function CommunityPage() {
         lede={communityHero.lede}
         actions={
           <div className="flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-            <Button href={cta.joinCommunity.href}>{cta.joinCommunity.label}</Button>
+            <Button href={cta.joinTsa.href}>{cta.joinCommunity.label}</Button>
             <WhatsAppUpdatesLink href={site.whatsappInvite} />
           </div>
         }
@@ -176,7 +176,7 @@ export default async function CommunityPage() {
         lede={communityIdea.lede}
         actions={
           <div className="flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-            <Button href={cta.joinCommunity.href}>{communityIdea.ctaLabel}</Button>
+            <Button href={cta.joinTsa.href}>{communityIdea.ctaLabel}</Button>
             <WhatsAppUpdatesLink href={site.whatsappInvite} />
           </div>
         }

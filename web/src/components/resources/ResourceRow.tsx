@@ -30,7 +30,7 @@ export function ResourceRow({
 
   return (
     <Link
-      href={`/resources/${resource.slug}`}
+      href={`/grow/${resource.slug}`}
       className={cn(
         "group grid items-center gap-4 border border-edge-subtle bg-raised px-4 py-4 transition duration-300",
         "hover:border-accent/40 hover:bg-inset hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-18px_rgba(126,182,255,0.35)] active:translate-y-0 sm:grid-cols-[auto_1fr_auto] sm:gap-6 sm:px-5 sm:py-5",

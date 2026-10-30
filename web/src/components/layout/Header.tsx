@@ -15,8 +15,8 @@ import { trackEvent } from "@/lib/analytics";
 import { getFocusableElements, trapTabKey } from "@/lib/focus-trap";
 
 function pathMatches(pathname: string, href: string) {
-  // Exact for `/` and `/community` so /community/mentors marks Mentors only.
-  if (href === "/" || href === "/community") return pathname === href;
+  // Exact for `/` and `/connect` so /connect/mentors marks Mentors only.
+  if (href === "/" || href === "/connect") return pathname === href;
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -177,24 +177,26 @@ export function Header() {
           </nav>
           <div className="mt-auto flex flex-col gap-3 pt-8" onClick={() => setOpen(false)}>
             <Button
-              href={cta.joinTsa.href}
+              href={cta.applyCohort.href}
               className="w-full"
               onClick={() => trackEvent("primary_cta_click", { location: "mobile_nav" })}
             >
-              {cta.joinTsa.label}
+              {cta.applyCohort.label}
             </Button>
             <Button href={cta.memberSignIn.href} variant="ghost" className="w-full">
               {cta.memberSignIn.label}
             </Button>
-            <a
-              href={site.whatsappInvite}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex min-h-11 items-center justify-center px-3 text-center text-xs text-text-3 underline-offset-2 hover:underline"
-              onClick={() => trackEvent("whatsapp_click", { location: "mobile_nav" })}
-            >
-              {cta.whatsapp.communityLabel}
-            </a>
+            {site.whatsappInvite ? (
+              <a
+                href={site.whatsappInvite}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-11 items-center justify-center px-3 text-center text-xs text-text-3 underline-offset-2 hover:underline"
+                onClick={() => trackEvent("whatsapp_click", { location: "mobile_nav" })}
+              >
+                {cta.whatsapp.communityLabel}
+              </a>
+            ) : null}
           </div>
         </div>
       </div>,
@@ -301,21 +303,21 @@ export function Header() {
               {cta.memberSignIn.label}
             </Button>
             <Button
-              href={cta.joinTsa.href}
+              href={cta.applyCohort.href}
               className="px-5 py-2.5"
               onClick={() => trackEvent("primary_cta_click", { location: "header" })}
             >
-              {cta.joinTsa.label}
+              {cta.applyCohort.shortLabel}
             </Button>
           </div>
 
           <div className="relative z-10 flex items-center gap-2 lg:hidden">
             <Button
-              href={cta.joinTsa.href}
+              href={cta.applyCohort.href}
               className="min-h-11 px-3 py-2 text-xs sm:px-4 sm:text-sm"
               onClick={() => trackEvent("primary_cta_click", { location: "header_mobile" })}
             >
-              {cta.joinTsa.shortLabel}
+              {cta.applyCohort.shortLabel}
             </Button>
             <button
               ref={toggleRef}

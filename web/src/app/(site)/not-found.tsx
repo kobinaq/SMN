@@ -4,7 +4,7 @@ import { cta } from "@/lib/cta";
 import { getEventCalendar, getNextEvent } from "@/lib/events";
 
 const quickLinks = [
-  { href: "/academy", label: "Academy" },
+  { href: "/learn", label: "Academy" },
   { href: "/events", label: "Events" },
   { href: "/contact", label: "Contact" },
 ];

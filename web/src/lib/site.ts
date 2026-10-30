@@ -12,46 +12,44 @@ export const site = {
   description:
     "Think Social Academy is a social media marketing academy and community focused on thoughtful learning, practical application, and work designed to support brand and business results.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://thinksocialacademy.com",
-  email: process.env.OPS_EMAIL ?? "hello@socialmarketers.network",
-  whatsappInvite:
-    process.env.NEXT_PUBLIC_WHATSAPP_INVITE ?? "https://chat.whatsapp.com/socialmarketers",
+  // Contact and social fallbacks stay empty so a missing CMS row does not resurrect
+  // retired SMN addresses. Live values come from site-settings / env.
+  email: process.env.OPS_EMAIL ?? "",
+  whatsappInvite: process.env.NEXT_PUBLIC_WHATSAPP_INVITE ?? "",
   social: {
-    instagram: "https://instagram.com/socialmarketersnetwork",
-    linkedin: "https://linkedin.com/company/social-marketers-network",
-    twitter: "https://x.com/smn_africa",
+    instagram: "",
+    linkedin: "",
+    twitter: "",
   },
   homepage: {
-    // Tab 5 hero: Explore the Academy is the primary CTA, Join the Community the secondary.
-    headline: "Learn social media marketing. Put it into practice. Work towards results.",
+    // Website Structure doc hero. Admin site-settings is the source of truth when set.
+    headline: "Learn the skills to deliver results for any brand or business using social media.",
     supportingCopy:
-      "Build your understanding through practical lessons, guided exercises, and simulated briefs that connect social media marketing concepts to different business contexts.",
-    primaryCtaLabel: "Explore the Academy",
-    secondaryCtaLabel: "Join the Community",
-    // Secondary CTA target (Join the Community, a free TSA account). Explore the Academy uses cta.explorePrograms (/academy).
-    secondaryCtaHref: "/signup",
+      "Learn social media marketing, execute smarter and leave with real experience to become opportunity-ready. Whether you are starting out, building on existing experience, or developing your team's capabilities, TSA gives you a structured, practical training in one of the most in-demand areas of digital skills.",
+    primaryCtaLabel: "Explore our programmes",
+    primaryCtaHref: "/learn",
+    // Cohort number/date unconfirmed in the doc — keep generic apply wording.
+    secondaryCtaLabel: "Apply for the next cohort",
+    secondaryCtaHref: "/apply",
   },
   announcementBanner: "",
   footerBlurb:
-    "Learn, practise, connect, and grow in one ecosystem. Member portal for courses, mentorship, opportunities, portfolios, and credentials.",
+    "Think Social Academy - a social media marketing academy teaching strategy, content, AI tools, and practical application.",
   impactStats: [] as { label: string; value: string }[],
   cohort: {
-    name: "Social Media Marketing & AI Cohort",
-    // TODO(T5-placeholder): next cohort start date unconfirmed (September 2026 is past).
-    // Empty means unknown. Display it through cohortStartLabel / cohortStartSentence
-    // in lib/cohort-copy.ts so unknown dates read "Next cohort dates coming soon".
+    name: "Social Media Marketing & AI Programme",
+    // Empty means unknown. Display through cohort-copy helpers.
     startDate: "",
     applicationDeadline: "Rolling. Apply early",
     duration: "4 weeks",
     seats: 30,
-    format: "Live classes, member platform, community, and portfolio projects",
-    sessions: "2 live sessions per week (Classroom) plus member-platform learning",
-    /** Safe public wording until the client confirms a final fee */
-    // TODO(T5-placeholder): fees unconfirmed.
+    format: "Online · Cohort-based",
+    sessions: "Structured sessions plus practical assignments",
     priceLabel: FEE_PENDING_LABEL,
     priceNote: "Payment is requested after acceptance. Payment plans may be available.",
     priceConfirmed: false,
     audience:
-      "Aspiring social media managers, students and graduates, freelancers, creators moving into marketing, early-career marketers, and existing social media professionals",
+      "People starting out in social media marketing, social media managers who want to upskill or learn to execute with AI, and those who want a structured, guided learning experience with tutor support",
   },
 } as const;
 
@@ -72,6 +70,7 @@ export type SiteConfig = {
     headline: string;
     supportingCopy: string;
     primaryCtaLabel: string;
+    primaryCtaHref: string;
     secondaryCtaLabel: string;
     secondaryCtaHref: string;
   };
@@ -94,24 +93,23 @@ export type SiteConfig = {
 };
 
 /**
- * Primary navigation for the public marketing site.
- * Labels match Tab 4 / Tab 5 IA. Join TSA is the header CTA, not a nav item.
- * Mentors sit under Community (not a top-level item).
+ * Public marketing navigation from the Website Structure doc.
+ * Header primary CTA is Apply (see Header), not a nav item.
  */
 export const nav = [
   { label: "Home", href: "/" },
-  { label: "Academy", href: "/academy" },
+  { label: "Learn", href: "/learn" },
+  { label: "Grow", href: "/grow" },
   {
-    label: "Community",
-    href: "/community",
+    label: "Connect",
+    href: "/connect",
     children: [
-      { label: "The community", href: "/community" },
-      { label: "Mentors", href: "/community/mentors" },
+      { label: "Community", href: "/connect" },
+      { label: "Mentors", href: "/connect/mentors" },
       { label: "Events", href: "/events" },
     ],
   },
   { label: "Partner With Us", href: "/partner" },
-  { label: "Resources", href: "/resources" },
   { label: "About", href: "/about" },
 ] as const;
 

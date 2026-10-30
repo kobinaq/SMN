@@ -87,7 +87,7 @@ export function FeaturedEvent({ event }: { event: EventItem }) {
                 ? "View & register"
                 : "Register free"}
             </Button>
-            <Button href="/community" variant="secondary">
+            <Button href="/connect" variant="secondary">
               Join community first
             </Button>
           </div>

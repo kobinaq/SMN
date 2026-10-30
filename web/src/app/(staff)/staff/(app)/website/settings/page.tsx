@@ -26,7 +26,7 @@ export default async function SiteSettingsPage() {
       <StaffPageHeader
         eyebrow="Website"
         title="Site settings"
-        description="Public brand, homepage, banner, and verified stats. Cohort copy lives on Learning programmes marked Cohort."
+        description="Public brand, homepage hero, banner, and social links. Cohort facts live on Learning programmes marked Cohort."
       />
       <StaffPanel>
         <SiteSettingsForm
@@ -41,6 +41,7 @@ export default async function SiteSettingsPage() {
             homepageHeadline: String(homepage.headline || ""),
             homepageSupportingCopy: String(homepage.supportingCopy || ""),
             homepagePrimaryCtaLabel: String(homepage.primaryCtaLabel || ""),
+            homepagePrimaryCtaHref: String(homepage.primaryCtaHref || ""),
             homepageSecondaryCtaLabel: String(homepage.secondaryCtaLabel || ""),
             homepageSecondaryCtaHref: String(homepage.secondaryCtaHref || ""),
             instagram: String(social.instagram || ""),

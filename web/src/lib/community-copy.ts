@@ -55,7 +55,7 @@ export const communityMentors = {
   title: "Learn from people already doing the work.",
   lede: "The TSA mentor directory sits inside the community. Mentors are reviewed by TSA before they appear, and requests are coordinated through your member account.",
   ctaLabel: "Meet the mentors",
-  href: "/community/mentors",
+  href: "/connect/mentors",
 } as const;
 
 export const communityStories = {

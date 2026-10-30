@@ -107,7 +107,7 @@ export default async function CertificatesPage() {
           action={
             <>
               <Button href="/app/learning">Open learning</Button>
-              <Button href="/academy/cohort" variant="secondary">
+              <Button href="/learn/social-media-marketing-ai-programme" variant="secondary">
                 View cohort
                 <ExternalLink className="h-3.5 w-3.5" />
               </Button>

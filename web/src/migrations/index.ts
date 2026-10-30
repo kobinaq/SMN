@@ -9,6 +9,7 @@ import * as migration_20260825_locked_documents_missing_rels from './20260825_lo
 import * as migration_20260825_lms_cohort_workspace from './20260825_lms_cohort_workspace';
 import * as migration_20261029_payload_3_90_security_schema from './20261029_payload_3_90_security_schema';
 import * as migration_20261030_lms_lessons_resource_fields from './20261030_lms_lessons_resource_fields';
+import * as migration_20261030_site_settings_primary_cta_href from './20261030_site_settings_primary_cta_href';
 
 export const migrations = [
   {
@@ -65,5 +66,10 @@ export const migrations = [
     up: migration_20261030_lms_lessons_resource_fields.up,
     down: migration_20261030_lms_lessons_resource_fields.down,
     name: '20261030_lms_lessons_resource_fields'
+  },
+  {
+    up: migration_20261030_site_settings_primary_cta_href.up,
+    down: migration_20261030_site_settings_primary_cta_href.down,
+    name: '20261030_site_settings_primary_cta_href'
   },
 ];

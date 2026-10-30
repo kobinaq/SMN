@@ -24,8 +24,8 @@ export const metadata: Metadata = {
   title: seoTitle("Practical work and marketing simulations"),
   description:
     "After Social Media Marketing and AI training, TSA learners practise through practical briefs and clearly labelled marketing simulations. Simulation waitlist open.",
-  alternates: { canonical: "/academy" },
-  openGraph: { url: "/academy" },
+  alternates: { canonical: "/learn" },
+  openGraph: { url: "/learn" },
 };
 
 const partnerProvides = [
@@ -229,11 +229,11 @@ export default function ExperiencePage() {
             <p className="mt-8 rule pt-6 text-sm leading-relaxed text-text-3">
               Real marketers rarely receive a perfect brief with every answer provided. Until
               simulations open, the{" "}
-              <Link href="/academy/cohort" className="link-wipe text-accent">
+              <Link href="/learn/social-media-marketing-ai-programme" className="link-wipe text-accent">
                 live training programme
               </Link>{" "}
               and{" "}
-              <Link href="/academy/courses" className="link-wipe text-accent">
+              <Link href="/learn/courses" className="link-wipe text-accent">
                 self-paced courses
               </Link>{" "}
               are the live learning paths.

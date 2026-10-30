@@ -18,6 +18,7 @@ export type SiteSettingsFormValues = {
   homepageHeadline: string;
   homepageSupportingCopy: string;
   homepagePrimaryCtaLabel: string;
+  homepagePrimaryCtaHref: string;
   homepageSecondaryCtaLabel: string;
   homepageSecondaryCtaHref: string;
   instagram: string;
@@ -90,6 +91,7 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
             headline: values.homepageHeadline,
             supportingCopy: values.homepageSupportingCopy,
             primaryCtaLabel: values.homepagePrimaryCtaLabel,
+            primaryCtaHref: values.homepagePrimaryCtaHref,
             secondaryCtaLabel: values.homepageSecondaryCtaLabel,
             secondaryCtaHref: values.homepageSecondaryCtaHref,
           },
@@ -156,13 +158,13 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
       <section className="grid gap-4 md:grid-cols-2">
         <h2 className="font-display text-lg text-text-1 md:col-span-2">Homepage</h2>
         <p className="text-sm text-text-3 md:col-span-2">
-          The public hero uses the coded brand promise and CTAs. These fields stay available for
-          metadata and later campaigns.
+          These fields drive the public homepage hero. Put each headline line on its own line.
         </p>
         <Field
           label="Headline"
           value={values.homepageHeadline}
           onChange={(value) => setField("homepageHeadline", value)}
+          multiline
           className="md:col-span-2"
         />
         <Field
@@ -178,6 +180,11 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
           onChange={(value) => setField("homepagePrimaryCtaLabel", value)}
         />
         <Field
+          label="Primary CTA href"
+          value={values.homepagePrimaryCtaHref}
+          onChange={(value) => setField("homepagePrimaryCtaHref", value)}
+        />
+        <Field
           label="Secondary CTA label"
           value={values.homepageSecondaryCtaLabel}
           onChange={(value) => setField("homepageSecondaryCtaLabel", value)}
@@ -186,7 +193,6 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
           label="Secondary CTA href"
           value={values.homepageSecondaryCtaHref}
           onChange={(value) => setField("homepageSecondaryCtaHref", value)}
-          className="md:col-span-2"
         />
       </section>
 

@@ -1,55 +1,56 @@
 import { expect, test } from "@playwright/test";
 
 const permanentRedirects: Array<[string, string]> = [
-  ["/programs", "/academy"],
-  ["/programs/cohort", "/academy/cohort"],
-  ["/programs/courses", "/academy/courses"],
+  ["/programs", "/learn"],
+  ["/academy", "/learn"],
+  ["/grow", "/grow"],
+  ["/connect", "/connect"],
+  ["/programs/courses", "/learn/courses"],
   ["/employers", "/partner"],
-  ["/employers/post-a-job", "/community"],
-  ["/employers/request-intern", "/community"],
-  ["/experience", "/academy#practical-work"],
-  ["/simulations", "/academy#practical-work"],
-  ["/careers", "/community"],
-  ["/careers/jobs", "/community"],
-  ["/careers/jobs/example-role", "/community"],
-  ["/careers/internships", "/community"],
-  ["/mentorship", "/community/mentors"],
-  ["/mentorship/become-a-mentor", "/community/mentors#become-a-mentor"],
-  ["/stories", "/community#stories"],
+  ["/employers/post-a-job", "/connect"],
+  ["/employers/request-intern", "/connect"],
+  ["/experience", "/learn#practical-work"],
+  ["/simulations", "/learn#practical-work"],
+  ["/careers", "/connect"],
+  ["/careers/jobs", "/connect"],
+  ["/careers/jobs/example-role", "/connect"],
+  ["/careers/internships", "/connect"],
+  ["/mentorship", "/connect/mentors"],
+  ["/mentorship/become-a-mentor", "/connect/mentors#become-a-mentor"],
+  ["/stories", "/connect#stories"],
+  ["/learn/cohort", "/learn/social-media-marketing-ai-programme"],
 ];
 
 test.describe("marketing navigation and CTAs", () => {
-  test("header primary CTA goes to Join TSA signup", async ({ page }) => {
+  test("header primary CTA goes to Apply", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("navigation", { name: "Primary" })).toBeVisible();
-    const join = page.getByRole("link", { name: /^Join TSA$/i }).first();
-    await expect(join).toHaveAttribute("href", "/signup");
+    const apply = page.getByRole("link", { name: /^Apply now$/i }).first();
+    await expect(apply).toHaveAttribute("href", "/apply");
     await expect(page.getByRole("link", { name: /member sign in/i }).first()).toHaveAttribute(
       "href",
       "/login",
     );
   });
 
-  test("home hero headline, primary Explore the Academy and secondary Join the Community CTAs", async ({ page }) => {
+  test("home hero uses website-doc CTAs to Learn and Apply", async ({ page }) => {
     await page.goto("/");
     const hero = page.locator("[data-hero]");
     await expect(hero.getByRole("heading", { level: 1 })).toContainText(
-      /Learn social media marketing[\s\S]*Put it into practice[\s\S]*Work towards results/i,
+      /deliver results for any brand or business/i,
     );
-    // Order matters: the first hero CTA is the primary (filled) button.
     const ctas = hero.locator(".btn-row-mobile a");
     await expect(ctas).toHaveCount(2);
-    await expect(ctas.nth(0)).toHaveText(/explore the academy/i);
-    await expect(ctas.nth(0)).toHaveAttribute("href", "/academy");
-    await expect(ctas.nth(1)).toHaveText(/join the community/i);
-    await expect(ctas.nth(1)).toHaveAttribute("href", "/signup");
+    await expect(ctas.nth(0)).toHaveText(/explore our programmes/i);
+    await expect(ctas.nth(0)).toHaveAttribute("href", "/learn");
+    await expect(ctas.nth(1)).toHaveText(/apply for the next cohort/i);
+    await expect(ctas.nth(1)).toHaveAttribute("href", "/apply");
   });
 
-  test("home main has no em dash and no SMN, internship or hire copy", async ({ page }) => {
+  test("home main has no em dash and no internship or hire copy", async ({ page }) => {
     await page.goto("/");
     const text = await page.locator("main").innerText();
     expect(text).not.toMatch(/\u2014|&mdash;/);
-    expect(text).not.toMatch(/\bSMN\b/);
     expect(text).not.toMatch(/internship/i);
     expect(text).not.toMatch(/\bhire\b/i);
   });
@@ -67,27 +68,24 @@ test.describe("marketing navigation and CTAs", () => {
     });
   });
 
-  test("nav shows the T3 labels", async ({ page }) => {
+  test("nav shows Learn / Grow / Connect labels", async ({ page }) => {
     await page.goto("/");
     const primary = page.getByRole("navigation", { name: "Primary" });
-    for (const label of ["Home", "Academy", "Community", "Partner With Us", "Resources", "About"]) {
+    for (const label of ["Home", "Learn", "Grow", "Connect", "Partner With Us", "About"]) {
       await expect(primary.getByRole("link", { name: label, exact: true }).or(primary.getByRole("button", { name: label, exact: true }))).toBeVisible();
     }
   });
 
-  test("footer includes legal, mentors, and section links", async ({ page }) => {
+  test("footer includes legal, Learn, Explore, and Account links", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("contentinfo").getByRole("link", { name: "Privacy" })).toBeVisible();
     await expect(page.getByRole("contentinfo").getByRole("link", { name: "Terms" })).toBeVisible();
     await expect(
-      page.getByRole("contentinfo").getByRole("link", { name: "Academy", exact: true }),
-    ).toBeVisible();
+      page.getByRole("contentinfo").getByRole("link", { name: "Grow", exact: true }),
+    ).toHaveAttribute("href", "/grow");
     await expect(
-      page.getByRole("contentinfo").getByRole("link", { name: "Mentors", exact: true }),
-    ).toHaveAttribute("href", "/community/mentors");
-    await expect(
-      page.getByRole("contentinfo").getByRole("link", { name: "Events", exact: true }),
-    ).toBeVisible();
+      page.getByRole("contentinfo").getByRole("link", { name: "Connect", exact: true }),
+    ).toHaveAttribute("href", "/connect");
     await expect(
       page.getByRole("contentinfo").getByRole("link", { name: "Contact", exact: true }),
     ).toBeVisible();
@@ -97,22 +95,22 @@ test.describe("marketing navigation and CTAs", () => {
   });
 
   test("does not display withheld placeholder prices", async ({ page }) => {
-    await page.goto("/academy/cohort");
+    await page.goto("/learn/social-media-marketing-ai-programme");
     await expect(page.getByText(/250,?000/)).toHaveCount(0);
     await expect(page.getByText(/Contact TSA for current fees/i).first()).toBeVisible();
   });
 
   test("cohort duration is 4 weeks on public pages", async ({ page }) => {
-    await page.goto("/academy/cohort");
+    await page.goto("/learn/social-media-marketing-ai-programme");
     await expect(page.getByText(/4 weeks/i).first()).toBeVisible();
     await expect(page.getByText(/8 weeks/i)).toHaveCount(0);
   });
 
-  test("community CTA links to signup, not WhatsApp as primary", async ({ page }) => {
+  test("community CTA links to Connect then signup, not WhatsApp as primary", async ({ page }) => {
     await page.goto("/");
     const join = page.getByRole("link", { name: /join the community/i }).first();
-    await expect(join).toHaveAttribute("href", "/signup");
-    await page.goto("/community");
+    await expect(join).toHaveAttribute("href", "/connect");
+    await page.goto("/connect");
     const communityJoin = page.getByRole("link", { name: /join the community/i }).first();
     await expect(communityJoin).toHaveAttribute("href", "/signup");
   });
@@ -127,13 +125,13 @@ test.describe("marketing navigation and CTAs", () => {
     });
     await page
       .getByRole("navigation", { name: "Primary" })
-      .getByRole("link", { name: "Academy", exact: true })
+      .getByRole("link", { name: "Learn", exact: true })
       .click();
     await progressAppeared;
   });
 
   test("navigation progress completes and disappears on a query-only link", async ({ page }) => {
-    await page.goto("/resources");
+    await page.goto("/grow");
     await page.waitForSelector("html[data-navigation-ready]", { state: "attached" });
     const progress = page.locator("[data-navigation-progress]");
     await expect(progress).toHaveCount(0);
@@ -181,7 +179,7 @@ test.describe("marketing navigation and CTAs", () => {
   });
 
   test("navigation progress does not start on a same-URL click", async ({ page }) => {
-    await page.goto("/resources?type=Template");
+    await page.goto("/grow?type=Template");
     const current = page
       .getByRole("navigation", { name: "Resource types" })
       .getByRole("link", { name: "Template", exact: true });
@@ -234,15 +232,15 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(page.locator("[data-navigation-progress]")).toHaveCount(0);
   });
 
-  test("footer Create a free account links to signup", async ({ page }) => {
+  test("footer Create account links to signup", async ({ page }) => {
     await page.goto("/");
     await expect(
-      page.getByRole("contentinfo").getByRole("link", { name: /create a free account/i }),
+      page.getByRole("contentinfo").getByRole("link", { name: /create account/i }),
     ).toHaveAttribute("href", "/signup");
   });
 
   test("community and contact WhatsApp CTAs are text links", async ({ page }) => {
-    await page.goto("/community");
+    await page.goto("/connect");
     const communityWa = page.getByRole("link", { name: /also get tsa updates on whatsapp/i });
     await expect(communityWa.first()).toBeVisible();
     await expect(communityWa.first()).toHaveAttribute("href", /whatsapp/i);
@@ -253,7 +251,7 @@ test.describe("marketing navigation and CTAs", () => {
   });
 
   test("main public pages do not render em dashes", async ({ page }) => {
-    for (const path of ["/", "/about", "/academy", "/community", "/contact", "/partner", "/resources"]) {
+    for (const path of ["/", "/about", "/learn", "/connect", "/contact", "/partner", "/grow"]) {
       await page.goto(path);
       const text = await page.locator("main").innerText();
       expect(text, path).not.toMatch(/\u2014|&mdash;/);
@@ -269,10 +267,10 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(page).toHaveTitle(/Create account \| Think Social Academy/);
   });
 
-  test("desktop nav marks only Mentors with aria-current on /community/mentors", async ({
+  test("desktop nav marks only Mentors with aria-current on /connect/mentors", async ({
     page,
   }) => {
-    await page.goto("/community/mentors");
+    await page.goto("/connect/mentors");
     const primary = page.getByRole("navigation", { name: "Primary" });
     await primary.getByRole("button", { name: "Community" }).hover();
     await expect(primary.getByRole("menuitem", { name: "Mentors" })).toHaveAttribute(
@@ -309,14 +307,14 @@ test.describe("marketing navigation and CTAs", () => {
   });
 
   test("community mentors page keeps become-a-mentor", async ({ page }) => {
-    await page.goto("/community/mentors");
+    await page.goto("/connect/mentors");
     await expect(page.getByRole("heading", { name: /learn from people already doing the work/i })).toBeVisible();
     await expect(page.locator("#become-a-mentor")).toBeVisible();
     await expect(page.getByRole("heading", { name: /become a mentor/i }).first()).toBeVisible();
   });
 
   test("community stories do not render fictional seed names", async ({ page }) => {
-    await page.goto("/community");
+    await page.goto("/connect");
     await expect(page.getByText("Ada Okonkwo")).toHaveCount(0);
     await expect(page.getByText("Kwame Mensah")).toHaveCount(0);
     await expect(page.getByText("Efua Demo")).toHaveCount(0);
@@ -349,9 +347,9 @@ test.describe("marketing navigation and CTAs", () => {
     const sitemap = await request.get("/sitemap.xml");
     expect(sitemap.ok()).toBeTruthy();
     const sitemapBody = await sitemap.text();
-    expect(sitemapBody).toContain("/academy");
+    expect(sitemapBody).toContain("/learn");
     expect(sitemapBody).toContain("/partner");
-    expect(sitemapBody).toContain("/community/mentors");
+    expect(sitemapBody).toContain("/connect/mentors");
     expect(sitemapBody).not.toContain("/programs");
     expect(sitemapBody).not.toContain("/employers");
     expect(sitemapBody).not.toContain("/careers");
@@ -377,7 +375,7 @@ test.describe("marketing navigation and CTAs", () => {
       const box = await panel.boundingBox();
       expect(box?.height ?? 0).toBeGreaterThan(200);
       await expect(panel.getByRole("navigation", { name: "Mobile" }).getByRole("link").first()).toBeVisible();
-      await expect(panel.getByRole("link", { name: "Academy", exact: true })).toBeVisible();
+      await expect(panel.getByRole("link", { name: "Learn", exact: true })).toBeVisible();
     });
 
     test("Esc closes the menu and returns focus to the toggle", async ({ page }) => {
@@ -417,8 +415,8 @@ test.describe("marketing navigation and CTAs", () => {
       }
     });
 
-    test("marks only Mentors with aria-current on /community/mentors", async ({ page }) => {
-      await page.goto("/community/mentors");
+    test("marks only Mentors with aria-current on /connect/mentors", async ({ page }) => {
+      await page.goto("/connect/mentors");
       await page.getByRole("button", { name: /open menu/i }).click();
       const panel = page.locator('[role="dialog"][aria-label="Mobile menu"]');
       await expect(panel.getByRole("link", { name: "Mentors", exact: true })).toHaveAttribute(
@@ -515,7 +513,7 @@ test.describe("marketing navigation and CTAs", () => {
       expect(buf.readUInt32BE(20)).toBe(630);
     }
 
-    // Job detail URLs 308 to /community (T3). Community forwards parent hashed
+    // Job detail URLs 308 to /connect (T3). Connect forwards parent hashed
     // OG images so the redirect destination still satisfies this check. The job
     // page itself keeps itemShareImages for when that route is served.
     await assertShareImage("/careers/jobs/demo-social-media-associate");

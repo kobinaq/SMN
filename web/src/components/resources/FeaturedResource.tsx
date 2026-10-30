@@ -48,17 +48,17 @@ export function FeaturedResource({ resource }: { resource: ResourceItem }) {
           </ul>
         ) : null}
         <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <Button href={`/resources/${resource.slug}`} className="sm:min-w-[160px]">
+          <Button href={`/grow/${resource.slug}`} className="sm:min-w-[160px]">
             <Download className="h-4 w-4" />
             Get free resource
           </Button>
-          <Button href="/resources" variant="secondary" className="sm:min-w-[140px]">
+          <Button href="/grow" variant="secondary" className="sm:min-w-[140px]">
             Browse library
             <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
         <Link
-          href={`/resources/${resource.slug}`}
+          href={`/grow/${resource.slug}`}
           className="mt-4 text-sm text-text-3 transition hover:text-text-1"
         >
           See full details →

@@ -21,8 +21,9 @@ export function Testimonials({ stories }: { stories: HomeStoryItem[] }) {
       <SectionHead
         kicker="In their words"
         title="What Our Learners Say"
+        lede="Hear from learners about their experience with Think Social Academy and how the learning experience has shaped their skills and approach to social media marketing."
         actions={
-          <Button href="/community#stories" variant="secondary">
+          <Button href="/connect#stories" variant="secondary">
             Member stories
           </Button>
         }

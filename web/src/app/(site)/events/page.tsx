@@ -15,6 +15,7 @@ import { EmptyProof } from "@/components/layout/EmptyProof";
 import { Button } from "@/components/ui/Button";
 import { seoTitle } from "@/lib/brand";
 import { eventTypes } from "@/lib/content";
+import { cta } from "@/lib/cta";
 import { formatEventDate, getEventCalendar, getNextEvent } from "@/lib/events";
 import { img } from "@/lib/images";
 import { getSiteSettings } from "@/lib/cms";
@@ -101,8 +102,8 @@ export default async function EventsPage({ searchParams }: Props) {
         actions={
           <>
             {next ? <Button href={`/events/${next.slug}`}>Register for next event</Button> : null}
-            <Button href="/signup" variant="secondary">
-              Join the Community
+            <Button href={cta.joinCommunity.href} variant="secondary">
+              {cta.joinCommunity.label}
             </Button>
           </>
         }

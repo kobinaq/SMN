@@ -25,11 +25,11 @@ test.describe("About page (T10)", () => {
     await expect(page.getByText("Founder, Think Social Academy")).toBeVisible();
   });
 
-  test("CTAs go to the Academy, signup and the Agency section", async ({ page }) => {
+  test("CTAs go to Learn, Connect and the Agency section", async ({ page }) => {
     await page.goto("/about");
     const main = page.locator("main");
-    await expect(main.getByRole("link", { name: "Explore the Academy" }).first()).toHaveAttribute("href", "/academy");
-    await expect(main.getByRole("link", { name: "Join the Community" }).first()).toHaveAttribute("href", "/signup");
+    await expect(main.getByRole("link", { name: "Explore our programmes" }).first()).toHaveAttribute("href", "/learn");
+    await expect(main.getByRole("link", { name: "Join the community" }).first()).toHaveAttribute("href", "/connect");
     await expect(main.getByRole("link", { name: /About the agency/ })).toHaveAttribute("href", "/partner#agency");
   });
 

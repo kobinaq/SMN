@@ -22,8 +22,8 @@ export async function generateMetadata(): Promise<Metadata> {
     title: seoTitle("Social Media Marketing Training"),
     description:
       "Learn social media marketing, strategy and AI through practical training, mentorship and real-world experience at Think Social Academy.",
-    alternates: { canonical: "/academy/cohort" },
-    openGraph: { url: "/academy/cohort" },
+    alternates: { canonical: "/learn/social-media-marketing-ai-programme" },
+    openGraph: { url: "/learn/social-media-marketing-ai-programme" },
   };
 }
 
@@ -253,15 +253,15 @@ export default async function CohortPage() {
             </div>
             <p className="mt-6 text-sm text-text-3">
               Prefer to learn on your own schedule?{" "}
-              <Link href="/academy/courses" className="text-accent transition hover:text-text-1">
+              <Link href="/learn/courses" className="text-accent transition hover:text-text-1">
                 Explore courses
               </Link>
               . Practice scenarios sit on the{" "}
-              <Link href="/academy#practical-work" className="text-accent transition hover:text-text-1">
+              <Link href="/learn#practical-work" className="text-accent transition hover:text-text-1">
                 simulation waitlist
               </Link>
               . Guidance lives in{" "}
-              <Link href="/community/mentors" className="text-accent transition hover:text-text-1">
+              <Link href="/connect/mentors" className="text-accent transition hover:text-text-1">
                 mentorship
               </Link>
               .

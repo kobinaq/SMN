@@ -12,8 +12,8 @@ export const metadata: Metadata = {
   title: seoTitle("Member Stories"),
   description:
     "See what happens when learning becomes practice. Published member stories from Social Marketers Network.",
-  alternates: { canonical: "/community" },
-  openGraph: { url: "/community" },
+  alternates: { canonical: "/connect" },
+  openGraph: { url: "/connect" },
 };
 
 export const revalidate = 60;
@@ -33,7 +33,7 @@ export default async function StoriesPage() {
         actions={
           <>
             <Button href={cta.applyCohort.href}>{cta.applyCohort.shortLabel}</Button>
-            <Button href="/community" variant="secondary">
+            <Button href="/connect" variant="secondary">
               Join the community
             </Button>
           </>
@@ -175,7 +175,7 @@ export default async function StoriesPage() {
               </div>
               <div className="btn-row-mobile">
                 <Button href={cta.applyCohort.href}>{cta.applyCohort.shortLabel}</Button>
-                <Button href="/community" variant="secondary">
+                <Button href="/connect" variant="secondary">
                   Join the community
                 </Button>
               </div>

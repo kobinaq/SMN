@@ -14,28 +14,31 @@
 import { chromium } from "playwright";
 const base = process.env.BASE_URL || "http://localhost:3000";
 const paths = [
-  "/", "/about", "/academy", "/academy/cohort", "/academy/courses",
-  "/apply", "/community", "/community/mentors", "/events", "/insights", "/resources",
-  "/resources?type=Template", "/resources?type=Guide", "/partner",
+  "/", "/about", "/learn", "/learn/social-media-marketing-ai-programme", "/learn/courses",
+  "/apply", "/connect", "/connect/mentors", "/events", "/insights", "/grow",
+  "/grow?type=Template", "/grow?type=Guide", "/partner",
   "/contact", "/privacy", "/terms",
   "/login", "/signup", "/this-page-does-not-exist",
 ];
 const redirects = [
-  ["/programs", "/academy"],
-  ["/programs/cohort", "/academy/cohort"],
+  ["/programs", "/learn"],
+  ["/academy", "/learn"],
+  ["/resources", "/grow"],
+  ["/community", "/connect"],
   ["/employers", "/partner"],
-  ["/employers/post-a-job", "/community"],
-  ["/employers/request-intern", "/community"],
-  ["/experience", "/academy"],
-  ["/simulations", "/academy"],
-  ["/careers", "/community"],
-  ["/careers/jobs", "/community"],
-  ["/careers/internships", "/community"],
-  ["/mentorship", "/community/mentors"],
-  ["/mentorship/become-a-mentor", "/community/mentors"],
-  ["/stories", "/community"],
-  ["/resources/templates", "/resources?type=Template"],
-  ["/resources/guides", "/resources?type=Guide"],
+  ["/employers/post-a-job", "/connect"],
+  ["/employers/request-intern", "/connect"],
+  ["/experience", "/learn"],
+  ["/simulations", "/learn"],
+  ["/careers", "/connect"],
+  ["/careers/jobs", "/connect"],
+  ["/careers/internships", "/connect"],
+  ["/mentorship", "/connect/mentors"],
+  ["/mentorship/become-a-mentor", "/connect/mentors"],
+  ["/stories", "/connect"],
+  ["/learn/cohort", "/learn/social-media-marketing-ai-programme"],
+  ["/grow/templates", "/grow?type=Template"],
+  ["/grow/guides", "/grow?type=Guide"],
 ];
 const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium" });
 const results = [];
@@ -84,18 +87,20 @@ await page.goto(`${base}/partner`, { waitUntil: "networkidle" });
 check("partner form shows training", (await page.locator('h3:has-text("Train a team")').count()) > 0);
 check("partner has no hire talent CTA", (await page.getByRole("link", { name: /hire tsa talent/i }).count()) === 0);
 
-// resources filter
-await page.goto(`${base}/resources`, { waitUntil: "networkidle" });
+// Grow library filter
+await page.goto(`${base}/grow`, { waitUntil: "networkidle" });
 const navLinks = await page.locator('nav[aria-label="Resource types"] a').count();
 check("resource type filter renders", navLinks > 0, `${navLinks} types`);
 
-// header nav labels
+// header nav labels (Learn / Grow / Connect IA)
 await page.goto(`${base}/`, { waitUntil: "networkidle" });
-check("header shows Academy", await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Academy" }).isVisible());
-check("header shows Partner With Us", await page.getByRole("navigation", { name: "Primary" }).getByRole("link", { name: "Partner With Us" }).isVisible());
-await page.getByRole("button", { name: "Community" }).first().click();
+const primary = page.getByRole("navigation", { name: "Primary" });
+check("header shows Learn", await primary.getByRole("link", { name: "Learn", exact: true }).isVisible());
+check("header shows Grow", await primary.getByRole("link", { name: "Grow", exact: true }).isVisible());
+check("header shows Partner With Us", await primary.getByRole("link", { name: "Partner With Us" }).isVisible());
+await page.getByRole("button", { name: "Connect" }).first().click();
 await page.waitForTimeout(300);
-check("community dropdown lists Mentors", await page.getByRole("menuitem", { name: "Mentors" }).isVisible());
+check("Connect dropdown lists Mentors", await page.getByRole("menuitem", { name: "Mentors" }).isVisible());
 
 // mobile menu
 await page.setViewportSize({ width: 390, height: 844 });

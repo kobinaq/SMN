@@ -45,11 +45,33 @@ export const SiteSettings: GlobalConfig = {
               name: "homepage",
               type: "group",
               fields: [
-                { name: "headline", type: "text" },
+                {
+                  name: "headline",
+                  type: "text",
+                  admin: {
+                    description:
+                      "Public hero headline. Put each display line on its own line, or use sentence breaks.",
+                  },
+                },
                 { name: "supportingCopy", type: "textarea" },
-                { name: "primaryCtaLabel", type: "text", defaultValue: "Apply for the next cohort" },
-                { name: "secondaryCtaLabel", type: "text", defaultValue: "Explore the Academy" },
-                { name: "secondaryCtaHref", type: "text", defaultValue: "/academy" },
+                { name: "primaryCtaLabel", type: "text", defaultValue: "Explore our programmes" },
+                {
+                  name: "primaryCtaHref",
+                  type: "text",
+                  defaultValue: "/learn",
+                  admin: { description: "Primary hero button destination, e.g. /learn or /apply." },
+                },
+                {
+                  name: "secondaryCtaLabel",
+                  type: "text",
+                  defaultValue: "Apply for the next cohort",
+                },
+                {
+                  name: "secondaryCtaHref",
+                  type: "text",
+                  defaultValue: "/apply",
+                  admin: { description: "Secondary hero button destination, e.g. /apply." },
+                },
               ],
             },
           ],

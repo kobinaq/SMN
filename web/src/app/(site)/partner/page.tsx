@@ -91,7 +91,7 @@ export default function PartnerPage() {
             <h2 className="mt-4 font-display display-3 text-text-1">{partnerTeamTraining.title}</h2>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-text-2 sm:text-base">
               {partnerTeamTraining.body}{" "}
-              <Link href="/academy" className="link-wipe text-accent">
+              <Link href="/learn" className="link-wipe text-accent">
                 See the Academy
               </Link>
               .
