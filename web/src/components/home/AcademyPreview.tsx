@@ -7,6 +7,7 @@ import { Band, Kicker, SectionHead } from "@/components/site/kit";
 import { useSiteSettings } from "@/components/layout/SiteSettingsProvider";
 import { ArrowUpRight } from "@/components/ui/icons";
 import { img } from "@/lib/images";
+import { cohortAudienceSentence, cohortDeadlineSentence } from "@/lib/cohort-copy";
 import { cta } from "@/lib/cta";
 import { homepageProgrammes } from "@/lib/content";
 import { trackEvent } from "@/lib/analytics";
@@ -81,7 +82,7 @@ export function AcademyPreview() {
           <Kicker>Flagship programme</Kicker>
           <h3 className="mt-5 max-w-[18ch] font-display display-3 text-text-1">{site.cohort.name}</h3>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-text-2">
-            For {site.cohort.audience}. {site.cohort.format}.
+            {cohortAudienceSentence(site.cohort.audience)} {site.cohort.format}.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -105,7 +106,7 @@ export function AcademyPreview() {
             ))}
           </dl>
           <p className="mt-4 max-w-3xl text-xs text-text-3">
-            Apply by {site.cohort.applicationDeadline}. {site.cohort.sessions}.
+            {cohortDeadlineSentence(site.cohort.applicationDeadline)} {site.cohort.sessions}.
           </p>
         </div>
       </div>

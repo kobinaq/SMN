@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Kicker } from "@/components/site/kit";
 import { useSiteSettings } from "@/components/layout/SiteSettingsProvider";
 import { img } from "@/lib/images";
+import { cohortAudienceSentence, cohortDeadlineSentence } from "@/lib/cohort-copy";
 import { cta } from "@/lib/cta";
 import { trackEvent } from "@/lib/analytics";
 
@@ -45,7 +46,7 @@ export function CohortSpotlight() {
         <Kicker>Flagship programme</Kicker>
         <h2 className="mt-6 max-w-[14ch] font-display display-1 text-text-1">{site.cohort.name}</h2>
         <p className="mt-7 max-w-xl text-base leading-relaxed text-text-2 sm:text-lg">
-          For {site.cohort.audience}. {site.cohort.format}.
+          {cohortAudienceSentence(site.cohort.audience)} {site.cohort.format}.
         </p>
 
         <div className="mt-9 flex flex-wrap gap-3">
@@ -69,7 +70,7 @@ export function CohortSpotlight() {
           ))}
         </dl>
         <p className="mt-4 max-w-3xl text-xs text-text-3">
-          Apply by {site.cohort.applicationDeadline}. {site.cohort.sessions}.
+          {cohortDeadlineSentence(site.cohort.applicationDeadline)} {site.cohort.sessions}.
         </p>
       </div>
     </section>
