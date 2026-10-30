@@ -30,4 +30,15 @@ describe("community copy (T7)", () => {
     expect(cta.whatsapp.communityLabel).toBe("Also get TSA updates on WhatsApp");
     expect(copy.communityMentors.href).toBe("/community/mentors");
   });
+
+  it("lists portal community features as current member benefits", () => {
+    expect(copy.communityAccess.lede).toContain(
+      "Members get discussions, peer learning and community sessions inside their TSA account.",
+    );
+    expect(text).not.toMatch(/\bcoming\b/i);
+  });
+
+  it("uses the same stories heading as the home page", () => {
+    expect(copy.communityStories.title).toBe("What members say");
+  });
 });

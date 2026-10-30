@@ -28,6 +28,12 @@ test.describe("/community (T7)", () => {
   test("lists what members can access and links to the mentor directory", async ({ page }) => {
     await page.goto("/community");
     await expect(page.getByRole("heading", { name: /what members can access/i })).toBeVisible();
+    await expect(
+      page.getByText(
+        "Members get discussions, peer learning and community sessions inside their TSA account.",
+        { exact: false },
+      ),
+    ).toBeVisible();
     await expect(page.getByRole("heading", { name: /hear about selected activities first/i })).toBeVisible();
     await expect(page.getByRole("link", { name: /meet the mentors/i })).toHaveAttribute(
       "href",
@@ -49,9 +55,10 @@ test.describe("/community (T7)", () => {
     await page.goto("/community");
     const stories = page.locator("#stories");
     if ((await stories.count()) > 0) {
+      await expect(stories.getByRole("heading", { name: /^what members say$/i })).toBeVisible();
       await expect(stories.locator("figure").first()).toBeVisible();
     } else {
-      await expect(page.getByRole("heading", { name: /member stories/i })).toHaveCount(0);
+      await expect(page.getByRole("heading", { name: /what members say/i })).toHaveCount(0);
     }
   });
 });

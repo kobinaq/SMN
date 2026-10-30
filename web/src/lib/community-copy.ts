@@ -16,7 +16,7 @@ export const communityHero = {
 export const communityAccess = {
   kicker: "Membership",
   title: "What members can access",
-  lede: "Members receive updates and early notices about selected TSA activities as they become available.",
+  lede: "Members get discussions, peer learning and community sessions inside their TSA account. They also receive updates and early notices about selected TSA activities as they become available.",
   items: [
     {
       title: "Member updates",
@@ -60,7 +60,7 @@ export const communityMentors = {
 
 export const communityStories = {
   kicker: "In their words",
-  title: "What our learners say",
+  title: "What members say",
 } as const;
 
 export const communityIdea = {
