@@ -26,9 +26,9 @@ describe("community copy (T7)", () => {
   });
 
   it("joins through signup, with WhatsApp as a secondary updates link", () => {
-    expect(cta.joinCommunity.href).toBe("/signup");
+    expect(cta.joinCommunity.href).toBe("/connect");
     expect(cta.whatsapp.communityLabel).toBe("Also get TSA updates on WhatsApp");
-    expect(copy.communityMentors.href).toBe("/community/mentors");
+    expect(copy.communityMentors.href).toBe("/connect/mentors");
   });
 
   it("lists portal community features as current member benefits", () => {

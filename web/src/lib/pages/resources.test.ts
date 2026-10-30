@@ -28,7 +28,7 @@ describe("Resources and Insights copy (T9)", () => {
 
   it("points library categories at real resource type filters", () => {
     for (const category of resources.resourceCategories) {
-      const match = category.href.match(/^\/resources\?type=(.+)$/);
+      const match = category.href.match(/^\/grow\?type=(.+)$/);
       if (match) expect(resourceTypes).toContain(decodeURIComponent(match[1]));
       else expect(category.href).toMatch(/^\/(insights|events)(\?category=.+)?$/);
     }

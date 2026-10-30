@@ -29,7 +29,7 @@ export function CourseCheckoutButton({
 
   async function run() {
     if (!signedIn) {
-      router.push(`/login?callbackUrl=${encodeURIComponent("/academy/courses")}`);
+      router.push(`/login?callbackUrl=${encodeURIComponent("/learn/courses")}`);
       return;
     }
     if (!payable) {

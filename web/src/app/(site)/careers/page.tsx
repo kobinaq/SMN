@@ -12,8 +12,8 @@ export const metadata: Metadata = {
   title: seoTitle("Marketing Career Training"),
   description:
     "Marketing jobs, internships, and mentorship through Social Marketers Network. Browse openings publicly. Apply from a member account.",
-  alternates: { canonical: "/community" },
-  openGraph: { url: "/community" },
+  alternates: { canonical: "/connect" },
+  openGraph: { url: "/connect" },
 };
 
 const routes = [
@@ -21,21 +21,21 @@ const routes = [
     kicker: "Job opportunities",
     title: "Browse marketing roles",
     body: "Open listings from SMN and partner employers. Sign in when you are ready to apply.",
-    href: "/community",
+    href: "/connect",
     action: "View jobs",
   },
   {
     kicker: "Internships",
     title: "Find internship pathways",
     body: "Entry roles, briefs, and Experience Programme placements for marketers building workplace proof.",
-    href: "/community",
+    href: "/connect",
     action: "View internships",
   },
   {
     kicker: "Mentorship",
     title: "Get guidance on real work",
     body: "Brand, agency, freelance, and alumni mentors. Bring one clear question.",
-    href: "/community",
+    href: "/connect",
     action: "How it works",
   },
 ];
@@ -52,7 +52,7 @@ export default function CareersHubPage() {
         actions={
           <>
             <Button href={cta.browseJobs.href}>{cta.browseJobs.label}</Button>
-            <Button href="/community/mentors" variant="secondary">
+            <Button href="/connect/mentors" variant="secondary">
               How mentorship works
             </Button>
           </>

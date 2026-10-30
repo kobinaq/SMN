@@ -2,15 +2,8 @@ import { describe, expect, it } from "vitest";
 import { cohortStartLabel } from "@/lib/cohort-copy";
 import { cta } from "@/lib/cta";
 import { site, nav } from "@/lib/site";
-import {
-  courses,
-  excerptStoryQuote,
-  homepageHero,
-  homepageOutcomes,
-  homepageProgrammes,
-  smnValues,
-  stories,
-} from "@/lib/content";
+import { courses, excerptStoryQuote, homepageHeadlineLines, stories } from "@/lib/content";
+import { homepageOfferings } from "@/lib/pages/home";
 
 describe("marketing defaults", () => {
   it("withholds unconfirmed cohort pricing", () => {
@@ -39,72 +32,54 @@ describe("marketing defaults", () => {
     expect(excerptStoryQuote("Short quote.")).toBe("Short quote.");
   });
 
-  it("keeps apply / purchase / sign-in terminology distinct", () => {
+  it("keeps apply / learn / connect CTAs distinct", () => {
     expect(cta.applyCohort.href).toBe("/apply");
     expect(cta.buyCourse.label).toMatch(/Enroll/i);
     expect(cta.memberSignIn.href).toBe("/login");
     expect(cta.joinTsa.href).toBe("/signup");
-    expect(cta.joinTsa.label).toBe("Join TSA");
-    expect(cta.joinCommunity.href).toBe("/signup");
-    expect(cta.joinCommunity.label).toBe("Join the Community");
-    expect(cta.whatsapp.communityLabel).toBe("Also get TSA updates on WhatsApp");
-    expect(cta.whatsapp.updatesLabel).toBe("Get TSA updates on WhatsApp");
-    expect(cta.hireTalent.href).toBe("/community");
-    expect(cta.postJob.href).toBe("/community");
-    expect(cta.requestIntern.href).toBe("/community");
-    expect(cta.viewMentors.href).toBe("/community/mentors");
-    expect(cta.explorePrograms.label).toBe("Explore the Academy");
-    expect(cta.explorePrograms.href).toBe("/academy");
-    expect(cta.exploreServices.href).toBe("/academy");
+    expect(cta.joinCommunity.href).toBe("/connect");
+    expect(cta.joinCommunity.label).toBe("Join the community");
+    expect(cta.hireTalent.href).toBe("/connect");
+    expect(cta.viewMentors.href).toBe("/connect/mentors");
+    expect(cta.explorePrograms.label).toBe("Explore our programmes");
+    expect(cta.explorePrograms.href).toBe("/learn");
+    expect(cta.viewCohort.href).toBe("/learn/social-media-marketing-ai-programme");
   });
 
-  it("uses a 4-week cohort duration and Tab 5 home CTAs in public defaults", () => {
+  it("uses Website Structure doc home CTAs and cohort duration", () => {
     expect(site.cohort.duration).toBe("4 weeks");
-    // Unknown start date is empty; display goes through cohort-copy helpers.
     expect(site.cohort.startDate).toBe("");
     expect(cohortStartLabel(site.cohort.startDate).toLowerCase()).toContain("coming soon");
-    expect(site.homepage.primaryCtaLabel).toBe("Explore the Academy");
-    expect(site.homepage.secondaryCtaLabel).toBe("Join the Community");
-    expect(site.homepage.secondaryCtaHref).toBe("/signup");
+    expect(site.homepage.primaryCtaLabel).toBe("Explore our programmes");
+    expect(site.homepage.primaryCtaHref).toBe("/learn");
+    expect(site.homepage.secondaryCtaLabel).toBe("Apply for the next cohort");
+    expect(site.homepage.secondaryCtaHref).toBe("/apply");
   });
 
-  it("exposes the T3 public navigation labels and hrefs", () => {
+  it("exposes Learn / Grow / Connect navigation", () => {
     expect(nav.map((item) => item.label)).toEqual([
       "Home",
-      "Academy",
-      "Community",
+      "Learn",
+      "Grow",
+      "Connect",
       "Partner With Us",
-      "Resources",
       "About",
     ]);
-    expect(nav.find((item) => item.label === "Academy")?.href).toBe("/academy");
+    expect(nav.find((item) => item.label === "Learn")?.href).toBe("/learn");
+    expect(nav.find((item) => item.label === "Grow")?.href).toBe("/grow");
     expect(nav.find((item) => item.label === "Partner With Us")?.href).toBe("/partner");
-    expect(nav.find((item) => item.label === "Resources")?.href).toBe("/resources");
-    const community = nav.find((item) => item.label === "Community");
+    const connect = nav.find((item) => item.label === "Connect");
     expect(
-      community && "children" in community && community.children.some((child) => child.href === "/community/mentors"),
+      connect && "children" in connect && connect.children.some((child) => child.href === "/connect/mentors"),
     ).toBe(true);
   });
 
-  it("keeps Tab 5 homepage hero promise and values in code", () => {
-    expect(homepageHero.lines).toEqual([
-      "Learn social media marketing.",
-      "Put it into practice.",
-      "Work towards results.",
+  it("keeps homepage offerings on Learn routes from the website doc", () => {
+    expect(homepageHeadlineLines(site.homepage.headline)[0]).toContain("deliver results");
+    expect(homepageOfferings.items.map((item) => item.href)).toEqual([
+      "/learn/social-media-marketing-ai-programme",
+      "/learn/one-on-one-training",
+      "/learn/organisational-training",
     ]);
-    expect(homepageHero.body.toLowerCase()).toContain("simulated briefs");
-    expect(smnValues.map((value) => value.title)).toEqual([
-      "Practicality",
-      "Strategy over aesthetics",
-      "Community",
-      "Relevance",
-      "Opportunity",
-    ]);
-    expect(homepageProgrammes.some((p) => /4 weeks/i.test(p.meta))).toBe(true);
-    expect(homepageProgrammes.some((p) => p.href === "/academy/courses")).toBe(true);
-    expect(homepageOutcomes.every((o) => !/\u2014/.test(`${o.title}${o.body}`))).toBe(true);
-    expect(homepageOutcomes.every((o) => !/intern|hire|recognised certificate/i.test(`${o.title}${o.body}`))).toBe(
-      true,
-    );
   });
 });

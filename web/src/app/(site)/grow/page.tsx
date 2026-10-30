@@ -21,8 +21,8 @@ export const metadata: Metadata = {
   title: seoTitle("Social Media Marketing Resources"),
   description:
     "Keep learning with practical social media marketing resources from Think Social Academy: articles, guides, templates, tools, case studies and webinars.",
-  alternates: { canonical: "/resources" },
-  openGraph: { url: "/resources" },
+  alternates: { canonical: "/grow" },
+  openGraph: { url: "/grow" },
 };
 
 const TITLES: Record<string, { title: string; lede: string }> = {
@@ -161,7 +161,7 @@ export default async function ResourcesPage({
                     all.length === 0 ? (
                       <Button href="/signup">Create your free account</Button>
                     ) : (
-                      <Button href="/resources" variant="secondary">
+                      <Button href="/grow" variant="secondary">
                         Show everything
                       </Button>
                     )
@@ -175,7 +175,7 @@ export default async function ResourcesPage({
                         <div className="mb-4 flex items-center justify-between gap-3 rule pt-4">
                           <h2 className="eyebrow text-text-3">{group.type}</h2>
                           <Link
-                            href={`/resources?type=${encodeURIComponent(group.type)}`}
+                            href={`/grow?type=${encodeURIComponent(group.type)}`}
                             scroll={false}
                             className="link-wipe text-xs text-accent"
                           >
@@ -207,7 +207,7 @@ export default async function ResourcesPage({
                 </div>
               </div>
               {all[0] ? (
-                <Button href={`/resources/${all[0].slug}`} variant="secondary" className="sm:shrink-0">
+                <Button href={`/grow/${all[0].slug}`} variant="secondary" className="sm:shrink-0">
                   Try a free template
                   <ArrowRight className="h-4 w-4" />
                 </Button>
@@ -230,8 +230,8 @@ export default async function ResourcesPage({
                 Insights
               </Link>{" "}
               or{" "}
-              <Link href="/academy" className="link-wipe text-accent">
-                explore the Academy
+              <Link href="/learn" className="link-wipe text-accent">
+                explore our programmes
               </Link>
               .
             </p>

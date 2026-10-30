@@ -2414,10 +2414,20 @@ export interface SiteSetting {
    */
   footerBlurb?: string | null;
   homepage?: {
+    /**
+     * Public hero headline. Put each display line on its own line, or use sentence breaks.
+     */
     headline?: string | null;
     supportingCopy?: string | null;
     primaryCtaLabel?: string | null;
+    /**
+     * Primary hero button destination, e.g. /academy or /apply.
+     */
+    primaryCtaHref?: string | null;
     secondaryCtaLabel?: string | null;
+    /**
+     * Secondary hero button destination, e.g. /signup.
+     */
     secondaryCtaHref?: string | null;
   };
   social?: {
@@ -2460,6 +2470,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         headline?: T;
         supportingCopy?: T;
         primaryCtaLabel?: T;
+        primaryCtaHref?: T;
         secondaryCtaLabel?: T;
         secondaryCtaHref?: T;
       };

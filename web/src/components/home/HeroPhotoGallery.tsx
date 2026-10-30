@@ -5,9 +5,9 @@ import Image, { ImageProps } from "next/image";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
+import { useSiteSettings } from "@/components/layout/SiteSettingsProvider";
 import { img } from "@/lib/images";
-import { cta } from "@/lib/cta";
-import { homepageHero } from "@/lib/content";
+import { homepageHeadlineLines } from "@/lib/content";
 import { trackEvent } from "@/lib/analytics";
 
 type Direction = "left" | "right";
@@ -121,6 +121,8 @@ function useBreakpoint(): Breakpoint {
 
 export function HeroPhotoGallery() {
   const bp = useBreakpoint();
+  const site = useSiteSettings();
+  const headlineLines = homepageHeadlineLines(site.homepage.headline);
 
   return (
     <section
@@ -132,13 +134,13 @@ export function HeroPhotoGallery() {
           data-hero-item
           className="text-[10px] font-medium uppercase tracking-[0.28em] text-baby-blue sm:text-[11px] md:text-xs"
         >
-          {homepageHero.eyebrow}
+          {site.name}
         </p>
         <h1
           data-hero-item
           className="font-display mx-auto mt-3 text-[1.55rem] leading-[1.15] tracking-tight text-white sm:mt-4 sm:text-4xl md:text-5xl"
         >
-          {homepageHero.lines.map((line) => (
+          {headlineLines.map((line) => (
             <span key={line} className="block">
               {line}
             </span>
@@ -148,7 +150,7 @@ export function HeroPhotoGallery() {
           data-hero-item
           className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/60 sm:mt-5 md:text-base"
         >
-          {homepageHero.body}
+          {site.homepage.supportingCopy}
         </p>
       </div>
 
@@ -197,19 +199,19 @@ export function HeroPhotoGallery() {
       >
         <div className="btn-row-mobile">
           <Button
-            href={cta.explorePrograms.href}
+            href={site.homepage.primaryCtaHref}
             className="sm:min-w-[160px]"
             onClick={() => trackEvent("primary_cta_click", { location: "hero" })}
           >
-            {cta.explorePrograms.label}
+            {site.homepage.primaryCtaLabel}
           </Button>
           <Button
-            href={cta.joinCommunity.href}
+            href={site.homepage.secondaryCtaHref}
             variant="secondary"
             className="sm:min-w-[140px]"
             onClick={() => trackEvent("secondary_cta_click", { location: "hero" })}
           >
-            {cta.joinCommunity.label}
+            {site.homepage.secondaryCtaLabel}
           </Button>
         </div>
       </div>

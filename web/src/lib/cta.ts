@@ -1,10 +1,9 @@
 /**
  * Standard CTA terminology for the marketing site.
- * Use these labels so Apply / purchase / sign-in / partner / WhatsApp stay distinct.
+ * Paths follow the Website Structure doc (Learn / Grow / Connect).
  *
- * Hire / jobs / intern public entry points are retired (T3). Those CTA objects
- * still exist for dormant page code and portal reuse, but their hrefs point at
- * /community so nothing on the public site deep-links into the old boards.
+ * Hire / jobs / intern public entry points stay retired; their hrefs point at
+ * /connect so dormant code does not deep-link into removed boards.
  */
 export const cta = {
   /** Primary member conversion — cohort application */
@@ -13,43 +12,43 @@ export const cta = {
     shortLabel: "Apply now",
     href: "/apply",
   },
-  /** Header primary CTA — account creation */
+  /** Header account creation — secondary to Apply */
   joinTsa: {
     label: "Join TSA",
     shortLabel: "Join TSA",
     href: "/signup",
   },
   explorePrograms: {
-    label: "Explore the Academy",
-    href: "/academy",
+    label: "Explore our programmes",
+    href: "/learn",
   },
   exploreServices: {
-    label: "Explore our Services",
-    href: "/academy",
+    label: "Explore our programmes",
+    href: "/learn",
   },
   viewCohort: {
-    label: "View the curriculum",
-    href: "/academy/cohort",
+    label: "Programme details",
+    href: "/learn/social-media-marketing-ai-programme",
   },
   viewCurriculum: {
     label: "View the curriculum",
-    href: "/academy/cohort#curriculum",
+    href: "/learn/social-media-marketing-ai-programme#curriculum",
   },
   viewCourses: {
     label: "Explore courses",
-    href: "/academy/courses",
+    href: "/learn/courses",
   },
   viewExperience: {
     label: "Learn about practical work",
-    href: "/academy#practical-work",
+    href: "/learn#practical-work",
   },
   joinCommunity: {
-    label: "Join the Community",
-    href: "/signup",
+    label: "Join the community",
+    href: "/connect",
   },
   viewMentors: {
     label: "Mentors",
-    href: "/community/mentors",
+    href: "/connect/mentors",
   },
   /** On-platform Paystack purchase */
   buyCourse: {
@@ -63,34 +62,33 @@ export const cta = {
     label: "Create member account",
     href: "/signup",
   },
-  /** Retired public hire entry — kept for dormant careers/partner code */
   hireTalent: {
     label: "Hire TSA talent",
-    href: "/community",
+    href: "/connect",
   },
   requestIntern: {
     label: "Request a TSA intern",
-    href: "/community",
+    href: "/connect",
   },
   postJob: {
     label: "Post a job",
-    href: "/community",
+    href: "/connect",
   },
   shareOpportunity: {
     label: "Share an opportunity",
-    href: "/community",
+    href: "/connect",
   },
   partner: {
-    label: "Partner with us",
+    label: "Partner With Us",
     href: "/partner",
   },
   browseJobs: {
     label: "Browse job opportunities",
-    href: "/community",
+    href: "/connect",
   },
   browseInternships: {
     label: "Browse internships",
-    href: "/community",
+    href: "/connect",
   },
   contact: {
     label: "Contact TSA",
@@ -98,9 +96,7 @@ export const cta = {
   },
   whatsapp: {
     label: "Chat on WhatsApp",
-    /** Secondary only. Never use as the main community CTA. */
     communityLabel: "Also get TSA updates on WhatsApp",
-    /** Standalone secondary (e.g. footer), when not paired after Join/signup. */
     updatesLabel: "Get TSA updates on WhatsApp",
   },
   submitApplication: {

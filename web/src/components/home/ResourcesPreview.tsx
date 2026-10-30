@@ -19,7 +19,7 @@ export function ResourcesPreview({ resources }: { resources: ResourceItem[] }) {
         title="Keep learning."
         lede="Practical resources to help you think, create and work better in social media marketing."
         actions={
-          <Button href="/resources" variant="secondary">
+          <Button href="/grow" variant="secondary">
             Explore Resources
           </Button>
         }
@@ -28,7 +28,7 @@ export function ResourcesPreview({ resources }: { resources: ResourceItem[] }) {
         {resources.map((resource) => (
           <li key={resource.slug} className="border-b border-edge-subtle">
             <Link
-              href={`/resources/${resource.slug}`}
+              href={`/grow/${resource.slug}`}
               className="group grid min-h-11 gap-2 py-6 transition-colors hover:bg-raised sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline sm:gap-8 sm:px-4"
             >
               <span>

@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("/community (T7)", () => {
+test.describe("/connect (T7)", () => {
   test("hero uses the Tab 4 heading and joins through signup", async ({ page }) => {
-    await page.goto("/community");
+    await page.goto("/connect");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       /keep learning\. keep growing\. stay connected\./i,
     );
@@ -15,7 +15,7 @@ test.describe("/community (T7)", () => {
   });
 
   test("WhatsApp is only a secondary updates link", async ({ page }) => {
-    await page.goto("/community");
+    await page.goto("/connect");
     const main = page.locator("main");
     const wa = main.getByRole("link", { name: /whatsapp/i });
     const count = await wa.count();
@@ -26,7 +26,7 @@ test.describe("/community (T7)", () => {
   });
 
   test("lists what members can access and links to the mentor directory", async ({ page }) => {
-    await page.goto("/community");
+    await page.goto("/connect");
     await expect(page.getByRole("heading", { name: /what members can access/i })).toBeVisible();
     await expect(
       page.getByText(
@@ -37,12 +37,12 @@ test.describe("/community (T7)", () => {
     await expect(page.getByRole("heading", { name: /hear about selected activities first/i })).toBeVisible();
     await expect(page.getByRole("link", { name: /meet the mentors/i })).toHaveAttribute(
       "href",
-      "/community/mentors",
+      "/connect/mentors",
     );
   });
 
   test("does not promise jobs, internships or income, or call TSA a network", async ({ page }) => {
-    for (const path of ["/community", "/community/mentors"]) {
+    for (const path of ["/connect", "/connect/mentors"]) {
       await page.goto(path);
       const text = await page.locator("main").innerText();
       expect(text, path).not.toMatch(/\u2014/);
@@ -52,7 +52,7 @@ test.describe("/community (T7)", () => {
   });
 
   test("hides the stories band when there are no published stories", async ({ page }) => {
-    await page.goto("/community");
+    await page.goto("/connect");
     const stories = page.locator("#stories");
     if ((await stories.count()) > 0) {
       await expect(stories.getByRole("heading", { name: /^what members say$/i })).toBeVisible();

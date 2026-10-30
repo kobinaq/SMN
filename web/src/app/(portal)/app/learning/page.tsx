@@ -171,8 +171,8 @@ export default async function LearningPage({ searchParams }: Props) {
             workspaces will appear here.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-2">
-            <Button href="/academy/cohort">Flagship cohort</Button>
-            <Button href="/academy/courses" variant="secondary">
+            <Button href="/learn/social-media-marketing-ai-programme">Flagship cohort</Button>
+            <Button href="/learn/courses" variant="secondary">
               Self-paced courses
             </Button>
           </div>

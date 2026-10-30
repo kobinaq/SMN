@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     // Staff may not have attached a file yet; the resource page still carries the
     // material, so it is the honest fallback target rather than a dead link.
     const settings = await getSiteSettings();
-    const downloadUrl = absoluteUrl(resource.fileUrl ?? `/resources/${slug}`, settings.url);
+    const downloadUrl = absoluteUrl(resource.fileUrl ?? `/grow/${slug}`, settings.url);
     const delivery = await sendEmail({
       to: email,
       subject: `Your download: ${resource.title}`,

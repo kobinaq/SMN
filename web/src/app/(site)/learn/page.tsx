@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   title: seoTitle("Marketing Academy Ghana"),
   description:
     "Training programmes, self-paced courses, marketing simulations, and the experience programme from Think Social Academy.",
-  alternates: { canonical: "/academy" },
-  openGraph: { url: "/academy" },
+  alternates: { canonical: "/learn" },
+  openGraph: { url: "/learn" },
 };
 
 export default async function ProgramsPage() {
@@ -53,7 +53,7 @@ export default async function ProgramsPage() {
 
           <div className="mt-12 grid gap-6 lg:grid-cols-[1.35fr_0.85fr] lg:gap-5">
             <Link
-              href="/academy/cohort"
+              href="/learn/social-media-marketing-ai-programme"
               className="group relative min-h-[28rem] overflow-hidden border border-edge-subtle sm:min-h-[32rem]"
             >
               <Image
@@ -89,7 +89,7 @@ export default async function ProgramsPage() {
 
             <div className="grid gap-5">
               <Link
-                href="/academy/courses"
+                href="/learn/courses"
                 className="group relative flex min-h-[12rem] flex-col justify-between overflow-hidden border border-edge-subtle bg-raised p-6 sm:p-7"
               >
                 <div className="pointer-events-none absolute -right-8 top-0 h-40 w-40 rounded-full bg-accent/10 blur-3xl transition duration-500 group-hover:bg-accent/20" />
@@ -112,7 +112,7 @@ export default async function ProgramsPage() {
               </Link>
 
               <Link
-                href="/academy#practical-work"
+                href="/learn#practical-work"
                 className="group relative flex min-h-[11rem] flex-col justify-between overflow-hidden border border-edge-subtle bg-canvas p-6 sm:p-7"
               >
                 <div className="relative">
@@ -134,7 +134,7 @@ export default async function ProgramsPage() {
               </Link>
 
               <Link
-                href="/academy#practical-work"
+                href="/learn#practical-work"
                 className="group relative flex min-h-[11rem] flex-col justify-between overflow-hidden border border-edge-subtle bg-raised p-6 sm:p-7"
               >
                 <div className="relative">

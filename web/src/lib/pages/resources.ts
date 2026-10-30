@@ -3,13 +3,13 @@
  *
  * Source: Tab 4 "05 Resources", adjusted to the Tab 5 brand rules where they
  * conflict (Tab 5 wins). Categories map onto what already exists: the CMS
- * resource library (/resources?type=...), Insights articles (/insights) and
+ * resource library (/grow?type=...), Insights articles (/insights) and
  * events (/events). Nothing is invented: empty sections keep their existing
  * empty states.
  */
 
 export const resourcesHero = {
-  kicker: "Resources",
+  kicker: "Grow",
   title: "Keep learning.",
   lede: "Practical resources to help you think, create and work better in social media marketing.",
 } as const;
@@ -26,17 +26,17 @@ export const resourceCategories: ResourceCategory[] = [
   {
     title: "Guides",
     body: "Step-by-step guides for clearer, more purposeful marketing work.",
-    href: "/resources?type=Guide",
+    href: "/grow?type=Guide",
   },
   {
     title: "Templates",
     body: "Ready-to-use files for planning, content and campaign work.",
-    href: "/resources?type=Template",
+    href: "/grow?type=Template",
   },
   {
     title: "Tools",
     body: "Toolkits, checklists and AI prompts to support your workflow.",
-    href: "/resources?type=Toolkit",
+    href: "/grow?type=Toolkit",
   },
   {
     title: "Case Studies",
@@ -88,9 +88,9 @@ export const insightsHero = {
 } as const;
 
 export const insightsLinks = [
-  { label: "Explore the Academy", href: "/academy" },
-  { label: "Free resources", href: "/resources" },
-  { label: "Join the Community", href: "/signup" },
+  { label: "Explore our programmes", href: "/learn" },
+  { label: "Free resources", href: "/grow" },
+  { label: "Join the community", href: "/connect" },
 ] as const;
 
 export const insightsNewsletter = {

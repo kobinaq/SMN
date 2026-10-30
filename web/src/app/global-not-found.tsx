@@ -5,7 +5,7 @@ import { cta } from "@/lib/cta";
 import { seoTitle } from "@/lib/brand";
 
 const quickLinks = [
-  { href: "/academy", label: "Academy" },
+  { href: "/learn", label: "Academy" },
   { href: "/events", label: "Events" },
   { href: "/contact", label: "Contact" },
 ];

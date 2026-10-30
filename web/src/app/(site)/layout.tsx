@@ -27,7 +27,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
           name: settings.name,
           url: settings.url,
           description: settings.description,
-          email: settings.email,
+          ...(settings.email ? { email: settings.email } : {}),
           sameAs: [
             settings.social.instagram,
             settings.social.linkedin,

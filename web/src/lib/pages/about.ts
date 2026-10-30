@@ -109,8 +109,8 @@ export const aboutEcosystem: { title: string; tagline: string; body: string; hre
     title: "Think Social Academy",
     tagline: "Academy + Community",
     body: "Learning, practical application, professional development and a community that keeps you connected.",
-    href: "/academy",
-    ctaLabel: "Explore the Academy",
+    href: "/learn",
+    ctaLabel: "Explore our programmes",
   },
   {
     title: "Think Social Agency",

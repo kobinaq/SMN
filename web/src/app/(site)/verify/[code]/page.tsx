@@ -122,8 +122,8 @@ export default async function VerifyCertificatePage(props: { params: Promise<{ c
                   View PDF
                 </Button>
               ) : null}
-              <Button href="/academy" variant="secondary">
-                Explore the Academy
+              <Button href="/learn" variant="secondary">
+                Explore our programmes
               </Button>
             </div>
           </div>

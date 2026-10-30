@@ -26,7 +26,7 @@ export function ResourceCard({
 
   return (
     <Link
-      href={`/resources/${resource.slug}`}
+      href={`/grow/${resource.slug}`}
       className={cn(
         "group flex flex-col overflow-hidden border border-edge-subtle bg-raised transition duration-300 hover:border-accent/35",
         className,

@@ -316,6 +316,10 @@ async function loadSiteSettings(): Promise<SiteConfig> {
           homepageDoc.primaryCtaLabel,
           fallbackSite.homepage.primaryCtaLabel,
         ),
+        primaryCtaHref: pickString(
+          homepageDoc.primaryCtaHref,
+          fallbackSite.homepage.primaryCtaHref,
+        ),
         secondaryCtaLabel: pickString(
           homepageDoc.secondaryCtaLabel,
           fallbackSite.homepage.secondaryCtaLabel,

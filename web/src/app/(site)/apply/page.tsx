@@ -69,7 +69,7 @@ export default async function ApplyPage() {
         actions={
           <>
             <Button href="#application">Start application</Button>
-            <Button href="/academy/cohort" variant="secondary">
+            <Button href="/learn/social-media-marketing-ai-programme" variant="secondary">
               Review cohort details
             </Button>
           </>

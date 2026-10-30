@@ -78,16 +78,30 @@ export const beliefs = [
   },
 ];
 
-/** Tab 5 hero. Primary CTA is Explore the Academy (/academy); secondary is Join the Community (/signup). */
+/**
+ * Fallback hero copy when CMS site-settings are unavailable.
+ * Prefer `getSiteSettings().homepage` / `useSiteSettings()` on public pages.
+ */
 export const homepageHero = {
   eyebrow: "Think Social Academy",
   lines: [
-    "Learn social media marketing.",
-    "Put it into practice.",
-    "Work towards results.",
+    "Learn the skills to deliver results for any brand or business using social media.",
   ],
-  body: "Build your understanding through practical lessons, guided exercises, and simulated briefs that connect social media marketing concepts to different business contexts.",
+  body: "Learn social media marketing, execute smarter and leave with real experience to become opportunity-ready.",
 } as const;
+
+/** Split a CMS headline into hero display lines (newlines, then sentence breaks). */
+export function homepageHeadlineLines(headline: string): string[] {
+  const trimmed = headline.trim();
+  if (!trimmed) return [...homepageHero.lines];
+  const byNewline = trimmed.split(/\n+/).map((line) => line.trim()).filter(Boolean);
+  if (byNewline.length > 1) return byNewline;
+  const bySentence = trimmed
+    .split(/(?<=\.)\s+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  return bySentence.length > 1 ? bySentence : [trimmed];
+}
 
 /** Tab 4 What is TSA, adjusted for Tab 5 (community, not professional network). */
 export const homepageWhatIs = {
@@ -138,13 +152,13 @@ export const homepageExplore = [
     title: "Academy",
     body: "Build practical social media marketing and AI skills through structured learning.",
     ctaLabel: "See the 4-week cohort",
-    href: "/academy/cohort",
+    href: "/learn/social-media-marketing-ai-programme",
   },
   {
     title: "Community",
     body: "Keep learning, stay connected to TSA updates, and continue growing beyond the classroom.",
-    ctaLabel: "Join the Community",
-    href: "/signup",
+    ctaLabel: "Join the community",
+    href: "/connect",
   },
   {
     title: "Partner With Us",
@@ -156,7 +170,7 @@ export const homepageExplore = [
     title: "Resources",
     body: "Access useful marketing knowledge, tools, templates and insights as they are published.",
     ctaLabel: "Explore Resources",
-    href: "/resources",
+    href: "/grow",
   },
 ] as const;
 
@@ -166,7 +180,7 @@ export const homepageProgrammes = [
     title: "Social Media Marketing & AI",
     meta: "4 weeks · Cohort-based",
     body: "Our core cohort programme for people who want to build practical social media marketing skills and learn how to integrate AI into their workflow.",
-    href: "/academy/cohort",
+    href: "/learn/social-media-marketing-ai-programme",
     ctaLabel: "View the curriculum",
   },
   {
@@ -188,7 +202,7 @@ export const homepageProgrammes = [
     title: "Self-paced courses",
     meta: "Learn on your schedule",
     body: "Individual courses you can work through in the member portal, with checkout when a course is published.",
-    href: "/academy/courses",
+    href: "/learn/courses",
     ctaLabel: "Browse self-paced courses",
   },
 ] as const;

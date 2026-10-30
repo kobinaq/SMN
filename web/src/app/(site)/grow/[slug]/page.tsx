@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const resource = await getResource(slug);
   if (!resource) return {};
-  const canonical = `/resources/${slug}`;
+  const canonical = `/grow/${slug}`;
   const title = seoTitle(resource.title);
   return {
     title,
@@ -48,7 +48,7 @@ export default async function ResourceDetailPage({ params }: Props) {
       <header className="border-b border-edge-subtle pt-[calc(5.5rem+env(safe-area-inset-top))] sm:pt-32">
         <div className="container-wide pb-8 sm:pb-10">
           <Link
-            href="/resources"
+            href="/grow"
             className="inline-flex min-h-11 items-center gap-2 text-sm text-text-3 transition hover:text-text-1"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -170,7 +170,7 @@ export default async function ResourceDetailPage({ params }: Props) {
                 More tools
               </h2>
               <Link
-                href="/resources"
+                href="/grow"
                 className="text-sm text-accent transition hover:text-text-1"
               >
                 Full library

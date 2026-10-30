@@ -7,15 +7,15 @@ import { getResourceLibrary } from "@/lib/resources";
 const staticRoutes = [
   "/",
   "/about",
-  "/academy",
-  "/academy/cohort",
-  "/academy/courses",
+  "/learn",
+  "/learn/social-media-marketing-ai-programme",
+  "/learn/courses",
   "/apply",
-  "/community",
-  "/community/mentors",
+  "/connect",
+  "/connect/mentors",
   "/events",
   "/insights",
-  "/resources",
+  "/grow",
   "/partner",
   "/contact",
   "/privacy",
@@ -47,7 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:
       path === "/"
         ? 1
-        : path === "/apply" || path === "/academy/cohort" || path === "/academy"
+        : path === "/apply" || path === "/learn/social-media-marketing-ai-programme" || path === "/learn"
           ? 0.9
           : 0.6,
   }));
@@ -64,7 +64,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const resourceEntries: MetadataRoute.Sitemap = resources
     .filter((resource) => Boolean(resource.slug))
     .map((resource) => ({
-      url: `${base}/resources/${resource.slug}`,
+      url: `${base}/grow/${resource.slug}`,
       lastModified: toLastModified(resource.updatedAt) ?? STATIC_LAST_MODIFIED,
       changeFrequency: "monthly",
       priority: 0.5,
