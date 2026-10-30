@@ -1,4 +1,5 @@
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
+import { insightsNewsletter } from "@/lib/pages/resources";
 
 export function BlogNewsletter() {
   return (
@@ -7,11 +8,10 @@ export function BlogNewsletter() {
         Newsletter
       </p>
       <h2 className="mt-3 font-display display-3 text-text-1">
-        Get strategy notes in your inbox
+        {insightsNewsletter.title}
       </h2>
       <p className="mt-3 max-w-xl text-sm leading-relaxed text-text-2">
-        Practical ideas on social media, AI, and marketing careers. No spam, just useful posts
-        from the Network.
+        {insightsNewsletter.body}
       </p>
       <div className="mt-6 max-w-lg">
         <NewsletterForm />
