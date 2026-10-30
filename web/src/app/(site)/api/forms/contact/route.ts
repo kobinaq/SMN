@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 
     if (!emailWasSent(delivery)) {
       return NextResponse.json(
-        { error: "We could not send that message yet. Email SMN directly or try again later." },
+        { error: "We could not send that message yet. Email TSA directly or try again later." },
         { status: 503 },
       );
     }

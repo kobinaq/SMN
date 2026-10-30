@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { staffFieldClass, StaffFormField } from "@/components/staff/ui";
 import { Select } from "@/components/ui/Select";
+import { FEE_PENDING_LABEL } from "@/lib/currency";
 
 /**
  * Create a cohort with only what the public site needs to market it.
@@ -74,7 +75,7 @@ export function CreateCohortForm() {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <StaffFormField label="Cohort name">
-        <input className={staffFieldClass} name="title" required maxLength={200} placeholder="e.g. Social Media Marketing & AI — September 2026" />
+        <input className={staffFieldClass} name="title" required maxLength={200} placeholder="e.g. Social Media Marketing & AI, September 2026" />
       </StaffFormField>
       <StaffFormField label="Slug">
         <input className={staffFieldClass} name="slug" maxLength={80} placeholder="auto-from-name if blank" />
@@ -106,7 +107,7 @@ export function CreateCohortForm() {
           <input className={staffFieldClass} name="applicationDeadline" placeholder="Rolling. Apply early" />
         </StaffFormField>
         <StaffFormField label="Duration">
-          <input className={staffFieldClass} name="duration" placeholder="8 weeks" />
+          <input className={staffFieldClass} name="duration" placeholder="4 weeks" />
         </StaffFormField>
         <StaffFormField label="Seats">
           <input className={staffFieldClass} name="seats" type="number" min={0} placeholder="30" />
@@ -145,7 +146,7 @@ export function CreateCohortForm() {
           </div>
         ) : (
           <p className="mt-2 text-xs text-text-3">
-            While unconfirmed, the site shows “Contact SMN for current fees”.
+            While unconfirmed, the site shows “{FEE_PENDING_LABEL}”.
           </p>
         )}
       </div>

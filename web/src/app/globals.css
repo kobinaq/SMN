@@ -439,11 +439,19 @@ select:not([aria-hidden="true"]) optgroup {
 }
 
 /* Sitewide keyboard focus baseline. Uses :where() for zero specificity so any
-   component-level focus style (Tailwind utilities, .field) still wins. */
-:where(a, button, [role="button"], [tabindex], summary, input, select, textarea):focus-visible {
+   component-level focus style (Tailwind utilities, .field) still wins.
+   tabindex=-1 is excluded: those nodes are programmatic focus targets (e.g. tutor
+   panel heading), not keyboard stops, so they must not pick up this ring. */
+:where(a, button, [role="button"], [tabindex]:not([tabindex="-1"]), summary, input, select, textarea):focus-visible {
   outline: 2px solid var(--baby-blue);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* Suppress the UA :focus outline on programmatic targets once they are out of
+   the focus-visible baseline above. Interactive controls keep their own rings. */
+:where([tabindex="-1"]):focus {
+  outline: none;
 }
 
 /* Skip-to-content link: hidden until focused by keyboard users. */

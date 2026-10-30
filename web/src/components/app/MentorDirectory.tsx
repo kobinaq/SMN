@@ -157,7 +157,7 @@ function RequestDialog({ mentor, onClose }: { mentor: MentorDirectoryItem; onClo
       return;
     }
     setStatus("success");
-    setFeedback("Request sent. The SMN team will review it and follow up.");
+    setFeedback("Request sent. The TSA team will review it and follow up.");
   }
 
   return (

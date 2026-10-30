@@ -33,7 +33,7 @@ export function LmsProgressButton({
       if (!response.ok) {
         setStatus(previous);
         const result = await response.json().catch(() => null);
-        setMessage(result?.error || "Progress did not save. Your place is unchanged — try again.");
+        setMessage(result?.error || "Progress did not save. Your place is unchanged. Try again.");
         return;
       }
       setMessage(next === "completed" ? "Progress saved. Lesson marked complete." : "Progress saved.");

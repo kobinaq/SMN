@@ -25,7 +25,7 @@ export type DataFailure = {
 };
 
 function errorText(error: unknown) {
-  if (error instanceof Error) return `${error.message}${error.cause ? ` — ${String(error.cause)}` : ""}`;
+  if (error instanceof Error) return `${error.message}${error.cause ? `: ${String(error.cause)}` : ""}`;
   return String(error);
 }
 

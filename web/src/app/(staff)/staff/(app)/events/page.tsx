@@ -50,10 +50,10 @@ export default async function StaffEventsOpsPage() {
               key: String(doc.id),
               cells: [
                 String(doc.title),
-                doc.startsAt ? new Date(String(doc.startsAt)).toLocaleString("en-GH") : String(doc.date || "—"),
-                String(doc.format || "—"),
-                String(doc.pricing || "—"),
-                String(doc.status || "—"),
+                doc.startsAt ? new Date(String(doc.startsAt)).toLocaleString("en-GH") : String(doc.date || "-"),
+                String(doc.format || "-"),
+                String(doc.pricing || "-"),
+                String(doc.status || "-"),
                 <span key="actions" className="flex flex-wrap gap-2">
                   <Link href={`/staff/events/${doc.id}`} className="text-xs text-accent hover:underline">
                     Open

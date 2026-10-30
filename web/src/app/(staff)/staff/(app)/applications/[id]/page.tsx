@@ -54,12 +54,12 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
           </div>
           <div>
             <dt className="text-xs uppercase tracking-wider text-text-3">Phone</dt>
-            <dd className="mt-1 text-text-1">{doc.phone || "—"}</dd>
+            <dd className="mt-1 text-text-1">{doc.phone || "-"}</dd>
           </div>
           <div>
             <dt className="text-xs uppercase tracking-wider text-text-3">Role / level</dt>
             <dd className="mt-1 text-text-1">
-              {doc.role || "—"} · {doc.level || "—"}
+              {doc.role || "-"} · {doc.level || "-"}
             </dd>
           </div>
           <div>

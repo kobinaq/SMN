@@ -400,7 +400,7 @@ export function ContentStudio({
       await navigator.clipboard.writeText(text);
       toast.push("Copied to clipboard.", "success");
     } catch {
-      toast.push("Couldn’t copy — use the JSON view to select manually.", "error");
+      toast.push("Couldn’t copy. Use the JSON view to select manually.", "error");
     }
   }
 
@@ -425,7 +425,7 @@ export function ContentStudio({
 
       <p className="flex items-center gap-2 border border-ai/25 bg-ai-bg px-3 py-2 text-xs text-ai">
         <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden />
-        AI-generated drafts — review before publishing. Saving stores a versioned draft and never publishes it.
+        AI-generated drafts. Review before publishing. Saving stores a versioned draft and never publishes it.
       </p>
 
       <form
@@ -495,7 +495,7 @@ export function ContentStudio({
             <div className="mt-3 grid grid-cols-2 gap-3">
               <label className={labelCls}>
                 Audience
-                <input className={field} name="audience" defaultValue="SMN learners" maxLength={200} />
+                <input className={field} name="audience" defaultValue="TSA learners" maxLength={200} />
               </label>
               <label className={labelCls}>
                 Level
@@ -690,7 +690,7 @@ export function ContentStudio({
       </form>
 
       <p className="text-xs leading-relaxed text-text-3">
-        Generated material is a versioned draft. Saving never publishes it — use the ordinary Course Builder readiness
+        Generated material is a versioned draft. Saving never publishes it. Use the ordinary Course Builder readiness
         and publication flow after human review.
       </p>
     </div>

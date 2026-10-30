@@ -16,11 +16,11 @@ export default async function StaffLoginPage() {
 
   return (
     <AuthShell
-      title={bootstrap ? "Set up SMN staff" : "Staff sign in"}
+      title={bootstrap ? "Set up TSA staff" : "Staff sign in"}
       subtitle={
         bootstrap
           ? "Create the first staff account."
-          : "Sign in to run SMN operations."
+          : "Sign in to run TSA operations."
       }
     >
       <Suspense fallback={<p className="text-sm text-text-2">Loading…</p>}>

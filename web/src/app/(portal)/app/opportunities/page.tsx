@@ -20,7 +20,7 @@ export default async function OpportunitiesAppPage() {
       <PageHeader
         eyebrow="Opportunities"
         title="Marketing jobs & gigs"
-        description="A moderated mix of SMN listings and relevant roles imported from employers' public career feeds."
+        description="A moderated mix of TSA listings and relevant roles imported from employers' public career feeds."
         action={
           <Button href="/app/profile" variant="secondary">
             Strengthen profile
