@@ -84,7 +84,7 @@ export function AddSessionForm({ courseId, order }: { courseId: string | number;
 }
 
 const ATTENDANCE_OPTIONS = [
-  { label: "—", value: "" },
+  { label: "-", value: "" },
   { label: "Present", value: "present" },
   { label: "Late", value: "late" },
   { label: "Excused", value: "excused" },

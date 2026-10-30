@@ -61,7 +61,7 @@ export default async function StaffCohortsPage() {
         newHref="/staff/learning/cohorts/new"
         newLabel="New cohort"
         emptyTitle="No cohorts yet"
-        emptyDescription="Create a live intake — a start date, seats and a session plan. You can market it before adding any learning materials."
+        emptyDescription="Create a live intake: a start date, seats and a session plan. You can market it before adding any learning materials."
         warnOnOpen={{
           title: "Edit this cohort?",
           description:

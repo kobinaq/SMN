@@ -473,7 +473,7 @@ export async function getCohortWorkspace(member: MemberUser, courseSlug: string)
       body: item.body,
       pinned: Boolean(item.pinned),
       publishedAt: item.publishedAt || "",
-      author: typeof item.author === "object" && item.author ? item.author.name?.trim() || "SMN team" : "SMN team",
+      author: typeof item.author === "object" && item.author ? item.author.name?.trim() || "TSA team" : "TSA team",
     }))
     .sort((a, b) => Number(b.pinned) - Number(a.pinned));
 
@@ -487,7 +487,7 @@ export async function getCohortWorkspace(member: MemberUser, courseSlug: string)
     rosterSeen.add(key);
     roster.push({
       id: rosterMember.id,
-      name: rosterMember.name?.trim() || "SMN member",
+      name: rosterMember.name?.trim() || "TSA member",
       handle: rosterMember.handle?.trim() || "",
     });
   }
@@ -495,7 +495,7 @@ export async function getCohortWorkspace(member: MemberUser, courseSlug: string)
   const discussion: CohortPost[] = (discussionResult.docs as DiscussionDoc[]).map((post) => ({
     id: post.id,
     body: post.body,
-    authorName: post.authorName?.trim() || "SMN member",
+    authorName: post.authorName?.trim() || "TSA member",
     authorRole: post.authorRole || "member",
     createdAt: post.createdAt,
     isSelf: String(relationId(post.authorMember)) === String(member.id),

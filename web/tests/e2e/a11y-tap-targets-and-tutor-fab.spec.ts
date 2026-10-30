@@ -199,6 +199,28 @@ test("tutor panel moves focus in on open and back to the FAB on close", async ({
   const heading = page.getByRole("heading", { name: "TSA Tutor" });
   await expect(heading).toBeVisible();
   await expect(heading).toBeFocused();
+  // Programmatic focus on tabindex=-1 must not pick up the sitewide focus ring.
+  // outline-style:none means nothing is drawn even if width still reports a used value.
+  await expect
+    .poll(async () =>
+      heading.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return style.outlineStyle === "none" || style.outlineWidth === "0px";
+      }),
+    )
+    .toBe(true);
+
+  const close = page.getByRole("button", { name: "Close Tutor" });
+  await close.focus();
+  await expect(close).toBeFocused();
+  await expect
+    .poll(async () =>
+      close.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return style.outlineStyle !== "none" && style.outlineWidth !== "0px";
+      }),
+    )
+    .toBe(true);
 
   await page.keyboard.press("Escape");
   await expect(page.getByRole("button", { name: "Ask TSA Tutor" })).toBeFocused();

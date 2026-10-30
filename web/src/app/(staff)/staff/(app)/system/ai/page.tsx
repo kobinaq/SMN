@@ -31,9 +31,9 @@ export default async function StaffAiActivityPage() {
               cells: [
                 `${doc.feature} · ${doc.operation}`,
                 doc.status,
-                doc.model || doc.provider || "—",
-                doc.latencyMs != null ? `${doc.latencyMs} ms` : "—",
-                doc.createdAt ? new Date(doc.createdAt).toLocaleString("en-GH") : "—",
+                doc.model || doc.provider || "-",
+                doc.latencyMs != null ? `${doc.latencyMs} ms` : "-",
+                doc.createdAt ? new Date(doc.createdAt).toLocaleString("en-GH") : "-",
               ],
             }))}
           />
@@ -51,8 +51,8 @@ export default async function StaffAiActivityPage() {
               cells: [
                 doc.feature,
                 doc.rating,
-                doc.reason || "—",
-                doc.createdAt ? new Date(doc.createdAt).toLocaleString("en-GH") : "—",
+                doc.reason || "-",
+                doc.createdAt ? new Date(doc.createdAt).toLocaleString("en-GH") : "-",
               ],
             }))}
           />

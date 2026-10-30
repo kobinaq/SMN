@@ -104,7 +104,7 @@ function Bubble({ message, onCopy }: { message: AiMessage; onCopy: (content: str
     >
       <p className="eyebrow mb-1.5 flex items-center gap-1.5 text-text-3">
         {!isMember ? <Sparkles className="h-3 w-3 text-ai" aria-hidden /> : null}
-        {isMember ? "You" : "SMN AI"}
+        {isMember ? "You" : "TSA AI"}
       </p>
       {isMember ? (
         <p className="whitespace-pre-wrap">{message.content}</p>

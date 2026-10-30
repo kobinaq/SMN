@@ -118,16 +118,14 @@ export async function POST(request: Request) {
         text: [
           `Hi ${member.name || "there"},`,
           "",
-          `You have access to ${course.title} on Social Marketers Network.`,
+          `You have access to ${course.title} on Think Social Academy.`,
           created
             ? `We created a member account for ${member.email}. Set your password at ${resetUrl}, then sign in at ${loginUrl}.`
             : `Sign in at ${loginUrl} and open Learning.`,
-          classroomUrl ? `Google Classroom invite: ${classroomUrl}` : "",
+          ...(classroomUrl ? [`Google Classroom invite: ${classroomUrl}`] : []),
           "",
-          "Social Marketers Network",
-        ]
-          .filter(Boolean)
-          .join("\n"),
+          "Think Social Academy",
+        ].join("\n"),
       });
 
       return Response.json({ ok: true, action: "grant", enrollmentId: enrollment.id, memberId: member.id });
@@ -194,7 +192,7 @@ export async function POST(request: Request) {
           ? `We created a member account for ${member.email}. After payment, set your password at ${resetUrl} and sign in at ${loginUrl}.`
           : `After payment, sign in at ${loginUrl} and open Learning.`,
         "",
-        "Social Marketers Network",
+        "Think Social Academy",
       ].join("\n"),
     });
 

@@ -85,7 +85,7 @@ export default async function StaffEventPage({ params }: Props) {
               <StaffOpsRow
                 key={String(item.id)}
                 title={String(member?.name || member?.email || "Member")}
-                detail={`${status} · ${String(item.ticketCode || "—")}`}
+                detail={`${status} · ${String(item.ticketCode || "-")}`}
               >
                 <RegistrationCancelActions
                   registrationId={item.id as string | number}

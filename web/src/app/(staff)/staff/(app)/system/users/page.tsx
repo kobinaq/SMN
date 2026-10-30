@@ -28,7 +28,7 @@ export default async function StaffUsersPage() {
             rows={users.docs.map((doc) => ({
               key: String(doc.id),
               href: canWrite ? `/staff/system/users/${doc.id}` : undefined,
-              cells: [doc.name || "—", doc.email, String(doc.role || "super-admin").replace("-", " ")],
+              cells: [doc.name || "-", doc.email, String(doc.role || "super-admin").replace("-", " ")],
             }))}
           />
         ) : (

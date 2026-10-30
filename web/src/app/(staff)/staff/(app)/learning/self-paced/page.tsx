@@ -19,7 +19,7 @@ export default async function StaffSelfPacedPage() {
     <StaffPageHeader
       eyebrow="Learning"
       title="Self-paced courses"
-      hint="Courses members work through on their own — modules, lessons and assessments inside SMN."
+      hint="Courses members work through on their own: modules, lessons and assessments inside TSA."
     >
       <Button href="/staff/learning/courses/new">
         <Plus className="h-4 w-4" />
@@ -61,7 +61,7 @@ export default async function StaffSelfPacedPage() {
         newHref="/staff/learning/courses/new"
         newLabel="New course"
         emptyTitle="No self-paced courses yet"
-        emptyDescription="Create a course members work through on their own — modules, lessons and assessments inside SMN."
+        emptyDescription="Create a course members work through on their own: modules, lessons and assessments inside TSA."
       />
     </div>
   );

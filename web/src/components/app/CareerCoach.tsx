@@ -236,7 +236,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
     }
     setPlanItems((current) => [...current, ...additions]);
     toast.push(
-      `Added ${additions.length} step${additions.length > 1 ? "s" : ""} to your plan — review and save.`,
+      `Added ${additions.length} step${additions.length > 1 ? "s" : ""} to your plan. Review and save.`,
       "success",
     );
   }
@@ -246,7 +246,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
       await navigator.clipboard.writeText(content);
       toast.push("Copied to clipboard.", "success");
     } catch {
-      toast.push("Couldn’t copy — select and copy manually.", "error");
+      toast.push("Couldn’t copy. Select and copy manually.", "error");
     }
   }
 
@@ -294,7 +294,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
           </div>
           <h1 className="mt-2 font-display text-2xl text-text-1 sm:text-3xl">Career Coach</h1>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-2">
-            Ask for practical next steps. Matches and gaps stay visible so guidance stays grounded in your profile —
+            Ask for practical next steps. Matches and gaps stay visible so guidance stays grounded in your profile,
             not hiring decisions.
           </p>
         </div>
@@ -482,7 +482,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
           <AiHeader
             eyebrow="Conversation"
             title="Ask for practical guidance"
-            grounding="Grounded in your profile · AI can be wrong — review before acting"
+            grounding="Grounded in your profile · AI can be wrong. Review before acting"
           />
 
           <AiThread
@@ -506,7 +506,7 @@ export function CareerCoach({ initial }: { initial: Snapshot }) {
                   <p className="text-sm font-medium text-text-1">What the Coach can do</p>
                   <p className="mt-1 text-sm leading-relaxed text-text-2">
                     Build preparation plans, close skill gaps with proof-of-work ideas, and prioritize profile
-                    improvements — always tied to your real matches. It won’t make hiring decisions or guarantee
+                    improvements, always tied to your real matches. It won’t make hiring decisions or guarantee
                     outcomes.
                   </p>
                 </div>
