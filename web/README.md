@@ -1,6 +1,6 @@
 # Social Marketers Network Application
 
-The application lives in web/. For project status and priorities, read [../PRODUCT-ROADMAP.md](../PRODUCT-ROADMAP.md). The documentation index is [../docs/README.md](../docs/README.md).
+The application lives in web/.
 
 ## Stack
 
@@ -29,11 +29,11 @@ Key local routes:
 | /staff/login and /staff | Staff authentication and product |
 | /admin | Redirect to /staff unless emergency legacy mode is enabled |
 
-Marketing content can fall back to safe defaults when CMS records are empty. Missing external credentials disable or degrade only their integration; see [../docs/environment-variables.md](../docs/environment-variables.md).
+Marketing content can fall back to safe defaults when CMS records are empty. Missing external credentials disable or degrade only their integration; see [../docs/ENVIRONMENT.md](../docs/ENVIRONMENT.md).
 
 ## Authentication
 
-Payload users are staff; Payload members are community members. Staff and member cookies are isolated. Collection and route authorization is server-enforced. See [../docs/authentication.md](../docs/authentication.md).
+Payload users are staff; Payload members are community members. Staff and member cookies are isolated. Collection and route authorization is server-enforced.
 
 ## Database
 
@@ -44,7 +44,7 @@ Production requires PostgreSQL. Normal startup never pushes schema.
 - npm run db:check lists/validates schema state.
 - npm run db:ensure-sqlite prepares disposable local/CI SQLite.
 
-Existing production predates the baseline; follow [../docs/database-migrations.md](../docs/database-migrations.md) and never replay the baseline over existing tables.
+Existing production predates the baseline. Never replay the baseline over existing tables.
 
 Current migrations are listed in `src/migrations/index.ts`. Apply new ones with `npm run db:migrate` after deploy. `20260825_locked_documents_missing_rels` adds lock-table columns for collections created after the baseline.
 
@@ -59,11 +59,11 @@ Run:
 5. npm run build
 6. npm run test:e2e
 
-The exact current checkpoint is in [../docs/testing.md](../docs/testing.md). As of 2026-07-21, typecheck and unit tests pass, while lint has five errors in newer staff components; build/E2E need a fresh run afterward.
+As of 2026-07-21, typecheck and unit tests pass, while lint has five errors in newer staff components; build/E2E need a fresh run afterward.
 
 ## Deployment
 
-Vercel must use web as the Root Directory and the default Next.js output. Configure the production environment, apply reviewed migrations, and complete [../docs/production-checklist.md](../docs/production-checklist.md). See [../docs/deployment.md](../docs/deployment.md).
+Vercel must use web as the Root Directory and the default Next.js output. Configure the production environment, apply reviewed migrations, and complete [../docs/PRODUCTION-CHECKLIST.md](../docs/PRODUCTION-CHECKLIST.md).
 
 ## Product domains
 
@@ -73,8 +73,6 @@ Vercel must use web as the Root Directory and the default Next.js output. Config
 - Staff: Today, learning, people, mentorship, opportunities, certificates, events, content, website, users, audit, and AI activity
 - Payments: Paystack checkout/verification/webhook, payment records, registration/enrollment fulfillment
 - AI: Tutor, Content Studio, and Career Coach behind independent flags
-
-Operational procedures are consolidated in [../docs/staff-guide.md](../docs/staff-guide.md).
 
 ## Opportunity imports
 
