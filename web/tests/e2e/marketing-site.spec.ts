@@ -26,11 +26,11 @@ const permanentRedirects: Array<[string, string]> = [
 ];
 
 test.describe("marketing navigation and CTAs", () => {
-  test("header primary CTA goes to Apply", async ({ page }) => {
+  test("header keeps member sign in and does not offer Apply", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("navigation", { name: "Primary" })).toBeVisible();
-    const apply = page.getByRole("link", { name: /^Apply now$/i }).first();
-    await expect(apply).toHaveAttribute("href", "/apply");
+    await expect(page.getByRole("link", { name: /^Apply now$/i })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: /apply for the next cohort/i })).toHaveCount(0);
     await expect(page.getByRole("link", { name: /member sign in/i }).first()).toHaveAttribute(
       "href",
       "/login",
@@ -43,7 +43,7 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(hero.getByRole("heading", { level: 1 })).toContainText(/opportunity-ready/i);
     const ctas = hero.locator(".btn-row-mobile a");
     await expect(ctas).toHaveCount(2);
-    await expect(ctas.nth(0)).toHaveText(/explore our programmes/i);
+    await expect(ctas.nth(0)).toHaveText(/explore our programs/i);
     await expect(ctas.nth(0)).toHaveAttribute("href", "/programs");
     await expect(ctas.nth(1)).toHaveText(/discover tsa/i);
     await expect(ctas.nth(1)).toHaveAttribute("href", "/about");

@@ -5,7 +5,7 @@ import { seoTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
   title: seoTitle("Terms and conditions"),
-  description: "Terms of use for the Think Social Academy website and programmes.",
+  description: "Terms of use for the Think Social Academy website and programs.",
   alternates: { canonical: "/terms" },
   openGraph: { url: "/terms" },
 };
@@ -16,7 +16,7 @@ const sections = [
     title: "Website use",
     body: (
       <p className="mt-4">
-        Content on this site is for general information. Programme details, pricing, and dates may
+        Content on this site is for general information. Program details, pricing, and dates may
         change. Self-paced course and event payments are processed by Paystack and subject to
         Paystack’s terms. Community participation on WhatsApp is subject to WhatsApp’s terms and SMN
         community guidelines.
@@ -89,7 +89,7 @@ export default function TermsPage() {
             Terms and conditions
           </h1>
           <p className="mt-5 max-w-xl text-sm leading-relaxed text-text-2 sm:text-base">
-            Website, application, and programme terms at a high level.
+            Website, application, and program terms at a high level.
           </p>
           <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <Link href="/privacy" className="text-text-3 transition hover:text-accent">

@@ -54,7 +54,12 @@ export function NewsletterForm({
   }
 
   return (
-    <form onSubmit={onSubmit} className={cn("flex flex-col gap-3 sm:flex-row", className)} aria-busy={loading} noValidate>
+    <form
+      onSubmit={onSubmit}
+      className={cn("flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center", className)}
+      aria-busy={loading}
+      noValidate
+    >
       <input type="text" name="website" className="sr-only" tabIndex={-1} autoComplete="off" aria-hidden="true" />
       <label htmlFor={id} className="sr-only">
         Email address
@@ -69,13 +74,13 @@ export function NewsletterForm({
         placeholder="Email address"
         aria-invalid={emailError ? true : undefined}
         aria-describedby={emailErrorId}
-        className="field min-w-0 flex-1 rounded-full border border-edge-subtle bg-inset px-5 py-3 text-text-1 placeholder:text-text-3"
+        className="field w-full rounded-full border border-edge-subtle bg-inset px-5 py-3 text-text-1 placeholder:text-text-3 sm:min-w-64 sm:flex-1"
       />
-      <Button type="submit" disabled={loading} className="shrink-0">
+      <Button type="submit" disabled={loading} className="w-full shrink-0 sm:w-auto">
         {loading ? "Sending…" : buttonLabel}
       </Button>
       {privacy ? (
-        <p className="text-xs leading-relaxed text-text-3 sm:basis-full">
+        <p className="w-full text-xs leading-relaxed text-text-3">
           {subscribePrivacy}{" "}
           <Link href="/privacy" className="underline underline-offset-2 hover:text-text-1">
             Privacy policy
@@ -84,11 +89,11 @@ export function NewsletterForm({
         </p>
       ) : null}
       {emailError ? (
-        <p id={emailErrorId} className="text-sm text-danger sm:basis-full">
+        <p id={emailErrorId} className="w-full text-sm text-danger">
           {emailError}
         </p>
       ) : null}
-      <p className="text-sm sm:basis-full" role="status" aria-live="polite">
+      <p className="w-full text-sm" role="status" aria-live="polite">
         {statusMessage}
       </p>
     </form>

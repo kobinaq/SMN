@@ -24,7 +24,7 @@ export const partnershipsWhy = {
 export const partnershipOpportunities = [
   {
     title: "Learning and Development Initiatives",
-    body: "Collaborate with us to design and deliver learning programmes for specific groups, communities, students or professionals.",
+    body: "Collaborate with us to design and deliver learning programs for specific groups, communities, students or professionals.",
   },
   {
     title: "Industry and Professional Exposure",
@@ -47,7 +47,7 @@ export const partnershipOpportunities = [
 export const partnershipShapes = {
   title: "What collaboration can look like",
   items: [
-    "Co-designed training programmes and workshops.",
+    "Co-designed training programs and workshops.",
     "Skills development initiatives for specific audiences.",
     "Guest sessions, mentorship and industry knowledge-sharing.",
     "Events and learning experiences.",

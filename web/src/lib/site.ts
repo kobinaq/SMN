@@ -6,13 +6,18 @@ import { agencyEnabled } from "@/lib/features";
  * Live values should come from Payload `site-settings` via `getSiteSettings()`.
  * Pricing defaults intentionally withhold unconfirmed figures.
  */
+/** Trim whitespace and a trailing slash so generated URLs stay valid. */
+export function normalizeSiteUrl(value: string) {
+  return value.trim().replace(/\/+$/, "");
+}
+
 export const site = {
   name: "Think Social Academy",
   shortName: "TSA",
   tagline: "Build social media marketing skills that make you opportunity-ready.",
   description:
-    "Build practical social media marketing skills with Think Social Academy. Explore professional training, specialised learning and organisational programmes.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://thinksocialacademy.com",
+    "Build practical social media marketing skills with Think Social Academy. Explore professional training, specialised learning and organisational programs.",
+  url: normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL ?? "https://thinksocialacademy.com"),
   // Contact and social fallbacks stay empty so a missing CMS row does not resurrect
   // retired SMN addresses. Live values come from site-settings / env.
   email: process.env.OPS_EMAIL ?? "",
@@ -27,7 +32,7 @@ export const site = {
     headline: "Build social media marketing skills that make you opportunity-ready.",
     supportingCopy:
       "Learn social media marketing skills, execute smarter and grow any brand or business. Whether you are starting out, strengthening your professional skills or developing your team's capabilities, TSA offers practical learning grounded in strategy, application and the realities of the industry.",
-    primaryCtaLabel: "Explore our programmes",
+    primaryCtaLabel: "Explore our programs",
     primaryCtaHref: "/programs",
     secondaryCtaLabel: "Discover TSA",
     secondaryCtaHref: "/about",
@@ -37,7 +42,7 @@ export const site = {
     "Think Social Academy equips individuals, business owners and organisations with practical social media marketing skills, strategic thinking and tools for today's digital landscape.",
   impactStats: [] as { label: string; value: string }[],
   cohort: {
-    name: "Social Media Marketing & AI Programme",
+    name: "Social Media Marketing & AI Program",
     // Empty means unknown. Display through cohort-copy helpers.
     startDate: "",
     applicationDeadline: "Rolling. Apply early",

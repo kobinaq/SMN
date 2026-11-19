@@ -7,16 +7,16 @@ import { HomeValues } from "@/components/home/HomeValues";
 import { GrowPreview } from "@/components/home/GrowPreview";
 import { Testimonials } from "@/components/home/Testimonials";
 import { PartnersBand } from "@/components/home/PartnersBand";
-import { HomeSubscribe } from "@/components/home/HomeSubscribe";
 import { getStories } from "@/lib/cms";
+import { learnerExperiencesEnabled } from "@/lib/features";
 
 /**
  * Document order: hero, founder, offerings, audience, approach,
- * resources, learner experiences (only with approved stories),
- * partnerships, email subscription.
+ * resources, learner experiences (flagged off until testimonials are approved),
+ * partnerships. The footer carries the email subscription.
  */
 export async function HomePage() {
-  const stories = await getStories();
+  const stories = learnerExperiencesEnabled ? await getStories() : [];
 
   return (
     <HomeStory>
@@ -26,9 +26,8 @@ export async function HomePage() {
       <WhoItsFor />
       <HomeValues />
       <GrowPreview />
-      <Testimonials stories={stories} />
+      {learnerExperiencesEnabled ? <Testimonials stories={stories} /> : null}
       <PartnersBand />
-      <HomeSubscribe />
     </HomeStory>
   );
 }

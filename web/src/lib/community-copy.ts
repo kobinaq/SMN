@@ -43,7 +43,7 @@ export const communityEarlyAccess = {
   lede: "Members may receive early access or first notice of selected:",
   items: [
     "TSA events",
-    "New programmes",
+    "New programs",
     "Resources",
     "Simulations",
     "Opportunities when available",

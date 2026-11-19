@@ -145,7 +145,7 @@ export const eventFields: StaffField[] = [
 export const storyFields: StaffField[] = [
   { name: "name", label: "Name", type: "text", required: true },
   { name: "role", label: "Role", type: "text", required: true },
-  { name: "programme", label: "Programme (optional)", type: "text", placeholder: "Cohort or course name" },
+  { name: "programme", label: "Program (optional)", type: "text", placeholder: "Cohort or course name" },
   {
     name: "quote",
     label: "Quote",

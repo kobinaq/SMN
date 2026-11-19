@@ -1,11 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { cohortStartLabel } from "@/lib/cohort-copy";
 import { cta } from "@/lib/cta";
-import { site, nav } from "@/lib/site";
+import { normalizeSiteUrl, site, nav } from "@/lib/site";
 import { courses, excerptStoryQuote, homepageHeadlineLines, stories } from "@/lib/content";
 import { homepageOfferings } from "@/lib/pages/home";
 
 describe("marketing defaults", () => {
+  it("trims the public site URL", () => {
+    expect(normalizeSiteUrl(" https://example.com/ ")).toBe("https://example.com");
+    expect(normalizeSiteUrl("https://example.com///")).toBe("https://example.com");
+  });
+
   it("withholds unconfirmed cohort pricing", () => {
     expect(site.cohort.priceConfirmed).toBe(false);
     expect(site.cohort.priceLabel.toLowerCase()).toContain("contact tsa");
@@ -41,7 +46,7 @@ describe("marketing defaults", () => {
     expect(cta.joinCommunity.label).toBe("Join the community");
     expect(cta.hireTalent.href).toBe("/connect");
     expect(cta.viewMentors.href).toBe("/connect/mentors");
-    expect(cta.explorePrograms.label).toBe("Explore our programmes");
+    expect(cta.explorePrograms.label).toBe("Explore our programs");
     expect(cta.explorePrograms.href).toBe("/programs");
     expect(cta.viewCohort.href).toBe("/programs/social-media-marketing");
   });
@@ -50,7 +55,7 @@ describe("marketing defaults", () => {
     expect(site.cohort.duration).toBe("4 weeks");
     expect(site.cohort.startDate).toBe("");
     expect(cohortStartLabel(site.cohort.startDate).toLowerCase()).toContain("coming soon");
-    expect(site.homepage.primaryCtaLabel).toBe("Explore our programmes");
+    expect(site.homepage.primaryCtaLabel).toBe("Explore our programs");
     expect(site.homepage.primaryCtaHref).toBe("/programs");
     expect(site.homepage.secondaryCtaLabel).toBe("Discover TSA");
     expect(site.homepage.secondaryCtaHref).toBe("/about");

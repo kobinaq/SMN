@@ -119,7 +119,7 @@ export const homepageFounderStory = [
   "I've seen how fragmented learning marketing can be. You learn a tool here, a platform there, and a few content tricks, but you don't always learn how it all connects.",
   "Too often, people learn how to post before they learn how to think. They finish courses but do not know how to apply what they've learned, or how to take their next step.",
   "We want to change that.",
-  "We want to build thinkers and doers, not just information absorbers. We don't want learning to end when a programme ends.",
+  "We want to build thinkers and doers, not just information absorbers. We don't want learning to end when a program ends.",
   "Our vision is a community that keeps learning and helps the next person find their next step.",
 ];
 
@@ -174,12 +174,12 @@ export const homepageExplore = [
   },
 ] as const;
 
-/** Tab 4 Academy preview programmes + self-paced courses that already exist. */
-export const homepageProgrammes = [
+/** Tab 4 Academy preview programs + self-paced courses that already exist. */
+export const homepagePrograms = [
   {
     title: "Social Media Marketing & AI",
     meta: "4 weeks · Cohort-based",
-    body: "Our core cohort programme for people who want to build practical social media marketing skills and learn how to integrate AI into their workflow.",
+    body: "Our core cohort program for people who want to build practical social media marketing skills and learn how to integrate AI into their workflow.",
     href: "/learn/social-media-marketing-ai-programme",
     ctaLabel: "View the curriculum",
   },
@@ -226,7 +226,7 @@ export const homepageOutcomes: { title: string; body: string }[] = [
   },
   {
     title: "A portfolio of work",
-    body: "Show what you can do and how you think, subject to programme requirements.",
+    body: "Show what you can do and how you think, subject to program requirements.",
   },
   {
     title: "A TSA certificate",
@@ -236,7 +236,7 @@ export const homepageOutcomes: { title: string; body: string }[] = [
 
 /** Tab 4 Community preview, rewritten to Tab 5 community rules. */
 export const homepageCommunity = {
-  title: "Learning shouldn't end when the programme ends.",
+  title: "Learning shouldn't end when the program ends.",
   body: "The TSA community is an opt-in space for people who want to stay connected to Think Social Academy. Members can receive updates and early notices about selected learning experiences, partnerships, opportunities and events as they become available.",
   items: [
     "TSA updates",
@@ -262,7 +262,7 @@ export const homepagePartners = {
   areas: [
     {
       title: "Sponsorship",
-      body: "Support TSA programmes, learners, scholarships, events and initiatives.",
+      body: "Support TSA programs, learners, scholarships, events and initiatives.",
       href: "/contact?type=Sponsorship",
       ctaLabel: "Discuss sponsorship",
     },
@@ -547,7 +547,7 @@ export const cohortFaqs = [
   },
   {
     q: "How do self-paced courses work?",
-    a: "Purchase courses checkout on TSA via Paystack, then unlock in the member portal. Apply-first programmes use /apply. Staff grant access or send a payment link after review.",
+    a: "Purchase courses checkout on TSA via Paystack, then unlock in the member portal. Apply-first programs use /apply. Staff grant access or send a payment link after review.",
   },
   {
     q: "What is the fee?",

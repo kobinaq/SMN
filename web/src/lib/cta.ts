@@ -19,15 +19,15 @@ export const cta = {
     href: "/signup",
   },
   explorePrograms: {
-    label: "Explore our programmes",
+    label: "Explore our programs",
     href: "/programs",
   },
   exploreServices: {
-    label: "Explore our programmes",
+    label: "Explore our programs",
     href: "/programs",
   },
   viewCohort: {
-    label: "Programme details",
+    label: "Program details",
     href: "/programs/social-media-marketing",
   },
   viewCurriculum: {

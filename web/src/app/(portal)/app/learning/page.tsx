@@ -54,7 +54,7 @@ export default async function LearningPage({ searchParams }: Props) {
       <PageHeader
         eyebrow="Learning"
         title="Your learning home"
-        description="Self-paced courses and live cohort workspaces for the programmes you have unlocked."
+        description="Self-paced courses and live cohort workspaces for the programs you have unlocked."
         action={
           <Button href="/app/learning/courses" variant={resumeCourse ? "secondary" : "primary"}>
             Open courses
@@ -107,7 +107,7 @@ export default async function LearningPage({ searchParams }: Props) {
           {lmsCourses.length ? (
             <section className="space-y-3">
               <div className="flex items-end justify-between gap-3">
-                <h2 className="font-display text-xl text-text-1">Your programmes</h2>
+                <h2 className="font-display text-xl text-text-1">Your programs</h2>
                 <Link
                   href="/app/learning/courses"
                   className="inline-flex min-h-11 items-center text-sm text-accent hover:underline"

@@ -6,7 +6,7 @@
 export const homepageSeo = {
   title: "Think Social Academy | Social Media Marketing Skills & Training",
   description:
-    "Build practical social media marketing skills with Think Social Academy. Explore professional training, specialised learning and organisational programmes.",
+    "Build practical social media marketing skills with Think Social Academy. Explore professional training, specialised learning and organisational programs.",
 } as const;
 
 export const homepageHero = {
@@ -14,7 +14,7 @@ export const homepageHero = {
   headline: "Build social media marketing skills that make you opportunity-ready.",
   supporting:
     "Learn social media marketing skills, execute smarter and grow any brand or business. Whether you are starting out, strengthening your professional skills or developing your team's capabilities, TSA offers practical learning grounded in strategy, application and the realities of the industry.",
-  primaryCtaLabel: "Explore our programmes",
+  primaryCtaLabel: "Explore our programs",
   primaryCtaHref: "/programs",
   secondaryCtaLabel: "Discover TSA",
   secondaryCtaHref: "/about",
@@ -38,11 +38,11 @@ export const homepageOfferings = {
   title: "Learning offerings",
   items: [
     {
-      title: "Social Media Marketing Programme",
+      title: "Social Media Marketing Program",
       meta: "",
       body: "A structured learning experience for beginners, aspiring professionals, practising social media marketers and business owners who want to understand and apply social media marketing.",
       audience: "",
-      ctaLabel: "Explore programme",
+      ctaLabel: "Explore program",
       href: "/programs/social-media-marketing",
     },
     {
@@ -56,7 +56,7 @@ export const homepageOfferings = {
     {
       title: "Organisational Training",
       meta: "",
-      body: "Tailored training programmes and workshops that help organisations and teams strengthen their social media marketing capabilities.",
+      body: "Tailored training programs and workshops that help organisations and teams strengthen their social media marketing capabilities.",
       audience: "",
       ctaLabel: "Request team training",
       href: "/programs/organisational-training",

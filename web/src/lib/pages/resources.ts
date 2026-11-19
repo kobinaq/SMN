@@ -61,8 +61,8 @@ export const resourceAccess = {
   member: {
     title: "Member resources",
     // TODO(placeholder): a members-only resource library does not exist yet. When one is
-    // built, extend this card. Today it only describes programme materials in the account.
-    body: "Enrolled learners find their programme materials and resources inside their TSA account.",
+    // built, extend this card. Today it only describes program materials in the account.
+    body: "Enrolled learners find their program materials and resources inside their TSA account.",
     href: "/signup",
     ctaLabel: "Join TSA",
     secondaryHref: "/login",
@@ -88,7 +88,7 @@ export const insightsHero = {
 } as const;
 
 export const insightsLinks = [
-  { label: "Explore our programmes", href: "/learn" },
+  { label: "Explore our programs", href: "/learn" },
   { label: "Free resources", href: "/grow" },
   { label: "Join the community", href: "/connect" },
 ] as const;

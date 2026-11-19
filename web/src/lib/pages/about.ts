@@ -13,7 +13,7 @@ export const aboutSeo = {
 export const aboutHero = {
   title: "Building stronger social media marketing capabilities.",
   lede: "Think Social Academy equips individuals and organisations with the practical skills, strategic thinking and knowledge in social media marketing",
-  ctaLabel: "Explore our programmes",
+  ctaLabel: "Explore our programs",
   ctaHref: "/programs",
 } as const;
 
@@ -70,6 +70,6 @@ export const aboutAudience = {
 export const aboutClose = {
   title: "Build the skills to take your next step.",
   lede: "Explore learning experiences designed to help you develop practical social media marketing capabilities.",
-  ctaLabel: "Explore our programmes",
+  ctaLabel: "Explore our programs",
   ctaHref: "/programs",
 } as const;

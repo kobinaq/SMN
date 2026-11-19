@@ -50,7 +50,7 @@ export function CourseIndex({
   newHref = "/staff/learning/courses/new",
   newLabel = "New course",
   emptyTitle = "No courses yet",
-  emptyDescription = "Create your first programme: a self-paced course members work through on their own, or a live cohort with a scheduled session plan.",
+  emptyDescription = "Create your first program: a self-paced course members work through on their own, or a live cohort with a scheduled session plan.",
   warnOnOpen,
 }: {
   courses: CourseSummary[];

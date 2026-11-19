@@ -8,7 +8,7 @@ export const SiteSettings: GlobalConfig = {
   admin: {
     group: "Website",
     description:
-      "Public brand, homepage, and social settings. Cohort copy and fees live on Learning programmes marked Cohort.",
+      "Public brand, homepage, and social settings. Cohort copy and fees live on Learning programs marked Cohort.",
   },
   access: {
     read: () => true,
@@ -54,7 +54,7 @@ export const SiteSettings: GlobalConfig = {
                   },
                 },
                 { name: "supportingCopy", type: "textarea" },
-                { name: "primaryCtaLabel", type: "text", defaultValue: "Explore our programmes" },
+                { name: "primaryCtaLabel", type: "text", defaultValue: "Explore our programs" },
                 {
                   name: "primaryCtaHref",
                   type: "text",

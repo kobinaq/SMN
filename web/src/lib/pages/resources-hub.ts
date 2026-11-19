@@ -28,7 +28,7 @@ export const resourcesTools = {
 
 export const resourcesSubscribe = {
   heading: "Stay curious. Stay connected. Keep growing.",
-  body: "Join the TSA community to receive practical resources, learning opportunities, industry insights, programme announcements and updates from Think Social Academy.",
+  body: "Join the TSA community to receive practical resources, learning opportunities, industry insights, program announcements and updates from Think Social Academy.",
   button: "Join the TSA community",
   success: "You're on the list. Thank you for joining the TSA community.",
 } as const;

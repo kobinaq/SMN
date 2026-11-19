@@ -107,11 +107,11 @@ export function ApplicationForm({
       {cohorts.length > 1 ? (
         <div>
           <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-course">
-            Which programme?
+            Which program?
           </label>
           <Select id="apply-course" className={cn(field, "bg-raised")} name="course" required defaultValue="">
             <option value="" disabled>
-              Select a programme
+              Select a program
             </option>
             {cohorts.map((cohort) => (
               <option key={String(cohort.id)} value={String(cohort.id)}>

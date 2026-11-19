@@ -246,7 +246,7 @@ export default async function EventsPage({ searchParams }: Props) {
               </h2>
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-text-2">
                 Join the community for reminders and recaps, or apply to live training when you
-                want a full programme.
+                want a full program.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:items-end">

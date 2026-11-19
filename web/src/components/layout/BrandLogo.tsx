@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils";
  * - `full`: the stacked THINK / SOCIAL / ACADEMY lockup (558x320).
  * - `mark`: the THINK wordmark (566x192), for tight spaces.
  *
- * `tone="white"` is for dark and deep-blue grounds (every public header and
- * footer state today); `tone="blue"` (#2b4c7f) is for light grounds.
+ * `tone="white"` is only for the dark Home hero. `tone="blue"` is the colour
+ * lockup for off-white and white grounds (header, footer, mobile menu).
  *
  * Intrinsic width/height are the real file sizes so the box is reserved
  * before the image loads (no layout shift); the rendered size comes from a
@@ -37,7 +37,7 @@ export type BrandLogoTone = "white" | "blue";
 export function BrandLogo({
   className,
   variant = "full",
-  tone = "white",
+  tone = "blue",
   priority = false,
 }: {
   className?: string;

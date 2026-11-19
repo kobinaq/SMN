@@ -23,7 +23,7 @@ test.describe("About page", () => {
   test("CTA goes to programs", async ({ page }) => {
     await page.goto("/about");
     const main = page.locator("main");
-    await expect(main.getByRole("link", { name: "Explore our programmes" }).first()).toHaveAttribute(
+    await expect(main.getByRole("link", { name: "Explore our programs" }).first()).toHaveAttribute(
       "href",
       "/programs",
     );

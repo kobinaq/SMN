@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import { AhrefsAnalytics } from "@/components/analytics/AhrefsAnalytics";
-import { site } from "@/lib/site";
+import { normalizeSiteUrl, site } from "@/lib/site";
 import "@/app/globals.css";
 
 const inter = Inter({
@@ -16,7 +16,7 @@ const montserrat = Montserrat({
 
 function safeMetadataBase() {
   try {
-    return new URL(site.url);
+    return new URL(normalizeSiteUrl(site.url));
   } catch {
     return new URL("http://localhost:3000");
   }

@@ -33,7 +33,7 @@ export function CourseCheckoutButton({
       return;
     }
     if (!payable) {
-      toast.push("This programme is not available for checkout yet.", "error");
+      toast.push("This program is not available for checkout yet.", "error");
       return;
     }
     setBusy(true);

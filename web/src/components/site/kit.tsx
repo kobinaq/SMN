@@ -198,7 +198,7 @@ export function Sequence({
           key={item.title}
           className="grid gap-4 rule py-8 sm:grid-cols-[6rem_minmax(0,1fr)] sm:gap-10 sm:py-10 last:pb-0"
         >
-          <span aria-hidden className="ordinal text-accent/50">
+          <span aria-hidden className="ordinal text-accent">
             {String(index + 1).padStart(2, "0")}
           </span>
           <div className="max-w-2xl">

@@ -5,7 +5,7 @@ import { findCopyViolations } from "@/lib/pages/copy-rules";
 describe("Programs copy", () => {
   it("keeps the three offers and their public URLs", () => {
     expect(programs.programs.map((program) => [program.title, program.href])).toEqual([
-      ["Social Media Marketing Programme", "/programs/social-media-marketing"],
+      ["Social Media Marketing Program", "/programs/social-media-marketing"],
       ["Specialised One-on-One Training", "/programs/one-on-one-training"],
       ["Organisational Training", "/programs/organisational-training"],
     ]);

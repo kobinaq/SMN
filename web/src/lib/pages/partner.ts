@@ -29,8 +29,8 @@ export const partnerAreas: PartnerArea[] = [
   {
     id: "sponsorship",
     title: "Sponsorship",
-    body: "Support TSA programmes, learners, scholarships, events and community initiatives.",
-    examples: ["Scholarships", "Programme seats", "Events", "Community initiatives", "Learning resources", "Learner access"],
+    body: "Support TSA programs, learners, scholarships, events and community initiatives.",
+    examples: ["Scholarships", "Program seats", "Events", "Community initiatives", "Learning resources", "Learner access"],
     href: "/contact?type=Sponsorship",
     ctaLabel: "Discuss Sponsorship",
   },
@@ -48,17 +48,17 @@ export const partnerAreas: PartnerArea[] = [
     body: "Give learners realistic marketing challenges, briefs or scenarios to solve as part of their learning experience.",
     examples: ["A marketing brief", "A campaign challenge", "A business scenario", "Feedback on learner work"],
     // Tab 5 section 10: label simulations clearly; no implied paid client work.
-    note: "Learners may work through partner briefs or clearly labelled simulations, depending on the programme and opportunities available. These activities are designed to help learners practise applying concepts to realistic marketing challenges.",
+    note: "Learners may work through partner briefs or clearly labelled simulations, depending on the program and opportunities available. These activities are designed to help learners practise applying concepts to realistic marketing challenges.",
     href: "/contact?type=Simulation%20waitlist",
     ctaLabel: "Create a Simulation",
   },
 ];
 
-/** Tab 4 Think Social Agency. Tab 5: a separate arm, not an Academy programme. */
+/** Tab 4 Think Social Agency. Tab 5: a separate arm, not an Academy program. */
 export const agency = {
   kicker: "Think Social Agency",
   title: "Social Media, Storytelling & Content",
-  body: "Think Social Agency is the agency arm of Think Social, helping brands and organisations turn what they do into meaningful social media, stories and content. It works separately from the Academy's programmes.",
+  body: "Think Social Agency is the agency arm of Think Social, helping brands and organisations turn what they do into meaningful social media, stories and content. It works separately from the Academy's programs.",
   focusAreas: [
     {
       title: "Social Media",

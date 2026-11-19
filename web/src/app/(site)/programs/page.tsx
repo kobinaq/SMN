@@ -22,7 +22,7 @@ export default function ProgramsPage() {
   return (
     <>
       <Masthead
-        kicker="Programmes"
+        kicker="Programs"
         title={programsHero.title}
         lede={programsHero.lede}
         actions={

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { agencyEnabled } from "@/lib/features";
-import { site } from "@/lib/site";
+import { normalizeSiteUrl, site } from "@/lib/site";
 import { getBlogPosts } from "@/lib/blog";
 import { getEventCalendar } from "@/lib/events";
 import { getResourceLibrary } from "@/lib/resources";
@@ -36,7 +36,7 @@ function toLastModified(value?: string | null): Date | undefined {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = site.url.replace(/\/$/, "");
+  const base = normalizeSiteUrl(site.url);
 
   const [posts, resources, events] = await Promise.all([
     getBlogPosts().catch(() => []),

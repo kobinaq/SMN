@@ -32,7 +32,7 @@ const sections = [
     title: "How we use information",
     body: (
       <p className="mt-4">
-        We use information to review applications, operate programmes, deliver learning, provide
+        We use information to review applications, operate programs, deliver learning, provide
         mentorship and opportunity tools, issue credentials, respond to enquiries, and improve the
         website. Transactional email may be sent via Resend. Newsletters may use Mailchimp. Course
         and event payments are processed by Paystack.

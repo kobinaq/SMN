@@ -26,14 +26,18 @@ const programEnquiryType = {
   workshop: "organisational-training",
 } as const satisfies Record<ProgramCopy["kind"], EnquiryType>;
 
-function ProgramBody({ program }: { program: ProgramCopy }) {
+function ProgramBody({
+  program,
+  titleTag = "h2",
+}: {
+  program: ProgramCopy;
+  titleTag?: "h1" | "h2";
+}) {
+  const Title = titleTag;
   return (
     <>
       <Kicker>{program.descriptor}</Kicker>
-      <h2 className="mt-5 font-display display-2 text-text-1">{program.title}</h2>
-      {program.subheading ? (
-        <h3 className="mt-4 font-display text-xl text-text-1">{program.subheading}</h3>
-      ) : null}
+      <Title className="mt-5 font-display display-2 text-text-1">{program.title}</Title>
       <div className="mt-6 max-w-3xl space-y-4 text-base leading-relaxed text-text-2">
         {program.paragraphs.map((paragraph) => (
           <p key={paragraph.slice(0, 48)}>{paragraph}</p>
@@ -69,10 +73,10 @@ export function ProgramDetail({ program }: { program: ProgramCopy }) {
       <header className="border-b border-edge-subtle bg-canvas pt-[calc(6rem+env(safe-area-inset-top))] pb-14 sm:pt-40 sm:pb-20">
         <div className="container-wide">
           <Link href="/programs" className="text-sm text-text-3 underline-offset-2 hover:text-text-1 hover:underline">
-            All programmes
+            All programs
           </Link>
           <div className="mt-8">
-            <ProgramBody program={program} />
+            <ProgramBody program={program} titleTag="h1" />
           </div>
         </div>
       </header>
