@@ -8,9 +8,10 @@ describe("About page copy", () => {
     expect(about.aboutHero.ctaHref).toBe("/programs");
   });
 
-  it("keeps the founder biography as written, including the source typos", () => {
-    expect(about.aboutFounder.paragraphs[0]).toContain("social mediaategist");
-    expect(about.aboutFounder.paragraphs[0]).toContain("lifestyle and consumer and brands");
+  it("uses the corrected founder biography", () => {
+    expect(about.aboutFounder.paragraphs[0]).toContain("social media strategist");
+    expect(about.aboutFounder.paragraphs[0]).toContain("lifestyle and consumer brands");
+    expect(about.aboutFounder.paragraphs[0]).not.toContain("mediaategist");
     expect(about.aboutFounder.role).toBe("Founder, Think Social Academy");
   });
 

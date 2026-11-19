@@ -41,7 +41,7 @@ describe("marketing defaults", () => {
     expect(cta.joinCommunity.label).toBe("Join the community");
     expect(cta.hireTalent.href).toBe("/connect");
     expect(cta.viewMentors.href).toBe("/connect/mentors");
-    expect(cta.explorePrograms.label).toBe("Explore our programs");
+    expect(cta.explorePrograms.label).toBe("Explore our programmes");
     expect(cta.explorePrograms.href).toBe("/programs");
     expect(cta.viewCohort.href).toBe("/programs/social-media-marketing");
   });
@@ -50,7 +50,7 @@ describe("marketing defaults", () => {
     expect(site.cohort.duration).toBe("4 weeks");
     expect(site.cohort.startDate).toBe("");
     expect(cohortStartLabel(site.cohort.startDate).toLowerCase()).toContain("coming soon");
-    expect(site.homepage.primaryCtaLabel).toBe("Explore our programs");
+    expect(site.homepage.primaryCtaLabel).toBe("Explore our programmes");
     expect(site.homepage.primaryCtaHref).toBe("/programs");
     expect(site.homepage.secondaryCtaLabel).toBe("Discover TSA");
     expect(site.homepage.secondaryCtaHref).toBe("/about");

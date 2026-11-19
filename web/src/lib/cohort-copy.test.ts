@@ -8,9 +8,9 @@ import {
 import { site } from "@/lib/site";
 
 describe("cohortAudienceSentence", () => {
-  it("lowercases the leading word so the sentence reads 'For aspiring ...'", () => {
-    expect(cohortAudienceSentence(site.cohort.audience)).toMatch(
-      /^For aspiring social media managers,/,
+  it("lowercases the leading word of the stored audience line", () => {
+    expect(cohortAudienceSentence(site.cohort.audience)).toBe(
+      "For people starting out in social media marketing, social media managers who want to upskill or learn to execute with AI, and those who want a structured, guided learning experience with tutor support.",
     );
     expect(cohortAudienceSentence("Aspiring marketers")).toBe("For aspiring marketers.");
   });

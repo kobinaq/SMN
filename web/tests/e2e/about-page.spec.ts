@@ -17,13 +17,13 @@ test.describe("About page", () => {
       page.getByRole("heading", { name: "Supporting people and teams at different stages." }),
     ).toBeVisible();
     await expect(page.getByText("Founder, Think Social Academy")).toBeVisible();
-    await expect(page.getByText("social mediaategist")).toBeVisible();
+    await expect(page.getByText("social media strategist")).toBeVisible();
   });
 
   test("CTA goes to programs", async ({ page }) => {
     await page.goto("/about");
     const main = page.locator("main");
-    await expect(main.getByRole("link", { name: "Explore our programs" }).first()).toHaveAttribute(
+    await expect(main.getByRole("link", { name: "Explore our programmes" }).first()).toHaveAttribute(
       "href",
       "/programs",
     );

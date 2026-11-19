@@ -47,7 +47,7 @@ export const partnershipOpportunities = [
 export const partnershipShapes = {
   title: "What collaboration can look like",
   items: [
-    "Co-designed training programs and workshops.",
+    "Co-designed training programmes and workshops.",
     "Skills development initiatives for specific audiences.",
     "Guest sessions, mentorship and industry knowledge-sharing.",
     "Events and learning experiences.",

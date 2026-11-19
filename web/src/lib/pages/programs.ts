@@ -5,15 +5,15 @@
  */
 
 export const programsSeo = {
-  title: "Social Media Marketing Programs & Training | Think Social Academy",
+  title: "Social Media Marketing Programmes & Training | Think Social Academy",
   description:
-    "Explore social media marketing training at Think Social Academy, including the core program, specialised one-on-one training and tailored organisational programs.",
+    "Explore social media marketing training at Think Social Academy, including the core programme, specialised one-on-one training and tailored organisational programmes.",
 } as const;
 
 export const programsHero = {
   title: "Find the right learning experience for your next step.",
   lede: "Whether you are starting out, developing specialised skills or equipping your team, Think Social Academy offers practical learning experiences built around real-world application.",
-  ctaLabel: "Explore our programs",
+  ctaLabel: "Explore our programmes",
   ctaHref: "#programs",
 } as const;
 
@@ -42,7 +42,7 @@ export const socialMediaProgram: ProgramCopy = {
   id: "social-media-marketing",
   href: "/programs/social-media-marketing",
   descriptor: "Structured • Practical • Cohort-based",
-  title: "Social Media Marketing Program",
+  title: "Social Media Marketing Programme",
   subheading: "Programme 1: Social Media Marketing Programme",
   paragraphs: [
     "Build the skills to plan, manage and deliver results for any brand or business.",
@@ -76,7 +76,7 @@ export const socialMediaProgram: ProgramCopy = {
       items: ["A certificate", "A portfolio template with your work"],
     },
   ],
-  ctaLabel: "View program details / Register interest",
+  ctaLabel: "View programme details / Register interest",
 };
 
 export const oneOnOneProgram: ProgramCopy = {
@@ -86,7 +86,7 @@ export const oneOnOneProgram: ProgramCopy = {
   descriptor: "Personalised • Focused • Flexible",
   title: "Specialised One-on-One Training",
   paragraphs: [
-    "Not every learning need fits a cohort program. Our specialised one-on-one training is designed around your goals, experience and specific development needs. Together, we identify the skills you want to strengthen and shape a focused learning experience around them.",
+    "Not every learning need fits a cohort programme. Our specialised one-on-one training is designed around your goals, experience and specific development needs. Together, we identify the skills you want to strengthen and shape a focused learning experience around them.",
   ],
   sections: [
     {
@@ -108,11 +108,10 @@ export const oneOnOneProgram: ProgramCopy = {
     },
     {
       heading: "What you leave with",
-      items: ["A certificate", "A 30- day content calendar", "Mentorship for your next opportunity"],
-    },
-    {
-      heading: "What you'll leave with",
       items: [
+        "A certificate",
+        "A 30-day content calendar",
+        "Mentorship for your next opportunity",
         "Practical skills relevant to your role, industry and objectives.",
         "Industry-specific social media strategies tailored to your business or organizational needs.",
         "Platform knowledge and the ability to use relevant social media platforms effectively.",
@@ -170,33 +169,33 @@ export const programFaqs = [
   {
     question: "Do I need prior experience to join?",
     answer:
-      "The Social Media Marketing Program is designed to accommodate beginners. Requirements for specialised and organisational training depend on the learning brief.",
+      "The Social Media Marketing Programme is designed to accommodate beginners. Requirements for specialised and organisational training depend on the learning brief.",
   },
   {
-    question: "Are the programs delivered online or in person?",
+    question: "Are the programmes delivered online or in person?",
     answer:
-      "Delivery format depends on the program and cohort. Confirm the current format on the relevant program details page.",
+      "Delivery format depends on the programme and cohort. Confirm the current format on the relevant programme details page.",
   },
   {
     question: "How long does training take?",
     answer:
-      "Duration varies by program and training requirements. Refer to the relevant program details or contact TSA.",
+      "Duration varies by programme and training requirements. Refer to the relevant programme details or contact TSA.",
   },
   {
     question: "Will I receive a certificate?",
     answer:
-      "Certificate availability and completion requirements should be stated on each program page once confirmed by TSA.",
+      "Certificate availability and completion requirements should be stated on each programme page once confirmed by TSA.",
   },
   {
     question: "How do I enrol or enquire?",
     answer:
-      "Use the relevant program call to action to register interest or submit an enquiry. TSA will provide the next steps.",
+      "Use the relevant programme call to action to register interest or submit an enquiry. TSA will provide the next steps.",
   },
 ] as const;
 
 export const programsClose = {
   title: "Ready to build skills that move you forward?",
-  body: "Explore a program or speak with us about the right learning experience for you or your team.",
+  body: "Explore a programme or speak with us about the right learning experience for you or your team.",
   ctaLabel: "Get started",
   ctaHref: "/contact",
 } as const;

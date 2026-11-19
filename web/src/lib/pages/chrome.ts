@@ -21,7 +21,7 @@ export const footerMore = [
 ] as const;
 
 export const footerPrograms = [
-  { label: "Social Media Marketing Program", href: "/programs/social-media-marketing" },
+  { label: "Social Media Marketing Programme", href: "/programs/social-media-marketing" },
   { label: "Specialised One-on-One Training", href: "/programs/one-on-one-training" },
   { label: "Organisational Training", href: "/programs/organisational-training" },
 ] as const;

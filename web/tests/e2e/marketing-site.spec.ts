@@ -43,7 +43,7 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(hero.getByRole("heading", { level: 1 })).toContainText(/opportunity-ready/i);
     const ctas = hero.locator(".btn-row-mobile a");
     await expect(ctas).toHaveCount(2);
-    await expect(ctas.nth(0)).toHaveText(/explore our programs/i);
+    await expect(ctas.nth(0)).toHaveText(/explore our programmes/i);
     await expect(ctas.nth(0)).toHaveAttribute("href", "/programs");
     await expect(ctas.nth(1)).toHaveText(/discover tsa/i);
     await expect(ctas.nth(1)).toHaveAttribute("href", "/about");

@@ -69,7 +69,7 @@ export function ProgramDetail({ program }: { program: ProgramCopy }) {
       <header className="border-b border-edge-subtle bg-canvas pt-[calc(6rem+env(safe-area-inset-top))] pb-14 sm:pt-40 sm:pb-20">
         <div className="container-wide">
           <Link href="/programs" className="text-sm text-text-3 underline-offset-2 hover:text-text-1 hover:underline">
-            All programs
+            All programmes
           </Link>
           <div className="mt-8">
             <ProgramBody program={program} />

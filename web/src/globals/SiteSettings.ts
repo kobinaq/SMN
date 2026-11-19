@@ -54,7 +54,7 @@ export const SiteSettings: GlobalConfig = {
                   },
                 },
                 { name: "supportingCopy", type: "textarea" },
-                { name: "primaryCtaLabel", type: "text", defaultValue: "Explore our programs" },
+                { name: "primaryCtaLabel", type: "text", defaultValue: "Explore our programmes" },
                 {
                   name: "primaryCtaHref",
                   type: "text",

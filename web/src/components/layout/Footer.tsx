@@ -46,7 +46,7 @@ export function Footer({ site }: { site: SiteConfig }) {
 
           <div>
             <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-text-3 sm:text-xs">
-              Programs
+              Programmes
             </p>
             <ul className="mt-3 space-y-1 sm:mt-4">
               {footerPrograms.map((link) => (
