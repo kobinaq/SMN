@@ -22,6 +22,15 @@ export const SiteSettings: GlobalConfig = {
           label: "Brand",
           fields: [
             { name: "siteName", type: "text", required: true, defaultValue: "Think Social Academy" },
+            {
+              name: "agencyEnabled",
+              type: "checkbox",
+              defaultValue: false,
+              admin: {
+                description:
+                  "Off matches the current site, which has no Agency item in the public navigation. Turn on when the Agency page should be visible.",
+              },
+            },
             { name: "tagline", type: "textarea" },
             { name: "description", type: "textarea", admin: { description: "Default meta description" } },
             { name: "opsEmail", type: "email" },

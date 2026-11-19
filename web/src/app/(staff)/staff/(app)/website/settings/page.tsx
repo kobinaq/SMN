@@ -48,6 +48,7 @@ export default async function SiteSettingsPage() {
             linkedin: String(social.linkedin || ""),
             twitter: String(social.twitter || ""),
             impactStats,
+            agencyEnabled: settings.agencyEnabled === true,
           }}
         />
       </StaffPanel>

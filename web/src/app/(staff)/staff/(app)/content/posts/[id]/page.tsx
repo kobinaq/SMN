@@ -33,6 +33,8 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
             title: doc.title,
             slug: doc.slug,
             category: doc.category,
+            author: doc.author || "",
+            status: doc.status || "published",
             excerpt: doc.excerpt,
             contentText: lexicalToPlainText(doc.content),
             cover: relationId(doc.cover),

@@ -105,6 +105,7 @@ export interface Config {
     events: Event;
     stories: Story;
     resources: Resource;
+    enquiries: Enquiry;
     'payload-kv': PayloadKv;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -148,6 +149,7 @@ export interface Config {
     events: EventsSelect<false> | EventsSelect<true>;
     stories: StoriesSelect<false> | StoriesSelect<true>;
     resources: ResourcesSelect<false> | ResourcesSelect<true>;
+    enquiries: EnquiriesSelect<false> | EnquiriesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -1361,7 +1363,16 @@ export interface Post {
     | 'Career Development'
     | 'Case Studies'
     | 'Industry Trends'
-    | 'Community Stories';
+    | 'Community Stories'
+    | 'Social Media Strategy'
+    | 'Content Marketing & Planning'
+    | 'Platforms'
+    | 'Performance'
+    | 'Professional Development';
+  /**
+   * Article byline. Leave blank to keep the current founder byline.
+   */
+  author?: string | null;
   excerpt: string;
   content?: {
     root: {
@@ -1381,6 +1392,10 @@ export interface Post {
   cover?: (number | null) | Media;
   publishedAt?: string | null;
   readTime?: string | null;
+  /**
+   * Draft hides the post. Existing posts default to published, so a deploy does not unpublish them.
+   */
+  status: 'draft' | 'published';
   updatedAt: string;
   createdAt: string;
 }
@@ -1425,7 +1440,60 @@ export interface Resource {
   slug: string;
   type: 'Template' | 'Guide' | 'AI Prompts' | 'Checklist' | 'Toolkit' | 'Download';
   description: string;
+  category?:
+    | (
+        | 'Social Media Strategy'
+        | 'Content Marketing & Planning'
+        | 'AI'
+        | 'Platforms'
+        | 'Performance'
+        | 'Professional Development'
+      )
+    | null;
+  format?:
+    | (
+        | 'Template'
+        | 'Checklist'
+        | 'Worksheet'
+        | 'Planning tool'
+        | 'Guide'
+        | 'Prompt library'
+        | 'Handbook'
+        | 'Toolkit'
+        | 'Download'
+        | 'Link'
+      )
+    | null;
   file?: (number | null) | Media;
+  /**
+   * Link for a resource that is not an uploaded file.
+   */
+  externalUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Public form submissions. Created only by POST /api/enquiries.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "enquiries".
+ */
+export interface Enquiry {
+  id: number;
+  type:
+    | 'programme-social-media-marketing'
+    | 'one-on-one-training'
+    | 'organisational-training'
+    | 'partnership'
+    | 'contact'
+    | 'newsletter';
+  name?: string | null;
+  email: string;
+  phone?: string | null;
+  organisation?: string | null;
+  message?: string | null;
+  sourcePage?: string | null;
+  status: 'new' | 'in-progress' | 'closed';
   updatedAt: string;
   createdAt: string;
 }
@@ -2261,11 +2329,13 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   category?: T;
+  author?: T;
   excerpt?: T;
   content?: T;
   cover?: T;
   publishedAt?: T;
   readTime?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2353,7 +2423,26 @@ export interface ResourcesSelect<T extends boolean = true> {
   slug?: T;
   type?: T;
   description?: T;
+  category?: T;
+  format?: T;
   file?: T;
+  externalUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "enquiries_select".
+ */
+export interface EnquiriesSelect<T extends boolean = true> {
+  type?: T;
+  name?: T;
+  email?: T;
+  phone?: T;
+  organisation?: T;
+  message?: T;
+  sourcePage?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2395,6 +2484,10 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface SiteSetting {
   id: number;
   siteName: string;
+  /**
+   * Off matches the current site, which has no Agency item in the public navigation. Turn on when the Agency page should be visible.
+   */
+  agencyEnabled?: boolean | null;
   tagline?: string | null;
   /**
    * Default meta description
@@ -2421,12 +2514,12 @@ export interface SiteSetting {
     supportingCopy?: string | null;
     primaryCtaLabel?: string | null;
     /**
-     * Primary hero button destination, e.g. /academy or /apply.
+     * Primary hero button destination, e.g. /learn or /apply.
      */
     primaryCtaHref?: string | null;
     secondaryCtaLabel?: string | null;
     /**
-     * Secondary hero button destination, e.g. /signup.
+     * Secondary hero button destination, e.g. /apply.
      */
     secondaryCtaHref?: string | null;
   };
@@ -2458,6 +2551,7 @@ export interface SiteSetting {
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
+  agencyEnabled?: T;
   tagline?: T;
   description?: T;
   opsEmail?: T;

@@ -1,4 +1,5 @@
-import type { CollectionConfig } from "payload";
+import type { CollectionConfig, Where } from "payload";
+import { postCategories, selectOptions } from "@/lib/catalogue";
 
 const staffOnly = ({ req }: { req: { user?: { collection?: string } | null } }) =>
   req.user?.collection === "users";
@@ -11,10 +12,16 @@ export const Posts: CollectionConfig = {
     group: "Content",
   },
   access: {
-    read: ({ req }) =>
-      req.user?.collection === "users"
-        ? true
-        : { publishedAt: { less_than_equal: new Date().toISOString() } },
+    read: ({ req }) => {
+      if (req.user?.collection === "users") return true;
+      const published: Where = {
+        and: [
+          { publishedAt: { less_than_equal: new Date().toISOString() } },
+          { status: { equals: "published" } },
+        ],
+      };
+      return published;
+    },
     create: staffOnly,
     update: staffOnly,
     delete: staffOnly,
@@ -36,15 +43,12 @@ export const Posts: CollectionConfig = {
       name: "category",
       type: "select",
       required: true,
-      options: [
-        { label: "Marketing Strategy", value: "Marketing Strategy" },
-        { label: "AI", value: "AI" },
-        { label: "Social Media", value: "Social Media" },
-        { label: "Career Development", value: "Career Development" },
-        { label: "Case Studies", value: "Case Studies" },
-        { label: "Industry Trends", value: "Industry Trends" },
-        { label: "Community Stories", value: "Community Stories" },
-      ],
+      options: selectOptions(postCategories),
+    },
+    {
+      name: "author",
+      type: "text",
+      admin: { description: "Article byline. Leave blank to keep the current founder byline." },
     },
     {
       name: "excerpt",
@@ -69,6 +73,20 @@ export const Posts: CollectionConfig = {
       name: "readTime",
       type: "text",
       admin: { position: "sidebar" },
+    },
+    {
+      name: "status",
+      type: "select",
+      required: true,
+      defaultValue: "published",
+      options: [
+        { label: "Draft", value: "draft" },
+        { label: "Published", value: "published" },
+      ],
+      admin: {
+        position: "sidebar",
+        description: "Draft hides the post. Existing posts default to published, so a deploy does not unpublish them.",
+      },
     },
   ],
 };

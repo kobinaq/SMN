@@ -25,6 +25,7 @@ export type SiteSettingsFormValues = {
   linkedin: string;
   twitter: string;
   impactStats: ImpactRow[];
+  agencyEnabled: boolean;
 };
 
 function Field({
@@ -101,6 +102,7 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
             twitter: values.twitter,
           },
           impactStats: values.impactStats.filter((row) => row.label.trim() && row.value.trim()),
+          agencyEnabled: values.agencyEnabled,
         }),
       });
       const result = await response.json();
@@ -119,6 +121,20 @@ export function SiteSettingsForm({ initial }: { initial: SiteSettingsFormValues 
       <section className="grid gap-4 md:grid-cols-2">
         <h2 className="font-display text-lg text-text-1 md:col-span-2">Brand</h2>
         <Field label="Site name" value={values.siteName} onChange={(value) => setField("siteName", value)} />
+        <label className="flex items-start gap-3 text-sm text-text-2 md:col-span-2">
+          <input
+            type="checkbox"
+            className="mt-1"
+            checked={values.agencyEnabled}
+            onChange={(event) => setField("agencyEnabled", event.target.checked)}
+          />
+          <span>
+            Show Agency
+            <span className="mt-1 block text-text-3">
+              Off matches the current site. Agency stays out of the public navigation until this is on.
+            </span>
+          </span>
+        </label>
         <Field label="Operations email" value={values.opsEmail} onChange={(value) => setField("opsEmail", value)} />
         <Field
           label="Tagline"

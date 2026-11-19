@@ -50,6 +50,9 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
   if (canStaff(staff, "content", "support", "analyst", "learning")) {
     links.push({ href: "/staff/applications", label: "Applications" });
   }
+  if (canStaff(staff, "content", "support", "analyst")) {
+    links.push({ href: "/staff/enquiries", label: "Enquiries" });
+  }
 
   if (canStaff(staff, "content", "analyst")) {
     links.push(

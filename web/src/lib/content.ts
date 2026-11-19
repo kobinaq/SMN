@@ -425,6 +425,7 @@ export type ResourceItem = {
   body: string[];
   /** Uploaded file URL when staff attached one in the CMS. */
   fileUrl?: string;
+  category?: string;
   updatedAt?: string;
 };
 
@@ -489,6 +490,11 @@ export const blogCategories = [
   "Career Development",
   "Industry Trends",
   "Case Studies",
+  "Social Media Strategy",
+  "Content Marketing & Planning",
+  "Platforms",
+  "Performance",
+  "Professional Development",
 ] as const;
 
 export const curriculum = [

@@ -13,6 +13,7 @@ import { Courses } from "./collections/Courses";
 import { Events } from "./collections/Events";
 import { Stories } from "./collections/Stories";
 import { Resources } from "./collections/Resources";
+import { Enquiries } from "./collections/Enquiries";
 import { Mentors } from "./collections/Mentors";
 import { MentorshipRequests } from "./collections/MentorshipRequests";
 import { MentorshipRelationships } from "./collections/MentorshipRelationships";
@@ -144,6 +145,7 @@ export default buildConfig({
     Events,
     Stories,
     Resources,
+    Enquiries,
   ]).map((collection) => ({
     ...collection,
     // /staff does not use Payload's concurrent-edit locks. Those queries
