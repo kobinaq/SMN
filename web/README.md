@@ -29,7 +29,7 @@ Key local routes:
 | /staff/login and /staff | Staff authentication and product |
 | /admin | Redirect to /staff unless emergency legacy mode is enabled |
 
-Marketing content can fall back to safe defaults when CMS records are empty. Missing external credentials disable or degrade only their integration; see [../docs/ENVIRONMENT.md](../docs/ENVIRONMENT.md).
+Marketing content can fall back to safe defaults when CMS records are empty. Missing external credentials disable or degrade only their integration.
 
 ## Authentication
 
@@ -63,7 +63,7 @@ As of 2026-07-21, typecheck and unit tests pass, while lint has five errors in n
 
 ## Deployment
 
-Vercel must use web as the Root Directory and the default Next.js output. Configure the production environment, apply reviewed migrations, and complete [../docs/PRODUCTION-CHECKLIST.md](../docs/PRODUCTION-CHECKLIST.md).
+Vercel must use web as the Root Directory and the default Next.js output. Configure the production environment, apply reviewed migrations, and complete the production checklist.
 
 ## Product domains
 
