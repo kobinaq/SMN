@@ -5,9 +5,9 @@ import Image, { ImageProps } from "next/image";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
-import { useSiteSettings } from "@/components/layout/SiteSettingsProvider";
 import { img } from "@/lib/images";
 import { homepageHeadlineLines } from "@/lib/content";
+import { homepageHero } from "@/lib/pages/home";
 import { trackEvent } from "@/lib/analytics";
 
 type Direction = "left" | "right";
@@ -121,8 +121,7 @@ function useBreakpoint(): Breakpoint {
 
 export function HeroPhotoGallery() {
   const bp = useBreakpoint();
-  const site = useSiteSettings();
-  const headlineLines = homepageHeadlineLines(site.homepage.headline);
+  const headlineLines = homepageHeadlineLines(homepageHero.headline);
 
   return (
     <section
@@ -134,7 +133,7 @@ export function HeroPhotoGallery() {
           data-hero-item
           className="text-[10px] font-medium uppercase tracking-[0.28em] text-baby-blue sm:text-[11px] md:text-xs"
         >
-          {site.name}
+          {homepageHero.eyebrow}
         </p>
         <h1
           data-hero-item
@@ -148,9 +147,9 @@ export function HeroPhotoGallery() {
         </h1>
         <p
           data-hero-item
-          className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/60 sm:mt-5 md:text-base"
+          className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-white/60 sm:mt-5 md:text-base"
         >
-          {site.homepage.supportingCopy}
+          {homepageHero.supporting}
         </p>
       </div>
 
@@ -199,19 +198,19 @@ export function HeroPhotoGallery() {
       >
         <div className="btn-row-mobile">
           <Button
-            href={site.homepage.primaryCtaHref}
+            href={homepageHero.primaryCtaHref}
             className="sm:min-w-[160px]"
             onClick={() => trackEvent("primary_cta_click", { location: "hero" })}
           >
-            {site.homepage.primaryCtaLabel}
+            {homepageHero.primaryCtaLabel}
           </Button>
           <Button
-            href={site.homepage.secondaryCtaHref}
+            href={homepageHero.secondaryCtaHref}
             variant="secondary"
             className="sm:min-w-[140px]"
             onClick={() => trackEvent("secondary_cta_click", { location: "hero" })}
           >
-            {site.homepage.secondaryCtaLabel}
+            {homepageHero.secondaryCtaLabel}
           </Button>
         </div>
       </div>

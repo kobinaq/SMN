@@ -94,7 +94,7 @@ export function StaffResetPasswordForm() {
         {status === "loading" ? "Saving…" : "Update password"}
       </Button>
       {message ? (
-        <p className={`text-sm ${status === "error" ? "text-red-300" : "text-ai"}`} role="status" aria-live="polite">
+        <p className={`text-sm ${status === "error" ? "text-danger" : "text-ai"}`} role="status" aria-live="polite">
           {message}
         </p>
       ) : null}

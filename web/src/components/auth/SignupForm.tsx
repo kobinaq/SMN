@@ -130,7 +130,7 @@ export function SignupForm() {
               aria-describedby={describedBy}
             />
             {error ? (
-              <p id={errorId} className="mt-1.5 text-sm text-red-300">
+              <p id={errorId} className="mt-1.5 text-sm text-danger">
                 {error}
               </p>
             ) : null}
@@ -139,9 +139,9 @@ export function SignupForm() {
       })}
 
       <div role="alert" aria-live="assertive">
-        {hasFieldErrors ? <p className="text-sm text-red-300">{signupCopy.errors.summary}</p> : null}
+        {hasFieldErrors ? <p className="text-sm text-danger">{signupCopy.errors.summary}</p> : null}
         {formError ? (
-          <p ref={formErrorRef} tabIndex={-1} id="signup-form-error" className="text-sm text-red-300">
+          <p ref={formErrorRef} tabIndex={-1} id="signup-form-error" className="text-sm text-danger">
             {formError}{" "}
             <Link href="/login" className="underline hover:text-text-1">
               Sign in

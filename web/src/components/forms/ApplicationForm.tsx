@@ -211,7 +211,7 @@ export function ApplicationForm({
             ))}
           </Select>
           {levelError ? (
-            <p id={levelErrorId} className="mt-1.5 text-sm text-red-300" role="alert">
+            <p id={levelErrorId} className="mt-1.5 text-sm text-danger" role="alert">
               {levelError}
             </p>
           ) : null}
@@ -269,7 +269,7 @@ export function ApplicationForm({
         {status === "loading" ? "Submitting…" : cta.submitApplication.label}
       </Button>
       {message ? (
-        <p className={cn("text-sm", status === "error" ? "text-red-300" : "text-ai")} role="alert">
+        <p className={cn("text-sm", status === "error" ? "text-danger" : "text-ai")} role="alert">
           {message}
         </p>
       ) : null}

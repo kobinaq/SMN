@@ -149,7 +149,7 @@ export function JobPostingForm() {
         {status === "loading" ? "Submitting…" : "Submit for review"}
       </Button>
       {message && status === "error" ? (
-        <p className="text-sm text-red-300" role="alert">{message}</p>
+        <p className="text-sm text-danger" role="alert">{message}</p>
       ) : null}
     </form>
   );

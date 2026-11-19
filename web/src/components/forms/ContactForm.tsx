@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
+import { enquiryErrorMessage, enquiryLimits, submitEnquiry, type FieldErrors } from "@/lib/enquiries";
 import { cn } from "@/lib/utils";
 import { trackEvent } from "@/lib/analytics";
 
@@ -26,9 +28,22 @@ const partnerTypes = new Set([
   "Sponsorship",
 ]);
 
-export function ContactForm({ defaultType }: { defaultType?: string }) {
+export function ContactForm({
+  defaultType,
+  submitLabel = "Send message",
+  successMessage = "Message sent. We’ll get back to you soon.",
+  hideType = false,
+}: {
+  defaultType?: string;
+  submitLabel?: string;
+  successMessage?: string;
+  hideType?: boolean;
+}) {
+  const pathname = usePathname() || "/";
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-  const [message, setMessage] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const loading = status === "loading";
   // Unknown or retired ?type= values (Talent request, Intern request, Job posting)
   // fall back to the blank default option.
   const selectedType = types.includes(defaultType as (typeof types)[number]) ? defaultType : undefined;
@@ -41,34 +56,38 @@ export function ContactForm({ defaultType }: { defaultType?: string }) {
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("loading");
-    setMessage("");
+    setStatusMessage("");
+    setFieldErrors({});
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
-
-    try {
-      const res = await fetch("/api/forms/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const json = (await res.json()) as { ok?: boolean; error?: string };
-      if (!res.ok) throw new Error(json.error || "Something went wrong");
+    const subject = String(data.subject ?? "").trim();
+    const note = String(data.message ?? "").trim();
+    const result = await submitEnquiry({
+      type: "contact",
+      name: String(data.name ?? ""),
+      email: String(data.email ?? ""),
+      message: note ? (subject ? `Enquiry type: ${subject}\n\n${note}` : note) : "",
+      sourcePage: pathname,
+      website: String(data.website ?? ""),
+    });
+    if (result.ok) {
       setStatus("success");
-      setMessage("Message sent. We’ll get back to you soon.");
+      setStatusMessage(successMessage);
       if (isEmployer) trackEvent("employer_enquiry_complete", { location: "contact_form" });
       form.reset();
-    } catch (err) {
-      setStatus("error");
-      setMessage(err instanceof Error ? err.message : "Unable to send. Try again.");
+      return;
     }
+    setStatus("error");
+    setFieldErrors(result.error === "validation_error" ? result.fieldErrors : {});
+    setStatusMessage(result.error === "validation_error" ? "" : enquiryErrorMessage(result));
   }
 
   const field =
     "field w-full border border-edge-subtle bg-inset px-4 py-3.5 text-text-1 placeholder:text-text-3 sm:py-3";
 
   return (
-    <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4">
-      <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
+    <form onSubmit={onSubmit} className="space-y-3 sm:space-y-4" aria-busy={loading} noValidate>
+      <input type="text" name="website" className="sr-only" tabIndex={-1} autoComplete="off" aria-hidden="true" />
       <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
         <div>
           <label className="mb-1.5 block text-xs text-text-3" htmlFor="contact-name">
@@ -79,9 +98,18 @@ export function ContactForm({ defaultType }: { defaultType?: string }) {
             className={field}
             name="name"
             required
+            maxLength={enquiryLimits.name}
+            disabled={loading}
             placeholder="Full name"
             autoComplete="name"
+            aria-invalid={fieldErrors.name ? true : undefined}
+            aria-describedby={fieldErrors.name ? "contact-name-error" : undefined}
           />
+          {fieldErrors.name?.[0] ? (
+            <p id="contact-name-error" className="mt-1.5 text-sm text-danger">
+              {fieldErrors.name[0]}
+            </p>
+          ) : null}
         </div>
         <div>
           <label className="mb-1.5 block text-xs text-text-3" htmlFor="contact-email">
@@ -93,33 +121,46 @@ export function ContactForm({ defaultType }: { defaultType?: string }) {
             name="email"
             type="email"
             required
+            disabled={loading}
             placeholder="Email"
             autoComplete="email"
             inputMode="email"
+            aria-invalid={fieldErrors.email ? true : undefined}
+            aria-describedby={fieldErrors.email ? "contact-email-error" : undefined}
           />
+          {fieldErrors.email?.[0] ? (
+            <p id="contact-email-error" className="mt-1.5 text-sm text-danger">
+              {fieldErrors.email[0]}
+            </p>
+          ) : null}
         </div>
       </div>
-      <div>
-        <label className="mb-1.5 block text-xs text-text-3" htmlFor="contact-type">
-          Enquiry type
-        </label>
-        <Select
-          id="contact-type"
-          className={cn(field, "bg-raised")}
-          name="type"
-          required
-          defaultValue={selectedType ?? ""}
-        >
-          <option value="" disabled>
+      {hideType ? (
+        <input type="hidden" name="subject" value={selectedType ?? "General enquiry"} />
+      ) : (
+        <div>
+          <label className="mb-1.5 block text-xs text-text-3" htmlFor="contact-type">
             Enquiry type
-          </option>
-          {types.map((type) => (
-            <option key={type} value={type}>
-              {type}
+          </label>
+          <Select
+            id="contact-type"
+            className={cn(field, "bg-raised")}
+            name="subject"
+            required
+            disabled={loading}
+            defaultValue={selectedType ?? ""}
+          >
+            <option value="" disabled>
+              Enquiry type
             </option>
-          ))}
-        </Select>
-      </div>
+            {types.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </Select>
+        </div>
+      )}
       <div>
         <label className="mb-1.5 block text-xs text-text-3" htmlFor="contact-message">
           Message
@@ -129,21 +170,24 @@ export function ContactForm({ defaultType }: { defaultType?: string }) {
           className={cn(field, "min-h-32 resize-y")}
           name="message"
           required
-          minLength={10}
+          maxLength={enquiryLimits.message}
+          disabled={loading}
           placeholder="How can we help?"
+          aria-invalid={fieldErrors.message ? true : undefined}
+          aria-describedby={fieldErrors.message ? "contact-message-error" : undefined}
         />
+        {fieldErrors.message?.[0] ? (
+          <p id="contact-message-error" className="mt-1.5 text-sm text-danger">
+            {fieldErrors.message[0]}
+          </p>
+        ) : null}
       </div>
-      <Button type="submit" disabled={status === "loading"} className="w-full sm:w-auto">
-        {status === "loading" ? "Sending…" : "Send message"}
+      <Button type="submit" disabled={loading} className="w-full sm:w-auto">
+        {loading ? "Sending…" : submitLabel}
       </Button>
-      {message ? (
-        <p
-          className={cn("text-sm", status === "success" ? "text-ai" : "text-red-300")}
-          role="alert"
-        >
-          {message}
-        </p>
-      ) : null}
+      <p className="text-sm" role="status" aria-live="polite">
+        {statusMessage}
+      </p>
     </form>
   );
 }

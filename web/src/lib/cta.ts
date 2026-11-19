@@ -19,16 +19,16 @@ export const cta = {
     href: "/signup",
   },
   explorePrograms: {
-    label: "Explore our programmes",
-    href: "/learn",
+    label: "Explore our programs",
+    href: "/programs",
   },
   exploreServices: {
-    label: "Explore our programmes",
-    href: "/learn",
+    label: "Explore our programs",
+    href: "/programs",
   },
   viewCohort: {
     label: "Programme details",
-    href: "/learn/social-media-marketing-ai-programme",
+    href: "/programs/social-media-marketing",
   },
   viewCurriculum: {
     label: "View the curriculum",
@@ -79,8 +79,8 @@ export const cta = {
     href: "/connect",
   },
   partner: {
-    label: "Partner With Us",
-    href: "/partner",
+    label: "Explore partnerships",
+    href: "/partnerships",
   },
   browseJobs: {
     label: "Browse job opportunities",

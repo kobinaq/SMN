@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { agencyEnabled } from "@/lib/features";
 import { site } from "@/lib/site";
 import { getBlogPosts } from "@/lib/blog";
 import { getEventCalendar } from "@/lib/events";
@@ -7,16 +8,19 @@ import { getResourceLibrary } from "@/lib/resources";
 const staticRoutes = [
   "/",
   "/about",
-  "/learn",
-  "/learn/social-media-marketing-ai-programme",
-  "/learn/courses",
+  "/programs",
+  "/programs/social-media-marketing",
+  "/programs/one-on-one-training",
+  "/programs/organisational-training",
+  "/resources",
+  "/partnerships",
+  ...(agencyEnabled ? ["/agency"] : []),
   "/apply",
   "/connect",
   "/connect/mentors",
   "/events",
-  "/insights",
-  "/grow",
-  "/partner",
+  "/careers",
+  "/careers/jobs",
   "/contact",
   "/privacy",
   "/terms",
@@ -47,7 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority:
       path === "/"
         ? 1
-        : path === "/apply" || path === "/learn/social-media-marketing-ai-programme" || path === "/learn"
+        : path === "/apply" || path.startsWith("/programs")
           ? 0.9
           : 0.6,
   }));
@@ -55,7 +59,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const postEntries: MetadataRoute.Sitemap = posts
     .filter((post) => Boolean(post.slug))
     .map((post) => ({
-      url: `${base}/insights/${post.slug}`,
+      url: `${base}/resources/${post.slug}`,
       lastModified: toLastModified(post.updatedAt) ?? toLastModified(post.date) ?? STATIC_LAST_MODIFIED,
       changeFrequency: "monthly",
       priority: 0.5,
@@ -64,7 +68,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const resourceEntries: MetadataRoute.Sitemap = resources
     .filter((resource) => Boolean(resource.slug))
     .map((resource) => ({
-      url: `${base}/grow/${resource.slug}`,
+      url: `${base}/resources/${resource.slug}`,
       lastModified: toLastModified(resource.updatedAt) ?? STATIC_LAST_MODIFIED,
       changeFrequency: "monthly",
       priority: 0.5,

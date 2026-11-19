@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/Button";
 import { Band, SectionHead } from "@/components/site/kit";
 import { excerptStoryQuote } from "@/lib/content";
+import { homepageTestimonials } from "@/lib/pages/home";
 
 type HomeStoryItem = {
   name: string;
@@ -17,17 +17,8 @@ export function Testimonials({ stories }: { stories: HomeStoryItem[] }) {
   if (!stories.length) return null;
 
   return (
-    <Band tone="raised" size="lg" fade>
-      <SectionHead
-        kicker="In their words"
-        title="What Our Learners Say"
-        lede="Hear from learners about their experience with Think Social Academy and how the learning experience has shaped their skills and approach to social media marketing."
-        actions={
-          <Button href="/connect#stories" variant="secondary">
-            Member stories
-          </Button>
-        }
-      />
+    <Band id="learner-experiences" tone="raised" size="lg" fade>
+      <SectionHead align="stacked" title={homepageTestimonials.lede} />
       <div data-stagger className="mt-12 grid gap-px overflow-hidden border border-edge-subtle bg-edge-subtle md:grid-cols-2">
         {stories.map((story) => (
           <figure key={story.name} data-stagger-item className="flex flex-col bg-canvas p-7 sm:p-9">

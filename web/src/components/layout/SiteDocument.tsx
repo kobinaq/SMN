@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, League_Spartan } from "next/font/google";
+import { Inter, Montserrat } from "next/font/google";
 import { AhrefsAnalytics } from "@/components/analytics/AhrefsAnalytics";
 import { site } from "@/lib/site";
 import "@/app/globals.css";
@@ -9,8 +9,8 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const leagueSpartan = League_Spartan({
-  variable: "--font-league-spartan",
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
 });
 
@@ -59,13 +59,13 @@ export const siteViewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   viewportFit: "cover",
-  themeColor: "#0b0d12",
+  themeColor: "#174ea6",
 };
 
 /** Shared document shell for marketing, auth, and member portal (not Payload admin). */
 export function SiteDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${leagueSpartan.variable} h-full`}>
+    <html lang="en" className={`${inter.variable} ${montserrat.variable} h-full`}>
       {/* Analytics belongs inside <body>: a sibling of <body> is invalid nesting,
           and the browser relocating it is one of the documented causes of a
           hydration mismatch. */}

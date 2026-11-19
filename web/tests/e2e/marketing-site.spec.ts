@@ -1,24 +1,28 @@
 import { expect, test } from "@playwright/test";
 
 const permanentRedirects: Array<[string, string]> = [
-  ["/programs", "/learn"],
-  ["/academy", "/learn"],
-  ["/grow", "/grow"],
-  ["/connect", "/connect"],
-  ["/programs/courses", "/learn/courses"],
-  ["/employers", "/partner"],
-  ["/employers/post-a-job", "/connect"],
-  ["/employers/request-intern", "/connect"],
-  ["/experience", "/learn#practical-work"],
-  ["/simulations", "/learn#practical-work"],
-  ["/careers", "/connect"],
-  ["/careers/jobs", "/connect"],
-  ["/careers/jobs/example-role", "/connect"],
-  ["/careers/internships", "/connect"],
+  ["/learn", "/programs"],
+  ["/academy", "/programs"],
+  ["/academy/old", "/programs"],
+  ["/grow", "/resources"],
+  ["/grow/templates", "/resources#tools"],
+  ["/insights", "/resources"],
+  ["/insights/example-article", "/resources/example-article"],
+  ["/learn/courses", "/programs"],
+  ["/learn/social-media-marketing-ai-programme", "/programs/social-media-marketing"],
+  ["/learn/one-on-one-training", "/programs/one-on-one-training"],
+  ["/learn/organisational-training", "/programs/organisational-training"],
+  ["/employers", "/partnerships"],
+  ["/employers/post-a-job", "/partnerships"],
+  ["/experience", "/programs"],
+  ["/simulations", "/programs"],
+  ["/community", "/resources#subscribe"],
+  ["/partner", "/partnerships"],
+  ["/careers/internships", "/careers/jobs?type=Internship"],
   ["/mentorship", "/connect/mentors"],
   ["/mentorship/become-a-mentor", "/connect/mentors#become-a-mentor"],
-  ["/stories", "/connect#stories"],
-  ["/learn/cohort", "/learn/social-media-marketing-ai-programme"],
+  ["/stories", "/#learner-experiences"],
+  ["/learn/cohort", "/programs/social-media-marketing"],
 ];
 
 test.describe("marketing navigation and CTAs", () => {
@@ -33,18 +37,16 @@ test.describe("marketing navigation and CTAs", () => {
     );
   });
 
-  test("home hero uses website-doc CTAs to Learn and Apply", async ({ page }) => {
+  test("home hero uses the document CTAs", async ({ page }) => {
     await page.goto("/");
     const hero = page.locator("[data-hero]");
-    await expect(hero.getByRole("heading", { level: 1 })).toContainText(
-      /deliver results for any brand or business/i,
-    );
+    await expect(hero.getByRole("heading", { level: 1 })).toContainText(/opportunity-ready/i);
     const ctas = hero.locator(".btn-row-mobile a");
     await expect(ctas).toHaveCount(2);
-    await expect(ctas.nth(0)).toHaveText(/explore our programmes/i);
-    await expect(ctas.nth(0)).toHaveAttribute("href", "/learn");
-    await expect(ctas.nth(1)).toHaveText(/apply for the next cohort/i);
-    await expect(ctas.nth(1)).toHaveAttribute("href", "/apply");
+    await expect(ctas.nth(0)).toHaveText(/explore our programs/i);
+    await expect(ctas.nth(0)).toHaveAttribute("href", "/programs");
+    await expect(ctas.nth(1)).toHaveText(/discover tsa/i);
+    await expect(ctas.nth(1)).toHaveAttribute("href", "/about");
   });
 
   test("home main has no em dash and no internship or hire copy", async ({ page }) => {
@@ -68,48 +70,59 @@ test.describe("marketing navigation and CTAs", () => {
     });
   });
 
-  test("nav shows Learn / Grow / Connect labels", async ({ page }) => {
+  test("nav shows Home, About, Programs, Resources, Partnerships", async ({ page }) => {
     await page.goto("/");
     const primary = page.getByRole("navigation", { name: "Primary" });
-    for (const label of ["Home", "Learn", "Grow", "Connect", "Partner With Us", "About"]) {
-      await expect(primary.getByRole("link", { name: label, exact: true }).or(primary.getByRole("button", { name: label, exact: true }))).toBeVisible();
+    for (const label of ["Home", "About", "Programs", "Resources", "Partnerships"]) {
+      await expect(primary.getByRole("link", { name: label, exact: true })).toBeVisible();
     }
+    await expect(primary.getByRole("link", { name: "Agency", exact: true })).toHaveCount(0);
+    await expect(primary.getByRole("link", { name: "Learn", exact: true })).toHaveCount(0);
   });
 
-  test("footer includes legal, Learn, Explore, and Account links", async ({ page }) => {
+  test("footer includes the document links, subscribe module, and legal pages", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("contentinfo").getByRole("link", { name: "Privacy" })).toBeVisible();
-    await expect(page.getByRole("contentinfo").getByRole("link", { name: "Terms" })).toBeVisible();
-    await expect(
-      page.getByRole("contentinfo").getByRole("link", { name: "Grow", exact: true }),
-    ).toHaveAttribute("href", "/grow");
-    await expect(
-      page.getByRole("contentinfo").getByRole("link", { name: "Connect", exact: true }),
-    ).toHaveAttribute("href", "/connect");
-    await expect(
-      page.getByRole("contentinfo").getByRole("link", { name: "Contact", exact: true }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("contentinfo").getByRole("link", { name: "Apply", exact: true }),
-    ).toBeVisible();
+    const footer = page.getByRole("contentinfo");
+    await expect(footer.getByRole("link", { name: "Privacy" })).toBeVisible();
+    await expect(footer.getByRole("link", { name: "Terms" })).toBeVisible();
+    await expect(footer.getByRole("link", { name: "Programs", exact: true })).toHaveAttribute(
+      "href",
+      "/programs",
+    );
+    await expect(footer.getByRole("link", { name: "Resources", exact: true })).toHaveAttribute(
+      "href",
+      "/resources",
+    );
+    await expect(footer.getByRole("link", { name: "Partnerships", exact: true })).toHaveAttribute(
+      "href",
+      "/partnerships",
+    );
+    await expect(footer.getByRole("link", { name: "Events", exact: true })).toHaveAttribute("href", "/events");
+    await expect(footer.getByRole("link", { name: "Careers", exact: true })).toHaveAttribute("href", "/careers");
+    await expect(footer.getByRole("link", { name: "Mentors", exact: true })).toHaveAttribute(
+      "href",
+      "/connect/mentors",
+    );
+    await expect(footer.getByRole("link", { name: "Contact", exact: true })).toHaveAttribute("href", "/contact");
+    await expect(footer.getByRole("link", { name: "Member sign in", exact: true })).toHaveAttribute(
+      "href",
+      "/login",
+    );
+    await expect(footer.getByRole("button", { name: "Join the TSA community" })).toBeVisible();
+    await expect(footer.getByRole("link", { name: "Agency", exact: true })).toHaveCount(0);
   });
 
-  test("does not display withheld placeholder prices", async ({ page }) => {
-    await page.goto("/learn/social-media-marketing-ai-programme");
+  test("program page does not publish unconfirmed fees or duration", async ({ page }) => {
+    await page.goto("/programs/social-media-marketing");
     await expect(page.getByText(/250,?000/)).toHaveCount(0);
-    await expect(page.getByText(/Contact TSA for current fees/i).first()).toBeVisible();
-  });
-
-  test("cohort duration is 4 weeks on public pages", async ({ page }) => {
-    await page.goto("/learn/social-media-marketing-ai-programme");
-    await expect(page.getByText(/4 weeks/i).first()).toBeVisible();
+    await expect(page.getByText(/4 weeks/i)).toHaveCount(0);
     await expect(page.getByText(/8 weeks/i)).toHaveCount(0);
+    await expect(page.getByText(/Contact TSA for current fees/i)).toHaveCount(0);
   });
 
-  test("community CTA links to Connect then signup, not WhatsApp as primary", async ({ page }) => {
+  test("community entry is the subscribe form, and Connect still links to signup", async ({ page }) => {
     await page.goto("/");
-    const join = page.getByRole("link", { name: /join the community/i }).first();
-    await expect(join).toHaveAttribute("href", "/connect");
+    await expect(page.getByRole("button", { name: "Join the TSA community" }).first()).toBeVisible();
     await page.goto("/connect");
     const communityJoin = page.getByRole("link", { name: /join the community/i }).first();
     await expect(communityJoin).toHaveAttribute("href", "/signup");
@@ -125,13 +138,13 @@ test.describe("marketing navigation and CTAs", () => {
     });
     await page
       .getByRole("navigation", { name: "Primary" })
-      .getByRole("link", { name: "Learn", exact: true })
+      .getByRole("link", { name: "Programs", exact: true })
       .click();
     await progressAppeared;
   });
 
   test("navigation progress completes and disappears on a query-only link", async ({ page }) => {
-    await page.goto("/grow");
+    await page.goto("/events");
     await page.waitForSelector("html[data-navigation-ready]", { state: "attached" });
     const progress = page.locator("[data-navigation-progress]");
     await expect(progress).toHaveCount(0);
@@ -167,23 +180,17 @@ test.describe("marketing navigation and CTAs", () => {
       return Boolean((window as Window & { __navProgressArmed?: boolean }).__navProgressArmed);
     });
 
-    await page
-      .getByRole("navigation", { name: "Resource types" })
-      .getByRole("link", { name: "Template", exact: true })
-      .click();
+    await page.locator('a[href="/events?type=Workshop"]').click();
     expect(
       await page.evaluate(() => (window as Window & { __navProgressSeen?: Promise<boolean> }).__navProgressSeen),
     ).toBe(true);
-    await page.waitForURL(/[?&]type=Template/);
+    await page.waitForURL(/[?&]type=Workshop/);
     await expect(progress).toHaveCount(0, { timeout: 5000 });
   });
 
   test("navigation progress does not start on a same-URL click", async ({ page }) => {
-    await page.goto("/grow?type=Template");
-    const current = page
-      .getByRole("navigation", { name: "Resource types" })
-      .getByRole("link", { name: "Template", exact: true });
-    await expect(current).toHaveAttribute("aria-current", "page");
+    await page.goto("/events?type=Workshop");
+    const current = page.locator('a[href="/events?type=Workshop"]');
     await page.waitForSelector("html[data-navigation-ready]", { state: "attached" });
 
     // Count full document loads so a reload cannot hide the bar check below
@@ -211,7 +218,7 @@ test.describe("marketing navigation and CTAs", () => {
     });
 
     await current.click();
-    await expect(page).toHaveURL(/[?&]type=Template/);
+    await expect(page).toHaveURL(/[?&]type=Workshop/);
     await page.evaluate(() => new Promise<void>((resolve) => window.setTimeout(resolve, 300)));
 
     const { appeared, sameDocument } = await page.evaluate(() => {
@@ -232,11 +239,12 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(page.locator("[data-navigation-progress]")).toHaveCount(0);
   });
 
-  test("footer Create account links to signup", async ({ page }) => {
+  test("header member sign in still links to login", async ({ page }) => {
     await page.goto("/");
-    await expect(
-      page.getByRole("contentinfo").getByRole("link", { name: /create account/i }),
-    ).toHaveAttribute("href", "/signup");
+    await expect(page.getByRole("link", { name: /member sign in/i }).first()).toHaveAttribute(
+      "href",
+      "/login",
+    );
   });
 
   test("community and contact WhatsApp CTAs are text links", async ({ page }) => {
@@ -251,7 +259,7 @@ test.describe("marketing navigation and CTAs", () => {
   });
 
   test("main public pages do not render em dashes", async ({ page }) => {
-    for (const path of ["/", "/about", "/learn", "/connect", "/contact", "/partner", "/grow"]) {
+    for (const path of ["/", "/about", "/programs", "/resources", "/partnerships", "/contact", "/connect"]) {
       await page.goto(path);
       const text = await page.locator("main").innerText();
       expect(text, path).not.toMatch(/\u2014|&mdash;/);
@@ -267,21 +275,14 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(page).toHaveTitle(/Create account \| Think Social Academy/);
   });
 
-  test("desktop nav marks only Mentors with aria-current on /connect/mentors", async ({
-    page,
-  }) => {
+  test("mentors page stays available outside the primary nav", async ({ page }) => {
     await page.goto("/connect/mentors");
+    await expect(page.getByRole("heading", { name: /learn from people already doing the work/i })).toBeVisible();
     const primary = page.getByRole("navigation", { name: "Primary" });
-    await primary.getByRole("button", { name: "Community" }).hover();
-    await expect(primary.getByRole("menuitem", { name: "Mentors" })).toHaveAttribute(
+    await expect(primary.getByRole("link", { name: "Mentors", exact: true })).toHaveCount(0);
+    await expect(primary.getByRole("link", { name: "Programs", exact: true })).not.toHaveAttribute(
       "aria-current",
       "page",
-    );
-    await expect(primary.getByRole("menuitem", { name: "The community" })).not.toHaveAttribute(
-      "aria-current",
-    );
-    await expect(primary.getByRole("button", { name: "Community" })).not.toHaveAttribute(
-      "aria-current",
     );
   });
 
@@ -298,12 +299,14 @@ test.describe("marketing navigation and CTAs", () => {
     expect(mainText).toMatch(/Next intake [^.\n]+\.|Next cohort dates coming soon\./);
   });
 
-  test("partner page has no public hire or job CTAs", async ({ page }) => {
-    await page.goto("/partner");
+  test("partnerships page has no public hire or job CTAs", async ({ page }) => {
+    await page.goto("/partnerships");
     await expect(page.getByRole("link", { name: /hire tsa talent/i })).toHaveCount(0);
     await expect(page.getByRole("link", { name: /^post a job$/i })).toHaveCount(0);
     await expect(page.getByRole("tab", { name: /request an intern/i })).toHaveCount(0);
-    await expect(page.getByRole("link", { name: /partner with us/i }).first()).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Building opportunities through collaboration." }),
+    ).toBeVisible();
   });
 
   test("community mentors page keeps become-a-mentor", async ({ page }) => {
@@ -347,12 +350,15 @@ test.describe("marketing navigation and CTAs", () => {
     const sitemap = await request.get("/sitemap.xml");
     expect(sitemap.ok()).toBeTruthy();
     const sitemapBody = await sitemap.text();
-    expect(sitemapBody).toContain("/learn");
-    expect(sitemapBody).toContain("/partner");
+    expect(sitemapBody).toContain("/programs</loc>");
+    expect(sitemapBody).toContain("/resources</loc>");
+    expect(sitemapBody).toContain("/partnerships</loc>");
     expect(sitemapBody).toContain("/connect/mentors");
-    expect(sitemapBody).not.toContain("/programs");
+    expect(sitemapBody).toContain("/careers</loc>");
+    expect(sitemapBody).not.toContain("/agency");
+    expect(sitemapBody).not.toContain("/learn</loc>");
+    expect(sitemapBody).not.toContain("/grow</loc>");
     expect(sitemapBody).not.toContain("/employers");
-    expect(sitemapBody).not.toContain("/careers");
     expect(sitemapBody).not.toContain("/mentorship");
     const robots = await request.get("/robots.txt");
     expect(robots.ok()).toBeTruthy();
@@ -375,7 +381,8 @@ test.describe("marketing navigation and CTAs", () => {
       const box = await panel.boundingBox();
       expect(box?.height ?? 0).toBeGreaterThan(200);
       await expect(panel.getByRole("navigation", { name: "Mobile" }).getByRole("link").first()).toBeVisible();
-      await expect(panel.getByRole("link", { name: "Learn", exact: true })).toBeVisible();
+      await expect(panel.getByRole("link", { name: "Programs", exact: true })).toBeVisible();
+      await expect(panel.getByRole("link", { name: "Agency", exact: true })).toHaveCount(0);
     });
 
     test("Esc closes the menu and returns focus to the toggle", async ({ page }) => {
@@ -415,20 +422,13 @@ test.describe("marketing navigation and CTAs", () => {
       }
     });
 
-    test("marks only Mentors with aria-current on /connect/mentors", async ({ page }) => {
+    test("mobile menu does not list the retired Learn or Connect items", async ({ page }) => {
       await page.goto("/connect/mentors");
       await page.getByRole("button", { name: /open menu/i }).click();
       const panel = page.locator('[role="dialog"][aria-label="Mobile menu"]');
-      await expect(panel.getByRole("link", { name: "Mentors", exact: true })).toHaveAttribute(
-        "aria-current",
-        "page",
-      );
-      await expect(panel.getByRole("link", { name: "The community", exact: true })).not.toHaveAttribute(
-        "aria-current",
-      );
-      await expect(panel.getByRole("link", { name: "Community", exact: true })).not.toHaveAttribute(
-        "aria-current",
-      );
+      await expect(panel.getByRole("link", { name: "Programs", exact: true })).toBeVisible();
+      await expect(panel.getByRole("link", { name: "Learn", exact: true })).toHaveCount(0);
+      await expect(panel.getByRole("link", { name: "Connect", exact: true })).toHaveCount(0);
     });
 
     test("Close menu button closes the panel and returns focus to the toggle", async ({
