@@ -11,6 +11,7 @@ import {
   type EnquiryType,
   type FieldErrors,
 } from "@/lib/enquiries";
+import { ENQUIRY_REPLY_TIME_COPY } from "@/lib/enquiry-copy";
 import { cn } from "@/lib/utils";
 
 export type EnquiryField = {
@@ -164,8 +165,16 @@ export function EnquiryForm({
       <Button type="submit" disabled={loading} className="w-full sm:w-auto">
         {loading ? "Sending…" : submitLabel}
       </Button>
+      {status === "success" ? null : (
+        <p className="text-sm text-text-3" data-testid="enquiry-reply-time">
+          {ENQUIRY_REPLY_TIME_COPY}
+        </p>
+      )}
       <p className="text-sm text-text-1" role="status" aria-live="polite">
         {statusMessage}
+        {status === "success" ? (
+          <span data-testid="enquiry-reply-time"> {ENQUIRY_REPLY_TIME_COPY}</span>
+        ) : null}
       </p>
     </form>
   );
