@@ -62,7 +62,7 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     ALTER TABLE "resources" ADD COLUMN IF NOT EXISTS "format" "public"."enum_resources_format";
     ALTER TABLE "resources" ADD COLUMN IF NOT EXISTS "external_url" varchar;
 
-    ALTER TABLE "site_settings" ADD COLUMN IF NOT EXISTS "agency_enabled" boolean DEFAULT false;
+    -- No site_settings.agency_enabled: NEXT_PUBLIC_AGENCY_ENABLED is the Agency source of truth; the dev DB may keep an unused column from an earlier run.
 
     DO $$ BEGIN
       CREATE TYPE "public"."enum_enquiries_type" AS ENUM(

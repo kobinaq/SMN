@@ -361,7 +361,6 @@ async function loadSiteSettings(): Promise<SiteConfig> {
         linkedin: pickString(socialDoc.linkedin, fallbackSite.social.linkedin),
         twitter: pickString(socialDoc.twitter, fallbackSite.social.twitter),
       },
-      agencyEnabled: doc.agencyEnabled === true,
     };
   }, empty);
 }

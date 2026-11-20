@@ -2484,10 +2484,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface SiteSetting {
   id: number;
   siteName: string;
-  /**
-   * Off matches the current site, which has no Agency item in the public navigation. Turn on when the Agency page should be visible.
-   */
-  agencyEnabled?: boolean | null;
   tagline?: string | null;
   /**
    * Default meta description
@@ -2551,7 +2547,6 @@ export interface SiteSetting {
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
-  agencyEnabled?: T;
   tagline?: T;
   description?: T;
   opsEmail?: T;

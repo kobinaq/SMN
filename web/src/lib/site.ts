@@ -41,8 +41,6 @@ export const site = {
   footerBlurb:
     "Think Social Academy equips individuals, business owners and organisations with practical social media marketing skills, strategic thinking and tools for today's digital landscape.",
   impactStats: [] as { label: string; value: string }[],
-  // Agency is not in the public nav today. The CMS flag defaults off so a deploy keeps that.
-  agencyEnabled: false,
   cohort: {
     name: "Social Media Marketing & AI Program",
     // Empty means unknown. Display through cohort-copy helpers.
@@ -84,7 +82,6 @@ export type SiteConfig = {
   announcementBanner: string;
   footerBlurb: string;
   impactStats: { label: string; value: string }[];
-  agencyEnabled: boolean;
   cohort: {
     name: string;
     startDate: string;
