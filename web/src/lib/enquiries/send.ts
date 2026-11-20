@@ -35,7 +35,13 @@ export async function confirmEnquiry(input: EnquiryInput, id: number | string) {
     return;
   }
   const message = enquiryConfirmation(toStoredEnquiry(id, input));
-  const result = await sendEmail({ to: input.email, subject: message.subject, text: message.text });
+  const replyTo = enquiryNotifyRecipient(input.type);
+  const result = await sendEmail({
+    to: input.email,
+    subject: message.subject,
+    text: message.text,
+    ...(replyTo ? { replyTo } : {}),
+  });
   if (!result.ok) {
     console.warn("[enquiries] confirmation email was not sent", {
       id,
