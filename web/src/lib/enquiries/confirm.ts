@@ -19,8 +19,19 @@ const topic: Record<Exclude<EnquiryType, "newsletter">, string> = {
   contact: "your message",
 };
 
+const typePrefix = /^[ \t]*Enquiry type:[^\r\n]*(?:\r?\n)*/;
+
+/** The sender's own words: drops the "Enquiry type: ..." line the contact form prepends. */
+export function senderMessage(message: string): string {
+  return message.trim().replace(typePrefix, "").trim();
+}
+
+function singleLine(value: string): string {
+  return value.replace(/[\x00-\x1f\x7f-\x9f]+/g, " ").trim();
+}
+
 export function enquiryConfirmation(record: StoredEnquiry): { subject: string; text: string } {
-  const name = record.name?.trim();
+  const name = record.name ? singleLine(record.name) : "";
   const greeting = name ? `Dear ${name},` : "Hello,";
   const signOff = ["", "Kind regards,", site.name];
 
@@ -43,7 +54,7 @@ export function enquiryConfirmation(record: StoredEnquiry): { subject: string; t
     "",
     "We will reply within 48 hours.",
   ];
-  const message = record.message?.trim();
+  const message = record.message ? senderMessage(record.message) : "";
   if (message) {
     lines.push("", "For your records, this is what you sent us:", "");
     for (const line of message.split(/\r?\n/)) lines.push(`> ${line}`);
