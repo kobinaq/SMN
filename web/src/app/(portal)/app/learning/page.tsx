@@ -171,8 +171,8 @@ export default async function LearningPage({ searchParams }: Props) {
             workspaces will appear here.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-2">
-            <Button href="/learn/social-media-marketing-ai-programme">Flagship cohort</Button>
-            <Button href="/learn/courses" variant="secondary">
+            <Button href="/programs/social-media-marketing">Flagship program</Button>
+            <Button href="/programs" variant="secondary">
               Self-paced courses
             </Button>
           </div>
@@ -181,7 +181,7 @@ export default async function LearningPage({ searchParams }: Props) {
 
       <p className="text-sm text-text-3">
         {cohortStartSentence(settings.cohort.startDate)}{" "}
-        <Link href="/apply" className="text-accent hover:underline">
+        <Link href="/programs/social-media-marketing" className="font-medium text-deep-blue underline underline-offset-2 hover:text-text-1">
           Apply
         </Link>
       </p>

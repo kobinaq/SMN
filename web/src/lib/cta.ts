@@ -10,7 +10,7 @@ export const cta = {
   applyCohort: {
     label: "Apply for the next cohort",
     shortLabel: "Apply now",
-    href: "/apply",
+    href: "/programs/social-media-marketing",
   },
   /** Header account creation — secondary to Apply */
   joinTsa: {
@@ -32,15 +32,15 @@ export const cta = {
   },
   viewCurriculum: {
     label: "View the curriculum",
-    href: "/learn/social-media-marketing-ai-programme#curriculum",
+    href: "/programs/social-media-marketing",
   },
   viewCourses: {
     label: "Explore courses",
-    href: "/learn/courses",
+    href: "/programs",
   },
   viewExperience: {
     label: "Learn about practical work",
-    href: "/learn#practical-work",
+    href: "/programs",
   },
   joinCommunity: {
     label: "Join the community",
@@ -48,7 +48,7 @@ export const cta = {
   },
   viewMentors: {
     label: "Mentors",
-    href: "/connect/mentors",
+    href: "/about",
   },
   /** On-platform Paystack purchase */
   buyCourse: {
@@ -92,7 +92,7 @@ export const cta = {
   },
   contact: {
     label: "Contact TSA",
-    href: "/contact",
+    href: "/partnerships",
   },
   whatsapp: {
     label: "Chat on WhatsApp",

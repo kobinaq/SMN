@@ -151,7 +151,7 @@ export const storyFields: StaffField[] = [
     label: "Quote",
     type: "textarea",
     required: true,
-    placeholder: "Full testimonial. The homepage shows a short excerpt. /stories shows this in full.",
+    placeholder: "Full testimonial. The homepage shows a short excerpt when learner experiences are enabled.",
   },
   { name: "image", label: "Image", type: "media" },
   { name: "portfolioUrl", label: "Portfolio URL (optional)", type: "url" },
@@ -165,7 +165,7 @@ export const storyFields: StaffField[] = [
     name: "published",
     label: "Published on the public site",
     type: "checkbox",
-    description: "Shows on the homepage stories band and /stories once permission is confirmed.",
+    description: "Shows on the homepage stories band once permission is confirmed and learner experiences are enabled.",
   },
 ];
 

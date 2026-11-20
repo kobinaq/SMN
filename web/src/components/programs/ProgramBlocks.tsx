@@ -46,7 +46,11 @@ function ProgramBody({
       <div className="mt-10 space-y-10">
         {program.sections.map((section) => (
           <div key={section.heading}>
-            <h3 className="font-display text-2xl text-text-1">{section.heading}</h3>
+            {titleTag === "h1" ? (
+              <h2 className="font-display text-2xl text-text-1">{section.heading}</h2>
+            ) : (
+              <h3 className="font-display text-2xl text-text-1">{section.heading}</h3>
+            )}
             {section.body ? <p className="mt-3 text-base leading-relaxed text-text-2">{section.body}</p> : null}
             {section.items ? <Checklist className="mt-4 max-w-3xl" items={section.items} /> : null}
           </div>

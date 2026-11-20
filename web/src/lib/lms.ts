@@ -31,7 +31,7 @@ export async function getMemberEnrollments(member: MemberUser): Promise<MemberEn
   const docs = await getEnrollments(member);
   return docs.map((doc) => ({
     id: doc.id,
-    programName: doc.programName || "Programme",
+    programName: doc.programName || "Program",
     programType: doc.programType || "",
     status: doc.status,
     classroomUrl: doc.classroomUrl || "",

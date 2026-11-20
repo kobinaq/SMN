@@ -195,5 +195,5 @@ export const programsClose = {
   title: "Ready to build skills that move you forward?",
   body: "Explore a program or speak with us about the right learning experience for you or your team.",
   ctaLabel: "Get started",
-  ctaHref: "/contact",
+  ctaHref: "/partnerships",
 } as const;

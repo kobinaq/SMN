@@ -69,8 +69,8 @@ export default async function ApplyPage() {
         actions={
           <>
             <Button href="#application">Start application</Button>
-            <Button href="/learn/social-media-marketing-ai-programme" variant="secondary">
-              Review cohort details
+            <Button href="/programs/social-media-marketing" variant="secondary">
+              Review program details
             </Button>
           </>
         }
@@ -131,7 +131,7 @@ export default async function ApplyPage() {
                 <p className="mt-2 text-xs leading-relaxed text-text-3">{site.cohort.priceNote}</p>
                 <p className="mt-5 text-xs leading-relaxed text-text-3">
                   Questions? Email{" "}
-                  <a className="text-accent hover:text-text-1" href={`mailto:${site.email}`}>
+                  <a className="font-medium text-deep-blue underline underline-offset-2 hover:text-text-1" href={`mailto:${site.email}`}>
                     {site.email}
                   </a>{" "}
                   or use the contact page.

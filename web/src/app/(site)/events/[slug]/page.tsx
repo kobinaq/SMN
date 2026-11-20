@@ -191,7 +191,7 @@ async function EventDetailBody({
                 {eventId ? (
                   <EventRegisterButton eventId={eventId} pricing={pricing} signedIn={Boolean(member)} />
                 ) : (
-                  <Button href="/contact" variant="secondary">
+                  <Button href="/partnerships" variant="secondary">
                     Ask about registration
                   </Button>
                 )}

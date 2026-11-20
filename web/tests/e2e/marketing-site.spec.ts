@@ -18,10 +18,14 @@ const permanentRedirects: Array<[string, string]> = [
   ["/simulations", "/programs"],
   ["/community", "/resources#subscribe"],
   ["/partner", "/partnerships"],
-  ["/careers/internships", "/careers/jobs?type=Internship"],
-  ["/mentorship", "/connect/mentors"],
-  ["/mentorship/become-a-mentor", "/connect/mentors#become-a-mentor"],
-  ["/stories", "/#learner-experiences"],
+  ["/careers", "/about"],
+  ["/careers/jobs", "/about"],
+  ["/careers/internships", "/about"],
+  ["/mentors", "/about"],
+  ["/connect/mentors", "/about"],
+  ["/mentorship", "/about"],
+  ["/mentorship/become-a-mentor", "/about"],
+  ["/stories", "/about"],
   ["/learn/cohort", "/programs/social-media-marketing"],
 ];
 
@@ -98,12 +102,12 @@ test.describe("marketing navigation and CTAs", () => {
       "/partnerships",
     );
     await expect(footer.getByRole("link", { name: "Events", exact: true })).toHaveAttribute("href", "/events");
-    await expect(footer.getByRole("link", { name: "Careers", exact: true })).toHaveAttribute("href", "/careers");
-    await expect(footer.getByRole("link", { name: "Mentors", exact: true })).toHaveAttribute(
+    await expect(footer.getByRole("link", { name: "Careers", exact: true })).toHaveCount(0);
+    await expect(footer.getByRole("link", { name: "Mentors", exact: true })).toHaveCount(0);
+    await expect(footer.getByRole("link", { name: "Contact", exact: true })).toHaveAttribute(
       "href",
-      "/connect/mentors",
+      "/partnerships",
     );
-    await expect(footer.getByRole("link", { name: "Contact", exact: true })).toHaveAttribute("href", "/contact");
     await expect(footer.getByRole("link", { name: "Member sign in", exact: true })).toHaveAttribute(
       "href",
       "/login",
@@ -275,15 +279,11 @@ test.describe("marketing navigation and CTAs", () => {
     await expect(page).toHaveTitle(/Create account \| Think Social Academy/);
   });
 
-  test("mentors page stays available outside the primary nav", async ({ page }) => {
+  test("public mentor URLs redirect to about", async ({ page }) => {
     await page.goto("/connect/mentors");
-    await expect(page.getByRole("heading", { name: /learn from people already doing the work/i })).toBeVisible();
+    await expect(page).toHaveURL(/\/about$/);
     const primary = page.getByRole("navigation", { name: "Primary" });
     await expect(primary.getByRole("link", { name: "Mentors", exact: true })).toHaveCount(0);
-    await expect(primary.getByRole("link", { name: "Programs", exact: true })).not.toHaveAttribute(
-      "aria-current",
-      "page",
-    );
   });
 
   test("application page explains next steps before payment", async ({ page }) => {
@@ -309,11 +309,11 @@ test.describe("marketing navigation and CTAs", () => {
     ).toBeVisible();
   });
 
-  test("community mentors page keeps become-a-mentor", async ({ page }) => {
-    await page.goto("/connect/mentors");
-    await expect(page.getByRole("heading", { name: /learn from people already doing the work/i })).toBeVisible();
-    await expect(page.locator("#become-a-mentor")).toBeVisible();
-    await expect(page.getByRole("heading", { name: /become a mentor/i }).first()).toBeVisible();
+  test("retired careers and stories URLs land on about", async ({ page }) => {
+    await page.goto("/careers");
+    await expect(page).toHaveURL(/\/about$/);
+    await page.goto("/stories");
+    await expect(page).toHaveURL(/\/about$/);
   });
 
   test("community stories do not render fictional seed names", async ({ page }) => {
@@ -353,8 +353,8 @@ test.describe("marketing navigation and CTAs", () => {
     expect(sitemapBody).toContain("/programs</loc>");
     expect(sitemapBody).toContain("/resources</loc>");
     expect(sitemapBody).toContain("/partnerships</loc>");
-    expect(sitemapBody).toContain("/connect/mentors");
-    expect(sitemapBody).toContain("/careers</loc>");
+    expect(sitemapBody).not.toContain("/connect/mentors");
+    expect(sitemapBody).not.toContain("/careers");
     expect(sitemapBody).not.toContain("/agency");
     expect(sitemapBody).not.toContain("/learn</loc>");
     expect(sitemapBody).not.toContain("/grow</loc>");
@@ -423,7 +423,7 @@ test.describe("marketing navigation and CTAs", () => {
     });
 
     test("mobile menu does not list the retired Learn or Connect items", async ({ page }) => {
-      await page.goto("/connect/mentors");
+      await page.goto("/about");
       await page.getByRole("button", { name: /open menu/i }).click();
       const panel = page.locator('[role="dialog"][aria-label="Mobile menu"]');
       await expect(panel.getByRole("link", { name: "Programs", exact: true })).toBeVisible();
@@ -513,10 +513,7 @@ test.describe("marketing navigation and CTAs", () => {
       expect(buf.readUInt32BE(20)).toBe(630);
     }
 
-    // Job detail URLs 308 to /connect (T3). Connect forwards parent hashed
-    // OG images so the redirect destination still satisfies this check. The job
-    // page itself keeps itemShareImages for when that route is served.
-    await assertShareImage("/careers/jobs/demo-social-media-associate");
+    await assertShareImage("/about");
     await assertShareImage("/events/demo-marketing-meetup");
   });
 });

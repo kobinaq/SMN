@@ -88,8 +88,8 @@ export const insightsHero = {
 } as const;
 
 export const insightsLinks = [
-  { label: "Explore our programs", href: "/learn" },
-  { label: "Free resources", href: "/grow" },
+  { label: "Explore our programs", href: "/programs" },
+  { label: "Free resources", href: "/resources" },
   { label: "Join the community", href: "/connect" },
 ] as const;
 

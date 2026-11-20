@@ -7,7 +7,7 @@ import { seoTitle } from "@/lib/brand";
 const quickLinks = [
   { href: "/programs", label: "Programs" },
   { href: "/events", label: "Events" },
-  { href: "/contact", label: "Contact" },
+  { href: "/partnerships", label: "Contact" },
 ];
 
 export const metadata = {
@@ -49,7 +49,7 @@ export default function GlobalNotFound() {
           className="mt-10 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm text-text-3"
         >
           {quickLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="transition hover:text-text-1">
+            <Link key={link.href} href={link.href} className="font-medium text-deep-blue underline underline-offset-2 hover:text-text-1">
               {link.label}
             </Link>
           ))}

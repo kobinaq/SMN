@@ -1,8 +1,8 @@
 /**
  * Public IA redirects for the v2 sitemap.
  * Destinations are final URLs. Do not point one of these at another source.
- * `/contact`, `/events`, `/careers`, `/apply`, `/login`, `/signup`, `/connect`,
- * and `/connect/mentors` stay as pages. `/careers/internships` lands on the jobs board.
+ * `/contact`, `/events`, `/apply`, `/login`, `/signup`, and `/connect` stay as pages.
+ * Careers, jobs, and public mentor URLs redirect to /about.
  */
 export const publicRedirects = [
   { source: "/learn/social-media-marketing-ai-programme", destination: "/programs/social-media-marketing", permanent: true },
@@ -34,12 +34,16 @@ export const publicRedirects = [
   { source: "/employers", destination: "/partnerships", permanent: true },
   { source: "/employers/:path*", destination: "/partnerships", permanent: true },
 
-  { source: "/stories", destination: "/#learner-experiences", permanent: true },
+  { source: "/stories", destination: "/about", permanent: true },
 
-  { source: "/careers/internships", destination: "/careers/jobs?type=Internship", permanent: true },
-  { source: "/mentorship", destination: "/connect/mentors", permanent: true },
-  { source: "/mentorship/become-a-mentor", destination: "/connect/mentors#become-a-mentor", permanent: true },
-  { source: "/mentorship/:path*", destination: "/connect/mentors", permanent: true },
+  { source: "/careers", destination: "/about", permanent: true },
+  { source: "/careers/:path*", destination: "/about", permanent: true },
+  { source: "/mentors", destination: "/about", permanent: true },
+  { source: "/mentors/:path*", destination: "/about", permanent: true },
+  { source: "/connect/mentors", destination: "/about", permanent: true },
+  { source: "/connect/mentors/:path*", destination: "/about", permanent: true },
+  { source: "/mentorship", destination: "/about", permanent: true },
+  { source: "/mentorship/:path*", destination: "/about", permanent: true },
 ] as const;
 
 export function redirectPath(destination: string) {

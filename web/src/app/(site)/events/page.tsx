@@ -250,7 +250,7 @@ export default async function EventsPage({ searchParams }: Props) {
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:items-end">
-              <Button href="/apply">
+              <Button href="/programs/social-media-marketing">
                 Apply to cohort
                 <ArrowRight className="h-4 w-4" />
               </Button>

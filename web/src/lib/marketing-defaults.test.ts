@@ -30,7 +30,7 @@ describe("marketing defaults", () => {
 
   it("shortens homepage story quotes without changing the full quote", () => {
     const full =
-      "SMN gave me a way to talk about my work that finally made sense to clients, and the community kept me shipping when I would have stalled.";
+      "TSA gave me a way to talk about my work that finally made sense to clients, and the community kept me shipping when I would have stalled.";
     const excerpt = excerptStoryQuote(full, 80);
     expect(excerpt.length).toBeLessThan(full.length);
     expect(excerpt.endsWith("…")).toBe(true);
@@ -38,14 +38,15 @@ describe("marketing defaults", () => {
   });
 
   it("keeps apply / learn / connect CTAs distinct", () => {
-    expect(cta.applyCohort.href).toBe("/apply");
+    expect(cta.applyCohort.href).toBe("/programs/social-media-marketing");
     expect(cta.buyCourse.label).toMatch(/Enroll/i);
     expect(cta.memberSignIn.href).toBe("/login");
     expect(cta.joinTsa.href).toBe("/signup");
     expect(cta.joinCommunity.href).toBe("/connect");
     expect(cta.joinCommunity.label).toBe("Join the community");
     expect(cta.hireTalent.href).toBe("/connect");
-    expect(cta.viewMentors.href).toBe("/connect/mentors");
+    expect(cta.viewMentors.href).toBe("/about");
+    expect(cta.contact.href).toBe("/partnerships");
     expect(cta.explorePrograms.label).toBe("Explore our programs");
     expect(cta.explorePrograms.href).toBe("/programs");
     expect(cta.viewCohort.href).toBe("/programs/social-media-marketing");

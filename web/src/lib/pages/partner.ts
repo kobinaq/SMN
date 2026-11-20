@@ -31,7 +31,7 @@ export const partnerAreas: PartnerArea[] = [
     title: "Sponsorship",
     body: "Support TSA programs, learners, scholarships, events and community initiatives.",
     examples: ["Scholarships", "Program seats", "Events", "Community initiatives", "Learning resources", "Learner access"],
-    href: "/contact?type=Sponsorship",
+    href: "/partnerships",
     ctaLabel: "Discuss Sponsorship",
   },
   {
@@ -39,7 +39,7 @@ export const partnerAreas: PartnerArea[] = [
     title: "Events",
     body: "Collaborate with TSA on webinars, panels, workshops, industry conversations and community events.",
     examples: ["Webinars", "Panels", "Workshops and masterclasses", "Guest sessions", "Industry conversations", "Community events"],
-    href: "/contact?type=Collaboration",
+    href: "/partnerships",
     ctaLabel: "Partner on an Event",
   },
   {
@@ -49,7 +49,7 @@ export const partnerAreas: PartnerArea[] = [
     examples: ["A marketing brief", "A campaign challenge", "A business scenario", "Feedback on learner work"],
     // Tab 5 section 10: label simulations clearly; no implied paid client work.
     note: "Learners may work through partner briefs or clearly labelled simulations, depending on the program and opportunities available. These activities are designed to help learners practise applying concepts to realistic marketing challenges.",
-    href: "/contact?type=Simulation%20waitlist",
+    href: "/partnerships",
     ctaLabel: "Create a Simulation",
   },
 ];
@@ -76,7 +76,7 @@ export const agency = {
   // TODO(placeholder): no Agency contact address, enquiry type or work samples exist yet.
   // Agency enquiries use the shared TSA contact form (type=Partnership) for now.
   // Levi may want a separate Agency address later.
-  href: "/contact?type=Partnership",
+  href: "/partnerships",
   ctaLabel: "Work With Think Social Agency",
 } as const;
 
@@ -84,7 +84,7 @@ export const agency = {
 export const partnerTeamTraining = {
   title: "Looking for team training?",
   body: "Tailored training for teams, organisations and groups is part of the Academy's Team & Organization Programs.",
-  href: "/contact?type=Training%20request",
+  href: "/programs/organisational-training",
   ctaLabel: "Enquire about team training",
 } as const;
 
@@ -92,6 +92,6 @@ export const partnerClose = {
   kicker: "Something else in mind?",
   title: "Have an idea we haven't listed?",
   lede: "Partnerships do not always fit neatly into a category. Tell us how your organisation would like to work with TSA and we'll follow up.",
-  href: "/contact?type=Partnership",
+  href: "/partnerships",
   ctaLabel: "Start a conversation",
 } as const;

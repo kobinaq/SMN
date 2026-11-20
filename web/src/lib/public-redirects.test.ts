@@ -19,13 +19,10 @@ describe("public redirects", () => {
       "/agency",
       "/contact",
       "/events",
-      "/careers",
-      "/careers/jobs",
       "/apply",
       "/login",
       "/signup",
       "/connect",
-      "/connect/mentors",
     ]) {
       expect(sources.has(path)).toBe(false);
     }
@@ -51,11 +48,13 @@ describe("public redirects", () => {
     expect(publicRedirects.find((rule) => rule.source === "/employers")?.destination).toBe("/partnerships");
   });
 
-  it("keeps careers pages and points internships at the jobs board", () => {
-    expect(sources.has("/careers")).toBe(false);
-    expect(sources.has("/careers/jobs")).toBe(false);
-    expect(publicRedirects.find((rule) => rule.source === "/careers/internships")?.destination).toBe(
-      "/careers/jobs?type=Internship",
-    );
+  it("sends retired careers and mentor URLs to about", () => {
+    expect(publicRedirects.find((rule) => rule.source === "/careers")?.destination).toBe("/about");
+    expect(publicRedirects.find((rule) => rule.source === "/careers/:path*")?.destination).toBe("/about");
+    expect(publicRedirects.find((rule) => rule.source === "/mentors")?.destination).toBe("/about");
+    expect(publicRedirects.find((rule) => rule.source === "/connect/mentors")?.destination).toBe("/about");
+    expect(publicRedirects.find((rule) => rule.source === "/connect/mentors/:path*")?.destination).toBe("/about");
+    expect(publicRedirects.find((rule) => rule.source === "/mentorship")?.destination).toBe("/about");
+    expect(publicRedirects.find((rule) => rule.source === "/stories")?.destination).toBe("/about");
   });
 });

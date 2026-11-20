@@ -9,7 +9,7 @@ export const instructor = {
   linkedin: "https://www.linkedin.com/in/arielle-adodo/",
   bio: "I didn’t start in marketing. I had to figure my way into it: no traditional marketing degree, no clear roadmap. I started with social media and content, learning through experience, experimenting, and working with brands until I realised there was much more to marketing than making good-looking content.",
   philosophy:
-    "The more I worked across social, content, and digital, from FMCG and lifestyle to consumer and tech brands, the more I noticed a problem: social media marketing was evolving, but the way we teach it wasn’t. People were learning how to post before they learned how to think. I founded Social Marketers Network to close that gap, and to build the marketing community I wish I had when I started.",
+    "The more I worked across social, content, and digital, from FMCG and lifestyle to consumer and tech brands, the more I noticed a problem: social media marketing was evolving, but the way we teach it wasn’t. People were learning how to post before they learned how to think. I founded Think Social Academy to close that gap, and to build the marketing community I wish I had when I started.",
   highlights: [
     "Social and digital marketing across FMCG, lifestyle, consumer, and technology brands",
     "Content strategy, brand storytelling, and marketing education",
@@ -19,14 +19,14 @@ export const instructor = {
   note: null as string | null,
 };
 
-/** Founder story for the About page — first-person, per the SMN brand voice. */
+/** Founder story for the About page. */
 export const founderStory = [
   "I didn’t start in marketing. I had to figure my way into it.",
   "I didn’t have a traditional marketing degree or a clear roadmap telling me what to learn next. I started with social media and content, learning through experience, experimenting, working with brands, and gradually figuring out that there was much more to marketing than making good-looking content.",
   "Over the years, I worked across social media, content, and digital marketing, with experience spanning FMCG, lifestyle, consumer, and technology brands. But the more I worked in the industry, the more I noticed a problem: social media marketing was evolving, and the way we were teaching it wasn’t.",
   "Social media managers were no longer just being asked to keep a page active or create aesthetically pleasing content. Businesses wanted marketers who could understand the audience, develop strategy, contribute to campaigns, and ultimately help drive results. Yet many people entering the field were learning how to post before they learned how to think.",
   "There was also very little guidance around the things that actually help someone build a career: how to build a portfolio, how to price your work, how to communicate with clients, how to understand the business behind a brief, and what you actually need to learn to stay relevant as AI changes the industry.",
-  "I know, because I spent years figuring it out myself. That’s why I founded Social Marketers Network, combining marketing strategy, social media, AI, practical application, career development, and professional experience. We’re building something bigger than a course: the marketing community I wish I had when I started, where learning can lead to experience, relationships, and opportunity.",
+  "I know, because I spent years figuring it out myself. That’s why I founded Think Social Academy, combining marketing strategy, social media, AI, practical application, career development, and professional experience. We’re building something bigger than a course: the marketing community I wish I had when I started, where learning can lead to experience, relationships, and opportunity.",
 ];
 
 /** Founder philosophy — "What I believe". */
@@ -53,7 +53,7 @@ export const founderBeliefs = [
   },
 ];
 
-/** SMN-specific values for the founder / about page. */
+/** Values for the founder and about page. */
 export const founderValues = [
   { title: "Practicality", body: "We teach what people can actually use." },
   { title: "Curiosity", body: "We stay open to new ideas, tools, and ways of working." },
@@ -152,7 +152,7 @@ export const homepageExplore = [
     title: "Academy",
     body: "Build practical social media marketing and AI skills through structured learning.",
     ctaLabel: "See the 4-week cohort",
-    href: "/learn/social-media-marketing-ai-programme",
+    href: "/programs/social-media-marketing",
   },
   {
     title: "Community",
@@ -164,13 +164,13 @@ export const homepageExplore = [
     title: "Partner With Us",
     body: "Collaborate with TSA through sponsorships, events, simulations or our agency arm.",
     ctaLabel: "Partner With Us",
-    href: "/partner",
+    href: "/partnerships",
   },
   {
     title: "Resources",
     body: "Access useful marketing knowledge, tools, templates and insights as they are published.",
     ctaLabel: "Explore Resources",
-    href: "/grow",
+    href: "/resources",
   },
 ] as const;
 
@@ -180,7 +180,7 @@ export const homepagePrograms = [
     title: "Social Media Marketing & AI",
     meta: "4 weeks · Cohort-based",
     body: "Our core cohort program for people who want to build practical social media marketing skills and learn how to integrate AI into their workflow.",
-    href: "/learn/social-media-marketing-ai-programme",
+    href: "/programs/social-media-marketing",
     ctaLabel: "View the curriculum",
   },
   {
@@ -188,21 +188,21 @@ export const homepagePrograms = [
     meta: "For individuals",
     // TODO(T5-placeholder): 1-on-1 booking flow does not exist yet; contact is the route.
     body: "Personalized learning designed around your specific goals, challenges or skill gaps.",
-    href: "/contact?type=Training%20request",
+    href: "/programs/one-on-one-training",
     ctaLabel: "Enquire about 1-on-1",
   },
   {
     title: "Team & Organization Programs",
     meta: "For teams, organisations and groups",
     body: "Tailored learning experiences designed around the needs of teams, organisations and groups.",
-    href: "/contact?type=Training%20request",
+    href: "/programs/one-on-one-training",
     ctaLabel: "Enquire about team training",
   },
   {
     title: "Self-paced courses",
     meta: "Learn on your schedule",
     body: "Individual courses you can work through in the member portal, with checkout when a course is published.",
-    href: "/learn/courses",
+    href: "/programs",
     ctaLabel: "Browse self-paced courses",
   },
 ] as const;
@@ -263,26 +263,26 @@ export const homepagePartners = {
     {
       title: "Sponsorship",
       body: "Support TSA programs, learners, scholarships, events and initiatives.",
-      href: "/contact?type=Sponsorship",
+      href: "/partnerships",
       ctaLabel: "Discuss sponsorship",
     },
     {
       title: "Events",
       body: "Collaborate on webinars, panels, workshops and industry conversations.",
-      href: "/contact?type=Collaboration",
+      href: "/partnerships",
       ctaLabel: "Partner on an event",
     },
     {
       title: "Simulations",
       body: "Provide clearly labelled marketing briefs, challenges or scenarios for learners to solve.",
-      href: "/contact?type=Simulation%20waitlist",
+      href: "/partnerships",
       ctaLabel: "Create a simulation",
     },
   ],
   agency: {
     title: "Think Social Agency",
     body: "Our agency arm works with brands and organisations on social media, storytelling and content. Enquiries go through Partner With Us.",
-    href: "/partner",
+    href: "/partnerships",
     ctaLabel: "Partner With Us",
   },
   close: "Marketing is changing. How we learn it should too.",
