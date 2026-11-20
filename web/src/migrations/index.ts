@@ -11,6 +11,7 @@ import * as migration_20261029_payload_3_90_security_schema from './20261029_pay
 import * as migration_20261030_lms_lessons_resource_fields from './20261030_lms_lessons_resource_fields';
 import * as migration_20261030_site_settings_primary_cta_href from './20261030_site_settings_primary_cta_href';
 import * as migration_20261119_161800_enquiries_cms_fields from './20261119_161800_enquiries_cms_fields';
+import * as migration_20261120_140000_courses_cohorts_one_on_one from './20261120_140000_courses_cohorts_one_on_one';
 
 export const migrations = [
   {
@@ -77,5 +78,10 @@ export const migrations = [
     up: migration_20261119_161800_enquiries_cms_fields.up,
     down: migration_20261119_161800_enquiries_cms_fields.down,
     name: '20261119_161800_enquiries_cms_fields'
+  },
+  {
+    up: migration_20261120_140000_courses_cohorts_one_on_one.up,
+    down: migration_20261120_140000_courses_cohorts_one_on_one.down,
+    name: '20261120_140000_courses_cohorts_one_on_one'
   },
 ];

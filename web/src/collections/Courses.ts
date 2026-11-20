@@ -7,13 +7,10 @@ export const Courses: CollectionConfig = {
   slug: "courses",
   admin: {
     useAsTitle: "title",
-    group: "Website",
+    group: "Courses and Cohorts",
   },
   access: {
-    read: ({ req }) =>
-      req.user?.collection === "users"
-        ? true
-        : { status: { in: ["published", "coming-soon"] } },
+    read: staffOnly,
     create: staffOnly,
     update: staffOnly,
     delete: staffOnly,
@@ -27,6 +24,18 @@ export const Courses: CollectionConfig = {
       type: "array",
       fields: [{ name: "item", type: "text", required: true }],
     },
+    {
+      name: "whoItsFor",
+      label: "Who it's for",
+      type: "array",
+      fields: [{ name: "item", type: "text", required: true }],
+    },
+    {
+      name: "certificateEnabled",
+      label: "Awards a certificate",
+      type: "checkbox",
+      defaultValue: true,
+    },
     { name: "duration", type: "text" },
     { name: "lessons", type: "number" },
     { name: "price", type: "text", admin: { description: "Display label (optional if amount is set)." } },
@@ -34,7 +43,7 @@ export const Courses: CollectionConfig = {
       name: "amount",
       type: "number",
       min: 0,
-      admin: { description: "Checkout amount in minor units (pesewas). 0 = free catalog item." },
+      admin: { description: "Default cohort price in pesewas (GH₵1 = 100). A cohort can override it." },
     },
     { name: "currency", type: "text", defaultValue: "GHS" },
     {
@@ -62,7 +71,7 @@ export const Courses: CollectionConfig = {
       type: "relationship",
       relationTo: "lms-courses",
       maxDepth: 0,
-      admin: { description: "Optional link to the native LMS course." },
+      admin: { description: "The LMS course that holds this course's modules and lessons." },
     },
     {
       name: "selarUrl",
@@ -75,6 +84,7 @@ export const Courses: CollectionConfig = {
       name: "status",
       type: "select",
       defaultValue: "published",
+      admin: { description: "Published means visible on the public site." },
       options: [
         { label: "Published", value: "published" },
         { label: "Coming soon", value: "coming-soon" },

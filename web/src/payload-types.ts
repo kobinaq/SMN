@@ -102,6 +102,7 @@ export interface Config {
     media: Media;
     posts: Post;
     courses: Course;
+    cohorts: Cohort;
     events: Event;
     stories: Story;
     resources: Resource;
@@ -146,6 +147,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
+    cohorts: CohortsSelect<false> | CohortsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     stories: StoriesSelect<false> | StoriesSelect<true>;
     resources: ResourcesSelect<false> | ResourcesSelect<true>;
@@ -160,9 +162,11 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     'site-settings': SiteSetting;
+    'one-on-one': OneOnOne;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'one-on-one': OneOnOneSelect<false> | OneOnOneSelect<true>;
   };
   locale: null;
   widgets: {
@@ -1169,6 +1173,13 @@ export interface Course {
         id?: string | null;
       }[]
     | null;
+  whoItsFor?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  certificateEnabled?: boolean | null;
   duration?: string | null;
   lessons?: number | null;
   /**
@@ -1176,7 +1187,7 @@ export interface Course {
    */
   price?: string | null;
   /**
-   * Checkout amount in minor units (pesewas). 0 = free catalog item.
+   * Default cohort price in pesewas (GH₵1 = 100). A cohort can override it.
    */
   amount?: number | null;
   currency?: string | null;
@@ -1190,7 +1201,7 @@ export interface Course {
    */
   classroomUrl?: string | null;
   /**
-   * Optional link to the native LMS course.
+   * The LMS course that holds this course's modules and lessons.
    */
   lmsCourse?: (number | null) | LmsCourse;
   /**
@@ -1199,6 +1210,9 @@ export interface Course {
   selarUrl?: string | null;
   badge?: string | null;
   image?: (number | null) | Media;
+  /**
+   * Published means visible on the public site.
+   */
   status?: ('published' | 'coming-soon') | null;
   updatedAt: string;
   createdAt: string;
@@ -1396,6 +1410,31 @@ export interface Post {
    * Draft hides the post. Existing posts default to published, so a deploy does not unpublish them.
    */
   status: 'draft' | 'published';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cohorts".
+ */
+export interface Cohort {
+  id: number;
+  course: number | Course;
+  name: string;
+  startsAt: string;
+  endsAt?: string | null;
+  applicationDeadline?: string | null;
+  seats: number;
+  /**
+   * Override in pesewas. Blank uses the course default price.
+   */
+  price?: number | null;
+  currency?: string | null;
+  status: 'draft' | 'open' | 'full' | 'running' | 'finished';
+  /**
+   * Default Google Meet or Zoom link for this cohort's live sessions.
+   */
+  meetingUrl?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -2353,6 +2392,13 @@ export interface CoursesSelect<T extends boolean = true> {
         item?: T;
         id?: T;
       };
+  whoItsFor?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  certificateEnabled?: T;
   duration?: T;
   lessons?: T;
   price?: T;
@@ -2366,6 +2412,24 @@ export interface CoursesSelect<T extends boolean = true> {
   badge?: T;
   image?: T;
   status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cohorts_select".
+ */
+export interface CohortsSelect<T extends boolean = true> {
+  course?: T;
+  name?: T;
+  startsAt?: T;
+  endsAt?: T;
+  applicationDeadline?: T;
+  seats?: T;
+  price?: T;
+  currency?: T;
+  status?: T;
+  meetingUrl?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2510,12 +2574,12 @@ export interface SiteSetting {
     supportingCopy?: string | null;
     primaryCtaLabel?: string | null;
     /**
-     * Primary hero button destination, e.g. /learn or /apply.
+     * Primary hero button destination, e.g. /programs.
      */
     primaryCtaHref?: string | null;
     secondaryCtaLabel?: string | null;
     /**
-     * Secondary hero button destination, e.g. /apply.
+     * Secondary hero button destination, e.g. /about.
      */
     secondaryCtaHref?: string | null;
   };
@@ -2535,6 +2599,46 @@ export interface SiteSetting {
          * Must be checked to appear on the public site
          */
         verified?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "one-on-one".
+ */
+export interface OneOnOne {
+  id: number;
+  /**
+   * Editable default. The one-on-one format is pending confirmation.
+   */
+  durationWeeks?: number | null;
+  /**
+   * Editable default. The one-on-one format is pending confirmation.
+   */
+  daysPerWeek?: number | null;
+  /**
+   * Editable default. The one-on-one format is pending confirmation.
+   */
+  sessionCount?: number | null;
+  /**
+   * Price in pesewas (GH₵1 = 100). Blank means not yet priced.
+   */
+  price?: number | null;
+  currency?: string | null;
+  included?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  trainers?: (number | User)[] | null;
+  resources?:
+    | {
+        label: string;
+        url: string;
         id?: string | null;
       }[]
     | null;
@@ -2576,6 +2680,34 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         label?: T;
         value?: T;
         verified?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "one-on-one_select".
+ */
+export interface OneOnOneSelect<T extends boolean = true> {
+  durationWeeks?: T;
+  daysPerWeek?: T;
+  sessionCount?: T;
+  price?: T;
+  currency?: T;
+  included?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  trainers?: T;
+  resources?:
+    | T
+    | {
+        label?: T;
+        url?: T;
         id?: T;
       };
   updatedAt?: T;
