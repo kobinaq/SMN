@@ -88,6 +88,31 @@ A notification email is sent with the existing Resend helper. The recipient is `
 
 All of those are optional. If neither the shared variable nor the type override is set, the enquiry is still stored and the server logs a warning.
 
+### Sender confirmation
+
+Every stored enquiry also sends a plain-text confirmation to the sender's `email`, alongside the notification above. It thanks them by name when one was given and restates what they asked about:
+
+- `programme-social-media-marketing`: the Social Media Marketing cohort
+- `one-on-one-training`: One-on-One Training
+- `organisational-training`: Specialised Marketing Workshops
+- `partnership`: partnering with us
+- `contact`: their message
+
+It promises a reply within 48 hours, quotes their message back (each line prefixed with `> `) and signs off with the site name. `newsletter` gets a short "you're subscribed" note with no 48-hour promise.
+
+Confirmations are on by default. Set the matching variable to `false`, `0`, `off` or `no` (case-insensitive) to turn one type off:
+
+- `ENQUIRY_CONFIRM_PROGRAMME_SOCIAL_MEDIA_MARKETING`
+- `ENQUIRY_CONFIRM_ONE_ON_ONE_TRAINING`
+- `ENQUIRY_CONFIRM_ORGANISATIONAL_TRAINING`
+- `ENQUIRY_CONFIRM_PARTNERSHIP`
+- `ENQUIRY_CONFIRM_CONTACT`
+- `ENQUIRY_CONFIRM_NEWSLETTER`
+
+Confirmations need both `RESEND_API_KEY` and `RESEND_FROM`. If either is missing, nothing is sent and the server logs a warning (id, type and reason only). They are never sent from the fallback onboarding address.
+
+The notification and the confirmation run independently. If either fails, the other still goes out and the `201` stands. Honeypot hits, rate-limited requests, invalid JSON, validation errors and duplicate newsletter signups send neither email.
+
 `type: "newsletter"` also calls the existing Mailchimp subscribe helper when `MAILCHIMP_API_KEY`, `MAILCHIMP_AUDIENCE_ID`, and `MAILCHIMP_SERVER_PREFIX` are all set. If they are not set, Mailchimp is skipped and the `201` still stands.
 
 Payload's own REST and GraphQL APIs cannot create enquiries. Staff with the content or support role can read and update them at `/staff/enquiries`. Analysts can read them.

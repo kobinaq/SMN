@@ -9,6 +9,7 @@ export type EnquiryDeps = {
   findNewsletterDuplicate: (email: string) => Promise<boolean>;
   create: (input: EnquiryInput) => Promise<{ id: number | string }>;
   notify: (input: EnquiryInput, id: number | string) => Promise<void>;
+  confirm: (input: EnquiryInput, id: number | string) => Promise<void>;
   subscribe: (email: string) => Promise<void>;
 };
 
@@ -67,7 +68,10 @@ export async function handleEnquiry(request: Request, deps: EnquiryDeps): Promis
     if (input.type === "newsletter") {
       await quietly("[enquiries] newsletter subscribe failed", () => deps.subscribe(input.email));
     }
-    await quietly("[enquiries] notification failed", () => deps.notify(input, created.id));
+    await Promise.all([
+      quietly("[enquiries] notification failed", () => deps.notify(input, created.id)),
+      quietly("[enquiries] confirmation failed", () => deps.confirm(input, created.id)),
+    ]);
     return json({ ok: true, id: String(created.id) }, 201);
   } catch (error) {
     console.error("[enquiries] store failed", error);

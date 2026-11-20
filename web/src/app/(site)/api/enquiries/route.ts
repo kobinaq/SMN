@@ -1,7 +1,6 @@
 import { handleEnquiry, type EnquiryDeps } from "@/lib/enquiries/handle";
-import { enquiryNotification, enquiryNotifyRecipient, toStoredEnquiry } from "@/lib/enquiries/notify";
 import type { EnquiryInput } from "@/lib/enquiries/schema";
-import { sendEmail } from "@/lib/email";
+import { confirmEnquiry, notifyEnquiry } from "@/lib/enquiries/send";
 import { subscribeToNewsletter } from "@/lib/newsletter";
 import { getPayloadClient } from "@/lib/payload";
 import { clientKey, rateLimit } from "@/lib/rate-limit";
@@ -43,24 +42,6 @@ async function createEnquiry(input: EnquiryInput) {
   return { id: created.id };
 }
 
-async function notifyEnquiry(input: EnquiryInput, id: number | string) {
-  const to = enquiryNotifyRecipient(input.type);
-  if (!to) {
-    console.warn("[enquiries] stored without a notification email", { id, type: input.type });
-    return;
-  }
-  const record = toStoredEnquiry(id, input);
-  const message = enquiryNotification(record);
-  const result = await sendEmail({ to, subject: message.subject, text: message.text });
-  if (!result.ok) {
-    console.warn("[enquiries] notification email was not sent", {
-      id,
-      type: input.type,
-      reason: result.reason,
-    });
-  }
-}
-
 async function subscribe(email: string) {
   const result = await subscribeToNewsletter(email);
   if (!result.ok) {
@@ -74,6 +55,7 @@ const deps: EnquiryDeps = {
   findNewsletterDuplicate,
   create: createEnquiry,
   notify: notifyEnquiry,
+  confirm: confirmEnquiry,
   subscribe,
 };
 

@@ -26,6 +26,7 @@ function deps(overrides: Partial<EnquiryDeps> = {}): EnquiryDeps {
     findNewsletterDuplicate: async () => false,
     create: vi.fn(async () => ({ id: 42 })),
     notify: vi.fn(async () => undefined),
+    confirm: vi.fn(async () => undefined),
     subscribe: vi.fn(async () => undefined),
     ...overrides,
   };
@@ -40,7 +41,52 @@ describe("handleEnquiry", () => {
     expect(await response.json()).toEqual({ ok: true, id: "42" });
     expect(hooks.create).toHaveBeenCalledWith(contact);
     expect(hooks.notify).toHaveBeenCalledWith(contact, 42);
+    expect(hooks.confirm).toHaveBeenCalledWith(contact, 42);
     expect(hooks.subscribe).not.toHaveBeenCalled();
+  });
+
+  it("sends no email for honeypot, rate-limited, invalid-JSON or invalid requests", async () => {
+    const cases: Array<[Request, Partial<EnquiryDeps>]> = [
+      [request({ ...contact, website: "https://spam.test" }), {}],
+      [request(contact), { limit: () => ({ ok: false, retryAfterSec: 5 }) }],
+      [request("{"), {}],
+      [request({ type: "contact", email: "ada@example.com" }), {}],
+    ];
+    for (const [req, overrides] of cases) {
+      const hooks = deps(overrides);
+      await handleEnquiry(req, hooks);
+      expect(hooks.notify).not.toHaveBeenCalled();
+      expect(hooks.confirm).not.toHaveBeenCalled();
+    }
+  });
+
+  it("sends neither email for a duplicate newsletter signup", async () => {
+    const hooks = deps({ findNewsletterDuplicate: async () => true });
+    await handleEnquiry(request({ type: "newsletter", email: "reader@example.com" }), hooks);
+    expect(hooks.notify).not.toHaveBeenCalled();
+    expect(hooks.confirm).not.toHaveBeenCalled();
+  });
+
+  it("still returns 201 and runs notify when confirm throws", async () => {
+    const hooks = deps({
+      confirm: vi.fn(async () => {
+        throw new Error("boom");
+      }),
+    });
+    const response = await handleEnquiry(request(contact), hooks);
+    expect(response.status).toBe(201);
+    expect(hooks.notify).toHaveBeenCalledOnce();
+  });
+
+  it("still runs confirm when notify throws", async () => {
+    const hooks = deps({
+      notify: vi.fn(async () => {
+        throw new Error("boom");
+      }),
+    });
+    const response = await handleEnquiry(request(contact), hooks);
+    expect(response.status).toBe(201);
+    expect(hooks.confirm).toHaveBeenCalledOnce();
   });
 
   it("returns 200 and stores nothing when the honeypot is filled", async () => {
