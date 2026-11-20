@@ -8,6 +8,9 @@ import { sql } from "@payloadcms/db-postgres";
  * would rename and drop live tables. This file is the reviewed subset:
  * new tables, new columns, new enum values, new indexes.
  *
+ * payload_locked_documents_rels only exists when document locking is enabled,
+ * so the statements touching it are conditional on the table being present.
+ *
  * `down` is intentionally empty. Production and dev can share one database,
  * and a rollback that drops these objects is not safe to leave in the file.
  */
@@ -99,18 +102,27 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     CREATE INDEX IF NOT EXISTS "enquiries_updated_at_idx" ON "enquiries" USING btree ("updated_at");
     CREATE INDEX IF NOT EXISTS "enquiries_created_at_idx" ON "enquiries" USING btree ("created_at");
 
-    ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "enquiries_id" integer;
-    CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_enquiries_id_idx"
-      ON "payload_locked_documents_rels" USING btree ("enquiries_id");
-
+    -- Document locking is disabled in the Payload config, so
+    -- payload_locked_documents_rels does not exist in dev or prod. Every
+    -- statement touching it is guarded and is skipped when the table is absent.
+    -- This migration never creates that table.
     DO $$ BEGIN
-      IF to_regclass('public.enquiries') IS NOT NULL THEN
-        ALTER TABLE "payload_locked_documents_rels"
-          ADD CONSTRAINT "payload_locked_documents_rels_enquiries_fk"
-          FOREIGN KEY ("enquiries_id") REFERENCES "public"."enquiries"("id")
-          ON DELETE cascade ON UPDATE no action;
+      IF to_regclass('public.payload_locked_documents_rels') IS NOT NULL THEN
+        ALTER TABLE "payload_locked_documents_rels" ADD COLUMN IF NOT EXISTS "enquiries_id" integer;
+
+        CREATE INDEX IF NOT EXISTS "payload_locked_documents_rels_enquiries_id_idx"
+          ON "payload_locked_documents_rels" USING btree ("enquiries_id");
+
+        IF to_regclass('public.enquiries') IS NOT NULL THEN
+          BEGIN
+            ALTER TABLE "payload_locked_documents_rels"
+              ADD CONSTRAINT "payload_locked_documents_rels_enquiries_fk"
+              FOREIGN KEY ("enquiries_id") REFERENCES "public"."enquiries"("id")
+              ON DELETE cascade ON UPDATE no action;
+          EXCEPTION WHEN duplicate_object THEN NULL;
+          END;
+        END IF;
       END IF;
-    EXCEPTION WHEN duplicate_object THEN NULL;
     END $$;
   `);
 }
