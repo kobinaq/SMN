@@ -38,6 +38,16 @@ export const enquiryNotifyEnvByType: Record<EnquiryType, string> = {
   newsletter: "ENQUIRY_NOTIFY_EMAIL_NEWSLETTER",
 };
 
+/** Per-type switch for the sender confirmation. On unless set to false, 0, off or no. */
+export const enquiryConfirmEnvByType: Record<EnquiryType, string> = {
+  "programme-social-media-marketing": "ENQUIRY_CONFIRM_PROGRAMME_SOCIAL_MEDIA_MARKETING",
+  "one-on-one-training": "ENQUIRY_CONFIRM_ONE_ON_ONE_TRAINING",
+  "organisational-training": "ENQUIRY_CONFIRM_ORGANISATIONAL_TRAINING",
+  partnership: "ENQUIRY_CONFIRM_PARTNERSHIP",
+  contact: "ENQUIRY_CONFIRM_CONTACT",
+  newsletter: "ENQUIRY_CONFIRM_NEWSLETTER",
+};
+
 export const enquiryRateLimit = {
   limit: 8,
   windowMs: 15 * 60 * 1000,
