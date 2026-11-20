@@ -87,8 +87,8 @@ test.describe("marketing navigation and CTAs", () => {
   test("footer includes the document links, subscribe module, and legal pages", async ({ page }) => {
     await page.goto("/");
     const footer = page.getByRole("contentinfo");
-    await expect(footer.getByRole("link", { name: "Privacy" })).toBeVisible();
-    await expect(footer.getByRole("link", { name: "Terms" })).toBeVisible();
+    await expect(footer.getByRole("link", { name: "Privacy", exact: true })).toBeVisible();
+    await expect(footer.getByRole("link", { name: "Terms", exact: true })).toBeVisible();
     await expect(footer.getByRole("link", { name: "Programs", exact: true })).toHaveAttribute(
       "href",
       "/programs",
@@ -465,7 +465,7 @@ test.describe("marketing navigation and CTAs", () => {
     });
   });
 
-  test("job and event pages inherit a working default share image", async ({ request }) => {
+  test("connect and event pages inherit a working default share image", async ({ request }) => {
     async function assertShareImage(path: string) {
       const res = await request.get(path);
       // Detail pages may 404 when the demo slug is unpublished; metadata and
@@ -513,7 +513,7 @@ test.describe("marketing navigation and CTAs", () => {
       expect(buf.readUInt32BE(20)).toBe(630);
     }
 
-    await assertShareImage("/about");
+    await assertShareImage("/connect");
     await assertShareImage("/events/demo-marketing-meetup");
   });
 });
