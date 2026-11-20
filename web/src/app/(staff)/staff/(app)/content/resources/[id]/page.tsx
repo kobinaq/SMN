@@ -34,7 +34,10 @@ export default async function EditResourcePage({ params }: { params: Promise<{ i
             slug: doc.slug,
             type: doc.type,
             description: doc.description,
+            category: doc.category || "",
+            format: doc.format || "",
             file: relationId(doc.file),
+            externalUrl: doc.externalUrl || "",
           }}
           submitLabel="Save resource"
           onSuccessHref={`/staff/content/resources/${doc.id}`}

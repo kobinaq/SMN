@@ -33,6 +33,7 @@ const domains: Record<string, Domain> = {
   "event-registrations": { read: ["content", "support", "analyst"], write: ["content", "support"] },
   payments: { read: ["content", "learning", "support", "analyst"], write: ["support"] },
   stories: { read: ["content", "analyst"], write: ["content"] },
+  enquiries: { read: ["content", "support", "analyst"], write: ["content", "support"] },
   "audit-events": { read: ["support", "analyst"], write: ["content", "learning", "mentorship", "opportunity", "support"] },
   "ai-usage-records": { read: ["learning", "support", "analyst"], write: [] },
   "ai-feedback": { read: ["learning", "support", "analyst"], write: [] },

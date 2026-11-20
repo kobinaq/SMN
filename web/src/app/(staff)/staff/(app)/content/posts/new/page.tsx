@@ -12,7 +12,13 @@ export default async function NewPostPage() {
     <div className="space-y-6">
       <StaffPageHeader eyebrow="Content" title="New post" description="Title, summary, and body for the public insights feed." />
       <StaffPanel>
-        <StaffRecordForm collection="posts" fields={postFields} submitLabel="Create post" onSuccessHref="/staff/content/posts" />
+        <StaffRecordForm
+          collection="posts"
+          fields={postFields}
+          initial={{ status: "published" }}
+          submitLabel="Create post"
+          onSuccessHref="/staff/content/posts"
+        />
       </StaffPanel>
     </div>
   );

@@ -12,6 +12,7 @@ const writeRoles: Record<string, StaffRole[]> = {
   events: ["content"],
   stories: ["content"],
   "cohort-applications": ["content", "support", "learning"],
+  enquiries: ["content", "support"],
   "lms-courses": ["learning"],
   "lms-modules": ["learning"],
   "lms-lessons": ["learning"],
@@ -70,7 +71,9 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
       .map((outcome) => ({ outcome }));
     delete body.learningOutcomesText;
   }
-  for (const key of ["cover", "file", "image", "course", "module", "member", "mentor", "source", "lmsCourse", "session", "author"]) {
+  const relationKeys = ["cover", "file", "image", "course", "module", "member", "mentor", "source", "lmsCourse", "session"];
+  if (collection !== "posts") relationKeys.push("author");
+  for (const key of relationKeys) {
     if (!(key in body)) continue;
     const next = coerceRelationId(body[key]);
     if (next === undefined) {
@@ -161,6 +164,18 @@ function normalizeStaffBody(collection: string, data: Record<string, unknown>) {
         };
       })
       .filter(Boolean);
+  }
+  if (collection === "posts") {
+    if ("author" in body) {
+      const author = typeof body.author === "string" ? body.author.trim() : "";
+      body.author = author || null;
+    }
+    if (body.status === "") body.status = "published";
+  }
+  if (collection === "resources") {
+    for (const key of ["category", "format", "externalUrl"]) {
+      if (body[key] === "") body[key] = null;
+    }
   }
   if (collection === "stories") delete body.slug;
   return body;
