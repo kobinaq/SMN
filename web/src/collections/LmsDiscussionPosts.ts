@@ -7,7 +7,7 @@ const stampAuthor: CollectionBeforeChangeHook = ({ data, req, operation }) => {
   const next = { ...data };
   if (operation !== "create" || !req.user) return next;
   const user = req.user as { id: string | number; collection?: string; name?: string | null; email?: string | null };
-  const display = (user.name?.trim() || user.email?.split("@")[0] || "SMN member").toString();
+  const display = (user.name?.trim() || user.email?.split("@")[0] || "TSA member").toString();
   if (user.collection === "members") {
     next.authorMember = user.id;
     next.authorStaff = null;
@@ -16,7 +16,7 @@ const stampAuthor: CollectionBeforeChangeHook = ({ data, req, operation }) => {
   } else if (user.collection === "users") {
     next.authorStaff = user.id;
     next.authorMember = null;
-    next.authorName = user.name?.trim() || "SMN team";
+    next.authorName = user.name?.trim() || "TSA team";
     next.authorRole = "staff";
   }
   return next;

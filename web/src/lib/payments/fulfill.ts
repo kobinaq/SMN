@@ -249,7 +249,7 @@ export async function fulfillSuccessfulPayment(payload: Payload, reference: stri
       memberId,
       course: {
         id: course.id as string | number,
-        title: String(course.title || "Programme"),
+        title: String(course.title || "Program"),
         programKey: String(course.programKey || course.slug || ""),
         slug: String(course.slug || ""),
         delivery: typeof course.delivery === "string" ? course.delivery : "self-paced",
@@ -269,7 +269,7 @@ export async function fulfillSuccessfulPayment(payload: Payload, reference: stri
     await notifyCourseReceipt(
       payload,
       memberId,
-      String(course.title || "Programme"),
+      String(course.title || "Program"),
       Number(payment.amount || 0),
       String(payment.currency || "GHS"),
       typeof course.classroomUrl === "string" ? course.classroomUrl : undefined,

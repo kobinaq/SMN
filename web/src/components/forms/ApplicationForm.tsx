@@ -83,10 +83,10 @@ export function ApplicationForm({
           <li>If you do not hear back after five business days, contact us.</li>
         </ul>
         <div className="btn-row-mobile mt-6">
-          <Button href="/learn/social-media-marketing-ai-programme" variant="secondary">
-            Review cohort details
+          <Button href="/programs/social-media-marketing" variant="secondary">
+            Review program details
           </Button>
-          <Button href="/contact" variant="ghost">
+          <Button href="/partnerships" variant="ghost">
             Contact support
           </Button>
         </div>
@@ -107,11 +107,11 @@ export function ApplicationForm({
       {cohorts.length > 1 ? (
         <div>
           <label className="mb-1.5 block text-xs text-text-3" htmlFor="apply-course">
-            Which programme?
+            Which program?
           </label>
           <Select id="apply-course" className={cn(field, "bg-raised")} name="course" required defaultValue="">
             <option value="" disabled>
-              Select a programme
+              Select a program
             </option>
             {cohorts.map((cohort) => (
               <option key={String(cohort.id)} value={String(cohort.id)}>
@@ -211,7 +211,7 @@ export function ApplicationForm({
             ))}
           </Select>
           {levelError ? (
-            <p id={levelErrorId} className="mt-1.5 text-sm text-red-300" role="alert">
+            <p id={levelErrorId} className="mt-1.5 text-sm text-danger" role="alert">
               {levelError}
             </p>
           ) : null}
@@ -269,7 +269,7 @@ export function ApplicationForm({
         {status === "loading" ? "Submitting…" : cta.submitApplication.label}
       </Button>
       {message ? (
-        <p className={cn("text-sm", status === "error" ? "text-red-300" : "text-ai")} role="alert">
+        <p className={cn("text-sm", status === "error" ? "text-danger" : "text-ai")} role="alert">
           {message}
         </p>
       ) : null}

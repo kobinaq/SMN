@@ -55,7 +55,7 @@ export const Courses: CollectionConfig = {
     {
       name: "classroomUrl",
       type: "text",
-      admin: { description: "Default Google Classroom link for live programmes." },
+      admin: { description: "Default Google Classroom link for live programs." },
     },
     {
       name: "lmsCourse",

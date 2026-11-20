@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 import path from "path";
 import { fileURLToPath } from "url";
 import { withPayload } from "@payloadcms/next/withPayload";
+import { publicRedirects } from "./src/lib/public-redirects";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -42,31 +43,7 @@ const nextConfig: NextConfig = {
    */
   async redirects() {
     return [
-      // Former SMN / TSA interim paths → current Learn / Grow / Connect IA
-      { source: "/academy", destination: "/learn", permanent: true },
-      { source: "/academy/:path*", destination: "/learn/:path*", permanent: true },
-      { source: "/programs", destination: "/learn", permanent: true },
-      { source: "/programs/:path*", destination: "/learn/:path*", permanent: true },
-      { source: "/resources", destination: "/grow", permanent: true },
-      { source: "/resources/:path*", destination: "/grow/:path*", permanent: true },
-      { source: "/community", destination: "/connect", permanent: true },
-      { source: "/community/:path*", destination: "/connect/:path*", permanent: true },
-      { source: "/learn/cohort", destination: "/learn/social-media-marketing-ai-programme", permanent: true },
-      { source: "/employers", destination: "/partner", permanent: true },
-      { source: "/employers/post-a-job", destination: "/connect", permanent: true },
-      { source: "/employers/request-intern", destination: "/connect", permanent: true },
-      { source: "/experience", destination: "/learn#practical-work", permanent: true },
-      { source: "/simulations", destination: "/learn#practical-work", permanent: true },
-      { source: "/careers", destination: "/connect", permanent: true },
-      { source: "/careers/jobs", destination: "/connect", permanent: true },
-      { source: "/careers/jobs/:slug", destination: "/connect", permanent: true },
-      { source: "/careers/internships", destination: "/connect", permanent: true },
-      { source: "/mentorship", destination: "/connect/mentors", permanent: true },
-      { source: "/mentorship/become-a-mentor", destination: "/connect/mentors#become-a-mentor", permanent: true },
-      { source: "/mentorship/:path*", destination: "/connect/mentors", permanent: true },
-      { source: "/stories", destination: "/connect#stories", permanent: true },
-      { source: "/grow/templates", destination: "/grow?type=Template", permanent: true },
-      { source: "/grow/guides", destination: "/grow?type=Guide", permanent: true },
+      ...publicRedirects,
       { source: "/staff/website/events", destination: "/staff/events", permanent: true },
       { source: "/staff/website/events/new", destination: "/staff/events/new", permanent: true },
       { source: "/staff/website/events/:id", destination: "/staff/events/:id", permanent: true },

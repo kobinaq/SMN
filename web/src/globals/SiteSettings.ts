@@ -8,7 +8,7 @@ export const SiteSettings: GlobalConfig = {
   admin: {
     group: "Website",
     description:
-      "Public brand, homepage, and social settings. Cohort copy and fees live on Learning programmes marked Cohort.",
+      "Public brand, homepage, and social settings. Cohort copy and fees live on Learning programs marked Cohort.",
   },
   access: {
     read: () => true,
@@ -54,23 +54,23 @@ export const SiteSettings: GlobalConfig = {
                   },
                 },
                 { name: "supportingCopy", type: "textarea" },
-                { name: "primaryCtaLabel", type: "text", defaultValue: "Explore our programmes" },
+                { name: "primaryCtaLabel", type: "text", defaultValue: "Explore our programs" },
                 {
                   name: "primaryCtaHref",
                   type: "text",
-                  defaultValue: "/learn",
-                  admin: { description: "Primary hero button destination, e.g. /learn or /apply." },
+                  defaultValue: "/programs",
+                  admin: { description: "Primary hero button destination, e.g. /programs." },
                 },
                 {
                   name: "secondaryCtaLabel",
                   type: "text",
-                  defaultValue: "Apply for the next cohort",
+                  defaultValue: "Discover TSA",
                 },
                 {
                   name: "secondaryCtaHref",
                   type: "text",
-                  defaultValue: "/apply",
-                  admin: { description: "Secondary hero button destination, e.g. /apply." },
+                  defaultValue: "/about",
+                  admin: { description: "Secondary hero button destination, e.g. /about." },
                 },
               ],
             },

@@ -2,59 +2,39 @@ import { expect, test } from "@playwright/test";
 
 const banned = /\bSMN\b|Social Marketers|\bhir(e|ing)\b|\bintern(s|ship|ships)?\b|\bjobs?\b/i;
 
-test.describe("Resources and Insights (T9)", () => {
-  test("Resources renders the Tab 4 hero, categories and access split", async ({ page }) => {
-    await page.goto("/grow");
-    await expect(page.getByRole("heading", { level: 1, name: "Keep learning." })).toBeVisible();
-    const categories = page.locator("#categories");
-    for (const name of ["Articles", "Guides", "Templates", "Tools", "Case Studies", "Webinars & Insights"]) {
-      await expect(categories.getByRole("heading", { level: 3, name, exact: true })).toBeVisible();
+test.describe("Resources", () => {
+  test("renders the document hero, categories, and subscribe module", async ({ page }) => {
+    await page.goto("/resources");
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Knowledge to help you think smarter and market better." }),
+    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Explore the knowledge hub." })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Perspectives on a changing marketing landscape." }),
+    ).toBeVisible();
+    await expect(page.getByText("Social Media Strategy")).toBeVisible();
+    await expect(page.getByText("Content Marketing & Planning")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Resources you can put to work." })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Stay curious. Stay connected. Keep growing." })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Join the TSA community" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Privacy policy" }).first()).toHaveAttribute("href", "/privacy");
+  });
+
+  test("old Grow and Insights URLs redirect once", async ({ request }) => {
+    for (const [from, to] of [
+      ["/grow", "/resources"],
+      ["/insights", "/resources"],
+    ] as const) {
+      const res = await request.get(from, { maxRedirects: 0 });
+      expect(res.status(), from).toBe(308);
+      expect(res.headers().location ?? "").toContain(to);
     }
-    await expect(page.getByRole("heading", { level: 2, name: "Public resources" })).toBeVisible();
-    await expect(page.getByRole("heading", { level: 2, name: "Member resources" })).toBeVisible();
-    await expect(page.locator("#access")).toContainText("programme materials and resources inside their TSA account");
   });
 
-  test("Resources category and access links go to the right routes", async ({ page }) => {
-    await page.goto("/grow");
-    const categories = page.locator("#categories");
-    const expected: Array<[string, string]> = [
-      ["Articles", "/insights"],
-      ["Guides", "/grow?type=Guide"],
-      ["Templates", "/grow?type=Template"],
-      ["Tools", "/grow?type=Toolkit"],
-      ["Case Studies", "/insights?category=Case%20Studies"],
-      ["Webinars & Insights", "/events"],
-    ];
-    for (const [title, href] of expected) {
-      await expect(categories.getByRole("link", { name: new RegExp(`^${title}`) })).toHaveAttribute("href", href);
-    }
-    const access = page.locator("#access");
-    await expect(access.getByRole("link", { name: "Join TSA", exact: true })).toHaveAttribute("href", "/signup");
-    await expect(access.getByRole("link", { name: "Member sign in", exact: true })).toHaveAttribute("href", "/login");
-    await expect(access.getByRole("link", { name: "Browse the library", exact: true })).toHaveAttribute("href", "#library");
-  });
-
-  test("filtered Resources views keep the library and hide the category grid", async ({ page }) => {
-    await page.goto("/grow?type=Template");
-    await expect(page.locator("#library")).toBeVisible();
-    await expect(page.locator("#categories")).toHaveCount(0);
-  });
-
-  test("Insights uses TSA copy and links", async ({ page }) => {
-    await page.goto("/insights");
-    await expect(page.getByRole("heading", { level: 1, name: "Ideas for thinking beyond posting." })).toBeVisible();
-    const main = page.locator("main");
-    await expect(main.getByRole("link", { name: "Explore our programmes", exact: true })).toHaveAttribute("href", "/learn");
-    await expect(main.getByRole("link", { name: "Join the community", exact: true })).toHaveAttribute("href", "/connect");
-  });
-
-  test("Resources and Insights have no em dash, SMN, hire, intern or job copy", async ({ page }) => {
-    for (const path of ["/grow", "/insights"]) {
-      await page.goto(path);
-      const text = await page.locator("main").innerText();
-      expect(text, path).not.toMatch(/\u2014/);
-      expect(text, path).not.toMatch(banned);
-    }
+  test("has no em dash, SMN, hire, intern or job copy", async ({ page }) => {
+    await page.goto("/resources");
+    const text = await page.locator("main").innerText();
+    expect(text).not.toMatch(/\u2014/);
+    expect(text).not.toMatch(banned);
   });
 });

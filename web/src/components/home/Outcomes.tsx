@@ -7,8 +7,8 @@ export function Outcomes() {
     <Band size="lg" fade>
       <SectionHead
         kicker="Outcomes"
-        title="Don't just complete a programme. Leave ready for your next step."
-        lede="Programmes emphasise practice, guided application and portfolio work. Strategy develops through experience, feedback and continued work."
+        title="Don't just complete a program. Leave ready for your next step."
+        lede="Programs emphasise practice, guided application and portfolio work. Strategy develops through experience, feedback and continued work."
       />
       <Sequence className="mt-12" items={homepageOutcomes} />
     </Band>

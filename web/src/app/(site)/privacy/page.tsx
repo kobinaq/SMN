@@ -32,7 +32,7 @@ const sections = [
     title: "How we use information",
     body: (
       <p className="mt-4">
-        We use information to review applications, operate programmes, deliver learning, provide
+        We use information to review applications, operate programs, deliver learning, provide
         mentorship and opportunity tools, issue credentials, respond to enquiries, and improve the
         website. Transactional email may be sent via Resend. Newsletters may use Mailchimp. Course
         and event payments are processed by Paystack.
@@ -54,7 +54,7 @@ const sections = [
     title: "AI features",
     body: (
       <p className="mt-4">
-        When optional AI learning tools are enabled for a member, SMN sends only the context needed
+        When optional AI learning tools are enabled for a member, TSA sends only the context needed
         for the request. AI output can be wrong and should be reviewed before acting.
       </p>
     ),
@@ -65,7 +65,7 @@ const sections = [
     body: (
       <p className="mt-4">
         Contact{" "}
-        <a className="text-accent transition hover:text-text-1" href={`mailto:${site.email}`}>
+        <a className="font-medium text-deep-blue underline underline-offset-2 hover:text-text-1" href={`mailto:${site.email}`}>
           {site.email}
         </a>{" "}
         to request access or deletion of personal data where applicable.
@@ -87,7 +87,7 @@ export default function PrivacyPage() {
         />
         <div className="container-wide relative z-10 pb-14 pt-10 sm:pb-20 sm:pt-16">
           <p className="font-display text-sm tracking-[0.08em] text-accent sm:text-base">
-            Social Marketers Network
+            Think Social Academy
           </p>
           <p className="mt-3 eyebrow text-text-3">Legal</p>
           <h1 className="mt-3 max-w-3xl text-balance font-display text-[2.35rem] leading-[1.05] text-text-1 sm:text-5xl md:text-6xl">
@@ -98,10 +98,10 @@ export default function PrivacyPage() {
             platform.
           </p>
           <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/terms" className="text-text-3 transition hover:text-accent">
+            <Link href="/terms" className="font-medium text-deep-blue underline underline-offset-2 hover:text-text-1">
               Terms and conditions
             </Link>
-            <Link href="/contact" className="text-text-3 transition hover:text-accent">
+            <Link href="/partnerships" className="font-medium text-deep-blue underline underline-offset-2 hover:text-text-1">
               Contact
             </Link>
           </div>
@@ -117,7 +117,7 @@ export default function PrivacyPage() {
                 <li key={section.id}>
                   <a
                     href={`#${section.id}`}
-                    className="block text-sm text-text-3 transition hover:text-accent"
+                    className="block text-sm font-medium text-deep-blue underline underline-offset-2 hover:text-text-1"
                   >
                     {section.title}
                   </a>
@@ -140,7 +140,7 @@ export default function PrivacyPage() {
             <p className="pt-2 text-sm font-medium text-text-2">We do not sell personal data.</p>
             <p className="mt-8 text-xs text-text-3">
               Questions about this policy:{" "}
-              <a className="text-accent hover:text-text-1" href={`mailto:${site.email}`}>
+              <a className="font-medium text-deep-blue underline underline-offset-2 hover:text-text-1" href={`mailto:${site.email}`}>
                 {site.email}
               </a>
             </p>

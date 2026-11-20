@@ -84,9 +84,9 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     meta: {
-      title: "SMN CMS",
-      description: "Social Marketers Network content and member administration",
-      titleSuffix: " · SMN",
+      title: "TSA CMS",
+      description: "Think Social Academy content and member administration",
+      titleSuffix: " · TSA",
       icons: [
         {
           rel: "icon",
@@ -95,9 +95,9 @@ export default buildConfig({
         },
       ],
       openGraph: {
-        title: "SMN CMS",
-        description: "Social Marketers Network admin",
-        siteName: "Social Marketers Network",
+        title: "TSA CMS",
+        description: "Think Social Academy admin",
+        siteName: "Think Social Academy",
       },
     },
     // Custom ops/CMS UI lives at /staff. Payload admin chrome is retired unless STAFF_LEGACY_ADMIN=true.

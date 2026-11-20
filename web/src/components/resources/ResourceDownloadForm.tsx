@@ -83,7 +83,7 @@ export function ResourceDownloadForm({
           <p
             className={cn(
               "text-sm leading-relaxed",
-              status === "success" ? "text-ai" : "text-red-300",
+              status === "success" ? "text-ai" : "text-danger",
             )}
           >
             {message}

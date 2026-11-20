@@ -13,7 +13,7 @@ export default async function NewStoryPage() {
       <StaffPageHeader
         eyebrow="Website"
         title="New story"
-        description="Write the full quote for /stories. Tick permission and Published to show it on the public site. The homepage uses a short excerpt."
+        description="Write the full quote. Tick permission and Published to show it on the public site when learner experiences are enabled. The homepage uses a short excerpt."
       />
       <StaffPanel>
         <StaffRecordForm collection="stories" fields={storyFields} submitLabel="Create story" onSuccessHref="/staff/website/stories" />

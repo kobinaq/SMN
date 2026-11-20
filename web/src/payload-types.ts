@@ -209,7 +209,7 @@ export interface MemberAuthOperations {
   };
 }
 /**
- * Staff accounts for the SMN staff app at /staff.
+ * Staff accounts for the TSA staff app at /staff.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
@@ -242,7 +242,7 @@ export interface User {
   collection: 'users';
 }
 /**
- * Member accounts for the SMN portal (not CMS staff).
+ * Member accounts for the TSA portal (not CMS staff).
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "members".
@@ -551,7 +551,7 @@ export interface LmsCourse {
     | null;
   programKey: string;
   /**
-   * Self-paced lessons live in SMN. Cohort sessions use the Google Classroom invite. Assessments stay in SMN for both.
+   * Self-paced lessons live in TSA. Cohort sessions use the Google Classroom invite. Assessments stay in TSA for both.
    */
   delivery: 'self-paced' | 'cohort';
   /**
@@ -580,7 +580,7 @@ export interface LmsCourse {
   format?: string | null;
   sessions?: string | null;
   /**
-   * Only enable after the fee is confirmed. When off, the site shows Contact SMN for current fees.
+   * Only enable after the fee is confirmed. When off, the site shows Contact TSA for current fees.
    */
   priceConfirmed?: boolean | null;
   /**
@@ -1184,7 +1184,7 @@ export interface Course {
   programKey?: string | null;
   delivery?: ('self-paced' | 'live') | null;
   /**
-   * Default Google Classroom link for live programmes.
+   * Default Google Classroom link for live programs.
    */
   classroomUrl?: string | null;
   /**
@@ -1395,7 +1395,7 @@ export interface Story {
   name: string;
   role: string;
   /**
-   * Programme or cohort name (optional)
+   * Program or cohort name (optional)
    */
   programme?: string | null;
   quote: string;
@@ -2387,7 +2387,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Public brand, homepage, and social settings. Cohort copy and fees live on Learning programmes marked Cohort.
+ * Public brand, homepage, and social settings. Cohort copy and fees live on Learning programs marked Cohort.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".

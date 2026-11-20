@@ -4,7 +4,7 @@ const staffOnly = ({ req }: { req: { user?: { collection?: string } | null } }) 
   req.user?.collection === "users";
 
 /**
- * A scheduled live session for a cohort programme. Sessions are the backbone of
+ * A scheduled live session for a cohort program. Sessions are the backbone of
  * the in-app cohort workspace: the schedule, the "join" link, and the recording
  * all hang off this record, and attendance is taken against it.
  */

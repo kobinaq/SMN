@@ -718,7 +718,7 @@ export default async function StaffCourseWorkspacePage({
               { name: "programKey", label: "Program key", type: "text", required: true },
               {
                 name: "delivery",
-                label: "Programme type",
+                label: "Program type",
                 type: "select",
                 required: true,
                 options: [

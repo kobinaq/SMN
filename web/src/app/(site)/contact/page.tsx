@@ -30,7 +30,7 @@ export default async function ContactPage({
       title: site.email,
       href: `mailto:${site.email}`,
       external: false,
-      body: "Partnerships, programme questions, and general enquiries.",
+      body: "Partnerships, program questions, and general enquiries.",
     },
     {
       icon: MessageCircle,

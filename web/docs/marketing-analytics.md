@@ -7,8 +7,8 @@ Privacy-conscious events for the public marketing site. Do not attach emails, ph
 | Event | When |
 |---|---|
 | `primary_cta_click` | Primary cohort application CTA clicked |
-| `secondary_cta_click` | Secondary CTA (e.g. explore programmes) |
-| `programme_page_view` | Programme page viewed (optional future hook) |
+| `secondary_cta_click` | Secondary CTA (e.g. explore programs) |
+| `programme_page_view` | Program page viewed (optional future hook) |
 | `application_start` | Application form mounted |
 | `application_complete` | Application submitted successfully |
 | `application_error` | Application submit failed |

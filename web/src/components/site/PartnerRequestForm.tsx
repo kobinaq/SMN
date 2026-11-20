@@ -31,7 +31,7 @@ const REQUESTS = {
     label: "Request an intern",
     type: "Intern request",
     blurb:
-      "We match motivated marketers from the Network, including Experience Programme participants where the fit is right. Placements are not guaranteed.",
+      "We match motivated marketers from TSA, including Experience Program participants where the fit is right. Placements are not guaranteed.",
     needs: [
       "Role focus, duration, and location or remote preference",
       "Must-have skills and the work they will actually do",

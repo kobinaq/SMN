@@ -4,9 +4,9 @@ import { cta } from "@/lib/cta";
 import { getEventCalendar, getNextEvent } from "@/lib/events";
 
 const quickLinks = [
-  { href: "/learn", label: "Academy" },
+  { href: "/programs", label: "Programs" },
   { href: "/events", label: "Events" },
-  { href: "/contact", label: "Contact" },
+  { href: "/partnerships", label: "Contact" },
 ];
 
 export default async function SiteNotFound() {
@@ -39,7 +39,7 @@ export default async function SiteNotFound() {
         className="mt-10 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm text-text-3"
       >
         {quickLinks.map((link) => (
-          <Link key={link.href} href={link.href} className="transition hover:text-text-1">
+          <Link key={link.href} href={link.href} className="font-medium text-deep-blue underline underline-offset-2 hover:text-text-1">
             {link.label}
           </Link>
         ))}
