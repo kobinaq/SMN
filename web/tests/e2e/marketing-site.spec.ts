@@ -465,7 +465,7 @@ test.describe("marketing navigation and CTAs", () => {
     });
   });
 
-  test("connect and event pages inherit a working default share image", async ({ request }) => {
+  test("about, connect and event pages inherit a working default share image", async ({ request }) => {
     async function assertShareImage(path: string) {
       const res = await request.get(path);
       // Detail pages may 404 when the demo slug is unpublished; metadata and
@@ -513,6 +513,7 @@ test.describe("marketing navigation and CTAs", () => {
       expect(buf.readUInt32BE(20)).toBe(630);
     }
 
+    await assertShareImage("/about");
     await assertShareImage("/connect");
     await assertShareImage("/events/demo-marketing-meetup");
   });

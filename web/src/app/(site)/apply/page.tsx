@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
+import { withDefaultShareImages } from "@/lib/share-metadata";
 import { cohortStartSentence } from "@/lib/cohort-copy";
 import { ApplicationForm } from "@/components/forms/ApplicationForm";
 import { Masthead } from "@/components/site/kit";
@@ -8,14 +9,17 @@ import { getApplyCourses, getSiteSettings } from "@/lib/cms";
 import { img } from "@/lib/images";
 import { seoTitle } from "@/lib/brand";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
   const site = await getSiteSettings();
-  return {
-    title: seoTitle("Apply for the next cohort"),
-    description: `Apply to the ${site.cohort.name}. Applications are reviewed before payment.`,
-    alternates: { canonical: "/apply" },
-    openGraph: { url: "/apply" },
-  };
+  return withDefaultShareImages(
+    {
+      title: seoTitle("Apply for the next cohort"),
+      description: `Apply to the ${site.cohort.name}. Applications are reviewed before payment.`,
+      alternates: { canonical: "/apply" },
+      openGraph: { url: "/apply" },
+    },
+    parent,
+  );
 }
 
 const steps = [
