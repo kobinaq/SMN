@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
+import { withDefaultShareImages } from "@/lib/share-metadata";
 import { Suspense } from "react";
 import {
   ArrowRight,
@@ -20,7 +21,11 @@ import { formatEventDate, getEventCalendar, getNextEvent } from "@/lib/events";
 import { img } from "@/lib/images";
 import { getSiteSettings } from "@/lib/cms";
 
-export const metadata: Metadata = {
+export function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
+  return withDefaultShareImages(metadata, parent);
+}
+
+const metadata: Metadata = {
   title: seoTitle("Marketing Events Ghana"),
   description:
     "Come learn with us. Free webinars, workshops, community events, and industry conversations from Think Social Academy.",

@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
+import { withDefaultShareImages } from "@/lib/share-metadata";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -21,27 +22,33 @@ export async function generateStaticParams() {
   return [...slugs].map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
   const { slug } = await params;
   const post = await getBlogPost(slug).catch(() => undefined);
   if (post) {
     const title = seoTitle(post.title);
-    return {
-      title,
-      description: post.excerpt,
-      alternates: { canonical: `/resources/${slug}` },
-      openGraph: { title: title.absolute, description: post.excerpt, url: `/resources/${slug}` },
-    };
+    return withDefaultShareImages(
+      {
+        title,
+        description: post.excerpt,
+        alternates: { canonical: `/resources/${slug}` },
+        openGraph: { title: title.absolute, description: post.excerpt, url: `/resources/${slug}` },
+      },
+      parent,
+    );
   }
   const resource = await getResource(slug).catch(() => undefined);
   if (!resource) return {};
   const title = seoTitle(resource.title);
-  return {
-    title,
-    description: resource.description,
-    alternates: { canonical: `/resources/${slug}` },
-    openGraph: { title: title.absolute, description: resource.description, url: `/resources/${slug}` },
-  };
+  return withDefaultShareImages(
+    {
+      title,
+      description: resource.description,
+      alternates: { canonical: `/resources/${slug}` },
+      openGraph: { title: title.absolute, description: resource.description, url: `/resources/${slug}` },
+    },
+    parent,
+  );
 }
 
 export default async function ResourceOrArticlePage({ params }: Props) {

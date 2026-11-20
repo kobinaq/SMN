@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
+import { withDefaultShareImages } from "@/lib/share-metadata";
 import { ProgramSections } from "@/components/programs/ProgramBlocks";
 import { Band, Checklist, CtaBand, Masthead } from "@/components/site/kit";
 import { Button } from "@/components/ui/Button";
@@ -11,7 +12,11 @@ import {
   whyLearn,
 } from "@/lib/pages/programs";
 
-export const metadata: Metadata = {
+export function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
+  return withDefaultShareImages(metadata, parent);
+}
+
+const metadata: Metadata = {
   title: { absolute: programsSeo.title },
   description: programsSeo.description,
   alternates: { canonical: "/programs" },

@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
+import { withDefaultShareImages } from "@/lib/share-metadata";
 import Image from "next/image";
 import { Band, Checklist, CtaBand, DefinitionGrid, Kicker, Masthead } from "@/components/site/kit";
 import { Button } from "@/components/ui/Button";
@@ -6,7 +7,11 @@ import { instructor } from "@/lib/content";
 import { img } from "@/lib/images";
 import { aboutApproach, aboutAudience, aboutClose, aboutFounder, aboutHero, aboutSeo } from "@/lib/pages/about";
 
-export const metadata: Metadata = {
+export function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
+  return withDefaultShareImages(metadata, parent);
+}
+
+const metadata: Metadata = {
   title: { absolute: aboutSeo.title },
   description: aboutSeo.description,
   alternates: { canonical: "/about" },

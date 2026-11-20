@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
+import { withDefaultShareImages } from "@/lib/share-metadata";
 import { ArrowUpRight, Briefcase, Mail, MessageCircle, Mic2 } from "@/components/ui/icons";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { Masthead } from "@/components/site/kit";
@@ -8,7 +9,11 @@ import { getSiteSettings } from "@/lib/cms";
 import { img } from "@/lib/images";
 import { seoTitle } from "@/lib/brand";
 
-export const metadata: Metadata = {
+export function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
+  return withDefaultShareImages(metadata, parent);
+}
+
+const metadata: Metadata = {
   title: seoTitle("Contact"),
   description:
     "Get in touch with Think Social Academy for partnerships, training, speaking, or general questions.",
@@ -44,7 +49,7 @@ export default async function ContactPage({
       icon: Briefcase,
       label: "Partners",
       title: "Partner with us",
-      href: "/partner",
+      href: "/partnerships",
       external: false,
       body: "Sponsorship, training, events, and marketing simulations.",
     },

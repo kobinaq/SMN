@@ -1,10 +1,15 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
+import { withDefaultShareImages } from "@/lib/share-metadata";
 import { HomePage } from "@/components/home/HomePage";
 import { homepageSeo } from "@/lib/pages/home";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
+export function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
+  return withDefaultShareImages(metadata, parent);
+}
+
+const metadata: Metadata = {
   title: { absolute: homepageSeo.title },
   description: homepageSeo.description,
   alternates: { canonical: "/" },

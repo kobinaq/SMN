@@ -1,9 +1,14 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
+import { withDefaultShareImages } from "@/lib/share-metadata";
 import Link from "next/link";
 import { site } from "@/lib/site";
 import { seoTitle } from "@/lib/brand";
 
-export const metadata: Metadata = {
+export function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
+  return withDefaultShareImages(metadata, parent);
+}
+
+const metadata: Metadata = {
   title: seoTitle("Privacy policy"),
   description: "How Think Social Academy handles personal information.",
   alternates: { canonical: "/privacy" },

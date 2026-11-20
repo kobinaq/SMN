@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
+import { withDefaultShareImages } from "@/lib/share-metadata";
 import { EnquiryForm } from "@/components/forms/EnquiryForm";
 import { Band, CtaBand, Masthead, Sequence } from "@/components/site/kit";
 import { Button } from "@/components/ui/Button";
@@ -14,7 +15,11 @@ import {
   agencyServices,
 } from "@/lib/pages/agency";
 
-export const metadata: Metadata = {
+export function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
+  return withDefaultShareImages(metadata, parent);
+}
+
+const metadata: Metadata = {
   title: { absolute: agencySeo.title },
   description: agencySeo.description,
   alternates: { canonical: "/agency" },

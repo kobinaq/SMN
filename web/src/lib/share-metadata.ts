@@ -1,3 +1,5 @@
+import type { Metadata, ResolvingMetadata } from "next";
+
 type AnyShareImage =
   | string
   | URL
@@ -57,4 +59,33 @@ export function itemShareImages(
     ...(openGraphImages ? { openGraphImages } : {}),
     ...(twitterImages ? { twitterImages } : {}),
   };
+}
+
+/**
+ * Add the parent segment's default share images (hashed `(site)/opengraph-image`
+ * and `twitter-image`) to a page's metadata. Pages that set their own
+ * `openGraph`/`twitter` otherwise drop the default image. Images a page already
+ * set are kept.
+ */
+export async function withDefaultShareImages(
+  metadata: Metadata,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const parentMeta = await parent;
+  const share = itemShareImages(null, {
+    openGraphImages: parentMeta.openGraph?.images,
+    twitterImages: parentMeta.twitter?.images,
+  });
+  return {
+    ...metadata,
+    openGraph: {
+      ...metadata.openGraph,
+      ...(!metadata.openGraph?.images && share.openGraphImages ? { images: share.openGraphImages } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      ...metadata.twitter,
+      ...(!metadata.twitter?.images && share.twitterImages ? { images: share.twitterImages } : {}),
+    },
+  } as Metadata;
 }

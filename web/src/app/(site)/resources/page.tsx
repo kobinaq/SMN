@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
+import { withDefaultShareImages } from "@/lib/share-metadata";
 import Image from "next/image";
 import Link from "next/link";
 import { NewsletterForm } from "@/components/forms/NewsletterForm";
@@ -16,7 +17,11 @@ import { getResourceLibrary } from "@/lib/resources";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
+export function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
+  return withDefaultShareImages(metadata, parent);
+}
+
+const metadata: Metadata = {
   title: { absolute: resourcesSeo.title },
   description: resourcesSeo.description,
   alternates: { canonical: "/resources" },
