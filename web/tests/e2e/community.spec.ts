@@ -35,14 +35,11 @@ test.describe("/connect (T7)", () => {
       ),
     ).toBeVisible();
     await expect(page.getByRole("heading", { name: /hear about selected activities first/i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /meet the mentors/i })).toHaveAttribute(
-      "href",
-      "/connect/mentors",
-    );
+    await expect(page.getByRole("link", { name: /meet the mentors/i })).toHaveCount(0);
   });
 
   test("does not promise jobs, internships or income, or call TSA a network", async ({ page }) => {
-    for (const path of ["/connect", "/connect/mentors"]) {
+    for (const path of ["/connect"]) {
       await page.goto(path);
       const text = await page.locator("main").innerText();
       expect(text, path).not.toMatch(/\u2014/);

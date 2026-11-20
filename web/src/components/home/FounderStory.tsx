@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/motion/Reveal";
-import { Band, Kicker } from "@/components/site/kit";
+import { Band } from "@/components/site/kit";
 import { instructor } from "@/lib/content";
 import { homepageFounder } from "@/lib/pages/home";
 
@@ -25,18 +25,17 @@ export function FounderStory() {
         </Reveal>
 
         <div>
-          <Kicker>Founder</Kicker>
-          <h2 className="mt-6 font-display display-2 text-text-1">{homepageFounder.heading}</h2>
-          <p className="mt-4 text-sm text-text-3">
-            {homepageFounder.name}
-            <span className="mx-2 text-edge-strong">·</span>
-            {homepageFounder.role}
-          </p>
+          <h2 className="font-display display-2 text-text-1">{homepageFounder.heading}</h2>
           <div className="mt-8 max-w-[62ch] space-y-5 text-base leading-relaxed text-text-2">
             {homepageFounder.paragraphs.map((paragraph) => (
               <p key={paragraph.slice(0, 48)}>{paragraph}</p>
             ))}
           </div>
+          <p className="mt-8 text-sm text-text-1">
+            {homepageFounder.name}
+            <span className="mx-2 text-edge-strong">·</span>
+            <span className="text-text-3">{homepageFounder.role}</span>
+          </p>
           <div className="mt-8">
             <Button href={homepageFounder.ctaHref} variant="secondary">
               {homepageFounder.ctaLabel}

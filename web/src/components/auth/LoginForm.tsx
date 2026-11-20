@@ -102,7 +102,7 @@ export function LoginForm() {
         {status === "loading" ? "Signing in…" : "Sign in"}
       </Button>
       {message ? (
-        <p id={errorId} className="text-sm text-red-300" role="alert" aria-live="assertive">
+        <p id={errorId} className="text-sm text-danger" role="alert" aria-live="assertive">
           {message}
         </p>
       ) : null}

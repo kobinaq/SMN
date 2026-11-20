@@ -69,7 +69,7 @@ export async function grantCourseEnrollment(
 
   const data = {
     member: memberId,
-    programName: String(args.course.title || "Programme"),
+    programName: String(args.course.title || "Program"),
     programKey,
     programType: programTypeForDelivery(args.course.delivery),
     source: args.source,

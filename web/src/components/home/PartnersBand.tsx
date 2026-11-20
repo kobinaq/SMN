@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
-import { Band, Kicker } from "@/components/site/kit";
+import { Band } from "@/components/site/kit";
 import { img } from "@/lib/images";
+import { agencyEnabled } from "@/lib/features";
 import { homepagePartner } from "@/lib/pages/home";
 
 /** Doc Section 9 - partner / agency invitation. */
@@ -10,17 +11,24 @@ export function PartnersBand() {
     <Band tone="blue" size="lg" fade>
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
         <div>
-          <Kicker>Partner With Us</Kicker>
-          <h2 className="mt-5 max-w-[18ch] font-display display-2 text-text-1">
-            {homepagePartner.title}
-          </h2>
+          <h2 className="max-w-[18ch] font-display display-2 text-text-1">{homepagePartner.title}</h2>
           <p className="mt-6 max-w-[62ch] text-base leading-relaxed text-text-2 sm:text-lg">
             {homepagePartner.body}
           </p>
-          <div className="mt-8">
+          {agencyEnabled ? (
+            <p className="mt-4 max-w-[62ch] text-base leading-relaxed text-text-2">
+              {homepagePartner.agencyBody}
+            </p>
+          ) : null}
+          <div className="mt-8 flex flex-wrap gap-3">
             <Button href={homepagePartner.ctaHref} variant="light">
               {homepagePartner.ctaLabel}
             </Button>
+            {agencyEnabled ? (
+              <Button href={homepagePartner.agencyCtaHref} variant="secondary">
+                {homepagePartner.agencyCtaLabel}
+              </Button>
+            ) : null}
           </div>
         </div>
         <div className="relative aspect-[5/4] overflow-hidden" data-parallax-wrap>

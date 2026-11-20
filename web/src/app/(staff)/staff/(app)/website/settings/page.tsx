@@ -26,7 +26,7 @@ export default async function SiteSettingsPage() {
       <StaffPageHeader
         eyebrow="Website"
         title="Site settings"
-        description="Public brand, homepage hero, banner, and social links. Cohort facts live on Learning programmes marked Cohort."
+        description="Public brand, homepage hero, banner, and social links. Cohort facts live on Learning programs marked Cohort."
       />
       <StaffPanel>
         <SiteSettingsForm

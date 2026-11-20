@@ -5,7 +5,7 @@ import { cta } from "@/lib/cta";
 import { homepageClose } from "@/lib/content";
 import { img } from "@/lib/images";
 
-/** Tab 4 final CTA. Primary Join the community → /connect; secondary Explore our programmes. */
+/** Tab 4 final CTA. Primary Join the community → /connect; secondary Explore our programs. */
 export function NetworkClose() {
   return (
     <Band size="lg" bordered={false} fade>

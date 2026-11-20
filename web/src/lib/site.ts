@@ -1,17 +1,23 @@
 import { COURSE_FEE_PENDING_LABEL, FEE_PENDING_LABEL } from "@/lib/currency";
+import { agencyEnabled } from "@/lib/features";
 
 /**
  * Fallback site configuration.
  * Live values should come from Payload `site-settings` via `getSiteSettings()`.
  * Pricing defaults intentionally withhold unconfirmed figures.
  */
+/** Trim whitespace and a trailing slash so generated URLs stay valid. */
+export function normalizeSiteUrl(value: string) {
+  return value.trim().replace(/\/+$/, "");
+}
+
 export const site = {
   name: "Think Social Academy",
   shortName: "TSA",
-  tagline: "Learn. Apply. Grow. Connect.",
+  tagline: "Build social media marketing skills that make you opportunity-ready.",
   description:
-    "Think Social Academy is a social media marketing academy and community focused on thoughtful learning, practical application, and work designed to support brand and business results.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://thinksocialacademy.com",
+    "Build practical social media marketing skills with Think Social Academy. Explore professional training, specialised learning and organisational programs.",
+  url: normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL ?? "https://thinksocialacademy.com"),
   // Contact and social fallbacks stay empty so a missing CMS row does not resurrect
   // retired SMN addresses. Live values come from site-settings / env.
   email: process.env.OPS_EMAIL ?? "",
@@ -23,23 +29,22 @@ export const site = {
   },
   homepage: {
     // Website Structure doc hero. Admin site-settings is the source of truth when set.
-    headline: "Learn the skills to deliver results for any brand or business using social media.",
+    headline: "Build social media marketing skills that make you opportunity-ready.",
     supportingCopy:
-      "Learn social media marketing, execute smarter and leave with real experience to become opportunity-ready. Whether you are starting out, building on existing experience, or developing your team's capabilities, TSA gives you a structured, practical training in one of the most in-demand areas of digital skills.",
-    primaryCtaLabel: "Explore our programmes",
-    primaryCtaHref: "/learn",
-    // Cohort number/date unconfirmed in the doc — keep generic apply wording.
-    secondaryCtaLabel: "Apply for the next cohort",
-    secondaryCtaHref: "/apply",
+      "Learn social media marketing skills, execute smarter and grow any brand or business. Whether you are starting out, strengthening your professional skills or developing your team's capabilities, TSA offers practical learning grounded in strategy, application and the realities of the industry.",
+    primaryCtaLabel: "Explore our programs",
+    primaryCtaHref: "/programs",
+    secondaryCtaLabel: "Discover TSA",
+    secondaryCtaHref: "/about",
   },
   announcementBanner: "",
   footerBlurb:
-    "Think Social Academy - a social media marketing academy teaching strategy, content, AI tools, and practical application.",
+    "Think Social Academy equips individuals, business owners and organisations with practical social media marketing skills, strategic thinking and tools for today's digital landscape.",
   impactStats: [] as { label: string; value: string }[],
   // Agency is not in the public nav today. The CMS flag defaults off so a deploy keeps that.
   agencyEnabled: false,
   cohort: {
-    name: "Social Media Marketing & AI Programme",
+    name: "Social Media Marketing & AI Program",
     // Empty means unknown. Display through cohort-copy helpers.
     startDate: "",
     applicationDeadline: "Rolling. Apply early",
@@ -95,26 +100,28 @@ export type SiteConfig = {
   };
 };
 
+export type NavItem = {
+  label: string;
+  href: string;
+  children?: readonly { label: string; href: string }[];
+};
+
 /**
- * Public marketing navigation from the Website Structure doc.
- * Header primary CTA is Apply (see Header), not a nav item.
+ * Primary navigation. Labels match the website document.
+ * Agency is appended only when NEXT_PUBLIC_AGENCY_ENABLED=true.
+ * Member sign in stays a header action, not a nav item.
  */
-export const nav = [
+const baseNav: readonly NavItem[] = [
   { label: "Home", href: "/" },
-  { label: "Learn", href: "/learn" },
-  { label: "Grow", href: "/grow" },
-  {
-    label: "Connect",
-    href: "/connect",
-    children: [
-      { label: "Community", href: "/connect" },
-      { label: "Mentors", href: "/connect/mentors" },
-      { label: "Events", href: "/events" },
-    ],
-  },
-  { label: "Partner With Us", href: "/partner" },
   { label: "About", href: "/about" },
-] as const;
+  { label: "Programs", href: "/programs" },
+  { label: "Resources", href: "/resources" },
+  { label: "Partnerships", href: "/partnerships" },
+];
+
+export const nav: readonly NavItem[] = agencyEnabled
+  ? [...baseNav, { label: "Agency", href: "/agency" }]
+  : baseNav;
 
 /** Re-export pending labels for seed content */
 export { COURSE_FEE_PENDING_LABEL, FEE_PENDING_LABEL };

@@ -14,9 +14,9 @@ describe("Partner page copy (T8)", () => {
 
   it("keeps the three Tab 4 partnership areas with contact CTAs", () => {
     expect(partner.partnerAreas.map((area) => [area.title, area.ctaLabel, area.href])).toEqual([
-      ["Sponsorship", "Discuss Sponsorship", "/contact?type=Sponsorship"],
-      ["Events", "Partner on an Event", "/contact?type=Collaboration"],
-      ["Simulations", "Create a Simulation", "/contact?type=Simulation%20waitlist"],
+      ["Sponsorship", "Discuss Sponsorship", "/partnerships"],
+      ["Events", "Partner on an Event", "/partnerships"],
+      ["Simulations", "Create a Simulation", "/partnerships"],
     ]);
   });
 
@@ -30,6 +30,6 @@ describe("Partner page copy (T8)", () => {
     expect(partner.agency.focusAreas.map((area) => area.title)).toEqual(["Social Media", "Storytelling", "Content"]);
     expect(partner.agency.body).toMatch(/separately from the Academy/);
     expect(partner.agency.ctaLabel).toBe("Work With Think Social Agency");
-    expect(partner.agency.href).toMatch(/^\/contact\?type=/);
+    expect(partner.agency.href).toBe("/partnerships");
   });
 });

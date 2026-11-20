@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
+import { withDefaultShareImages } from "@/lib/share-metadata";
 import { cohortStartSentence } from "@/lib/cohort-copy";
 import { ApplicationForm } from "@/components/forms/ApplicationForm";
 import { Masthead } from "@/components/site/kit";
@@ -8,14 +9,17 @@ import { getApplyCourses, getSiteSettings } from "@/lib/cms";
 import { img } from "@/lib/images";
 import { seoTitle } from "@/lib/brand";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
   const site = await getSiteSettings();
-  return {
-    title: seoTitle("Apply for the next cohort"),
-    description: `Apply to the ${site.cohort.name}. Applications are reviewed before payment.`,
-    alternates: { canonical: "/apply" },
-    openGraph: { url: "/apply" },
-  };
+  return withDefaultShareImages(
+    {
+      title: seoTitle("Apply for the next cohort"),
+      description: `Apply to the ${site.cohort.name}. Applications are reviewed before payment.`,
+      alternates: { canonical: "/apply" },
+      openGraph: { url: "/apply" },
+    },
+    parent,
+  );
 }
 
 const steps = [
@@ -69,8 +73,8 @@ export default async function ApplyPage() {
         actions={
           <>
             <Button href="#application">Start application</Button>
-            <Button href="/learn/social-media-marketing-ai-programme" variant="secondary">
-              Review cohort details
+            <Button href="/programs/social-media-marketing" variant="secondary">
+              Review program details
             </Button>
           </>
         }
@@ -131,7 +135,7 @@ export default async function ApplyPage() {
                 <p className="mt-2 text-xs leading-relaxed text-text-3">{site.cohort.priceNote}</p>
                 <p className="mt-5 text-xs leading-relaxed text-text-3">
                   Questions? Email{" "}
-                  <a className="text-accent hover:text-text-1" href={`mailto:${site.email}`}>
+                  <a className="font-medium text-deep-blue underline underline-offset-2 hover:text-text-1" href={`mailto:${site.email}`}>
                     {site.email}
                   </a>{" "}
                   or use the contact page.

@@ -16,7 +16,7 @@ export const Members: CollectionConfig = {
     useAsTitle: "email",
     defaultColumns: ["name", "email", "cohortStatus", "updatedAt"],
     group: "Members",
-    description: "Member accounts for the SMN portal (not CMS staff).",
+    description: "Member accounts for the TSA portal (not CMS staff).",
   },
   access: {
     // Who can see this collection *inside* the admin UI (staff only).

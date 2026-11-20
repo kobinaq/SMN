@@ -22,7 +22,7 @@ export default async function MentorsAppPage() {
         title="Find the right guide"
         description="Browse staff-approved mentors by specialty, then send a focused request. The TSA team reviews introductions to protect everyone's time."
         action={
-          <Button href="/connect/mentors#become-a-mentor" variant="secondary">
+          <Button href="#become-a-mentor" variant="secondary">
             Become a mentor
           </Button>
         }
@@ -37,20 +37,22 @@ export default async function MentorsAppPage() {
             Staff can review mentor applications in Payload and approve them when ready. Approved profiles appear
             here automatically.
           </p>
-          <Button href="/connect/mentors" variant="secondary" className="mt-6">
+          <Button href="#become-a-mentor" variant="secondary" className="mt-6">
             How mentorship works
           </Button>
         </Card>
       )}
 
-      <Card as="section">
-        <Eyebrow>Give back</Eyebrow>
-        <h2 className="mt-2 font-display text-xl text-text-1">Apply to become a mentor</h2>
-        <p className="mt-2 mb-6 max-w-2xl text-sm text-text-2">
-          Share your experience and specialties. Staff review every application before publishing a profile.
-        </p>
-        <MentorApplication status={applicationStatus} />
-      </Card>
+      <section id="become-a-mentor">
+        <Card>
+          <Eyebrow>Give back</Eyebrow>
+          <h2 className="mt-2 font-display text-xl text-text-1">Apply to become a mentor</h2>
+          <p className="mt-2 mb-6 max-w-2xl text-sm text-text-2">
+            Share your experience and specialties. Staff review every application before publishing a profile.
+          </p>
+          <MentorApplication status={applicationStatus} />
+        </Card>
+      </section>
     </div>
   );
 }

@@ -1,11 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
+import { withDefaultShareImages } from "@/lib/share-metadata";
 import Link from "next/link";
 import { site } from "@/lib/site";
 import { seoTitle } from "@/lib/brand";
 
-export const metadata: Metadata = {
+export function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
+  return withDefaultShareImages(metadata, parent);
+}
+
+const metadata: Metadata = {
   title: seoTitle("Terms and conditions"),
-  description: "Terms of use for the Think Social Academy website and programmes.",
+  description: "Terms of use for the Think Social Academy website and programs.",
   alternates: { canonical: "/terms" },
   openGraph: { url: "/terms" },
 };
@@ -16,9 +21,9 @@ const sections = [
     title: "Website use",
     body: (
       <p className="mt-4">
-        Content on this site is for general information. Programme details, pricing, and dates may
+        Content on this site is for general information. Program details, pricing, and dates may
         change. Self-paced course and event payments are processed by Paystack and subject to
-        Paystack’s terms. Community participation on WhatsApp is subject to WhatsApp’s terms and SMN
+        Paystack’s terms. Community participation on WhatsApp is subject to WhatsApp’s terms and TSA
         community guidelines.
       </p>
     ),
@@ -28,8 +33,8 @@ const sections = [
     title: "Applications and payment",
     body: (
       <p className="mt-4">
-        Cohort applications are reviewed by SMN. Submitting an application does not create a payment
-        obligation. Fees and payment plans are arranged after acceptance. Contact SMN for current
+        Cohort applications are reviewed by TSA. Submitting an application does not create a payment
+        obligation. Fees and payment plans are arranged after acceptance. Contact TSA for current
         fees and refund details.
       </p>
     ),
@@ -50,7 +55,7 @@ const sections = [
     title: "No employment guarantee",
     body: (
       <p className="mt-4">
-        SMN helps members prepare for marketing work and connect with opportunities. We do not
+        TSA helps members prepare for marketing work and connect with opportunities. We do not
         guarantee employment, income, or specific career outcomes.
       </p>
     ),
@@ -61,7 +66,7 @@ const sections = [
     body: (
       <p className="mt-4">
         Questions:{" "}
-        <a className="text-accent transition hover:text-text-1" href={`mailto:${site.email}`}>
+        <a className="font-medium text-deep-blue underline underline-offset-2 hover:text-text-1" href={`mailto:${site.email}`}>
           {site.email}
         </a>
       </p>
@@ -82,20 +87,20 @@ export default function TermsPage() {
         />
         <div className="container-wide relative z-10 pb-14 pt-10 sm:pb-20 sm:pt-16">
           <p className="font-display text-sm tracking-[0.08em] text-accent sm:text-base">
-            Social Marketers Network
+            Think Social Academy
           </p>
           <p className="mt-3 eyebrow text-text-3">Legal</p>
           <h1 className="mt-3 max-w-3xl text-balance font-display text-[2.35rem] leading-[1.05] text-text-1 sm:text-5xl md:text-6xl">
             Terms and conditions
           </h1>
           <p className="mt-5 max-w-xl text-sm leading-relaxed text-text-2 sm:text-base">
-            Website, application, and programme terms at a high level.
+            Website, application, and program terms at a high level.
           </p>
           <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <Link href="/privacy" className="text-text-3 transition hover:text-accent">
+            <Link href="/privacy" className="font-medium text-deep-blue underline underline-offset-2 hover:text-text-1">
               Privacy policy
             </Link>
-            <Link href="/contact" className="text-text-3 transition hover:text-accent">
+            <Link href="/partnerships" className="font-medium text-deep-blue underline underline-offset-2 hover:text-text-1">
               Contact
             </Link>
           </div>
@@ -111,7 +116,7 @@ export default function TermsPage() {
                 <li key={section.id}>
                   <a
                     href={`#${section.id}`}
-                    className="block text-sm text-text-3 transition hover:text-accent"
+                    className="block text-sm font-medium text-deep-blue underline underline-offset-2 hover:text-text-1"
                   >
                     {section.title}
                   </a>

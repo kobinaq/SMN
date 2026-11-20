@@ -29,11 +29,11 @@ export function CourseCheckoutButton({
 
   async function run() {
     if (!signedIn) {
-      router.push(`/login?callbackUrl=${encodeURIComponent("/learn/courses")}`);
+      router.push(`/login?callbackUrl=${encodeURIComponent("/programs")}`);
       return;
     }
     if (!payable) {
-      toast.push("This programme is not available for checkout yet.", "error");
+      toast.push("This program is not available for checkout yet.", "error");
       return;
     }
     setBusy(true);

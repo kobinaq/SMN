@@ -4,18 +4,19 @@ import { FounderStory } from "@/components/home/FounderStory";
 import { LearningOfferings } from "@/components/home/LearningOfferings";
 import { WhoItsFor } from "@/components/home/WhoItsFor";
 import { HomeValues } from "@/components/home/HomeValues";
-import { CommunityPreview } from "@/components/home/CommunityPreview";
 import { GrowPreview } from "@/components/home/GrowPreview";
 import { Testimonials } from "@/components/home/Testimonials";
 import { PartnersBand } from "@/components/home/PartnersBand";
 import { getStories } from "@/lib/cms";
+import { learnerExperiencesEnabled } from "@/lib/features";
 
 /**
- * Website Structure doc homepage order:
- * hero → founder → offerings → audience → values → connect → grow → testimonials → partner.
+ * Document order: hero, founder, offerings, audience, approach,
+ * resources, learner experiences (flagged off until testimonials are approved),
+ * partnerships. The footer carries the email subscription.
  */
 export async function HomePage() {
-  const stories = await getStories();
+  const stories = learnerExperiencesEnabled ? await getStories() : [];
 
   return (
     <HomeStory>
@@ -24,9 +25,8 @@ export async function HomePage() {
       <LearningOfferings />
       <WhoItsFor />
       <HomeValues />
-      <CommunityPreview />
       <GrowPreview />
-      <Testimonials stories={stories.slice(0, 4)} />
+      {learnerExperiencesEnabled ? <Testimonials stories={stories} /> : null}
       <PartnersBand />
     </HomeStory>
   );

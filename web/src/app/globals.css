@@ -1,17 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --deep-blue: #0a2f8f;
-  --baby-blue: #7eb6ff;
-  --mint: #6fcfb0;
-  --grey: #6b7280;
-  --near-black: #0b0d12;
-  --ink: #12151c;
-  --surface: #141820;
-  --surface-2: #1a1f2b;
+  /* Brand palette. Other colors reference these tokens. */
+  --deep-blue: #174ea6;
+  --mint: #3fd1a6;
+  --grey: #e5e7eb;
+  --off-white: #f7f9fc;
+  --charcoal: #202938;
+
+  /* Mint text on off-white is 1.83:1, so mint is a fill and a dark-band accent.
+     Deep blue on off-white is 7.44:1. Charcoal on off-white is 13.87:1.
+     Off-white on deep blue is 7.44:1. Grey is a border, not text (1.17:1). */
+  --baby-blue: var(--mint);
+  --near-black: var(--charcoal);
+  --ink: var(--charcoal);
+  --surface: var(--charcoal);
+  --surface-2: var(--charcoal);
   --white: #ffffff;
-  --off-white: #f4f6fa;
-  --line: rgba(255, 255, 255, 0.1);
+  --line: var(--grey);
   --header-h: 4rem;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-top: env(safe-area-inset-top, 0px);
@@ -21,39 +27,36 @@
   /* Elevation ladder. Each step is a deliberate layer: page ground, resting
      card, inset/hover, then anything that floats above the page. Using these
      instead of one flat surface is what makes panels read as raised. */
-  --canvas: #0a0c10;
-  --raised: #12151c;
-  --inset: #171b23;
-  --overlay: #1b202b;
+  --canvas: var(--off-white);
+  --raised: var(--white);
+  --inset: var(--grey);
+  --overlay: var(--white);
 
-  /* Borders: subtle for resting dividers, base for interactive edges,
-     strong only on hover/focus so emphasis has somewhere to go. */
-  --edge-subtle: rgba(255, 255, 255, 0.07);
-  --edge: rgba(255, 255, 255, 0.13);
-  --edge-strong: rgba(255, 255, 255, 0.24);
+  /* Borders use the brand grey. It is too light to be text on off-white. */
+  --edge-subtle: var(--grey);
+  --edge: color-mix(in srgb, var(--charcoal) 18%, var(--grey));
+  --edge-strong: color-mix(in srgb, var(--charcoal) 32%, var(--grey));
 
-  /* Text ramp — three weights of attention, not arbitrary opacities.
-     text-3 must clear WCAG AA 4.5:1 on canvas/raised/inset (alpha 0.40 was ~3.6:1). */
-  --text-1: #f4f6fb;
-  --text-2: rgba(244, 246, 251, 0.66);
-  --text-3: rgba(244, 246, 251, 0.52);
+  /* text-2 is charcoal mixed 72% onto off-white (5.74:1).
+     text-3 is 68% (5.02:1). Both clear WCAG AA for body text. */
+  --text-1: var(--charcoal);
+  --text-2: color-mix(in srgb, var(--charcoal) 72%, var(--off-white));
+  --text-3: color-mix(in srgb, var(--charcoal) 68%, var(--off-white));
 
-  /* One job per color. Accent = interactive. AI = assistant surfaces and
-     success. Warn = needs attention. Danger = destructive/error. Keeping
-     these disjoint is what stops "AI is thinking" reading like "succeeded". */
-  --accent: #7eb6ff;
-  --accent-strong: #4f8ff0;
-  --accent-bg: rgba(126, 182, 255, 0.12);
-  /* Text on a filled accent-strong/accent surface (primary buttons). Each
-     band sets its own so the pair always clears WCAG AA 4.5:1. */
-  --on-accent: #08111f;
-  --ai: #6fcfb0;
-  --ai-strong: #49b592;
-  --ai-bg: rgba(111, 207, 176, 0.12);
-  --warn: #e3a13f;
-  --warn-bg: rgba(227, 161, 63, 0.12);
-  --danger: #ef7a6f;
-  --danger-bg: rgba(239, 122, 111, 0.12);
+  --accent: var(--deep-blue);
+  --accent-strong: var(--deep-blue);
+  --accent-bg: color-mix(in srgb, var(--deep-blue) 12%, transparent);
+  /* Off-white on deep blue is 7.44:1. */
+  --on-accent: var(--off-white);
+  /* Small "AI" text sits on off-white, where mint fails. Deep blue carries
+     that text. Mint remains the fill behind it. */
+  --ai: var(--deep-blue);
+  --ai-strong: var(--deep-blue);
+  --ai-bg: color-mix(in srgb, var(--mint) 28%, var(--off-white));
+  --warn: #92400e;
+  --warn-bg: color-mix(in srgb, #92400e 12%, transparent);
+  --danger: #7f1d1d;
+  --danger-bg: color-mix(in srgb, #7f1d1d 10%, transparent);
 
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -120,7 +123,7 @@
   --ease-out: var(--ease-out);
   --ease-spring: var(--ease-spring);
 
-  --font-display: var(--font-league-spartan);
+  --font-display: var(--font-montserrat);
   --font-sans: var(--font-inter);
   --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
 }
@@ -133,7 +136,7 @@
 
 html {
   scroll-behavior: auto;
-  color-scheme: dark;
+  color-scheme: light;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -154,8 +157,8 @@ html.lenis body {
 }
 
 body {
-  background: var(--near-black);
-  color: var(--white);
+  background: var(--canvas);
+  color: var(--text-1);
   font-family: var(--font-inter), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -172,7 +175,7 @@ h2,
 h3,
 h4,
 .font-display {
-  font-family: var(--font-league-spartan), system-ui, sans-serif;
+  font-family: var(--font-montserrat), system-ui, sans-serif;
   letter-spacing: -0.03em;
   text-wrap: balance;
 }
@@ -420,20 +423,20 @@ select {
 /* Native select fallback (custom Select preferred — OS option menus stay light on Windows) */
 select:not([aria-hidden="true"]) {
   appearance: none;
-  background-color: color-mix(in srgb, var(--surface) 88%, black);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.45)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-color: var(--raised);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23202938' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.9rem center;
   background-size: 1rem;
-  color: var(--white);
-  color-scheme: dark;
+  color: var(--charcoal);
+  color-scheme: light;
   padding-right: 2.5rem;
 }
 
 select:not([aria-hidden="true"]) option,
 select:not([aria-hidden="true"]) optgroup {
-  background-color: #12161f;
-  color: #f4f6fa;
+  background-color: var(--off-white);
+  color: var(--charcoal);
 }
 
 .field:focus,
@@ -533,7 +536,7 @@ button {
 /* Oversized ordinals for numbered lists — the "01 / 02 / 03" spine that makes
    a sequence read as a sequence rather than as three unrelated cards. */
 .ordinal {
-  font-family: var(--font-league-spartan), system-ui, sans-serif;
+  font-family: var(--font-montserrat), system-ui, sans-serif;
   font-size: clamp(2.25rem, 1.4rem + 3vw, 4rem);
   line-height: 0.8;
   letter-spacing: -0.05em;
@@ -544,42 +547,43 @@ button {
    child is what lets the same card markup sit on ink or on paper: the tokens
    resolve at the point of use, so children need no light-mode variants. */
 .band-light {
-  --canvas: #f4f6fa;
-  --raised: #ffffff;
-  --inset: #eceff6;
-  --overlay: #ffffff;
-  --text-1: #0b0d12;
-  --text-2: rgba(11, 13, 18, 0.68);
-  --text-3: rgba(11, 13, 18, 0.6);
-  --edge-subtle: rgba(11, 13, 18, 0.09);
-  --edge: rgba(11, 13, 18, 0.16);
-  --edge-strong: rgba(11, 13, 18, 0.32);
-  --accent: #1e5fd0;
-  --accent-strong: #0a2f8f;
-  --accent-bg: rgba(30, 95, 208, 0.1);
-  /* White on #0a2f8f is 11.6:1 and on hover #1e5fd0 is 5.8:1. */
-  --on-accent: #ffffff;
-  --ai: #17795c;
-  --ai-bg: rgba(23, 121, 92, 0.1);
+  --canvas: var(--off-white);
+  --raised: var(--white);
+  --inset: var(--grey);
+  --overlay: var(--white);
+  --text-1: var(--charcoal);
+  --text-2: color-mix(in srgb, var(--charcoal) 72%, var(--off-white));
+  --text-3: color-mix(in srgb, var(--charcoal) 68%, var(--off-white));
+  --edge-subtle: var(--grey);
+  --edge: color-mix(in srgb, var(--charcoal) 18%, var(--grey));
+  --edge-strong: color-mix(in srgb, var(--charcoal) 32%, var(--grey));
+  --accent: var(--deep-blue);
+  --accent-strong: var(--deep-blue);
+  --accent-bg: color-mix(in srgb, var(--deep-blue) 12%, transparent);
+  --on-accent: var(--off-white);
+  --ai: var(--deep-blue);
+  --ai-bg: color-mix(in srgb, var(--mint) 28%, var(--off-white));
   color: var(--text-1);
 }
 
-/* Deep-blue band — the brand colour used as ground, not as an accent. */
+/* Deep-blue band. Off-white text at 80% on #174EA6 is about 5.4:1. */
 .band-blue {
-  --canvas: #0a2f8f;
-  --raised: #0d379f;
-  --inset: #093080;
-  --overlay: #0d379f;
-  --text-1: #ffffff;
-  --text-2: rgba(255, 255, 255, 0.74);
-  --text-3: rgba(255, 255, 255, 0.6);
-  --edge-subtle: rgba(255, 255, 255, 0.14);
-  --edge: rgba(255, 255, 255, 0.24);
-  --edge-strong: rgba(255, 255, 255, 0.45);
-  --accent: #ffffff;
-  --accent-strong: #ffffff;
-  --accent-bg: rgba(255, 255, 255, 0.14);
-  --on-accent: #08111f;
+  --canvas: var(--deep-blue);
+  --raised: color-mix(in srgb, var(--deep-blue) 88%, var(--charcoal));
+  --inset: color-mix(in srgb, var(--deep-blue) 80%, var(--charcoal));
+  --overlay: color-mix(in srgb, var(--deep-blue) 88%, var(--charcoal));
+  --text-1: var(--off-white);
+  --text-2: color-mix(in srgb, var(--off-white) 80%, var(--deep-blue));
+  --text-3: color-mix(in srgb, var(--off-white) 74%, var(--deep-blue));
+  --edge-subtle: color-mix(in srgb, var(--off-white) 24%, transparent);
+  --edge: color-mix(in srgb, var(--off-white) 36%, transparent);
+  --edge-strong: color-mix(in srgb, var(--off-white) 55%, transparent);
+  /* Mint on deep blue is 4.07:1, short of 4.5:1 for small text. */
+  --accent: var(--off-white);
+  --accent-strong: var(--off-white);
+  --accent-bg: color-mix(in srgb, var(--off-white) 14%, transparent);
+  --on-accent: var(--charcoal);
+  --ai: var(--off-white);
   color: var(--text-1);
 }
 

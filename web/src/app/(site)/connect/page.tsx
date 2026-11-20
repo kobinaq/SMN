@@ -9,12 +9,12 @@ import { cta } from "@/lib/cta";
 import { img } from "@/lib/images";
 import { getEvents, getSiteSettings, getStories } from "@/lib/cms";
 import { itemShareImages } from "@/lib/share-metadata";
+import { learnerExperiencesEnabled } from "@/lib/features";
 import {
   communityAccess,
   communityEarlyAccess,
   communityHero,
   communityIdea,
-  communityMentors,
   communityMetadata,
   communityStories,
 } from "@/lib/community-copy";
@@ -133,20 +133,7 @@ export default async function CommunityPage() {
 
       <UpcomingEvents events={upcoming} />
 
-      <Band size="lg">
-        <SectionHead
-          kicker={communityMentors.kicker}
-          title={communityMentors.title}
-          lede={communityMentors.lede}
-          actions={
-            <Button href={communityMentors.href} variant="secondary">
-              {communityMentors.ctaLabel}
-            </Button>
-          }
-        />
-      </Band>
-
-      {memberStories.length ? (
+      {learnerExperiencesEnabled && memberStories.length ? (
         <Band id="stories" tone="raised" size="lg" className="scroll-mt-24">
           <SectionHead align="stacked" kicker={communityStories.kicker} title={communityStories.title} />
           <div className="mt-12 grid gap-px overflow-hidden border border-edge-subtle bg-edge-subtle md:grid-cols-2">

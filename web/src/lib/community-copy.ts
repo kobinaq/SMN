@@ -43,7 +43,7 @@ export const communityEarlyAccess = {
   lede: "Members may receive early access or first notice of selected:",
   items: [
     "TSA events",
-    "New programmes",
+    "New programs",
     "Resources",
     "Simulations",
     "Opportunities when available",
@@ -55,7 +55,7 @@ export const communityMentors = {
   title: "Learn from people already doing the work.",
   lede: "The TSA mentor directory sits inside the community. Mentors are reviewed by TSA before they appear, and requests are coordinated through your member account.",
   ctaLabel: "Meet the mentors",
-  href: "/connect/mentors",
+  href: "/about",
 } as const;
 
 export const communityStories = {
