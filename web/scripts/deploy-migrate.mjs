@@ -1,32 +1,29 @@
 /**
- * Run pending Payload migrations, but only on a production deploy.
+ * Run pending Payload migrations on Vercel production, and on preview when
+ * DATABASE_URL points at the Neon dev endpoint.
  *
- * Vercel runs `vercel-build` in place of `build` when it exists, which is the
- * hook we use to keep the deployed schema in step with the deployed code.
- * Preview deployments deliberately skip it: previews may point at the same
- * database as production, and a preview build must never migrate it.
+ * Vercel runs `vercel-build` in place of `build`. Local and CI builds call
+ * `next build` directly, so they never reach this script. Any other
+ * VERCEL_ENV still skips migrations.
  *
- * `db:migrate` refuses anything that is not PostgreSQL and is non-interactive,
- * so this stays a no-op locally and in CI.
+ * `db:migrate` refuses anything that is not PostgreSQL and is non-interactive.
  */
 import { spawn } from "node:child_process";
+import { decideDeployMigration } from "./deploy-migrate-guard.mjs";
 
-const env = process.env.VERCEL_ENV;
+const decision = decideDeployMigration(process.env);
 
-if (env !== "production") {
-  console.log(
-    `[deploy] VERCEL_ENV=${env ?? "unset"} — skipping migrations. ` +
-      "Only production deploys migrate; run `npm run db:migrate` by hand for other environments.",
-  );
+if (decision.action === "skip") {
+  console.log(decision.message);
   process.exit(0);
 }
 
-if (!process.env.DATABASE_URL) {
-  console.error("[deploy] Production build has no DATABASE_URL; refusing to continue.");
+if (decision.action === "fail") {
+  console.error(decision.message);
   process.exit(1);
 }
 
-console.log("[deploy] Production deploy — running Payload migrations before the build.");
+console.log(decision.message);
 
 const child = spawn("npm", ["run", "db:migrate"], { stdio: "inherit" });
 child.on("exit", (code) => {
