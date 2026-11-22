@@ -3,18 +3,21 @@ import { LinkButton, Picture } from "./helpers";
 import type { LinkData, MediaRef } from "./types";
 
 type Props = {
+  eyebrow?: string;
   headline?: string;
   text?: string;
   buttons?: Array<LinkData & { style?: "primary" | "secondary" }>;
   image?: MediaRef;
+  imagePreset?: string | null;
 };
 
-export function HeroBlock({ headline, text, buttons, image }: Props) {
+export function HeroBlock({ eyebrow, headline, text, buttons, image, imagePreset }: Props) {
   if (!headline) return null;
   return (
     <Band size="lg">
       <div className="grid items-center gap-10 lg:grid-cols-2">
         <div>
+          {eyebrow ? <p className="eyebrow mb-4 text-accent">{eyebrow}</p> : null}
           <h1 className="font-display display-1 text-text-1">{headline}</h1>
           {text ? <p className="mt-6 max-w-xl text-base leading-relaxed text-text-2 sm:text-lg">{text}</p> : null}
           {buttons?.length ? (
@@ -25,7 +28,7 @@ export function HeroBlock({ headline, text, buttons, image }: Props) {
             </div>
           ) : null}
         </div>
-        <Picture media={image} />
+        <Picture media={image} preset={imagePreset} />
       </div>
     </Band>
   );

@@ -3,7 +3,7 @@ import { Band } from "@/components/site/kit";
 import { Picture, isExternal, safeHref } from "./helpers";
 import type { LinkData, MediaRef } from "./types";
 
-type Card = { title?: string; text?: string; image?: MediaRef; link?: LinkData };
+type Card = { meta?: string; title?: string; text?: string; audience?: string; image?: MediaRef; imagePreset?: string | null; link?: LinkData };
 type Props = { heading?: string; intro?: string; variant?: "program-types" | "approaches" | "audiences"; cards?: Card[] };
 
 const columns = {
@@ -23,9 +23,11 @@ export function CardGridBlock({ heading, intro, variant = "program-types", cards
           const href = safeHref(card.link?.href);
           return (
             <li key={i} className="flex flex-col gap-3 rounded-2xl border border-edge-subtle bg-raised p-5">
-              <Picture media={card.image} className="aspect-[16/10]" />
+              <Picture media={card.image} preset={card.imagePreset} className="aspect-[16/10]" />
+              {card.meta ? <p className="eyebrow text-accent">{card.meta}</p> : null}
               <h3 className="font-display text-lg text-text-1">{card.title}</h3>
               {card.text ? <p className="text-sm leading-relaxed text-text-2">{card.text}</p> : null}
+              {card.audience ? <p className="text-xs leading-relaxed text-text-3">{card.audience}</p> : null}
               {href && card.link?.label ? (
                 <Link
                   href={href}

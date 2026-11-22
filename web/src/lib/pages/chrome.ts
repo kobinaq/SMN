@@ -3,6 +3,9 @@
 export const footerBrand =
   "Think Social Academy equips individuals, business owners and organizations with practical social media marketing skills, strategic thinking and tools for today's digital landscape.";
 
+/** Footer column headings, in column order. */
+export const footerColumnHeadings = { explore: "Explore", programs: "Programs", more: "More" } as const;
+
 export const footerExplore = [
   { label: "About", href: "/about" },
   { label: "Programs", href: "/programs" },

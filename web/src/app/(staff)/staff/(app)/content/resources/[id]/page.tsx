@@ -6,6 +6,7 @@ import { getPayloadClient } from "@/lib/payload";
 import { resourceFields } from "@/lib/staff/field-defs";
 import { getCollectionDoc, relationId } from "@/lib/staff/records";
 import { pageTitle } from "@/lib/brand";
+import { categoryValue } from "@/lib/catalogue";
 
 export const metadata = { title: pageTitle("Edit resource", { staff: true }) };
 
@@ -34,7 +35,7 @@ export default async function EditResourcePage({ params }: { params: Promise<{ i
             slug: doc.slug,
             type: doc.type,
             description: doc.description,
-            category: doc.category || "",
+            category: doc.category ? categoryValue(doc.category) : "",
             format: doc.format || "",
             file: relationId(doc.file),
             externalUrl: doc.externalUrl || "",

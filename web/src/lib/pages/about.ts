@@ -11,6 +11,7 @@ export const aboutSeo = {
 } as const;
 
 export const aboutHero = {
+  kicker: "About",
   title: "Building stronger social media marketing capabilities.",
   lede: "Think Social Academy equips individuals and organizations with the practical skills, strategic thinking and knowledge in social media marketing",
   ctaLabel: "Explore our programs",

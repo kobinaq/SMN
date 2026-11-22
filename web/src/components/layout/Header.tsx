@@ -7,7 +7,7 @@ import { createPortal } from "react-dom";
 import { Menu, X, ChevronDown } from "@/components/ui/icons";
 import { BrandLogo } from "@/components/layout/BrandLogo";
 import { useSiteSettings } from "@/components/layout/SiteSettingsProvider";
-import { nav } from "@/lib/site";
+import { nav as codeNav, type NavItem } from "@/lib/site";
 import { cta } from "@/lib/cta";
 import { MemberSignInIcon } from "@/components/layout/MemberSignInIcon";
 import { cn } from "@/lib/utils";
@@ -21,7 +21,15 @@ function useMounted() {
   return useSyncExternalStore(noopSubscribe, () => true, () => false);
 }
 
-export function Header() {
+type HeaderProps = {
+  /** Menu from the published CMS header. Defaults to the code nav. */
+  items?: readonly NavItem[];
+  /** False when a CMS home page replaces the dark code hero. */
+  darkHomeHero?: boolean;
+};
+
+export function Header({ items, darkHomeHero = true }: HeaderProps = {}) {
+  const nav = items ?? codeNav;
   const site = useSiteSettings();
   const pathname = usePathname() || "/";
   const [open, setOpen] = useState(false);
@@ -196,7 +204,7 @@ export function Header() {
       document.body,
     );
 
-  const tone = headerTone(pathname, scrolled, open);
+  const tone = headerTone(pathname, scrolled, open, darkHomeHero);
 
   return (
     <>

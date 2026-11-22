@@ -11,12 +11,16 @@ import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getSiteSettings } from "@/lib/cms";
+import { chooseSource, chromeProps, getCachedPublishedChrome, getCachedPublishedHome } from "@/lib/cms-pages";
 
 export const metadata = siteMetadata;
 export const viewport = siteViewport;
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const settings = await getSiteSettings();
+  // Production returns null here without touching Payload, so the code chrome renders unchanged.
+  const [chrome, home] = await Promise.all([getCachedPublishedChrome(), getCachedPublishedHome()]);
+  const published = chromeProps(chrome, chooseSource(home) === "cms");
 
   return (
     <SiteDocument>
@@ -41,13 +45,13 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         </a>
         <NavigationProgress />
         <SmoothScroll>
-          <Header />
+          <Header items={published.navItems} darkHomeHero={published.darkHomeHero} />
           <PageTransition>
             <main id="main" className="flex-1">
               {children}
             </main>
           </PageTransition>
-          <Footer site={settings} />
+          <Footer site={settings} blurb={published.footer?.blurb} columns={published.footer?.columns} />
         </SmoothScroll>
       </SiteSettingsProvider>
     </SiteDocument>

@@ -6,6 +6,7 @@ import { getPayloadClient } from "@/lib/payload";
 import { postFields } from "@/lib/staff/field-defs";
 import { getCollectionDoc, lexicalToPlainText, relationId, toDateTimeLocal } from "@/lib/staff/records";
 import { pageTitle } from "@/lib/brand";
+import { categoryValue } from "@/lib/catalogue";
 
 export const metadata = { title: pageTitle("Edit post", { staff: true }) };
 
@@ -32,7 +33,7 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
           initial={{
             title: doc.title,
             slug: doc.slug,
-            category: doc.category,
+            category: categoryValue(doc.category),
             author: doc.author || "",
             status: doc.status || "published",
             excerpt: doc.excerpt,

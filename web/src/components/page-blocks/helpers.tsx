@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { validateHref } from "@/lib/page-blocks/link-validation";
 import { Button } from "@/components/ui/Button";
+import { presetImage } from "@/lib/page-blocks/image-presets";
 import type { LinkData, MediaRef } from "./types";
 
 /** Defense in depth: validation runs on save, but a stored href is still checked before it becomes a link. */
@@ -29,12 +30,14 @@ export function mediaOf(ref: MediaRef): { url: string; alt: string } | null {
   return { url: ref.url, alt: ref.alt ?? "" };
 }
 
-export function Picture({ media, className }: { media: MediaRef; className?: string }) {
-  const m = mediaOf(media);
+/** An uploaded image, or the built-in preset when nothing is uploaded. */
+export function Picture({ media, preset, className }: { media: MediaRef; preset?: string | null; className?: string }) {
+  const uploaded = mediaOf(media);
+  const m = uploaded ?? presetImage(preset);
   if (!m) return null;
   return (
     <div className={`relative overflow-hidden rounded-2xl bg-inset ${className ?? "aspect-[4/3]"}`}>
-      <Image src={m.url} alt={m.alt} fill unoptimized sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+      <Image src={m.url} alt={m.alt} fill unoptimized={Boolean(uploaded)} sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
     </div>
   );
 }

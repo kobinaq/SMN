@@ -5,10 +5,13 @@ import { Band, Checklist, CtaBand, DefinitionGrid, Kicker, Masthead } from "@/co
 import { Button } from "@/components/ui/Button";
 import { instructor } from "@/lib/content";
 import { img } from "@/lib/images";
+import { RenderBlocks } from "@/components/page-blocks/RenderBlocks";
+import { chooseSource, cmsMetadata, getCachedPublishedPage } from "@/lib/cms-pages";
 import { aboutApproach, aboutAudience, aboutClose, aboutFounder, aboutHero, aboutSeo } from "@/lib/pages/about";
 
-export function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
-  return withDefaultShareImages(metadata, parent);
+export async function generateMetadata(_props: unknown, parent: ResolvingMetadata): Promise<Metadata> {
+  const cms = await getCachedPublishedPage("about");
+  return withDefaultShareImages(chooseSource(cms) === "cms" ? cmsMetadata(cms, metadata) : metadata, parent);
 }
 
 const metadata: Metadata = {
@@ -18,13 +21,16 @@ const metadata: Metadata = {
   openGraph: { title: aboutSeo.title, description: aboutSeo.description, url: "/about" },
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  // A published CMS page wins outside production. Production gets null here and renders code.
+  const cms = await getCachedPublishedPage("about");
+  if (chooseSource(cms) === "cms") return <RenderBlocks blocks={cms?.layout} />;
   return (
     <>
       <Masthead
         image={img.aboutMission}
         alt="Instructor presenting to a room of learners"
-        kicker="About"
+        kicker={aboutHero.kicker}
         title={aboutHero.title}
         lede={aboutHero.lede}
         actions={<Button href={aboutHero.ctaHref}>{aboutHero.ctaLabel}</Button>}

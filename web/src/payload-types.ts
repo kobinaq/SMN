@@ -1461,7 +1461,7 @@ export interface Post {
     | 'Industry Trends'
     | 'Community Stories'
     | 'Social Media Strategy'
-    | 'Content Marketing & Planning'
+    | 'Content Marketing and Planning'
     | 'Platforms'
     | 'Performance'
     | 'Professional Development';
@@ -1539,7 +1539,7 @@ export interface Resource {
   category?:
     | (
         | 'Social Media Strategy'
-        | 'Content Marketing & Planning'
+        | 'Content Marketing and Planning'
         | 'AI'
         | 'Platforms'
         | 'Performance'
@@ -1584,6 +1584,10 @@ export interface Page {
   layout?:
     | (
         | {
+            /**
+             * Small label above the headline (optional).
+             */
+            eyebrow?: string | null;
             headline: string;
             text?: string | null;
             buttons?:
@@ -1598,6 +1602,23 @@ export interface Page {
                 }[]
               | null;
             image?: (number | null) | Media;
+            /**
+             * Used only when no image is uploaded.
+             */
+            imagePreset?:
+              | (
+                  | 'hero-community'
+                  | 'about-mission'
+                  | 'founder'
+                  | 'cohort-spotlight'
+                  | 'mentorship-talk'
+                  | 'event-workshop'
+                  | 'academy-group'
+                  | 'philosophy'
+                  | 'post-strategy'
+                  | 'hire-conversation'
+                )
+              | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'hero';
@@ -1629,9 +1650,34 @@ export interface Page {
             variant?: ('program-types' | 'approaches' | 'audiences') | null;
             cards?:
               | {
+                  /**
+                   * Small label above the title (optional).
+                   */
+                  meta?: string | null;
                   title: string;
                   text?: string | null;
+                  /**
+                   * Who it is for, shown below the text (optional).
+                   */
+                  audience?: string | null;
                   image?: (number | null) | Media;
+                  /**
+                   * Used only when no image is uploaded.
+                   */
+                  imagePreset?:
+                    | (
+                        | 'hero-community'
+                        | 'about-mission'
+                        | 'founder'
+                        | 'cohort-spotlight'
+                        | 'mentorship-talk'
+                        | 'event-workshop'
+                        | 'academy-group'
+                        | 'philosophy'
+                        | 'post-strategy'
+                        | 'hire-conversation'
+                      )
+                    | null;
                   link?: {
                     label?: string | null;
                     /**
@@ -1647,6 +1693,10 @@ export interface Page {
             blockType: 'card-grid';
           }
         | {
+            /**
+             * Small label above the heading (optional).
+             */
+            eyebrow?: string | null;
             heading?: string | null;
             name?: string | null;
             role?: string | null;
@@ -1666,7 +1716,31 @@ export interface Page {
               [k: string]: unknown;
             } | null;
             image?: (number | null) | Media;
+            /**
+             * Used only when no image is uploaded.
+             */
+            imagePreset?:
+              | (
+                  | 'hero-community'
+                  | 'about-mission'
+                  | 'founder'
+                  | 'cohort-spotlight'
+                  | 'mentorship-talk'
+                  | 'event-workshop'
+                  | 'academy-group'
+                  | 'philosophy'
+                  | 'post-strategy'
+                  | 'hire-conversation'
+                )
+              | null;
             quote?: string | null;
+            cta?: {
+              label?: string | null;
+              /**
+               * A page like /about, an #anchor, mailto:, tel:, or a full https:// link.
+               */
+              href?: string | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'founder-story';
@@ -2786,6 +2860,7 @@ export interface PagesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              eyebrow?: T;
               headline?: T;
               text?: T;
               buttons?:
@@ -2797,6 +2872,7 @@ export interface PagesSelect<T extends boolean = true> {
                     id?: T;
                   };
               image?: T;
+              imagePreset?: T;
               id?: T;
               blockName?: T;
             };
@@ -2817,9 +2893,12 @@ export interface PagesSelect<T extends boolean = true> {
               cards?:
                 | T
                 | {
+                    meta?: T;
                     title?: T;
                     text?: T;
+                    audience?: T;
                     image?: T;
+                    imagePreset?: T;
                     link?:
                       | T
                       | {
@@ -2834,12 +2913,20 @@ export interface PagesSelect<T extends boolean = true> {
         'founder-story'?:
           | T
           | {
+              eyebrow?: T;
               heading?: T;
               name?: T;
               role?: T;
               story?: T;
               image?: T;
+              imagePreset?: T;
               quote?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
               id?: T;
               blockName?: T;
             };

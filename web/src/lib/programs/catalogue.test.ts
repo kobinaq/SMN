@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { countActiveEnrollmentsByCohort, shapeCatalogue, type RawCohort, type RawCourse } from "./catalogue";
+import { SEAT_HOLDING_ENROLLMENT_STATUSES, seatsLeft } from "./next-open-cohort";
 
 const now = new Date("2026-12-01T00:00:00.000Z");
 
@@ -184,5 +185,21 @@ describe("countActiveEnrollmentsByCohort", () => {
     expect(counts.get("1")).toBe(2);
     expect(counts.get("2")).toBe(1);
     expect(counts.size).toBe(2);
+  });
+
+  it("holds a seat for active and paused only", () => {
+    expect([...SEAT_HOLDING_ENROLLMENT_STATUSES]).toEqual(["active", "paused"]);
+  });
+
+  it("counts paused enrollments as holding a seat; cancelled, completed and refunded do not", () => {
+    const counts = countActiveEnrollmentsByCohort([
+      { cohort: 1, status: "active" },
+      { cohort: 1, status: "paused" },
+      { cohort: 1, status: "cancelled" },
+      { cohort: 1, status: "completed" },
+      { cohort: 1, status: "refunded" },
+    ]);
+    expect(counts.get("1")).toBe(2);
+    expect(seatsLeft({ seats: 3 }, counts.get("1"))).toBe(1);
   });
 });

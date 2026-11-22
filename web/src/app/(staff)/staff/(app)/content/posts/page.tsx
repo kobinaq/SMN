@@ -3,6 +3,7 @@ import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { listCollection } from "@/lib/staff/records";
 import { pageTitle } from "@/lib/brand";
+import { categoryLabel } from "@/lib/catalogue";
 
 export const metadata = { title: pageTitle("Posts", { staff: true }) };
 
@@ -28,7 +29,7 @@ export default async function StaffPostsPage() {
               href: `/staff/content/posts/${doc.id}`,
               cells: [
                 doc.title,
-                doc.category,
+                categoryLabel(doc.category),
                 doc.status === "draft" ? "Draft" : doc.publishedAt ? "Published" : "Draft",
                 doc.updatedAt ? new Date(doc.updatedAt).toLocaleDateString("en-GH") : "-",
               ],
