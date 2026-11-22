@@ -126,7 +126,7 @@ export function HeroPhotoGallery() {
   return (
     <section
       data-hero
-      className="grain relative flex min-h-[100dvh] flex-col overflow-hidden bg-near-black pt-[calc(5rem+env(safe-area-inset-top))] md:pt-24"
+      className="grain relative flex min-h-[100dvh] flex-col overflow-hidden bg-near-black pt-[calc(5rem+env(safe-area-inset-top))] md:pt-24 lg:h-[100dvh] lg:max-h-[100dvh]"
     >
       <div className="relative z-10 mx-auto w-full max-w-5xl px-4 text-center sm:px-6">
         <p
@@ -155,12 +155,13 @@ export function HeroPhotoGallery() {
 
       <div
         className={cn(
-          "relative z-10 mb-4 mt-8 w-full overflow-hidden sm:mb-6 sm:mt-10",
-          "flex h-[210px] items-center justify-center sm:h-[280px] md:h-[320px] lg:h-[360px]",
+          "hero-stage relative z-10 mb-4 mt-8 w-full overflow-hidden sm:mb-6 sm:mt-10",
+          "flex h-[210px] items-center justify-center sm:h-[280px] md:h-[320px]",
+          "lg:mb-0 lg:mt-6 lg:h-auto lg:min-h-40 lg:max-h-[360px] lg:flex-1",
         )}
       >
         <div className="relative mx-auto flex w-full max-w-7xl justify-center px-2">
-          <div className="relative flex w-full justify-center">
+          <div className="hero-fan relative flex w-full justify-center">
             <div className="relative h-[120px] w-[120px] sm:h-[180px] sm:w-[180px] md:h-[200px] md:w-[200px] lg:h-[220px] lg:w-[220px]">
               {[...photos].reverse().map((photo, reverseIndex) => {
                 const index = photos.length - 1 - reverseIndex;
@@ -194,7 +195,7 @@ export function HeroPhotoGallery() {
 
       <div
         data-hero-item
-        className="relative z-10 mt-auto flex w-full flex-col items-center px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-6 sm:pb-10"
+        className="hero-ctas relative z-10 mt-auto flex w-full shrink-0 flex-col items-center px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-6 sm:pb-10 lg:pb-12"
       >
         <div className="btn-row-mobile">
           <Button

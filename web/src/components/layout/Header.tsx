@@ -13,12 +13,7 @@ import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { trackEvent } from "@/lib/analytics";
 import { getFocusableElements, trapTabKey } from "@/lib/focus-trap";
-
-function pathMatches(pathname: string, href: string) {
-  // Exact for `/` and `/connect` so /connect/mentors marks Mentors only.
-  if (href === "/" || href === "/connect") return pathname === href;
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
+import { headerTone, logoTone, pathMatches } from "@/lib/header-chrome";
 
 /** Same pattern as ConfirmDialog: settle on the first client render without setState-in-effect. */
 const noopSubscribe = () => () => {};
@@ -44,7 +39,7 @@ export function Header() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -196,12 +191,16 @@ export function Header() {
       document.body,
     );
 
+  const tone = headerTone(pathname, scrolled, open);
+
   return (
     <>
       <header
+        data-tone={tone}
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition duration-300",
           "pt-[env(safe-area-inset-top)]",
+          tone === "light" && "header-on-dark",
           scrolled || open
             ? "border-b border-edge-subtle bg-canvas/90 backdrop-blur-xl"
             : "bg-transparent",
@@ -217,7 +216,7 @@ export function Header() {
             <BrandLogo
               className="h-10 sm:h-11 md:h-14"
               priority
-              tone={pathname === "/" && !scrolled && !open ? "white" : "blue"}
+              tone={logoTone(tone)}
             />
           </Link>
 
