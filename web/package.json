@@ -62,7 +62,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitest/coverage-v8": "^4.1.10",
-    "esbuild": "^0.28.1",
+    "esbuild": "^0.28.2",
     "eslint": "^9",
     "eslint-config-next": "16.4.5",
     "sass": "^1.101.0",
