@@ -12,7 +12,7 @@ const wholeNumber =
     return value >= min || `Enter ${min} or more.`;
   };
 
-const formatNote = "Editable default. The one-on-one format is pending confirmation.";
+const formatNote = "Fixed format: 2 weeks, 4 live sessions a week, 8 sessions in total.";
 
 export const OneOnOne: GlobalConfig = {
   slug: "one-on-one",
@@ -36,6 +36,7 @@ export const OneOnOne: GlobalConfig = {
     {
       name: "resources",
       type: "array",
+      admin: { description: "One-on-One learners see these in the learning area alongside their session links." },
       fields: [
         { name: "label", type: "text", required: true },
         { name: "url", type: "text", required: true },

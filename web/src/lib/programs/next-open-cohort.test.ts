@@ -36,6 +36,13 @@ describe("nextOpenCohort", () => {
     expect(nextOpenCohort([cohort({ seats: null })], now)).toBeNull();
   });
 
+  it("skips a cohort whose seats are all taken by active enrollments", () => {
+    const full = cohort({ id: 1, seats: 5, activeEnrollments: 5 });
+    const later = cohort({ id: 2, startsAt: "2027-02-10T09:00:00.000Z", seats: 5, activeEnrollments: 4 });
+    expect(nextOpenCohort([full, later], now)?.id).toBe(2);
+    expect(nextOpenCohort([full], now)).toBeNull();
+  });
+
   it("ignores full cohorts", () => {
     expect(nextOpenCohort([cohort({ status: "full" })], now)).toBeNull();
   });
@@ -53,6 +60,18 @@ describe("seatsLeft", () => {
     expect(seatsLeft({ seats: 12 })).toBe(12);
     expect(seatsLeft({ seats: -3 })).toBe(0);
     expect(seatsLeft({})).toBe(0);
+  });
+
+  it("subtracts active enrollments and clamps at 0", () => {
+    expect(seatsLeft({ seats: 12 }, 5)).toBe(7);
+    expect(seatsLeft({ seats: 12 }, 12)).toBe(0);
+    expect(seatsLeft({ seats: 12 }, 20)).toBe(0);
+  });
+
+  it("ignores negative and NaN enrollment counts", () => {
+    expect(seatsLeft({ seats: 12 }, -4)).toBe(12);
+    expect(seatsLeft({ seats: 12 }, Number.NaN)).toBe(12);
+    expect(seatsLeft({ seats: Number.NaN }, 2)).toBe(0);
   });
 });
 

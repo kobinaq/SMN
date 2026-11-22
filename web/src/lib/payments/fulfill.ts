@@ -128,6 +128,11 @@ export async function fulfillSuccessfulPayment(payload: Payload, reference: stri
   const kind = String(payment.kind);
   const memberId = relId(payment.member);
 
+  // Cohort and One-on-One checkout and fulfillment arrive in Phase 3 (H-I).
+  if (kind === "cohort" || kind === "one-on-one") {
+    return { ok: false as const, reason: "kind_not_fulfilled_yet" as const };
+  }
+
   if (kind === "event") {
     const eventId = relId(payment.event);
     const event = await p.findByID({

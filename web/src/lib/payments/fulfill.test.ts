@@ -29,4 +29,20 @@ describe("fulfillSuccessfulPayment", () => {
     const result = await fulfillSuccessfulPayment(payload as never, "missing");
     expect(result).toEqual({ ok: false, reason: "payment_not_found" });
   });
+
+  it.each(["cohort", "one-on-one"])("leaves a %s payment untouched", async (kind) => {
+    const payload = {
+      find: vi.fn().mockResolvedValue({
+        docs: [{ id: 5, status: "initialized", kind, paystackReference: "ref_2" }],
+      }),
+      findByID: vi.fn(),
+      create: vi.fn(),
+      update: vi.fn(),
+      count: vi.fn(),
+    };
+    const result = await fulfillSuccessfulPayment(payload as never, "ref_2");
+    expect(result).toEqual({ ok: false, reason: "kind_not_fulfilled_yet" });
+    expect(payload.update).not.toHaveBeenCalled();
+    expect(payload.create).not.toHaveBeenCalled();
+  });
 });
