@@ -84,7 +84,7 @@ describe("enquiryConfirmation", () => {
     const text = (type: EnquiryType) => enquiryConfirmation(record(type)).text;
     expect(text("programme-social-media-marketing")).toContain("the Social Media Marketing cohort");
     expect(text("one-on-one-training")).toContain("One-on-One Training");
-    expect(text("organisational-training")).toContain("Specialised Marketing Workshops");
+    expect(text("organisational-training")).toContain("Specialized Marketing Workshops");
     expect(text("partnership")).toContain("partnering with us");
     expect(text("contact")).toContain("your message");
   });

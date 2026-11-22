@@ -72,7 +72,7 @@ export const LmsCourses: CollectionConfig = {
         { label: "Apply first", value: "apply" },
       ],
       admin: {
-        description: "Purchase courses checkout on the public catalogue. Apply-first courses use /apply, then staff grant access or send a payment link.",
+        description: "Purchase courses checkout on the public catalog. Apply-first courses use /apply, then staff grant access or send a payment link.",
       },
     },
     { name: "amount", type: "number", min: 0, admin: { description: "Checkout amount in pesewas. Required for Buy now once the fee is confirmed." } },

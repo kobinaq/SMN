@@ -7,7 +7,7 @@ export const instructor = {
   image: img.instructor,
   headline: "Arielle Adodo",
   linkedin: "https://www.linkedin.com/in/arielle-adodo/",
-  bio: "I didn’t start in marketing. I had to figure my way into it: no traditional marketing degree, no clear roadmap. I started with social media and content, learning through experience, experimenting, and working with brands until I realised there was much more to marketing than making good-looking content.",
+  bio: "I didn’t start in marketing. I had to figure my way into it: no traditional marketing degree, no clear roadmap. I started with social media and content, learning through experience, experimenting, and working with brands until I realized there was much more to marketing than making good-looking content.",
   philosophy:
     "The more I worked across social, content, and digital, from FMCG and lifestyle to consumer and tech brands, the more I noticed a problem: social media marketing was evolving, but the way we teach it wasn’t. People were learning how to post before they learned how to think. I founded Think Social Academy to close that gap, and to build the marketing community I wish I had when I started.",
   highlights: [
@@ -106,7 +106,7 @@ export function homepageHeadlineLines(headline: string): string[] {
 /** Tab 4 What is TSA, adjusted for Tab 5 (community, not professional network). */
 export const homepageWhatIs = {
   title: "More than learning how to create content.",
-  body: "Think Social Academy is a social media marketing academy and community that helps you build the knowledge, strategic skills and practical experience to use social media effectively and work towards results for brands and organisations.",
+  body: "Think Social Academy is a social media marketing academy and community that helps you build the knowledge, strategic skills and practical experience to use social media effectively and work towards results for brands and organizations.",
   ctaLabel: "Discover TSA",
   ctaHref: "/about",
 } as const;
@@ -189,14 +189,14 @@ export const homepagePrograms = [
     // TODO(T5-placeholder): 1-on-1 booking flow does not exist yet; contact is the route.
     body: "Personalized learning designed around your specific goals, challenges or skill gaps.",
     href: "/programs/one-on-one-training",
-    ctaLabel: "Enquire about 1-on-1",
+    ctaLabel: "Inquire about 1-on-1",
   },
   {
     title: "Team & Organization Programs",
-    meta: "For teams, organisations and groups",
-    body: "Tailored learning experiences designed around the needs of teams, organisations and groups.",
+    meta: "For teams, organizations and groups",
+    body: "Tailored learning experiences designed around the needs of teams, organizations and groups.",
     href: "/programs/one-on-one-training",
-    ctaLabel: "Enquire about team training",
+    ctaLabel: "Inquire about team training",
   },
   {
     title: "Self-paced courses",
@@ -218,7 +218,7 @@ export const homepageOutcomes: { title: string; body: string }[] = [
   },
   {
     title: "Practical application",
-    body: "Practise through guided briefs and clearly labelled simulations.",
+    body: "Practice through guided briefs and clearly labeled simulations.",
   },
   {
     title: "An AI-powered workflow",
@@ -274,14 +274,14 @@ export const homepagePartners = {
     },
     {
       title: "Simulations",
-      body: "Provide clearly labelled marketing briefs, challenges or scenarios for learners to solve.",
+      body: "Provide clearly labeled marketing briefs, challenges or scenarios for learners to solve.",
       href: "/partnerships",
       ctaLabel: "Create a simulation",
     },
   ],
   agency: {
     title: "Think Social Agency",
-    body: "Our agency arm works with brands and organisations on social media, storytelling and content. Enquiries go through Partner With Us.",
+    body: "Our agency arm works with brands and organizations on social media, storytelling and content. Enquiries go through Partner With Us.",
     href: "/partnerships",
     ctaLabel: "Partner With Us",
   },
@@ -296,7 +296,7 @@ export const ecosystem: { title: string; body: string; kicker?: string }[] = [
   },
   {
     title: "Apply",
-    body: "Practise through exercises, guided briefs, clearly labelled simulations, and portfolio work.",
+    body: "Practice through exercises, guided briefs, clearly labeled simulations, and portfolio work.",
   },
   {
     title: "Grow",
@@ -317,7 +317,7 @@ export const memberJourney = [
   },
   {
     step: "02",
-    title: "Practise through projects",
+    title: "Practice through projects",
     body: "Assignments and client-style work that produce proof, not only notes.",
   },
   {
@@ -515,8 +515,8 @@ export const curriculum = [
   },
   {
     week: "04",
-    title: "Analytics, Optimisation and Reporting",
-    topics: ["Measurement", "Optimisation", "Reporting"],
+    title: "Analytics, Optimization and Reporting",
+    topics: ["Measurement", "Optimization", "Reporting"],
   },
   {
     week: "05",
@@ -541,7 +541,7 @@ export const cohortFaqs = [
   },
   {
     q: "Do I need prior experience?",
-    a: "No. Curiosity, consistency, and a willingness to practise matter more than job titles.",
+    a: "No. Curiosity, consistency, and a willingness to practice matter more than job titles.",
   },
   {
     q: "When do I pay?",
@@ -549,7 +549,7 @@ export const cohortFaqs = [
   },
   {
     q: "Is employment guaranteed?",
-    a: "No. We help you practise marketing work and stay connected to selected opportunities when available. We do not promise a job.",
+    a: "No. We help you practice marketing work and stay connected to selected opportunities when available. We do not promise a job.",
   },
   {
     q: "How do self-paced courses work?",

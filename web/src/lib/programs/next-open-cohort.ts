@@ -1,5 +1,5 @@
 /**
- * Pure cohort rules for the public programs catalogue. No Payload import.
+ * Pure cohort rules for the public programs catalog. No Payload import.
  * Money is integer minor units (pesewas, GH₵1 = 100).
  */
 
@@ -58,7 +58,7 @@ export const DEFAULT_CURRENCY = "GHS";
 
 /**
  * Seats still available in a cohort. This is the ONLY place seats-left is
- * computed. Phase 1C subtracts active enrolments here; until then it is the
+ * computed. Phase 1C subtracts active enrollments here; until then it is the
  * seat total.
  */
 export function seatsLeft(cohort: Pick<CohortInput, "seats">): number {

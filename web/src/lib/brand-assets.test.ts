@@ -27,7 +27,7 @@ describe("TSA brand assets (T12)", () => {
     expect(existsSync(join(root, "public/brand/logo-blue.png"))).toBe(false);
   });
 
-  it("uses brand blue #2b4c7f for the PWA manifest colours", () => {
+  it("uses brand blue #2b4c7f for the PWA manifest colors", () => {
     const m = manifest();
     expect(m.theme_color).toBe("#2b4c7f");
     expect(m.background_color).toBe("#2b4c7f");

@@ -171,8 +171,8 @@ Built a premium marketing-community website for Social Marketers Network — Nex
 
 ## Spoken / on-screen narration (≈ 90–120s)
 
-1. **Home** — Open on the cinematic hero. Call out the brand-led first viewport, photo gallery, and scroll-driven story sections (credibility → programmes → ecosystem → CTA).
-2. **Programmes** — Show the programme hub, then drill into the flagship cohort and self-paced courses.
+1. **Home** — Open on the cinematic hero. Call out the brand-led first viewport, photo gallery, and scroll-driven story sections (credibility → programs → ecosystem → CTA).
+2. **Programs** — Show the program hub, then drill into the flagship cohort and self-paced courses.
 3. **Learning** — Pass through free resources, insights, and mentorship — the content/learning funnel.
 4. **Community** — WhatsApp community, events, and member stories as social proof.
 5. **Employers & About** — B2B employers page and mission/about positioning.
@@ -184,7 +184,7 @@ ${chapters.map((c) => `- **${c.name}** — \`${c.path}\` (~${c.seconds}s)`).join
 
 ## Suggested portfolio caption
 
-> End-to-end marketing site for a professional learning network: motion-led homepage, programme pages, content hubs, community proof, and conversion flows — powered by Next.js + Payload CMS.
+> End-to-end marketing site for a professional learning network: motion-led homepage, program pages, content hubs, community proof, and conversion flows — powered by Next.js + Payload CMS.
 
 ## Tech to mention
 

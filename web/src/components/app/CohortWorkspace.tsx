@@ -186,7 +186,7 @@ export function CohortWorkspace({ workspace }: { workspace: CohortWorkspaceData 
             ))}
           </div>
         ) : (
-          <p className="mt-3 text-sm text-text-3">Cohort members will appear here as they enrol.</p>
+          <p className="mt-3 text-sm text-text-3">Cohort members will appear here as they enroll.</p>
         )}
       </Card>
     </div>

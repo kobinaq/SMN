@@ -14,7 +14,7 @@ describe("normalizeCredentialCode", () => {
     expect(runHook(normalizeCredentialCode, "\tSmn-Demo-001\n")).toBe("SMN-DEMO-001");
   });
 
-  it("leaves an already normalised code unchanged", () => {
+  it("leaves an already normalized code unchanged", () => {
     expect(runHook(normalizeCredentialCode, "SMN-DEMO-001")).toBe("SMN-DEMO-001");
   });
 

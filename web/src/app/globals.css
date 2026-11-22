@@ -508,7 +508,7 @@ button {
 /* ==========================================================================
    Marketing site — studio scale
    The public site carries a louder voice than the portal: oversized display
-   type, bands of flat colour, and visible rules. These are the pieces of that
+   type, bands of flat color, and visible rules. These are the pieces of that
    voice that belong in CSS rather than in a component, because they are
    either typographic scales or things Tailwind cannot express cleanly.
    ========================================================================== */
@@ -657,7 +657,7 @@ button {
   }
 }
 
-/* Link that underlines from the leading edge on hover — quieter than a colour
+/* Link that underlines from the leading edge on hover — quieter than a color
    change and it survives on any band. */
 .link-wipe {
   background-image: linear-gradient(currentColor, currentColor);

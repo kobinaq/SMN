@@ -99,6 +99,6 @@ export function decideDeployMigration(env) {
     };
   }
 
-  const loggedId = parsed.endpointId?.startsWith("ep-") ? parsed.endpointId : "unrecognised";
+  const loggedId = parsed.endpointId?.startsWith("ep-") ? parsed.endpointId : "unrecognized";
   return previewRefusal(`Endpoint id ${loggedId} is not the dev database.`);
 }

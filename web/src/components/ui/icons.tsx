@@ -54,6 +54,7 @@ import {
   Ticket as PhosphorTicket,
   Trash as PhosphorTrash,
   User as PhosphorUser,
+  UserCircle as PhosphorUserCircle,
   Users as PhosphorUsers,
   VideoCamera as PhosphorVideoCamera,
   Wrench as PhosphorWrench,
@@ -135,6 +136,7 @@ export const Sparkles = phosphor(PhosphorSparkle);
 export const Target = phosphor(PhosphorTarget);
 export const Ticket = phosphor(PhosphorTicket);
 export const Trash2 = phosphor(PhosphorTrash);
+export const UserCircle = phosphor(PhosphorUserCircle);
 export const UserRound = phosphor(PhosphorUser);
 export const Users = phosphor(PhosphorUsers);
 export const Video = phosphor(PhosphorVideoCamera);

@@ -84,7 +84,7 @@ export default function AgencyPage() {
             successMessage={agencyEnquiry.success}
             fields={[
               { name: "name", label: "Name", kind: "text", autoComplete: "name", api: "name" },
-              { name: "organisation", label: "Business/organisation", kind: "text", autoComplete: "organization", api: "organisation" },
+              { name: "organisation", label: "Business/organization", kind: "text", autoComplete: "organization", api: "organisation" },
               { name: "email", label: "Work email", kind: "email", autoComplete: "email", api: "email" },
               { name: "links", label: "Website or social media links", kind: "text" },
               { name: "support", label: "Support required", kind: "text" },

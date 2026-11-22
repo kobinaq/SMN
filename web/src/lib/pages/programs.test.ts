@@ -6,8 +6,8 @@ describe("Programs copy", () => {
   it("keeps the three offers and their public URLs", () => {
     expect(programs.programs.map((program) => [program.title, program.href])).toEqual([
       ["Social Media Marketing Program", "/programs/social-media-marketing"],
-      ["Specialised One-on-One Training", "/programs/one-on-one-training"],
-      ["Organisational Training", "/programs/organisational-training"],
+      ["Specialized One-on-One Training", "/programs/one-on-one-training"],
+      ["Organizational Training", "/programs/organisational-training"],
     ]);
   });
 

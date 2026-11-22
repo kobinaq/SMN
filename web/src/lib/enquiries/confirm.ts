@@ -14,7 +14,7 @@ export function enquiryConfirmationEnabled(type: EnquiryType, env: EnvSource = p
 const topic: Record<Exclude<EnquiryType, "newsletter">, string> = {
   "programme-social-media-marketing": "the Social Media Marketing cohort",
   "one-on-one-training": "One-on-One Training",
-  "organisational-training": "Specialised Marketing Workshops",
+  "organisational-training": "Specialized Marketing Workshops",
   partnership: "partnering with us",
   contact: "your message",
 };

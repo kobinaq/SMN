@@ -1,5 +1,5 @@
 /**
- * Span for the last row of a gap-coloured definition grid.
+ * Span for the last row of a gap-colored definition grid.
  * An odd count in 2 columns otherwise leaves the container background
  * showing through as an empty cell. Below `md` the grid is one column,
  * so these classes do not apply.

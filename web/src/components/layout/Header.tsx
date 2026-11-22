@@ -9,7 +9,7 @@ import { BrandLogo } from "@/components/layout/BrandLogo";
 import { useSiteSettings } from "@/components/layout/SiteSettingsProvider";
 import { nav } from "@/lib/site";
 import { cta } from "@/lib/cta";
-import { Button } from "@/components/ui/Button";
+import { MemberSignInIcon } from "@/components/layout/MemberSignInIcon";
 import { cn } from "@/lib/utils";
 import { trackEvent } from "@/lib/analytics";
 import { getFocusableElements, trapTabKey } from "@/lib/focus-trap";
@@ -171,9 +171,14 @@ export function Header() {
             })}
           </nav>
           <div className="mt-auto flex flex-col gap-3 pt-8" onClick={() => setOpen(false)}>
-            <Button href={cta.memberSignIn.href} variant="ghost" className="w-full">
-              {cta.memberSignIn.label}
-            </Button>
+            <div className="flex justify-center">
+              <MemberSignInIcon
+                href={cta.memberSignIn.href}
+                tooltipSide="top"
+                tone="ink"
+                onClick={() => trackEvent("member_signin_click", { location: "mobile_nav" })}
+              />
+            </div>
             {site.whatsappInvite ? (
               <a
                 href={site.whatsappInvite}
@@ -203,7 +208,10 @@ export function Header() {
           tone === "light" && "header-on-dark",
           scrolled || open
             ? "border-b border-edge-subtle bg-canvas/90 backdrop-blur-xl"
-            : "bg-transparent",
+            : // Match the hero fill so contrast tools see light nav on navy, not the page canvas.
+              tone === "light"
+              ? "bg-near-black"
+              : "bg-transparent",
         )}
       >
         {site.announcementBanner ? (
@@ -290,14 +298,12 @@ export function Header() {
           </nav>
 
           <div className="hidden items-center gap-2 lg:flex">
-            <Button
+            <MemberSignInIcon
               href={cta.memberSignIn.href}
-              variant="ghost"
-              className="px-3 py-2 text-text-2"
+              tooltipAlign="end"
+              tone={tone}
               onClick={() => trackEvent("member_signin_click", { location: "header" })}
-            >
-              {cta.memberSignIn.label}
-            </Button>
+            />
           </div>
 
           <div className="relative z-10 flex items-center gap-2 lg:hidden">

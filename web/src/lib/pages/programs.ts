@@ -7,12 +7,12 @@
 export const programsSeo = {
   title: "Social Media Marketing Programs & Training | Think Social Academy",
   description:
-    "Explore social media marketing training at Think Social Academy, including the core program, specialised one-on-one training and tailored organisational programs.",
+    "Explore social media marketing training at Think Social Academy, including the core program, specialized one-on-one training and tailored organizational programs.",
 } as const;
 
 export const programsHero = {
   title: "Find the right learning experience for your next step.",
-  lede: "Whether you are starting out, developing specialised skills or equipping your team, Think Social Academy offers practical learning experiences built around real-world application.",
+  lede: "Whether you are starting out, developing specialized skills or equipping your team, Think Social Academy offers practical learning experiences built around real-world application.",
   ctaLabel: "Explore our programs",
   ctaHref: "#programs",
 } as const;
@@ -44,7 +44,7 @@ export const socialMediaProgram: ProgramCopy = {
   title: "Social Media Marketing Program",
   paragraphs: [
     "Build the skills to plan, manage and deliver results for any brand or business.",
-    "This structured learning program equips beginners, aspiring professionals, practising social media marketers and business owners with the strategic and practical skills required to understand, plan and manage brands effectively.",
+    "This structured learning program equips beginners, aspiring professionals, practicing social media marketers and business owners with the strategic and practical skills required to understand, plan and manage brands effectively.",
   ],
   sections: [
     {
@@ -52,7 +52,7 @@ export const socialMediaProgram: ProgramCopy = {
       items: [
         "Beginners looking to build a strong foundation in social media marketing.",
         "Students and graduates preparing to pursue opportunities in the field.",
-        "Practising social media marketers looking to strengthen their approach.",
+        "Practicing social media marketers looking to strengthen their approach.",
         "Business owners who want to understand and apply social media marketing to their businesses.",
       ],
     },
@@ -81,10 +81,10 @@ export const oneOnOneProgram: ProgramCopy = {
   kind: "one-on-one",
   id: "one-on-one-training",
   href: "/programs/one-on-one-training",
-  descriptor: "Personalised • Focused • Flexible",
-  title: "Specialised One-on-One Training",
+  descriptor: "Personalized • Focused • Flexible",
+  title: "Specialized One-on-One Training",
   paragraphs: [
-    "Not every learning need fits a cohort program. Our specialised one-on-one training is designed around your goals, experience and specific development needs. Together, we identify the skills you want to strengthen and shape a focused learning experience around them.",
+    "Not every learning need fits a cohort program. Our specialized one-on-one training is designed around your goals, experience and specific development needs. Together, we identify the skills you want to strengthen and shape a focused learning experience around them.",
   ],
   sections: [
     {
@@ -117,7 +117,7 @@ export const oneOnOneProgram: ProgramCopy = {
       ],
     },
   ],
-  ctaLabel: "Enquire about one-on-one training",
+  ctaLabel: "Inquire about one-on-one training",
 };
 
 export const workshopProgram: ProgramCopy = {
@@ -125,9 +125,9 @@ export const workshopProgram: ProgramCopy = {
   id: "organisational-training",
   href: "/programs/organisational-training",
   descriptor: "Tailored • Practical • Team-focused",
-  title: "Organisational Training",
+  title: "Organizational Training",
   paragraphs: [
-    "Our specialised workshops are hands-on, instructor-led training experiences developed for teams, groups, business owners in specific industries, communities or organisations.",
+    "Our specialized workshops are hands-on, instructor-led training experiences developed for teams, groups, business owners in specific industries, communities or organizations.",
     "Each workshop is designed around the audience's learning needs, objectives and context. Participants receive focused instruction, practical guidance and opportunities to apply what they learn with an instructor supporting the learning process.",
     "A workshop could be designed for schools, business owners in a particular industry, women entrepreneurs, fashion students, professional groups, teams or institutions looking to develop specific social media marketing skills.",
   ],
@@ -138,7 +138,7 @@ export const workshopProgram: ProgramCopy = {
         "Business owners and entrepreneurs.",
         "Professional and industry groups.",
         "Students and learning communities.",
-        "Teams and organisations.",
+        "Teams and organizations.",
         "Institutions and development initiatives.",
       ],
     },
@@ -147,7 +147,7 @@ export const workshopProgram: ProgramCopy = {
       body: "A practical handbook tailored to your needs",
     },
   ],
-  ctaLabel: "Discuss organisational training",
+  ctaLabel: "Discuss organizational training",
 };
 
 export const programs = [socialMediaProgram, oneOnOneProgram, workshopProgram] as const;
@@ -167,7 +167,7 @@ export const programFaqs = [
   {
     question: "Do I need prior experience to join?",
     answer:
-      "The Social Media Marketing Program is designed to accommodate beginners. Requirements for specialised and organisational training depend on the learning brief.",
+      "The Social Media Marketing Program is designed to accommodate beginners. Requirements for specialized and organizational training depend on the learning brief.",
   },
   {
     question: "Are the programs delivered online or in person?",
@@ -185,7 +185,7 @@ export const programFaqs = [
       "Certificate availability and completion requirements should be stated on each program page once confirmed by TSA.",
   },
   {
-    question: "How do I enrol or enquire?",
+    question: "How do I enroll or inquire?",
     answer:
       "Use the relevant program call to action to register interest or submit an enquiry. TSA will provide the next steps.",
   },

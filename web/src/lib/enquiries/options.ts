@@ -14,9 +14,9 @@ export const enquiryStatuses = ["new", "in-progress", "closed"] as const;
 export type EnquiryStatus = (typeof enquiryStatuses)[number];
 
 export const enquiryTypeLabels: Record<EnquiryType, string> = {
-  "programme-social-media-marketing": "Social media marketing programme",
+  "programme-social-media-marketing": "Social media marketing program",
   "one-on-one-training": "One-on-one training",
-  "organisational-training": "Organisational training",
+  "organisational-training": "Organizational training",
   partnership: "Partnership",
   contact: "Contact",
   newsletter: "Newsletter",

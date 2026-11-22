@@ -20,7 +20,7 @@ export const whatsappUpdatesLabel = "Also get TSA updates on WhatsApp";
 export const signupCopy = {
   metaTitle: "Create account",
   metaDescription:
-    "Join Think Social Academy. Create your free TSA account to learn, practise and stay connected.",
+    "Join Think Social Academy. Create your free TSA account to learn, practice and stay connected.",
   title: "Join TSA",
   subtitle:
     "Create your free TSA account. It is your home for learning, practical work and TSA updates.",
@@ -57,7 +57,7 @@ export const accountIncludes = [
   },
   {
     title: "Apply",
-    body: "Practise with guided briefs, exercises and clearly labelled simulations, depending on your program.",
+    body: "Practice with guided briefs, exercises and clearly labeled simulations, depending on your program.",
   },
   {
     title: "Grow",
@@ -121,7 +121,7 @@ export const firstRunAreas = [
   {
     key: "apply",
     title: "Apply",
-    body: "Practise on guided briefs and clearly labelled simulations, then keep the work in your portfolio.",
+    body: "Practice on guided briefs and clearly labeled simulations, then keep the work in your portfolio.",
     href: "/app/portfolio",
     cta: "Open Portfolio",
   },
