@@ -145,19 +145,33 @@ export function HomeStory({ children }: { children: React.ReactNode }) {
         );
       });
 
-      // Soft section-to-section wash
+      // One-way entrance. A scrub that returns to 0.55 leaves body copy
+      // under the contrast threshold after the reader scrolls back up.
+      // Anything already on screen stays at full opacity.
       el.querySelectorAll<HTMLElement>("[data-section-fade]").forEach((section) => {
+        gsap.set(section, { autoAlpha: 1 });
+        const top = section.getBoundingClientRect().top;
+        if (top < window.innerHeight * 0.9) return;
+
         gsap.fromTo(
           section,
           { autoAlpha: 0.55 },
           {
             autoAlpha: 1,
-            ease: "none",
+            duration: 0.6,
+            ease: "power1.out",
+            immediateRender: false,
             scrollTrigger: {
               trigger: section,
-              start: "top 90%",
-              end: "top 40%",
-              scrub: true,
+              start: "top 88%",
+              toggleActions: "play none none none",
+              once: true,
+              onLeaveBack: () => {
+                gsap.set(section, { autoAlpha: 1 });
+              },
+            },
+            onComplete: () => {
+              gsap.set(section, { autoAlpha: 1 });
             },
           },
         );

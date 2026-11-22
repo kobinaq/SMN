@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowRight } from "@/components/ui/icons";
+import { definitionCellSpan } from "@/lib/definition-span";
 import { cn } from "@/lib/utils";
 
 /**
@@ -328,8 +329,8 @@ export function DefinitionGrid({
         className,
       )}
     >
-      {items.map((item) => (
-        <div key={item.title} className="bg-canvas p-7">
+      {items.map((item, index) => (
+        <div key={item.title} className={cn("bg-canvas p-7", definitionCellSpan(index, items.length, columns))}>
           <h3 className="font-display text-xl text-text-1">{item.title}</h3>
           <div className="mt-3 text-sm leading-relaxed text-text-2">{item.body}</div>
         </div>

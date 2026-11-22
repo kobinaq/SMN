@@ -543,6 +543,35 @@ button {
   font-variant-numeric: tabular-nums;
 }
 
+/* Transparent header sitting on the dark home hero. Same token override as
+   .band-blue: children keep using text-text-* and border-edge, and the
+   variables resolve here. Present on the server render so the first paint
+   is already light. */
+.header-on-dark {
+  --text-1: var(--off-white);
+  --text-2: color-mix(in srgb, var(--off-white) 88%, var(--charcoal));
+  --text-3: color-mix(in srgb, var(--off-white) 74%, var(--charcoal));
+  --edge: color-mix(in srgb, var(--off-white) 62%, transparent);
+  --edge-subtle: color-mix(in srgb, var(--off-white) 32%, transparent);
+  --inset: color-mix(in srgb, var(--off-white) 14%, transparent);
+  --accent: var(--off-white);
+}
+
+/* The photo fan is a fixed pixel cluster. On a short laptop it is scaled
+   so it stays inside the flexible stage instead of covering the buttons. */
+@media (min-width: 1024px) and (max-height: 820px) {
+  .hero-fan {
+    transform: scale(0.82);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-section-fade] {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
+
 /* Inverted band. Overriding the text ramp and edges here rather than in every
    child is what lets the same card markup sit on ink or on paper: the tokens
    resolve at the point of use, so children need no light-mode variants. */
