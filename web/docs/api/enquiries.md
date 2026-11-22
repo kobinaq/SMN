@@ -100,6 +100,10 @@ Every stored enquiry also sends a plain-text confirmation to the sender's `email
 
 It promises a reply within 48 hours, quotes their message back (each line prefixed with `> `) and signs off with the site name. `newsletter` gets a short "you're subscribed" note with no 48-hour promise.
 
+The quoted message leaves out the leading `Enquiry type: ...` line (and the blank lines after it) that the contact form adds, so it shows only what the sender wrote. If nothing else remains, the quote is omitted. The admin notification and the stored message keep the full text.
+
+The subject is a fixed string and the greeting name is collapsed to a single line. Confirmations carry a `Reply-To` header set to the address the notification goes to for that type (`ENQUIRY_NOTIFY_EMAIL_<TYPE>`, else `ENQUIRY_NOTIFY_EMAIL`), so replies reach the team. With neither set, no `Reply-To` is added. `sendEmail` refuses any `to`, `replyTo` or `subject` that contains a line break.
+
 Confirmations are on by default. Set the matching variable to `false`, `0`, `off` or `no` (case-insensitive) to turn one type off:
 
 - `ENQUIRY_CONFIRM_PROGRAMME_SOCIAL_MEDIA_MARKETING`

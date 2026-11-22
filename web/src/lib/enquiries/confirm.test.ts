@@ -8,7 +8,9 @@ vi.mock("resend", () => ({
   },
 }));
 
-import { enquiryConfirmation, enquiryConfirmationEnabled } from "@/lib/enquiries/confirm";
+import { sendEmail } from "@/lib/email";
+import { enquiryConfirmation, enquiryConfirmationEnabled, senderMessage } from "@/lib/enquiries/confirm";
+import { parseEnquiryBody } from "@/lib/enquiries/schema";
 import { handleEnquiry } from "@/lib/enquiries/handle";
 import { enquiryConfirmEnvByType, enquiryTypes, type EnquiryType } from "@/lib/enquiries/options";
 import type { StoredEnquiry } from "@/lib/enquiries/notify";
@@ -167,6 +169,143 @@ describe("send functions", () => {
       },
     );
     expect(response.status).toBe(201);
+    expect(sent).not.toHaveBeenCalled();
+  });
+});
+
+describe("Reply-To", () => {
+  const configure = () => {
+    vi.stubEnv("RESEND_API_KEY", "key");
+    vi.stubEnv("RESEND_FROM", "Academy <hello@example.org>");
+    vi.stubEnv("ENQUIRY_NOTIFY_EMAIL", "");
+    vi.stubEnv("ENQUIRY_NOTIFY_EMAIL_CONTACT", "");
+  };
+
+  it("replies to the shared notification address", async () => {
+    configure();
+    vi.stubEnv("ENQUIRY_NOTIFY_EMAIL", "ops@example.org");
+    await confirmEnquiry(contact, 1);
+    expect(sent.mock.calls[0][0]).toMatchObject({ to: "ada@example.com", replyTo: "ops@example.org" });
+  });
+
+  it("prefers the per-type override", async () => {
+    configure();
+    vi.stubEnv("ENQUIRY_NOTIFY_EMAIL", "ops@example.org");
+    vi.stubEnv("ENQUIRY_NOTIFY_EMAIL_CONTACT", "contact@example.org");
+    await confirmEnquiry(contact, 1);
+    expect(sent.mock.calls[0][0]).toMatchObject({ replyTo: "contact@example.org" });
+  });
+
+  it("has no replyTo key when no notification address is set", async () => {
+    configure();
+    await confirmEnquiry(contact, 1);
+    expect(sent).toHaveBeenCalledTimes(1);
+    expect(sent.mock.calls[0][0]).not.toHaveProperty("replyTo");
+  });
+
+  it("does not add replyTo to the admin notice", async () => {
+    configure();
+    vi.stubEnv("ENQUIRY_NOTIFY_EMAIL", "ops@example.org");
+    await notifyEnquiry(contact, 1);
+    expect(sent.mock.calls[0][0]).not.toHaveProperty("replyTo");
+  });
+});
+
+describe("senderMessage", () => {
+  it("strips the type prefix and the blank line after it", () => {
+    expect(senderMessage("Enquiry type: Pricing\n\nHow much?")).toBe("How much?");
+  });
+  it("tolerates CRLF", () => {
+    expect(senderMessage("Enquiry type: Pricing\r\n\r\nHow much?\r\nThanks")).toBe("How much?\r\nThanks");
+  });
+  it("leaves text without the prefix unchanged", () => {
+    expect(senderMessage("How much?")).toBe("How much?");
+  });
+  it("returns empty when only the prefix was sent", () => {
+    expect(senderMessage("Enquiry type: Pricing\n\n")).toBe("");
+    expect(senderMessage("Enquiry type: Pricing")).toBe("");
+  });
+  it("keeps 'Enquiry type:' when it appears later", () => {
+    const text = "Hello.\nEnquiry type: mine";
+    expect(senderMessage(text)).toBe(text);
+  });
+  it("quotes only the sender's words in the confirmation", () => {
+    const { text } = enquiryConfirmation(record("contact", { message: "Enquiry type: Pricing\n\nHow much?" }));
+    expect(text).toContain("> How much?");
+    expect(text).not.toContain("Enquiry type:");
+  });
+  it("omits the quoted block when nothing remains", () => {
+    const { text } = enquiryConfirmation(record("contact", { message: "Enquiry type: Pricing\n\n" }));
+    expect(text).not.toContain("For your records");
+    expect(text).not.toContain(">");
+  });
+});
+
+describe("header safety", () => {
+  it("keeps the greeting on one line and the subject fixed", () => {
+    const hostile = enquiryConfirmation(record("contact", { name: "Ada\r\nBcc: x@evil.test" }));
+    const plain = enquiryConfirmation(record("contact"));
+    expect(hostile.text.split("\n")[0]).toBe("Dear Ada Bcc: x@evil.test,");
+    expect(hostile.subject).toBe(plain.subject);
+  });
+
+  it("rejects emails containing line breaks", () => {
+    for (const email of ["a@b.com\r\nBcc: c@d.com", "a@b.com\nBcc: c@d.com", "a\n@b.com"]) {
+      expect(parseEnquiryBody({ type: "contact", email, message: "Hi" }).ok).toBe(false);
+    }
+  });
+
+  it.each([
+    ["to", { to: "a@b.com\nBcc: c@d.com", subject: "s", text: "t" }],
+    ["replyTo", { to: "a@b.com", replyTo: "a@b.com\r\nBcc: c@d.com", subject: "s", text: "t" }],
+    ["subject", { to: "a@b.com", subject: "s\r\nBcc: c@d.com", text: "t" }],
+  ])("sendEmail refuses a line break in %s", async (_field, message) => {
+    vi.stubEnv("RESEND_API_KEY", "key");
+    const result = await sendEmail(message);
+    expect(result).toEqual({ ok: false, reason: "error" });
+    expect(sent).not.toHaveBeenCalled();
+    expect(JSON.stringify(vi.mocked(console.warn).mock.calls)).not.toContain("c@d.com");
+  });
+});
+
+describe("newsletter through handleEnquiry", () => {
+  const signup = { type: "newsletter", email: "reader@example.com" };
+  const run = (duplicate: boolean) =>
+    handleEnquiry(
+      new Request("http://localhost/api/enquiries", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(signup),
+      }),
+      {
+        clientKey: () => "c",
+        limit: () => ({ ok: true }),
+        findNewsletterDuplicate: async () => duplicate,
+        create: async () => ({ id: 5 }),
+        notify: notifyEnquiry,
+        confirm: confirmEnquiry,
+        subscribe: async () => undefined,
+      },
+    );
+
+  beforeEach(() => {
+    vi.stubEnv("RESEND_API_KEY", "key");
+    vi.stubEnv("RESEND_FROM", "Academy <hello@example.org>");
+    vi.stubEnv("ENQUIRY_NOTIFY_EMAIL", "");
+    vi.stubEnv("ENQUIRY_NOTIFY_EMAIL_NEWSLETTER", "");
+  });
+
+  it("confirms a new signup to the subscriber", async () => {
+    const response = await run(false);
+    expect(response.status).toBe(201);
+    expect(calls()).toHaveLength(1);
+    expect(calls()[0].to).toBe("reader@example.com");
+    expect(calls()[0].subject).toBe("You're subscribed to Think Social Academy");
+  });
+
+  it("sends nothing for a repeat signup", async () => {
+    const response = await run(true);
+    expect(response.status).toBe(200);
     expect(sent).not.toHaveBeenCalled();
   });
 });
