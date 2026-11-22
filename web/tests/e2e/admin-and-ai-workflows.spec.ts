@@ -1,9 +1,11 @@
 import { expect, test, type Page } from "@playwright/test";
+import { requireStaff, requireMember } from "./auth-credentials";
 
 async function loginStaff(page: Page) {
+  const staff = requireStaff();
   await page.goto("/staff/login");
-  await page.locator('input[name="email"]').fill("staff.demo@smn.example");
-  await page.locator('input[name="password"]').fill("DemoStaff123!");
+  await page.locator('input[name="email"]').fill(staff.email);
+  await page.locator('input[name="password"]').fill(staff.password);
   await Promise.all([
     page.waitForResponse(
       (response) =>
@@ -17,9 +19,10 @@ async function loginStaff(page: Page) {
 }
 
 async function loginMember(page: Page) {
+  const member = requireMember();
   await page.goto("/login");
-  await page.getByPlaceholder("Email").fill("ama.demo@smn.example");
-  await page.getByPlaceholder("Password").fill("DemoMember123!");
+  await page.getByPlaceholder("Email").fill(member.email);
+  await page.getByPlaceholder("Password").fill(member.password);
   await page.getByRole("button", { name: /sign in/i }).click();
   await expect(page).toHaveURL(/\/app/);
 }

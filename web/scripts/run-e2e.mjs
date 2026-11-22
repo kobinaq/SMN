@@ -1,5 +1,6 @@
 import { spawn, spawnSync } from "node:child_process";
 import { rmSync } from "node:fs";
+import { randomBytes } from "node:crypto";
 import { fileURLToPath } from "node:url";
 
 const isWindows = process.platform === "win32";
@@ -8,8 +9,18 @@ const npxCmd = isWindows ? "npx.cmd" : "npx";
 const e2ePort = process.env.PLAYWRIGHT_PORT || String(3100 + (process.pid % 1000));
 const baseURL = process.env.PLAYWRIGHT_BASE_URL || `http://localhost:${e2ePort}`;
 const localDatabasePath = fileURLToPath(new URL(`../payload.e2e-${process.pid}.db`, import.meta.url));
+const isLocalRun = !process.env.PLAYWRIGHT_BASE_URL;
+// Against a remote base URL we never invent credentials: login specs skip when unset.
+const genPassword = () => (isLocalRun ? randomBytes(18).toString("base64url") : "");
+const localEmail = (value) => (isLocalRun ? value : "");
 const e2eEnv = {
   ...process.env,
+  // Disposable local fixtures: use provided values (e.g. CI secrets) or generate per run.
+  E2E_STAFF_EMAIL: process.env.E2E_STAFF_EMAIL || process.env.DEMO_SEED_STAFF_EMAIL || localEmail("staff.e2e@example.com"),
+  E2E_STAFF_PASSWORD: process.env.E2E_STAFF_PASSWORD || process.env.DEMO_SEED_STAFF_PASSWORD || genPassword(),
+  E2E_MEMBER_EMAIL: process.env.E2E_MEMBER_EMAIL || process.env.DEMO_SEED_MEMBER_EMAIL || localEmail("member.e2e@example.com"),
+  E2E_MEMBER_PASSWORD: process.env.E2E_MEMBER_PASSWORD || process.env.DEMO_SEED_MEMBER_PASSWORD || genPassword(),
+  DEMO_SEED_MENTOR_EMAIL: process.env.DEMO_SEED_MENTOR_EMAIL || localEmail("mentor.e2e@example.com"),
   CRON_SECRET: process.env.CRON_SECRET || "e2e-cron-secret",
   DATABASE_URL: process.env.PLAYWRIGHT_DATABASE_URL || `file:./payload.e2e-${process.pid}.db`,
   SITE_URL: baseURL,
@@ -74,7 +85,18 @@ try {
     const pushScript = isPostgresDb ? "db:push" : "db:ensure-sqlite";
     const pushCode = await run(npmCmd, ["run", pushScript], { env: e2eEnv });
     if (pushCode !== 0) throw new Error("Unable to push schema to the disposable E2E database.");
-    const seedCode = await run(npmCmd, ["run", "seed:demo"], { env: e2eEnv });
+    // Only this disposable-DB branch opts in to demo seeding; never production flags.
+    const seedEnv = {
+      ...e2eEnv,
+      ALLOW_DEMO_SEED: "1",
+      // next build may leave NODE_ENV=production in the parent; the guard refuses that.
+      NODE_ENV: "test",
+      DEMO_SEED_STAFF_EMAIL: e2eEnv.E2E_STAFF_EMAIL,
+      DEMO_SEED_STAFF_PASSWORD: e2eEnv.E2E_STAFF_PASSWORD,
+      DEMO_SEED_MEMBER_EMAIL: e2eEnv.E2E_MEMBER_EMAIL,
+      DEMO_SEED_MEMBER_PASSWORD: e2eEnv.E2E_MEMBER_PASSWORD,
+    };
+    const seedCode = await run(npmCmd, ["run", "seed:demo"], { env: seedEnv });
     if (seedCode !== 0) throw new Error("Unable to seed the disposable E2E database.");
     server = spawn(npmCmd, ["run", "start", "--", "--hostname", "localhost", "--port", e2ePort], {
       env: e2eEnv,
