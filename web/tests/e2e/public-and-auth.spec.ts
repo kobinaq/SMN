@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { requireStaff } from "./auth-credentials";
 
 test("public home page loads", async ({ page }) => {
   await page.goto("/");
@@ -19,9 +20,10 @@ test("protected portal redirects anonymous users to login", async ({ page }) => 
 
 test("staff lands on the workflow-first staff dashboard", async ({ page }) => {
   test.setTimeout(90_000);
+  const staff = requireStaff();
   await page.goto("/staff/login");
-  await page.locator('input[name="email"]').fill("staff.demo@smn.example");
-  await page.locator('input[name="password"]').fill("DemoStaff123!");
+  await page.locator('input[name="email"]').fill(staff.email);
+  await page.locator('input[name="password"]').fill(staff.password);
   await Promise.all([
     page.waitForResponse(
       (response) =>
