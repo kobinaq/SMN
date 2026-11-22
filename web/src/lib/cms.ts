@@ -11,6 +11,7 @@ import {
   type ResourceItem,
 } from "@/lib/content";
 import { FEE_PENDING_LABEL, formatGhs, formatGhsLabel } from "@/lib/currency";
+import { categoryLabel } from "@/lib/catalogue";
 import { img } from "@/lib/images";
 import { site as fallbackSite, type SiteConfig } from "@/lib/site";
 import { loadPublicList, safePayloadQuery } from "@/lib/payload";
@@ -54,7 +55,7 @@ export async function getCourses(): Promise<CourseItem[]> {
       const courseKey = String(courseRef && typeof courseRef === "object" && "id" in courseRef ? (courseRef as { id: unknown }).id : courseRef);
       lessonCounts.set(courseKey, (lessonCounts.get(courseKey) || 0) + 1);
     }
-    // The catalog at /academy/courses is the self-paced catalogue; live cohorts
+    // The catalog at /academy/courses is the self-paced catalog; live cohorts
     // are sold through /academy/cohort, so exclude them here.
     return result.docs
       .filter((doc) => (doc as { delivery?: string | null }).delivery !== "cohort")
@@ -179,7 +180,7 @@ export async function getPosts(): Promise<BlogPost[]> {
       return {
         slug: doc.slug as string,
         title: doc.title as string,
-        category: doc.category as string,
+        category: categoryLabel(doc.category as string),
         excerpt,
         date: (doc.publishedAt as string)?.slice(0, 10) || "",
         readTime: (doc.readTime as string) || "5 min",
@@ -227,7 +228,7 @@ export async function getResources(): Promise<ResourceItem[]> {
     const result = await payload.find({ collection: "resources", limit: 50, overrideAccess: false });
     return result.docs.map((doc): ResourceItem => {
       const externalUrl = typeof doc.externalUrl === "string" ? doc.externalUrl.trim() : "";
-      const category = typeof doc.category === "string" ? doc.category : "";
+      const category = typeof doc.category === "string" ? categoryLabel(doc.category) : "";
       const format = typeof doc.format === "string" && doc.format.trim() ? doc.format : "Download";
       return {
         slug: doc.slug as string,

@@ -47,7 +47,7 @@ export function cmsFailClosed(): boolean {
   return process.env.NODE_ENV === "production" || Boolean(process.env.VERCEL);
 }
 
-/** Public catalogues. Seed only when shouldUseCms is false. Empty CMS stays empty. */
+/** Public catalogs. Seed only when shouldUseCms is false. Empty CMS stays empty. */
 export async function loadPublicList<T>(
   query: () => Promise<T[]>,
   seed: T[],

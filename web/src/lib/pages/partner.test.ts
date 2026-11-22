@@ -22,7 +22,7 @@ describe("Partner page copy (T8)", () => {
 
   it("labels simulations clearly (Tab 5 section 10)", () => {
     const simulations = partner.partnerAreas.find((area) => area.id === "simulations");
-    expect(simulations?.note).toMatch(/clearly labelled simulations/);
+    expect(simulations?.note).toMatch(/clearly labeled simulations/);
   });
 
   it("presents the Agency as separate from the Academy, with a contact CTA", () => {

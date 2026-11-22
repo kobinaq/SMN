@@ -1,22 +1,47 @@
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { randomBytes } from "node:crypto";
 import { loadEnv } from "./load-env.mjs";
+import { assertNonProdOrExit } from "./lib/assert-non-prod.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 loadEnv(root);
 
+assertNonProdOrExit("seed-demo");
+
 const databaseUrl = process.env.DATABASE_URL || "";
 const looksLikeRemoteDb =
-  /postgres(ql)?:\/\//i.test(databaseUrl) && !/@(localhost|127\.0\.0\.1)([:/]|$)/i.test(databaseUrl);
+  /^postgres(ql)?:\/\//i.test(databaseUrl.trim()) &&
+  !/@(localhost|127\.0\.0\.1)([:/]|$)/i.test(databaseUrl);
 
-if (
-  (process.env.NODE_ENV === "production" || looksLikeRemoteDb) &&
-  process.env.ALLOW_PRODUCTION_SEED !== "true"
-) {
-  throw new Error(
-    "Refusing to seed a remote/production database without ALLOW_PRODUCTION_SEED=true.",
-  );
+function envFirst(...keys) {
+  for (const key of keys) {
+    const value = process.env[key]?.trim();
+    if (value) return value;
+  }
+  return "";
 }
+
+const staffEmail = envFirst("DEMO_SEED_STAFF_EMAIL", "E2E_STAFF_EMAIL");
+const memberEmail = envFirst("DEMO_SEED_MEMBER_EMAIL", "E2E_MEMBER_EMAIL");
+const mentorEmail = envFirst("DEMO_SEED_MENTOR_EMAIL");
+if (!staffEmail || !memberEmail || !mentorEmail) {
+  console.error(
+    "[seed-demo] Missing emails. Set DEMO_SEED_STAFF_EMAIL (or E2E_STAFF_EMAIL), " +
+      "DEMO_SEED_MEMBER_EMAIL (or E2E_MEMBER_EMAIL) and DEMO_SEED_MENTOR_EMAIL.",
+  );
+  process.exit(1);
+}
+
+function passwordFor(label, ...keys) {
+  const fromEnv = keys.map((k) => process.env[k]).find((v) => v);
+  if (fromEnv) return fromEnv;
+  const generated = randomBytes(18).toString("base64url");
+  console.log(`[seed-demo] LOCAL ONLY generated ${label} password (shown once): ${generated}`);
+  return generated;
+}
+const staffPassword = passwordFor("staff", "DEMO_SEED_STAFF_PASSWORD", "E2E_STAFF_PASSWORD", "DEMO_SEED_PASSWORD");
+const memberPassword = passwordFor("member", "DEMO_SEED_MEMBER_PASSWORD", "E2E_MEMBER_PASSWORD", "DEMO_SEED_PASSWORD");
 
 // Local/E2E SQLite needs an explicit schema push now that connect no longer auto-pushes.
 // Never auto-push against remote DBs from seed.
@@ -49,16 +74,16 @@ async function upsert(collection, where, data) {
 
 const staff = await upsert(
   "users",
-  { email: { equals: "staff.demo@smn.example" } },
-  { email: "staff.demo@smn.example", password: "DemoStaff123!", name: "SMN Demo Staff" },
+  { email: { equals: staffEmail } },
+  { email: staffEmail, password: staffPassword, name: "SMN Demo Staff" },
 );
 
 const ama = await upsert(
   "members",
-  { email: { equals: "ama.demo@smn.example" } },
+  { email: { equals: memberEmail } },
   {
-    email: "ama.demo@smn.example",
-    password: "DemoMember123!",
+    email: memberEmail,
+    password: memberPassword,
     name: "Ama Mensah",
     handle: "ama-mensah-demo",
     headline: "Junior social media strategist",
@@ -72,10 +97,10 @@ const ama = await upsert(
 
 const kojo = await upsert(
   "members",
-  { email: { equals: "kojo.demo@smn.example" } },
+  { email: { equals: mentorEmail } },
   {
-    email: "kojo.demo@smn.example",
-    password: "DemoMember123!",
+    email: mentorEmail,
+    password: memberPassword,
     name: "Kojo Boateng",
     handle: "kojo-boateng-demo",
     headline: "Growth marketing lead",

@@ -48,7 +48,7 @@ export const partnerAreas: PartnerArea[] = [
     body: "Give learners realistic marketing challenges, briefs or scenarios to solve as part of their learning experience.",
     examples: ["A marketing brief", "A campaign challenge", "A business scenario", "Feedback on learner work"],
     // Tab 5 section 10: label simulations clearly; no implied paid client work.
-    note: "Learners may work through partner briefs or clearly labelled simulations, depending on the program and opportunities available. These activities are designed to help learners practise applying concepts to realistic marketing challenges.",
+    note: "Learners may work through partner briefs or clearly labeled simulations, depending on the program and opportunities available. These activities are designed to help learners practice applying concepts to realistic marketing challenges.",
     href: "/partnerships",
     ctaLabel: "Create a Simulation",
   },
@@ -58,7 +58,7 @@ export const partnerAreas: PartnerArea[] = [
 export const agency = {
   kicker: "Think Social Agency",
   title: "Social Media, Storytelling & Content",
-  body: "Think Social Agency is the agency arm of Think Social, helping brands and organisations turn what they do into meaningful social media, stories and content. It works separately from the Academy's programs.",
+  body: "Think Social Agency is the agency arm of Think Social, helping brands and organizations turn what they do into meaningful social media, stories and content. It works separately from the Academy's programs.",
   focusAreas: [
     {
       title: "Social Media",
@@ -66,7 +66,7 @@ export const agency = {
     },
     {
       title: "Storytelling",
-      body: "Finding and shaping meaningful stories from the work organisations are doing.",
+      body: "Finding and shaping meaningful stories from the work organizations are doing.",
     },
     {
       title: "Content",
@@ -83,15 +83,15 @@ export const agency = {
 /** Team training lives in the Academy (Team & Organization Programs); point to it, do not duplicate it. */
 export const partnerTeamTraining = {
   title: "Looking for team training?",
-  body: "Tailored training for teams, organisations and groups is part of the Academy's Team & Organization Programs.",
+  body: "Tailored training for teams, organizations and groups is part of the Academy's Team & Organization Programs.",
   href: "/programs/organisational-training",
-  ctaLabel: "Enquire about team training",
+  ctaLabel: "Inquire about team training",
 } as const;
 
 export const partnerClose = {
   kicker: "Something else in mind?",
   title: "Have an idea we haven't listed?",
-  lede: "Partnerships do not always fit neatly into a category. Tell us how your organisation would like to work with TSA and we'll follow up.",
+  lede: "Partnerships do not always fit neatly into a category. Tell us how your organization would like to work with TSA and we'll follow up.",
   href: "/partnerships",
   ctaLabel: "Start a conversation",
 } as const;

@@ -6,7 +6,7 @@ import { loadOrDescribe, type DataFailure } from "@/lib/staff/data-health";
 import { staffAccess } from "@/lib/staff/records";
 
 /**
- * The course catalogue, loaded and summarised once.
+ * The course catalog, loaded and summarised once.
  *
  * Both the self-paced list and the cohort list need the same per-course rollup
  * (module/lesson/session counts, learner totals, publish-readiness), so the
@@ -45,10 +45,10 @@ export async function loadCourseSummaries(
   const access = staffAccess(staff);
 
   // Fetch children once and bucket them locally rather than issuing 4 queries
-  // per course — that fanned out badly as the catalogue grew. Wrapped rather
+  // per course — that fanned out badly as the catalog grew. Wrapped rather
   // than left to throw so a database that predates the code names the problem
   // instead of 500-ing with a message React strips in production.
-  const loaded = await loadOrDescribe("the course catalogue", () =>
+  const loaded = await loadOrDescribe("the course catalog", () =>
     Promise.all([
       payload.find({ collection: "lms-courses", depth: 0, limit: 200, sort: "-updatedAt", ...access }),
       payload.find({ collection: "lms-modules", depth: 0, limit: 2000, ...access }),

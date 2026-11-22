@@ -9,7 +9,7 @@ import { homepageFounder } from "@/lib/pages/home";
 export function FounderStory() {
   return (
     <Band tone="raised" size="lg" fade bordered={false}>
-      <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16 lg:pt-[max(0rem,calc(22.9rem-15.7vw))]">
         <Reveal>
           <div className="relative aspect-[4/5] overflow-hidden" data-parallax-wrap>
             <Image
@@ -25,7 +25,7 @@ export function FounderStory() {
         </Reveal>
 
         <div>
-          <h2 className="font-display display-2 text-text-1">{homepageFounder.heading}</h2>
+          <h2 className="font-display text-[clamp(1.8rem,1.1rem+3.15vw,3.75rem)] leading-[0.96] tracking-[-0.04em] text-text-1">{homepageFounder.heading}</h2>
           <div className="mt-8 max-w-[62ch] space-y-5 text-base leading-relaxed text-text-2">
             {homepageFounder.paragraphs.map((paragraph) => (
               <p key={paragraph.slice(0, 48)}>{paragraph}</p>

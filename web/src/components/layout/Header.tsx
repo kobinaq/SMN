@@ -7,9 +7,9 @@ import { createPortal } from "react-dom";
 import { Menu, X, ChevronDown } from "@/components/ui/icons";
 import { BrandLogo } from "@/components/layout/BrandLogo";
 import { useSiteSettings } from "@/components/layout/SiteSettingsProvider";
-import { nav } from "@/lib/site";
+import { nav as codeNav, type NavItem } from "@/lib/site";
 import { cta } from "@/lib/cta";
-import { Button } from "@/components/ui/Button";
+import { MemberSignInIcon } from "@/components/layout/MemberSignInIcon";
 import { cn } from "@/lib/utils";
 import { trackEvent } from "@/lib/analytics";
 import { getFocusableElements, trapTabKey } from "@/lib/focus-trap";
@@ -21,7 +21,15 @@ function useMounted() {
   return useSyncExternalStore(noopSubscribe, () => true, () => false);
 }
 
-export function Header() {
+type HeaderProps = {
+  /** Menu from the published CMS header. Defaults to the code nav. */
+  items?: readonly NavItem[];
+  /** False when a CMS home page replaces the dark code hero. */
+  darkHomeHero?: boolean;
+};
+
+export function Header({ items, darkHomeHero = true }: HeaderProps = {}) {
+  const nav = items ?? codeNav;
   const site = useSiteSettings();
   const pathname = usePathname() || "/";
   const [open, setOpen] = useState(false);
@@ -171,9 +179,14 @@ export function Header() {
             })}
           </nav>
           <div className="mt-auto flex flex-col gap-3 pt-8" onClick={() => setOpen(false)}>
-            <Button href={cta.memberSignIn.href} variant="ghost" className="w-full">
-              {cta.memberSignIn.label}
-            </Button>
+            <div className="flex justify-center">
+              <MemberSignInIcon
+                href={cta.memberSignIn.href}
+                tooltipSide="top"
+                tone="ink"
+                onClick={() => trackEvent("member_signin_click", { location: "mobile_nav" })}
+              />
+            </div>
             {site.whatsappInvite ? (
               <a
                 href={site.whatsappInvite}
@@ -191,7 +204,7 @@ export function Header() {
       document.body,
     );
 
-  const tone = headerTone(pathname, scrolled, open);
+  const tone = headerTone(pathname, scrolled, open, darkHomeHero);
 
   return (
     <>
@@ -203,7 +216,10 @@ export function Header() {
           tone === "light" && "header-on-dark",
           scrolled || open
             ? "border-b border-edge-subtle bg-canvas/90 backdrop-blur-xl"
-            : "bg-transparent",
+            : // Match the hero fill so contrast tools see light nav on navy, not the page canvas.
+              tone === "light"
+              ? "bg-near-black"
+              : "bg-transparent",
         )}
       >
         {site.announcementBanner ? (
@@ -290,14 +306,12 @@ export function Header() {
           </nav>
 
           <div className="hidden items-center gap-2 lg:flex">
-            <Button
+            <MemberSignInIcon
               href={cta.memberSignIn.href}
-              variant="ghost"
-              className="px-3 py-2 text-text-2"
+              tooltipAlign="end"
+              tone={tone}
               onClick={() => trackEvent("member_signin_click", { location: "header" })}
-            >
-              {cta.memberSignIn.label}
-            </Button>
+            />
           </div>
 
           <div className="relative z-10 flex items-center gap-2 lg:hidden">

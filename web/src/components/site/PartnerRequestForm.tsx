@@ -55,7 +55,7 @@ const REQUESTS = {
     label: "Train a team",
     type: "Training request",
     blurb:
-      "We design specialised training around your team, industry, and needs: from social and AI foundations to analytics and strategy workshops.",
+      "We design specialized training around your team, industry, and needs: from social and AI foundations to analytics and strategy workshops.",
     needs: [
       "Team size, roles, and current level",
       "The capability gap you are trying to close",

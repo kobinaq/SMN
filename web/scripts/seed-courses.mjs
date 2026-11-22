@@ -10,6 +10,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import pg from "pg";
 import { loadEnv } from "./load-env.mjs";
+import { assertNonProdOrExit } from "./lib/assert-non-prod.mjs";
 import { decideSeedTarget, smmCourse, smmSeedSql } from "./seed-courses-lib.mjs";
 
 if (process.argv.includes("--print-sql")) {
@@ -18,6 +19,8 @@ if (process.argv.includes("--print-sql")) {
 }
 
 loadEnv(path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."));
+
+assertNonProdOrExit("seed-courses");
 
 const target = decideSeedTarget(process.env);
 if (!target.ok) {

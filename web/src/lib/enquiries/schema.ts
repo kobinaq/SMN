@@ -27,7 +27,7 @@ export const enquiryBodySchema = z
     ),
     name: optionalText(120, "Name must be 120 characters or fewer."),
     phone: optionalText(40, "Phone must be 40 characters or fewer."),
-    organisation: optionalText(160, "Organisation must be 160 characters or fewer."),
+    organisation: optionalText(160, "Organization must be 160 characters or fewer."),
     message: optionalText(5000, "Message must be 5000 characters or fewer."),
     sourcePage: optionalText(300, "Source page must be 300 characters or fewer."),
   })

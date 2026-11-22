@@ -11,8 +11,9 @@ export const aboutSeo = {
 } as const;
 
 export const aboutHero = {
+  kicker: "About",
   title: "Building stronger social media marketing capabilities.",
-  lede: "Think Social Academy equips individuals and organisations with the practical skills, strategic thinking and knowledge in social media marketing",
+  lede: "Think Social Academy equips individuals and organizations with the practical skills, strategic thinking and knowledge in social media marketing",
   ctaLabel: "Explore our programs",
   ctaHref: "/programs",
 } as const;
@@ -26,7 +27,7 @@ export const aboutFounder = {
   paragraphs: [
     "Think Social Academy was founded by Arielle Adodo, a social media strategist and marketing professional with experience working across lifestyle and consumer brands.",
     "Her experience spans social media management, content strategy, campaign development and marketing. Working across different brands and business contexts shaped her understanding of the skills required to move beyond managing social media pages to delivering meaningful marketing results.",
-    "Through her work with brands and marketing teams, she observed a recurring gap: people could learn platform features and content formats without necessarily developing the strategic foundation needed to make their work effective. They could publish content, but often needed more support to plan strategically, analyse performance and connect their work to business objectives.",
+    "Through her work with brands and marketing teams, she observed a recurring gap: people could learn platform features and content formats without necessarily developing the strategic foundation needed to make their work effective. They could publish content, but often needed more support to plan strategically, analyze performance and connect their work to business objectives.",
     "This informed her decision to establish Think Social Academy: a learning platform designed to bridge the gap between knowledge and practice through structured learning experiences that connect strategy, practical application and professional development.",
   ],
 } as const;
@@ -40,7 +41,7 @@ export const aboutApproach = {
     },
     {
       title: "Application",
-      body: "We prioritise practical knowledge that learners can translate into real work.",
+      body: "We prioritize practical knowledge that learners can translate into real work.",
     },
     {
       title: "Excellence",
@@ -48,7 +49,7 @@ export const aboutApproach = {
     },
     {
       title: "Adaptability",
-      body: "We recognise the changing nature of social media and the importance of staying informed, learning new tools and adapting to emerging technologies.",
+      body: "We recognize the changing nature of social media and the importance of staying informed, learning new tools and adapting to emerging technologies.",
     },
     {
       title: "Opportunity",
@@ -61,9 +62,9 @@ export const aboutAudience = {
   title: "Supporting people and teams at different stages.",
   items: [
     "Beginners, students and graduates building their first foundation in social media marketing.",
-    "Aspiring and practising social media professionals developing their skills and professional capabilities.",
+    "Aspiring and practicing social media professionals developing their skills and professional capabilities.",
     "Business owners who want to make more effective use of social media.",
-    "Businesses, institutions and organisations investing in team learning and development.",
+    "Businesses, institutions and organizations investing in team learning and development.",
   ],
 } as const;
 

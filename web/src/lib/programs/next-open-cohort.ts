@@ -1,5 +1,5 @@
 /**
- * Pure cohort rules for the public programs catalogue. No Payload import.
+ * Pure cohort rules for the public programs catalog. No Payload import.
  * Money is integer minor units (pesewas, GH₵1 = 100).
  */
 
@@ -13,6 +13,8 @@ export type CohortInput = {
   price?: number | null;
   currency?: string | null;
   status?: string | null;
+  /** Server-side only: enrollments holding a seat. Never exposed publicly. */
+  activeEnrollments?: number;
 };
 
 export type CourseInput = {
@@ -56,13 +58,18 @@ export type ProgramsCatalogue = {
 
 export const DEFAULT_CURRENCY = "GHS";
 
+/** Enrollment statuses that hold a seat in a cohort. A paused enrollment keeps its seat. */
+export const SEAT_HOLDING_ENROLLMENT_STATUSES = ["active", "paused"] as const;
+
 /**
- * Seats still available in a cohort. This is the ONLY place seats-left is
- * computed. Phase 1C subtracts active enrolments here; until then it is the
- * seat total.
+ * Seats still available in a cohort: seats minus enrollments that hold a seat
+ * (status in SEAT_HOLDING_ENROLLMENT_STATUSES), never below 0. This is the
+ * ONLY place seats-left is computed.
  */
-export function seatsLeft(cohort: Pick<CohortInput, "seats">): number {
-  return Math.max(0, cohort.seats ?? 0);
+export function seatsLeft(cohort: Pick<CohortInput, "seats">, activeEnrollments = 0): number {
+  const seats = Number.isFinite(cohort.seats) ? (cohort.seats as number) : 0;
+  const taken = Number.isFinite(activeEnrollments) ? Math.max(0, activeEnrollments) : 0;
+  return Math.max(0, seats - taken);
 }
 
 /** Cohort price override, else the course default, else null (not yet priced). */
@@ -81,7 +88,7 @@ export function nextOpenCohort<T extends CohortInput>(cohorts: readonly T[], now
   let best: T | null = null;
   let bestStart = Infinity;
   for (const cohort of cohorts) {
-    if (cohort.status !== "open" || seatsLeft(cohort) <= 0) continue;
+    if (cohort.status !== "open" || seatsLeft(cohort, cohort.activeEnrollments ?? 0) <= 0) continue;
     const start = Date.parse(cohort.startsAt);
     if (Number.isNaN(start) || start <= now.getTime()) continue;
     if (start < bestStart) {

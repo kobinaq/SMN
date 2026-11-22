@@ -60,4 +60,11 @@ jobs:
         run: npm run build
 
       - name: End-to-end smoke tests
+        # Optional secrets; when empty, run-e2e generates disposable local credentials.
+        env:
+          E2E_STAFF_EMAIL: ${{ secrets.E2E_STAFF_EMAIL }}
+          E2E_STAFF_PASSWORD: ${{ secrets.E2E_STAFF_PASSWORD }}
+          E2E_MEMBER_EMAIL: ${{ secrets.E2E_MEMBER_EMAIL }}
+          E2E_MEMBER_PASSWORD: ${{ secrets.E2E_MEMBER_PASSWORD }}
+          PROD_DB_HOSTS: ${{ secrets.PROD_DB_HOSTS }}
         run: npm run test:e2e

@@ -6,7 +6,7 @@ import sharp from "sharp";
  * Favicon, app icon and Apple touch icon from the TSA THINK mark (T12).
  *
  * The mark is a wide wordmark (about 2.95:1), so each icon is a square of
- * brand blue #2b4c7f with the white mark centred and inset by `pad` of the
+ * brand blue #2b4c7f with the white mark centered and inset by `pad` of the
  * side on the left and right. White on blue was chosen over blue on white:
  * the solid square stays visible on both light and dark browser tab bars,
  * and the white letters keep the same 8.6:1 contrast.
@@ -24,8 +24,8 @@ async function squareIcon(size, { pad = 0.1, radius = 0 } = {}) {
   const markPng = await sharp(mark).resize({ width: inner, fit: "inside" }).png().toBuffer();
   const meta = await sharp(markPng).metadata();
   const left = Math.round((size - meta.width) / 2);
-  // Optical centre: the dot over the I sits above the cap height, so nudge
-  // the mark down a touch so the letters, not the dot, read as centred.
+  // Optical center: the dot over the I sits above the cap height, so nudge
+  // the mark down a touch so the letters, not the dot, read as centered.
   const top = Math.round((size - meta.height) / 2 + size * 0.02);
   const bg = Buffer.from(
     `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><rect width="${size}" height="${size}" rx="${radius}" fill="${BLUE}"/></svg>`,

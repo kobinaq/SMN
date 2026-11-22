@@ -1,17 +1,24 @@
 /**
  * End-to-end verification of the staff portal against a running dev server.
  *
- *   npm run seed:demo && npm run dev      # terminal 1
- *   npm run verify:staff                  # terminal 2
+ *   ALLOW_DEMO_SEED=1 npm run seed:demo && npm run dev   # terminal 1 (needs seed emails/passwords)
+ *   npm run verify:staff                                 # terminal 2 (needs E2E_STAFF_EMAIL / E2E_STAFF_PASSWORD)
  *
  * Walks the course index, the create/delete flows, every course-workspace tab,
  * the cohort ops (sessions, attendance, announcements) and every other staff
- * route, asserting behaviour and collecting console errors. Screenshots land in
+ * route, asserting behavior and collecting console errors. Screenshots land in
  * /tmp/staff-shots. It creates and then removes its own QA records, so it is
  * safe to re-run against the demo seed.
  */
 import { chromium } from "playwright";
 import { mkdir } from "node:fs/promises";
+
+const staffEmail = process.env.E2E_STAFF_EMAIL?.trim();
+const staffPassword = process.env.E2E_STAFF_PASSWORD;
+if (!staffEmail || !staffPassword) {
+  console.error("[verify-staff] Set E2E_STAFF_EMAIL and E2E_STAFF_PASSWORD (the seeded staff login) and retry.");
+  process.exit(1);
+}
 
 const base = process.env.BASE_URL || "http://localhost:3000";
 const shotDir = "/tmp/staff-shots";
@@ -41,8 +48,8 @@ async function visit(path, label, shot) {
 // ---------------------------------------------------------------- login
 console.log("\n== AUTH ==");
 await page.goto(`${base}/staff/login`, { waitUntil: "networkidle" });
-await page.fill('input[name="email"]', "staff.demo@smn.example");
-await page.fill('input[name="password"]', "DemoStaff123!");
+await page.fill('input[name="email"]', staffEmail);
+await page.fill('input[name="password"]', staffPassword);
 await page.click('button[type="submit"]');
 await page.waitForURL(/\/staff(?!\/login)/, { timeout: 20000 });
 await page.waitForTimeout(1000);
@@ -189,7 +196,7 @@ await page.fill('textarea[name="summary"]', "Cohort created by the automated sta
 await page.fill('input[name="programKey"]', `qa-cohort-${stamp}`);
 await page.selectOption('select[name="delivery"]', "cohort").catch(async () => {
   // Custom Select renders a button + listbox rather than a native select.
-  await page.locator('label:has-text("Programme type") button').click();
+  await page.locator('label:has-text("Program type") button').click();
   await page.locator('[role="option"]:has-text("Live cohort")').click();
 });
 await page.waitForTimeout(400);

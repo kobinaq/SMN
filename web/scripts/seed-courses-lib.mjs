@@ -35,7 +35,7 @@ export const smmCourse = {
   whoItsFor: [
     "Beginners looking to build a strong foundation in social media marketing.",
     "Students and graduates preparing to pursue opportunities in the field.",
-    "Practising social media marketers looking to strengthen their approach.",
+    "Practicing social media marketers looking to strengthen their approach.",
     "Business owners who want to understand and apply social media marketing to their businesses.",
   ],
 };
@@ -53,7 +53,7 @@ export function decideSeedTarget(env) {
     return { ok: false, reason: "DATABASE_URL could not be parsed." };
   }
   if (parsed.endpointId !== SEED_ENDPOINT_ID) {
-    const shown = parsed.endpointId.startsWith("ep-") ? parsed.endpointId : "unrecognised";
+    const shown = parsed.endpointId.startsWith("ep-") ? parsed.endpointId : "unrecognized";
     return {
       ok: false,
       reason: `Endpoint ${shown} is not the dev database. Seeding runs only against ${SEED_ENDPOINT_ID}.`,

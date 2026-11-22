@@ -5,6 +5,7 @@ import { requireStaff, staffDisplayName, staffRoleLabel } from "@/lib/auth/staff
 import { getPayloadClient } from "@/lib/payload";
 import { getAdminWorkspaceBadges } from "@/lib/admin-dashboard";
 import { probeSchema } from "@/lib/staff/data-health";
+import { isPageEditorEnabled } from "@/lib/page-editor";
 import { canStaff, staffRole } from "@/lib/staff-permissions";
 
 export default async function StaffAppLayout({ children }: { children: React.ReactNode }) {
@@ -62,6 +63,9 @@ export default async function StaffAppLayout({ children }: { children: React.Rea
       { href: "/staff/website/stories", label: "Stories" },
       { href: "/staff/website/settings", label: "Site settings" },
     );
+    if (isPageEditorEnabled()) {
+      links.push({ href: "/admin/collections/pages", label: "Page editor" });
+    }
   } else if (canStaff(staff, "learning")) {
     links.push(
       { href: "/staff/content/resources", label: "Resources" },

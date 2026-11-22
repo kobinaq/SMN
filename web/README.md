@@ -74,6 +74,10 @@ Vercel must use web as the Root Directory and the default Next.js output. Config
 - Payments: Paystack checkout/verification/webhook, payment records, registration/enrollment fulfillment
 - AI: Tutor, Content Studio, and Career Coach behind independent flags
 
+## Page editor
+
+A block-based page editor (pages, header, footer, drafts, live preview) runs outside production only. See `docs/page-editor.md`. `npm run import:pages` (dev/local databases only, `ALLOW_DEMO_SEED=1`) imports the home and about copy and the header and footer into the CMS; outside production a published CMS page is served, production always renders the code pages.
+
 ## Opportunity imports
 
 The protected cron can ingest public Greenhouse, Lever, and Ashby boards. Keep auto-publish off until a source is proven. Applications continue on the employer site; SMN stores member tracking state only.
@@ -81,3 +85,11 @@ The protected cron can ingest public Greenhouse, Lever, and Ashby boards. Keep a
 ## External integrations
 
 Paystack, Resend, R2, Mailchimp, Ahrefs, WhatsApp, Classroom, ATS feeds, and Groq require their documented environment values and separate staging/production smoke. Normal deterministic CI does not contact those services.
+
+## Local demo seed and e2e credentials
+
+`npm run seed:demo` creates fictional demo data on a **local or disposable** database only. It refuses to run unless `ALLOW_DEMO_SEED=1`, and always refuses when `NODE_ENV` or `VERCEL_ENV` is `production` or the `DATABASE_URL` host matches `PROD_DB_HOSTS` (comma-separated hostnames/Neon endpoint ids; set it wherever you hold production connection strings). `seed:courses` uses the same guard.
+
+Account emails come from env (`DEMO_SEED_STAFF_EMAIL`/`E2E_STAFF_EMAIL`, `DEMO_SEED_MEMBER_EMAIL`/`E2E_MEMBER_EMAIL`, `DEMO_SEED_MENTOR_EMAIL`); passwords come from `DEMO_SEED_*_PASSWORD`/`E2E_*_PASSWORD`/`DEMO_SEED_PASSWORD`, or are generated and printed once. See `.env.example`.
+
+Playwright login specs and `npm run verify:staff` read `E2E_STAFF_EMAIL`, `E2E_STAFF_PASSWORD`, `E2E_MEMBER_EMAIL`, `E2E_MEMBER_PASSWORD`; login specs skip when unset. `npm run test:e2e` generates disposable credentials for its local SQLite DB. Previously committed demo passwords were leaked: never reuse them anywhere.

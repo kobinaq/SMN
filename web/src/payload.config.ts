@@ -42,6 +42,9 @@ import { EventRegistrations } from "./collections/EventRegistrations";
 import { Payments } from "./collections/Payments";
 import { SiteSettings } from "./globals/SiteSettings";
 import { OneOnOne } from "./globals/OneOnOne";
+import { Header } from "./globals/Header";
+import { Footer } from "./globals/Footer";
+import { Pages } from "./collections/Pages";
 import { createDbAdapter } from "./lib/db";
 import { validateProductionEnv } from "./lib/env";
 import { getServerURL } from "./lib/server-url";
@@ -149,6 +152,7 @@ export default buildConfig({
     Stories,
     Resources,
     Enquiries,
+    Pages,
   ]).map((collection) => ({
     ...collection,
     // /staff does not use Payload's concurrent-edit locks. Those queries
@@ -158,6 +162,8 @@ export default buildConfig({
   globals: [
     { ...SiteSettings, lockDocuments: false },
     { ...OneOnOne, lockDocuments: false },
+    { ...Header, lockDocuments: false },
+    { ...Footer, lockDocuments: false },
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "smn-dev-secret-change-me-in-production",

@@ -12,6 +12,10 @@ import * as migration_20261030_lms_lessons_resource_fields from './20261030_lms_
 import * as migration_20261030_site_settings_primary_cta_href from './20261030_site_settings_primary_cta_href';
 import * as migration_20261119_161800_enquiries_cms_fields from './20261119_161800_enquiries_cms_fields';
 import * as migration_20261120_140000_courses_cohorts_one_on_one from './20261120_140000_courses_cohorts_one_on_one';
+import * as migration_20261122_115410_phase_1c_enrollments_payments_enquiries from './20261122_115410_phase_1c_enrollments_payments_enquiries';
+import * as migration_20261122_122558_phase_2d_page_editor from './20261122_122558_phase_2d_page_editor';
+import * as migration_20261122_125035_phase_2e_cms_pages_category_value from './20261122_125035_phase_2e_cms_pages_category_value';
+import * as migration_20261122_125036_phase_2e_category_rows from './20261122_125036_phase_2e_category_rows';
 
 export const migrations = [
   {
@@ -83,5 +87,25 @@ export const migrations = [
     up: migration_20261120_140000_courses_cohorts_one_on_one.up,
     down: migration_20261120_140000_courses_cohorts_one_on_one.down,
     name: '20261120_140000_courses_cohorts_one_on_one'
+  },
+  {
+    up: migration_20261122_115410_phase_1c_enrollments_payments_enquiries.up,
+    down: migration_20261122_115410_phase_1c_enrollments_payments_enquiries.down,
+    name: '20261122_115410_phase_1c_enrollments_payments_enquiries'
+  },
+  {
+    up: migration_20261122_122558_phase_2d_page_editor.up,
+    down: migration_20261122_122558_phase_2d_page_editor.down,
+    name: '20261122_122558_phase_2d_page_editor'
+  },
+  {
+    up: migration_20261122_125035_phase_2e_cms_pages_category_value.up,
+    down: migration_20261122_125035_phase_2e_cms_pages_category_value.down,
+    name: '20261122_125035_phase_2e_cms_pages_category_value'
+  },
+  {
+    up: migration_20261122_125036_phase_2e_category_rows.up,
+    down: migration_20261122_125036_phase_2e_category_rows.down,
+    name: '20261122_125036_phase_2e_category_rows'
   },
 ];
