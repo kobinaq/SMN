@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
+import { isPageEditorEnabled } from "@/lib/page-editor";
 
 type Args = {
   params: Promise<{ segments: string[] }>;
@@ -9,8 +10,17 @@ type Args = {
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
+/**
+ * Next gives not-found no route params, so the path cannot be checked here.
+ * It does not need to be: page.tsx redirects every non-allowlisted path, so a
+ * not-found only happens inside the legacy admin or the page editor routes.
+ */
+async function showsPayloadAdmin() {
+  return process.env.STAFF_LEGACY_ADMIN === "true" || isPageEditorEnabled();
+}
+
 export async function generateMetadata(args: Args): Promise<Metadata> {
-  if (process.env.STAFF_LEGACY_ADMIN === "true") {
+  if (await showsPayloadAdmin()) {
     const [{ generatePageMetadata }, config] = await Promise.all([
       import("@payloadcms/next/views"),
       import("@payload-config"),
@@ -21,7 +31,7 @@ export async function generateMetadata(args: Args): Promise<Metadata> {
 }
 
 export default async function LegacyAdminNotFound(args: Args) {
-  if (process.env.STAFF_LEGACY_ADMIN === "true") {
+  if (await showsPayloadAdmin()) {
     const [{ NotFoundPage }, config, importMapModule] = await Promise.all([
       import("@payloadcms/next/views"),
       import("@payload-config"),
