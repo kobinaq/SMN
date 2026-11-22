@@ -58,8 +58,8 @@ export type ProgramsCatalogue = {
 
 export const DEFAULT_CURRENCY = "GHS";
 
-/** Enrollment statuses that hold a seat in a cohort. */
-export const SEAT_HOLDING_ENROLLMENT_STATUSES = ["active"] as const;
+/** Enrollment statuses that hold a seat in a cohort. A paused enrollment keeps its seat. */
+export const SEAT_HOLDING_ENROLLMENT_STATUSES = ["active", "paused"] as const;
 
 /**
  * Seats still available in a cohort: seats minus enrollments that hold a seat

@@ -1,6 +1,6 @@
 import type { Block } from "payload";
 import { linkField } from "@/fields/link";
-import { imageField } from "./shared";
+import { imageField, imagePresetField } from "./shared";
 
 export const CardGrid: Block = {
   slug: "card-grid",
@@ -23,9 +23,12 @@ export const CardGrid: Block = {
       type: "array",
       minRows: 1,
       fields: [
+        { name: "meta", type: "text", admin: { description: "Small label above the title (optional)." } },
         { name: "title", type: "text", required: true },
         { name: "text", type: "textarea" },
+        { name: "audience", type: "text", admin: { description: "Who it is for, shown below the text (optional)." } },
         imageField(),
+        imagePresetField(),
         linkField({ name: "link", required: false, label: "Link (optional)" }),
       ],
     },

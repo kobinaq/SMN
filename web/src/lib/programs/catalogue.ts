@@ -37,7 +37,7 @@ function courseId(course: RawCohort["course"]): string {
   return String(typeof course === "object" ? course.id : course);
 }
 
-/** Tally seat-holding enrollments per cohort id. Callers filter by status in the query. */
+/** Tally seat-holding (active or paused) enrollments per cohort id. Other statuses are ignored. */
 export function countActiveEnrollmentsByCohort(
   enrollments: ReadonlyArray<{ cohort?: number | string | { id: number | string } | null; status?: string | null }>,
 ): Map<string, number> {

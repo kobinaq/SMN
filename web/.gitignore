@@ -51,6 +51,7 @@ yarn-error.log*
 # local schema tooling
 scripts/.payload.config.bundle.mjs
 scripts/.migrations.bundle.mjs
+scripts/.import-pages.bundle.mjs
 
 # ad hoc, dot-prefixed scratch scripts (manual QA/repro, never committed)
 scripts/.*.mjs

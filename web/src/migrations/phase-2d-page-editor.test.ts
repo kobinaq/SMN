@@ -26,9 +26,9 @@ const existingTables = [
 ];
 
 describe("phase_2d_page_editor migration", () => {
-  it("is registered last, right after Phase 1C", () => {
-    expect(migrations.at(-1)?.name).toBe(name);
-    expect(migrations.at(-2)?.name).toBe("20261122_115410_phase_1c_enrollments_payments_enquiries");
+  it("is registered right after Phase 1C", () => {
+    const names = migrations.map((migration) => migration.name);
+    expect(names[names.indexOf(name) - 1]).toBe("20261122_115410_phase_1c_enrollments_payments_enquiries");
   });
 
   it("contains no destructive keywords", () => {

@@ -3,6 +3,7 @@ import { requireStaff } from "@/lib/auth/staff";
 import { getPayloadClient } from "@/lib/payload";
 import { listCollection } from "@/lib/staff/records";
 import { pageTitle } from "@/lib/brand";
+import { categoryLabel } from "@/lib/catalogue";
 
 export const metadata = { title: pageTitle("Resources", { staff: true }) };
 
@@ -29,7 +30,7 @@ export default async function StaffResourcesPage() {
               cells: [
                 doc.title,
                 doc.type,
-                doc.category || "-",
+                doc.category ? categoryLabel(doc.category) : "-",
                 doc.updatedAt ? new Date(doc.updatedAt).toLocaleDateString("en-GH") : "-",
               ],
             }))}

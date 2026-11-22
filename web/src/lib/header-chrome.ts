@@ -2,11 +2,11 @@ export type HeaderTone = "light" | "ink";
 
 /**
  * Transparent header over the dark home hero needs the light logo and light
- * type from the first render. Scroll and the open mobile menu both put a
+ * type from the first render. A CMS home page has a light hero, so the layout turns the dark-hero rule off for it. Scroll and the open mobile menu both put a
  * light bar behind the header, which uses the ink tokens.
  */
-export function headerTone(pathname: string, scrolled: boolean, menuOpen: boolean): HeaderTone {
-  return pathname === "/" && !scrolled && !menuOpen ? "light" : "ink";
+export function headerTone(pathname: string, scrolled: boolean, menuOpen: boolean, darkHomeHero = true): HeaderTone {
+  return darkHomeHero && pathname === "/" && !scrolled && !menuOpen ? "light" : "ink";
 }
 
 export function logoTone(tone: HeaderTone): "white" | "blue" {

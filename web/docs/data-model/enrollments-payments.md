@@ -38,7 +38,7 @@ These are records only. There is no checkout. `fulfillSuccessfulPayment` returns
 
 ## Seats left
 
-`seatsLeft` = cohort `seats` minus enrollments whose status is `active` and whose cohort is that cohort, never below 0. It is computed only in `seatsLeft()` (`src/lib/programs/next-open-cohort.ts`). The catalog counts enrollments with `countActiveEnrollmentsByCohort`. Seat totals and counts are never exposed publicly.
+`seatsLeft` = cohort `seats` minus enrollments whose status is `active` or `paused` (a paused enrollment keeps its seat; cancelled, completed and refunded ones free it) and whose cohort is that cohort, never below 0. It is computed only in `seatsLeft()` (`src/lib/programs/next-open-cohort.ts`). The catalog counts enrollments with `countActiveEnrollmentsByCohort`. Seat totals and counts are never exposed publicly.
 
 ## Enquiries
 

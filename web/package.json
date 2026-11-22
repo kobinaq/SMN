@@ -27,6 +27,7 @@
     "db:check": "node scripts/check-schema.mjs",
     "db:ensure-sqlite": "esbuild src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=scripts/.payload.config.bundle.mjs && node scripts/with-retry.mjs node scripts/ensure-sqlite-schema.mjs",
     "seed:courses": "node scripts/seed-courses.mjs",
+    "import:pages": "esbuild src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=scripts/.payload.config.bundle.mjs && esbuild src/lib/cms-import/run.ts --bundle --platform=node --format=esm --packages=external --outfile=scripts/.import-pages.bundle.mjs && node scripts/import-pages.mjs",
     "seed:demo": "esbuild src/payload.config.ts --bundle --platform=node --format=esm --packages=external --outfile=scripts/.payload.config.bundle.mjs && node scripts/with-retry.mjs node scripts/seed-demo.mjs"
   },
   "dependencies": {

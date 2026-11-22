@@ -1,11 +1,12 @@
 import type { Block } from "payload";
 import { linkFields } from "@/fields/link";
-import { imageField } from "./shared";
+import { imageField, imagePresetField } from "./shared";
 
 export const Hero: Block = {
   slug: "hero",
   labels: { singular: "Hero", plural: "Heroes" },
   fields: [
+    { name: "eyebrow", type: "text", admin: { description: "Small label above the headline (optional)." } },
     { name: "headline", type: "text", required: true },
     { name: "text", type: "textarea" },
     {
@@ -26,5 +27,6 @@ export const Hero: Block = {
       ],
     },
     imageField(),
+    imagePresetField(),
   ],
 };

@@ -76,7 +76,7 @@ Vercel must use web as the Root Directory and the default Next.js output. Config
 
 ## Page editor
 
-A block-based page editor (pages, header, footer, drafts, live preview) runs outside production only. See `docs/page-editor.md`.
+A block-based page editor (pages, header, footer, drafts, live preview) runs outside production only. See `docs/page-editor.md`. `npm run import:pages` (dev/local databases only, `ALLOW_DEMO_SEED=1`) imports the home and about copy and the header and footer into the CMS; outside production a published CMS page is served, production always renders the code pages.
 
 ## Opportunity imports
 
