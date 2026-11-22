@@ -62,7 +62,7 @@ The earliest cohort, by `startsAt`, that meets all of these:
 
 ## Seats left
 
-`seatsLeft` is the cohort's seat total until phase 1C. Phase 1C subtracts active enrollments inside `seatsLeft()` in `src/lib/programs/next-open-cohort.ts`, the only place it is computed. The seat total itself is never returned.
+`seatsLeft` is the cohort's seats minus the enrollments whose status is `active` and whose cohort is that cohort, never below 0. It is computed only by `seatsLeft()` in `src/lib/programs/next-open-cohort.ts`. The seat total and the enrollment count are never returned.
 
 ## Money
 

@@ -45,6 +45,15 @@ describe("handleEnquiry", () => {
     expect(hooks.subscribe).not.toHaveBeenCalled();
   });
 
+  it("passes only the parsed public fields to create", async () => {
+    const hooks = deps();
+    await handleEnquiry(
+      request({ ...contact, owner: 1, notes: "x", enrollment: 2, status: "converted" }),
+      hooks,
+    );
+    expect(hooks.create).toHaveBeenCalledWith(contact);
+  });
+
   it("sends no email for honeypot, rate-limited, invalid-JSON or invalid requests", async () => {
     const cases: Array<[Request, Partial<EnquiryDeps>]> = [
       [request({ ...contact, website: "https://spam.test" }), {}],

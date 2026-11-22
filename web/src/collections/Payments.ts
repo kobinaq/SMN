@@ -1,7 +1,15 @@
-import type { CollectionConfig } from "payload";
+import { APIError, type CollectionBeforeValidateHook, type CollectionConfig } from "payload";
+import { validatePaymentLinks } from "@/lib/payments/links";
 
 const staffOnly = ({ req }: { req: { user?: { collection?: string } | null } }) =>
   req.user?.collection === "users";
+
+const checkLinks: CollectionBeforeValidateHook = ({ data, originalDoc }) => {
+  if (!data) return data;
+  const result = validatePaymentLinks({ ...(originalDoc ?? {}), ...data });
+  if (result !== true) throw new APIError(result, 400, undefined, true);
+  return data;
+};
 
 export const Payments: CollectionConfig = {
   slug: "payments",
@@ -22,6 +30,7 @@ export const Payments: CollectionConfig = {
     update: staffOnly,
     delete: staffOnly,
   },
+  hooks: { beforeValidate: [checkLinks] },
   fields: [
     {
       name: "kind",
@@ -30,6 +39,8 @@ export const Payments: CollectionConfig = {
       options: [
         { label: "Event", value: "event" },
         { label: "Course", value: "course" },
+        { label: "Cohort", value: "cohort" },
+        { label: "One-on-One", value: "one-on-one" },
       ],
     },
     { name: "member", type: "relationship", relationTo: "members", required: true, maxDepth: 1 },
@@ -53,6 +64,7 @@ export const Payments: CollectionConfig = {
     { name: "event", type: "relationship", relationTo: "events", maxDepth: 0 },
     { name: "course", type: "relationship", relationTo: "lms-courses", maxDepth: 0 },
     { name: "catalogueCourse", type: "relationship", relationTo: "courses", maxDepth: 0, admin: { hidden: true } },
+    { name: "cohort", type: "relationship", relationTo: "cohorts", maxDepth: 0, index: true },
     { name: "application", type: "relationship", relationTo: "cohort-applications", maxDepth: 0 },
     { name: "enrollment", type: "relationship", relationTo: "enrollments", maxDepth: 0 },
     { name: "eventRegistration", type: "relationship", relationTo: "event-registrations" as "events", maxDepth: 0 },

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { shapeCatalogue, type RawCohort, type RawCourse } from "./catalogue";
+import { countActiveEnrollmentsByCohort, shapeCatalogue, type RawCohort, type RawCourse } from "./catalogue";
 
 const now = new Date("2026-12-01T00:00:00.000Z");
 
@@ -153,5 +153,36 @@ describe("shapeCatalogue", () => {
       sessionCount: 6,
       included: ["A certificate"],
     });
+  });
+});
+
+describe("seatsLeft in the catalogue", () => {
+  it("subtracts active enrollments and never exposes counts", () => {
+    const out = shapeCatalogue(
+      {
+        courses: [course()],
+        cohorts: [cohort({ activeEnrollments: 7 })],
+        oneOnOne: null,
+      },
+      now,
+    );
+    expect(out.courses[0].nextCohort?.seatsLeft).toBe(13);
+    expect(JSON.stringify(out)).not.toContain("activeEnrollments");
+  });
+});
+
+describe("countActiveEnrollmentsByCohort", () => {
+  it("tallies active enrollments per cohort, ignoring other statuses", () => {
+    const counts = countActiveEnrollmentsByCohort([
+      { cohort: 1, status: "active" },
+      { cohort: { id: 1 }, status: "active" },
+      { cohort: "2", status: "active" },
+      { cohort: 1, status: "cancelled" },
+      { cohort: 1, status: "completed" },
+      { cohort: null, status: "active" },
+    ]);
+    expect(counts.get("1")).toBe(2);
+    expect(counts.get("2")).toBe(1);
+    expect(counts.size).toBe(2);
   });
 });

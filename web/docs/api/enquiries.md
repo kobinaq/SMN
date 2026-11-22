@@ -12,7 +12,7 @@ There is no captcha. Unknown JSON fields are ignored.
 
 | Field | Required | Limits |
 | --- | --- | --- |
-| `type` | yes | `programme-social-media-marketing`, `one-on-one-training`, `organisational-training`, `partnership`, `contact`, `newsletter` |
+| `type` | yes | `programme-social-media-marketing`, `cohort-application`, `one-on-one-training`, `organisational-training`, `partnership`, `contact`, `newsletter` |
 | `email` | yes | valid email, max 254 characters. Stored lowercased. |
 | `name` | yes, except `newsletter` | max 120. Optional for `newsletter`. |
 | `phone` | no | max 40 |
@@ -80,6 +80,7 @@ Every accepted submission is stored in the Payload `enquiries` collection with `
 A notification email is sent with the existing Resend helper. The recipient is `ENQUIRY_NOTIFY_EMAIL`, unless the matching per-type variable is set:
 
 - `ENQUIRY_NOTIFY_EMAIL_PROGRAMME_SOCIAL_MEDIA_MARKETING`
+- `ENQUIRY_NOTIFY_EMAIL_COHORT_APPLICATION`
 - `ENQUIRY_NOTIFY_EMAIL_ONE_ON_ONE_TRAINING`
 - `ENQUIRY_NOTIFY_EMAIL_ORGANISATIONAL_TRAINING`
 - `ENQUIRY_NOTIFY_EMAIL_PARTNERSHIP`
@@ -93,6 +94,7 @@ All of those are optional. If neither the shared variable nor the type override 
 Every stored enquiry also sends a plain-text confirmation to the sender's `email`, alongside the notification above. It thanks them by name when one was given and restates what they asked about:
 
 - `programme-social-media-marketing`: the Social Media Marketing cohort
+- `cohort-application`: their cohort application
 - `one-on-one-training`: One-on-One Training
 - `organisational-training`: Specialized Marketing Workshops
 - `partnership`: partnering with us
@@ -107,6 +109,7 @@ The subject is a fixed string and the greeting name is collapsed to a single lin
 Confirmations are on by default. Set the matching variable to `false`, `0`, `off` or `no` (case-insensitive) to turn one type off:
 
 - `ENQUIRY_CONFIRM_PROGRAMME_SOCIAL_MEDIA_MARKETING`
+- `ENQUIRY_CONFIRM_COHORT_APPLICATION`
 - `ENQUIRY_CONFIRM_ONE_ON_ONE_TRAINING`
 - `ENQUIRY_CONFIRM_ORGANISATIONAL_TRAINING`
 - `ENQUIRY_CONFIRM_PARTNERSHIP`
@@ -120,6 +123,26 @@ The notification and the confirmation run independently. If either fails, the ot
 `type: "newsletter"` also calls the existing Mailchimp subscribe helper when `MAILCHIMP_API_KEY`, `MAILCHIMP_AUDIENCE_ID`, and `MAILCHIMP_SERVER_PREFIX` are all set. If they are not set, Mailchimp is skipped and the `201` still stands.
 
 Payload's own REST and GraphQL APIs cannot create enquiries. Staff with the content or support role can read and update them at `/staff/enquiries`. Analysts can read them.
+
+## Types and statuses
+
+Stored values are unchanged; labels follow the plan. The legacy British slugs are kept until the spelling task (T3).
+
+| Stored value | Label |
+| --- | --- |
+| `programme-social-media-marketing` | Course interest |
+| `cohort-application` | Cohort application |
+| `one-on-one-training` | One-on-One |
+| `organisational-training` | Workshop sales |
+| `partnership` | Partnership |
+| `contact` | Contact |
+| `newsletter` | Newsletter |
+
+Statuses: `new`, `contacted`, `qualified`, `converted`, `closed`. `in-progress` is legacy ("In progress (legacy)"): it stays valid for existing rows but is not offered in pickers.
+
+## Staff-only fields
+
+`owner` (user), `notes` (internal text) and `enrollment` (linked enrollment) are set by staff only. The public endpoint builds the stored row from an explicit list of fields and always sets `status` to `new`, so these fields and `status` in a request body are ignored. They are never returned publicly or emailed.
 
 ## Example
 
