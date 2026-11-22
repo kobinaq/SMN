@@ -53,11 +53,11 @@ export const signupCopy = {
 export const accountIncludes = [
   {
     title: "Learn",
-    body: "Explore courses and programme materials in the member portal.",
+    body: "Explore courses and program materials in the member portal.",
   },
   {
     title: "Apply",
-    body: "Practise with guided briefs, exercises and clearly labelled simulations, depending on your programme.",
+    body: "Practise with guided briefs, exercises and clearly labelled simulations, depending on your program.",
   },
   {
     title: "Grow",
@@ -99,7 +99,7 @@ export const firstRunCopy = {
   intro:
     "Here is what you can do now that you are a member. Start anywhere. Your member home keeps track of what is next.",
   areasHeading: "What you can do now",
-  cohortEyebrow: "Programme",
+  cohortEyebrow: "Program",
   profileHeading: "Start with your profile",
   profileBody: "A few details help tutors and mentors understand your goals and where you are starting from.",
   profileLabel: "Complete your profile",
@@ -114,7 +114,7 @@ export const firstRunAreas = [
   {
     key: "learn",
     title: "Learn",
-    body: "Work through courses and programme materials at your own pace.",
+    body: "Work through courses and program materials at your own pace.",
     href: "/app/learning",
     cta: "Open Learning",
   },

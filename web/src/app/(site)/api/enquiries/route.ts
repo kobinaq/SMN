@@ -1,0 +1,64 @@
+import { handleEnquiry, type EnquiryDeps } from "@/lib/enquiries/handle";
+import type { EnquiryInput } from "@/lib/enquiries/schema";
+import { confirmEnquiry, notifyEnquiry } from "@/lib/enquiries/send";
+import { subscribeToNewsletter } from "@/lib/newsletter";
+import { getPayloadClient } from "@/lib/payload";
+import { clientKey, rateLimit } from "@/lib/rate-limit";
+
+async function findNewsletterDuplicate(email: string) {
+  const payload = await getPayloadClient();
+  const existing = await payload.find({
+    collection: "enquiries",
+    depth: 0,
+    limit: 1,
+    overrideAccess: true,
+    where: {
+      and: [{ type: { equals: "newsletter" } }, { email: { equals: email } }],
+    },
+  });
+  return existing.totalDocs > 0;
+}
+
+function enquiryData(input: EnquiryInput) {
+  return {
+    type: input.type,
+    email: input.email,
+    status: "new" as const,
+    ...(input.name ? { name: input.name } : {}),
+    ...(input.phone ? { phone: input.phone } : {}),
+    ...(input.organisation ? { organisation: input.organisation } : {}),
+    ...(input.message ? { message: input.message } : {}),
+    ...(input.sourcePage ? { sourcePage: input.sourcePage } : {}),
+  };
+}
+
+async function createEnquiry(input: EnquiryInput) {
+  const payload = await getPayloadClient();
+  const created = await payload.create({
+    collection: "enquiries",
+    overrideAccess: true,
+    data: enquiryData(input),
+  });
+  return { id: created.id };
+}
+
+async function subscribe(email: string) {
+  const result = await subscribeToNewsletter(email);
+  if (!result.ok) {
+    console.error("[enquiries] mailchimp subscribe failed");
+  }
+}
+
+const deps: EnquiryDeps = {
+  clientKey,
+  limit: rateLimit,
+  findNewsletterDuplicate,
+  create: createEnquiry,
+  notify: notifyEnquiry,
+  confirm: confirmEnquiry,
+  subscribe,
+};
+
+export async function POST(request: Request) {
+  return handleEnquiry(request, deps);
+}

@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
+import { withDefaultShareImages } from "@/lib/share-metadata";
 import { ExternalLink, MapPin } from "@/components/ui/icons";
 import { EmptyProof } from "@/components/layout/EmptyProof";
 import { Reveal } from "@/components/motion/Reveal";
@@ -9,15 +10,18 @@ import { seoTitle } from "@/lib/brand";
 
 type Props = { params: Promise<{ handle: string }> };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
   const { handle } = await params;
   const { member } = await getPublicProfile(handle);
-  return {
-    title: seoTitle(`${member.name} portfolio`),
-    description: member.bio || member.headline,
-    alternates: { canonical: `/u/${handle}` },
-    openGraph: { url: `/u/${handle}` },
-  };
+  return withDefaultShareImages(
+    {
+      title: seoTitle(`${member.name} portfolio`),
+      description: member.bio || member.headline,
+      alternates: { canonical: `/u/${handle}` },
+      openGraph: { url: `/u/${handle}` },
+    },
+    parent,
+  );
 }
 
 export default async function PublicProfilePage({ params }: Props) {

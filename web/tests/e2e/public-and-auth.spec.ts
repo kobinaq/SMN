@@ -53,28 +53,34 @@ test("staff lands on the workflow-first staff dashboard", async ({ page }) => {
   await expect(page.getByRole("main").getByRole("link", { name: /Cohorts/i })).toBeVisible();
 
   await page.goto("/staff/learning/self-paced");
-  await expect(page.getByRole("heading", { name: "Self-paced courses" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Self-paced courses" })).toBeVisible();
   await expect(page.getByRole("link", { name: "New course" }).first()).toBeVisible();
-  await page.getByRole("link", { name: "Demo Content Strategy Sprint" }).first().click();
-  await expect(page).toHaveURL(/\/staff\/learning\/courses\/\d+/);
+  // Seeded envs list the demo course; unseeded shared envs (e.g. dev) show the empty state.
+  const demoCourse = page.getByRole("link", { name: "Demo Content Strategy Sprint" }).first();
+  const emptyState = page.getByRole("heading", { name: "No self-paced courses yet" });
+  await expect(demoCourse.or(emptyState)).toBeVisible();
+  if (await demoCourse.isVisible()) {
+    await demoCourse.click();
+    await expect(page).toHaveURL(/\/staff\/learning\/courses\/\d+/);
 
-  const sections = page.getByRole("navigation", { name: "Course sections" });
-  await expect(sections).toBeVisible();
-  await sections.getByRole("link", { name: "Curriculum" }).click();
-  await expect(page.getByRole("heading", { name: "Modules and lessons" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Move module up" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Duplicate" }).first()).toBeVisible();
+    const sections = page.getByRole("navigation", { name: "Course sections" });
+    await expect(sections).toBeVisible();
+    await sections.getByRole("link", { name: "Curriculum" }).click();
+    await expect(page.getByRole("heading", { name: "Modules and lessons" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Move module up" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Duplicate" }).first()).toBeVisible();
 
-  await sections.getByRole("link", { name: "Learners" }).click();
-  await expect(page).toHaveURL(/tab=learners/);
-  await expect(page.getByRole("heading", { name: "Learners" })).toBeVisible();
-  await page.getByText("Progress override", { exact: true }).click();
-  await expect(page.getByRole("button", { name: "Save audited override" })).toBeVisible();
+    await sections.getByRole("link", { name: "Learners" }).click();
+    await expect(page).toHaveURL(/tab=learners/);
+    await expect(page.getByRole("heading", { name: "Learners" })).toBeVisible();
+    await page.getByText("Progress override", { exact: true }).click();
+    await expect(page.getByRole("button", { name: "Save audited override" })).toBeVisible();
 
-  await sections.getByRole("link", { name: "Analytics" }).click();
-  await expect(page).toHaveURL(/tab=analytics/);
-  await expect(page.getByText("Completion rate", { exact: true }).first()).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Module drop-off" })).toBeVisible();
+    await sections.getByRole("link", { name: "Analytics" }).click();
+    await expect(page).toHaveURL(/tab=analytics/);
+    await expect(page.getByText("Completion rate", { exact: true }).first()).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Module drop-off" })).toBeVisible();
+  }
 
   await page.goto("/staff/members");
   await expect(page.getByRole("heading", { name: "People" })).toBeVisible();

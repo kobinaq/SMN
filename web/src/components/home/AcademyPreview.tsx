@@ -13,11 +13,11 @@ import {
   cohortStartLabel,
 } from "@/lib/cohort-copy";
 import { cta } from "@/lib/cta";
-import { homepageProgrammes } from "@/lib/content";
+import { homepagePrograms } from "@/lib/content";
 import { trackEvent } from "@/lib/analytics";
 
 /**
- * Tab 4 Academy preview: three programmes + self-paced courses, with cohort
+ * Tab 4 Academy preview: three programs + self-paced courses, with cohort
  * facts from site settings / CMS. Duration is 4 weeks (PR #54 / Tab 4).
  */
 export function AcademyPreview() {
@@ -37,7 +37,7 @@ export function AcademyPreview() {
       <SectionHead
         kicker="Academy"
         title="Learn skills you can actually use."
-        lede="Our programmes connect strategy, content, platforms, AI and practical application so you can move from knowing the theory to knowing how to use it."
+        lede="Our programs connect strategy, content, platforms, AI and practical application so you can move from knowing the theory to knowing how to use it."
         actions={
           <Button href={cta.viewCohort.href} variant="secondary">
             See the 4-week cohort
@@ -46,22 +46,22 @@ export function AcademyPreview() {
       />
 
       <div data-stagger className="mt-12 grid gap-px overflow-hidden border border-edge-subtle bg-edge-subtle lg:grid-cols-2">
-        {homepageProgrammes.map((programme) => (
+        {homepagePrograms.map((program) => (
           <Link
-            key={programme.title}
-            href={programme.href}
+            key={program.title}
+            href={program.href}
             data-stagger-item
             className="group flex min-h-11 flex-col bg-canvas p-7 transition-colors hover:bg-raised sm:p-9"
           >
-            <p className="eyebrow text-accent">{programme.meta}</p>
+            <p className="eyebrow text-accent">{program.meta}</p>
             <h3 className="mt-3 font-display text-2xl text-text-1 transition-colors group-hover:text-accent">
-              {programme.title}
+              {program.title}
             </h3>
             <p className="mt-4 flex-1 text-sm leading-relaxed text-text-2 sm:text-base">
-              {programme.body}
+              {program.body}
             </p>
             <span className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent">
-              {programme.ctaLabel}
+              {program.ctaLabel}
               <ArrowUpRight className="h-4 w-4" />
             </span>
           </Link>
@@ -83,7 +83,7 @@ export function AcademyPreview() {
         </div>
 
         <div className="relative z-10 p-7 sm:p-10 lg:p-12">
-          <Kicker>Flagship programme</Kicker>
+          <Kicker>Flagship program</Kicker>
           <h3 className="mt-5 max-w-[18ch] font-display display-3 text-text-1">{site.cohort.name}</h3>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-text-2">
             {cohortAudienceSentence(site.cohort.audience)} {site.cohort.format}.

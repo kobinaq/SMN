@@ -29,7 +29,7 @@ export default async function StaffPostsPage() {
               cells: [
                 doc.title,
                 doc.category,
-                doc.publishedAt ? "Published" : "Draft",
+                doc.status === "draft" ? "Draft" : doc.publishedAt ? "Published" : "Draft",
                 doc.updatedAt ? new Date(doc.updatedAt).toLocaleDateString("en-GH") : "-",
               ],
             }))}

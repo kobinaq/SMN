@@ -55,11 +55,11 @@ export async function POST(req: Request) {
           overrideAccess: true,
         });
         if (course.status !== "published" || course.commerce !== "apply" || course.enrollmentOpen === false) {
-          return NextResponse.json({ error: "That programme is not open for applications." }, { status: 400 });
+          return NextResponse.json({ error: "That program is not open for applications." }, { status: 400 });
         }
         courseId = Number(course.id);
       } catch {
-        return NextResponse.json({ error: "That programme is not open for applications." }, { status: 400 });
+        return NextResponse.json({ error: "That program is not open for applications." }, { status: 400 });
       }
     }
 
@@ -92,7 +92,7 @@ export async function POST(req: Request) {
 
     const opsMail = await sendEmail({
       to: ops,
-        subject: `Programme application: ${data.name}`,
+        subject: `Program application: ${data.name}`,
       text: applicationText,
     });
 

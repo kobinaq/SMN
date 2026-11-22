@@ -22,11 +22,16 @@ export default async function StaffResourcesPage() {
       <StaffPanel>
         {resources.docs.length ? (
           <StaffTable
-            columns={["Title", "Type", "Updated"]}
+            columns={["Title", "Type", "Category", "Updated"]}
             rows={resources.docs.map((doc) => ({
               key: String(doc.id),
               href: `/staff/content/resources/${doc.id}`,
-              cells: [doc.title, doc.type, doc.updatedAt ? new Date(doc.updatedAt).toLocaleDateString("en-GH") : "-"],
+              cells: [
+                doc.title,
+                doc.type,
+                doc.category || "-",
+                doc.updatedAt ? new Date(doc.updatedAt).toLocaleDateString("en-GH") : "-",
+              ],
             }))}
           />
         ) : (

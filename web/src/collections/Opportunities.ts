@@ -29,7 +29,7 @@ export const Opportunities: CollectionConfig = {
     { name: "source", type: "relationship", relationTo: "opportunity-sources", maxDepth: 0 },
     { name: "externalId", type: "text", index: true },
     { name: "fingerprint", type: "text", index: true },
-    { name: "sourceLabel", type: "select", required: true, defaultValue: "manual", options: [{ label: "SMN verified", value: "manual" }, { label: "Partner listing", value: "partner" }, { label: "External opportunity", value: "imported" }] },
+    { name: "sourceLabel", type: "select", required: true, defaultValue: "manual", options: [{ label: "TSA verified", value: "manual" }, { label: "Partner listing", value: "partner" }, { label: "External opportunity", value: "imported" }] },
     { name: "relevanceScore", type: "number", admin: { position: "sidebar", readOnly: true } },
     { name: "status", type: "select", required: true, defaultValue: "pending", options: ["pending", "published", "closed", "archived"], admin: { position: "sidebar" } },
     { name: "publishedAt", type: "date", admin: { position: "sidebar" } },

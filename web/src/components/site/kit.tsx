@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowRight } from "@/components/ui/icons";
+import { definitionCellSpan } from "@/lib/definition-span";
 import { cn } from "@/lib/utils";
 
 /**
@@ -198,7 +199,7 @@ export function Sequence({
           key={item.title}
           className="grid gap-4 rule py-8 sm:grid-cols-[6rem_minmax(0,1fr)] sm:gap-10 sm:py-10 last:pb-0"
         >
-          <span aria-hidden className="ordinal text-accent/50">
+          <span aria-hidden className="ordinal text-accent">
             {String(index + 1).padStart(2, "0")}
           </span>
           <div className="max-w-2xl">
@@ -328,8 +329,8 @@ export function DefinitionGrid({
         className,
       )}
     >
-      {items.map((item) => (
-        <div key={item.title} className="bg-canvas p-7">
+      {items.map((item, index) => (
+        <div key={item.title} className={cn("bg-canvas p-7", definitionCellSpan(index, items.length, columns))}>
           <h3 className="font-display text-xl text-text-1">{item.title}</h3>
           <div className="mt-3 text-sm leading-relaxed text-text-2">{item.body}</div>
         </div>

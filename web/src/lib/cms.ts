@@ -161,7 +161,11 @@ export async function getPosts(): Promise<BlogPost[]> {
       sort: "-publishedAt",
       overrideAccess: false,
       where: {
-        and: [{ publishedAt: { exists: true } }, { publishedAt: { less_than_equal: now } }],
+        and: [
+          { publishedAt: { exists: true } },
+          { publishedAt: { less_than_equal: now } },
+          { status: { equals: "published" } },
+        ],
       },
     });
     const author = blogAuthorDefaults();
@@ -171,6 +175,7 @@ export async function getPosts(): Promise<BlogPost[]> {
           ? (doc.cover.url as string)
           : img.defaultPost;
       const excerpt = (doc.excerpt as string) || "";
+      const authorName = typeof doc.author === "string" ? doc.author.trim() : "";
       return {
         slug: doc.slug as string,
         title: doc.title as string,
@@ -183,6 +188,7 @@ export async function getPosts(): Promise<BlogPost[]> {
         body: blogBodyFromCms(doc.content, excerpt),
         updatedAt: typeof doc.updatedAt === "string" ? doc.updatedAt : undefined,
         ...author,
+        ...(authorName ? { author: authorName, authorRole: "Think Social Academy" } : {}),
       };
     });
   }, fallbackPosts);
@@ -219,21 +225,27 @@ export async function getResources(): Promise<ResourceItem[]> {
     const { getPayloadClient } = await import("@/lib/payload");
     const payload = await getPayloadClient();
     const result = await payload.find({ collection: "resources", limit: 50, overrideAccess: false });
-    return result.docs.map((doc): ResourceItem => ({
-      slug: doc.slug as string,
-      title: doc.title as string,
-      type: doc.type as string,
-      description: doc.description as string,
-      cover: img.default,
-      format: "Download",
-      level: "All levels",
-      featured: false,
-      free: true,
-      highlights: [],
-      body: [doc.description as string],
-      fileUrl: uploadUrl(doc.file),
-      updatedAt: typeof doc.updatedAt === "string" ? doc.updatedAt : undefined,
-    }));
+    return result.docs.map((doc): ResourceItem => {
+      const externalUrl = typeof doc.externalUrl === "string" ? doc.externalUrl.trim() : "";
+      const category = typeof doc.category === "string" ? doc.category : "";
+      const format = typeof doc.format === "string" && doc.format.trim() ? doc.format : "Download";
+      return {
+        slug: doc.slug as string,
+        title: doc.title as string,
+        type: doc.type as string,
+        description: doc.description as string,
+        cover: img.default,
+        format,
+        level: "All levels",
+        featured: false,
+        free: true,
+        highlights: [],
+        body: [doc.description as string],
+        fileUrl: uploadUrl(doc.file) || externalUrl || undefined,
+        ...(category ? { category } : {}),
+        updatedAt: typeof doc.updatedAt === "string" ? doc.updatedAt : undefined,
+      };
+    });
   }, fallbackResources);
 }
 

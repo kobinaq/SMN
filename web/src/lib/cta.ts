@@ -10,7 +10,7 @@ export const cta = {
   applyCohort: {
     label: "Apply for the next cohort",
     shortLabel: "Apply now",
-    href: "/apply",
+    href: "/programs/social-media-marketing",
   },
   /** Header account creation — secondary to Apply */
   joinTsa: {
@@ -19,28 +19,28 @@ export const cta = {
     href: "/signup",
   },
   explorePrograms: {
-    label: "Explore our programmes",
-    href: "/learn",
+    label: "Explore our programs",
+    href: "/programs",
   },
   exploreServices: {
-    label: "Explore our programmes",
-    href: "/learn",
+    label: "Explore our programs",
+    href: "/programs",
   },
   viewCohort: {
-    label: "Programme details",
-    href: "/learn/social-media-marketing-ai-programme",
+    label: "Program details",
+    href: "/programs/social-media-marketing",
   },
   viewCurriculum: {
     label: "View the curriculum",
-    href: "/learn/social-media-marketing-ai-programme#curriculum",
+    href: "/programs/social-media-marketing",
   },
   viewCourses: {
     label: "Explore courses",
-    href: "/learn/courses",
+    href: "/programs",
   },
   viewExperience: {
     label: "Learn about practical work",
-    href: "/learn#practical-work",
+    href: "/programs",
   },
   joinCommunity: {
     label: "Join the community",
@@ -48,7 +48,7 @@ export const cta = {
   },
   viewMentors: {
     label: "Mentors",
-    href: "/connect/mentors",
+    href: "/about",
   },
   /** On-platform Paystack purchase */
   buyCourse: {
@@ -79,8 +79,8 @@ export const cta = {
     href: "/connect",
   },
   partner: {
-    label: "Partner With Us",
-    href: "/partner",
+    label: "Explore partnerships",
+    href: "/partnerships",
   },
   browseJobs: {
     label: "Browse job opportunities",
@@ -92,7 +92,7 @@ export const cta = {
   },
   contact: {
     label: "Contact TSA",
-    href: "/contact",
+    href: "/partnerships",
   },
   whatsapp: {
     label: "Chat on WhatsApp",

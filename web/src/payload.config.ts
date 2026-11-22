@@ -13,6 +13,8 @@ import { Courses } from "./collections/Courses";
 import { Events } from "./collections/Events";
 import { Stories } from "./collections/Stories";
 import { Resources } from "./collections/Resources";
+import { Enquiries } from "./collections/Enquiries";
+import { Cohorts } from "./collections/Cohorts";
 import { Mentors } from "./collections/Mentors";
 import { MentorshipRequests } from "./collections/MentorshipRequests";
 import { MentorshipRelationships } from "./collections/MentorshipRelationships";
@@ -39,6 +41,7 @@ import { AICollections } from "./collections/AI";
 import { EventRegistrations } from "./collections/EventRegistrations";
 import { Payments } from "./collections/Payments";
 import { SiteSettings } from "./globals/SiteSettings";
+import { OneOnOne } from "./globals/OneOnOne";
 import { createDbAdapter } from "./lib/db";
 import { validateProductionEnv } from "./lib/env";
 import { getServerURL } from "./lib/server-url";
@@ -84,9 +87,9 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     meta: {
-      title: "SMN CMS",
-      description: "Social Marketers Network content and member administration",
-      titleSuffix: " · SMN",
+      title: "TSA CMS",
+      description: "Think Social Academy content and member administration",
+      titleSuffix: " · TSA",
       icons: [
         {
           rel: "icon",
@@ -95,9 +98,9 @@ export default buildConfig({
         },
       ],
       openGraph: {
-        title: "SMN CMS",
-        description: "Social Marketers Network admin",
-        siteName: "Social Marketers Network",
+        title: "TSA CMS",
+        description: "Think Social Academy admin",
+        siteName: "Think Social Academy",
       },
     },
     // Custom ops/CMS UI lives at /staff. Payload admin chrome is retired unless STAFF_LEGACY_ADMIN=true.
@@ -141,16 +144,21 @@ export default buildConfig({
     Media,
     Posts,
     Courses,
+    Cohorts,
     Events,
     Stories,
     Resources,
+    Enquiries,
   ]).map((collection) => ({
     ...collection,
     // /staff does not use Payload's concurrent-edit locks. Those queries
     // require a rel column per collection; missing columns broke event saves.
     lockDocuments: false,
   })),
-  globals: [{ ...SiteSettings, lockDocuments: false }],
+  globals: [
+    { ...SiteSettings, lockDocuments: false },
+    { ...OneOnOne, lockDocuments: false },
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "smn-dev-secret-change-me-in-production",
   typescript: {

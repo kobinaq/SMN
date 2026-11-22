@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Band, Kicker } from "@/components/site/kit";
+import { Band } from "@/components/site/kit";
 import { img } from "@/lib/images";
 import { homepageValues } from "@/lib/pages/home";
 
@@ -9,8 +9,7 @@ export function HomeValues() {
     <Band tone="canvas" size="lg" fade>
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
         <div>
-          <Kicker>Values</Kicker>
-          <h2 className="mt-5 font-display display-2 text-text-1">{homepageValues.title}</h2>
+          <h2 className="font-display display-2 text-text-1">{homepageValues.title}</h2>
           <ul className="mt-10 space-y-0 border-t border-edge-subtle">
             {homepageValues.items.map((item) => (
               <li key={item.title} className="border-b border-edge-subtle py-5">

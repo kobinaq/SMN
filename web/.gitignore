@@ -18,6 +18,10 @@
 payload.e2e.db
 payload.e2e-*.db
 payload.importmap-*.db
+e2e-server*.log
+
+# generated marketing walkthrough captures
+/recordings/
 
 # local / CI disposable SQLite (never commit — causes schema push conflicts)
 *.db

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import { resourceCategories, resourceFormats, selectOptions } from "@/lib/catalogue";
 
 const staffOnly = ({ req }: { req: { user?: { collection?: string } | null } }) =>
   req.user?.collection === "users";
@@ -26,9 +27,24 @@ export const Resources: CollectionConfig = {
     },
     { name: "description", type: "textarea", required: true },
     {
+      name: "category",
+      type: "select",
+      options: selectOptions(resourceCategories),
+    },
+    {
+      name: "format",
+      type: "select",
+      options: selectOptions(resourceFormats),
+    },
+    {
       name: "file",
       type: "upload",
       relationTo: "media",
+    },
+    {
+      name: "externalUrl",
+      type: "text",
+      admin: { description: "Link for a resource that is not an uploaded file." },
     },
   ],
 };

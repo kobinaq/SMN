@@ -20,21 +20,25 @@ export function GrowPreview() {
           />
         </div>
         <div>
-          <Kicker>Grow</Kicker>
-          <h2 className="mt-5 font-display display-2 text-text-1">{homepageGrow.title}</h2>
+          <Kicker>{homepageGrow.kicker}</Kicker>
+          {homepageGrow.title ? (
+            <h2 className="mt-5 font-display display-2 text-text-1">{homepageGrow.title}</h2>
+          ) : null}
           <p className="mt-6 max-w-[58ch] text-base leading-relaxed text-text-2 sm:text-lg">
             {homepageGrow.body}
           </p>
-          <ul className="mt-8 flex flex-wrap gap-2">
-            {homepageGrow.topics.map((topic) => (
-              <li
-                key={topic}
-                className="border border-edge-subtle px-3 py-2 text-xs text-text-2 sm:text-sm"
-              >
-                {topic}
-              </li>
-            ))}
-          </ul>
+          {homepageGrow.topics.length > 0 ? (
+            <ul className="mt-8 flex flex-wrap gap-2">
+              {homepageGrow.topics.map((topic) => (
+                <li
+                  key={topic}
+                  className="border border-edge-subtle px-3 py-2 text-xs text-text-2 sm:text-sm"
+                >
+                  {topic}
+                </li>
+              ))}
+            </ul>
+          ) : null}
           <div className="mt-8">
             <Button href={homepageGrow.ctaHref} variant="secondary">
               {homepageGrow.ctaLabel}

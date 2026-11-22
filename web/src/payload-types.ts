@@ -102,9 +102,11 @@ export interface Config {
     media: Media;
     posts: Post;
     courses: Course;
+    cohorts: Cohort;
     events: Event;
     stories: Story;
     resources: Resource;
+    enquiries: Enquiry;
     'payload-kv': PayloadKv;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -145,9 +147,11 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
+    cohorts: CohortsSelect<false> | CohortsSelect<true>;
     events: EventsSelect<false> | EventsSelect<true>;
     stories: StoriesSelect<false> | StoriesSelect<true>;
     resources: ResourcesSelect<false> | ResourcesSelect<true>;
+    enquiries: EnquiriesSelect<false> | EnquiriesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -158,9 +162,11 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     'site-settings': SiteSetting;
+    'one-on-one': OneOnOne;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'one-on-one': OneOnOneSelect<false> | OneOnOneSelect<true>;
   };
   locale: null;
   widgets: {
@@ -209,7 +215,7 @@ export interface MemberAuthOperations {
   };
 }
 /**
- * Staff accounts for the SMN staff app at /staff.
+ * Staff accounts for the TSA staff app at /staff.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
@@ -242,7 +248,7 @@ export interface User {
   collection: 'users';
 }
 /**
- * Member accounts for the SMN portal (not CMS staff).
+ * Member accounts for the TSA portal (not CMS staff).
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "members".
@@ -551,7 +557,7 @@ export interface LmsCourse {
     | null;
   programKey: string;
   /**
-   * Self-paced lessons live in SMN. Cohort sessions use the Google Classroom invite. Assessments stay in SMN for both.
+   * Self-paced lessons live in TSA. Cohort sessions use the Google Classroom invite. Assessments stay in TSA for both.
    */
   delivery: 'self-paced' | 'cohort';
   /**
@@ -580,7 +586,7 @@ export interface LmsCourse {
   format?: string | null;
   sessions?: string | null;
   /**
-   * Only enable after the fee is confirmed. When off, the site shows Contact SMN for current fees.
+   * Only enable after the fee is confirmed. When off, the site shows Contact TSA for current fees.
    */
   priceConfirmed?: boolean | null;
   /**
@@ -1167,6 +1173,13 @@ export interface Course {
         id?: string | null;
       }[]
     | null;
+  whoItsFor?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  certificateEnabled?: boolean | null;
   duration?: string | null;
   lessons?: number | null;
   /**
@@ -1174,7 +1187,7 @@ export interface Course {
    */
   price?: string | null;
   /**
-   * Checkout amount in minor units (pesewas). 0 = free catalog item.
+   * Default cohort price in pesewas (GH₵1 = 100). A cohort can override it.
    */
   amount?: number | null;
   currency?: string | null;
@@ -1184,11 +1197,11 @@ export interface Course {
   programKey?: string | null;
   delivery?: ('self-paced' | 'live') | null;
   /**
-   * Default Google Classroom link for live programmes.
+   * Default Google Classroom link for live programs.
    */
   classroomUrl?: string | null;
   /**
-   * Optional link to the native LMS course.
+   * The LMS course that holds this course's modules and lessons.
    */
   lmsCourse?: (number | null) | LmsCourse;
   /**
@@ -1197,6 +1210,9 @@ export interface Course {
   selarUrl?: string | null;
   badge?: string | null;
   image?: (number | null) | Media;
+  /**
+   * Published means visible on the public site.
+   */
   status?: ('published' | 'coming-soon') | null;
   updatedAt: string;
   createdAt: string;
@@ -1361,7 +1377,16 @@ export interface Post {
     | 'Career Development'
     | 'Case Studies'
     | 'Industry Trends'
-    | 'Community Stories';
+    | 'Community Stories'
+    | 'Social Media Strategy'
+    | 'Content Marketing & Planning'
+    | 'Platforms'
+    | 'Performance'
+    | 'Professional Development';
+  /**
+   * Article byline. Leave blank to keep the current founder byline.
+   */
+  author?: string | null;
   excerpt: string;
   content?: {
     root: {
@@ -1381,6 +1406,35 @@ export interface Post {
   cover?: (number | null) | Media;
   publishedAt?: string | null;
   readTime?: string | null;
+  /**
+   * Draft hides the post. Existing posts default to published, so a deploy does not unpublish them.
+   */
+  status: 'draft' | 'published';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cohorts".
+ */
+export interface Cohort {
+  id: number;
+  course: number | Course;
+  name: string;
+  startsAt: string;
+  endsAt?: string | null;
+  applicationDeadline?: string | null;
+  seats: number;
+  /**
+   * Override in pesewas. Blank uses the course default price.
+   */
+  price?: number | null;
+  currency?: string | null;
+  status: 'draft' | 'open' | 'full' | 'running' | 'finished';
+  /**
+   * Default Google Meet or Zoom link for this cohort's live sessions.
+   */
+  meetingUrl?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1395,7 +1449,7 @@ export interface Story {
   name: string;
   role: string;
   /**
-   * Programme or cohort name (optional)
+   * Program or cohort name (optional)
    */
   programme?: string | null;
   quote: string;
@@ -1425,7 +1479,60 @@ export interface Resource {
   slug: string;
   type: 'Template' | 'Guide' | 'AI Prompts' | 'Checklist' | 'Toolkit' | 'Download';
   description: string;
+  category?:
+    | (
+        | 'Social Media Strategy'
+        | 'Content Marketing & Planning'
+        | 'AI'
+        | 'Platforms'
+        | 'Performance'
+        | 'Professional Development'
+      )
+    | null;
+  format?:
+    | (
+        | 'Template'
+        | 'Checklist'
+        | 'Worksheet'
+        | 'Planning tool'
+        | 'Guide'
+        | 'Prompt library'
+        | 'Handbook'
+        | 'Toolkit'
+        | 'Download'
+        | 'Link'
+      )
+    | null;
   file?: (number | null) | Media;
+  /**
+   * Link for a resource that is not an uploaded file.
+   */
+  externalUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Public form submissions. Created only by POST /api/enquiries.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "enquiries".
+ */
+export interface Enquiry {
+  id: number;
+  type:
+    | 'programme-social-media-marketing'
+    | 'one-on-one-training'
+    | 'organisational-training'
+    | 'partnership'
+    | 'contact'
+    | 'newsletter';
+  name?: string | null;
+  email: string;
+  phone?: string | null;
+  organisation?: string | null;
+  message?: string | null;
+  sourcePage?: string | null;
+  status: 'new' | 'in-progress' | 'closed';
   updatedAt: string;
   createdAt: string;
 }
@@ -2261,11 +2368,13 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   category?: T;
+  author?: T;
   excerpt?: T;
   content?: T;
   cover?: T;
   publishedAt?: T;
   readTime?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2283,6 +2392,13 @@ export interface CoursesSelect<T extends boolean = true> {
         item?: T;
         id?: T;
       };
+  whoItsFor?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  certificateEnabled?: T;
   duration?: T;
   lessons?: T;
   price?: T;
@@ -2296,6 +2412,24 @@ export interface CoursesSelect<T extends boolean = true> {
   badge?: T;
   image?: T;
   status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cohorts_select".
+ */
+export interface CohortsSelect<T extends boolean = true> {
+  course?: T;
+  name?: T;
+  startsAt?: T;
+  endsAt?: T;
+  applicationDeadline?: T;
+  seats?: T;
+  price?: T;
+  currency?: T;
+  status?: T;
+  meetingUrl?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2353,7 +2487,26 @@ export interface ResourcesSelect<T extends boolean = true> {
   slug?: T;
   type?: T;
   description?: T;
+  category?: T;
+  format?: T;
   file?: T;
+  externalUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "enquiries_select".
+ */
+export interface EnquiriesSelect<T extends boolean = true> {
+  type?: T;
+  name?: T;
+  email?: T;
+  phone?: T;
+  organisation?: T;
+  message?: T;
+  sourcePage?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2387,7 +2540,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Public brand, homepage, and social settings. Cohort copy and fees live on Learning programmes marked Cohort.
+ * Public brand, homepage, and social settings. Cohort copy and fees live on Learning programs marked Cohort.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
@@ -2421,12 +2574,12 @@ export interface SiteSetting {
     supportingCopy?: string | null;
     primaryCtaLabel?: string | null;
     /**
-     * Primary hero button destination, e.g. /academy or /apply.
+     * Primary hero button destination, e.g. /programs.
      */
     primaryCtaHref?: string | null;
     secondaryCtaLabel?: string | null;
     /**
-     * Secondary hero button destination, e.g. /signup.
+     * Secondary hero button destination, e.g. /about.
      */
     secondaryCtaHref?: string | null;
   };
@@ -2446,6 +2599,46 @@ export interface SiteSetting {
          * Must be checked to appear on the public site
          */
         verified?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "one-on-one".
+ */
+export interface OneOnOne {
+  id: number;
+  /**
+   * Editable default. The one-on-one format is pending confirmation.
+   */
+  durationWeeks?: number | null;
+  /**
+   * Editable default. The one-on-one format is pending confirmation.
+   */
+  daysPerWeek?: number | null;
+  /**
+   * Editable default. The one-on-one format is pending confirmation.
+   */
+  sessionCount?: number | null;
+  /**
+   * Price in pesewas (GH₵1 = 100). Blank means not yet priced.
+   */
+  price?: number | null;
+  currency?: string | null;
+  included?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  trainers?: (number | User)[] | null;
+  resources?:
+    | {
+        label: string;
+        url: string;
         id?: string | null;
       }[]
     | null;
@@ -2487,6 +2680,34 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         label?: T;
         value?: T;
         verified?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "one-on-one_select".
+ */
+export interface OneOnOneSelect<T extends boolean = true> {
+  durationWeeks?: T;
+  daysPerWeek?: T;
+  sessionCount?: T;
+  price?: T;
+  currency?: T;
+  included?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  trainers?: T;
+  resources?:
+    | T
+    | {
+        label?: T;
+        url?: T;
         id?: T;
       };
   updatedAt?: T;

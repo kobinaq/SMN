@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Band, Kicker } from "@/components/site/kit";
+import { Band } from "@/components/site/kit";
 import { img } from "@/lib/images";
 import { homepageAudience } from "@/lib/pages/home";
 
@@ -19,8 +19,7 @@ export function WhoItsFor() {
           />
         </div>
         <div>
-          <Kicker>Audience</Kicker>
-          <h2 className="mt-5 font-display display-2 text-text-1">{homepageAudience.title}</h2>
+          <h2 className="font-display display-2 text-text-1">{homepageAudience.title}</h2>
           <ul className="mt-10 space-y-0 border-t border-edge-subtle">
             {homepageAudience.items.map((item) => (
               <li key={item.title} className="border-b border-edge-subtle py-5">

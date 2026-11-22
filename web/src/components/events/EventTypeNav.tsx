@@ -28,7 +28,7 @@ export function EventTypeNav({
             className={cn(
               "inline-flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-medium transition sm:px-4 sm:text-sm",
               isActive
-                ? "border-deep-blue bg-accent-strong text-text-1"
+                ? "border-deep-blue bg-accent-strong text-on-accent"
                 : "border-edge bg-inset text-text-2 hover:border-edge hover:text-text-1",
             )}
           >
@@ -36,7 +36,7 @@ export function EventTypeNav({
             <span
               className={cn(
                 "rounded-full px-1.5 py-0.5 text-[10px] tabular-nums",
-                isActive ? "bg-white/20 text-text-1" : "bg-white/10 text-text-3",
+                isActive ? "bg-white/25 text-on-accent" : "bg-white/10 text-text-3",
               )}
             >
               {count}

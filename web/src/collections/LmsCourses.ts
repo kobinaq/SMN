@@ -59,7 +59,7 @@ export const LmsCourses: CollectionConfig = {
         { label: "Cohort", value: "cohort" },
       ],
       admin: {
-        description: "Self-paced lessons live in SMN. Cohort sessions use the Google Classroom invite. Assessments stay in SMN for both.",
+        description: "Self-paced lessons live in TSA. Cohort sessions use the Google Classroom invite. Assessments stay in TSA for both.",
       },
     },
     {
@@ -129,7 +129,7 @@ export const LmsCourses: CollectionConfig = {
       type: "checkbox",
       defaultValue: false,
       admin: {
-        description: "Only enable after the fee is confirmed. When off, the site shows Contact SMN for current fees.",
+        description: "Only enable after the fee is confirmed. When off, the site shows Contact TSA for current fees.",
       },
     },
     {

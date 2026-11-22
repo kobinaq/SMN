@@ -19,9 +19,9 @@ export default function Icon() {
         letterSpacing: "0.02em",
         lineHeight: 1,
       }}
-      aria-label="SMN"
+      aria-label="TSA"
     >
-      SMN
+      TSA
     </span>
   );
 }

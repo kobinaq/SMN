@@ -16,14 +16,14 @@ export function checkoutPublishedAmountGate(course: {
   priceConfirmed?: unknown;
 }): { ok: true; amount: number } | { ok: false; error: string; status: number } {
   if (course.status !== "published") {
-    return { ok: false, error: "This programme is not available.", status: 400 };
+    return { ok: false, error: "This program is not available.", status: 400 };
   }
   if (course.priceConfirmed === false) {
-    return { ok: false, error: "Programme price is not configured.", status: 400 };
+    return { ok: false, error: "Program price is not configured.", status: 400 };
   }
   const amount = Number(course.amount || 0);
   if (!amount || amount < 100) {
-    return { ok: false, error: "Programme price is not configured.", status: 400 };
+    return { ok: false, error: "Program price is not configured.", status: 400 };
   }
   return { ok: true, amount };
 }
@@ -35,7 +35,7 @@ export function checkoutCourseGate(course: {
   priceConfirmed?: unknown;
 }): { ok: true; amount: number } | { ok: false; error: string; status: number } {
   if (course.commerce !== "purchase") {
-    return { ok: false, error: "This programme is application-only.", status: 400 };
+    return { ok: false, error: "This program is application-only.", status: 400 };
   }
   return checkoutPublishedAmountGate(course);
 }

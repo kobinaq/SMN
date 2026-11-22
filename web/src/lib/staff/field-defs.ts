@@ -1,4 +1,5 @@
 import type { StaffField } from "@/components/staff/StaffRecordForm";
+import { postCategories, resourceCategories, resourceFormats, selectOptions } from "@/lib/catalogue";
 
 export const postFields: StaffField[] = [
   { name: "title", label: "Title", type: "text", required: true },
@@ -8,15 +9,18 @@ export const postFields: StaffField[] = [
     label: "Category",
     type: "select",
     required: true,
+    options: selectOptions(postCategories),
+  },
+  { name: "author", label: "Author", type: "text", placeholder: "Leave blank for the founder byline" },
+  {
+    name: "status",
+    label: "Status",
+    type: "select",
+    required: true,
     options: [
-      "Marketing Strategy",
-      "AI",
-      "Social Media",
-      "Career Development",
-      "Case Studies",
-      "Industry Trends",
-      "Community Stories",
-    ].map((value) => ({ label: value, value })),
+      { label: "Published", value: "published" },
+      { label: "Draft", value: "draft" },
+    ],
   },
   { name: "excerpt", label: "Summary", type: "textarea", required: true },
   { name: "contentText", label: "Body", type: "textarea", required: true, placeholder: "Plain text or markdown-style paragraphs" },
@@ -39,7 +43,20 @@ export const resourceFields: StaffField[] = [
     })),
   },
   { name: "description", label: "Description", type: "textarea", required: true },
+  {
+    name: "category",
+    label: "Category",
+    type: "select",
+    options: [{ label: "None", value: "" }, ...selectOptions(resourceCategories)],
+  },
+  {
+    name: "format",
+    label: "Format",
+    type: "select",
+    options: [{ label: "None", value: "" }, ...selectOptions(resourceFormats)],
+  },
   { name: "file", label: "File", type: "media" },
+  { name: "externalUrl", label: "External link", type: "url", placeholder: "https://" },
 ];
 
 export function courseFields(lmsOptions: Array<{ label: string; value: string }> = []): StaffField[] {
@@ -145,13 +162,13 @@ export const eventFields: StaffField[] = [
 export const storyFields: StaffField[] = [
   { name: "name", label: "Name", type: "text", required: true },
   { name: "role", label: "Role", type: "text", required: true },
-  { name: "programme", label: "Programme (optional)", type: "text", placeholder: "Cohort or course name" },
+  { name: "programme", label: "Program (optional)", type: "text", placeholder: "Cohort or course name" },
   {
     name: "quote",
     label: "Quote",
     type: "textarea",
     required: true,
-    placeholder: "Full testimonial. The homepage shows a short excerpt. /stories shows this in full.",
+    placeholder: "Full testimonial. The homepage shows a short excerpt when learner experiences are enabled.",
   },
   { name: "image", label: "Image", type: "media" },
   { name: "portfolioUrl", label: "Portfolio URL (optional)", type: "url" },
@@ -165,7 +182,7 @@ export const storyFields: StaffField[] = [
     name: "published",
     label: "Published on the public site",
     type: "checkbox",
-    description: "Shows on the homepage stories band and /stories once permission is confirmed.",
+    description: "Shows on the homepage stories band once permission is confirmed and learner experiences are enabled.",
   },
 ];
 

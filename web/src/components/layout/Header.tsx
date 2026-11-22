@@ -13,12 +13,7 @@ import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { trackEvent } from "@/lib/analytics";
 import { getFocusableElements, trapTabKey } from "@/lib/focus-trap";
-
-function pathMatches(pathname: string, href: string) {
-  // Exact for `/` and `/connect` so /connect/mentors marks Mentors only.
-  if (href === "/" || href === "/connect") return pathname === href;
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
+import { headerTone, logoTone, pathMatches } from "@/lib/header-chrome";
 
 /** Same pattern as ConfirmDialog: settle on the first client render without setState-in-effect. */
 const noopSubscribe = () => () => {};
@@ -44,7 +39,7 @@ export function Header() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -176,13 +171,6 @@ export function Header() {
             })}
           </nav>
           <div className="mt-auto flex flex-col gap-3 pt-8" onClick={() => setOpen(false)}>
-            <Button
-              href={cta.applyCohort.href}
-              className="w-full"
-              onClick={() => trackEvent("primary_cta_click", { location: "mobile_nav" })}
-            >
-              {cta.applyCohort.label}
-            </Button>
             <Button href={cta.memberSignIn.href} variant="ghost" className="w-full">
               {cta.memberSignIn.label}
             </Button>
@@ -203,12 +191,16 @@ export function Header() {
       document.body,
     );
 
+  const tone = headerTone(pathname, scrolled, open);
+
   return (
     <>
       <header
+        data-tone={tone}
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition duration-300",
           "pt-[env(safe-area-inset-top)]",
+          tone === "light" && "header-on-dark",
           scrolled || open
             ? "border-b border-edge-subtle bg-canvas/90 backdrop-blur-xl"
             : "bg-transparent",
@@ -221,7 +213,11 @@ export function Header() {
         ) : null}
         <div className="container-wide flex h-14 items-center justify-between gap-3 sm:h-16 md:h-20">
           <Link href="/" className="relative z-10 flex min-h-11 min-w-0 shrink items-center gap-3">
-            <BrandLogo className="h-10 sm:h-11 md:h-14" priority />
+            <BrandLogo
+              className="h-10 sm:h-11 md:h-14"
+              priority
+              tone={logoTone(tone)}
+            />
           </Link>
 
           <nav
@@ -302,23 +298,9 @@ export function Header() {
             >
               {cta.memberSignIn.label}
             </Button>
-            <Button
-              href={cta.applyCohort.href}
-              className="px-5 py-2.5"
-              onClick={() => trackEvent("primary_cta_click", { location: "header" })}
-            >
-              {cta.applyCohort.shortLabel}
-            </Button>
           </div>
 
           <div className="relative z-10 flex items-center gap-2 lg:hidden">
-            <Button
-              href={cta.applyCohort.href}
-              className="min-h-11 px-3 py-2 text-xs sm:px-4 sm:text-sm"
-              onClick={() => trackEvent("primary_cta_click", { location: "header_mobile" })}
-            >
-              {cta.applyCohort.shortLabel}
-            </Button>
             <button
               ref={toggleRef}
               type="button"

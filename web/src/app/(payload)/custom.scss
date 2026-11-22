@@ -36,7 +36,7 @@
 /* Dashboard operational layer. */
 .smn-dashboard { margin: 8px 0 36px; color: var(--theme-text); }
 .smn-dashboard-hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; overflow: hidden; position: relative; padding: 32px; border: 1px solid var(--theme-elevation-150); border-radius: 20px; background: linear-gradient(130deg, #0a2f8f, #102353 58%, #141820); color: white; }
-.smn-dashboard-hero::after { content: "SMN"; position: absolute; right: 3%; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,.045); font-size: clamp(80px, 14vw, 180px); font-weight: 800; letter-spacing: -.08em; pointer-events: none; }
+.smn-dashboard-hero::after { content: "TSA"; position: absolute; right: 3%; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,.045); font-size: clamp(80px, 14vw, 180px); font-weight: 800; letter-spacing: -.08em; pointer-events: none; }
 .smn-dashboard-hero h1 { position: relative; z-index: 1; margin: 10px 0 8px; font-size: clamp(30px, 4vw, 48px); line-height: 1; letter-spacing: -.045em; }
 .smn-dashboard-hero p { position: relative; z-index: 1; margin: 0; color: rgba(255,255,255,.62); }
 .smn-site-link { position: relative; z-index: 1; flex: none; border: 1px solid rgba(255,255,255,.2); border-radius: 999px; padding: 10px 16px; color: white; text-decoration: none; font-size: 13px; }

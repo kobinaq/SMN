@@ -26,7 +26,7 @@ export const Stories: CollectionConfig = {
     {
       name: "programme",
       type: "text",
-      admin: { description: "Programme or cohort name (optional)" },
+      admin: { description: "Program or cohort name (optional)" },
     },
     { name: "quote", type: "textarea", required: true },
     {
