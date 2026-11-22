@@ -638,14 +638,26 @@ export interface LmsCourse {
 export interface Enrollment {
   id: number;
   member: number | Member;
+  /**
+   * New model. Leave blank for legacy enrollments that use programKey only.
+   */
+  offering?: ('cohort' | 'one-on-one') | null;
+  cohort?: (number | null) | Cohort;
+  /**
+   * Derived from the cohort when blank.
+   */
+  catalogCourse?: (number | null) | Course;
+  trainer?: (number | null) | User;
+  payment?: (number | null) | Payment;
+  sourceEnquiry?: (number | null) | Enquiry;
   programName: string;
   /**
    * Stable key shared with the LMS course, e.g. cohort-2026 or ai-marketers.
    */
   programKey: string;
   course?: (number | null) | LmsCourse;
-  programType: 'Cohort' | 'Self-paced course' | 'Workshop' | 'Community track';
-  source: 'staff' | 'cohort' | 'paystack' | 'selar';
+  programType: 'Cohort' | 'One-on-One' | 'Self-paced course' | 'Workshop' | 'Community track';
+  source: 'staff' | 'cohort' | 'paystack' | 'selar' | 'enquiry';
   /**
    * Paystack reference or legacy order id.
    */
@@ -666,6 +678,227 @@ export interface Enrollment {
   completedAt?: string | null;
   completionPercent?: number | null;
   certificateEligible?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cohorts".
+ */
+export interface Cohort {
+  id: number;
+  course: number | Course;
+  name: string;
+  startsAt: string;
+  endsAt?: string | null;
+  applicationDeadline?: string | null;
+  seats: number;
+  /**
+   * Override in pesewas. Blank uses the course default price.
+   */
+  price?: number | null;
+  currency?: string | null;
+  status: 'draft' | 'open' | 'full' | 'running' | 'finished';
+  /**
+   * Default Google Meet or Zoom link for this cohort's live sessions.
+   */
+  meetingUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses".
+ */
+export interface Course {
+  id: number;
+  title: string;
+  slug: string;
+  summary: string;
+  outcomes?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  whoItsFor?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  certificateEnabled?: boolean | null;
+  duration?: string | null;
+  lessons?: number | null;
+  /**
+   * Display label (optional if amount is set).
+   */
+  price?: string | null;
+  /**
+   * Default cohort price in pesewas (GH₵1 = 100). A cohort can override it.
+   */
+  amount?: number | null;
+  currency?: string | null;
+  /**
+   * Must match the LMS course program key to unlock access after Paystack.
+   */
+  programKey?: string | null;
+  delivery?: ('self-paced' | 'live') | null;
+  /**
+   * Default Google Classroom link for live programs.
+   */
+  classroomUrl?: string | null;
+  /**
+   * The LMS course that holds this course's modules and lessons.
+   */
+  lmsCourse?: (number | null) | LmsCourse;
+  /**
+   * Legacy Selar URL — unused for new checkouts.
+   */
+  selarUrl?: string | null;
+  badge?: string | null;
+  image?: (number | null) | Media;
+  /**
+   * Published means visible on the public site.
+   */
+  status?: ('published' | 'coming-soon') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payments".
+ */
+export interface Payment {
+  id: number;
+  kind: 'event' | 'course' | 'cohort' | 'one-on-one';
+  member: number | Member;
+  /**
+   * Amount in minor units (e.g. pesewas).
+   */
+  amount: number;
+  currency: string;
+  status: 'initialized' | 'success' | 'failed' | 'needs_refund' | 'refunded';
+  paystackReference: string;
+  paystackAccessCode?: string | null;
+  event?: (number | null) | Event;
+  course?: (number | null) | LmsCourse;
+  catalogueCourse?: (number | null) | Course;
+  cohort?: (number | null) | Cohort;
+  application?: (number | null) | CohortApplication;
+  enrollment?: (number | null) | Enrollment;
+  eventRegistration?: (number | null) | EventRegistration;
+  metadata?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: number;
+  title: string;
+  slug: string;
+  status: 'draft' | 'published' | 'cancelled';
+  type: 'Webinar' | 'Workshop' | 'Networking' | 'Conference';
+  format: 'online' | 'onsite' | 'hybrid';
+  pricing: 'free' | 'paid';
+  /**
+   * Price in minor units (pesewas). Required when paid.
+   */
+  amount?: number | null;
+  currency?: string | null;
+  capacity?: number | null;
+  venue?: string | null;
+  address?: string | null;
+  /**
+   * Meet / Classroom / Zoom link shown after registration.
+   */
+  onlineUrl?: string | null;
+  startsAt: string;
+  endsAt?: string | null;
+  /**
+   * Legacy display date; prefer startsAt.
+   */
+  date?: string | null;
+  /**
+   * Legacy time label.
+   */
+  time?: string | null;
+  host?: string | null;
+  summary: string;
+  body?: string | null;
+  /**
+   * Legacy external URL — leave blank for first-party registration.
+   */
+  registrationUrl?: string | null;
+  image?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-registrations".
+ */
+export interface EventRegistration {
+  id: number;
+  event: number | Event;
+  member: number | Member;
+  status: 'pending_payment' | 'confirmed' | 'cancelled' | 'checked_in' | 'no_show';
+  ticketCode?: string | null;
+  paystackReference?: string | null;
+  amountPaid?: number | null;
+  currency?: string | null;
+  registeredAt?: string | null;
+  checkedInAt?: string | null;
+  checkedInBy?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Public form submissions. Created only by POST /api/enquiries.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "enquiries".
+ */
+export interface Enquiry {
+  id: number;
+  type:
+    | 'programme-social-media-marketing'
+    | 'cohort-application'
+    | 'one-on-one-training'
+    | 'organisational-training'
+    | 'partnership'
+    | 'contact'
+    | 'newsletter';
+  name?: string | null;
+  email: string;
+  phone?: string | null;
+  organisation?: string | null;
+  message?: string | null;
+  sourcePage?: string | null;
+  status: 'new' | 'contacted' | 'qualified' | 'converted' | 'closed' | 'in-progress';
+  /**
+   * Staff member handling this enquiry.
+   */
+  owner?: (number | null) | User;
+  /**
+   * Internal staff notes. Never returned publicly or emailed.
+   */
+  notes?: string | null;
+  /**
+   * Enrollment created from this enquiry.
+   */
+  enrollment?: (number | null) | Enrollment;
   updatedAt: string;
   createdAt: string;
 }
@@ -1062,163 +1295,6 @@ export interface MemberNote {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "event-registrations".
- */
-export interface EventRegistration {
-  id: number;
-  event: number | Event;
-  member: number | Member;
-  status: 'pending_payment' | 'confirmed' | 'cancelled' | 'checked_in' | 'no_show';
-  ticketCode?: string | null;
-  paystackReference?: string | null;
-  amountPaid?: number | null;
-  currency?: string | null;
-  registeredAt?: string | null;
-  checkedInAt?: string | null;
-  checkedInBy?: (number | null) | User;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "events".
- */
-export interface Event {
-  id: number;
-  title: string;
-  slug: string;
-  status: 'draft' | 'published' | 'cancelled';
-  type: 'Webinar' | 'Workshop' | 'Networking' | 'Conference';
-  format: 'online' | 'onsite' | 'hybrid';
-  pricing: 'free' | 'paid';
-  /**
-   * Price in minor units (pesewas). Required when paid.
-   */
-  amount?: number | null;
-  currency?: string | null;
-  capacity?: number | null;
-  venue?: string | null;
-  address?: string | null;
-  /**
-   * Meet / Classroom / Zoom link shown after registration.
-   */
-  onlineUrl?: string | null;
-  startsAt: string;
-  endsAt?: string | null;
-  /**
-   * Legacy display date; prefer startsAt.
-   */
-  date?: string | null;
-  /**
-   * Legacy time label.
-   */
-  time?: string | null;
-  host?: string | null;
-  summary: string;
-  body?: string | null;
-  /**
-   * Legacy external URL — leave blank for first-party registration.
-   */
-  registrationUrl?: string | null;
-  image?: (number | null) | Media;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payments".
- */
-export interface Payment {
-  id: number;
-  kind: 'event' | 'course';
-  member: number | Member;
-  /**
-   * Amount in minor units (e.g. pesewas).
-   */
-  amount: number;
-  currency: string;
-  status: 'initialized' | 'success' | 'failed' | 'needs_refund' | 'refunded';
-  paystackReference: string;
-  paystackAccessCode?: string | null;
-  event?: (number | null) | Event;
-  course?: (number | null) | LmsCourse;
-  catalogueCourse?: (number | null) | Course;
-  application?: (number | null) | CohortApplication;
-  enrollment?: (number | null) | Enrollment;
-  eventRegistration?: (number | null) | EventRegistration;
-  metadata?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "courses".
- */
-export interface Course {
-  id: number;
-  title: string;
-  slug: string;
-  summary: string;
-  outcomes?:
-    | {
-        item: string;
-        id?: string | null;
-      }[]
-    | null;
-  whoItsFor?:
-    | {
-        item: string;
-        id?: string | null;
-      }[]
-    | null;
-  certificateEnabled?: boolean | null;
-  duration?: string | null;
-  lessons?: number | null;
-  /**
-   * Display label (optional if amount is set).
-   */
-  price?: string | null;
-  /**
-   * Default cohort price in pesewas (GH₵1 = 100). A cohort can override it.
-   */
-  amount?: number | null;
-  currency?: string | null;
-  /**
-   * Must match the LMS course program key to unlock access after Paystack.
-   */
-  programKey?: string | null;
-  delivery?: ('self-paced' | 'live') | null;
-  /**
-   * Default Google Classroom link for live programs.
-   */
-  classroomUrl?: string | null;
-  /**
-   * The LMS course that holds this course's modules and lessons.
-   */
-  lmsCourse?: (number | null) | LmsCourse;
-  /**
-   * Legacy Selar URL — unused for new checkouts.
-   */
-  selarUrl?: string | null;
-  badge?: string | null;
-  image?: (number | null) | Media;
-  /**
-   * Published means visible on the public site.
-   */
-  status?: ('published' | 'coming-soon') | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ai-usage-records".
  */
 export interface AiUsageRecord {
@@ -1414,31 +1490,6 @@ export interface Post {
   createdAt: string;
 }
 /**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "cohorts".
- */
-export interface Cohort {
-  id: number;
-  course: number | Course;
-  name: string;
-  startsAt: string;
-  endsAt?: string | null;
-  applicationDeadline?: string | null;
-  seats: number;
-  /**
-   * Override in pesewas. Blank uses the course default price.
-   */
-  price?: number | null;
-  currency?: string | null;
-  status: 'draft' | 'open' | 'full' | 'running' | 'finished';
-  /**
-   * Default Google Meet or Zoom link for this cohort's live sessions.
-   */
-  meetingUrl?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
  * Member testimonials. Only stories with Published enabled appear on the public site. Do not publish fictional or seed content.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1508,31 +1559,6 @@ export interface Resource {
    * Link for a resource that is not an uploaded file.
    */
   externalUrl?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * Public form submissions. Created only by POST /api/enquiries.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "enquiries".
- */
-export interface Enquiry {
-  id: number;
-  type:
-    | 'programme-social-media-marketing'
-    | 'one-on-one-training'
-    | 'organisational-training'
-    | 'partnership'
-    | 'contact'
-    | 'newsletter';
-  name?: string | null;
-  email: string;
-  phone?: string | null;
-  organisation?: string | null;
-  message?: string | null;
-  sourcePage?: string | null;
-  status: 'new' | 'in-progress' | 'closed';
   updatedAt: string;
   createdAt: string;
 }
@@ -1814,6 +1840,12 @@ export interface CohortApplicationsSelect<T extends boolean = true> {
  */
 export interface EnrollmentsSelect<T extends boolean = true> {
   member?: T;
+  offering?: T;
+  cohort?: T;
+  catalogCourse?: T;
+  trainer?: T;
+  payment?: T;
+  sourceEnquiry?: T;
   programName?: T;
   programKey?: T;
   course?: T;
@@ -2220,6 +2252,7 @@ export interface PaymentsSelect<T extends boolean = true> {
   event?: T;
   course?: T;
   catalogueCourse?: T;
+  cohort?: T;
   application?: T;
   enrollment?: T;
   eventRegistration?: T;
@@ -2507,6 +2540,9 @@ export interface EnquiriesSelect<T extends boolean = true> {
   message?: T;
   sourcePage?: T;
   status?: T;
+  owner?: T;
+  notes?: T;
+  enrollment?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2612,15 +2648,15 @@ export interface SiteSetting {
 export interface OneOnOne {
   id: number;
   /**
-   * Editable default. The one-on-one format is pending confirmation.
+   * Fixed format: 2 weeks, 4 live sessions a week, 8 sessions in total.
    */
   durationWeeks?: number | null;
   /**
-   * Editable default. The one-on-one format is pending confirmation.
+   * Fixed format: 2 weeks, 4 live sessions a week, 8 sessions in total.
    */
   daysPerWeek?: number | null;
   /**
-   * Editable default. The one-on-one format is pending confirmation.
+   * Fixed format: 2 weeks, 4 live sessions a week, 8 sessions in total.
    */
   sessionCount?: number | null;
   /**
@@ -2635,6 +2671,9 @@ export interface OneOnOne {
       }[]
     | null;
   trainers?: (number | User)[] | null;
+  /**
+   * One-on-One learners see these in the learning area alongside their session links.
+   */
   resources?:
     | {
         label: string;

@@ -22,7 +22,7 @@ New `cohorts` collection. One course has many cohorts. Status runs `draft`, `ope
 
 ## One-on-One
 
-New global `one-on-one`. Duration, days per week and session count are editable defaults (2 weeks, 4 days, 8 sessions) while the format is confirmed. Staff-only.
+New global `one-on-one`. The format is fixed: 2 weeks, 4 live sessions a week, 8 sessions in total (defaults 2 / 4 / 8). Resources listed here are shown to One-on-One learners in the learning area alongside their session links. Staff-only.
 
 ## Migration
 

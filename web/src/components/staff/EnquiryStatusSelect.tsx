@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { staffFieldClass } from "@/components/staff/ui";
-import { enquiryStatuses, enquiryStatusLabels } from "@/lib/enquiries/options";
+import { activeEnquiryStatuses, enquiryStatusLabels, type EnquiryStatus } from "@/lib/enquiries/options";
 
 export function EnquiryStatusSelect({ id, status }: { id: string | number; status: string }) {
   const router = useRouter();
@@ -34,6 +34,10 @@ export function EnquiryStatusSelect({ id, status }: { id: string | number; statu
     }
   }
 
+  const items: readonly EnquiryStatus[] = (activeEnquiryStatuses as readonly string[]).includes(value)
+    ? activeEnquiryStatuses
+    : [...activeEnquiryStatuses, value as EnquiryStatus];
+
   return (
     <select
       className={`${staffFieldClass} mt-0 min-w-36`}
@@ -42,9 +46,9 @@ export function EnquiryStatusSelect({ id, status }: { id: string | number; statu
       aria-label="Enquiry status"
       onChange={(event) => onChange(event.target.value)}
     >
-      {enquiryStatuses.map((item) => (
+      {items.map((item) => (
         <option key={item} value={item}>
-          {enquiryStatusLabels[item]}
+          {enquiryStatusLabels[item] ?? item}
         </option>
       ))}
     </select>

@@ -3,6 +3,7 @@ import {
   DEFAULT_CURRENCY,
   effectivePrice,
   nextOpenCohort,
+  SEAT_HOLDING_ENROLLMENT_STATUSES,
   seatsLeft,
   type CohortInput,
   type ProgramsCatalogue,
@@ -34,6 +35,20 @@ export type RawOneOnOne = {
 
 function courseId(course: RawCohort["course"]): string {
   return String(typeof course === "object" ? course.id : course);
+}
+
+/** Tally seat-holding enrollments per cohort id. Callers filter by status in the query. */
+export function countActiveEnrollmentsByCohort(
+  enrollments: ReadonlyArray<{ cohort?: number | string | { id: number | string } | null; status?: string | null }>,
+): Map<string, number> {
+  const counts = new Map<string, number>();
+  for (const row of enrollments) {
+    if (!row.status || !(SEAT_HOLDING_ENROLLMENT_STATUSES as readonly string[]).includes(row.status)) continue;
+    if (row.cohort == null) continue;
+    const id = String(typeof row.cohort === "object" ? row.cohort.id : row.cohort);
+    counts.set(id, (counts.get(id) ?? 0) + 1);
+  }
+  return counts;
 }
 
 function iso(value: string): string {
@@ -92,7 +107,7 @@ export function shapeCatalogue(
           endsAt: isoOrNull(next.endsAt),
           applicationDeadline: isoOrNull(next.applicationDeadline),
           ...effectivePrice(next, course),
-          seatsLeft: seatsLeft(next),
+          seatsLeft: seatsLeft(next, next.activeEnrollments ?? 0),
         },
       };
     }),
@@ -128,7 +143,29 @@ export async function getProgramsCatalogue(payload?: Payload): Promise<ProgramsC
       })
     : { docs: [] };
 
+  const cohortIds = cohorts.docs.map((cohort) => cohort.id);
+  const enrollments = cohortIds.length
+    ? await client.find({
+        collection: "enrollments",
+        where: {
+          and: [
+            { status: { in: [...SEAT_HOLDING_ENROLLMENT_STATUSES] } },
+            { cohort: { in: cohortIds } },
+          ],
+        },
+        depth: 0,
+        pagination: false,
+        select: { cohort: true, status: true },
+        overrideAccess: true,
+      })
+    : { docs: [] };
+  const counts = countActiveEnrollmentsByCohort(enrollments.docs);
+  const cohortsWithCounts = cohorts.docs.map((cohort) => ({
+    ...cohort,
+    activeEnrollments: counts.get(String(cohort.id)) ?? 0,
+  }));
+
   const oneOnOne = await client.findGlobal({ slug: "one-on-one", depth: 0, overrideAccess: true });
 
-  return shapeCatalogue({ courses: courses.docs, cohorts: cohorts.docs, oneOnOne }, new Date());
+  return shapeCatalogue({ courses: courses.docs, cohorts: cohortsWithCounts, oneOnOne }, new Date());
 }
