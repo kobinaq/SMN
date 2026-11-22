@@ -4,9 +4,22 @@ import { expect, test } from "@playwright/test";
 // params, which returned a bare 500. src/proxy.ts now answers with the 404.
 const undecodablePaths = ["/verify/%E0%A4%A", "/verify/%E0%A4", "/events/%E0%A4%A"];
 
+// Vercel Edge rejects some malformed encodings with a bare 400 before src/proxy.ts
+// runs, so remote runs accept 400 for those. Local runs stay strict.
+const baseURL = process.env.PLAYWRIGHT_BASE_URL;
+const isRemote = Boolean(baseURL) && !/^https?:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/i.test(baseURL ?? "");
+const edgeRejectedPaths = new Set(["/verify/%E0%A4%A", "/events/%E0%A4%A"]);
+
 for (const path of undecodablePaths) {
   test(`undecodable path ${path} returns 404`, async ({ request }) => {
     const response = await request.get(path, { maxRedirects: 0 });
+    if (isRemote && edgeRejectedPaths.has(path)) {
+      expect([400, 404]).toContain(response.status());
+      if (response.status() === 404) {
+        expect(await response.text()).toContain("Page not found");
+      }
+      return;
+    }
     expect(response.status()).toBe(404);
     expect(await response.text()).toContain("Page not found");
   });
