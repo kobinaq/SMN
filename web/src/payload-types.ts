@@ -107,6 +107,7 @@ export interface Config {
     stories: Story;
     resources: Resource;
     enquiries: Enquiry;
+    pages: Page;
     'payload-kv': PayloadKv;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -152,6 +153,7 @@ export interface Config {
     stories: StoriesSelect<false> | StoriesSelect<true>;
     resources: ResourcesSelect<false> | ResourcesSelect<true>;
     enquiries: EnquiriesSelect<false> | EnquiriesSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -163,10 +165,14 @@ export interface Config {
   globals: {
     'site-settings': SiteSetting;
     'one-on-one': OneOnOne;
+    header: Header;
+    footer: Footer;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     'one-on-one': OneOnOneSelect<false> | OneOnOneSelect<true>;
+    header: HeaderSelect<false> | HeaderSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
   };
   locale: null;
   widgets: {
@@ -561,7 +567,7 @@ export interface LmsCourse {
    */
   delivery: 'self-paced' | 'cohort';
   /**
-   * Purchase courses checkout on the public catalogue. Apply-first courses use /apply, then staff grant access or send a payment link.
+   * Purchase courses checkout on the public catalog. Apply-first courses use /apply, then staff grant access or send a payment link.
    */
   commerce: 'purchase' | 'apply';
   /**
@@ -1563,6 +1569,227 @@ export interface Resource {
   createdAt: string;
 }
 /**
+ * Page editor. Available outside production only.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  /**
+   * Lowercase, hyphens only. Use "home" for the home page.
+   */
+  slug: string;
+  layout?:
+    | (
+        | {
+            headline: string;
+            text?: string | null;
+            buttons?:
+              | {
+                  label: string;
+                  /**
+                   * A page like /about, an #anchor, mailto:, tel:, or a full https:// link.
+                   */
+                  href: string;
+                  style?: ('primary' | 'secondary') | null;
+                  id?: string | null;
+                }[]
+              | null;
+            image?: (number | null) | Media;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            heading?: string | null;
+            body: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'text-section';
+          }
+        | {
+            heading?: string | null;
+            intro?: string | null;
+            variant?: ('program-types' | 'approaches' | 'audiences') | null;
+            cards?:
+              | {
+                  title: string;
+                  text?: string | null;
+                  image?: (number | null) | Media;
+                  link?: {
+                    label?: string | null;
+                    /**
+                     * A page like /about, an #anchor, mailto:, tel:, or a full https:// link.
+                     */
+                    href?: string | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'card-grid';
+          }
+        | {
+            heading?: string | null;
+            name?: string | null;
+            role?: string | null;
+            story?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            image?: (number | null) | Media;
+            quote?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'founder-story';
+          }
+        | {
+            heading?: string | null;
+            steps?:
+              | {
+                  title: string;
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'steps';
+          }
+        | {
+            heading?: string | null;
+            items?:
+              | {
+                  question: string;
+                  answer: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faqs';
+          }
+        | {
+            heading: string;
+            text?: string | null;
+            primary: {
+              label: string;
+              /**
+               * A page like /about, an #anchor, mailto:, tel:, or a full https:// link.
+               */
+              href: string;
+            };
+            secondary?: {
+              label?: string | null;
+              /**
+               * A page like /about, an #anchor, mailto:, tel:, or a full https:// link.
+               */
+              href?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta-band';
+          }
+        | {
+            heading?: string | null;
+            partners?:
+              | {
+                  name: string;
+                  logo: number | Media;
+                  /**
+                   * Optional. A page link or full https:// link.
+                   */
+                  url?: string | null;
+                  /**
+                   * Only approved logos are shown.
+                   */
+                  approved?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'partner-logos';
+          }
+        | {
+            heading?: string | null;
+            text?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'newsletter';
+          }
+        | {
+            heading?: string | null;
+            text?: string | null;
+            enquiryType:
+              | 'programme-social-media-marketing'
+              | 'one-on-one-training'
+              | 'organisational-training'
+              | 'partnership'
+              | 'contact';
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'enquiry-form';
+          }
+        | {
+            heading?: string | null;
+            intro?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'course-list';
+          }
+        | {
+            heading?: string | null;
+            product: 'course' | 'one-on-one' | 'workshops';
+            course?: (number | null) | Course;
+            /**
+             * Optional. Where Apply goes when the course has an open cohort. Defaults to /apply.
+             */
+            applyLink?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'price-panel';
+          }
+      )[]
+    | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -2548,6 +2775,187 @@ export interface EnquiriesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  layout?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              headline?: T;
+              text?: T;
+              buttons?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                    style?: T;
+                    id?: T;
+                  };
+              image?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'text-section'?:
+          | T
+          | {
+              heading?: T;
+              body?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'card-grid'?:
+          | T
+          | {
+              heading?: T;
+              intro?: T;
+              variant?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    image?: T;
+                    link?:
+                      | T
+                      | {
+                          label?: T;
+                          href?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'founder-story'?:
+          | T
+          | {
+              heading?: T;
+              name?: T;
+              role?: T;
+              story?: T;
+              image?: T;
+              quote?: T;
+              id?: T;
+              blockName?: T;
+            };
+        steps?:
+          | T
+          | {
+              heading?: T;
+              steps?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faqs?:
+          | T
+          | {
+              heading?: T;
+              items?:
+                | T
+                | {
+                    question?: T;
+                    answer?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'cta-band'?:
+          | T
+          | {
+              heading?: T;
+              text?: T;
+              primary?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondary?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        'partner-logos'?:
+          | T
+          | {
+              heading?: T;
+              partners?:
+                | T
+                | {
+                    name?: T;
+                    logo?: T;
+                    url?: T;
+                    approved?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        newsletter?:
+          | T
+          | {
+              heading?: T;
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'enquiry-form'?:
+          | T
+          | {
+              heading?: T;
+              text?: T;
+              enquiryType?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'course-list'?:
+          | T
+          | {
+              heading?: T;
+              intro?: T;
+              id?: T;
+              blockName?: T;
+            };
+        'price-panel'?:
+          | T
+          | {
+              heading?: T;
+              product?: T;
+              course?: T;
+              applyLink?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -2685,6 +3093,91 @@ export interface OneOnOne {
   createdAt?: string | null;
 }
 /**
+ * Menu and button shown at the top of CMS pages. Available outside production only.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header".
+ */
+export interface Header {
+  id: number;
+  navItems?:
+    | {
+        label: string;
+        /**
+         * A page like /about, an #anchor, mailto:, tel:, or a full https:// link.
+         */
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  ctaButton?: {
+    label?: string | null;
+    /**
+     * A page like /about, an #anchor, mailto:, tel:, or a full https:// link.
+     */
+    href?: string | null;
+  };
+  sections?: {
+    /**
+     * Show Agency in menus and allow its page
+     */
+    showAgency?: boolean | null;
+    /**
+     * Show Events in menus and allow its page. Keep off until the first event is published.
+     */
+    showEvents?: boolean | null;
+  };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Footer shown on CMS pages. Available outside production only.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: number;
+  blurb?: string | null;
+  columns?:
+    | {
+        heading: string;
+        links?:
+          | {
+              label: string;
+              /**
+               * A page like /about, an #anchor, mailto:, tel:, or a full https:// link.
+               */
+              href: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  legalLinks?:
+    | {
+        label: string;
+        /**
+         * A page like /about, an #anchor, mailto:, tel:, or a full https:// link.
+         */
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  socialLinks?:
+    | {
+        platform: 'instagram' | 'linkedin' | 'x' | 'facebook' | 'youtube' | 'tiktok' | 'whatsapp';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
@@ -2749,6 +3242,73 @@ export interface OneOnOneSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header_select".
+ */
+export interface HeaderSelect<T extends boolean = true> {
+  navItems?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  ctaButton?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+      };
+  sections?:
+    | T
+    | {
+        showAgency?: T;
+        showEvents?: T;
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  blurb?: T;
+  columns?:
+    | T
+    | {
+        heading?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  legalLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  _status?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

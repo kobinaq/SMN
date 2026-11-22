@@ -12,8 +12,9 @@ const code = source
   .replace(/\bON\s+DELETE\s+(cascade|set\s+null|no\s+action)/gi, "");
 
 describe("phase_1c_enrollments_payments_enquiries migration", () => {
-  it("is registered last in the ordered index", () => {
-    expect(migrations.at(-1)?.name).toBe(name);
+  it("is registered right after the courses and cohorts migration", () => {
+    const names = migrations.map((migration) => migration.name);
+    expect(names[names.indexOf(name) - 1]).toBe("20261120_140000_courses_cohorts_one_on_one");
   });
 
   it("contains no destructive keywords", () => {

@@ -74,6 +74,10 @@ Vercel must use web as the Root Directory and the default Next.js output. Config
 - Payments: Paystack checkout/verification/webhook, payment records, registration/enrollment fulfillment
 - AI: Tutor, Content Studio, and Career Coach behind independent flags
 
+## Page editor
+
+A block-based page editor (pages, header, footer, drafts, live preview) runs outside production only. See `docs/page-editor.md`.
+
 ## Opportunity imports
 
 The protected cron can ingest public Greenhouse, Lever, and Ashby boards. Keep auto-publish off until a source is proven. Applications continue on the employer site; SMN stores member tracking state only.
