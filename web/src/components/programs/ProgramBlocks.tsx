@@ -13,7 +13,7 @@ const interestFields = [
 
 const workshopFields = [
   { name: "name", label: "Contact person", kind: "text", autoComplete: "name", api: "name" },
-  { name: "organisation", label: "Organisation name", kind: "text", autoComplete: "organization", api: "organisation" },
+  { name: "organisation", label: "Organization name", kind: "text", autoComplete: "organization", api: "organisation" },
   { name: "email", label: "Email", kind: "email", autoComplete: "email", api: "email" },
   { name: "teamSize", label: "Team size", kind: "text" },
   { name: "objectives", label: "Training objectives", kind: "textarea", api: "message" },

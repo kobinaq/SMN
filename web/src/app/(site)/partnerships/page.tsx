@@ -72,7 +72,7 @@ export default function PartnershipsPage() {
             successMessage={partnershipEnquiry.success}
             fields={[
               { name: "name", label: "Name", kind: "text", autoComplete: "name", api: "name" },
-              { name: "organisation", label: "Organisation", kind: "text", autoComplete: "organization", api: "organisation" },
+              { name: "organisation", label: "Organization", kind: "text", autoComplete: "organization", api: "organisation" },
               { name: "email", label: "Work email", kind: "email", autoComplete: "email", api: "email" },
               { name: "partnershipType", label: "Partnership type", kind: "text" },
               { name: "explore", label: "What would you like to explore?", kind: "textarea", api: "message" },

@@ -14,7 +14,7 @@ describe("getVerifiedCertificate", () => {
     find.mockResolvedValue({ docs: [] });
   });
 
-  it("normalises mixed-case codes to uppercase before the equals query", async () => {
+  it("normalizes mixed-case codes to uppercase before the equals query", async () => {
     await getVerifiedCertificate("  smn-abc123def45678  ");
 
     expect(find).toHaveBeenCalledWith(

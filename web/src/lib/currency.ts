@@ -7,7 +7,7 @@ export function formatGhs(amount: number): string {
   return `GH₵${Math.round(amount).toLocaleString("en-GH")}`;
 }
 
-/** Normalise legacy "GHS 2,500" / "GH₵2500" strings when a numeric parse is possible. */
+/** Normalize legacy "GHS 2,500" / "GH₵2500" strings when a numeric parse is possible. */
 export function formatGhsLabel(raw: string | null | undefined): string {
   const value = (raw || "").trim();
   if (!value) return "";

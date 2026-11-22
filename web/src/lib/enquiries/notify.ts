@@ -27,7 +27,7 @@ export function enquiryNotification(record: StoredEnquiry): { subject: string; t
     `Name: ${record.name ?? ""}`,
     `Email: ${record.email}`,
     `Phone: ${record.phone ?? ""}`,
-    `Organisation: ${record.organisation ?? ""}`,
+    `Organization: ${record.organisation ?? ""}`,
     `Source page: ${record.sourcePage ?? ""}`,
     `Enquiry id: ${record.id}`,
     "",

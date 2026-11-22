@@ -16,7 +16,7 @@ export const site = {
   shortName: "TSA",
   tagline: "Build social media marketing skills that make you opportunity-ready.",
   description:
-    "Build practical social media marketing skills with Think Social Academy. Explore professional training, specialised learning and organisational programs.",
+    "Build practical social media marketing skills with Think Social Academy. Explore professional training, specialized learning and organizational programs.",
   url: normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL ?? "https://thinksocialacademy.com"),
   // Contact and social fallbacks stay empty so a missing CMS row does not resurrect
   // retired SMN addresses. Live values come from site-settings / env.
@@ -39,7 +39,7 @@ export const site = {
   },
   announcementBanner: "",
   footerBlurb:
-    "Think Social Academy equips individuals, business owners and organisations with practical social media marketing skills, strategic thinking and tools for today's digital landscape.",
+    "Think Social Academy equips individuals, business owners and organizations with practical social media marketing skills, strategic thinking and tools for today's digital landscape.",
   impactStats: [] as { label: string; value: string }[],
   cohort: {
     name: "Social Media Marketing & AI Program",

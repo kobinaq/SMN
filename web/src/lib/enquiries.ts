@@ -114,7 +114,7 @@ export function validateEnquiry(payload: EnquiryPayload): FieldErrors {
   if (message.length > enquiryLimits.message) errors.message = [tooLong("Message", enquiryLimits.message)];
   if (phone.length > enquiryLimits.phone) errors.phone = [tooLong("Phone", enquiryLimits.phone)];
   if (organisation.length > enquiryLimits.organisation) {
-    errors.organisation = [tooLong("Organisation", enquiryLimits.organisation)];
+    errors.organisation = [tooLong("Organization", enquiryLimits.organisation)];
   }
   if (sourcePage.length > enquiryLimits.sourcePage) {
     errors.sourcePage = [tooLong("Page", enquiryLimits.sourcePage)];

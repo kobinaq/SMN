@@ -42,7 +42,7 @@ export default async function EnquiryDetailPage({ params }: { params: Promise<{ 
           {line("Type", label)}
           {line("Email", String(doc.email || ""))}
           {line("Phone", doc.phone)}
-          {line("Organisation", doc.organisation)}
+          {line("Organization", doc.organisation)}
           {line("Source page", doc.sourcePage)}
           {line("Received", doc.createdAt ? new Date(doc.createdAt).toLocaleString("en-GH") : "")}
           <div className="md:col-span-2">{line("Message", doc.message)}</div>

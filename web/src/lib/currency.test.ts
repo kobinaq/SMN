@@ -12,7 +12,7 @@ describe("currency formatting", () => {
     expect(formatGhs(450)).toBe("GH₵450");
   });
 
-  it("normalises legacy GHS labels when numeric", () => {
+  it("normalizes legacy GHS labels when numeric", () => {
     expect(formatGhsLabel("GHS 2,500")).toBe("GH₵2,500");
     expect(formatGhsLabel("GH₵450")).toBe("GH₵450");
   });

@@ -9,12 +9,12 @@ import { cn } from "@/lib/utils";
  * Marketing kit.
  *
  * The public site speaks louder than the member portal: oversized display
- * type, flat bands of colour, visible rules, numbered sequences. It runs on
+ * type, flat bands of color, visible rules, numbered sequences. It runs on
  * the same tokens as the rest of the app — the difference is scale and
  * contrast, not a second palette.
  *
  * The one rule worth stating: a page is a stack of `Band`s. A band owns its
- * ground colour and its vertical rhythm, so pages never hand-roll padding or
+ * ground color and its vertical rhythm, so pages never hand-roll padding or
  * background classes and two adjacent sections can never disagree about
  * either.
  */
@@ -283,7 +283,7 @@ export function EditorialCard({
 
 /**
  * Bulleted list. Every content page on this site has three or four of these,
- * so the marker, spacing and colour live here rather than being re-typed —
+ * so the marker, spacing and color live here rather than being re-typed —
  * that repetition was most of what made the old pages drift apart.
  */
 export function Checklist({

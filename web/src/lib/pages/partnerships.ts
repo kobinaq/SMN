@@ -8,7 +8,7 @@ export const partnershipsSeo = {
 
 export const partnershipsHero = {
   title: "Building opportunities through collaboration.",
-  lede: "We work with organisations, institutions, educators, brands and industry stakeholders to expand access to practical social media marketing skills, create meaningful learning experiences and connect people with opportunities for growth.",
+  lede: "We work with organizations, institutions, educators, brands and industry stakeholders to expand access to practical social media marketing skills, create meaningful learning experiences and connect people with opportunities for growth.",
   ctaLabel: "Explore a partnership",
   ctaHref: "/partnerships#enquiry",
 } as const;
@@ -17,7 +17,7 @@ export const partnershipsWhy = {
   title: "Connecting learning with industry.",
   paragraphs: [
     "Developing capable marketing professionals takes more than classroom learning. It takes relevant knowledge, practical experiences, industry perspectives and relationships that help learners understand how the work happens.",
-    "Through collaboration, TSA aims to connect education with industry needs and create opportunities for people and organisations to learn, contribute and grow.",
+    "Through collaboration, TSA aims to connect education with industry needs and create opportunities for people and organizations to learn, contribute and grow.",
   ],
 } as const;
 
@@ -61,7 +61,7 @@ export const partnershipSteps = {
   items: [
     {
       title: "Start a conversation",
-      body: "Tell us about your organisation and the opportunity you have in mind.",
+      body: "Tell us about your organization and the opportunity you have in mind.",
     },
     {
       title: "Explore alignment",

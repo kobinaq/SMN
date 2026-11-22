@@ -1,5 +1,5 @@
 /**
- * Pure cohort rules for the public programs catalogue. No Payload import.
+ * Pure cohort rules for the public programs catalog. No Payload import.
  * Money is integer minor units (pesewas, GH₵1 = 100).
  */
 

@@ -1,4 +1,4 @@
-# Public programs catalogue
+# Public programs catalog
 
 `GET /api/programs`
 

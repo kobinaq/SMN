@@ -3,12 +3,12 @@ import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 /**
- * Think Social Academy logo (T12). Two lockups, each in two colours:
+ * Think Social Academy logo (T12). Two lockups, each in two colors:
  *
  * - `full`: the stacked THINK / SOCIAL / ACADEMY lockup (558x320).
  * - `mark`: the THINK wordmark (566x192), for tight spaces.
  *
- * `tone="white"` is only for the dark Home hero. `tone="blue"` is the colour
+ * `tone="white"` is only for the dark Home hero. `tone="blue"` is the color
  * lockup for off-white and white grounds (header, footer, mobile menu).
  *
  * Intrinsic width/height are the real file sizes so the box is reserved

@@ -99,9 +99,9 @@ export const trainingModules = [
   },
   {
     module: "04",
-    title: "Analytics, Optimisation and Reporting",
+    title: "Analytics, Optimization and Reporting",
     body: "Measure performance, interpret data, and make better marketing decisions.",
-    topics: ["Measurement", "Optimisation", "Reporting"],
+    topics: ["Measurement", "Optimization", "Reporting"],
   },
   {
     module: "05",
@@ -112,7 +112,7 @@ export const trainingModules = [
   {
     module: "06",
     title: "Practical Experience",
-    body: "Apply what you have learned through practical challenges and clearly labelled marketing simulations.",
+    body: "Apply what you have learned through practical challenges and clearly labeled marketing simulations.",
     topics: ["Challenges", "Simulations", "Applied work"],
   },
 ];
@@ -123,7 +123,7 @@ export const trainingOutcomes = [
   "Develop content strategies",
   "Create marketing campaigns",
   "Use AI in a marketing workflow",
-  "Analyse social media performance",
+  "Analyze social media performance",
   "Present marketing recommendations",
   "Build a professional portfolio",
   "Think beyond individual posts and platforms",
@@ -222,7 +222,7 @@ export const experienceDeliverables = [
   },
   {
     title: "Professional feedback",
-    body: "A short assessment, testimonial, or recommendation from the mentor or organisation.",
+    body: "A short assessment, testimonial, or recommendation from the mentor or organization.",
   },
 ];
 
@@ -231,8 +231,8 @@ export const partnerTracks = [
     id: "train",
     n: "01",
     kicker: "Train and develop",
-    title: "Build marketing capabilities within your organisation",
-    body: "We work with organisations to design specialised training around their teams, industry, and needs.",
+    title: "Build marketing capabilities within your organization",
+    body: "We work with organizations to design specialized training around their teams, industry, and needs.",
     items: [
       "Custom marketing training programs",
       "Social media and digital marketing training",
@@ -243,7 +243,7 @@ export const partnerTracks = [
       "Team upskilling",
       "Industry-specific learning programs",
     ],
-    bestFor: "Organisations looking to develop their teams and build relevant marketing capabilities.",
+    bestFor: "Organizations looking to develop their teams and build relevant marketing capabilities.",
     href: "/partnerships",
     cta: "Build a training program",
     formType: "Training request",
@@ -253,7 +253,7 @@ export const partnerTracks = [
     n: "02",
     kicker: "Practical work and simulations",
     title: "Partner on practical marketing work",
-    body: "Partner with TSA on clearly labelled marketing simulations, practical briefs, and project-based learning. Help learners apply skills in realistic business contexts.",
+    body: "Partner with TSA on clearly labeled marketing simulations, practical briefs, and project-based learning. Help learners apply skills in realistic business contexts.",
     items: [
       "Host a marketing simulation",
       "Contribute a practical brief",
@@ -262,7 +262,7 @@ export const partnerTracks = [
       "Collaborate on portfolio-building simulations",
       "Give participants realistic marketing briefs",
     ],
-    bestFor: "Brands, agencies, and organisations that want to support practical marketing learning.",
+    bestFor: "Brands, agencies, and organizations that want to support practical marketing learning.",
     href: "#employer-form",
     cta: cta.partner.label,
     formType: "Collaboration",
@@ -293,7 +293,7 @@ export const partnerTracks = [
     n: "04",
     kicker: "Sponsor the next generation",
     title: "Invest in access. Invest in opportunity.",
-    body: "Help create more opportunities for aspiring and emerging marketers who may not otherwise have access to quality training, mentorship, professional networks, and industry experience. Your organisation can help someone move from learning marketing to building a career in it.",
+    body: "Help create more opportunities for aspiring and emerging marketers who may not otherwise have access to quality training, mentorship, professional networks, and industry experience. Your organization can help someone move from learning marketing to building a career in it.",
     items: [
       "Scholarships",
       "Training programs",
@@ -304,7 +304,7 @@ export const partnerTracks = [
       "Career development initiatives",
       "Student access",
     ],
-    bestFor: "Organisations looking to support marketing talent development and create meaningful social impact.",
+    bestFor: "Organizations looking to support marketing talent development and create meaningful social impact.",
     href: "/partnerships",
     cta: "Become a sponsor",
     formType: "Sponsorship",
@@ -322,7 +322,7 @@ export const trainingAudience = [
 
 export const experienceOpportunities = [
   "Practical briefs",
-  "Clearly labelled marketing simulations",
+  "Clearly labeled marketing simulations",
   "Support realistic project work",
   "Build their portfolios",
   "Gain practical marketing experience",
